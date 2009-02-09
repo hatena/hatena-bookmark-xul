@@ -38,4 +38,19 @@
 
     // ]]>
     </script>
+
+    <menupopup id="viewSidebarMenu">
+        <menuitem observes="viewHBookmarkSidebar" />
+    </menupopup>
+
+    <broadcasterset id="mainBroadcasterSet">
+        <broadcaster id="viewHBookmarkSidebar"
+                     label="Hatena Bookmark Sidebar"
+                     autoCheck="false"
+                     type="checkbox"
+                     group="sidebar"
+                     sidebarurl="chrome://hatenabookmark/content/sidebar.xul"
+                     sidebartitle="Hatena Bookmark Sidebar"
+                     oncommand="toggleSidebar('viewHBookmarkSidebar');"/>
+    </broadcasterset>
 </overlay>
