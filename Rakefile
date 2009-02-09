@@ -1,4 +1,4 @@
-# based on: http://gravelog.blogspot.com/2007/03/using-rake-to-build-firefox-extensions_04.html
+ # based on: http://gravelog.blogspot.com/2007/03/using-rake-to-build-firefox-extensions_04.html
 require 'rexml/document'
 require 'digest/sha1'
 
