@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
+<?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
+
+<page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      id="hBookmarkSidebar" title="Hatena Bookmark Sidebar">
+  <vbox flex="1">
+    <label value="Hello, sidebar world!" />
+  </vbox>
+</page>
