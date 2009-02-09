@@ -2,8 +2,8 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
     <Description about="urn:mozilla:install-manifest">
-        <em:id>{e0a5aeec-982b-46c4-95db-c0e11e6e6f30}</em:id>
-        <em:name>Hatenabookmark</em:name>
+        <em:id>bookmark@hatena.ne.jp</em:id>
+        <em:name>HatenaBookmark</em:name>
         <em:version>0.0.1</em:version>
         <em:type>2</em:type>
         <em:description>FIXME Description about this extension</em:description>
