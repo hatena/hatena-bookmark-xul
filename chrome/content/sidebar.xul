@@ -7,9 +7,17 @@
       onload="setTreeView();">
     <vbox flex="1">
         <label value="Hello, sidebar world!" />
+
         <tree id="my-tree" flex="1">
             <treecols>
                 <treecol label="Rows" flex="1" />
+            </treecols>
+            <treechildren />
+        </tree>
+
+        <tree id="my-history-tree" flex="1">
+            <treecols>
+                <treecol label="Recent History" flex="1" />
             </treecols>
             <treechildren />
         </tree>
@@ -17,16 +25,48 @@
     <script type="application/javascript; version=1.8">
     // <![CDATA[
 
+        Components.utils.import("resource://gre/modules/utils.js");
+
         var treeView = {
             rowCount: 5,
             getCellText: function tv_getCellText(row, column) {
-                return (row + 1) + ["st", "nd", "rd"][row % 10] + " row";
+                return (row + 1) +
+                       (["st", "nd", "rd"][row % 10] || "th") +
+                       " row";
             },
             setTree: function tv_setTree(treebox) {}
         };
 
+        var historyTreeView = {
+            rowCount: 5,
+            getCellText: function htv_getCellText(row, column) {
+                return this.items[row].uri;
+            },
+            setTree: function htv_setTree(treebox) {
+                this.init();
+            },
+            items: null,
+            init: function htv_init() {
+                var HistoryService =
+                    Components.classes["@mozilla.org/browser/nav-history-service;1"]
+                              .getService(Components.interfaces.nsINavHistoryService);
+                var query = HistoryService.getNewQuery();
+                var options = HistoryService.getNewQueryOptions();
+                options.sortingMode =
+                    Components.interfaces.nsINavHistoryQueryOptions.SORT_BY_DATE_DESCENDING;
+                options.maxResults = this.rowCount;
+                var result = HistoryService.executeQuery(query, options);
+                // Use nsIFaviconService to get a favicon uri.
+                this.items =
+                    PlacesUtils.getURLsForContainerNode(result.root)
+                               .map(function (e) ({ uri: e.uri, favicon: "anno:favicon:" + e.uri }));
+                this.rowCount = this.items.length;
+            }
+        };
+
         function setTreeView() {
             document.getElementById("my-tree").view = treeView;
+            document.getElementById("my-history-tree").view = historyTreeView;
         }
 
     // ]]>
