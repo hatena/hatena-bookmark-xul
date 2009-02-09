@@ -9,11 +9,7 @@ hBookmark.Sync = {
         var BOOKMARK  = model('Bookmark');
 
         // XXX 初期化処理
-        BOOKMARK.deinitialize();
-        BOOKMARK.db.vacuum();
-        BOOKMARK.initialize();
-        BOOKMARK.db.connection.executeSimpleSQL('CREATE INDEX "bookmarks_date" ON "bookmarks" ("date" DESC)');
-        BOOKMARK.db.connection.executeSimpleSQL('CREATE INDEX "bookmarks_date_asc" ON "bookmarks" ("date" ASC)');
+        hBookmark.Model.resetAll();
 
         BOOKMARK.db.beginTransaction();
         if (req.status == 200) {
@@ -31,7 +27,7 @@ hBookmark.Sync = {
                 b.title = title;
                 b.comment = comment;
                 b.url = url;
-                b.search = [title, comment, url].join("\0");
+                // b.search = [title, comment, url].join("\0");
                 b.date = parseInt(timestamp);
                 if (url) {
                     try {

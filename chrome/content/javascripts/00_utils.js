@@ -6,6 +6,12 @@ var p = function (msg) {
      Application.console.log('' + msg);
 }
 
+var isInclude = function(val, ary) {
+    for (var i = 0;  i < ary.length; i++) {
+        if (ary[i] == val) return true;
+    }
+    return false;
+}
 
 // copy from Tombloo
 /**
@@ -31,6 +37,23 @@ var extend = function extend(target, source, overwrite){
             target[p] = source[p];
     }
     return target;
+}
+
+/**
+ * メソッドが呼ばれる前に処理を追加する。
+ * より詳細なコントロールが必要な場合はaddAroundを使うこと。
+ * 
+ * @param {Object} target 対象オブジェクト。
+ * @param {String} name メソッド名。
+ * @param {Function} before 前処理。
+ *        対象オブジェクトをthisとして、オリジナルの引数が全て渡されて呼び出される。
+ */
+function addBefore(target, name, before) {
+    var original = target[name];
+    target[name] = function() {
+        before.apply(target, arguments);
+        return original.apply(target, arguments);
+    }
 }
 
 /**
