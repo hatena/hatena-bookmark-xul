@@ -39,12 +39,16 @@
 
         var historyTreeView = {
             rowCount: 5,
-            getCellText: function htv_getCellText(row, column) {
+            getCellText: function htv_getCellText(row, col) {
                 return this.items[row].uri;
+            },
+            getImageSrc: function htv_getImageSrc(row, col) {
+                return this.items[row].favicon;
             },
             setTree: function htv_setTree(treebox) {
                 this.init();
             },
+
             items: null,
             init: function htv_init() {
                 var HistoryService =
@@ -56,10 +60,20 @@
                     Components.interfaces.nsINavHistoryQueryOptions.SORT_BY_DATE_DESCENDING;
                 options.maxResults = this.rowCount;
                 var result = HistoryService.executeQuery(query, options);
-                // Use nsIFaviconService to get a favicon uri.
+                const FaviconService =
+                    Components.classes["@mozilla.org/browser/favicon-service;1"]
+                              .getService(Components.interfaces.nsIFaviconService);
+                const IOService =
+                    Components.classes["@mozilla.org/network/io-service;1"]
+                              .getService(Components.interfaces.nsIIOService);
+                function getFaviconFor(uri)
+                    FaviconService.getFaviconImageForPage(IOService.newURI(uri, null, null)).spec;
                 this.items =
                     PlacesUtils.getURLsForContainerNode(result.root)
-                               .map(function (e) ({ uri: e.uri, favicon: "anno:favicon:" + e.uri }));
+                               .map(function (e) ({
+                                   uri: e.uri,
+                                   favicon: getFaviconFor(e.uri)
+                               }));
                 this.rowCount = this.items.length;
             }
         };
