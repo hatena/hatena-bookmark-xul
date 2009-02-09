@@ -3,8 +3,32 @@
 <?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
 
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-      id="hBookmarkSidebar" title="Hatena Bookmark Sidebar">
-  <vbox flex="1">
-    <label value="Hello, sidebar world!" />
-  </vbox>
+      id="hBookmarkSidebar" title="Hatena Bookmark Sidebar"
+      onload="setTreeView();">
+    <vbox flex="1">
+        <label value="Hello, sidebar world!" />
+        <tree id="my-tree" flex="1">
+            <treecols>
+                <treecol label="Rows" flex="1" />
+            </treecols>
+            <treechildren />
+        </tree>
+    </vbox>
+    <script type="application/javascript; version=1.8">
+    // <![CDATA[
+
+        var treeView = {
+            rowCount: 5,
+            getCellText: function tv_getCellText(row, column) {
+                return (row + 1) + ["st", "nd", "rd"][row % 10] + " row";
+            },
+            setTree: function tv_setTree(treebox) {}
+        };
+
+        function setTreeView() {
+            document.getElementById("my-tree").view = treeView;
+        }
+
+    // ]]>
+    </script>
 </page>
