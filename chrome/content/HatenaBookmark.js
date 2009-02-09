@@ -1,7 +1,7 @@
 
 (function() {
     hBookmark.init = function() {
-        // this.Sync.all();
+        this.Sync.all();
     };
 })();
 

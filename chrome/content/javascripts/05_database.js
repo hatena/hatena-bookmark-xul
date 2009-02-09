@@ -16,6 +16,9 @@ Database = function Database(file) {
     this.connection = StorageService.openDatabase(file);
 }
 
+function decapitalize(str) {
+    return str.substr(0, 1).toLowerCase() + str.substr(1);
+};
 
 extend(Database, {
     LIST_DELIMITER : ',',
@@ -374,6 +377,10 @@ Entity = function (def){
             if(this.temporary){
                 Model.insert(this);
                 this.temporary=false;
+                if (Model.db.connection.lastInsertRowID) {
+                    // id と固定されてしまう…
+                    this.id = Model.db.connection.lastInsertRowID;
+                }
             } else {
                 Model.update(this);
             }
@@ -469,14 +476,23 @@ Entity = function (def){
             return model;
         },
         
+        delete : function(sql){
+            return Model.db.execute(<>
+                DELETE
+                FROM {def.name}
+            </>, sql);
+        },
+        
         find : function(sql, params){
             if (!params && typeof sql == 'object') {
                 if (typeof sql.where == 'string') {
-                    return this.find(<>
+                    var str = <>
                         SELECT * 
                         FROM {def.name}
                         WHERE {sql.where}
-                    </>, sql);
+                    </>;
+                    delete sql.where;
+                    return this.find(str, sql);
                 } else {
                     return this.find(<>
                         SELECT * 
@@ -502,7 +518,7 @@ Entity = function (def){
             } else {
                 var fields = method.substr(type.length+2).
                     split('And').
-                    map(methodcaller('decapitalize'));
+                    map(function (e) decapitalize(e));
                 
                 switch(type){
                 case 'find':
