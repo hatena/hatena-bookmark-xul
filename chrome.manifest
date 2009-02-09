@@ -1,0 +1,3 @@
+content	hatenabookmark	chrome/content/
+overlay	chrome://browser/content/browser.xul	chrome://hatenabookmark/content/overlay.xul
+skin	hatenabookmark	classic/1.0	chrome/skin/

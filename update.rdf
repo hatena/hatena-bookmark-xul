@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<RDF:RDF xmlns:em='http://www.mozilla.org/2004/em-rdf#' xmlns:RDF='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:NC='http://home.netscape.com/NC-rdf#'>
+  <RDF:Seq RDF:about='rdf:#$KMQtH3'>
+    <RDF:li RDF:resource='rdf:#$LMQtH3'/>
+  </RDF:Seq>
+  <RDF:Description em:version='0.0.1' RDF:about='rdf:#$LMQtH3'>
+    <em:targetApplication RDF:resource='rdf:#$OMQtH3'/>
+  </RDF:Description>
+  <RDF:Description RDF:about='urn:mozilla:extension:{e0a5aeec-982b-46c4-95db-c0e11e6e6f30}'>
+    <em:updates RDF:resource='rdf:#$KMQtH3'/>
+  </RDF:Description>
+  <RDF:Description em:updateHash='' em:maxVersion='3.0.*' em:updateLink='' em:id='{ec8030f7-c20a-464f-9b0e-13a3a9e97384}' RDF:about='rdf:#$OMQtH3' em:minVersion='2.0'/>
+</RDF:RDF>

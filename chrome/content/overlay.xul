@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/x-javascript"
+	  src="chrome://hatenabookmark/content/Hatenabookmark.js" />
+  <menupopup id="menu_ToolsPopup">
+    <menuitem label='hatenabookmark' oncommand='alert("hello. this is hatenabookmark")'/>
+  </menupopup>
+</overlay>

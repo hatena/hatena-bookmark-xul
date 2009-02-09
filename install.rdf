@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+    <Description about="urn:mozilla:install-manifest">
+        <em:id>{e0a5aeec-982b-46c4-95db-c0e11e6e6f30}</em:id>
+        <em:name>Hatenabookmark</em:name>
+        <em:version>0.0.1</em:version>
+        <em:type>2</em:type>
+        <em:description>FIXME Description about this extension</em:description>
+        <em:creator>FIXME author</em:creator>
+        <em:targetApplication>
+            <Description>
+                <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+                <em:minVersion>1.5</em:minVersion>
+                <em:maxVersion>3.0.*</em:maxVersion>
+            </Description>
+        </em:targetApplication>
+    </Description>
+</RDF>
