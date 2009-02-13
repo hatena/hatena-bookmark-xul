@@ -4,6 +4,8 @@ Components.utils.import("resource://hatenabookmark/modules/base.jsm");
 require("ModelTemp");
 require("Widget.TreeView");
 
+extendBuiltIns(this);
+
 const AtomService = Components.classes["@mozilla.org/atom-service;1"]
                         .getService(Components.interfaces.nsIAtomService);
 
@@ -53,7 +55,7 @@ extend(TagTreeView.prototype, {
     toggleOpenState: function (index) {
         var item = this._visibleItems[index];
         if (item.isOpen)
-            ;// close
+            this._closeRelatedTags(item);
         else
             this._openRelatedTags(item);
     },
@@ -76,6 +78,25 @@ extend(TagTreeView.prototype, {
         if (!items.length)
             parentItem.isEmpty = true;
         this._treeBox.rowCountChanged(startIndex, items.length);
-        this._treeBox.invalidateRow(startIndex - 1);
+        this._treeBox.invalidateRow(parentItem.index);
+    },
+
+    _closeRelatedTags: function (parentItem) {
+        if (!parentItem.isOpen) return;
+        var visibleItems = this._visibleItems;
+        var startIndex = parentItem.index + 1;
+        var endIndex = startIndex;
+        var currentLevel = parentItem.level;
+        while (endIndex < visibleItems.length &&
+               visibleItems[endIndex].level > currentLevel)
+            endIndex++;
+        visibleItems.splice(startIndex, endIndex - startIndex);
+        for (var i = startIndex; i < visibleItems.length; i++)
+            visibleItems[i].index = i;
+
+        parentItem.isOpen = false;
+        parentItem.isEmpty = false;
+        this._treeBox.rowCountChanged(startIndex, startIndex - endIndex);
+        this._treeBox.invalidateRow(parentItem.index);
     }
 });

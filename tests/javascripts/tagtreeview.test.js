@@ -42,18 +42,23 @@ function testTagTreeView() {
     assert.equals(cellTexts.concat().sort(), ["JavaScript", "Perl", "Ruby"]);
     assert.equals(cellTexts[1], "Perl");
 
-    view._openRelatedTags(view._visibleItems[1]);
+    view.toggleOpenState(1);
     assert.equals(view.rowCount, 5);
 
     assert.equals(view.getLevel(2), 1);
     assert.equals(view.getParentIndex(2), 1);
     assert.equals(view.hasNextSibling(2), true);
 
-    assert.equals(view.getLevel(3), 1);
-    assert.equals(view.getParentIndex(3), 1);
-    assert.equals(view.hasNextSibling(3), false);
-
     assert.equals(view.getLevel(4), 0);
     assert.equals(view.getParentIndex(4), -1);
     assert.equals(view.hasNextSibling(4), false);
+
+    view.toggleOpenState(1);
+    assert.equals(view.rowCount, 3);
+
+    assert.equals(view.isContainerOpen(1), false);
+
+    assert.equals(view.getLevel(2), 0);
+    assert.equals(view.getParentIndex(2), -1);
+    assert.equals(view.hasNextSibling(2), false);
 }
