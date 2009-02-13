@@ -11,6 +11,7 @@ var requireBase = "resource://hatenabookmark/modules/";
  * 
  * @param {Object} target コピー先。
  * @param {Object} source コピー元。
+ * @param {Boolean} overwrite 既存のプロパティも上書きする。初期値はtrue。
  * @return {Object} コピー先。
  */
 function extend(target, source, overwrite) {
@@ -34,29 +35,40 @@ function extend(target, source, overwrite) {
  * モジュールをインポートする。
  * ドット区切りの階層がディレクトリ階層に反映される。
  * 
- * @param {Object} target インポート先のオブジェクト。
- * @param {Object} name 階層を含めたモジュール名。
- * @return {Object} インポートしたモジュールのグローバルオブジェクト。
+ * @param {String} name 階層を含めたモジュール名。
+ * @return {Object} インポートしたオブジェクト。
  */
-function require(target, path) {
-    var uri = requireBase + path.replace(/\./g, "/") + ".jsm";
-    var parts = path.split(".").slice(0, -1);
-    while (parts.length) {
-        var part = parts.shift();
-        target = target[part] || new target.__parent__.Object();
+function require(path) {
+    var target = this;
+    var segments = path.split(".");
+    var leaf = segments.pop();
+    while (segments.length) {
+        var segment = segments.shift();
+        target = target[segment] || (target[segment] = {});
     }
-    return Components.utils.import(uri, target);
+    var predecessor = target[leaf];
+    var uri = requireBase + path.replace(/\./g, "/") + ".jsm";
+    Components.utils.import(uri, target);
+    if (predecessor && target[leaf])
+        extend(target[leaf], predecessor, false);
+    return target[leaf];
 }
 
 /**
- * require() でインポートするモジュールの基底URIを設定する。
+ * require() でモジュールをインポートする際の基底URIを設定する。
  * 
- * @param {Object} base モジュールをインポートする際の基底URI。
+ * @param {String} base モジュールをインポートする際の基底URI。
  */
 function setRequireBase(base) {
     requireBase = base;
 }
 
+/**
+ * 配列、文字列といったネイティブオブジェクトのプロトタイプを拡張する。
+ * 
+ * @param {Object} global 拡張するネイティブオブジェクトが
+ *                        属するグローバルオブジェクト。
+ */
 function extendNative(global) {
     global.Array.prototype.clone = global.Array.prototype.concat;
     extend(global.Array.prototype, ArrayExtensions);
@@ -64,6 +76,7 @@ function extendNative(global) {
 }
 
 var ArrayExtensions = {
+    contains: function (value) this.indexOf(value) != -1,
     find: function (callback, thisObject) {
         for (var i = 0, length = this.length; i < length; i++) {
             if (i in this) {
