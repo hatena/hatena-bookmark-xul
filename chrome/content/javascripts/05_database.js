@@ -199,7 +199,7 @@ extend(Database.prototype, {
         }
         sql = sqls[0];
         
-        if(params && params.order){
+        if(params && params.group){
             sql += ' GROUP BY ' + params.group;
         }
         

@@ -1,6 +1,7 @@
 const EXPORTED_SYMBOLS = ["TagTreeView"];
 
-Components.import("resource://hatenabookmark/modules/base.jsm");
+Components.utils.import("resource://hatenabookmark/modules/base.jsm");
+require("ModelTemp");
 require("Widget.TreeView");
 
 function TagTreeItem(tag, parentItem) {
@@ -17,15 +18,15 @@ function TagTreeItem(tag, parentItem) {
 function TagTreeView() {
     this._visibleItems = [];
     this._treeBox = null;
-    this._model = {}; // XXX モデルの作成と設定
+    this._model = model("Tag"); // XXX モデルをどうこうしたい。
 }
 
-TagTreeView.prototype.__proto__ = TreeView.prototype;
-extend(TreeView.prototype, {
+TagTreeView.prototype.__proto__ = Widget.TreeView.prototype;
+extend(TagTreeView.prototype, {
     get rowCount () this._visibleItems.length,
     getCellText: function (row, col) this._visibleItems[row].currentTag,
     setTree: function (treeBox) {
-        this.treeBox = treeBox;
+        this._treeBox = treeBox;
         this._openRelatedTags(null);
     },
 
@@ -48,9 +49,9 @@ extend(TreeView.prototype, {
 
     _openRelatedTags: function (parentItem) {
         var tags = parentItem
-            ? this._model.getRelatedTags(parentItem.tags)
-            : this._model.getAllTags();
-        var items = tags.map(function (tag) new TagTreeItem(tag, parentItem));
+            ? this._model.findRelatedTags(parentItem.tags)
+            : this._model.findDistinctTags();
+        var items = tags.map(function (t) new TagTreeItem(t.name, parentItem));
         if (items.length)
             items[items.length - 1].hasNext = false;
         var visibleItems = this._visibleItems;
