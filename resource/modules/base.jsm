@@ -1,5 +1,5 @@
 const EXPORTED_SYMBOLS = [
-    "extend", "require", "setRequireBase", "extendNative"
+    "extend", "require", "setRequireBase", "extendBuiltIns"
 ];
 
 var requireBase = "resource://hatenabookmark/modules/";
@@ -69,7 +69,7 @@ function setRequireBase(base) {
  * @param {Object} global 拡張するネイティブオブジェクトが
  *                        属するグローバルオブジェクト。
  */
-function extendNative(global) {
+function extendBuiltIns(global) {
     global.Array.prototype.clone = global.Array.prototype.concat;
     extend(global.Array.prototype, ArrayExtensions);
     extend(global.String.prototype, StringExtensions);
