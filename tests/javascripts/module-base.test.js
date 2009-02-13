@@ -19,7 +19,7 @@ function warmUp() {
 }
 
 function coolDown() {
-    if (resFile)
+    if (resFile && resFile.leafName === "Bar.jsm")
         utils.scheduleToRemove(resFile.parent);
 }
 
