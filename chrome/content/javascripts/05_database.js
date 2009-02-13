@@ -200,6 +200,10 @@ extend(Database.prototype, {
         sql = sqls[0];
         
         if(params && params.order){
+            sql += ' GROUP BY ' + params.group;
+        }
+        
+        if(params && params.order){
             sql += ' ORDER BY ' + params.order;
         }
         
