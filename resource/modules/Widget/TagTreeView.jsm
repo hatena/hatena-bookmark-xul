@@ -4,6 +4,9 @@ Components.utils.import("resource://hatenabookmark/modules/base.jsm");
 require("ModelTemp");
 require("Widget.TreeView");
 
+const AtomService = Components.classes["@mozilla.org/atom-service;1"]
+                        .getService(Components.interfaces.nsIAtomService);
+
 function TagTreeItem(tag, parentItem) {
     this.currentTag = tag;
     this.parent = parentItem;
@@ -39,13 +42,21 @@ extend(TagTreeView.prototype, {
         return parent ? parent.index : -1;
     },
 
-    toggleOpenState: function (index) {
-        // TBD
-    },
-
     isContainer: function (index) true,
     isContainerEmpty: function (index) this._visibleItems[index].isEmpty,
     isContainerOpen: function (index) this._visibleItems[index].isOpen,
+
+    getCellProperties: function (row, col, properties) {
+        properties.AppendElement(AtomService.getAtom("Name"));
+    },
+
+    toggleOpenState: function (index) {
+        var item = this._visibleItems[index];
+        if (item.isOpen)
+            ;// close
+        else
+            this._openRelatedTags(item);
+    },
 
     _openRelatedTags: function (parentItem) {
         var tags = parentItem

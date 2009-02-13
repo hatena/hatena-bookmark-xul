@@ -44,4 +44,16 @@ function testTagTreeView() {
 
     view._openRelatedTags(view._visibleItems[1]);
     assert.equals(view.rowCount, 5);
+
+    assert.equals(view.getLevel(2), 1);
+    assert.equals(view.getParentIndex(2), 1);
+    assert.equals(view.hasNextSibling(2), true);
+
+    assert.equals(view.getLevel(3), 1);
+    assert.equals(view.getParentIndex(3), 1);
+    assert.equals(view.hasNextSibling(3), false);
+
+    assert.equals(view.getLevel(4), 0);
+    assert.equals(view.getParentIndex(4), -1);
+    assert.equals(view.hasNextSibling(4), false);
 }

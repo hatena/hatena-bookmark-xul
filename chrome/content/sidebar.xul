@@ -11,7 +11,7 @@
     <vbox flex="1">
         <tree id="tag-tree" flex="1">
             <treecols>
-                <treecol label="{{tag}}" flex="1"/>
+                <treecol label="{{tag}}" primary="true" flex="1"/>
             </treecols>
             <treechildren/>
         </tree>
