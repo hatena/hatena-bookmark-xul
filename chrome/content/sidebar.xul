@@ -17,7 +17,7 @@
             <treechildren/>
         </tree>
 
-        <tree id="bookmark-list" hidecolumnpicker="true" flex="1">
+        <tree id="bookmark-tree" hidecolumnpicker="true" flex="1">
             <treecols>
                 <treecol label="{{bookmark}}" primary="true" flex="1"/>
             </treecols>

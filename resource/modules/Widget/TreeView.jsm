@@ -5,6 +5,7 @@ Components.utils.import("resource://hatenabookmark/modules/base.jsm");
 function TreeView() {}
 
 extend(TreeView.prototype, {
+    get wrappedJSObject () this,
     rowCount:            0,
     selection:           null,
     canDrop:             function (index, orientation) false,

@@ -20,8 +20,11 @@ extend(BookmarkTreeView.prototype, {
     },
 
     showByTags: function (tags) {
-        var bm = this._bookmark;
-        this._items = bm.findByTags.apply(bm, tags);
-        this._treeBox.invalidate();
+        var prevRowCount = this.rowCount;
+        var Bookmark = this._bookmark;
+        this._items = Bookmark.findByTags.apply(Bookmark, tags)
+            .map(function (tag) Bookmark.findById(tag.bookmark_id)[0]);
+        this._treeBox.rowCountChanged(0, -prevRowCount);
+        this._treeBox.rowCountChanged(0, this.rowCount);
     }
 });

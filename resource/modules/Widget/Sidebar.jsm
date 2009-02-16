@@ -19,9 +19,10 @@ extend(Sidebar.prototype, {
     handleEvent: function (event) {
         switch (event.type) {
         case "select":
-            if (event.target === this.tagTree)
-                this.bookmarkTree.view
-                    .showByTags(this.tagTree.view.selectedTags);
+            if (event.target === this.tagTree) {
+                this.bookmarkTree.view.wrappedJSObject
+                    .showByTags(this.tagTree.view.wrappedJSObject.selectedTags);
+            }
             break;
         }
     }
