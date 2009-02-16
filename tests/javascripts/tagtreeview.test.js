@@ -42,6 +42,8 @@ function testTagTreeView() {
     var cellTexts = [0, 1, 2].map(function (i) view.getCellText(i, {}));
     assert.equals(cellTexts.concat().sort(), ["JavaScript", "Perl", "Ruby"]);
     assert.equals(cellTexts[1], "Perl");
+    assert.equals(view.isContainer(1), true);
+    assert.equals(view.isContainerEmpty(1), false);
 }
 
 function testOpenClose() {

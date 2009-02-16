@@ -13,15 +13,16 @@ function TagTreeItem(tag, parentItem) {
     this.currentTag = tag;
     this.parent = parentItem;
     this.index = -1;
-    this.tags = parentItem ? parentItem.tags.concat(tag) : [tag];
-    this.level = parentItem ? parentItem.level + 1 : 0;
+    this.tags = parentItem ? parentItem.tags.concat(tag) : [];
+    this.level = parentItem ? parentItem.level + 1 : -1;
     this.hasNext = true;
     this.isOpen = false;
-    this.isEmpty = false;
+    this.isEmpty = null;
 }
 
 function TagTreeView() {
     this._visibleItems = [];
+    this._rootItem = new TagTreeItem();
     this._treeBox = null;
     this._model = model("Tag"); // XXX モデルをどうこうしたい。
     this.selection = null;
@@ -33,7 +34,8 @@ extend(TagTreeView.prototype, {
     getCellText: function (row, col) this._visibleItems[row].currentTag,
     setTree: function (treeBox) {
         this._treeBox = treeBox;
-        this._openRelatedTags(null);
+        this._openRelatedTags(this._rootItem);
+        this._visibleItems.forEach(function (item, i) item.index = i);
     },
 
     getLevel: function (index) this._visibleItems[index].level,
@@ -46,44 +48,47 @@ extend(TagTreeView.prototype, {
     },
 
     isContainer: function (index) true,
-    isContainerEmpty: function (index) this._visibleItems[index].isEmpty,
     isContainerOpen: function (index) this._visibleItems[index].isOpen,
+    isContainerEmpty: function (index) {
+        var item = this._visibleItems[index];
+        if (item.isEmpty === null)
+            item.isEmpty = this._model.findRelatedTags(item.tags).length === 0;
+        return item.isEmpty;
+    },
 
     getCellProperties: function (row, col, properties) {
         properties.AppendElement(AtomService.getAtom("Name"));
     },
 
     toggleOpenState: function (index) {
-        var item = this._visibleItems[index];
-        if (item.isOpen)
-            this._closeRelatedTags(item);
-        else
-            this._openRelatedTags(item);
+        var visibleItems = this._visibleItems;
+        var item = visibleItems[index];
+        var changedCount = item.isOpen
+            ? this._closeRelatedTags(item) : this._openRelatedTags(item);
+        if (changedCount) {
+            item.isOpen = !item.isOpen;
+            for (var i = index + 1; i < visibleItems.length; i++)
+                visibleItems[i].index = i;
+            this._treeBox.rowCountChanged(index + 1, changedCount);
+        } else {
+            item.isOpen = false;
+            item.isEmpty = true;
+        }
+        this._treeBox.invalidateRow(index);
     },
 
     _openRelatedTags: function (parentItem) {
-        var tags = parentItem
-            ? this._model.findRelatedTags(parentItem.tags)
-            : this._model.findDistinctTags();
+        var tags = this._model.findRelatedTags(parentItem.tags);
         var items = tags.map(function (t) new TagTreeItem(t.name, parentItem));
         if (items.length)
             items[items.length - 1].hasNext = false;
         var visibleItems = this._visibleItems;
-        var startIndex = parentItem ? parentItem.index + 1 : 0;
+        var startIndex = parentItem.index + 1;
         visibleItems.splice.apply(visibleItems, [startIndex, 0].concat(items));
-        for (var i = startIndex; i < visibleItems.length; i++)
-            visibleItems[i].index = i;
-        if (!parentItem) return;
-
-        parentItem.isOpen = true;
-        if (!items.length)
-            parentItem.isEmpty = true;
-        this._treeBox.rowCountChanged(startIndex, items.length);
-        this._treeBox.invalidateRow(parentItem.index);
+        return items.length;
     },
 
     _closeRelatedTags: function (parentItem) {
-        if (!parentItem.isOpen) return;
         var visibleItems = this._visibleItems;
         var startIndex = parentItem.index + 1;
         var endIndex = startIndex;
@@ -92,13 +97,7 @@ extend(TagTreeView.prototype, {
                visibleItems[endIndex].level > currentLevel)
             endIndex++;
         visibleItems.splice(startIndex, endIndex - startIndex);
-        for (var i = startIndex; i < visibleItems.length; i++)
-            visibleItems[i].index = i;
-
-        parentItem.isOpen = false;
-        parentItem.isEmpty = false;
-        this._treeBox.rowCountChanged(startIndex, startIndex - endIndex);
-        this._treeBox.invalidateRow(parentItem.index);
+        return startIndex - endIndex;
     },
 
     get selectedTags () {
