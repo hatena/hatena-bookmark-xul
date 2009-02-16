@@ -8,11 +8,14 @@ extendBuiltIns(this);
 
 function Sidebar(doc) {
     this.tagTree = doc.getElementById("tag-tree");
-    this.tagTree.view = new Widget.TagTreeView();
-    this.tagTree.addEventListener("select", this, false);
+    this.tagTreeView = new Widget.TagTreeView();
+    this.tagTree.view = this.tagTreeView;
 
     this.bookmarkTree = doc.getElementById("bookmark-tree");
-    this.bookmarkTree.view = new Widget.BookmarkTreeView();
+    this.bookmarkTreeView = new Widget.BookmarkTreeView();
+    this.bookmarkTree.view = this.bookmarkTreeView;
+
+    this.tagTree.addEventListener("select", this, false);
 }
 
 extend(Sidebar.prototype, {
@@ -20,8 +23,7 @@ extend(Sidebar.prototype, {
         switch (event.type) {
         case "select":
             if (event.target === this.tagTree) {
-                this.bookmarkTree.view.wrappedJSObject
-                    .showByTags(this.tagTree.view.wrappedJSObject.selectedTags);
+                this.bookmarkTreeView.showByTags(this.tagTreeView.selectedTags);
             }
             break;
         }

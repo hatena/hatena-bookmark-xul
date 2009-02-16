@@ -46,6 +46,9 @@ function extend(target, source, overwrite) {
  * @return {Object} インポートしたオブジェクト。
  */
 function require(path) {
+    var uri = requireBase + path.replace(/\./g, "/") + ".jsm";
+    var tempRoot = {};
+    Components.utils.import(uri, tempRoot);
     var target = this;
     var segments = path.split(".");
     var leaf = segments.pop();
@@ -54,9 +57,8 @@ function require(path) {
         target = target[segment] || (target[segment] = {});
     }
     var predecessor = target[leaf];
-    var uri = requireBase + path.replace(/\./g, "/") + ".jsm";
-    Components.utils.import(uri, target);
-    if (predecessor && target[leaf])
+    extend(target, tempRoot);
+    if (predecessor && target[leaf] !== predecessor)
         extend(target[leaf], predecessor, false);
     return target[leaf];
 }
@@ -77,6 +79,7 @@ function setRequireBase(base) {
  *                        属するグローバルオブジェクト。
  */
 function extendBuiltIns(global) {
+    global = global || this;
     global.Array.prototype.clone = global.Array.prototype.concat;
     extend(global.Array.prototype, ArrayExtensions);
     extend(global.String.prototype, StringExtensions);

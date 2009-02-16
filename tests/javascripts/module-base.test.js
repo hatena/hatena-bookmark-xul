@@ -58,8 +58,7 @@ function testRequire() {
 }
 
 function testExtendNative() {
-    var global = (function () this)();
-    extendBuiltIns(global);
+    extendBuiltIns();
 
     assert.isFunction(Array.prototype.find);
     assert.equals([24, 32, 17, 8, 33].find(function (n) n & 1), 17);

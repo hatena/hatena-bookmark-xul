@@ -4,7 +4,7 @@ Components.utils.import("resource://hatenabookmark/modules/base.jsm");
 require("ModelTemp");
 require("Widget.TreeView");
 
-extendBuiltIns(this);
+extendBuiltIns();
 
 const AtomService = Components.classes["@mozilla.org/atom-service;1"]
                         .getService(Components.interfaces.nsIAtomService);
