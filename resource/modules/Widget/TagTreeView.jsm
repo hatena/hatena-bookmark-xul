@@ -24,6 +24,7 @@ function TagTreeView() {
     this._visibleItems = [];
     this._treeBox = null;
     this._model = model("Tag"); // XXX モデルをどうこうしたい。
+    this.selection = null;
 }
 
 TagTreeView.prototype.__proto__ = Widget.TreeView.prototype;
@@ -98,5 +99,9 @@ extend(TagTreeView.prototype, {
         parentItem.isEmpty = false;
         this._treeBox.rowCountChanged(startIndex, startIndex - endIndex);
         this._treeBox.invalidateRow(parentItem.index);
+    },
+
+    get selectedTags () {
+        return this._visibleItems[this.selection.currentIndex].tags.concat();
     }
 });

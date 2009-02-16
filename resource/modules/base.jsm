@@ -1,8 +1,15 @@
 const EXPORTED_SYMBOLS = [
-    "extend", "require", "setRequireBase", "extendBuiltIns"
+     "p", "extend", "require", "setRequireBase", "extendBuiltIns",
 ];
 
 var requireBase = "resource://hatenabookmark/modules/";
+
+function p(value) {
+    Components.classes["@mozilla.org/consoleservice;1"]
+              .getService(Components.interfaces.nsIConsoleService)
+              .logStringMessage(Array.map(arguments, String).join("\n"));
+    return value;
+}
 
 // copy from Tombloo
 /**

@@ -1,7 +1,7 @@
 // XXX 既存のモデル用ソースコードを流用
 
 const EXPORTED_SYMBOLS = [
-    "p", "model", "Database", "Entity", "Model", "hBookmark"
+    "model", "Database", "Entity", "Model", "hBookmark"
 ];
 
 const Cc = Components.classes;

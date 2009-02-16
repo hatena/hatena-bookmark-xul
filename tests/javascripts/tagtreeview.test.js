@@ -2,6 +2,7 @@ var global = this;
 
 var moduleRoot;
 var TagTreeView;
+var view;
 var treeBox = {
     rowCountChanged: function () {},
     invalidateRow: function () {}
@@ -31,17 +32,19 @@ function setUp() {
     });
 
     moduleRoot.hBookmark.Model.db = hBookmark.Model.db;
+
+    view = new TagTreeView();
+    view.setTree(treeBox);
 }
 
 function testTagTreeView() {
-    var view = new TagTreeView();
-    view.setTree(treeBox);
-
     assert.equals(view.rowCount, 3);
     var cellTexts = [0, 1, 2].map(function (i) view.getCellText(i, {}));
     assert.equals(cellTexts.concat().sort(), ["JavaScript", "Perl", "Ruby"]);
     assert.equals(cellTexts[1], "Perl");
+}
 
+function testOpenClose() {
     view.toggleOpenState(1);
     assert.equals(view.rowCount, 5);
 
@@ -61,4 +64,13 @@ function testTagTreeView() {
     assert.equals(view.getLevel(2), 0);
     assert.equals(view.getParentIndex(2), -1);
     assert.equals(view.hasNextSibling(2), false);
+}
+
+function testSelection() {
+    view.selection = { currentIndex: 1 };
+    assert.equals(view.selectedTags.join(), ["Perl"].join());
+
+    view.toggleOpenState(1);
+    view.selection.currentIndex = 2;
+    assert.equals(view.selectedTags.join(), ["Perl", "JavaScript"].join());
 }

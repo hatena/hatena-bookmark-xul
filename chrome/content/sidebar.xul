@@ -7,11 +7,19 @@
       id="hBookmarkSidebar"
       title="{{Hatena Bookmark Sidebar}}">
 
-    <script type="application/javascript; version=1.8" src="sidebar.js"></script>
+    <script type="application/javascript" src="sidebar.js"></script>
     <vbox flex="1">
-        <tree id="tag-tree" flex="1">
+        <tree id="tag-tree" seltype="single"
+              hidecolumnpicker="true" flex="1">
             <treecols>
                 <treecol label="{{tag}}" primary="true" flex="1"/>
+            </treecols>
+            <treechildren/>
+        </tree>
+
+        <tree id="bookmark-list" hidecolumnpicker="true" flex="1">
+            <treecols>
+                <treecol label="{{bookmark}}" primary="true" flex="1"/>
             </treecols>
             <treechildren/>
         </tree>
