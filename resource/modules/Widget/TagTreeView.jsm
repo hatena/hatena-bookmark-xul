@@ -24,7 +24,7 @@ function TagTreeView() {
     this._visibleItems = [];
     this._rootItem = new TagTreeItem();
     this._treeBox = null;
-    this._model = model("Tag"); // XXX モデルをどうこうしたい。
+    this._tagModel = model("Tag"); // XXX モデルをどうこうしたい。
     this.selection = null;
 }
 
@@ -43,8 +43,7 @@ extend(TagTreeView.prototype, {
         return this._visibleItems[rowIndex].hasNext;
     },
     getParentIndex: function (rowIndex) {
-        var parent = this._visibleItems[rowIndex].parent;
-        return parent ? parent.index : -1;
+        return this._visibleItems[rowIndex].parent.index;
     },
 
     isContainer: function (index) true,
@@ -52,7 +51,7 @@ extend(TagTreeView.prototype, {
     isContainerEmpty: function (index) {
         var item = this._visibleItems[index];
         if (item.isEmpty === null)
-            item.isEmpty = this._model.findRelatedTags(item.tags).length === 0;
+            item.isEmpty = !this._tagModel.findRelatedTags(item.tags).length;
         return item.isEmpty;
     },
 
@@ -78,13 +77,13 @@ extend(TagTreeView.prototype, {
     },
 
     _openRelatedTags: function (parentItem) {
-        var tags = this._model.findRelatedTags(parentItem.tags);
+        var tags = this._tagModel.findRelatedTags(parentItem.tags);
+        if (!tags.length) return 0;
         var items = tags.map(function (t) new TagTreeItem(t.name, parentItem));
-        if (items.length)
-            items[items.length - 1].hasNext = false;
+        items[items.length - 1].hasNext = false;
         var visibleItems = this._visibleItems;
-        var startIndex = parentItem.index + 1;
-        visibleItems.splice.apply(visibleItems, [startIndex, 0].concat(items));
+        var spliceArgs = [parentItem.index + 1, 0].concat(items);
+        visibleItems.splice.apply(visibleItems, spliceArgs);
         return items.length;
     },
 
