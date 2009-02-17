@@ -1,41 +1,18 @@
-var global = {
-    __proto__: window,
-    location: {
-        href: "chrome://hatenabookmark/content/sidebar.xul",
-        pathname: "/content/sidebar.xul"
-    }
-};
 var hBookmark;
-
 var view;
 var treeBox = {
     rowCountChanged: function () {},
     invalidateRow: function () {}
 };
 
-function setUp() {
-    // utils.includeだとIndirect Eval Callエラーになる?
-    //utils.include("chrome://hatenabookmark/content/autoloader.js", global);
-    Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
-        .getService(Components.interfaces.mozIJSSubScriptLoader)
-        .loadSubScript("chrome://hatenabookmark/content/autoloader.js", global);
+function warmUp() {
+    utils.include("btil.js");
+    var global = loadAutoloader("chrome://hatenabookmark/content/sidebar.xul");
     hBookmark = global.hBookmark;
+}
 
-    var db = new hBookmark.Database("hatena.bookmark.test.sqlite");
-    hBookmark.Model.db = db;
-    hBookmark.Model.resetAll();
-
-    var Tag = hBookmark.model("Tag");
-    [
-        [1, "Perl"], [1, "Ruby"], [1, "JavaScript"],
-        [2, "Perl"], [2, "Ruby"],
-        [3, "Ruby"], [3, "JavaScript"],
-    ].forEach(function ([bmId, name]) {
-        var tag = new Tag();
-        tag.bookmark_id = bmId;
-        tag.name = name;
-        tag.save();
-    });
+function setUp() {
+    prepareDatabase(hBookmark);
 
     view = new hBookmark.TagTreeView();
     view.setTree(treeBox);
