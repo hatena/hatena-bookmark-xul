@@ -1,8 +1,4 @@
-const EXPORTED_SYMBOLS = ["BookmarkTreeView"];
-
-Components.utils.import("resource://hatenabookmark/modules/base.jsm");
-require("ModelTemp");
-require("Widget.TreeView");
+const EXPORT = ["BookmarkTreeView"];
 
 function BookmarkTreeView() {
     this.selection = null;
@@ -11,7 +7,7 @@ function BookmarkTreeView() {
     this._bookmark = model("Bookmark"); // XXX モデルをどうこうしたい。
 }
 
-BookmarkTreeView.prototype.__proto__ = Widget.TreeView.prototype;
+BookmarkTreeView.prototype.__proto__ = TreeView.prototype;
 extend(BookmarkTreeView.prototype, {
     get rowCount () this._items.length,
     getCellText: function (row, col) this._items[row].title,

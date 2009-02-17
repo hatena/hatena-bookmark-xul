@@ -7,7 +7,10 @@
       id="hBookmarkSidebar"
       title="{{Hatena Bookmark Sidebar}}">
 
+    <script type="application/javascript" src="autoloader.js"></script>
+    <!--
     <script type="application/javascript" src="sidebar.js"></script>
+    -->
     <vbox flex="1">
         <tree id="tag-tree" seltype="single"
               hidecolumnpicker="true" flex="1">

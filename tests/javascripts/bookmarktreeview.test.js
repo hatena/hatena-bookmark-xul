@@ -1,7 +1,11 @@
-var global = this;
-
-var moduleRoot;
-var BookmarkTreeView;
+var global = {
+    __proto__: window,
+    location: {
+        href: "chrome://hatenabookmark/content/sidebar.xul",
+        pathname: "/content/sidebar.xul"
+    }
+};
+var hBookmark;
 var view;
 var treeBox = {
     rowCountChanged: function () {},
@@ -9,18 +13,17 @@ var treeBox = {
     invalidate: function () {}
 };
 
-function warmUp() {
-    moduleRoot = Components.utils.import("resource://hatenabookmark/modules/base.jsm", {});
-    moduleRoot.require("ModelTemp");
-    BookmarkTreeView = moduleRoot.require("Widget.BookmarkTreeView");
-}
-
 function setUp() {
-    var helper = { utils: utils };
-    utils.include('btil.js', helper);
-    helper.load(global);
+    Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
+        .getService(Components.interfaces.mozIJSSubScriptLoader)
+        .loadSubScript("chrome://hatenabookmark/content/autoloader.js", global);
+    hBookmark = global.hBookmark;
 
-    var Tag = model("Tag");
+    var db = new hBookmark.Database("hatena.bookmark.test.sqlite");
+    hBookmark.Model.db = db;
+    hBookmark.Model.resetAll();
+
+    var Tag = hBookmark.model("Tag");
     [
         [1, "Perl"], [1, "Ruby"], [1, "JavaScript"],
         [2, "Perl"], [2, "Ruby"],
@@ -31,7 +34,7 @@ function setUp() {
         tag.name = name;
         tag.save();
     });
-    var Bookmark = model("Bookmark");
+    var Bookmark = hBookmark.model("Bookmark");
     [
         ["http://example.org/langs",
          "[Perl][Ruby][JavaScript]Multiple languages comment",
@@ -48,9 +51,7 @@ function setUp() {
         b.save();
     });
 
-    moduleRoot.hBookmark.Model.db = hBookmark.Model.db;
-
-    view = new BookmarkTreeView();
+    view = new hBookmark.BookmarkTreeView();
     view.setTree(treeBox);
 }
 

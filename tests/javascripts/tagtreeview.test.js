@@ -1,25 +1,31 @@
-var global = this;
+var global = {
+    __proto__: window,
+    location: {
+        href: "chrome://hatenabookmark/content/sidebar.xul",
+        pathname: "/content/sidebar.xul"
+    }
+};
+var hBookmark;
 
-var moduleRoot;
-var TagTreeView;
 var view;
 var treeBox = {
     rowCountChanged: function () {},
     invalidateRow: function () {}
 };
 
-function warmUp() {
-    moduleRoot = Components.utils.import("resource://hatenabookmark/modules/base.jsm", {});
-    moduleRoot.require("ModelTemp");
-    TagTreeView = moduleRoot.require("Widget.TagTreeView");
-}
-
 function setUp() {
-    var helper = { utils: utils };
-    utils.include('btil.js', helper);
-    helper.load(global);
+    // utils.includeだとIndirect Eval Callエラーになる?
+    //utils.include("chrome://hatenabookmark/content/autoloader.js", global);
+    Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
+        .getService(Components.interfaces.mozIJSSubScriptLoader)
+        .loadSubScript("chrome://hatenabookmark/content/autoloader.js", global);
+    hBookmark = global.hBookmark;
 
-    var Tag = model("Tag");
+    var db = new hBookmark.Database("hatena.bookmark.test.sqlite");
+    hBookmark.Model.db = db;
+    hBookmark.Model.resetAll();
+
+    var Tag = hBookmark.model("Tag");
     [
         [1, "Perl"], [1, "Ruby"], [1, "JavaScript"],
         [2, "Perl"], [2, "Ruby"],
@@ -31,9 +37,7 @@ function setUp() {
         tag.save();
     });
 
-    moduleRoot.hBookmark.Model.db = hBookmark.Model.db;
-
-    view = new TagTreeView();
+    view = new hBookmark.TagTreeView();
     view.setTree(treeBox);
 }
 

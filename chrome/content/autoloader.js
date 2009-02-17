@@ -4,6 +4,12 @@ var hBookmark = {
     Cc: Components.classes,
     Ci: Components.interfaces,
 
+    StorageService: Components.classes["@mozilla.org/storage/service;1"]
+                    .getService(Components.interfaces.mozIStorageService),
+    IOService: Components.classes["@mozilla.org/network/io-service;1"]
+               .getService(Components.interfaces.nsIIOService),
+    StorageStatementWrapper: Components.Constructor("@mozilla.org/storage/statement-wrapper;1", "mozIStorageStatementWrapper", "initialize"),
+
     // copy from Tombloo
     /**
      * オブジェクトのプロパティをコピーする。

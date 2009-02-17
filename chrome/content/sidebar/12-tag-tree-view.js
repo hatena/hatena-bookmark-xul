@@ -1,13 +1,9 @@
-const EXPORTED_SYMBOLS = ["TagTreeView"];
+const EXPORT = ["TagTreeView"];
 
-Components.utils.import("resource://hatenabookmark/modules/base.jsm");
-require("ModelTemp");
-require("Widget.TreeView");
+const AtomService =
+    Cc["@mozilla.org/atom-service;1"].getService(Ci.nsIAtomService);
 
-extendBuiltIns();
-
-const AtomService = Components.classes["@mozilla.org/atom-service;1"]
-                        .getService(Components.interfaces.nsIAtomService);
+var Tag = model("Tag");
 
 function TagTreeItem(tag, parentItem) {
     this.currentTag = tag;
@@ -24,11 +20,10 @@ function TagTreeView() {
     this._visibleItems = [];
     this._rootItem = new TagTreeItem();
     this._treeBox = null;
-    this._tagModel = model("Tag"); // XXX モデルをどうこうしたい。
     this.selection = null;
 }
 
-TagTreeView.prototype.__proto__ = Widget.TreeView.prototype;
+TagTreeView.prototype.__proto__ = TreeView.prototype;
 extend(TagTreeView.prototype, {
     get rowCount () this._visibleItems.length,
     getCellText: function (row, col) this._visibleItems[row].currentTag,
@@ -51,7 +46,7 @@ extend(TagTreeView.prototype, {
     isContainerEmpty: function (index) {
         var item = this._visibleItems[index];
         if (item.isEmpty === null)
-            item.isEmpty = !this._tagModel.findRelatedTags(item.tags).length;
+            item.isEmpty = !Tag.findRelatedTags(item.tags).length;
         return item.isEmpty;
     },
 
@@ -77,7 +72,7 @@ extend(TagTreeView.prototype, {
     },
 
     _openRelatedTags: function (parentItem) {
-        var tags = this._tagModel.findRelatedTags(parentItem.tags);
+        var tags = Tag.findRelatedTags(parentItem.tags);
         if (!tags.length) return 0;
         var items = tags.map(function (t) new TagTreeItem(t.name, parentItem));
         items[items.length - 1].hasNext = false;

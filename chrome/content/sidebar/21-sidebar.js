@@ -1,10 +1,4 @@
-const EXPORTED_SYMBOLS = ["Sidebar"];
-
-Components.utils.import("resource://hatenabookmark/modules/base.jsm");
-require("Widget.TagTreeView");
-require("Widget.BookmarkTreeView");
-
-extendBuiltIns(this);
+const EXPORT = ["Sidebar"];
 
 function Sidebar(doc) {
     this.tagTree = doc.getElementById("tag-tree");

@@ -1,6 +1,4 @@
-const EXPORTED_SYMBOLS = ["TreeView"];
-
-Components.utils.import("resource://hatenabookmark/modules/base.jsm");
+const EXPORT = ["TreeView"];
 
 function TreeView() {}
 
