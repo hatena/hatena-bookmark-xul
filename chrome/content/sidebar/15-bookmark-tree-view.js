@@ -18,9 +18,19 @@ extend(BookmarkTreeView.prototype, {
     showByTags: function (tags) {
         var prevRowCount = this.rowCount;
         var Bookmark = this._bookmark;
+        // XXX Bookmark.find* はTagではなくBookmarkを返すべき。
         this._items = Bookmark.findByTags.apply(Bookmark, tags)
             .map(function (tag) Bookmark.findById(tag.bookmark_id)[0]);
         this._treeBox.rowCountChanged(0, -prevRowCount);
         this._treeBox.rowCountChanged(0, this.rowCount);
+    },
+
+    handleEvent: function (event) {
+        switch (event.type) {
+        case "select":
+            if (event.target.id === "tag-tree")
+                this.showByTags(event.target.view.wrappedJSObject.selectedTags);
+            break;
+        }
     }
 });
