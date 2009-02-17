@@ -1,5 +1,5 @@
 const EXPORT = [
-    "isInclude", "extend", "addBefore", "addAround", "update", "model",
+    "p", "isInclude", "extend", "addBefore", "addAround", "update", "model",
     "Application", "PrefetchService", "ObserverService", "StorageService",
     "IOService", "StorageStatementWrapper",
 ];

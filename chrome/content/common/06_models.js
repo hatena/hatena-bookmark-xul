@@ -81,15 +81,18 @@ var hBookmark = this;
                 var tag = arguments[i];
                 if (i == 0) {
                     res = Model.Tag.findByName(tag);
-                    if (!res.length) return [];
                 } else {
-                    bids = res.map(function(t) t.bookmark_id);
                     res = Model.Tag.find({
                         where: 'name = :name AND bookmark_id IN (' + bids.join(',') + ')',
                         name: tag,
                     });
                 }
+                if (!res.length) return [];
+                bids = res.map(function(t) t.bookmark_id);
             }
+            res = Model.Bookmark.find({
+                where: 'id IN (' + bids.join(',') + ')'
+            });
             return res;
         },
     });
