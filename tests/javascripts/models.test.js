@@ -42,7 +42,7 @@ function testBookmark() {
     var res = BOOKMARK.findAll();
     assert.isTrue(res.length > 0);
 
-    var res = BOOKMARK.findByTags('hoge');
+    var res = BOOKMARK.findByTags(['hoge']);
     assert.isTrue(res.length == 1);
 
     b = new BOOKMARK();
@@ -55,7 +55,7 @@ function testBookmark() {
     res = BOOKMARK.findByTags('hoge');
     assert.isTrue(res.length == 2);
 
-    res = BOOKMARK.findByTags('hoge', 'huga');
+    res = BOOKMARK.findByTags(['hoge', 'huga']);
     assert.isTrue(res.length == 1);
 
 }

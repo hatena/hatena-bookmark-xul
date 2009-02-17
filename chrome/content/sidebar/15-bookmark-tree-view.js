@@ -18,7 +18,7 @@ extend(BookmarkTreeView.prototype, {
 
     showByTags: function (tags) {
         var prevRowCount = this.rowCount;
-        this._items = Bookmark.findByTags.apply(Bookmark, tags);
+        this._items = Bookmark.findByTags(tags);
         this._treeBox.rowCountChanged(0, -prevRowCount);
         this._treeBox.rowCountChanged(0, this.rowCount);
     },

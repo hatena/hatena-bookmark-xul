@@ -74,11 +74,12 @@ var hBookmark = this;
             }
             return tags;
         },
-        findByTags: function() {
+        findByTags: function(tags) {
+            tags = [].concat(tags);
             let bids = [];
             let res = [];
-            for (var i = 0;  i < arguments.length; i++) {
-                var tag = arguments[i];
+            for (var i = 0;  i < tags.length; i++) {
+                var tag = tags[i];
                 if (i == 0) {
                     res = Model.Tag.findByName(tag);
                 } else {
