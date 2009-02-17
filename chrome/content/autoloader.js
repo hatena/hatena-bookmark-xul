@@ -1,8 +1,6 @@
 var hBookmark = {
-    EXTENSION_ID: "bookmark@hatena.ne.jp"
-};
+    EXTENSION_ID: "bookmark@hatena.ne.jp",
 
-hBookmark.utils = {
     Cc: Components.classes,
     Ci: Components.interfaces,
 
@@ -33,41 +31,41 @@ hBookmark.utils = {
         return target;
     },
 
+    /**
+     * 指定されたURIのスクリプトを読み込む。
+     * 
+     * @param {String} uri スクリプトのURI。"/"で終わっていた場合は
+     *                     そのディレクトリ直下のすべてのスクリプトを読み込む。
+     *                     省略された場合はcommonディレクトリ及び現在
+     *                     スクリプトが読み込まれているXULファイルと同名の
+     *                     ディレクトリ直下のすべてのスクリプトを読み込む。
+     */
+    load: function load(uri) {
+        if (!uri) {
+            load("/content/common/");
+            var leafName = location.pathname.replace(/^.*\/|\..+?$/g, "");
+            if (leafName)
+                load(leafName + "/");
+            return;
+        } else if (uri.charAt(uri.length - 1) === "/") {
+            load.getScriptURIs(uri).forEach(load);
+            return;
+        }
+
+        var loader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
+                     .getService(Components.interfaces.mozIJSSubScriptLoader);
+        var env = { __proto__: hBookmark };
+        loader.loadSubScript(uri, env);
+        if (env.EXPORT)
+            env.EXPORT.forEach(function (name) hBookmark[name] = env[name]);
+    },
+
     p: function (value) {
         Components.classes["@mozilla.org/consoleservice;1"]
             .getService(Components.interfaces.nsIConsoleService)
             .logStringMessage(Array.map(arguments, String).join("\n"));
         return value;
     }
-};
-
-/**
- * 指定されたURIのスクリプトを読み込む。
- * 
- * @param {String} uri スクリプトのURI。"/"で終わっていた場合は
- *                     そのディレクトリ直下のすべてのスクリプトを読み込む。
- *                     省略された場合はcommonディレクトリ及び現在スクリプトが
- *                     読み込まれているXULファイルと同名のディレクトリ
- *                     直下のすべてのスクリプトを読み込む。
- */
-hBookmark.load = function load(uri) {
-    if (!uri) {
-        load("/content/common/");
-        var leafName = location.pathname.replace(/^.*\/|\..+?$/g, "");
-        if (leafName)
-            load(leafName + "/");
-        return;
-    } else if (uri.charAt(uri.length - 1) === "/") {
-        load.getScriptURIs(uri).forEach(load);
-        return;
-    }
-
-    var loader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"]
-                     .getService(Components.interfaces.mozIJSSubScriptLoader);
-    var env = { __proto__: hBookmark.utils };
-    loader.loadSubScript(uri, env);
-    if (env.EXPORT)
-        env.EXPORT.forEach(function (name) hBookmark[name] = env[name]);
 };
 
 hBookmark.load.getScriptURIs = function (dirURI) {

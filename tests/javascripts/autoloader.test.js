@@ -12,7 +12,7 @@ function warmUp() {
 }
 
 function testExtend() {
-    var extend = global.hBookmark.utils.extend;
+    var extend = global.hBookmark.extend;
     assert.isFunction(extend);
 
     var o = { bar: 0 };
