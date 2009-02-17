@@ -1,11 +1,17 @@
 
 var _global = this;
+var hBookmark;
+
+function warmUp() {
+    utils.include('btil.js');
+    var tempGlobal = loadAutoloader("chrome://hatenabookmark/content/unknown.xul");
+    hBookmark = tempGlobal.hBookmark;
+    hBookmark.extend(_global, hBookmark);
+}
 
 function setUp()
 {
-    var helper = {utils: utils};
-    utils.include('btil.js', helper);
-    helper.load(_global);
+    initDatabase(hBookmark);
 }
 
 function testParseTags() {

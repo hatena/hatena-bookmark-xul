@@ -29,10 +29,14 @@ function loadAutoloader(uri) {
     return global;
 }
 
-function prepareDatabase(hBookmark) {
+function initDatabase(hBookmark) {
     var db = new hBookmark.Database("hatena.bookmark.test.sqlite");
     hBookmark.Model.db = db;
     hBookmark.Model.resetAll();
+}
+
+function prepareDatabase(hBookmark) {
+    initDatabase(hBookmark);
 
     var Tag = hBookmark.model("Tag");
     [
