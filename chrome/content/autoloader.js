@@ -3,39 +3,8 @@ var hBookmark = {
 
     Cc: Components.classes,
     Ci: Components.interfaces,
-
-    StorageService: Components.classes["@mozilla.org/storage/service;1"]
-                    .getService(Components.interfaces.mozIStorageService),
-    IOService: Components.classes["@mozilla.org/network/io-service;1"]
-               .getService(Components.interfaces.nsIIOService),
-    StorageStatementWrapper: Components.Constructor("@mozilla.org/storage/statement-wrapper;1", "mozIStorageStatementWrapper", "initialize"),
-
-    // copy from Tombloo
-    /**
-     * オブジェクトのプロパティをコピーする。
-     * ゲッター/セッターの関数も対象に含まれる。
-     * 
-     * @param {Object} target コピー先。
-     * @param {Object} source コピー元。
-     * @param {Boolean} overwrite 既存のプロパティも上書きする。初期値はtrue。
-     * @return {Object} コピー先。
-     */
-    extend: function (target, source, overwrite) {
-        overwrite = overwrite == null ? true : overwrite;
-        for (var p in source) {
-            var getter = source.__lookupGetter__(p);
-            if (getter)
-                target.__defineGetter__(p, getter);
-            
-            var setter = source.__lookupSetter__(p);
-            if (setter)
-                target.__defineSetter__(p, setter);
-            
-            if (!getter && !setter && (overwrite || !(p in target)))
-                target[p] = source[p];
-        }
-        return target;
-    },
+    Cr: Components.results,
+    Cu: Components.utils,
 
     /**
      * 指定されたURIのスクリプトを読み込む。
@@ -64,13 +33,6 @@ var hBookmark = {
         loader.loadSubScript(uri, env);
         if (env.EXPORT)
             env.EXPORT.forEach(function (name) hBookmark[name] = env[name]);
-    },
-
-    p: function (value) {
-        Components.classes["@mozilla.org/consoleservice;1"]
-            .getService(Components.interfaces.nsIConsoleService)
-            .logStringMessage(Array.map(arguments, String).join("\n"));
-        return value;
     }
 };
 

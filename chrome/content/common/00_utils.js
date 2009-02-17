@@ -1,11 +1,28 @@
-const EXPORT = ["isInclude", "addBefore", "addAround", "update", "model"];
+const EXPORT = [
+    "isInclude", "extend", "addBefore", "addAround", "update", "model",
+    "Application", "PrefetchService", "ObserverService", "StorageService",
+    "IOService", "StorageStatementWrapper",
+];
 var hBookmark = this;
+
+const Application =
+    Cc["@mozilla.org/fuel/application;1"].getService(Ci.fuelIApplication);
+const PrefetchService =
+    Cc["@mozilla.org/prefetch-service;1"].getService(Ci.nsIPrefetchService);
+const ObserverService =
+    Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
+const StorageService =
+    Cc["@mozilla.org/storage/service;1"].getService(Ci.mozIStorageService);
+const IOService =
+    Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+const StorageStatementWrapper =
+    Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');
 
 /* utility functions */
 
-var p = function (msg) {
-//     Application.console.open();
-     Application.console.log('' + msg);
+var p = function (value) {
+    Application.console.log(Array.map(arguments, String).join("\n"));
+    return value;
 }
 
 var isInclude = function(val, ary) {
