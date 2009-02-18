@@ -139,20 +139,35 @@ var model = function(name) {
     return m;
 }
 
+const _MODULE_BASE_URI = "resource://hatenabookmark/modules/"
+
 function loadModules() {
-    var files = __LOCATION__.parent.directoryEntries;
+    var uris = _getModuleURIs();
+    uris.forEach(function (uri) Cu.import(uri, this), this);
+}
+
+function loadPrecedingModules() {
+    var uris = _getModuleURIs();
+    var self = _MODULE_BASE_URI + this.__LOCATION__.leafName;
+    var i = uris.indexOf(self);
+    if (i === -1) return;
+    uris.slice(0, i).forEach(function (uri) Cu.import(uri, this), this);
+}
+
+function _getModuleURIs() {
     var uris = [];
+    var files = __LOCATION__.parent.directoryEntries;
     while (files.hasMoreElements()) {
         var file = files.getNext().QueryInterface(Ci.nsIFile);
         if (/\.jsm$/.test(file.leafName))
-            uris.push("resource://hatenabookmark/modules/" + file.leafName);
+            uris.push(_MODULE_BASE_URI + file.leafName);
     }
-    uris.sort().forEach(function (uri) Cu.import(uri, this), this);
+    return uris.sort();
 }
 
 var EXPORTED_SYMBOLS = [m for (m in new Iterator(this, true))
                           if (m[0] !== "_" && m !== "EXPORTED_SYMBOLS")];
-//* Debug
+/* Debug
 EXPORTED_SYMBOLS.push.apply(EXPORTED_SYMBOLS,
                             [m for (m in new Iterator(this, true))
                                if (m[0] === "_")]);
