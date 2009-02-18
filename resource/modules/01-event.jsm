@@ -11,7 +11,7 @@ const EXPORTED_SYMBOLS = ["EventService"];
  * };
  * var l = EventService.createListener("DataUpdated", eventListener);
  *
- * var l = EventService.createListener("DataUpdated", obj.method, obj);
+ * var l = EventService.createListener("DataUpdated", [obj, obj.method]);
  *
  * l.unlisten();
  */
@@ -19,12 +19,13 @@ const EXPORTED_SYMBOLS = ["EventService"];
 var listenersSet = {};
 
 var EventService = {
-    createListener: function (type, handler, object) {
-        if (typeof handler.handleEvent === "function") {
-            object = handler;
-            handler = handler.handleEvent;
-        }
-        var listener = new Listener(type, handler, object);
+    createListener: function (type, handler, priority) {
+        var object = null;
+        if (typeof handler.handleEvent === "function")
+            [object, handler] = [handler, handler.handleEvent];
+        else if (Object.prototype.toString.call(handler) === "[object Array]")
+            [object, handler] = handler;
+        var listener = new Listener(type, object, handler, priority || 0);
         listener.listen();
         return listener;
     },
@@ -32,9 +33,11 @@ var EventService = {
     dispatchEvent: function (event) {
         var listeners = listenersSet[event.type];
         if (!listeners) return true;
-        listeners.concat().forEach(function (listener) {
+        for (var i = 0; i < listeners.length; i++) {
+            var listener = listeners[i];
             listener.handler.call(listener.object || EventService, event);
-        });
+            if (event.isPropagationStopped) break;
+        }
         return !event.isDefaultPrevented;
     },
 
@@ -48,17 +51,25 @@ var EventService = {
     }
 };
 
-function Listener(type, handler, object) {
+function Listener(type, object, handler, priority) {
     this.type = type;
-    this.handler = handler;
     this.object = object;
+    this.handler = handler;
+    this.priority = priority;
 }
 
 extend(Listener.prototype, {
     listen: function () {
         var listeners = listenersSet[this.type] ||
                         (listenersSet[this.type] = []);
-        listeners.push(this);
+        if (this.priority) {
+            for (var i = 0; i < listeners.length; i++)
+                if (listeners[i].priority < this.priority)
+                    break;
+            listeners.splice(i, 0, this);
+        } else {
+            listeners.push(this);
+        }
     },
     unlisten: function () {
         var listeners = listenersSet[this.type];
@@ -71,12 +82,18 @@ extend(Listener.prototype, {
 function Event(type, data) {
     this.type = type;
     this.data = data;
+    this.isPropagationStopped = false;
     this.isDefaultPrevented = false;
 }
 
 extend(Event.prototype, {
+    stopPropagation: function () {
+        this.isPropagationStopped = true;
+    },
     preventDefault: function () {
         this.isDefaultPrevented = true;
-    },
-    stopPropagation: function () {}
+    }
 });
+
+Event.prototype.stop = Event.prototype.stopPropagation;
+Event.prototype.cancel = Event.prototype.preventDefault;
