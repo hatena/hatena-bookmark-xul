@@ -34,6 +34,7 @@ hBookmark.load.getScriptURIs = function (dirURI) {
     var dirPath = dirURI.replace(/^[\w-]+:\/\/[\w.:-]+\//, "");
     var em = Cc["@mozilla.org/extensions/manager;1"]
                  .getService(Ci.nsIExtensionManager);
+    var baseURI = 'chrome://hatenabookmark/' + dirPath;
     // XXX jarファイルに固めるのならnsIZipReaderを使ってごにょごにょする。
     var dir = em.getInstallLocation(EXTENSION_ID)
                 .getItemFile(EXTENSION_ID, "chrome/" + dirPath);
@@ -42,7 +43,7 @@ hBookmark.load.getScriptURIs = function (dirURI) {
     while (files.hasMoreElements()) {
         var file = files.getNext().QueryInterface(Ci.nsIFile);
         if (/\.js$/.test(file.leafName))
-            uris.push(dirURI + file.leafName);
+            uris.push(baseURI + file.leafName);
     }
     return uris.sort();
 };
