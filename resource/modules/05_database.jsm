@@ -1,4 +1,6 @@
-const EXPORT = ["Database", "Entity", "Model"];
+Components.utils.import("resource://hatenabookmark/modules/00_utils.jsm");
+
+const EXPORTED_SYMBOLS = ["Database", "Entity", "Model"];
 
 /*
  * original code by tombloo

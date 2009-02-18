@@ -1,4 +1,7 @@
-const EXPORT = ["Model"];
+Components.utils.import("resource://hatenabookmark/modules/00_utils.jsm");
+Components.utils.import("resource://hatenabookmark/modules/05_database.jsm");
+
+const EXPORTED_SYMBOLS = ["Model"];
 var hBookmark = this;
 
 (function() {
