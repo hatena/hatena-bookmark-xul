@@ -24,25 +24,6 @@ function setUp() {
     hBookmark = global.hBookmark;
 }
 
-function dontTestExtend() {
-    var extend = hBookmark.extend;
-    assert.isFunction(extend);
-
-    var o = { bar: 0 };
-    extend(o, {
-        _foo: "",
-        get foo () this._foo.toUpperCase(),
-        set foo (val) this._foo = val + "",
-        bar: 42
-    });
-    o.foo = "hello";
-    assert.equals(o.foo, "HELLO");
-    assert.equals(o.bar, 42);
-
-    extend(o, { bar: 12 }, false);
-    assert.equals(o.bar, 42);
-}
-
 function testModuleLoaded() {
     assert.isDefined(hBookmark.Foo);
     assert.equals(hBookmark.Foo.baz, 42);
@@ -50,6 +31,6 @@ function testModuleLoaded() {
 }
 
 function testGetScriptPaths() {
-    var paths = hBookmark.load.getScriptURIs("/content/autoloader-test/");
+    var paths = hBookmark.load.getScriptURIs("chrome://hatenabookmark/content/autoloader-test/");
     assert.equals(paths, ["chrome://hatenabookmark/content/autoloader-test/01_foo.js"]);
 }

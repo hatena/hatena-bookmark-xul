@@ -1,9 +1,9 @@
-const EXPORT = [
-    "p", "isInclude", "extend", "addBefore", "addAround", "update", "model",
-    "Application", "PrefetchService", "ObserverService", "StorageService",
-    "IOService", "StorageStatementWrapper",
-];
-var hBookmark = this;
+// エクスポートしたくないメンバの名前はアンダースコア(_)からはじめること。
+
+const Cc = Components.classes;
+const Ci = Components.interfaces;
+const Cr = Components.results;
+const Cu = Components.utils;
 
 const Application =
     Cc["@mozilla.org/fuel/application;1"].getService(Ci.fuelIApplication);
@@ -132,10 +132,28 @@ var update = function (self, obj/*, ... */) {
     return self;
 };
 
+// XXX model関数はmodel.jsmに置かないとスコープ的にまずい?
 var model = function(name) {
-    var m = hBookmark.Model[name];
+    var m = this.Model[name];
     if (!m) { throw 'model not found' };
     return m;
 }
 
+function loadModules() {
+    var files = __LOCATION__.parent.directoryEntries;
+    var uris = [];
+    while (files.hasMoreElements()) {
+        var file = files.getNext().QueryInterface(Ci.nsIFile);
+        if (/\.jsm$/.test(file.leafName))
+            uris.push("resource://hatenabookmark/modules/" + file.leafName);
+    }
+    uris.sort().forEach(function (uri) Cu.import(uri, this), this);
+}
 
+var EXPORTED_SYMBOLS = [m for (m in new Iterator(this, true))
+                          if (m[0] !== "_" && m !== "EXPORTED_SYMBOLS")];
+//* Debug
+EXPORTED_SYMBOLS.push.apply(EXPORTED_SYMBOLS,
+                            [m for (m in new Iterator(this, true))
+                               if (m[0] === "_")]);
+//*/
