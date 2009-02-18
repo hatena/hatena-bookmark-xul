@@ -56,10 +56,13 @@ function Listener(type, object, handler, priority) {
     this.object = object;
     this.handler = handler;
     this.priority = priority;
+    this.isListening = false;
 }
 
 extend(Listener.prototype, {
     listen: function () {
+        if (this.isListening) return;
+        this.isListening = true;
         var listeners = listenersSet[this.type] ||
                         (listenersSet[this.type] = []);
         if (this.priority) {
@@ -71,7 +74,10 @@ extend(Listener.prototype, {
             listeners.push(this);
         }
     },
+
     unlisten: function () {
+        if (!this.isListening) return;
+        this.isListening = false;
         var listeners = listenersSet[this.type];
         var i;
         if (listeners && (i = listeners.indexOf(this)) !== -1)

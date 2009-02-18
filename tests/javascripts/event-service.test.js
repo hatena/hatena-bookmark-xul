@@ -98,3 +98,16 @@ function testPriority() {
     EventService.dispatch("AnEvent");
     assert.equals(result, [3, 5, 4, 6, 1, 2]);
 }
+
+function testMultipleListenerMethodCall() {
+    var result = [];
+    var listener = EventService.createListener("AnEvent", function () result.push(1));
+    listener.listen();
+    listener.listen();
+    EventService.dispatch("AnEvent");
+    assert.equals(result, [1]);
+
+    listener.unlisten();
+    EventService.dispatch("AnEvent");
+    assert.equals(result, [1]);
+}
