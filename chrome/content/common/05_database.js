@@ -7,7 +7,6 @@ const EXPORT = ["Database", "Entity", "Model"];
 var Database = null;
 var Entity = null;
 var Model = null;
-(function() {
 
 Database = function Database(file) {
     if (typeof file == 'string') {
@@ -624,5 +623,3 @@ extend(Entity, {
             replace(/(^ +)|( +$)/g,'');
     },
 });
-})();
-
