@@ -99,11 +99,14 @@ extend(TagTreeView.prototype, {
         return (index === -1) ? [] : this._visibleItems[index].tags.concat();
     },
 
-    openInBrowser: function TTV_openInBrowser() {
-        // XXX 現在のユーザー名を取得してそのURIに飛ぶ。
-        var uri = "http://b.hatena.ne.jp/maoe/" +
-                  this.selectedTags.map(encodeURIComponent).join("/");
-        parent.gBrowser.loadURI(uri, null, null);
+    openInBrowser: function TTV_openInBrowser(row, col, event) {
+        if (row === -1) return;
+        let tags = this._visibleItems[row].tags;
+        // XXX 現在のユーザー名を取得する必要あり。
+        let uriSpec = "http://b.hatena.ne.jp/maoe/" +
+                      tags.map(encodeURIComponent).join("/");
+        let uri = IOService.newURI(uriSpec, null, null);
+        Application.activeWindow.activeTab.load(uri);
     },
 
     deleteRow: function TTV_deleteRow() {

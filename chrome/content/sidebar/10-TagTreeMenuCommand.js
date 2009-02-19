@@ -2,6 +2,8 @@ const EXPORT = ["TagTreeMenuCommand"];
 
 function TagTreeMenuCommand(view) {
     this.view = view;
+    this.targetRow = -1;
+    this.targetCol = null;
 }
 
 extend(TagTreeMenuCommand.prototype, {
@@ -9,10 +11,13 @@ extend(TagTreeMenuCommand.prototype, {
         switch (event.type) {
         case "command":
             let command = event.target.id.substring("tag-tree-menu-".length);
-            this.view[command]();
+            this.view[command](this.targetRow, this.targetCol, event);
             break;
 
         case "popupshowing":
+            let selection = this.view.selection;
+            this.targetRow = selection.currentIndex;
+            this.targetCol = selection.currentColumn;
             break;
         }
     }
