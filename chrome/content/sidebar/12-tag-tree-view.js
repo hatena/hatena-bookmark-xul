@@ -95,7 +95,23 @@ extend(TagTreeView.prototype, {
     },
 
     get selectedTags () {
-        return this._visibleItems[this.selection.currentIndex].tags.concat();
+        var index = this.selection.currentIndex;
+        return (index === -1) ? [] : this._visibleItems[index].tags.concat();
+    },
+
+    openInBrowser: function TTV_openInBrowser() {
+        // XXX 現在のユーザー名を取得してそのURIに飛ぶ。
+        var uri = "http://b.hatena.ne.jp/maoe/" +
+                  this.selectedTags.map(encodeURIComponent).join("/");
+        parent.gBrowser.loadURI(uri, null, null);
+    },
+
+    deleteRow: function TTV_deleteRow() {
+        p(arguments.callee.name, "Not yet implemented");
+    },
+
+    tryToRename: function TTV_tryToRename() {
+        p(arguments.callee.name, "Not yet implemented");
     },
 
     handleEvent: function TTV_handleEvent(event) {
