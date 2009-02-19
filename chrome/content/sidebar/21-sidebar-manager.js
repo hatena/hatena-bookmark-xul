@@ -16,4 +16,5 @@ function initializeSidebar() {
     tagTree.addEventListener("click", tagTreeView, false);
     tagTreeMenu.addEventListener("popupshowing", tagTreeMenuCommand, false);
     tagTreeMenu.addEventListener("command", tagTreeMenuCommand, false);
+    bookmarkTree.addEventListener("click", bookmarkTreeView, false);
 }

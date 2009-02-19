@@ -29,6 +29,15 @@ extend(BookmarkTreeView.prototype, {
             if (event.target.id === "tag-tree")
                 this.showByTags(event.target.view.wrappedJSObject.selectedTags);
             break;
+
+        case "click":
+            let row = {};
+            this._treeBox.getCellAt(event.clientX, event.clientY, row, {}, {});
+            if (row.value === -1) break;
+            let uriSpec = this._items[row.value].url;
+            let uri = IOService.newURI(uriSpec, null, null)
+            Application.activeWindow.activeTab.load(uri);
+            break;
         }
     }
 });
