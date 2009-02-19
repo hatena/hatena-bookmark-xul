@@ -60,3 +60,22 @@ function testBookmark() {
 
 }
 
+function testTag() {
+    let Tag = model("Tag");
+    prepareDatabase(hBookmark);
+
+    var names = Tag.findDistinctTags().map(function (t) t.name);
+    assert.equals(names.sort(), ["JavaScript", "Perl", "Ruby"]);
+    var names = Tag.findRelatedTags(["Perl", "Ruby"]).map(function (t) t.name);
+    assert.equals(names.sort(), ["JavaScript"]);
+
+    Tag.rename("Perl", "Perl5");
+    var tags = Tag.findByName("Perl5");
+    assert.equals(tags.length, 2);
+    Tag.rename(["Perl5", "Ruby", "JavaScript"], "JS");
+    var tags = Tag.findByName("JS");
+    assert.equals(tags.length, 1);
+    Tag.deleteByNames(["Perl5", "Ruby"]);
+    var tags = Tag.findByName("Ruby");
+    assert.equals(tags.length, 1);
+}
