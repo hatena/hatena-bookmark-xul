@@ -100,7 +100,6 @@ extend(TagTreeView.prototype, {
     },
 
     openInBrowser: function TTV_openInBrowser(row, col, event) {
-        if (row === -1) return;
         let tags = this._visibleItems[row].tags;
         // XXX 現在のユーザー名を取得する必要あり。
         let uriSpec = "http://b.hatena.ne.jp/maoe/" +
@@ -109,11 +108,11 @@ extend(TagTreeView.prototype, {
         Application.activeWindow.activeTab.load(uri);
     },
 
-    deleteRow: function TTV_deleteRow() {
+    deleteRow: function TTV_deleteRow(row) {
         p(arguments.callee.name, "Not yet implemented");
     },
 
-    tryToRename: function TTV_tryToRename() {
+    tryToRename: function TTV_tryToRename(row) {
         p(arguments.callee.name, "Not yet implemented");
     },
 

@@ -10,6 +10,7 @@ extend(TagTreeMenuCommand.prototype, {
     handleEvent: function TTMC_handleEvent(event) {
         switch (event.type) {
         case "command":
+            if (this.targetRow === -1) break;
             let command = event.target.id.substring("tag-tree-menu-".length);
             this.view[command](this.targetRow, this.targetCol, event);
             break;
