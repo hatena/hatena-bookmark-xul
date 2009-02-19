@@ -48,6 +48,21 @@ function testLoadModules() {
     assert.equals(root.Foo.baz, 42);
 }
 
+function testBindMethod() {
+    let f = function(arg) {
+        return this.foo + arg;
+    };
+    assert.equals(bind(f, {foo: 1})(0), 1);
+    assert.equals(bind(f, {foo: 1})(1), 2);
+    let f1 = new function() {
+        this.bar = 1;
+        this.callBar = function() this.bar;
+    };
+    assert.equals(f1.callBar(), 1);
+    assert.equals(method(f1, 'callBar')(), 1);
+    assert.equals(method(f1, 'callBar').apply({bar: 2}), 1);
+}
+
 /*
 function testExtendBuiltIns() {
     extendBuiltIns();
