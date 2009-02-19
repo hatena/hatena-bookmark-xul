@@ -27,6 +27,7 @@ extend(Bookmark, {
     },
     findByTags: function(tags) {
         tags = [].concat(tags);
+        if (!tags.length) return [];
         let bids = [];
         let res = [];
         for (var i = 0;  i < tags.length; i++) {
