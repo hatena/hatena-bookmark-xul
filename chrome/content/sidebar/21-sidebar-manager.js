@@ -10,4 +10,5 @@ function initializeSidebar() {
     bookmarkTree.view = bookmarkTreeView;
 
     tagTree.addEventListener("select", bookmarkTreeView, false);
+    tagTree.addEventListener("click", tagTreeView, false);
 }

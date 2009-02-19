@@ -96,5 +96,22 @@ extend(TagTreeView.prototype, {
 
     get selectedTags () {
         return this._visibleItems[this.selection.currentIndex].tags.concat();
+    },
+
+    handleEvent: function TTV_handleEvent(event) {
+        switch (event.type) {
+        case "click":
+            this.handleClickEvent(event);
+            break;
+        }
+    },
+
+    handleClickEvent: function TTV_handleClickEvent(event) {
+        if (event.button !== 0) return;
+        var row = {};
+        var child = {};
+        this._treeBox.getCellAt(event.clientX, event.clientY, row, {}, child);
+        if (row.value === -1 || child.value === "twisty") return;
+        this.toggleOpenState(row.value);
     }
 });
