@@ -16,6 +16,12 @@ function setUp()
 {
 }
 
+function testSprintf()
+{
+    assert.equals('abcdef', sprintf('a%sc%se%s', 'b','d', 'f'));
+    assert.equals('10 20 b 30.55', sprintf('%s %d %s %f', 10, 20.33, 'b', 30.55));
+}
+
 function testAsyncExecute()
 {
     let asyncExecute = async.splitExecuter;

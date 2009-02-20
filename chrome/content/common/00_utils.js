@@ -6,9 +6,17 @@ const EXPORT = ['async', 'net', 'sprintf'];
  */
 
 /*
- * %s のみサポート
+ * %s, %d, %f のみサポート
  */
-var sprintf = function () {
+const _SPRINTF_HASH = {
+    '%s': String,
+    '%d': parseInt,
+    '%f': parseFloat,
+};
+
+var sprintf = function (str) {
+    let args = Array.slice(arguments, 1);
+    return str.replace(/%[sdf]/g, function(m) _SPRINTF_HASH[m](args.shift()));
 };
 
 
@@ -99,8 +107,10 @@ net._http = function net__http (url, callback, errorback, async, query, method) 
         xhr.send(this.makeQuery(query));
     } else {
         xhr.send(null);
-        if (typeof callback == 'function')
-            callback(xhr);
+        if (!async) {
+            if (typeof callback == 'function')
+                callback(xhr);
+        }
     }
     return xhr;
 }

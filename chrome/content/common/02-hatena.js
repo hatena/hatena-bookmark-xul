@@ -45,7 +45,7 @@ if (shared.has('User')) {
         get name() this._name,
         set rks() this._rks = rks,
         get rks() this._rks,
-        get dataURL() 'http://b.hatena.ne.jp/' + this.name + '/search.data',
+        get dataURL() sprintf('http://b.hatena.ne.jp/%s/search.data', this.name),
     };
 
     EventService.createListener('firstPreload', function() {

@@ -13,10 +13,14 @@ extend(Sync, {
     fetchAll: function Sync_fetchAll () {
     },
     all: function Sync_all (url) {
-        var req = new XMLHttpRequest();
-        req.open('GET', url, false);
-        req.send(null);
-        // ASync じゃない
+        if (this._syncing) return;
+        p('res start');
+        net.get(url, method(this, 'allCallback'), null, true);
+        p('res async');
+    },
+    allCallback: function Sync_allCallback (req)  {
+        p(req);
+        p(req.status);
         var BOOKMARK  = model('Bookmark');
 
         // XXX 初期化処理
