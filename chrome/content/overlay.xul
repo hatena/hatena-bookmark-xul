@@ -5,7 +5,15 @@
     <script type="text/javascript; version=1.8" charset="utf-8">
     // <![CDATA[
     (function() {
-        hBookmark.init();
+        with(hBookmark) {
+            if (!shared.get('firstPreload')) {
+                EventService.dispatch('firstPreload', window);
+                shared.set('firstPreload', true);
+
+                Application.console.open();
+            }
+            EventService.dispatch('preload', window);
+        }
     })();
 
     // ]]>

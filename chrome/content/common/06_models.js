@@ -25,12 +25,12 @@ extend(Model, {
     },
     deleteAll: function() {
         this.MODELS.forEach(function(m) {
-        try { 
-            Model[m].deinitialize() 
-        } catch(e) {
-            p('delete error:' + e);
-        }}
-        );
+            try { 
+                Model[m].deinitialize() 
+            } catch(e) {
+                log.error(e);
+            }
+        });
     },
     createAll: function() {
         var models = this.MODELS.forEach(function(m) Model[m].initialize());
@@ -43,3 +43,5 @@ Model.Entity = function (def) {
     });
     return model;
 };
+
+

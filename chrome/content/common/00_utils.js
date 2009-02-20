@@ -1,9 +1,16 @@
 
-const EXPORT = ['async', 'net'];
+const EXPORT = ['async', 'net', 'sprintf'];
 
 /*
  * あとで jsm に移植？
  */
+
+/*
+ * %s のみサポート
+ */
+var sprintf = function () {
+};
+
 
 var async = {};
 
@@ -68,13 +75,14 @@ net.makeQuery =  function net_makeQuery (data) {
     return pairs.join('&');
 }
 
-net._http = function net__http (url, callback, errorback, sync, query, method) {
+net._http = function net__http (url, callback, errorback, async, query, method) {
     let xhr = new XMLHttpRequest();
-    if (!sync) {
+    if (async) {
        xhr.onreadystatechange = function() {
            if (xhr.readyState == 4) {
                if (xhr.status == 200) {
-                   callback(xhr);
+                   if (typeof callback == 'function')
+                       callback(xhr);
                } else {
                    if (typeof errorback == 'function')
                        errorback(xhr);
@@ -84,23 +92,24 @@ net._http = function net__http (url, callback, errorback, sync, query, method) {
     }
     if (method == 'GET')
         url += this.makeQuery(query);
-    xhr.open(method, url, sync);
+    xhr.open(method, url, async);
 
     if (method == 'POST') {
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send(this.makeQuery(query));
     } else {
         xhr.send(null);
-        callback(xhr);
+        if (typeof callback == 'function')
+            callback(xhr);
     }
     return xhr;
 }
 
-net.get = function net_get (url, callback, errorback, sync, query)
-                this._http(url, callback, errorback, sync, query, 'GET');
+net.get = function net_get (url, callback, errorback, async, query)
+                this._http(url, callback, errorback, async, query, 'GET');
 
-net.post = function net_get (url, callback, errorback, sync, query)
-                this._http(url, callback, errorback, sync, query, 'POST');
+net.post = function net_get (url, callback, errorback, async, query)
+                this._http(url, callback, errorback, async, query, 'POST');
 
 
 

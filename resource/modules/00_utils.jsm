@@ -20,10 +20,32 @@ const StorageStatementWrapper =
 
 /* utility functions */
 
+/*
+ * p は一時デバッグ用
+ */
 var p = function (value) {
     Application.console.log(Array.map(arguments, String).join("\n"));
     return value;
 }
+
+/*
+ * log は、実際にエラーコンソールに通知用
+ * ToDo: user_pref でこの拡張のデバッグが true なら、info の内容も表示する 
+ */
+var log = {
+    error: function (msg) {
+        if (msg instanceof 'Error') {
+            // スタックトレースを表示？
+            Application.console.log('Error: ' + msg.toString() + msg.stack.join("\n"));
+        } else {
+            Application.console.log('Error: ' + msg.toString());
+        }
+    },
+    info: function (msg) {
+        Application.console.log(msg.toString());
+    }
+}
+
 
 var isInclude = function(val, ary) {
     for (var i = 0;  i < ary.length; i++) {
@@ -142,6 +164,19 @@ var model = function(name) {
     return m;
 }
 
+let _shared = {};
+var shared = {
+    get: function shared_get (name) {
+        return _shared[name];
+    },
+    set: function shared_set (name, value) {
+        _shared[name] = value;
+    },
+    has: function shared_has (name) {
+        return !(typeof _shared[name] == 'undefined');
+    }
+};
+
 const _MODULE_BASE_URI = "resource://hatenabookmark/modules/"
 
 function loadModules() {
@@ -170,6 +205,7 @@ function _getModuleURIs() {
 
 var EXPORTED_SYMBOLS = [m for (m in new Iterator(this, true))
                           if (m[0] !== "_" && m !== "EXPORTED_SYMBOLS")];
+
 /* Debug
 EXPORTED_SYMBOLS.push.apply(EXPORTED_SYMBOLS,
                             [m for (m in new Iterator(this, true))
