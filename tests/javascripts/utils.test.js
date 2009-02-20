@@ -16,6 +16,15 @@ function setUp()
 {
 }
 
+function testNewURI() {
+    let spec = "http://example.org/";
+    let uri = newURI(spec);
+    assert.equals(uri.spec, spec);
+
+    uri = newURI("bar", null, "http://example.org/foo");
+    assert.equals(uri.spec, "http://example.org/bar");
+}
+
 function testAsyncExecute()
 {
     let asyncExecute = async.splitExecuter;

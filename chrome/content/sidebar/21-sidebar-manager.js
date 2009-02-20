@@ -1,3 +1,17 @@
+const EXPORT = ["sidebarBundle"];
+
+/*
+__defineGetter__("sidebarBundle", function get_sidebarBundle() {
+    var object = this;
+    while (object && !object.hasOwnProperty("sidebarBundle"))
+        object = object.__proto__;
+    if (!object)
+        throw new TypeError("The property sidebarBundle doesn't exist");
+    delete object.sidebarBundle;
+    return object.sidebarBundle = document.getElementById("sidebar-bundle");
+});
+*/
+
 window.addEventListener("load", initializeSidebar, false);
 
 function initializeSidebar() {
@@ -6,15 +20,17 @@ function initializeSidebar() {
     tagTree.view = tagTreeView;
 
     var tagTreeMenu = document.getElementById(tagTree.contextMenu);
-    var tagTreeMenuCommand = new TagTreeMenuCommand(tagTreeView);
+    var tagTreeCommand = new TagTreeCommand(tagTreeView);
 
     var bookmarkTree = document.getElementById("bookmark-tree");
     var bookmarkTreeView = new BookmarkTreeView();
     bookmarkTree.view = bookmarkTreeView;
 
-    tagTree.addEventListener("select", bookmarkTreeView, false);
     tagTree.addEventListener("click", tagTreeView, false);
-    tagTreeMenu.addEventListener("popupshowing", tagTreeMenuCommand, false);
-    tagTreeMenu.addEventListener("command", tagTreeMenuCommand, false);
+
+    tagTreeMenu.addEventListener("popupshowing", tagTreeCommand, false);
+    tagTreeMenu.addEventListener("command", tagTreeCommand, false);
+
+    tagTree.addEventListener("select", bookmarkTreeView, false);
     bookmarkTree.addEventListener("click", bookmarkTreeView, false);
 }
