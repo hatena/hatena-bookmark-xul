@@ -511,7 +511,7 @@ Entity = function (def){
         
         __noSuchMethod__ : function (method, args) {
             if( ! method.match(/^(find|count)By/))
-                return;
+                throw new TypeError("No such method: " + method);
             
             var me = arguments.callee;
             var cache = me.cache || (me.cache = {});

@@ -9,9 +9,17 @@
 
     <script type="application/javascript" src="autoloader.js"></script>
 
+    <popupset>
+        <menupopup id="tag-tree-menu">
+            <menuitem id="tag-tree-menu-openInBrowser" label="{{Webページを開く}}"/>
+            <menuitem id="tag-tree-menu-deleteRow" label="{{削除}}"/>
+            <menuitem id="tag-tree-menu-tryToRename" label="{{置換}}"/>
+        </menupopup>
+    </popupset>
+
     <vbox flex="1">
-        <tree id="tag-tree" seltype="single"
-              hidecolumnpicker="true" flex="1">
+        <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
+              contextmenu="tag-tree-menu" flex="1">
             <treecols>
                 <treecol label="{{tag}}" primary="true" flex="1"/>
             </treecols>
