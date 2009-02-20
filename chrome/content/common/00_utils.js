@@ -40,7 +40,7 @@ async.splitExecuter = function async_splitExecuter(it, loopTimes, callback, fini
                     callback.call(this, n, totalLoop);
                 } catch (e if e instanceof StopIteration) {
                     if (typeof finishCallback == 'function')
-                        finishCallback(totalLoop);
+                        finishCallback(totalLoop - 1);
                     yield false;
                 }
                 totalLoop++;
