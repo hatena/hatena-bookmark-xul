@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script type="application/javascript" src="chrome://hatenabookmark/content/autoloader.js"></script>
+    <script type="application/javascript">
+    <![CDATA[
+
+        function createDisposableListener() {
+            return EventService.createListener("AnEvent", callback);
+        }
+
+        function createNonDisposableListener() {
+            return EventService.createListener("AnEvent", callback,
+                                               null, 0, false);
+        }
+
+    ]]>
+    </script>
+    <label>EventService test</label>
+</window>
