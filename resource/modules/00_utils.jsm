@@ -132,6 +132,9 @@ var update = function (self, obj/*, ... */) {
     return self;
 };
 
+var bind = function bind(func, self) function () func.apply(self, Array.slice(arguments));
+var method = function method(self, methodName) function () self[methodName].apply(self, Array.slice(arguments));
+
 // XXX model関数はmodel.jsmに置かないとスコープ的にまずい?
 var model = function(name) {
     var m = this.Model[name];

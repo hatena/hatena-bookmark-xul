@@ -6,9 +6,11 @@ var Sync = {};
 
 extend(Sync, {
     createDataStructure: function Sync_createDataStructure (text) {
-        var infos = infos = text.split("\n");
-        var bookmarks = infos.splice(0, infos.length * 3/4);
+        let infos = text.split("\n");
+        let bookmarks = infos.splice(0, infos.length * 3/4);
         return [bookmarks, infos];
+    },
+    fetchAll: function Sync_fetchAll () {
     },
     all: function Sync_all () {
         var url = 'http://b.hatena.ne.jp/maoe/search.data';

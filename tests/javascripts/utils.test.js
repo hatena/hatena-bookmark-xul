@@ -18,6 +18,7 @@ function setUp()
 
 function testAsyncExecute()
 {
+    let asyncExecute = async.splitExecuter;
     let index = -1;
     let loaded = { value: false };
     asyncExecute(Iterator([1,2,3,4,5], true), 2, function(e, i) {
