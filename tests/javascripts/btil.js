@@ -38,18 +38,6 @@ function initDatabase(hBookmark) {
 function prepareDatabase(hBookmark) {
     initDatabase(hBookmark);
 
-    //var Tag = hBookmark.model("Tag");
-    //[
-    //    [1, "Perl"], [1, "Ruby"], [1, "JavaScript"],
-    //    [2, "Perl"], [2, "Ruby"],
-    //    [3, "Ruby"], [3, "JavaScript"],
-    //].forEach(function ([bmId, name]) {
-    //    var tag = new Tag();
-    //    tag.bookmark_id = bmId;
-    //    tag.name = name;
-    //    tag.save();
-    //});
-
     var Bookmark = hBookmark.model("Bookmark");
     [
         ["http://example.org/langs",
