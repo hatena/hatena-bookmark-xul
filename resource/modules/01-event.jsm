@@ -1,4 +1,4 @@
-Components.utils.import("resource://hatenabookmark/modules/00_utils.jsm");
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 
 const EXPORTED_SYMBOLS = ["EventService"];
 
@@ -94,7 +94,6 @@ function Listener(type, handler, lockKey, priority) {
 
 extend(Listener.prototype, {
     listen: function Listener_listen() {
-        p(this.lockKey.quote(), uneval(locked));
         if (this.isListening || (this.lockKey && locked[this.lockKey])) return;
         locked[this.lockKey] = true;
         this.isListening = true;

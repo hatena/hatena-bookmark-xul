@@ -13,10 +13,15 @@ extend(Sync, {
     fetchAll: function Sync_fetchAll () {
     },
     all: function Sync_all (url) {
+        this.threadTest();
+        return;
         if (this._syncing) return;
         p('res start');
         net.get(url, method(this, 'allCallback'), null, true);
         p('res async');
+    },
+    threadTest: function() {
+        p(1);
     },
     allCallback: function Sync_allCallback (req)  {
         var BOOKMARK  = model('Bookmark');

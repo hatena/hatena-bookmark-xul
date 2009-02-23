@@ -50,7 +50,7 @@ if (shared.has('User')) {
 
     EventService.createListener('firstPreload', function() {
         User.login();
-    }, 100);
+    }, null, 100);
     
     shared.set('User', User);
 };

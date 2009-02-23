@@ -1,7 +1,7 @@
 if (!hBookmark)
     var hBookmark = {};
 
-Components.utils.import("resource://hatenabookmark/modules/00_utils.jsm",
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm",
                         hBookmark);
 
 /**
