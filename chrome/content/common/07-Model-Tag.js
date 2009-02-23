@@ -33,16 +33,12 @@ extend(Tag, {
         return this.find(condition);
     },
 
-    deleteByNames: function Tag_deleteByNames(names) {
-        Tag.rename(names, null);
-    },
+    deleteByName: function Tag_deleteByName(name) Tag.rename(name, null),
 
     rename: function Tag_rename(oldName, newName) {
         const Bookmark = Model.Bookmark;
-        let oldNames = [].concat(oldName);
-        let bookmarks = Bookmark.findByTags(oldNames);
+        let bookmarks = Bookmark.findByTags([oldName]);
         if (!bookmarks.length) return;
-        oldName = oldNames[oldNames.length - 1];
         let re = new RegExp("^((?:\\[.*?\\])*?)\\[" +
                             oldName.replace(/[^\w\u0100-\uffff]/g, "\\$&") +
                             "\\]");
@@ -52,9 +48,12 @@ extend(Tag, {
         Bookmark.db.beginTransaction();
         bookmarks.forEach(function (bookmark) {
             bookmark.comment = bookmark.comment.replace(re, replacement);
+            // XXX 例外発生の可能性あり?
             bookmark.save();
         });
         Bookmark.db.commitTransaction();
+        // XXX delete時には別のイベントを発行すべき?
+        EventService.dispatch("TagNameChanged", { from :oldName, to: newName });
     }
 });
 

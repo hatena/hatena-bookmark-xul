@@ -99,23 +99,6 @@ extend(TagTreeView.prototype, {
         return (index === -1) ? [] : this._visibleItems[index].tags.concat();
     },
 
-    openInBrowser: function TTV_openInBrowser(row, col, event) {
-        let tags = this._visibleItems[row].tags;
-        // XXX 現在のユーザー名を取得する必要あり。
-        let uriSpec = "http://b.hatena.ne.jp/maoe/" +
-                      tags.map(encodeURIComponent).join("/");
-        let uri = IOService.newURI(uriSpec, null, null);
-        Application.activeWindow.activeTab.load(uri);
-    },
-
-    deleteRow: function TTV_deleteRow(row) {
-        p(arguments.callee.name, "Not yet implemented");
-    },
-
-    tryToRename: function TTV_tryToRename(row) {
-        p(arguments.callee.name, "Not yet implemented");
-    },
-
     handleEvent: function TTV_handleEvent(event) {
         switch (event.type) {
         case "click":

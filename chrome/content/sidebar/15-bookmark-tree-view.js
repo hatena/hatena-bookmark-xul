@@ -31,13 +31,18 @@ extend(BookmarkTreeView.prototype, {
             break;
 
         case "click":
-            let row = {};
-            this._treeBox.getCellAt(event.clientX, event.clientY, row, {}, {});
-            if (row.value === -1) break;
-            let uriSpec = this._items[row.value].url;
-            let uri = IOService.newURI(uriSpec, null, null)
-            Application.activeWindow.activeTab.load(uri);
+            this.handleClickEvent(event);
             break;
         }
+    },
+
+    handleClickEvent: function BTV_handleClickEvent(event) {
+        if (event.button !== 0) return;
+        let row = {};
+        this._treeBox.getCellAt(event.clientX, event.clientY, row, {}, {});
+        if (row.value === -1) return;
+        let uriSpec = this._items[row.value].url;
+        let uri = IOService.newURI(uriSpec, null, null)
+        Application.activeWindow.activeTab.load(uri);
     }
 });

@@ -11,57 +11,92 @@ const EXPORTED_SYMBOLS = ["EventService"];
  * };
  * var l = EventService.createListener("DataUpdated", eventListener);
  *
- * var l = EventService.createListener("DataUpdated", [obj, obj.method]);
- *
  * l.unlisten();
  */
 
-var listenersSet = {};
+let listenersSet = {};
 
 var EventService = {
-    createListener: function (type, handler, priority) {
-        var object = null;
+    createListener: function ES_createListener(type, handler, lockKey,
+                                               priority, disposable) {
         if (typeof handler.handleEvent === "function")
-            [object, handler] = [handler, handler.handleEvent];
-        else if (Object.prototype.toString.call(handler) === "[object Array]")
-            [object, handler] = handler;
-        var listener = new Listener(type, object, handler, priority || 0);
+            handler = method(handler, "handleEvent");
+        let listener =
+            new Listener(type, handler, lockKey || "", priority || 0);
+        let scope;
+        if ((arguments.length < 5 || disposable) &&
+            (scope = arguments.callee.caller))
+            addDisposableListener(listener, scope);
         listener.listen();
         return listener;
     },
 
-    dispatchEvent: function (event) {
+    dispatchEvent: function ES_dispatchEvent(event) {
         var listeners = listenersSet[event.type];
         if (!listeners) return true;
         for (var i = 0; i < listeners.length; i++) {
             var listener = listeners[i];
-            listener.handler.call(listener.object || EventService, event);
+            listener.handler(event);
             if (event.isPropagationStopped) break;
         }
         return !event.isDefaultPrevented;
     },
 
-    dispatch: function (type, data) {
+    dispatch: function ES_dispatch(type, data) {
         var event = new Event(type, data);
         return EventService.dispatchEvent(event);
     },
 
-    reset: function () {
+    reset: function ES_reset() {
         listenersSet = {};
     }
 };
 
-function Listener(type, object, handler, priority) {
+let disposableEntries = [];
+
+function addDisposableListener(listener, scope) {
+    while (scope.__proto__)
+        scope = scope.__proto__;
+    let window = scope.__parent__ || scope;
+    if (!window.addEventListener) return;
+    let listeners = null;
+    disposableEntries.some(function (entry) {
+        if (entry.window !== window) return false;
+        listeners = entry.listeners;
+        return true;
+    });
+    if (!listeners)
+        addDisposer(window, listeners = []);
+    listeners.push(listener);
+}
+
+function addDisposer(window, listeners) {
+    let entry = { window: window, listeners: listeners };
+    disposableEntries.push(entry);
+    window.addEventListener("unload", function ES_dispose() {
+        listeners.forEach(function (l) l.unlisten());
+        let i = disposableEntries.indexOf(entry);
+        if (i !== -1) disposableEntries.splice(i, 1);
+        window.removeEventListener("unload", arguments.callee, false);
+        p("unlistened " + listeners.length + " listeners");
+    }, false);
+}
+
+let locked = {};
+
+function Listener(type, handler, lockKey, priority) {
     this.type = type;
-    this.object = object;
     this.handler = handler;
+    this.lockKey = lockKey;
     this.priority = priority;
     this.isListening = false;
 }
 
 extend(Listener.prototype, {
-    listen: function () {
-        if (this.isListening) return;
+    listen: function Listener_listen() {
+        p(this.lockKey.quote(), uneval(locked));
+        if (this.isListening || (this.lockKey && locked[this.lockKey])) return;
+        locked[this.lockKey] = true;
         this.isListening = true;
         var listeners = listenersSet[this.type] ||
                         (listenersSet[this.type] = []);
@@ -75,9 +110,10 @@ extend(Listener.prototype, {
         }
     },
 
-    unlisten: function () {
+    unlisten: function Listener_unlisten() {
         if (!this.isListening) return;
         this.isListening = false;
+        locked[this.lockKey] = false;
         var listeners = listenersSet[this.type];
         var i;
         if (listeners && (i = listeners.indexOf(this)) !== -1)
@@ -93,13 +129,13 @@ function Event(type, data) {
 }
 
 extend(Event.prototype, {
-    stopPropagation: function () {
+    stop: function Event_stop() {
         this.isPropagationStopped = true;
     },
-    preventDefault: function () {
+    cancel: function Event_cancel() {
         this.isDefaultPrevented = true;
     }
 });
 
-Event.prototype.stop = Event.prototype.stopPropagation;
-Event.prototype.cancel = Event.prototype.preventDefault;
+Event.prototype.stopPropagation = Event.prototype.stop;
+Event.prototype.preventDefault = Event.prototype.cancel;

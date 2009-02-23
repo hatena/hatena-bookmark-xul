@@ -22,6 +22,15 @@ function testSprintf()
     assert.equals('10 20 b 30.55', sprintf('%s %d %s %f', 10, 20.33, 'b', 30.55));
 }
 
+function testNewURI() {
+    let spec = "http://example.org/";
+    let uri = newURI(spec);
+    assert.equals(uri.spec, spec);
+
+    uri = newURI("bar", null, "http://example.org/foo");
+    assert.equals(uri.spec, "http://example.org/bar");
+}
+
 function testAsyncExecute()
 {
     let asyncExecute = async.splitExecuter;

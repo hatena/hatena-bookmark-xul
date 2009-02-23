@@ -69,13 +69,10 @@ function testTag() {
     var names = Tag.findRelatedTags(["Perl", "Ruby"]).map(function (t) t.name);
     assert.equals(names.sort(), ["JavaScript"]);
 
-    Tag.rename("Perl", "Perl5");
-    var tags = Tag.findByName("Perl5");
-    assert.equals(tags.length, 2);
-    Tag.rename(["Perl5", "Ruby", "JavaScript"], "JS");
+    Tag.rename("JavaScript", "JS");
     var tags = Tag.findByName("JS");
-    assert.equals(tags.length, 1);
-    Tag.deleteByNames(["Perl5", "Ruby"]);
-    var tags = Tag.findByName("Ruby");
-    assert.equals(tags.length, 1);
+    assert.equals(tags.length, 2);
+    Tag.deleteByName("Perl");
+    var tags = Tag.findByName("Perl");
+    assert.equals(tags.length, 0);
 }

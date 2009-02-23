@@ -1,5 +1,11 @@
 
-const EXPORT = ['async', 'net', 'sprintf'];
+const EXPORT = ['newURI', 'async', 'net', 'sprintf'];
+
+function newURI(uriSpec, originCharset, baseURI) {
+    if (typeof baseURI === "string")
+        baseURI = IOService.newURI(baseURI, null, null);
+    return IOService.newURI(uriSpec, originCharset, baseURI);
+}
 
 /*
  * あとで jsm に移植？

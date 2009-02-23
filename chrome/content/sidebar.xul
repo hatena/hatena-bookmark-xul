@@ -11,9 +11,13 @@
 
     <popupset>
         <menupopup id="tag-tree-menu">
-            <menuitem id="tag-tree-menu-openInBrowser" label="{{Webページを開く}}"/>
-            <menuitem id="tag-tree-menu-deleteRow" label="{{削除}}"/>
-            <menuitem id="tag-tree-menu-tryToRename" label="{{置換}}"/>
+            <menuitem id="tag-tree-openAllBookmarks" label="{{すべてのブックマークを開く}}"/>
+            <menuseparator/>
+            <menuitem id="tag-tree-open" label="{{タグページを開く}}"/>
+            <menuitem id="tag-tree-openInNewTab" label="{{タグページを新しいタブで開く}}"/>
+            <menuseparator/>
+            <menuitem id="tag-tree-delete" label="{{%S タグを削除}}"/>
+            <menuitem id="tag-tree-rename" label="{{%S タグを置換}}"/>
         </menupopup>
     </popupset>
 
