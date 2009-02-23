@@ -13,24 +13,27 @@ extend(Sync, {
     fetchAll: function Sync_fetchAll () {
     },
     all: function Sync_all (url) {
-        return;
         if (this._syncing) return;
-        p('res start');
         net.get(url, method(this, 'allCallback'), null, true);
-        p('res async');
     },
     allCallback: function Sync_allCallback (req)  {
-        var BOOKMARK  = model('Bookmark');
+        let BOOKMARK  = model('Bookmark');
+        let box = document.getElementById('hBookmark-syncProgressBox');
+        box.removeAttribute('hidden');
+        let meter = document.getElementById('hBookmark-syncProgressMeter');
+        meter.value = 0;
 
         // XXX 初期化処理
         hBookmark.Model.resetAll();
 
-        let [bookmarks, infos] = this.createDataStructure(req.responseText);
-        let now = Date.now();
+        BOOKMARK.db.beginTransaction();
+        let text = req.responseText;
+        let [bookmarks, infos] = this.createDataStructure(text);
         p(sprintf('start: %d data', infos.length));
-
-       BOOKMARK.db.beginTransaction();
-       async.splitExecuter(Iterator(infos, true), 50, function([bookmark, info], i) {
+        let now = Date.now();
+        p('start');
+        BOOKMARK.db.beginTransaction();
+        for (let i = 0, len = infos.length;  i < len; i++) {
             let bi = i * 3;
             let timestamp = infos[i].split("\t", 2)[1];
             let title = bookmarks[bi];
@@ -49,14 +52,21 @@ extend(Sync, {
                     p('error: ' + [url, title, comment, timestamp].toString());
                 }
             } else {
-                //
             }
-        }, function() {
-            // finish
-            BOOKMARK.db.commitTransaction();
-            p('sync finish time: ' + (Date.now() - now));
-        });
-    }
+            if (i % 100 == 0) {
+                meter.value = i/len*100|0;
+                BOOKMARK.db.commitTransaction();
+                async.wait(1000);
+                BOOKMARK.db.beginTransaction();
+                p('wait: ' + (Date.now() - now));
+            }
+        }
+        BOOKMARK.db.commitTransaction();
+        box.setAttribute('hidden', true);
+
+        p(infos.length);
+        p('time: ' + (Date.now() - now));
+      }
 });
 
 

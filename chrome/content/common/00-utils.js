@@ -35,6 +35,19 @@ utils.values = function(obj) [key for each (key in obj)];
 
 var async = {};
 
+async.wait = function(wait, flush) {
+    if (typeof flush == 'undefined') flush = true;
+
+    let endTime = Date.now() + wait;
+    let mainThread = ThreadManager.mainThread;
+    let c = 0;
+    do {
+        c++;
+        mainThread.processNextEvent(flush);
+    } while ( (flush && mainThread.hasPendingEvents()) || Date.now() < endTime );
+    return c;
+};
+
 /*
  * 数万回ループ処理など、重い処理を yield で分割実行する。
  */
