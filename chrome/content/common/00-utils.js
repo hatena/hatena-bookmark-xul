@@ -1,5 +1,5 @@
 
-const EXPORT = ['newURI', 'async', 'net', 'sprintf'];
+const EXPORT = ['newURI', 'async', 'net', 'sprintf', 'utils'];
 
 function newURI(uriSpec, originCharset, baseURI) {
     if (typeof baseURI === "string")
@@ -25,6 +25,13 @@ var sprintf = function (str) {
     return str.replace(/%[sdf]/g, function(m) _SPRINTF_HASH[m](args.shift()));
 };
 
+/*
+ * グローバル関数としてエクスポートはしないけど、あったら便利な関数など
+ */
+var utils = {};
+utils.keys = function(obj) [key for (key in obj)];
+utils.values = function(obj) [key for each (key in obj)];
+// utils.values = function(obj) return [value for each ((_,value) in Iterator(obj))];
 
 var async = {};
 
