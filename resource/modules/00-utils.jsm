@@ -17,6 +17,8 @@ const IOService =
     Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 const StorageStatementWrapper =
     Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');
+const ThreadManager =
+    Cc["@mozilla.org/thread-manager;1"].getService(Ci.nsIThreadManager);
 
 /* utility functions */
 
@@ -35,7 +37,7 @@ var p = function (value) {
 var log = {
     error: function (msg) {
         if (msg instanceof 'Error') {
-            // スタックトレースを表示？
+            // Cu.reportError(msg);
             Application.console.log('Error: ' + msg.toString() + msg.stack.join("\n"));
         } else {
             Application.console.log('Error: ' + msg.toString());
