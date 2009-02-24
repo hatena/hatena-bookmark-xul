@@ -5,20 +5,27 @@ const Ci = Components.interfaces;
 const Cr = Components.results;
 const Cu = Components.utils;
 
+let getService = function getService(name, i) Cc[name].getService(i);
+
 const Application =
-    Cc["@mozilla.org/fuel/application;1"].getService(Ci.fuelIApplication);
+    getService("@mozilla.org/fuel/application;1", Ci.fuelIApplication);
 const PrefetchService =
-    Cc["@mozilla.org/prefetch-service;1"].getService(Ci.nsIPrefetchService);
+    getService("@mozilla.org/prefetch-service;1", Ci.nsIPrefetchService);
 const ObserverService =
-    Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
+    getService("@mozilla.org/observer-service;1", Ci.nsIObserverService);
 const StorageService =
-    Cc["@mozilla.org/storage/service;1"].getService(Ci.mozIStorageService);
+    getService("@mozilla.org/storage/service;1", Ci.mozIStorageService);
 const IOService =
-    Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
+    getService("@mozilla.org/network/io-service;1", Ci.nsIIOService);
+const ThreadManager =
+    getService("@mozilla.org/thread-manager;1", Ci.nsIThreadManager);
+const HistoryService =
+    getService("@mozilla.org/browser/nav-history-service;1", Ci.nsINavHistoryService);
+const BookmarksService =
+    getService("@mozilla.org/browser/nav-bookmarks-service;1", Ci.nsINavBookmarksService); 
+
 const StorageStatementWrapper =
     Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');
-const ThreadManager =
-    Cc["@mozilla.org/thread-manager;1"].getService(Ci.nsIThreadManager);
 
 /* utility functions */
 

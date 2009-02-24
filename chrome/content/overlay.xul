@@ -51,6 +51,10 @@
                     Application.console.open();
                 }
             }, false);
+
+            window.addEventListener('unload', function(e) {
+                EventService.dispatch('unload', window);
+            }, false);
         }
     })();
     // ]]>
