@@ -487,6 +487,12 @@ Entity = function (def){
                 FROM {def.name}
             </>, sql);
         },
+
+        findFirst : function(params) {
+            if (!params) params = {};
+            params.limit = 1;
+            return this.find(params)[0];
+        },
         
         find : function(sql, params){
             if (!params && typeof sql == 'object') {

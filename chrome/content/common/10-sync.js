@@ -1,4 +1,5 @@
-// リモートのブックマークと同期をとる
+
+// Sync to remote bookmark
 
 const EXPORT = ["Sync"];
 
@@ -6,29 +7,40 @@ var Sync = {};
 EventService.implement(Sync);
 
 extend(Sync, {
+    init: function Sync_init () {
+        let db = model('Bookmark').db;
+        if (!db.tableExists('bookmarks')) {
+            hBookmark.Model.resetAll();
+        }
+        this.sync();
+    },
     createDataStructure: function Sync_createDataStructure (text) {
         let infos = text.split("\n");
         let bookmarks = infos.splice(0, infos.length * 3/4);
         return [bookmarks, infos];
     },
-    fetchAll: function Sync_fetchAll () {
-    },
-    all: function Sync_all (url) {
+    sync: function Sync_sync () {
         if (this._syncing) return;
-        this.dispatch('startAll');
-        net.get(url, method(this, 'allCallback'), method(this, 'allError'), true);
+
+        let url = User.user.dataURL;
+        let b = model('Bookmark').findFirst({order: 'date desc'});
+
+        this.dispatch('start');
+        if (b.date) {
+            net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true, {
+                timestamp: b.date
+            });
+        } else {
+            net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true);
+        }
     },
-    allError : function Sync_errorAll () {
+    errorback: function Sync_errorAll () {
         this.dispatch('fail');
     },
-    allCallback: function Sync_allCallback (req)  {
+    fetchCallback: function Sync_allCallback (req)  {
         this.dispatch('progress', {value: 0});
         let BOOKMARK  = model('Bookmark');
 
-        // XXX 初期化処理
-        hBookmark.Model.resetAll();
-
-        BOOKMARK.db.beginTransaction();
         let text = req.responseText;
         let [bookmarks, infos] = this.createDataStructure(text);
         p(sprintf('start: %d data', infos.length));
@@ -45,7 +57,6 @@ extend(Sync, {
             b.title = title;
             b.comment = comment;
             b.url = url;
-            b.search = [title, comment, url].join("\0");
             b.date = parseInt(timestamp);
             if (url) {
                 try {
@@ -74,8 +85,8 @@ extend(Sync, {
 
 EventService.createListener('firstPreload', function() {
     if (User.user) {
-        async.wait(10); // こちらの方が順番が先に呼ばれてしまう？
-        Sync.all(User.user.dataURL);
+        async.wait(10); // XXX: waiting...
+        Sync.init();
     }
 });
 

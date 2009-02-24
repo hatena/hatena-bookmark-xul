@@ -124,8 +124,12 @@ net._http = function net__http (url, callback, errorback, async, query, method) 
            }
        }
     }
-    if (method == 'GET')
-        url += this.makeQuery(query);
+    if (method == 'GET') {
+        let q = this.makeQuery(query);
+        if (q) {
+            url += '?' + q;
+        }
+    }
     xhr.open(method, url, async);
 
     if (method == 'POST') {

@@ -40,6 +40,8 @@
     // <![CDATA[
     (function() {
         with(hBookmark) {
+            Application.console.open();
+
             EventService.dispatch('preload', window);
 
             window.addEventListener('load', function(e) {
@@ -49,7 +51,6 @@
                     EventService.dispatch('firstPreload', window);
                     shared.set('firstPreload', true);
 
-                    Application.console.open();
                 }
             }, false);
 
