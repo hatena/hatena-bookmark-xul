@@ -15,7 +15,7 @@ extend(Sync, {
     },
     all: function Sync_all (url) {
         if (this._syncing) return;
-        this.dispatch('start');
+        this.dispatch('startAll');
         net.get(url, method(this, 'allCallback'), method(this, 'allError'), true);
     },
     allError : function Sync_errorAll () {
@@ -24,10 +24,6 @@ extend(Sync, {
     allCallback: function Sync_allCallback (req)  {
         this.dispatch('progress', {value: 0});
         let BOOKMARK  = model('Bookmark');
-        let box = document.getElementById('hBookmark-syncProgressBox');
-        box.removeAttribute('hidden');
-        let meter = document.getElementById('hBookmark-syncProgressMeter');
-        meter.value = 0;
 
         // XXX 初期化処理
         hBookmark.Model.resetAll();
@@ -60,7 +56,6 @@ extend(Sync, {
             } else {
             }
             if (i % 100 == 0) {
-                meter.value = i/len*100|0;
                 this.dispatch('progress', { value: i/len*100|0 });
                 BOOKMARK.db.commitTransaction();
                 async.wait(1000);
@@ -70,7 +65,6 @@ extend(Sync, {
         }
         BOOKMARK.db.commitTransaction();
         this.dispatch('complete');
-        box.setAttribute('hidden', true);
 
         p(infos.length);
         p('time: ' + (Date.now() - now));
@@ -80,6 +74,7 @@ extend(Sync, {
 
 EventService.createListener('firstPreload', function() {
     if (User.user) {
+        async.wait(10); // こちらの方が順番が先に呼ばれてしまう？
         Sync.all(User.user.dataURL);
     }
 });

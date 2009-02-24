@@ -13,7 +13,7 @@
 
     <statusbar id="status-bar">
         <statusbarpanel id="hBookmark-statusBarPanel">
-            <hbox onload="alert(0);" id="hBookmark-syncProgressBox" hidden="true">
+            <hbox id="hBookmark-syncProgressBox" hidden="true">
                 <image src="http://b.hatena.ne.jp/images/loading.gif" width="16px" height="16px" />
                 <progressmeter 
                 id="hBookmark-syncProgressMeter"
@@ -23,9 +23,6 @@
             </hbox>
         </statusbarpanel>
     </statusbar>
-
-    <window id="main-window">
-    </window>
 
     <broadcasterset id="mainBroadcasterSet">
         <broadcaster id="viewHBookmarkSidebar"
@@ -42,15 +39,18 @@
     // <![CDATA[
     (function() {
         with(hBookmark) {
-            EventService.dispatch('uiload', window);
-
-            if (!shared.get('firstPreload')) {
-                EventService.dispatch('firstPreload', window);
-                shared.set('firstPreload', true);
-
-                Application.console.open();
-            }
             EventService.dispatch('preload', window);
+
+            window.addEventListener('load', function(e) {
+                EventService.dispatch('load', window);
+
+                if (!shared.get('firstPreload')) {
+                    EventService.dispatch('firstPreload', window);
+                    shared.set('firstPreload', true);
+
+                    Application.console.open();
+                }
+            }, false);
         }
     })();
     // ]]>
