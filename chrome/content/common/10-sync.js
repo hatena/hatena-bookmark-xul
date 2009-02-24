@@ -3,6 +3,7 @@
 const EXPORT = ["Sync"];
 
 var Sync = {};
+EventService.implement(Sync);
 
 extend(Sync, {
     createDataStructure: function Sync_createDataStructure (text) {
@@ -14,9 +15,14 @@ extend(Sync, {
     },
     all: function Sync_all (url) {
         if (this._syncing) return;
-        net.get(url, method(this, 'allCallback'), null, true);
+        this.dispatch('start');
+        net.get(url, method(this, 'allCallback'), method(this, 'allError'), true);
+    },
+    allError : function Sync_errorAll () {
+        this.dispatch('fail');
     },
     allCallback: function Sync_allCallback (req)  {
+        this.dispatch('progress', {value: 0});
         let BOOKMARK  = model('Bookmark');
         let box = document.getElementById('hBookmark-syncProgressBox');
         box.removeAttribute('hidden');
@@ -55,6 +61,7 @@ extend(Sync, {
             }
             if (i % 100 == 0) {
                 meter.value = i/len*100|0;
+                this.dispatch('progress', { value: i/len*100|0 });
                 BOOKMARK.db.commitTransaction();
                 async.wait(1000);
                 BOOKMARK.db.beginTransaction();
@@ -62,11 +69,12 @@ extend(Sync, {
             }
         }
         BOOKMARK.db.commitTransaction();
+        this.dispatch('complete');
         box.setAttribute('hidden', true);
 
         p(infos.length);
         p('time: ' + (Date.now() - now));
-      }
+    }
 });
 
 

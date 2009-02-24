@@ -1,21 +1,9 @@
 <?xml version="1.0" ?>
 <overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script type="application/javascript" src="autoloader.js"></script>
-
     <script type="text/javascript; version=1.8" charset="utf-8">
     // <![CDATA[
-    (function() {
-        with(hBookmark) {
-            if (!shared.get('firstPreload')) {
-                EventService.dispatch('firstPreload', window);
-                shared.set('firstPreload', true);
-
-                Application.console.open();
-            }
-            EventService.dispatch('preload', window);
-        }
-    })();
-
+        hBookmark.EventService.dispatch('fastload', window);
     // ]]>
     </script>
 
@@ -25,7 +13,7 @@
 
     <statusbar id="status-bar">
         <statusbarpanel id="hBookmark-statusBarPanel">
-            <hbox id="hBookmark-syncProgressBox" hidden="true">
+            <hbox onload="alert(0);" id="hBookmark-syncProgressBox" hidden="true">
                 <image src="http://b.hatena.ne.jp/images/loading.gif" width="16px" height="16px" />
                 <progressmeter 
                 id="hBookmark-syncProgressMeter"
@@ -49,4 +37,22 @@
                      sidebartitle="Hatena Bookmark Sidebar"
                      oncommand="toggleSidebar('viewHBookmarkSidebar');"/>
     </broadcasterset>
+
+    <script type="text/javascript; version=1.8" charset="utf-8">
+    // <![CDATA[
+    (function() {
+        with(hBookmark) {
+            EventService.dispatch('uiload', window);
+
+            if (!shared.get('firstPreload')) {
+                EventService.dispatch('firstPreload', window);
+                shared.set('firstPreload', true);
+
+                Application.console.open();
+            }
+            EventService.dispatch('preload', window);
+        }
+    })();
+    // ]]>
+    </script>
 </overlay>
