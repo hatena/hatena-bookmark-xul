@@ -22,7 +22,10 @@
                         </row>
                         <row>
                             <label>コメント:</label>
+                            <!--
                             <textbox anonid="comment"/>
+                            -->
+                            <hbookmark-commenttextbox anonid="comment"/>
                         </row>
                     </rows>
                 </grid>

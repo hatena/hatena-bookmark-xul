@@ -1,0 +1,73 @@
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:html="http://www.w3.org/1999/xhtml">
+
+    <binding id="commentTextbox">
+        <content>
+            <xul:textbox anonid="textbox" flex="1"/>
+            <xul:menupopup anonid="popup"/>
+        </content>
+
+        <implementation>
+            <field name="textbox">
+                document.getAnonymousElementByAttribute(this, "anonid", "textbox");
+            </field>
+            <field name="popup">
+                document.getAnonymousElementByAttribute(this, "anonid", "popup");
+            </field>
+            <field name="candidates">new hBookmark.TagCandidates()</field>
+
+            <property name="value"
+                      onget="return this.textbox.value;"
+                      onset="return this.textbox.value = val;"/>
+
+            <method name="_tryToShowCandidates">
+                <parameter name="input"/>
+                <body>
+                <![CDATA[
+                    let tagFragment = this.candidates.getTagFragment(input);
+                    if (!tagFragment) return;
+                    let tags = this.candidates.find(tagFragment);
+                    if (!tags.length) return;
+                    this.showCandidates(tags);
+                ]]>
+                </body>
+            </method>
+
+            <method name="_showCandidates">
+                <parameter name="tags"/>
+                <body>
+                <![CDATA[
+                    let popup = this.popup;
+                    let menuitems = popup.childNodes;
+                    let i = 0;
+                    for (let n = Math.min(tags.length, menuitems.length); i < n; i++) {
+                        menuitems[i].label = tags[i];
+                    }
+                    for (let n = tags.length; i < n; i++) {
+                        let menuitem = document.createElementNS(hBookmark.XUL_NS, "menuitem");
+                        menuitem.setAttribute("label", tags[i]);
+                        popup.appendChild(menuitem);
+                    }
+                    for (let n = menuitems.length; i < n; i++) {
+                        menuitems[i].hidden = true;
+                    }
+                ]]>
+                </body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="input">
+            <![CDATA[
+                let textbox = this.textbox;
+                let input = textbox.value.substring(0, textbox.selectionStart);
+hBookmark.p(this.nodeName);
+                this._tryToShowCandidates(input);
+            ]]>
+            </handler>
+        </handlers>
+    </binding>
+
+</bindings>
