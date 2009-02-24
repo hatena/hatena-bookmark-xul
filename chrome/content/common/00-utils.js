@@ -31,7 +31,28 @@ var sprintf = function (str) {
 var utils = {};
 utils.keys = function(obj) [key for (key in obj)];
 utils.values = function(obj) [key for each (key in obj)];
-// utils.values = function(obj) return [value for each ((_,value) in Iterator(obj))];
+
+
+utils.getHistoryNodeByURL = function utils_getHistoryNodeByURL(url) {
+    let query = HistoryService.getNewQuery();
+    query.uri = IOService.newURI(url, null, null);
+    let options = HistoryService.getNewQueryOptions();
+    options.queryType = options.QUERY_TYPE_HISTORY;
+    // options.resultType = options.RESULTS_AS_VISIT;
+    options.resultType = options.RESULTS_AS_URI;
+    let res = HistoryService.executeQuery(query, options);
+    let root = res.root;
+    try {
+        root.containerOpen = true;
+        for (let i = 0; i < root.childCount; i++) {
+            let node = root.getChild(i);
+            return node;
+        }
+    } finally {
+        root.containerOpen = false;
+    }
+    return;
+}
 
 var async = {};
 
