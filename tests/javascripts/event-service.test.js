@@ -4,7 +4,7 @@ function warmUp() {
 }
 
 function setUp() {
-    EventService.reset();
+    EventService.resetListeners();
 }
 
 function testEventService() {
@@ -114,6 +114,8 @@ function testMultipleListenerMethodCall() {
     assert.equals(result, [1]);
 }
 
+// XXX getTestWindow()の返り値がnullになる。
+testDisposable.priority = "never";
 function testDisposable() {
     const EXTENSION_ID = "bookmark@hatena.ne.jp";
     const em = Cc["@mozilla.org/extensions/manager;1"]
@@ -164,4 +166,17 @@ function testDisposable() {
     assert.equals(result, false);
 
     utils.scheduleToRemove(copiedFile);
+}
+
+function testImplement() {
+    var dispatcher = {};
+    var ret = EventService.implement(dispatcher);
+    assert.isTrue(ret === dispatcher);
+    assert.isFunction(dispatcher.createListener);
+    result = false;
+    dispatcher.createListener("AnEvent", function () result = true);
+    EventService.dispatch("AnEvent");
+    assert.equals(result, false);
+    dispatcher.dispatch("AnEvent");
+    assert.equals(result, true);
 }

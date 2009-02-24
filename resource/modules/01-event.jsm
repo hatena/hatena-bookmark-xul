@@ -14,15 +14,27 @@ const EXPORTED_SYMBOLS = ["EventService"];
  * l.unlisten();
  */
 
-let listenersSet = {};
+var EventService = new EventDispatcher();
 
-var EventService = {
-    createListener: function ES_createListener(type, handler, lockKey,
+EventService.implement = function ES_implement(target) {
+    extend(target, EventDispatcher.prototype, false);
+    EventDispatcher.call(target);
+    return target;
+};
+
+// XXX ToDo: unlisten/resetメソッドとdisposableなリスナの関係を整理する。
+
+function EventDispatcher() {
+    this._listenersSet = {};
+}
+
+extend(EventDispatcher.prototype, {
+    createListener: function ED_createListener(type, handler, lockKey,
                                                priority, disposable) {
         if (typeof handler.handleEvent === "function")
             handler = method(handler, "handleEvent");
         let listener =
-            new Listener(type, handler, lockKey || "", priority || 0);
+            new Listener(this, type, handler, lockKey || "", priority || 0);
         let scope;
         if ((arguments.length < 5 || disposable) &&
             (scope = arguments.callee.caller))
@@ -31,8 +43,8 @@ var EventService = {
         return listener;
     },
 
-    dispatchEvent: function ES_dispatchEvent(event) {
-        var listeners = listenersSet[event.type];
+    dispatchEvent: function ED_dispatchEvent(event) {
+        var listeners = this._listenersSet[event.type];
         if (!listeners) return true;
         for (var i = 0; i < listeners.length; i++) {
             var listener = listeners[i];
@@ -42,15 +54,15 @@ var EventService = {
         return !event.isDefaultPrevented;
     },
 
-    dispatch: function ES_dispatch(type, data) {
+    dispatch: function ED_dispatch(type, data) {
         var event = new Event(type, data);
-        return EventService.dispatchEvent(event);
+        return this.dispatchEvent(event);
     },
 
-    reset: function ES_reset() {
-        listenersSet = {};
+    resetListeners: function ED_resetListeners() {
+        this._listenersSet = {};
     }
-};
+});
 
 let disposableEntries = [];
 
@@ -84,7 +96,8 @@ function addDisposer(window, listeners) {
 
 let locked = {};
 
-function Listener(type, handler, lockKey, priority) {
+function Listener(dispatcher, type, handler, lockKey, priority) {
+    this.dispatcher = dispatcher;
     this.type = type;
     this.handler = handler;
     this.lockKey = lockKey;
@@ -97,8 +110,8 @@ extend(Listener.prototype, {
         if (this.isListening || (this.lockKey && locked[this.lockKey])) return;
         locked[this.lockKey] = true;
         this.isListening = true;
-        var listeners = listenersSet[this.type] ||
-                        (listenersSet[this.type] = []);
+        var listeners = this.dispatcher._listenersSet[this.type] ||
+                        (this.dispatcher._listenersSet[this.type] = []);
         if (this.priority) {
             for (var i = 0; i < listeners.length; i++)
                 if (listeners[i].priority < this.priority)
@@ -113,7 +126,7 @@ extend(Listener.prototype, {
         if (!this.isListening) return;
         this.isListening = false;
         locked[this.lockKey] = false;
-        var listeners = listenersSet[this.type];
+        var listeners = this.dispatcher._listenersSet[this.type];
         var i;
         if (listeners && (i = listeners.indexOf(this)) !== -1)
             listeners.splice(i, 1);
