@@ -20,6 +20,12 @@ const StorageStatementWrapper =
 const ThreadManager =
     Cc["@mozilla.org/thread-manager;1"].getService(Ci.nsIThreadManager);
 
+const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+const XBL_NS = "http://www.mozilla.org/xbl";
+const XHTML_NS = "http://www.w3.org/1999/xhtml";
+const XML_NS = "http://www.w3.org/XML/1998/namespace";
+const XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+
 /* utility functions */
 
 /*
