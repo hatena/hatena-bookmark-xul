@@ -3,12 +3,32 @@
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <binding id="commentTextbox" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
+        <implementation>
+            <field name="_prevSearchParam">""</field>
+
+            <method name="adjustCaret">
+                <parameter name="textEntered"/>
+                <body><![CDATA[
+                    let closerPos = this.value.indexOf("]", this._prevSearchParam);
+                    if (closerPos !== -1)
+                        this.setSelectionRange(closerPos + 1, closerPos + 1);
+                    this._setSearchParam();
+                ]]></body>
+            </method>
+
+            <method name="_setSearchParam">
+                <body><![CDATA[
+                    this._prevSearchParam = this.searchParam;
+                    this.searchParam = this.selectionStart;
+                ]]></body>
+            </method>
+        </implementation>
 
         <handlers>
             <handler event="input"
-                     action="this.searchParam = this.selectionStart;"/>
+                     action="this._setSearchParam();"/>
             <handler event="keypress" phase="capturing"
-                     action="this.searchParam = this.selectionStart;"/>
+                     action="this._setSearchParam();"/>
         </handlers>
     </binding>
 

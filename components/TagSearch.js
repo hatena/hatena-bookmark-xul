@@ -29,7 +29,7 @@ extend(TagSearch.prototype, {
 
     startSearch: function TS_startSearch(searchString, searchParam,
                                          previousResult, listener) {
-        //p("startSearch", searchString, searchParam, previousResult, listener);
+        p("startSearch", searchString, searchParam, previousResult, listener);
 
         let result = new TagSearchResult(searchString, +searchParam);
         listener.onSearchResult(this, result);
@@ -79,13 +79,16 @@ extend(TagSearchResult, {
 
 extend(TagSearchResult.prototype, {
     getCommentAt: function TSR_getCommentAt(index) {
-        return index + [, "st", "nd", "rd"][index % 10] + " comment";
+        //return index + ([, "st", "nd", "rd"][index % 10] || "th") + " comment";
+        return this._tags[index].name;
     },
     getImageAt: function TSR_getImageAt(index) {},
     getStyleAt: function TSR_getStyleAt(index) {},
     getValueAt: function TSR_getValueAt(index) {
         return this._head + this._tags[index].name + this._tail;
     },
+
+    removeValueAt: function TSR_removeValueAt(rowIndex, removeFromDb) {},
 
     QueryInterface: XPCOMUtils.generateQI([
         Ci.nsIAutoCompleteResult,

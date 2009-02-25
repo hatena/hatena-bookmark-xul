@@ -24,12 +24,9 @@
                             <label>コメント:</label>
                             <textbox anonid="comment" type="autocomplete"
                                      class="hbookmark-commenttextbox"
-                                     autocompletesearch="hbookmark-tag"/>
-                            <!--
-                            <hbookmark-commenttextbox
-                                 anonid="comment" type="autocomplete"
-                                 autocompletesearch="hbookmark-tag"/>
-                            -->
+                                     autocompletesearch="hbookmark-tag"
+                                     showcommentcolumn="true"
+                                     ontextentered="this.adjustCaret(true);"/>
                         </row>
                     </rows>
                 </grid>
