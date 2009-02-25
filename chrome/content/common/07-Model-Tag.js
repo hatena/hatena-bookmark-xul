@@ -33,6 +33,16 @@ extend(Tag, {
         return this.find(condition);
     },
 
+    findTagCandidates: function Tag_findTagCandidates(partialTag) {
+        if (!partialTag) return [];
+        return this.find({
+            where: "name LIKE :pattern ESCAPE '#'",
+            // XXX SQLインジェクションの可能性について要検証
+            pattern: partialTag.replace(/[#_%]/g, "#$&") + "%",
+            group: "name"
+        });
+    },
+
     deleteByName: function Tag_deleteByName(name) Tag.rename(name, null),
 
     rename: function Tag_rename(oldName, newName) {

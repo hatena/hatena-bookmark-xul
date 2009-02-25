@@ -64,15 +64,23 @@ function testTag() {
     let Tag = model("Tag");
     prepareDatabase(hBookmark);
 
-    var names = Tag.findDistinctTags().map(function (t) t.name);
+    let names;
+    names = Tag.findDistinctTags().map(function (t) t.name);
     assert.equals(names.sort(), ["JavaScript", "Perl", "Ruby"]);
-    var names = Tag.findRelatedTags(["Perl", "Ruby"]).map(function (t) t.name);
+    names = Tag.findRelatedTags(["Perl", "Ruby"]).map(function (t) t.name);
     assert.equals(names.sort(), ["JavaScript"]);
 
+    let tags;
+    tags = Tag.findTagCandidates("Java");
+    assert.equals(tags.length, 1);
+    assert.equals(tags[0].name, "JavaScript");
+    tags = Tag.findTagCandidates(null);
+    assert.equals(tags.length, 0);
+
     Tag.rename("JavaScript", "JS");
-    var tags = Tag.findByName("JS");
+    tags = Tag.findByName("JS");
     assert.equals(tags.length, 2);
     Tag.deleteByName("Perl");
-    var tags = Tag.findByName("Perl");
+    tags = Tag.findByName("Perl");
     assert.equals(tags.length, 0);
 }

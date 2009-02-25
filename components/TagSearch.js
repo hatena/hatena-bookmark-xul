@@ -29,8 +29,7 @@ extend(TagSearch.prototype, {
 
     startSearch: function TS_startSearch(searchString, searchParam,
                                          previousResult, listener) {
-        // Debug
-        p("startSearch", searchString, searchParam, previousResult, listener);
+        //p("startSearch", searchString, searchParam, previousResult, listener);
 
         let result = new TagSearchResult(searchString, +searchParam);
         listener.onSearchResult(this, result);
@@ -46,14 +45,17 @@ extend(TagSearch.prototype, {
 
 function TagSearchResult(comment, caretPos) {
     let [head, tag, tail] = TagSearchResult.splitComment(comment, caretPos);
+    this._tags = Model.Tag.findTagCandidates(tag);
+    this._head = head + "[";
+    this._tail = "]" + tail;
+
     this.defaultIndex = 0;
     this.errorDescription = "";
-    this.matchCount = TBD;
-    this.searchResult = TBD;
+    this.matchCount = this._tags.length;
+    this.searchResult = this._tags.length
+        ? Ci.nsIAutoCompleteResult.RESULT_SUCCESS
+        : Ci.nsIAutoCompleteResult.RESULT_NOMATCH;
     this.searchString = comment;
-    //this.tag = tag;
-    //this.head = head;
-    //this.tail = tail;
 }
 
 extend(TagSearchResult, {
@@ -76,22 +78,14 @@ extend(TagSearchResult, {
 });
 
 extend(TagSearchResult.prototype, {
-    /*
-    get defaultIndex TSR_get_defaultIndex() 0,
-    get errorDescription TSR_get_errorDescription() "",
-    get matchCount TSR_get_matchCount() {
-        // TBD
+    getCommentAt: function TSR_getCommentAt(index) {
+        return index + [, "st", "nd", "rd"][index % 10] + " comment";
     },
-    get searchResult TSR_get_searchResult() {
-        // TBD
-    },
-    get searchString TSR_get_searchString() {},
-    */
-
-    getCommentAt: function TSR_getCommentAt(index) {},
     getImageAt: function TSR_getImageAt(index) {},
     getStyleAt: function TSR_getStyleAt(index) {},
-    getValueAt: function TSR_getValueAt(index) {},
+    getValueAt: function TSR_getValueAt(index) {
+        return this._head + this._tags[index].name + this._tail;
+    },
 
     QueryInterface: XPCOMUtils.generateQI([
         Ci.nsIAutoCompleteResult,
