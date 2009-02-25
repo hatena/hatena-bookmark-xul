@@ -1,6 +1,6 @@
 hbookmark-addpanel {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#addPanel");
 }
-hbookmark-commenttextbox {
+.hbookmark-commenttextbox {
    -moz-binding: url("chrome://hatenabookmark/content/commentTextbox.xml#commentTextbox");
 }
