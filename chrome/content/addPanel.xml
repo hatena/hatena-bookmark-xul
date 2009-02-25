@@ -23,9 +23,12 @@
                         <row>
                             <label>コメント:</label>
                             <textbox anonid="comment" type="autocomplete"
+                                     class="hbookmark-commenttextbox"
                                      autocompletesearch="hbookmark-tag"/>
                             <!--
-                            <hbookmark-commenttextbox anonid="comment"/>
+                            <hbookmark-commenttextbox
+                                 anonid="comment" type="autocomplete"
+                                 autocompletesearch="hbookmark-tag"/>
                             -->
                         </row>
                     </rows>

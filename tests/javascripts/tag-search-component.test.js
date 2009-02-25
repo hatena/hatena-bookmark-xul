@@ -1,20 +1,26 @@
-let TagSearch;
 
 function setUp() {
-    TagSearch = Components.classes["@mozilla.org/autocomplete/search;1?name=hbookmark-tag"].
-                getService(Components.interfaces.nsIAutoCompleteSearch);
+    utils.include("../../components/TagSearch.js");
 }
 
-function testTagSearch() {
+function testGetTagSearchService() {
+    let TagSearch = Components.classes["@mozilla.org/autocomplete/search;1?name=hbookmark-tag"].
+                    getService(Components.interfaces.nsIAutoCompleteSearch);
     assert.isTrue(TagSearch instanceof Components.interfaces.nsIAutoCompleteSearch);
 }
 
-function testGetTagFragment() {
-    let ts = TagSearch.wrappedJSObject;
-    assert.equals(ts.getTagFragment("["), null);
-    assert.equals(ts.getTagFragment("[a"), "a");
-    assert.equals(ts.getTagFragment("[a]"), null);
-    assert.equals(ts.getTagFragment("[a]["), null);
-    assert.equals(ts.getTagFragment("[a][b"), "b");
-    assert.equals(ts.getTagFragment("[a]b[c"), null);
+function testSplitComment() {
+    let TSR = TagSearchResult;
+    let A = Array.slice;
+    assert.equals(A(TSR.splitComment("[", 1)), ["[", null, ""]);
+    assert.equals(A(TSR.splitComment("[a", 2)), ["", "a", ""]);
+    assert.equals(A(TSR.splitComment("[a]", 3)), ["[a]", null, ""]);
+    assert.equals(A(TSR.splitComment("[a][", 4)), ["[a][", null, ""]);
+    assert.equals(A(TSR.splitComment("[a][b", 5)), ["[a]", "b", ""]);
+    assert.equals(A(TSR.splitComment("[a]b[c", 6)), ["[a]b[c", null, ""]);
+
+    assert.equals(A(TSR.splitComment("[a][bc", 3)), ["[a]", null, "[bc"]);
+    assert.equals(A(TSR.splitComment("[a][bc", 4)), ["[a][", null, "bc"]);
+    assert.equals(A(TSR.splitComment("[a][bc", 5)), ["[a]", "b", "c"]);
+    assert.equals(A(TSR.splitComment("[a][b]c", 4)), ["[a]", "b", "c"]);
 }
