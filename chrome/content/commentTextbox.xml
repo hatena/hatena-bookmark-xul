@@ -4,21 +4,26 @@
 
     <binding id="commentTextbox" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
         <implementation>
-            <field name="_prevSearchParam">""</field>
+            <field name="_caretPos"></field>
 
             <method name="adjustCaret">
                 <parameter name="textEntered"/>
                 <body><![CDATA[
-                    let closerPos = this.value.indexOf("]", this._prevSearchParam);
+                    let closerPos = this.value.indexOf("]", this._caretPos);
                     if (closerPos !== -1)
                         this.setSelectionRange(closerPos + 1, closerPos + 1);
-                    this._setSearchParam();
+                    this.searchParam = this.selectionStart;
+                ]]></body>
+            </method>
+
+            <method name="memoCaret">
+                <body><![CDATA[
+                    this._caretPos = this.selectionStart;
                 ]]></body>
             </method>
 
             <method name="_setSearchParam">
                 <body><![CDATA[
-                    this._prevSearchParam = this.searchParam;
                     this.searchParam = this.selectionStart;
                 ]]></body>
             </method>

@@ -26,7 +26,8 @@
                                      class="hbookmark-commenttextbox"
                                      autocompletesearch="hbookmark-tag"
                                      showcommentcolumn="true"
-                                     ontextentered="this.adjustCaret(true);"/>
+                                     ontextentered="this.adjustCaret(true);"
+                                     onsearchcomplete="this.memoCaret();"/>
                         </row>
                     </rows>
                 </grid>
