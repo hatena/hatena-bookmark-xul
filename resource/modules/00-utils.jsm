@@ -25,6 +25,9 @@ const HistoryService =
     getService("@mozilla.org/browser/nav-history-service;1", Ci.nsINavHistoryService);
 const BookmarksService =
     getService("@mozilla.org/browser/nav-bookmarks-service;1", Ci.nsINavBookmarksService); 
+const FaviconService = 
+    getService("@mozilla.org/browser/favicon-service;1", Ci.nsIFaviconService);
+
 
 const StorageStatementWrapper =
     Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');
@@ -252,6 +255,9 @@ var model = function(name) {
     return m;
 }
 
+/*
+ * 共用グローバル変数
+ */
 let _shared = {};
 var shared = {
     get: function shared_get (name) {
@@ -264,6 +270,31 @@ var shared = {
         return !(typeof _shared[name] == 'undefined');
     }
 };
+
+/*
+ * 文字列変換
+ */
+function unEscapeURIForUI(charset, string) 
+    Cc['@mozilla.org/intl/texttosuburi;1'].getService(Ci.nsITextToSubURI).unEscapeURIForUI(charset, string);
+
+/*
+ * favicon 取得
+ */
+
+function getFaviconURI (url) {
+    let faviconURI;
+    let iurl = IOService.newURI(url, null, null);
+    try {
+        try {
+            faviconURI = FaviconService.getFaviconImageForPage(iurl);
+        } catch(e) {
+            faviconURI = FaviconService.getFaviconForPage(iurl);
+        }
+    } catch(e) {
+        faviconURI = FaviconService.defaultFavicon;
+    }
+    return faviconURI;
+}
 
 const _MODULE_BASE_URI = "resource://hatenabookmark/modules/"
 

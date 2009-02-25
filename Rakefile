@@ -61,7 +61,7 @@ task :create_extension_xpi => [
     version_number = element.text
   end
 
-  sh "cd #{BUILD_DIR} && zip -qr -9 ../../#{EXTENSION_NAME}-#{version_number}-fx.xpi *"
+  sh "cd #{BUILD_DIR} && zip -qr -9 ../../xpi/#{EXTENSION_NAME}-#{version_number}-#{Time.now.strftime('%Y%m%d')}-fx.xpi *"
   rm_rf "build"
 end
 
