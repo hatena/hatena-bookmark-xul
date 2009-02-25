@@ -4,60 +4,82 @@
 
     <binding id="addPanel">
         <content>
-            <hbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            <vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
                   flex="1" style="height: 20em;">
-                <vbox flex="1">
-                    <label>タイトル</label>
-                    <hbox>
-                        <textbox readonly="true" flex="1"/>
-                        <button label="変更する..."/>
-                    </hbox>
+                <grid>
+                    <columns>
+                        <column/>
+                        <column flex="1"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label>タイトル:</label>
+                            <textbox anonid="title" readonly="true"/>
+                        </row>
+                        <row>
+                            <label>URL:</label>
+                            <label anonid="url" class="text-link"/>
+                        </row>
+                        <row>
+                            <label>コメント:</label>
+                            <!--
+                            <textbox anonid="comment"/>
+                            -->
+                            <hbookmark-commenttextbox anonid="comment"/>
+                        </row>
+                    </rows>
+                </grid>
 
-                    <label>URL</label>
-                    <hbox>
-                        <textbox value="http://" readonly="true" flex="1"/>
-                        <button label="変更する..."/>
-                    </hbox>
-
-                    <hbox>
-                        <label>コメント</label>
-                        <spacer flex="1"/>
-                        <label>0 / 100</label>
-                    </hbox>
-                    <textbox/>
-
-                    <hbox>
-                        <button label="追加する"/>
-                    </hbox>
-                </vbox>
-
-                <tabbox flex="1">
-                    <tabs>
-                        <tab label="タグ"/>
-                        <tab label="画像"/>
-                        <tab label="コメント"/>
-                    </tabs>
-                    <tabpanels flex="1">
-                        <tabpanel>
-                            <label>タグ一覧</label>
-                        </tabpanel>
-                        <tabpanel>
-                            <label>画像一覧</label>
-                        </tabpanel>
-                        <tabpanel>
-                            <label>コメント一覧</label>
-                        </tabpanel>
-                    </tabpanels>
-                </tabbox>
-            </hbox>
+                <hbox>
+                    <button label="追加する"/>
+                </hbox>
+            </vbox>
         </content>
-        <!--
+
         <implementation>
-            <constructor>
-                hBookmark.p('Hello');
-            </constructor>
+            <field name="view">null</field>
+            <field name="targetBrowser">null</field>
+
+            <field name="_titleField">
+                document.getAnonymousElementByAttribute(this, "anonid", "title")
+            </field>
+            <field name="_urlField">
+                document.getAnonymousElementByAttribute(this, "anonid", "url")
+            </field>
+            <field name="_commentField">
+                document.getAnonymousElementByAttribute(this, "anonid", "comment")
+            </field>
+
+            <!-- XXX This should be false -->
+            <field name="_isOpen">true</field>
+            <property name="isOpen" readonly="true"
+                      onget="return this._isOpen"/>
+
+            <method name="toggle">
+                <body>
+                <![CDATA[
+                    let wasOpen = this.isOpen;
+                    if (!wasOpen) {
+                        this.view.setup(this.targetBrowser.contentWindow);
+                        this._update();
+                    }
+                    this.collapsed = wasOpen;
+                    this._isOpen = !wasOpen;
+                ]]>
+                </body>
+            </method>
+
+            <method name="_update">
+                <body>
+                <![CDATA[
+                    this._titleField.value = this.view.title;
+                    this._urlField.value = this.view.url;
+                    this._urlField.setAttribute("href", this.view.url);
+                    this._commentField.value = this.view.comment;
+                ]]>
+                </body>
+            </method>
         </implementation>
-        -->
     </binding>
 
 </bindings>
