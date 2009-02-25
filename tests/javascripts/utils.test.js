@@ -29,8 +29,8 @@ function testKeysValues()
         k2: 'b',
         k3: 'c',
     };
-    assert.equals(['k1', 'k2', 'k3'], utils.keys(o));
-    assert.equals(['a', 'b', 'c'], utils.values(o));
+    assert.equals(['k1', 'k2', 'k3'], keys(o));
+    assert.equals(['a', 'b', 'c'], values(o));
 }
 
 function testNewURI() {
