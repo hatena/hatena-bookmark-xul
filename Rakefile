@@ -17,7 +17,8 @@ file "#{BUILD_DIR}/chrome.manifest" => [:create_buildchrome_dir] do
   open("#{BUILD_DIR}/chrome.manifest",'w') do |infile|
     open("chrome.manifest", "r") do |outfile|
       while line = outfile.gets
-        infile.puts line.gsub(/chrome\//, "jar:chrome/#{EXTENSION_NAME}.jar!/")
+        #infile.puts line.gsub(/chrome\//, "jar:chrome/#{EXTENSION_NAME}.jar!/")
+        infile.puts line
       end
     end
   end
@@ -45,7 +46,8 @@ end
 
 desc "create the chrome jar file"
 task :create_chrome_jar => [:create_buildchrome_dir] do
-  sh "cd chrome && zip -qr -0 ../#{BUILD_DIR}/chrome/#{EXTENSION_NAME}.jar * -x \*.svn\*"
+  cp_r 'chrome', "#{BUILD_DIR}/"
+  #sh "cd chrome && zip -qr -0 ../#{BUILD_DIR}/chrome/#{EXTENSION_NAME}.jar * -x \*.svn\*"
 end
 
 desc "create the xpi file and use the version number in the file name"
@@ -53,7 +55,8 @@ task :create_extension_xpi => [
                                :create_install_rdf,
                                :create_chrome_manifest,
                                :create_extra_directories,
-                               :create_chrome_jar] do
+                               :create_chrome_jar
+] do
   install_rdf_file = File.new('install.rdf','r')
   install_rdf_xmldoc = Document.new(install_rdf_file)
   version_number = ""
