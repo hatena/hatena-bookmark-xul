@@ -5,6 +5,8 @@ const Ci = Components.interfaces;
 const Cr = Components.results;
 const Cu = Components.utils;
 
+const INTERFACES = [key for (key in Ci)];
+
 let getService = function getService(name, i) Cc[name].getService(i);
 
 const Application =
@@ -152,7 +154,6 @@ function addAround(target, methodNames, advice){
         target[methodName].overwrite = (method.overwrite || 0) + 1;
     });
 }
-// end from Tombloo
 
 var update = function (self, obj/*, ... */) {
     if (self === null) {
@@ -168,6 +169,78 @@ var update = function (self, obj/*, ... */) {
     }
     return self;
 };
+
+/**
+ * XPCOMインスタンスの実装しているインターフェース一覧を取得する。
+ *
+ * @param {Object} obj XPCOMインスタンス。
+ * @return {Array} インターフェースのリスト。
+ */
+function getInterfaces(obj){
+    var result = [];
+    
+    for(var i=0,len=INTERFACES.length ; i<len ; i++){
+        var ifc = INTERFACES[i];
+        if(obj instanceof ifc)
+            result.push(ifc);
+    }
+    
+    return result;
+}
+
+function createMock(sample, proto){
+    var non = function(){};
+    sample = typeof(sample)=='object'? sample : Cc[sample].createInstance();
+    
+    var ifcs = getInterfaces(sample);
+    var Mock = function(){};
+    
+    for(var key in sample){
+        try{
+            if(sample.__lookupGetter__(key))
+                continue;
+            
+            var val = sample[key];
+            switch (typeof(val)){
+            case 'number':
+            case 'string':
+                Mock.prototype[key] = val;
+                continue;
+                
+            case 'function':
+                Mock.prototype[key] = non;
+                continue;
+            }
+        } catch(e){
+            // コンポーネント実装により発生するプロパティ取得エラーを無視する
+        }
+    }
+    
+    Mock.prototype.QueryInterface = createQueryInterface(ifcs);
+    
+    // FIXME: extendに変える(アクセサをコピーできない)
+    update(Mock.prototype, proto);
+    update(Mock, Mock.prototype);
+    
+    return Mock;
+}
+
+function createQueryInterface(ifcNames){
+    var ifcs = ['nsISupports'].concat(ifcNames).map(function(ifcName){
+        return Ci[''+ifcName];
+    });
+    
+    return function(iid){
+        if(ifcs.some(function(ifc){
+            return iid.equals(ifc);
+        })){
+            return this;
+        }
+        
+        throw Components.results.NS_NOINTERFACE;
+    }
+}
+// end from Tombloo
 
 var bind = function bind(func, self) function () func.apply(self, Array.slice(arguments));
 var method = function method(self, methodName) function () self[methodName].apply(self, Array.slice(arguments));
