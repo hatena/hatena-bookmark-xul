@@ -22,10 +22,11 @@
                         </row>
                         <row>
                             <label>コメント:</label>
+                            <textbox anonid="comment" type="autocomplete"
+                                     autocompletesearch="hbookmark-tag"/>
                             <!--
-                            <textbox anonid="comment"/>
-                            -->
                             <hbookmark-commenttextbox anonid="comment"/>
+                            -->
                         </row>
                     </rows>
                 </grid>
