@@ -1,5 +1,8 @@
 
-const EXPORT = ['newURI', 'async', 'net', 'sprintf', 'utils'];
+/*
+ * utils 内部では、
+ * 頭に _ のついてないローカル変数はすべて EXPORT の対象となる
+ */
 
 function newURI(uriSpec, originCharset, baseURI) {
     if (typeof baseURI === "string")
@@ -28,12 +31,10 @@ var sprintf = function (str) {
 /*
  * グローバル関数としてエクスポートはしないけど、あったら便利な関数など
  */
-var utils = {};
-utils.keys = function(obj) [key for (key in obj)];
-utils.values = function(obj) [key for each (key in obj)];
+var keys = function(obj) [key for (key in obj)];
+var values = function(obj) [key for each (key in obj)];
 
-
-utils.getHistoryNodeByURL = function utils_getHistoryNodeByURL(url) {
+var getHistoryNodeByURL = function getHistoryNodeByURL(url) {
     let query = HistoryService.getNewQuery();
     query.uri = IOService.newURI(url, null, null);
     let options = HistoryService.getNewQueryOptions();
@@ -172,5 +173,7 @@ net.get = function net_get (url, callback, errorback, async, query)
 net.post = function net_get (url, callback, errorback, async, query)
                 this._http(url, callback, errorback, async, query, 'POST');
 
+var EXPORT = [m for (m in new Iterator(this, true))
+                          if (m[0] !== "_" && m !== "EXPORT")];
 
 
