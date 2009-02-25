@@ -1,8 +1,7 @@
-Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-let loader = Cc["@mozilla.org/moz/jssubscript-loader;1"].
-             getService(Ci.mozIJSSubScriptLoader);
+let loader = Components.classes["@mozilla.org/moz/jssubscript-loader;1"].
+             getService(Components.interfaces.mozIJSSubScriptLoader);
 
 function load(uri) {
     let env = { __proto__: this };
@@ -11,16 +10,26 @@ function load(uri) {
         env.EXPORT.forEach(function (name) this[name] = env[name], this);
 }
 
-load("chrome://hatenabookmark/content/common/00-utils.js");
-load("chrome://hatenabookmark/content/common/05_database.js");
-load("chrome://hatenabookmark/content/common/06_models.js");
-load("chrome://hatenabookmark/content/common/07-Model-Bookmark.js");
-load("chrome://hatenabookmark/content/common/07-Model-Tag.js");
+function setup() {
+    Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+    load("chrome://hatenabookmark/content/common/00-utils.js");
+    load("chrome://hatenabookmark/content/common/05_database.js");
+    load("chrome://hatenabookmark/content/common/06_models.js");
+    load("chrome://hatenabookmark/content/common/07-Model-Bookmark.js");
+    load("chrome://hatenabookmark/content/common/07-Model-Tag.js");
+}
 
+let firstTime = true;
 
-function TagSearch() {}
+function TagSearch() {
+    if (firstTime) {
+        firstTime = false;
+        setup();
+    }
+}
 
-extend(TagSearch.prototype, {
+TagSearch.prototype = {
+    constructor: TagSearch,
     get wrappedJSObject () this,
 
     classDescription: "Auto Complete Search for Hatena Bookmark Tags",
@@ -38,9 +47,9 @@ extend(TagSearch.prototype, {
     stopSearch: function TS_stopSearch() {},
 
     QueryInterface: XPCOMUtils.generateQI([
-        Ci.nsIAutoCompleteSearch,
+        Components.interfaces.nsIAutoCompleteSearch,
     ])
-});
+};
 
 
 function TagSearchResult(comment, caretPos) {
@@ -53,31 +62,32 @@ function TagSearchResult(comment, caretPos) {
     this.errorDescription = "";
     this.matchCount = this._tags.length;
     this.searchResult = this._tags.length
-        ? Ci.nsIAutoCompleteResult.RESULT_SUCCESS
-        : Ci.nsIAutoCompleteResult.RESULT_NOMATCH;
+        ? Components.interfaces.nsIAutoCompleteResult.RESULT_SUCCESS
+        : Components.interfaces.nsIAutoCompleteResult.RESULT_NOMATCH;
     this.searchString = comment;
 }
 
-extend(TagSearchResult, {
-    splitComment: function TS_splitComment(comment, caretPos) {
-        let head = comment.substring(0, caretPos);
-        let tail = comment.substring(caretPos);
-        let restTag = tail.match(/^([^?%\/\[\]]*)\]/);
-        if (restTag) {
-            head += restTag[1];
-            tail = tail.substring(restTag[0].length);
-        }
-        let tag = null;
-        let lastTag = head.match(/^(?:\[[^?%\/\[\]]+\])*\[([^?%\/\[\]]+)$/);
-        if (lastTag) {
-            tag = lastTag[1];
-            head = head.substring(0, head.length - tag.length - 1);
-        }
-        return [head, tag, tail];
+TagSearchResult.splitComment = function TS_splitComment(comment, caretPos) {
+    let head = comment.substring(0, caretPos);
+    let tail = comment.substring(caretPos);
+    let restTag = tail.match(/^([^?%\/\[\]]*)\]/);
+    if (restTag) {
+        head += restTag[1];
+        tail = tail.substring(restTag[0].length);
     }
-});
+    let tag = null;
+    let lastTag = head.match(/^(?:\[[^?%\/\[\]]+\])*\[([^?%\/\[\]]+)$/);
+    if (lastTag) {
+        tag = lastTag[1];
+        head = head.substring(0, head.length - tag.length - 1);
+    }
+    return [head, tag, tail];
+};
 
-extend(TagSearchResult.prototype, {
+TagSearchResult.prototype = {
+    constructor: TagSearchResult,
+    get wrappedJSObject () this,
+
     getCommentAt: function TSR_getCommentAt(index) {
         //return index + ([, "st", "nd", "rd"][index % 10] || "th") + " comment";
         return this._tags[index].name;
@@ -91,9 +101,9 @@ extend(TagSearchResult.prototype, {
     removeValueAt: function TSR_removeValueAt(rowIndex, removeFromDb) {},
 
     QueryInterface: XPCOMUtils.generateQI([
-        Ci.nsIAutoCompleteResult,
+        Components.interfaces.nsIAutoCompleteResult,
     ])
-});
+};
 
 
 function NSGetModule(compMgr, fileSpec)
