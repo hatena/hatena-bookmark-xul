@@ -54,7 +54,7 @@ var p = function (value) {
  */
 var log = {
     error: function (msg) {
-        if (msg instanceof 'Error') {
+        if (msg instanceof Error) {
             // Cu.reportError(msg);
             Application.console.log('Error: ' + msg.toString() + msg.stack.join("\n"));
         } else {
