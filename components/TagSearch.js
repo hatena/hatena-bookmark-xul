@@ -38,9 +38,10 @@ TagSearch.prototype = {
 
     startSearch: function TS_startSearch(searchString, searchParam,
                                          previousResult, listener) {
-        p("startSearch", searchString, searchParam, previousResult, listener);
+        //p("startSearch", searchString, searchParam, previousResult, listener);
 
-        let result = new TagSearchResult(searchString, +searchParam);
+        //let partialTag = searchParam.split("\t")[1];
+        let result = new TagSearchResult(searchParam);
         listener.onSearchResult(this, result);
     },
 
@@ -52,11 +53,8 @@ TagSearch.prototype = {
 };
 
 
-function TagSearchResult(comment, caretPos) {
-    let [head, tag, tail] = TagSearchResult.splitComment(comment, caretPos);
-    this._tags = Model.Tag.findTagCandidates(tag);
-    this._head = head + "[";
-    this._tail = "]" + tail;
+function TagSearchResult(partialTag) {
+    this._tags = Model.Tag.findTagCandidates(partialTag);
 
     this.defaultIndex = 0;
     this.errorDescription = "";
@@ -64,25 +62,8 @@ function TagSearchResult(comment, caretPos) {
     this.searchResult = this._tags.length
         ? Components.interfaces.nsIAutoCompleteResult.RESULT_SUCCESS
         : Components.interfaces.nsIAutoCompleteResult.RESULT_NOMATCH;
-    this.searchString = comment;
+    this.searchString = partialTag;
 }
-
-TagSearchResult.splitComment = function TS_splitComment(comment, caretPos) {
-    let head = comment.substring(0, caretPos);
-    let tail = comment.substring(caretPos);
-    let restTag = tail.match(/^([^?%\/\[\]]*)\]/);
-    if (restTag) {
-        head += restTag[1];
-        tail = tail.substring(restTag[0].length);
-    }
-    let tag = null;
-    let lastTag = head.match(/^(?:\[[^?%\/\[\]]+\])*\[([^?%\/\[\]]+)$/);
-    if (lastTag) {
-        tag = lastTag[1];
-        head = head.substring(0, head.length - tag.length - 1);
-    }
-    return [head, tag, tail];
-};
 
 TagSearchResult.prototype = {
     constructor: TagSearchResult,
@@ -94,9 +75,7 @@ TagSearchResult.prototype = {
     },
     getImageAt: function TSR_getImageAt(index) {},
     getStyleAt: function TSR_getStyleAt(index) {},
-    getValueAt: function TSR_getValueAt(index) {
-        return this._head + this._tags[index].name + this._tail;
-    },
+    getValueAt: function TSR_getValueAt(index) this._tags[index].name,
 
     removeValueAt: function TSR_removeValueAt(rowIndex, removeFromDb) {},
 

@@ -4,7 +4,15 @@
 
     <binding id="commentTextbox" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
         <implementation>
-            <field name="_caretPos"></field>
+            <constructor><![CDATA[
+                this.popup.__defineGetter__("overrideValue",
+                                            this._utils.getOverrideValue);
+            ]]></constructor>
+
+            <field name="_beforeTag">""</field>
+            <field name="_afterTag">""</field>
+            <field name="_caretPos">-1</field>
+            <field name="_utils">hBookmark.CommentUtils</field>
 
             <method name="adjustCaret">
                 <parameter name="textEntered"/>
@@ -12,7 +20,7 @@
                     let closerPos = this.value.indexOf("]", this._caretPos);
                     if (closerPos !== -1)
                         this.setSelectionRange(closerPos + 1, closerPos + 1);
-                    this.searchParam = this.selectionStart;
+                    //this.popup.invalidate();
                 ]]></body>
             </method>
 
@@ -24,7 +32,10 @@
 
             <method name="_setSearchParam">
                 <body><![CDATA[
-                    this.searchParam = this.selectionStart;
+                    let [head, tag, tail] = this._utils.splitComment(this.value, this.selectionStart);
+                    this._beforeTag = head;
+                    this._afterTag = tail;
+                    this.searchParam = tag;
                 ]]></body>
             </method>
         </implementation>
