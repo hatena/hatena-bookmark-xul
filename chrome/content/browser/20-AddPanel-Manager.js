@@ -1,13 +1,13 @@
 
-window.addEventListener("load", function () {
-    gBrowser.browsers.forEach(setupAddPanel);
-    gBrowser.addEventListener("TabOpen", function (event) {
-        setupAddPanel(event.originalTarget.linkedBrowser);
-    }, false);
-    document.getElementById("hBookmark-addToBookmarkButton")
-            .addEventListener("click", toggleCurrentPanel, false);
-
-}, false);
+//window.addEventListener("load", function () {
+//    gBrowser.browsers.forEach(setupAddPanel);
+//    gBrowser.addEventListener("TabOpen", function (event) {
+//        setupAddPanel(event.originalTarget.linkedBrowser);
+//    }, false);
+//    document.getElementById("hBookmark-addToBookmarkButton")
+//            .addEventListener("click", toggleCurrentPanel, false);
+//
+//}, false);
 
 function setupAddPanel(browser) {
     let addPanel = document.createElementNS(XUL_NS, "hbookmark-addpanel");

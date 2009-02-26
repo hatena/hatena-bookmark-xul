@@ -35,6 +35,8 @@
                 <hbox>
                     <button label="追加する"/>
                 </hbox>
+
+                <vbox class="hbookmark-taglist"/>
             </vbox>
         </content>
 
@@ -80,6 +82,68 @@
                     this._commentField.value = this.view.comment;
                 ]]>
                 </body>
+            </method>
+        </implementation>
+    </binding>
+
+
+    <!-- XXX commentTextbox.xml の内容をここに -->
+
+
+    <binding id="tagList">
+        <content>
+            <hbox anonid="first-line"/>
+        </content>
+
+        <implementation>
+            <field name="_firstLine">
+                document.getAnonymousElementByAttribute(this, "anonid", "first-line")
+            </field>
+
+            <method name="reset">
+                <body><![CDATA[
+                    let range = document.createRange();
+                    range.selectNodeContents(this);
+                    range.setStartAfter(this._firstLine);
+                    range.deleteContents();
+                    range.selectNodeContents(this._firstLine);
+                    range.deleteContents();
+
+                    let checkboxes = document.createDocumentFragment();
+                    let tags = hBookmark.Model.Tag.findDistinctTags();
+                    tags.forEach(function (tag) {
+                        let checkbox = document.createElementNS(
+                            hBookmark.XUL_NS, "checkbox");
+                        checkbox.setAttribute("label", tag.name);
+                        checkboxes.appendChild(checkbox);
+                    });
+                    this._firstLine.appendChild(checkboxes);
+                    this.reflow();
+                ]]></body>
+            </method>
+
+            <method name="reflow">
+                <body><![CDATA[
+                    // XXX rtl環境に未対応
+                    let width = this.boxObject.width;
+                    hBookmark.p
+                    let line = this._firstLine;
+                    let box = line.firstChild;
+                    while (box) {
+                        if (box.boxObject.right > width &&
+                            box.previousSibling) {
+                            let nextLine = document.createElementNS(
+                                hBookmark.XUL_NS, "hbox");
+                            let range = document.createRange();
+                            range.selectNodeContents(line);
+                            range.setStartBefore(box);
+                            nextLine.appendChild(range.extractContents());
+                            this.appendChild(nextLine);
+                            line = nextLine;
+                        }
+                        box = box.nextSibling;
+                    }
+                ]]></body>
             </method>
         </implementation>
     </binding>

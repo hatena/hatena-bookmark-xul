@@ -4,3 +4,7 @@ hbookmark-addpanel {
 .hbookmark-commenttextbox {
    -moz-binding: url("chrome://hatenabookmark/content/commentTextbox.xml#commentTextbox");
 }
+.hbookmark-taglist {
+   overflow: auto;
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#tagList");
+}
