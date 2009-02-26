@@ -26,7 +26,7 @@ extend(Sync, {
         let b = model('Bookmark').findFirst({order: 'date desc'});
 
         this.dispatch('start');
-        if (b.date) {
+        if (b && b.date) {
             net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true, {
                 timestamp: b.date
             });

@@ -5,6 +5,8 @@ const Ci = Components.interfaces;
 const Cr = Components.results;
 const Cu = Components.utils;
 
+const INTERFACES = [key for (key in Ci)];
+
 let getService = function getService(name, i) Cc[name].getService(i);
 
 const Application =
@@ -23,6 +25,9 @@ const HistoryService =
     getService("@mozilla.org/browser/nav-history-service;1", Ci.nsINavHistoryService);
 const BookmarksService =
     getService("@mozilla.org/browser/nav-bookmarks-service;1", Ci.nsINavBookmarksService); 
+const FaviconService = 
+    getService("@mozilla.org/browser/favicon-service;1", Ci.nsIFaviconService);
+
 
 const StorageStatementWrapper =
     Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');
@@ -49,7 +54,7 @@ var p = function (value) {
  */
 var log = {
     error: function (msg) {
-        if (msg instanceof 'Error') {
+        if (msg instanceof Error) {
             // Cu.reportError(msg);
             Application.console.log('Error: ' + msg.toString() + msg.stack.join("\n"));
         } else {
@@ -152,7 +157,6 @@ function addAround(target, methodNames, advice){
         target[methodName].overwrite = (method.overwrite || 0) + 1;
     });
 }
-// end from Tombloo
 
 var update = function (self, obj/*, ... */) {
     if (self === null) {
@@ -169,6 +173,78 @@ var update = function (self, obj/*, ... */) {
     return self;
 };
 
+/**
+ * XPCOMインスタンスの実装しているインターフェース一覧を取得する。
+ *
+ * @param {Object} obj XPCOMインスタンス。
+ * @return {Array} インターフェースのリスト。
+ */
+function getInterfaces(obj){
+    var result = [];
+    
+    for(var i=0,len=INTERFACES.length ; i<len ; i++){
+        var ifc = INTERFACES[i];
+        if(obj instanceof ifc)
+            result.push(ifc);
+    }
+    
+    return result;
+}
+
+function createMock(sample, proto){
+    var non = function(){};
+    sample = typeof(sample)=='object'? sample : Cc[sample].createInstance();
+    
+    var ifcs = getInterfaces(sample);
+    var Mock = function(){};
+    
+    for(var key in sample){
+        try{
+            if(sample.__lookupGetter__(key))
+                continue;
+            
+            var val = sample[key];
+            switch (typeof(val)){
+            case 'number':
+            case 'string':
+                Mock.prototype[key] = val;
+                continue;
+                
+            case 'function':
+                Mock.prototype[key] = non;
+                continue;
+            }
+        } catch(e){
+            // コンポーネント実装により発生するプロパティ取得エラーを無視する
+        }
+    }
+    
+    Mock.prototype.QueryInterface = createQueryInterface(ifcs);
+    
+    // FIXME: extendに変える(アクセサをコピーできない)
+    update(Mock.prototype, proto);
+    update(Mock, Mock.prototype);
+    
+    return Mock;
+}
+
+function createQueryInterface(ifcNames){
+    var ifcs = ['nsISupports'].concat(ifcNames).map(function(ifcName){
+        return Ci[''+ifcName];
+    });
+    
+    return function(iid){
+        if(ifcs.some(function(ifc){
+            return iid.equals(ifc);
+        })){
+            return this;
+        }
+        
+        throw Components.results.NS_NOINTERFACE;
+    }
+}
+// end from Tombloo
+
 var bind = function bind(func, self) function () func.apply(self, Array.slice(arguments));
 var method = function method(self, methodName) function () self[methodName].apply(self, Array.slice(arguments));
 
@@ -179,6 +255,9 @@ var model = function(name) {
     return m;
 }
 
+/*
+ * 共用グローバル変数
+ */
 let _shared = {};
 var shared = {
     get: function shared_get (name) {
@@ -191,6 +270,31 @@ var shared = {
         return !(typeof _shared[name] == 'undefined');
     }
 };
+
+/*
+ * 文字列変換
+ */
+function unEscapeURIForUI(charset, string) 
+    Cc['@mozilla.org/intl/texttosuburi;1'].getService(Ci.nsITextToSubURI).unEscapeURIForUI(charset, string);
+
+/*
+ * favicon 取得
+ */
+
+function getFaviconURI (url) {
+    let faviconURI;
+    let iurl = IOService.newURI(url, null, null);
+    try {
+        try {
+            faviconURI = FaviconService.getFaviconImageForPage(iurl);
+        } catch(e) {
+            faviconURI = FaviconService.getFaviconForPage(iurl);
+        }
+    } catch(e) {
+        faviconURI = FaviconService.defaultFavicon;
+    }
+    return faviconURI;
+}
 
 const _MODULE_BASE_URI = "resource://hatenabookmark/modules/"
 

@@ -33,6 +33,7 @@ function testBookmark() {
     var b2 = BOOKMARK.findById(b.id)[0];
     assert.equals(b.title, b2.title);
 
+    assert.equals(b2.body, 'mycomment');
     assert.equals(b2.tags.length, 2);
     assert.equals(b2.tags[0], 'hoge');
     assert.equals(b2.tags[1], 'huga');

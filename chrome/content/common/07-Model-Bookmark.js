@@ -12,18 +12,49 @@ let Bookmark = Model.Entity({
     }
 });
 
+let createWhereLike = function (word) {
+    var words = word.split(/\s+/);
+    var sql = [];
+    var args = {};
+    var c = 0;
+    var likeGenerateor = function(word) {
+        var word = '%' + word + '%';
+        var c1 = 'arg' + c++;
+        var arg = {};
+        arg[c1] = word;
+        return [<>
+          search like :{c1}
+        </>.toString(), arg];
+    }
+    for (var i = 0;  i < words.length; i++) {
+        var w = words[i];
+        if (w.length) {
+            var [sq, arg] = likeGenerateor(w);
+            sql.push('(' + sq + ')');
+            extend(args, arg);
+        }
+    }
+    return [sql.join(' AND '), args];
+}
+
 extend(Bookmark, {
     parseTags: function(str) {
+        let [tags, ] = this.parse(str);
+        return tags;
+    },
+    parse: function(str) {
         /*
          * XXX: [hoge][huga] foo [baz] の baz もまっちしてしまう
          */
         let regex = new RegExp('\\[([^\:\\[\\]]+)\\]', 'g');
         let match;
         let tags = [];
+        let lastIndex = 0;
         while (( match = regex.exec(str) )) {
             tags.push(match[1]);
+            lastIndex = regex.lastIndex;
         }
-        return tags;
+        return [tags, str.substring(lastIndex)];
     },
     findByTags: function(tags) {
         tags = [].concat(tags);
@@ -48,11 +79,33 @@ extend(Bookmark, {
         });
         return res;
     },
+    search: function(str, limit) {
+        var [sql, args] = createWhereLike(str);
+        extend(args, {
+            limit: limit || 10,
+            order: 'date desc',
+        });
+        var res = Bookmark.find(<>
+             select * from bookmarks
+             where {sql}
+        </>.toString(), args);
+        return res;
+    }
 });
 
 extend(Bookmark.prototype, {
-    get tags(comment) {
+    get tags() {
         return Bookmark.parseTags(this.comment);
+    },
+    get body() {
+        let [, body] = Bookmark.parse(this.comment);
+        return body;
+    },
+    get favicon() {
+        if (!this._favicon) {
+            this._favicon = getFaviconURI(this.url);
+        }
+        return this._favicon;
     },
     updateTags: function() {
         let tags = this.tags;
@@ -86,3 +139,5 @@ addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
 
 Model.Bookmark = Bookmark;
 Model.MODELS.push("Bookmark");
+
+
