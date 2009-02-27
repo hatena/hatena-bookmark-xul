@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
+<!DOCTYPE window [
+    <!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd">
+    %browserDTD;
+    <!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
+    %globalDTD;
+    <!ENTITY % globalRegionDTD SYSTEM "chrome://global-region/locale/region.dtd">
+    %globalRegionnDTD;
+]>
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="hBookmarkAddDialog"
+        type="hBookmark:addDialog"
+        title="{{Hatena::Bookmark}}">
+    <script type="application/javascript">
+    <![CDATA[
+
+        var targetWindow = null;
+        window.addEventListener("load", function () {
+            targetWindow = window.arguments[0];
+            let uri = 'http://b.hatena.ne.jp/add?mode=confirm';
+            if (targetWindow.document && targetWindow.document.title)
+                uri += '&title=' + escape(targetWindow.document.title);
+            uri += '&url=' + escape(targetWindow.location.href);
+            document.getElementById("dialog-body").setAttribute("src", uri);
+        }, false);
+
+    ]]>
+    </script>
+    <label>Hello, world</label>
+    <textbox/>
+    <iframe id="dialog-body" type="content" flex="1"
+            src="data:text/plain,Now%20Loading..."/>
+</window>
