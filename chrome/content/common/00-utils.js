@@ -100,9 +100,11 @@ async.runnable.prototype = {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIRunnable]),
 }
 
-async.method = function async_method (func, self) {
-    let args = Array.slice(arguments, 2);
+async.method = function async_method (func, self, thread) {
+    let args = Array.slice(arguments, 3);
     let runnable = new async.runnable(self, func, args);
+    if (thread)
+        runnable.thread = thread;
     runnable.selfDispatch();
     return runnable;
 }

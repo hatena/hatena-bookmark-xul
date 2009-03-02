@@ -1,35 +1,26 @@
+/*
+ * 実装 ToDo
+ * - input を wait を入れる
+ * - マウスクリック時の location の移動
+ * - user_pref でオフの時の動作
+ * - ツールバーをカスタマイズ後の挙動？
+ * - busy のオンオフ
+ * - 外観の実装
+ */
 
 var LocationBar = {
     init: function LocationBar_init () {
         let self = this;
 
         let bar = this.bar;
-        if (bar && bar.mController.mController) return;
+        if (bar && bar.mController.__mController__) return;
 
         let controller = new AutoCompletePopupController(bar.mController);
         bar.mController = controller;
 
-        //let controller = new Delegator(bar.mController);
-        //let controller = createMock(bar.mController, {
-        //    getValueAt: function(aIndex) {
-        //    p('log:' + aIndex);
-        //    return 'http://example.com/';
-        //    }
-        //});
-        //let myController = hhhhhhhhhhhhhh
-        //p(bar.controller);
-        //p(bar.mController);
-        //controller.getValueAt = function(aIndex) {
-        //    p('log:' + aIndex);
-        //    return 'http://example.com/';
-        //};
-        //bar.mController = controller;
-        //p(bar.mController.getValueAt.toSource());
-        //p(self.bar.controller.getValueAt.toSource());
-
         addAround(LocationBarHelpers, '_searchBegin', function(proceed, args, target) {
+            LocationBar.Searcher.searchBegin();
             proceed(args);
-            bar.mController.searchBegin(bar);
         });
     },
     get bar() 
@@ -37,6 +28,61 @@ var LocationBar = {
         return document.getElementById('urlbar');
     },
 };
+
+LocationBar.Searcher = {
+    searchBegin: function() {
+        var word = this.controller.input.textValue;
+        this.controller.cleanup()
+        if (word.length == 0) return;
+
+        //async.method(function() {
+            let b = model('Bookmark');
+            let res = b.search(word, 3);
+            async.method(this.searchCompleteHandler, this, ThreadManager.mainThread, res, word);
+        //}, this);
+    },
+    _bar: null,
+    get bar()
+    {
+        if (!this._bar)
+            return document.getElementById('urlbar');
+        return this._bar;
+    },
+    _panel: null,
+    get panel()
+    {
+        if (!this._panel)
+            this._panel = document.getElementById('PopupAutoCompleteRichResult');
+        return this._panel;
+    },
+    get controller() this.bar.controller,
+
+    searchCompleteHandler: function(res, word) {
+        for (var i = 0;  i < res.length; i++) {
+            let r = res[i];
+            let body = r.body;
+            if (body.length > 1) {
+                body = sprintf('%s - %s', body, r.title);
+            } else {
+                body = r.title;
+            }
+            let tags = r.tags;
+            if (tags.length) {
+                body = body + sprintf(" \u2013 %s", tags.join(', '));
+            }
+            this.controller.resultItems.push({
+                value: r.url,
+                comment: unEscapeURIForUI('utf-8', body),
+                style: tags.length ? 'tag' : 'favicon',
+                image: r.favicon.spec,
+            });
+        }
+        if (this.controller.resultItems.length) {
+            this.bar.openPopup();
+        }
+    },
+ 
+}
 
 function AutoCompletePopupController(aBaseController) 
 {
@@ -47,19 +93,21 @@ AutoCompletePopupController.prototype =
 {
     resultItems: [
     ],
+    finished: false,
 
     cleanup: function() {
+        this.finished = false;
         this.resultItems.splice(0);
     },
 
     get controller()
     {
-        return this.mController;
+        return this.__mController__;
     },
  
     init : function(controller) 
     {
-        this.mController = controller;
+        this.__mController__ = controller;
     },
  
     STATUS_NONE              : Ci.nsIAutoCompleteController.STATUS_NONE, 
@@ -96,43 +144,20 @@ AutoCompletePopupController.prototype =
         return this.controller.startSearch(aString);
     },
 
-    searchBegin : function(bar) {
-        //if (this.resultItems.length)
-        //    bar.openPopup();
-        var word = this.input.textValue;
-        this.cleanup();
-
-        async.method(function() {
-            let b = model('Bookmark');
-            let res = b.search(word, 3);
-            for (var i = 0;  i < res.length; i++) {
-                let r = res[i];
-                let body = r.body;
-                if (body.length > 1) {
-                    body = sprintf('%s - %s', body, r.title);
-                } else {
-                    body = r.title;
-                }
-                let tags = r.tags;
-                if (tags.length) {
-                    body = body + sprintf(" \u2013 %s", tags.join(', '));
-                }
-                this.resultItems.push({
-                    value: r.url,
-                    comment: unEscapeURIForUI('utf-8', body),
-                    style: tags.length ? 'tag' : 'favicon',
-                    image: r.favicon.spec,
-                });
-            }
-        }, this, function() {
-            // callback
-            p('finish: ' + this.resultItems.length);
-        });
-    },
- 
     stopSearch : function() 
     {
-        return this.controller.stopSearch();
+        let res = this.controller.stopSearch();
+        if (this.resultItems.length) {
+            let self = this;
+            /*
+             * selection の Index 位置の復元
+             */
+            setTimeout(function(){
+                self.input.popup.adjustHeight();
+                self.input.openPopup();
+            }, 10);
+        }
+        res;
     },
  
     handleText : function(aIgnoreSelection) 
