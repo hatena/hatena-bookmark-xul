@@ -1,11 +1,11 @@
 /*
  * 実装 ToDo
- * - input を wait を入れる
  * - マウスクリック時の location の移動
  * - user_pref でオフの時の動作
  * - ツールバーをカスタマイズ後の挙動？
  * - busy のオンオフ
  * - 外観の実装
+ * - 検索キャッシュ
  */
 
 var LocationBar = {
@@ -30,11 +30,28 @@ var LocationBar = {
 };
 
 LocationBar.Searcher = {
+    lastWord: null,
     searchBegin: function() {
-        var word = this.controller.input.textValue;
-        this.controller.cleanup()
-        if (word.length == 0) return;
+        let word = this.controller.input.textValue;
+        if (this.lastWord == word)
+            return;
 
+        this.controller.cleanup();
+        this.clearTimeout();
+        if (word.length == 0) return;
+        this.timeout = setTimeout(method(this, 'searchTimeoutHandler'), 100);
+
+    },
+    clearTimeout: function() {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+        this.timeout = null;
+    },
+    searchTimeoutHandler: function() {
+        this.clearTimeout();
+        let word = this.controller.input.textValue;
+        this.lastWord == word;
         //async.method(function() {
             let b = model('Bookmark');
             let res = b.search(word, 3);
