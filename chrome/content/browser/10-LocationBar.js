@@ -97,33 +97,37 @@ AutoCompletePopupController.prototype =
     },
 
     searchBegin : function(bar) {
-        let word = this.input.textValue;
+        //if (this.resultItems.length)
+        //    bar.openPopup();
+        var word = this.input.textValue;
         this.cleanup();
 
-        let b = model('Bookmark');
-        let res = b.search(word, 3);
-        for (var i = 0;  i < res.length; i++) {
-            let r = res[i];
-            let body = r.body;
-            if (body.length > 1) {
-                body = sprintf('%s - %s', body, r.title);
-            } else {
-                body = r.title;
+        async.method(function() {
+            let b = model('Bookmark');
+            let res = b.search(word, 3);
+            for (var i = 0;  i < res.length; i++) {
+                let r = res[i];
+                let body = r.body;
+                if (body.length > 1) {
+                    body = sprintf('%s - %s', body, r.title);
+                } else {
+                    body = r.title;
+                }
+                let tags = r.tags;
+                if (tags.length) {
+                    body = body + sprintf(" \u2013 %s", tags.join(', '));
+                }
+                this.resultItems.push({
+                    value: r.url,
+                    comment: unEscapeURIForUI('utf-8', body),
+                    style: tags.length ? 'tag' : 'favicon',
+                    image: r.favicon.spec,
+                });
             }
-            let tags = r.tags;
-            if (tags.length) {
-                body = body + sprintf(" \u2013 %s", tags.join(', '));
-            }
-            this.resultItems.push({
-                value: r.url,
-                comment: unEscapeURIForUI('utf-8', body),
-                style: tags.length ? 'tag' : 'favicon',
-                image: r.favicon.spec,
-            });
-        }
-        p(this.resultItems.length);
-        if (this.resultItems.length)
-            bar.openPopup();
+        }, this, function() {
+            // callback
+            p('finish: ' + this.resultItems.length);
+        });
     },
  
     stopSearch : function() 
@@ -289,13 +293,7 @@ AutoCompletePopupController.prototype =
         return this.controller.searchString = aValue;
     },
  
-    QueryInterface : function(aIID) 
-    {
-        if (aIID.equals(Ci.nsIAutoCompleteController) ||
-            aIID.equals(Ci.nsISupports))
-            return this;
-        throw Components.results.NS_ERROR_NO_INTERFACE;
-    }
+    QueryInterface: XPCOMUtils.generateQI([Ci.nsIAutoCompleteController, Ci.nsISupports]),
 }; 
 
 EventService.createListener('load', function() {

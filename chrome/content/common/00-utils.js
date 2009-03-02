@@ -76,11 +76,10 @@ async.wait = function(wait, flush) {
 /*
  * nsIRunnable
  */
-async.runnable = function async_runnable (self, func, args, callback) {
+async.runnable = function async_runnable (self, func, args) {
     this.self = self;
     this.func = func;
     this.args = args;
-    this.callback = callback;
 }
 
 async.runnable.prototype = {
@@ -93,7 +92,6 @@ async.runnable.prototype = {
     },
     run: function() {
         this.func.apply(this.self, this.args);
-        if (this.callback) this.callback.apply(this.self);
     },
     selfDispatch: function(pri) {
         let thread = this.thread;
@@ -102,10 +100,11 @@ async.runnable.prototype = {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIRunnable]),
 }
 
-async.method = function async_method (func, self, callback) {
-    let args = Array.slice(arguments, 3);
-    let runnable = new async.runnable(this, func, args, callback);
+async.method = function async_method (func, self) {
+    let args = Array.slice(arguments, 2);
+    let runnable = new async.runnable(self, func, args);
     runnable.selfDispatch();
+    return runnable;
 }
 
 /*

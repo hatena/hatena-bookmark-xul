@@ -50,7 +50,6 @@ function testAsyncMethod()
     });
     yield 100;
     assert.equals(foo, 30);
-
 }
 
 function testAsyncExecute()
