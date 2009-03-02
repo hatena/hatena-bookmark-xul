@@ -29,7 +29,7 @@ var LocationBar = {
 
         addAround(LocationBarHelpers, '_searchBegin', function(proceed, args, target) {
             proceed(args);
-            bar.mController.searchBegin();
+            bar.mController.searchBegin(bar);
         });
     },
     get bar() 
@@ -96,7 +96,7 @@ AutoCompletePopupController.prototype =
         return this.controller.startSearch(aString);
     },
 
-    searchBegin : function() {
+    searchBegin : function(bar) {
         let word = this.input.textValue;
         this.cleanup();
 
@@ -121,6 +121,9 @@ AutoCompletePopupController.prototype =
                 image: r.favicon.spec,
             });
         }
+        p(this.resultItems.length);
+        if (this.resultItems.length)
+            bar.openPopup();
     },
  
     stopSearch : function() 

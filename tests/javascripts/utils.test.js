@@ -42,6 +42,17 @@ function testNewURI() {
     assert.equals(uri.spec, "http://example.org/bar");
 }
 
+function testAsyncMethod()
+{
+    var foo = 1;
+    async.method(function() {
+        foo = 30;
+    });
+    yield 100;
+    assert.equals(foo, 30);
+
+}
+
 function testAsyncExecute()
 {
     let asyncExecute = async.splitExecuter;

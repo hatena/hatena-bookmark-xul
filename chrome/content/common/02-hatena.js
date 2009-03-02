@@ -8,7 +8,7 @@ if (shared.has('User')) {
     User = shared.get('User');
 } else {
     /*
-     * User ¥ª¥Ö¥¸¥§¥¯¥È¤Ï°ì¤Ä¤À¤±
+     * User ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ä¸€ã¤ã ã‘
      */
     User = function User_constructor (name, rks) {
         this._name = name;

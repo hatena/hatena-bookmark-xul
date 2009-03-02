@@ -38,6 +38,8 @@ const XHTML_NS = "http://www.w3.org/1999/xhtml";
 const XML_NS = "http://www.w3.org/XML/1998/namespace";
 const XMLNS_NS = "http://www.w3.org/2000/xmlns/";
 
+Cu.import('resource://gre/modules/XPCOMUtils.jsm');
+
 /* utility functions */
 
 /*

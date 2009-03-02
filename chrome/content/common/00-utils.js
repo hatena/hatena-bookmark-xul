@@ -57,6 +57,9 @@ var getHistoryNodeByURL = function getHistoryNodeByURL(url) {
 
 var async = {};
 
+/*
+ * sleep 的な処理
+ */
 async.wait = function(wait, flush) {
     if (typeof flush == 'undefined') flush = true;
 
@@ -69,6 +72,41 @@ async.wait = function(wait, flush) {
     } while ( (flush && mainThread.hasPendingEvents()) || Date.now() < endTime );
     return c;
 };
+
+/*
+ * nsIRunnable
+ */
+async.runnable = function async_runnable (self, func, args, callback) {
+    this.self = self;
+    this.func = func;
+    this.args = args;
+    this.callback = callback;
+}
+
+async.runnable.prototype = {
+    set thread(th) this._thread = th,
+    get thread() {
+        if (!this._thread) {
+            this._thread = ThreadManager.newThread(0);
+        }
+        return this._thread;
+    },
+    run: function() {
+        this.func.apply(this.self, this.args);
+        if (this.callback) this.callback.apply(this.self);
+    },
+    selfDispatch: function(pri) {
+        let thread = this.thread;
+        this.thread.dispatch(this, pri || thread.DISPATCH_NORMAL);
+    },
+    QueryInterface: XPCOMUtils.generateQI([Ci.nsIRunnable]),
+}
+
+async.method = function async_method (func, self, callback) {
+    let args = Array.slice(arguments, 3);
+    let runnable = new async.runnable(this, func, args, callback);
+    runnable.selfDispatch();
+}
 
 /*
  * 数万回ループ処理など、重い処理を yield で分割実行する。
