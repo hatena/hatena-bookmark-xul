@@ -27,7 +27,8 @@ const BookmarksService =
     getService("@mozilla.org/browser/nav-bookmarks-service;1", Ci.nsINavBookmarksService); 
 const FaviconService = 
     getService("@mozilla.org/browser/favicon-service;1", Ci.nsIFaviconService);
-
+const PrefService = 
+    getService("@mozilla.org/preferences-service;1", Ci.nsIPrefService);
 
 const StorageStatementWrapper =
     Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');
