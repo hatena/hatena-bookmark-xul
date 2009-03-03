@@ -7,7 +7,12 @@ const Cu = Components.utils;
 
 const INTERFACES = [key for (key in Ci)];
 
-let getService = function getService(name, i) Cc[name].getService(i);
+let getService = function getService(name, i) {
+    let interfaces = Array.concat(i);
+    let service = Cc[name].getService(interfaces.shift());
+    interfaces.forEach(function(i) service.QueryInterface(i));
+    return service;
+};
 
 const Application =
     getService("@mozilla.org/fuel/application;1", Ci.fuelIApplication);
@@ -28,7 +33,7 @@ const BookmarksService =
 const FaviconService = 
     getService("@mozilla.org/browser/favicon-service;1", Ci.nsIFaviconService);
 const PrefService = 
-    getService("@mozilla.org/preferences-service;1", Ci.nsIPrefService);
+    getService("@mozilla.org/preferences-service;1", [Ci.nsIPrefService, Ci.nsIPrefBranch, Ci.nsIPrefBranch2]);
 
 const StorageStatementWrapper =
     Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');
