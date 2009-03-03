@@ -10,10 +10,10 @@ function warmUp() {
 }
 
 function setUp() {
-    utils.setPref('exceptions.hatenabookmark.strfoo', 'foo');
-    utils.setPref('exceptions.hatenabookmark.strbar', 'bar');
-    utils.setPref('exceptions.hatenabookmark.intbar', 3);
-    utils.setPref('exceptions.hatenabookmark.bar', 'bar');
+    utils.setPref('extentions.hatenabookmark.strfoo', 'foo');
+    utils.setPref('extentions.hatenabookmark.strbar', 'bar');
+    utils.setPref('extentions.hatenabookmark.intbar', 3);
+    utils.setPref('extentions.hatenabookmark.bar', 'bar');
     utils.setPref('toplevel.bar', 'foo');
     Prefs.global.register();
     Prefs.bookmark.register();
@@ -31,9 +31,9 @@ function testPref()
     assert.equals(3, Prefs.bookmark.get('intbar'));
     assert.equals('bar', Prefs.bookmark.get('bar'));
     Prefs.bookmark.set('setstrbar', 'string');
-    assert.equals(utils.getPref('exceptions.hatenabookmark.setstrbar'), 'string');
+    assert.equals(utils.getPref('extentions.hatenabookmark.setstrbar'), 'string');
     Prefs.bookmark.set('setbarint', 4);
-    assert.equals(utils.getPref('exceptions.hatenabookmark.setbarint'), 4);
+    assert.equals(utils.getPref('extentions.hatenabookmark.setbarint'), 4);
     Prefs.global.clear('toplevel.bar');
     assert.isFalse(Prefs.global.get('toplevel.bar'));
 }
@@ -44,10 +44,10 @@ function testObserve() {
     Prefs.bookmark.createListener('strfoo', function(e) {
         loaded.value = true;
     });
-    Prefs.global.createListener('exceptions.hatenabookmark.strfoo', function(e) {
+    Prefs.global.createListener('extentions.hatenabookmark.strfoo', function(e) {
         loaded2.value = true;
     });
-    utils.setPref('exceptions.hatenabookmark.strfoo', 'change');
+    utils.setPref('extentions.hatenabookmark.strfoo', 'change');
     yield loaded;
     yield loaded2;
 }

@@ -98,6 +98,6 @@ Prefs.prototype = {
 };
 
 Prefs.global = new Prefs('');
-Prefs.bookmark = new Prefs('exceptions.hatenabookmark.');
+Prefs.bookmark = new Prefs('extentions.hatenabookmark.');
 
 
