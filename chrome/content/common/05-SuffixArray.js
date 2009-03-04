@@ -29,7 +29,7 @@ SuffixArray.prototype = {
                 sary[saryIndex++] = [str, i];
             }
         }
-        }, 'make index');
+        }, 'create');
         p.b(function() {
         sary.sort(function(a, b) {
             if (a[0] > b[0]) {

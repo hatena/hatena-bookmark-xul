@@ -34,7 +34,7 @@ function testSecondlife() {
     }, 'search');
 
     p('match:'+indexes.length + ' / ' + indexes);
-    p(indexes.map(function(index) sary.string.substr(index-5, word.length+10)).join(" # "));
+    //p(indexes.map(function(index) sary.string.substr(index-5, word.length+10)).join(" # "));
 }
 
 
