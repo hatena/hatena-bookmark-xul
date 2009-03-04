@@ -15,9 +15,35 @@ function setUp() {
 function tearDown() {
 }
 
+function testSecondlife() {
+    var data = utils.readFrom('data/secondlife.search.data', 'UTF-8');
+    assert.isTrue(data.length);
+    var sary, finder, indexes;
+
+    p.b(function() {
+        sary = new SuffixArray(data);
+        sary.make();
+        finder = sary.finder('Ruby on Rails');
+    }, 'create');
+
+    p.b(function() {
+        // indexes = [i for (i in finder)];
+        indexes = [];
+        for (let i = 0;i < 3;i++) {
+            try {
+                indexes.push(finder.next());
+            } catch (e if e instanceof StopIteration) {
+            };
+        }
+    }, 'find');
+
+    p(''+indexes);
+    p(indexes.map(function(index) sary.string.substr(index, 10)).join('/'));
+}
 
 function testSuffixArray()
 {
+    return;
     let sary = new SuffixArray('foobarbazmumubax');
     let finder = sary.finder('ba');
 

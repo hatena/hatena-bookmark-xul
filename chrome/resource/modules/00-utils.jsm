@@ -57,6 +57,19 @@ var p = function (value) {
 }
 
 /*
+ * 簡易ベンチマーク
+ */
+p.b = function (func, name) {
+    name = 'Benchmark ' + (name || '') + ': ';
+    let now = new Date * 1;
+    func();
+    let t = (new Date * 1) - now;
+    p(name + t);
+    return t;
+}
+
+
+/*
  * log は、実際にエラーコンソールに通知用
  * ToDo: user_pref でこの拡張のデバッグが true なら、info の内容も表示する 
  */
