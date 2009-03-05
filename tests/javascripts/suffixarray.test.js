@@ -15,25 +15,25 @@ function setUp() {
 function tearDown() {
 }
 
-function testSecondlife() {
-    var data = utils.readFrom('data/secondlife.search.data', 'UTF-8');
+function testNagayama() {
+    //var data = utils.readFrom('data/secondlife.search.data', 'UTF-8');
+    var data = utils.readFrom('data/nagayama.search.data', 'UTF-8');
     // var data = utils.readFrom('data/naoya.search.data', 'UTF-8');
     data = data.substr(0, data.length * 3/4);
     assert.isTrue(data.length);
     var sary, finder, indexes;
 
-    p.b(function() {
-        sary = new SuffixArray(data);
-        sary.make();
-    }, 'create');
+    sary = new SuffixArray(data);
+    sary.make();
 
-    var word = 'rubyonrails';
-    p.b(function() {
+    var word = 'ブックマーク';
+    //p.b(function() {
         // indexes = [i for (i in finder)];
         indexes = sary.search(word);
-    }, 'search');
+    //}, 'search');
 
     p('match:'+indexes.length + ' / ' + indexes);
+    assert.equals('307,330,2340,4386,4779,7158,7170,8218,8251,9260,9418,11387'.split(',').map(function(i) parseInt(i)), indexes);
     //p(indexes.map(function(index) sary.string.substr(index-5, word.length+10)).join(" # "));
 }
 

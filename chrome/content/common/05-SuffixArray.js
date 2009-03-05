@@ -22,12 +22,13 @@ SuffixArray.prototype = {
         p.b(function() {
         for (let i = 0, len = string.length; i < len; i++) {
             str = string.substr(i, dLen);
-            index = str.indexOf("\n");
-            if (index != 0) {
-                if (index != -1)
-                    str = str.substr(0, index);
-                sary[saryIndex++] = [str, i];
-            }
+            sary[saryIndex++] = [str, i];
+            // index = str.indexOf("\n");
+            // if (index != 0) {
+            //     if (index != -1)
+            //         str = str.substr(0, index);
+            //     sary[saryIndex++] = [str, i];
+            // }
         }
         }, 'create');
         p.b(function() {
