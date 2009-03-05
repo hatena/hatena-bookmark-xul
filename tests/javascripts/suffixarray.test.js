@@ -2,11 +2,32 @@
 var _global = this;
 var hBookmark;
 
+/*
+ * p は一時デバッグ用
+ */
+var p = function (value) {
+    Application.console.log(Array.map(arguments, String).join("\n"));
+    return value;
+}
+
+/*
+ * 簡易ベンチマーク
+ */
+p.b = function (func, name) {
+    name = 'Benchmark ' + (name || '') + ': ';
+    let now = new Date * 1;
+    func();
+    let t = (new Date * 1) - now;
+    p(name + t);
+    return t;
+}
+
 function warmUp() {
-    utils.include("btil.js");
-    var global = loadAutoloader("chrome://hatenabookmark/content/unknown.xul");
-    hBookmark = global.hBookmark;
-    hBookmark.extend(_global, hBookmark);
+    utils.include("../../chrome/content/common/05-SuffixArray.js");
+    // #utils.include("btil.js");
+    // #var global = loadAutoloader("chrome://hatenabookmark/content/unknown.xul");
+    // #hBookmark = global.hBookmark;
+    // #hBookmark.extend(_global, hBookmark);
 }
 
 function setUp() {
