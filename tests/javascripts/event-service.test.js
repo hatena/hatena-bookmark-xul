@@ -1,6 +1,6 @@
 
 function warmUp() {
-    Components.utils.import("resource://hatenabookmark/modules/01-event.jsm");
+    Components.utils.import("resource://hatenabookmark/modules/10-event.jsm");
 }
 
 function setUp() {
