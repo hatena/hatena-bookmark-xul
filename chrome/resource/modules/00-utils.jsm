@@ -34,6 +34,10 @@ const FaviconService =
     getService("@mozilla.org/browser/favicon-service;1", Ci.nsIFaviconService);
 const PrefService = 
     getService("@mozilla.org/preferences-service;1", [Ci.nsIPrefService, Ci.nsIPrefBranch, Ci.nsIPrefBranch2]);
+const CookieManager =
+     getService("@mozilla.org/cookiemanager;1", Ci.nsICookieManager);
+const CookieService=
+     getService("@mozilla.org/cookieService;1", Ci.nsICookieService);
 
 const StorageStatementWrapper =
     Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');

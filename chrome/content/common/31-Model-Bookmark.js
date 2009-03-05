@@ -107,6 +107,20 @@ extend(Bookmark.prototype, {
         }
         return this._favicon;
     },
+    get searchData() {
+        let res = this.db.execute(<>
+            SELECT
+               id, title, comment, url
+            FROM 
+               bookmarks
+            ORDER_BY date DESC;
+        </>.toString());
+        let data = [];
+        for (let i = 0, len = res.length; i < len; i++) {
+            data.push('\\0' + id + '\\0' + title + "\n" + comment + "\n" + url);
+        }
+        return data.join("\n");
+    },
     updateTags: function() {
         let tags = this.tags;
         if (this.id > 0) {
