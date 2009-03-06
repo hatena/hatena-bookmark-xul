@@ -82,11 +82,14 @@ extend(Sync, {
     }
 });
 
+EventService.createListener('UserChange', function() {
+    Sync.init();
+}, User);
 
-EventService.createListener('firstPreload', function() {
-    if (User.user) {
-        async.wait(10); // XXX: waiting...
-        Sync.init();
-    }
-});
+// EventService.createListener('firstPreload', function() {
+//     if (User.user) {
+//         async.wait(10); // XXX: waiting...
+//         Sync.init();
+//     }
+// }, window);
 
