@@ -80,10 +80,11 @@ var HttpWatcher = {
     },
 
     performTask: function HW_performTask(task) {
-        let bookmark = Model.Bookmark.findByUrl(task.url);
+        let bookmark = Model.Bookmark.findByUrl(task.url)[0];
         if (!bookmark) {
             bookmark = new Model.Bookmark();
             bookmark.url = task.url;
+            bookmark.title = task.title || "(No title)";
         }
         bookmark.comment = task.comment;
         bookmark.save();
