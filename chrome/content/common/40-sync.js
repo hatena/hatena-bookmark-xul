@@ -37,8 +37,17 @@ extend(Sync, {
     errorback: function Sync_errorAll () {
         this.dispatch('fail');
     },
+    get db() {
+        return User.user.database;
+    },
     fetchCallback: function Sync_allCallback (req)  {
         this.dispatch('progress', {value: 0});
+        if (!User.user) {
+            // XXX: データロード後にユーザが無い
+            this.errorback();
+            return;
+        }
+
         let BOOKMARK  = model('Bookmark');
 
         let text = req.responseText;
@@ -46,7 +55,7 @@ extend(Sync, {
         p(sprintf('start: %d data', infos.length));
         let now = Date.now();
         p('start');
-        BOOKMARK.db.beginTransaction();
+        this.db.beginTransaction();
         for (let i = 0, len = infos.length;  i < len; i++) {
             let bi = i * 3;
             let timestamp = infos[i].split("\t", 2)[1];
@@ -68,9 +77,9 @@ extend(Sync, {
             }
             if (i % 100 == 0) {
                 this.dispatch('progress', { value: i/len*100|0 });
-                BOOKMARK.db.commitTransaction();
+                this.db.commitTransaction();
                 async.wait(1000);
-                BOOKMARK.db.beginTransaction();
+                this.db.beginTransaction();
                 p('wait: ' + (Date.now() - now));
             }
         }
@@ -83,7 +92,8 @@ extend(Sync, {
 });
 
 EventService.createListener('UserChange', function() {
-    Sync.init();
+    if (User.user)
+        Sync.init();
 }, User);
 
 // EventService.createListener('firstPreload', function() {

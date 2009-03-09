@@ -34,7 +34,9 @@ let createWhereLike = function (word) {
             extend(args, arg);
         }
     }
-    return [sql.join(' AND '), args];
+    var res = [sql.join(' AND '), args];
+    p(sql.join(' AND '), keys(args), values(args));
+    return res;
 }
 
 extend(Bookmark, {
@@ -80,7 +82,7 @@ extend(Bookmark, {
         return res;
     },
     search: function(str, limit) {
-        var [sql, args] = createWhereLike(str);
+        var [sql, args] = createWhereLike(str || '');
         extend(args, {
             limit: limit || 10,
             order: 'date desc',
@@ -105,7 +107,7 @@ extend(Bookmark.prototype, {
         if (!this._favicon) {
             this._favicon = getFaviconURI(this.url);
         }
-        return this._favicon;
+        return this._favicon.spec.toString();
     },
     get searchData() {
         let res = this.db.execute(<>
@@ -146,7 +148,7 @@ addAround(Bookmark, 'initialize', function(proceed, args, target) {
 });
 
 addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
-    target.search = [target.title, target.comment, target.url].join("\0"); // SQLite での検索用
+    target.search = [target.title, target.comment, target.url].join("\n"); // SQLite での検索用
     proceed(args);
     target.updateTags();
 });
