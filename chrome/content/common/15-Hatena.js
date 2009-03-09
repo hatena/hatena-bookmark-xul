@@ -97,13 +97,9 @@ if (shared.has('User')) {
     }
     ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
 
-    /*
-     * 初回 Firefox 起動時に、cookie が added されるので
-     * 明示的なろぐいんは行わない
     EventService.createListener('firstPreload', function() {
         User.login();
     }, null, 100);
-    */
 
     shared.set('User', User);
 };
