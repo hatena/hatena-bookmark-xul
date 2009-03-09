@@ -87,6 +87,7 @@ var HttpWatcher = {
             bookmark.title = task.title || "(No title)";
         }
         bookmark.comment = task.comment;
+        bookmark.date = new Date();
         bookmark.save();
     },
 
