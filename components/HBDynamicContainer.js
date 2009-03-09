@@ -47,7 +47,7 @@ HBookmarkDynamicContainer.prototype = {
             order: "date DESC",
             limit: Prefs.bookmark.get("toolbarMenuCount") || 10
         });
-        p("onContainerNodeOpening", bookmarks.map(uneval).join("\n"));
+        p("[onContainerNodeOpening]", bookmarks.map(function (b) b.title).join("\n"));
         bookmarks.forEach(function (bookmark) {
             // XXX ToDo: 最後の引数にfaviconのURI (文字列)を指定する。
             container.appendURINode(bookmark.url, bookmark.title, 0,
