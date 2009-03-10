@@ -91,7 +91,7 @@ LocationBar.Searcher = {
                 value: r.url,
                 comment: unEscapeURIForUI('utf-8', body),
                 style: tags.length ? 'tag' : 'favicon',
-                image: r.favicon.spec,
+                image: r.favicon,
             });
         }
         if (this.controller.resultItems.length) {

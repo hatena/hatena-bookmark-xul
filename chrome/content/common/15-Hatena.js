@@ -52,6 +52,7 @@ if (shared.has('User')) {
         get name() this._name,
         set rks() this._rks = rks,
         get rks() this._rks,
+        get bCount() model('Bookmark').countAll(),
         get database() {
             if (!this._db) {
                 this._db = new Database('hatena.bookmark.' + this.name + '.sqlite');
@@ -95,11 +96,10 @@ if (shared.has('User')) {
         },
         QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
     }
-    ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
-
     EventService.createListener('firstPreload', function() {
         User.login();
     }, null, 100);
+    ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
 
     shared.set('User', User);
 };
