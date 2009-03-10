@@ -24,6 +24,9 @@
                 let event = document.createEvent("Event");
                 event.initEvent("HBookmarkToolbarReady", true, false);
                 this.dispatchEvent(event);
+                window.addEventListener("resize",
+                    let (self = this) function (e) self.onResize(e),
+                    false);
             ]]></constructor>
 
             <destructor><![CDATA[
@@ -73,7 +76,7 @@
                         this.body.appendChild(button);
 
                         let menuitem = document.createElementNS(XUL_NS, "menuitem");
-                        menuitem.setAttribute("class", "bookmark-item");
+                        menuitem.setAttribute("class", "bookmark-item menuitem-iconic");
                         menuitem.setAttribute("label", bookmark.title);
                         menuitem.bookmark = bookmark;
                         this.popup.appendChild(menuitem);
@@ -84,6 +87,7 @@
 
             <method name="redraw">
                 <body><![CDATA[
+hBookmark.p('redraw');
                     Array.forEach(this.body.childNodes,
                                   function (button) button.hidden = true);
                     this.chevron.hidden = true;
@@ -98,6 +102,10 @@
                     let lm = parseInt(getComputedStyle(left, null).marginLeft);
                     let rm = parseInt(getComputedStyle(right, null).marginRight);
                     function isOverflowed() {
+                        hBookmark.p([rb.x, rb.width],
+                                    parentWidth,
+                                    rb.x + rb.width + rm,
+                                    lb.x - lm);
                         return rb.x + rb.width + rm > parentWidth ||
                                lb.x - lm < 0;
                     }
@@ -121,6 +129,15 @@
                     Array.forEach(this.popup.childNodes, function (menuitem, i) {
                         menuitem.hidden = i < buttonCount;
                     });
+                ]]></body>
+            </method>
+
+            <method name="onResize">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    if (event.target !== window) return;
+                    hBookmark.p('want to redraw');
+                    //this.redraw();
                 ]]></body>
             </method>
         </implementation>
