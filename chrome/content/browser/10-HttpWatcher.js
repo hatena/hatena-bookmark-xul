@@ -17,8 +17,8 @@ var HttpWatcher = {
     },
 
     pushTask: function HW__pushTask(url, data) {
-        if (!(url in this.taskSet))
-            this.taskSet[url] = data;
+        //if (url in this.taskSet) return;
+        this.taskSet[url] = data;
     },
 
     popTask: function HW__popTask(url) {
@@ -64,6 +64,7 @@ var HttpWatcher = {
     onResponse: function HW_onResponse(channel) {
         p("on response", uneval(this.taskSet));
         let url = this._getBookmakedURL(channel);
+        p("url: " + url);
         if (!url) return;
         let task = this.popTask(url);
         if (!task) return;
@@ -79,12 +80,14 @@ var HttpWatcher = {
     },
 
     performTask: function HW_performTask(task) {
-        let bookmark = Model.Bookmark.findByUrl(task.url);
+        let bookmark = Model.Bookmark.findByUrl(task.url)[0];
         if (!bookmark) {
             bookmark = new Model.Bookmark();
             bookmark.url = task.url;
+            bookmark.title = task.title || "(No title)";
         }
         bookmark.comment = task.comment;
+        bookmark.date = new Date();
         bookmark.save();
     },
 
@@ -116,7 +119,7 @@ var HttpWatcher = {
     _isHBookmarkOperation: function HW__isHBookmarkOperation(channel) {
         let uri = channel.URI;
         return /\.hatena\.ne\.jp$/.test(uri.host) &&
-               /^\/bookmarklet.edit\b/.test(uri.path);
+               /^\/(?:bookmarklet\.edit|[\w-]+\/add\.edit)\b/.test(uri.path);
     }
 };
 

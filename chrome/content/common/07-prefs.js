@@ -1,7 +1,7 @@
 
-EXPORT = ['Prefs'];
+const EXPORT = ['Prefs'];
 
-Prefs = function (branchName) {
+var Prefs = function (branchName) {
     if (branchName && branchName[branchName.length-1] != '.')
         throw 'branchName should be "foo.branchName." -> ' + branchName;
     this._branch = branchName;
