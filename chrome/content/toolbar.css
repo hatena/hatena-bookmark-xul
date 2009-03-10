@@ -1,0 +1,9 @@
+.hbookmark-toolbar {
+   -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#hbookmark-toolbar");
+}
+.hbookmark-toolbar:first-child > .bookmarks-toolbar-items > .hbookmark-separator-1 {
+   display: none;
+}
+.hbookmark-toolbar:last-child > .bookmarks-toolbar-items > .hbookmark-separator-2 {
+   display: none;
+}

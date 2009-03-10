@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="hbookmark-toolbar">
+        <content>
+            <xul:hbox class="bookmarks-toolbar-items places-toolbar-items">
+                <xul:toolbarseparator class="hbookmark-separator-1"/>
+                <xul:hbox anonid="body"/>
+                <xul:toolbarbutton anonid="chevron" class="chevron" type="menu" hidden="true">
+                    <xul:menupopup anonid="popup"/>
+                </xul:toolbarbutton>
+                <xul:toolbarseparator class="hbookmark-separator-2"/>
+            </xul:hbox>
+            <xul:hbox class="bookmarks-toolbar-customize">
+                <children/>
+            </xul:hbox>
+        </content>
+
+        <implementation>
+            <constructor><![CDATA[
+                let event = document.createEvent("Event");
+                event.initEvent("HBookmarkToolbarReady", true, false);
+                this.dispatchEvent(event);
+            ]]></constructor>
+
+            <field name="body">
+                document.getAnonymousElementByAttribute(this, "anonid", "body")
+            </field>
+            <field name="chevron">
+                document.getAnonymousElementByAttribute(this, "anonid", "chevron")
+            </field>
+            <field name="popup">
+                document.getAnonymousElementByAttribute(this, "anonid", "popup")
+            </field>
+
+            <field name="_view">null</field>
+
+            <property name="view" onget="return this._view;">
+                <setter><![CDATA[
+                    this._view = val;
+                    this.fillIn();
+                    return val;
+                ]]></setter>
+            </property>
+
+            <method name="fillIn">
+                <body><![CDATA[
+                    let range = document.createRange();
+                    range.selectNodeContents(this.body);
+                    range.deleteContents();
+                    range.selectNodeContents(this.popup);
+                    range.deleteContents();
+
+                    const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+                    let view = this.view;
+                    let count = view.itemCount;
+                    for (let i = 0; i < count; i++) {
+                        let bookmark = view.getBookmarkAt(i);
+
+                        let button = document.createElementNS(XUL_NS, "toolbarbutton");
+                        button.setAttribute("class", "bookmark-item");
+                        button.setAttribute("label", bookmark.title);
+                        button.bookmark = bookmark;
+                        this.body.appendChild(button);
+
+                        let menuitem = document.createElementNS(XUL_NS, "menuitem");
+                        menuitem.setAttribute("class", "bookmark-item");
+                        menuitem.setAttribute("label", bookmark.title);
+                        menuitem.bookmark = bookmark;
+                        this.popup.appendChild(menuitem);
+                    }
+                    this.redraw();
+                ]]></body>
+            </method>
+
+            <method name="redraw">
+                <body><![CDATA[
+                    Array.forEach(this.body.childNodes,
+                                  function (button) button.hidden = true);
+                    this.chevron.hidden = true;
+                    if (!this.body.hasChildNodes()) return;
+
+                    let parentBox = this.parentNode.boxObject;
+                    let parentWidth = parentBox.width;
+                    let left = parentBox.firstChild;
+                    let right = parentBox.lastChild;
+                    let lb = left.boxObject;
+                    let rb = right.boxObject;
+                    let lm = parseInt(getComputedStyle(left, null).marginLeft);
+                    let rm = parseInt(getComputedStyle(right, null).marginRight);
+                    function isOverflowed() {
+                        return rb.x + rb.width + rm > parentWidth ||
+                               lb.x - lm < 0;
+                    }
+
+                    let buttonCount = 0;
+                    let button = this.body.firstChild;
+                    while (button) {
+                        button.hidden = false;
+                        buttonCount++;
+                        if (isOverflowed()) {
+                            this.chevron.hidden = false;
+                            do {
+                                button.hidden = true;
+                                buttonCount--;
+                                button = button.previousSibling;
+                            } while (button && isOverflowed());
+                            break;
+                        }
+                        button = button.nextSibling;
+                    }
+                    Array.forEach(this.popup.childNodes, function (menuitem, i) {
+                        menuitem.hidden = i < buttonCount;
+                    });
+                ]]></body>
+            </method>
+        </implementation>
+    </binding>
+
+</bindings>

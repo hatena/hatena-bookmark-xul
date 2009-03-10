@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/addPanel.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/toolbar.css"?>
 <overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script type="application/javascript" src="autoloader.js"></script>
     <script type="text/javascript; version=1.8" charset="utf-8">
@@ -11,6 +11,12 @@
     <menupopup id="viewSidebarMenu">
         <menuitem observes="viewHBookmarkSidebar" />
     </menupopup>
+
+    <toolbarpalette id="BrowserToolbarPalette">
+        <toolbaritem id="hBookmarkToolbar" class="hbookmark-toolbar">
+            <toolbarbutton class="bookmark-item" label="Customize ?B"/>
+        </toolbaritem>
+    </toolbarpalette>
 
     <statusbar id="status-bar">
         <statusbarpanel id="hBookmark-addToBookmarkButton"
