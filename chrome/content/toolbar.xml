@@ -20,10 +20,15 @@
 
         <implementation>
             <constructor><![CDATA[
+                hBookmark.p('toolbar constructor');
                 let event = document.createEvent("Event");
                 event.initEvent("HBookmarkToolbarReady", true, false);
                 this.dispatchEvent(event);
             ]]></constructor>
+
+            <destructor><![CDATA[
+                this._view = null;
+            ]]></destructor>
 
             <field name="body">
                 document.getAnonymousElementByAttribute(this, "anonid", "body")
@@ -40,12 +45,13 @@
             <property name="view" onget="return this._view;">
                 <setter><![CDATA[
                     this._view = val;
-                    this.fillIn();
+                    val.setToolbar(this);
+                    this.reset();
                     return val;
                 ]]></setter>
             </property>
 
-            <method name="fillIn">
+            <method name="reset">
                 <body><![CDATA[
                     let range = document.createRange();
                     range.selectNodeContents(this.body);
@@ -55,7 +61,8 @@
 
                     const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
                     let view = this.view;
-                    let count = view.itemCount;
+                    if (!view) return;
+                    let count = view.bookmarkCount;
                     for (let i = 0; i < count; i++) {
                         let bookmark = view.getBookmarkAt(i);
 
