@@ -80,6 +80,12 @@ var HttpWatcher = {
     },
 
     performTask: function HW_performTask(task) {
+        // ブックマーク成功したら、sync する
+        // これにより、リモートとのデータの同期がとれる
+        p('performTask');
+        // XXX: Sync に依存してしまう
+        Sync.sync();
+        /*
         let bookmark = Model.Bookmark.findByUrl(task.url)[0];
         if (!bookmark) {
             bookmark = new Model.Bookmark();
@@ -89,6 +95,7 @@ var HttpWatcher = {
         bookmark.comment = task.comment;
         bookmark.date = new Date();
         bookmark.save();
+        */
     },
 
     startObserving: function HW_startObserving() {

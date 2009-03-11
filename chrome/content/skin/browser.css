@@ -1,0 +1,27 @@
+/*
+#hatenastar-status-panel[hatenastar="false"] {
+  list-style-image: url("chrome://hatenabar/content/skin/star_off.png");
+}
+
+#hatenastar-status-panel[hatenastar="true"] {
+  list-style-image: url("chrome://hatenabar/content/skin/star_on.png");
+}
+
+#hatena-addbookmark-panel {
+  list-style-image: url("chrome://hatenabar/content/skin/b_append.png");
+}
+*/
+
+#hBookmark-status-home {
+  list-style-image: url("chrome://hatenabookmark/content/skin/home.gif");
+  border-right: 0px !important;
+}
+
+#hBookmark-status-add[added="false"] {
+  list-style-image: url("chrome://hatenabookmark/content/skin/b.gif");
+}
+
+#hBookmark-status-add[added="true"] {
+  list-style-image: url("chrome://hatenabookmark/content/skin/b_added.gif");
+}
+

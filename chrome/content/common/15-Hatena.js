@@ -53,6 +53,9 @@ if (shared.has('User')) {
         set rks() this._rks = rks,
         get rks() this._rks,
         get bCount() model('Bookmark').countAll(),
+        hasBookmark: function user_hasBookmark(url) {
+            return !! model('Bookmark').findByUrl(url);
+        },
         get database() {
             if (!this._db) {
                 this._db = new Database('hatena.bookmark.' + this.name + '.sqlite');
