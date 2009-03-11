@@ -54,7 +54,8 @@ if (shared.has('User')) {
         get rks() this._rks,
         get bCount() model('Bookmark').countAll(),
         hasBookmark: function user_hasBookmark(url) {
-            return !! model('Bookmark').findByUrl(url);
+            let res = model('Bookmark').findByUrl(url);
+            return res && res[0] ? true : false;
         },
         get database() {
             if (!this._db) {
