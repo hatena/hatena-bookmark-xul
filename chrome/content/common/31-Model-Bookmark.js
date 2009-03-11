@@ -35,7 +35,7 @@ let createWhereLike = function (word) {
         }
     }
     var res = [sql.join(' AND '), args];
-    p(sql.join(' AND '), keys(args), values(args));
+    // p(sql.join(' AND '), keys(args), values(args));
     return res;
 }
 
@@ -96,6 +96,9 @@ extend(Bookmark, {
 });
 
 extend(Bookmark.prototype, {
+    get imageURL() {
+        return 'http://b.hatena.ne.jp/entry/image/' + this.url.replace('#', '%23');
+    },
     get tags() {
         return Bookmark.parseTags(this.comment);
     },
