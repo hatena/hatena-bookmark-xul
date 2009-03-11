@@ -87,7 +87,7 @@
 
             <method name="redraw">
                 <body><![CDATA[
-hBookmark.p('redraw');
+                    hBookmark.p('redraw');
                     Array.forEach(this.body.childNodes,
                                   function (button) button.hidden = true);
                     this.chevron.hidden = true;
@@ -137,7 +137,7 @@ hBookmark.p('redraw');
                 <body><![CDATA[
                     if (event.target !== window) return;
                     hBookmark.p('want to redraw');
-                    //this.redraw();
+                    this.redraw();
                 ]]></body>
             </method>
         </implementation>
