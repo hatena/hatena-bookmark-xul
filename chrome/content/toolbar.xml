@@ -183,16 +183,6 @@
                 ]]></body>
             </method>
 
-            <method name="_getFavicon">
-                <parameter name="uriSpec"/>
-                <body><![CDATA[
-                    let uri = hBookmark.newURI(uriSpec);
-                    let faviconURI = hBookmark.FaviconService
-                                              .getFaviconImageForPage(uri);
-                    return faviconURI.spec;
-                ]]></body>
-            </method>
-
             <method name="_createToolbarButton">
                 <parameter name="bookmark"/>
                 <body><![CDATA[
@@ -200,7 +190,7 @@
                                                           "toolbarbutton");
                     button.setAttribute("class", "bookmark-item");
                     button.setAttribute("label", bookmark.title);
-                    button.setAttribute("image", this._getFavicon(bookmark.url));
+                    button.setAttribute("image", hBookmark.favicon(bookmark.url));
                     button.bookmark = bookmark;
                     return button;
                 ]]></body>
@@ -213,7 +203,7 @@
                                                         "menuitem");
                     item.setAttribute("class", "bookmark-item menuitem-iconic");
                     item.setAttribute("label", bookmark.title);
-                    item.setAttribute("image", this._getFavicon(bookmark.url));
+                    item.setAttribute("image", hBookmark.favicon(bookmark.url));
                     item.bookmark = bookmark;
                     return item;
                 ]]></body>
