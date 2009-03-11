@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
 <?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
+<?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
 
 <!-- {{ }} で囲まれた文字列はローカライズすべきもの -->
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
       id="hBookmarkSidebar"
       title="{{Hatena Bookmark Sidebar}}">
 
-    <script type="application/javascript" src="autoloader.js"></script>
+    <script type="application/javascript" src="autoloader.js"/>
+    <script type="application/javascript" src="chrome://browser/content/utilityOverlay.js"/>
 
-    <popupset>
+    <popupset id="mainPopupSet">
         <menupopup id="tag-tree-menu">
             <menuitem id="tag-tree-openAllBookmarks" label="{{すべてのブックマークを開く}}"/>
             <menuseparator/>
@@ -30,7 +32,8 @@
             <treechildren/>
         </tree>
 
-        <tree id="bookmark-tree" hidecolumnpicker="true" flex="1">
+        <tree id="bookmark-tree" hidecolumnpicker="true" flex="1"
+              context="hBookmarkItemContext">
             <treecols>
                 <treecol label="{{bookmark}}" primary="true" flex="1"/>
             </treecols>

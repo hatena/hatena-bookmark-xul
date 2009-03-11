@@ -33,4 +33,5 @@ function initializeSidebar() {
 
     tagTree.addEventListener("select", bookmarkTreeView, false);
     bookmarkTree.addEventListener("click", bookmarkTreeView, false);
+    bookmarkTree.addEventListener("contextmenu", bookmarkTreeView, false);
 }

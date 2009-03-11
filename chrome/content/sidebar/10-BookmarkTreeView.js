@@ -16,6 +16,8 @@ extend(BookmarkTreeView.prototype, {
         this._treeBox = treeBox;
     },
 
+    getBookmarkAt: function BTV_getBookmarkAt(row) this._items[row] || null,
+
     showByTags: function (tags) {
         var prevRowCount = this.rowCount;
         this._items = Bookmark.findByTags(tags);
@@ -33,6 +35,10 @@ extend(BookmarkTreeView.prototype, {
         case "click":
             this.handleClickEvent(event);
             break;
+
+        case "contextmenu":
+            this.handleContextMenu(event);
+            break;
         }
     },
 
@@ -44,5 +50,11 @@ extend(BookmarkTreeView.prototype, {
         let uriSpec = this._items[row.value].url;
         let uri = IOService.newURI(uriSpec, null, null)
         Application.activeWindow.activeTab.load(uri);
+    },
+
+    handleContextMenu: function BTV_handleContextMenu(event) {
+        let currentRow = this.selection.currentIndex;
+        let bookmark = this.getBookmarkAt(currentRow);
+        this._treeBox.treeBody.bookmark = bookmark;
     }
 });
