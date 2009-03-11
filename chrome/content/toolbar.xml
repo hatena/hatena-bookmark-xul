@@ -6,10 +6,12 @@
     <binding id="toolbar" extends="#toolbar-item-base">
         <content>
             <xul:toolbarbutton label="Hello"/>
-            <xul:hbox anonid="recent-container" flex="1">
+            <xul:hbox anonid="recent-container" flex="1"
+                      context="hBookmarkItemContext">
                 <xul:hbox anonid="body" flex="1"/>
                 <xul:toolbarbutton anonid="chevron" class="chevron" type="menu">
-                    <xul:menupopup anonid="popup"/>
+                    <xul:menupopup anonid="popup"
+                                   context="hBookmarkItemContext"/>
                 </xul:toolbarbutton>
             </xul:hbox>
         </content>
