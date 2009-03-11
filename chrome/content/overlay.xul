@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/addPanel.css"?>
+<?xml-stylesheet href="chrome://hatenabookmark/content/skin/browser.css" type="text/css"?>
 <overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script type="application/javascript" src="autoloader.js"></script>
     <script type="text/javascript; version=1.8" charset="utf-8">
@@ -13,16 +14,20 @@
     </menupopup>
 
     <statusbar id="status-bar">
-        <!--
-        <statusbarpanel id="hBookmark-addToBookmarkButton"
-                        label="B!"/>
-        -->
-        <statusbarpanel 
-             class="statusbarpanel-iconic" 
-             src="chrome://hatenabookmark/content/images/home.gif"
-             oncommand="Application.activeWindow.open(hBookmark.newURI('chrome://hatenabookmark/content/index.html'))"
-        />
-        <statusbarpanel id="hBookmark-statusBarPanel">
+        <statusbarpanel id="hBookmark-statusBarPanel"
+             collapsed="false"
+        >
+            <image
+                 id="hBookmark-status-home"
+                 onclick="hBookmark.StatusBar.goHome();"
+            />
+            <spacer width="3px" />
+            <image
+                 added="false"
+                 id="hBookmark-status-add"
+                 onclick="hBookmark.StatusBar.addBookmark();"
+            />
+
             <hbox id="hBookmark-syncProgressBox" hidden="true">
                 <image src="http://b.hatena.ne.jp/images/loading.gif" width="16px" height="16px" />
                 <progressmeter 
