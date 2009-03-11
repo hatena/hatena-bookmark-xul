@@ -59,6 +59,8 @@ function testBookmark() {
     res = BOOKMARK.findByTags(['hoge', 'huga']);
     assert.isTrue(res.length == 1);
 
+    res = BOOKMARK.findRecent(1);
+    assert.isTrue(res.length == 1);
 }
 
 function testTag() {

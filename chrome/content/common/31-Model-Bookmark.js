@@ -81,6 +81,12 @@ extend(Bookmark, {
         });
         return res;
     },
+    findRecent: function MB_findRecent(count) {
+        return Bookmark.find({
+            limit: count || 10,
+            order: 'date desc'
+        });
+    },
     search: function(str, limit) {
         var [sql, args] = createWhereLike(str || '');
         extend(args, {
