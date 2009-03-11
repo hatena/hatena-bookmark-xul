@@ -3,7 +3,7 @@
           xmlns:xbl="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <binding id="toolbar" extends="chrome://hatenabookmark/content/toolbar.xml#toolbar-base">
+    <binding id="toolbar" extends="#toolbar-item-base">
         <content>
             <xul:toolbarbutton label="Hello"/>
             <xul:hbox anonid="recent-container" flex="1">
@@ -14,12 +14,14 @@
             </xul:hbox>
         </content>
 
-        <implementation implements="nsIDOMEventListener">
+        <implementation>
             <constructor><![CDATA[
-                // resize/BookmarkChangedイベントに自身を結びつける。
-                window.addEventListener("resize", this, false);
+                let method = hBookmark.method;
+                // XXX ToDo: BookmarkChangedイベントに自身を結びつける。
+                window.addEventListener("resize",
+                    method(this, "onResize"), false);
                 this.recentContainer.addEventListener("command",
-                    let (t = this) function (e) t.onBookmarkCommand(e), false);
+                    method(this, "onBookmarkCommand"), false);
                 this.build();
             ]]></constructor>
 
@@ -99,25 +101,55 @@
                 ]]></body>
             </method>
 
-            <method name="handleEvent">
+            <method name="onResize">
                 <parameter name="event"/>
                 <body><![CDATA[
-                    switch (event.type) {
-                    case "(bookmark added)":
-                        this.build();
-                        break;
-
-                    case "resize":
-                        if (event.target === window)
-                            this.redraw();
-                        break;
-                    }
+                    if (event.target !== window) return;
+                    this.redraw();
                 ]]></body>
             </method>
         </implementation>
     </binding>
 
-    <binding id="toolbar-base">
+    <binding id="dropdown" extends="#toolbar-item-base">
+        <content>
+            <children/>
+        </content>
+
+        <implementation>
+            <constructor><![CDATA[
+                let method = hBookmark.method;
+                this.addEventListener("popupshowing",
+                    method(this, "onPopupShowing"), false);
+                this.popup.addEventListener("command",
+                    method(this, "onBookmarkCommand"), false);
+            ]]></constructor>
+
+            <field name="button">
+                this.getElementsByTagName("toolbarbutton")[0]
+            </field>
+            <field name="popup">
+                this.button.getElementsByTagName("menupopup")[0]
+            </field>
+
+            <method name="onPopupShowing">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    let range = document.createRange();
+                    range.selectNodeContents(this.popup);
+                    range.deleteContents();
+
+                    let bookmarks = this.getRecentBookmarks();
+                    bookmarks.forEach(function (bookmark) {
+                        let item = this._createMenuItem(bookmark);
+                        this.popup.appendChild(item);
+                    }, this);
+                ]]></body>
+            </method>
+        </implementation>
+    </binding>
+
+    <binding id="toolbar-item-base">
         <implementation>
             <method name="getRecentBookmarks">
                 <body><![CDATA[

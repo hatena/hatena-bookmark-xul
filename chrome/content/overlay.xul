@@ -13,11 +13,14 @@
     </menupopup>
 
     <toolbarpalette id="BrowserToolbarPalette">
-        <!--
-        <toolbaritem id="hBookmarkToolbar" class="hbookmark-toolbar">
-            <toolbarbutton class="bookmark-item" label="Customize ?B"/>
+        <toolbaritem id="hBookmarkDropdown">
+            <toolbarbutton class="bookmark-item"
+                           type="menu"
+                           container="true"
+                           label="Recent Hatena Bookmarks">
+                <menupopup/>
+            </toolbarbutton>
         </toolbaritem>
-        -->
     </toolbarpalette>
 
     <toolbox id="navigator-toolbox">
