@@ -18,59 +18,60 @@
             <constructor><![CDATA[
                 // resize/BookmarkChangedイベントに自身を結びつける。
                 window.addEventListener("resize", this, false);
-                this._build();
+                this.recentContainer.addEventListener("command",
+                    let (t = this) function (e) t.onBookmarkCommand(e), false);
+                this.build();
             ]]></constructor>
 
-            <field name="_recentContainer">
+            <field name="recentContainer">
                 document.getAnonymousElementByAttribute(this, "anonid", "recent-container")
             </field>
-            <field name="_body">
+            <field name="body">
                 document.getAnonymousElementByAttribute(this, "anonid", "body")
             </field>
-            <field name="_chevron">
+            <field name="chevron">
                 document.getAnonymousElementByAttribute(this, "anonid", "chevron")
             </field>
-            <field name="_popup">
+            <field name="popup">
                 document.getAnonymousElementByAttribute(this, "anonid", "popup")
             </field>
 
-            <method name="_build">
+            <method name="build">
                 <body><![CDATA[
                     let range = document.createRange();
-                    range.selectNodeContents(this._body);
+                    range.selectNodeContents(this.body);
                     range.deleteContents();
-                    range.selectNodeContents(this._popup);
+                    range.selectNodeContents(this.popup);
                     range.deleteContents();
 
-                    let count = hBookmark.Prefs.bookmark.get("recentItemCount");
-                    let bookmarks = hBookmark.Model.Bookmark.findRecent(count);
+                    let bookmarks = this.getRecentBookmarks();
                     bookmarks.forEach(function (bookmark) {
                         let button = this._createToolbarButton(bookmark);
-                        this._body.appendChild(button);
+                        this.body.appendChild(button);
                         let item = this._createMenuItem(bookmark);
-                        this._popup.appendChild(item);
+                        this.popup.appendChild(item);
                     }, this);
-                    this._redraw();
+                    this.redraw();
                 ]]></body>
             </method>
 
-            <method name="_redraw">
+            <method name="redraw">
                 <body><![CDATA[
                     hBookmark.p('redraw');
-                    Array.forEach(this._body.childNodes,
+                    Array.forEach(this.body.childNodes,
                                   function (button) button.hidden = false);
-                    this._chevron.hidden = false;
+                    this.chevron.hidden = false;
 
                     let leftSize = this.boxObject.width;
                     for (let child = this.boxObject.firstChild;
                          child;
                          child = child.boxObject.nextSibling) {
-                        if (child !== this._recentContainer)
+                        if (child !== this.recentContainer)
                             leftSize -= this._getMarginBoxWidth(child);
                     }
-                    let chevronSize = this._getMarginBoxWidth(this._chevron);
+                    let chevronSize = this._getMarginBoxWidth(this.chevron);
                     let visibleCount = 0;
-                    let button = this._body.firstChild;
+                    let button = this.body.firstChild;
                     while (button) {
                         let nextButton = button.nextSibling;
                         leftSize -= this._getMarginBoxWidth(button);
@@ -78,11 +79,11 @@
                         visibleCount++;
                         button = nextButton;
                     }
-                    this._chevron.hidden = !button;
-                    Array.forEach(this._body.childNodes, function (button, i) {
+                    this.chevron.hidden = !button;
+                    Array.forEach(this.body.childNodes, function (button, i) {
                         button.hidden = (i >= visibleCount);
                     });
-                    Array.forEach(this._popup.childNodes, function (item, i) {
+                    Array.forEach(this.popup.childNodes, function (item, i) {
                         item.hidden = (i < visibleCount);
                     });
                 ]]></body>
@@ -103,12 +104,12 @@
                 <body><![CDATA[
                     switch (event.type) {
                     case "(bookmark added)":
-                        this._build();
+                        this.build();
                         break;
 
                     case "resize":
                         if (event.target === window)
-                            this._redraw();
+                            this.redraw();
                         break;
                     }
                 ]]></body>
@@ -118,6 +119,24 @@
 
     <binding id="toolbar-base">
         <implementation>
+            <method name="getRecentBookmarks">
+                <body><![CDATA[
+                    let count = hBookmark.Prefs.bookmark.get("recentItemCount");
+                    return hBookmark.Model.Bookmark.findRecent(count);
+                ]]></body>
+            </method>
+
+            <method name="onBookmarkCommand">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    let bookmark = event.originalTarget.bookmark;
+                    if (!bookmark) return;
+                    let where = whereToOpenLink(event);
+                    openUILinkIn(bookmark.url, where);
+                    event.stopPropagation();
+                ]]></body>
+            </method>
+
             <method name="_createToolbarButton">
                 <parameter name="bookmark"/>
                 <body><![CDATA[
