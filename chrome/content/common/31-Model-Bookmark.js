@@ -96,6 +96,9 @@ extend(Bookmark, {
 });
 
 extend(Bookmark.prototype, {
+    get entryURL() {
+        return 'http://b.hatena.ne.jp/entry/' + this.url.replace('#', '%23');
+    },
     get imageURL() {
         return 'http://b.hatena.ne.jp/entry/image/' + this.url.replace('#', '%23');
     },

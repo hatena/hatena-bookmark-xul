@@ -46,7 +46,7 @@ with(hBookmark) { // XXX
            html.urlDiv = E('div', {className: 'infos'}, 
              html.url = E('a', {className: 'url'}, bookmark.url), ' ',
              // html.timestamp = E('span', {className: 'timestamp'}, bookmark.date.toString().substring(0,8)),
-             ' ', E('img', {src: bookmark.imageURL})
+             ' ', E('a', {href: bookmark.entryURL}, E('img', {src: bookmark.imageURL, height:'13'}))
            )
         );
         html.url.href = html.link.href = bookmark.url;

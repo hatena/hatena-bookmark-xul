@@ -13,8 +13,15 @@
     </menupopup>
 
     <statusbar id="status-bar">
+        <!--
         <statusbarpanel id="hBookmark-addToBookmarkButton"
-                        label="Add to Bookmark"/>
+                        label="B!"/>
+        -->
+        <statusbarpanel 
+             class="statusbarpanel-iconic" 
+             src="chrome://hatenabookmark/content/images/home.gif"
+             oncommand="Application.activeWindow.open(hBookmark.newURI('chrome://hatenabookmark/content/index.html'))"
+        />
         <statusbarpanel id="hBookmark-statusBarPanel">
             <hbox id="hBookmark-syncProgressBox" hidden="true">
                 <image src="http://b.hatena.ne.jp/images/loading.gif" width="16px" height="16px" />
