@@ -35,7 +35,7 @@
         <tree id="bookmark-tree" hidecolumnpicker="true" flex="1"
               context="hBookmarkItemContext">
             <treecols>
-                <treecol label="{{bookmark}}" primary="true" flex="1"/>
+                <treecol label="{{bookmark}}" flex="1"/>
             </treecols>
             <treechildren/>
         </tree>

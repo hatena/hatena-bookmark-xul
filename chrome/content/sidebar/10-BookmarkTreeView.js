@@ -16,6 +16,10 @@ extend(BookmarkTreeView.prototype, {
         this._treeBox = treeBox;
     },
 
+    getImageSrc: function BTV_getImageSrc(row, col) {
+        return favicon(this._items[row].url);
+    },
+
     showByTags: function (tags) {
         var prevRowCount = this.rowCount;
         this._items = Bookmark.findByTags(tags);
