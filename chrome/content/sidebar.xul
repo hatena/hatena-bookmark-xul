@@ -50,8 +50,9 @@
 
         <splitter resizebefore="flex" resizeafter="flex"/>
 
-        <tree id="bookmark-tree" seltype="single" hidecolumnpicker="true"
-              context="hBookmarkItemContext" flex="1" persist="height">
+        <tree id="bookmark-tree" seltype="single"
+              hidecolumnpicker="true" flex="1" persist="height"
+              context="hBookmarkItemContext" tooltip="hBookmarkItemTooltip">
             <treecols>
                 <treecol label="{{bookmark}}" flex="1"/>
             </treecols>

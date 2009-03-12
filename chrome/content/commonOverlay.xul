@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="bookmark.css"?>
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <popupset id="mainPopupSet">
@@ -14,6 +15,8 @@
             <menuitem label="Open Bookmark Entry"
                       oncommand="openUILink('http://b.hatena.ne.jp/entry/' + document.popupNode.bookmark.url.replace(/#/g, '%23'), event);"/>
         </menupopup>
+
+        <tooltip id="hBookmarkItemTooltip"/>
     </popupset>
 
 </overlay>
