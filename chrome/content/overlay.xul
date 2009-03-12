@@ -36,6 +36,7 @@
         <statusbarpanel id="hBookmark-statusBarPanel"
              collapsed="false"
         >
+
             <image
                  id="hBookmark-status-home"
                  onclick="hBookmark.StatusBar.goHome();"
@@ -45,6 +46,11 @@
                  added="false"
                  id="hBookmark-status-add"
                  onclick="hBookmark.StatusBar.addBookmark();"
+            />
+            <label
+                 id="hBookmark-status-count"
+                 onclick="hBookmark.StatusBar.goEntry();"
+                 value=""
             />
 
             <hbox id="hBookmark-syncProgressBox" hidden="true">

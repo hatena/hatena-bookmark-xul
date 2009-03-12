@@ -39,6 +39,9 @@ const CookieManager =
 const CookieService=
      getService("@mozilla.org/cookieService;1", Ci.nsICookieService);
 
+const CryptoHash = 
+    Cc["@mozilla.org/security/hash;1"].createInstance(Ci.nsICryptoHash);
+
 const StorageStatementWrapper =
     Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');
 

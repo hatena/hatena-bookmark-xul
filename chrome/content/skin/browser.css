@@ -25,3 +25,20 @@
   list-style-image: url("chrome://hatenabookmark/content/skin/b_added.gif");
 }
 
+#hBookmark-status-count {
+}
+
+
+#hBookmark-status-count[users="false"] {
+    display:none;
+}
+
+#hBookmark-status-count[users="few"] ,
+#hBookmark-status-count[users="many"] {
+    padding-left:3px;
+    padding-right:3px;
+    font-weight: bold;
+    color: #FF0000;
+    background-color: #FFCCCC;
+}
+    
