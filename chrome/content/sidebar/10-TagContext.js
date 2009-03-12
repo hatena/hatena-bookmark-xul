@@ -8,7 +8,7 @@ extend(TagContext.prototype, {
     build: function TC_build(popup) {
         let tags = document.popupNode.tags;
         if (!tags || !tags.length) return false;
-        this.tags = tags;
+        this.tags = tags.concat();
         return true;
     },
 
@@ -21,9 +21,11 @@ extend(TagContext.prototype, {
         openUILinkIn(url, where);
     },
     delete: function TC_delete() {
+        let tag = this.tags.pop();
         alert('Not implemented');
     },
     rename: function TC_rename() {
+        let tag = this.tags.pop();
         alert('Not implemented');
     }
 });
