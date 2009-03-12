@@ -54,9 +54,11 @@
                  value=""
             />
 
-            <label
+            <spacer width="3px" />
+
+            <image
                  id="hBookmark-status-comment"
-                 onclick="hBookmark.StatusBar.showComment();"
+                 onclick="hBookmark.CommentViewer.show(this);"
             />
 
             <hbox id="hBookmark-syncProgressBox" hidden="true">
@@ -69,6 +71,15 @@
             </hbox>
         </statusbarpanel>
     </statusbar>
+
+    <popupset id="mainPopupSet">
+        <panel id="hBookmark-panel-comment" 
+             orient="vertical"
+             noautofocus="true"
+             noautohide="false"
+        >
+        </panel>
+    </popupset>
 
     <broadcasterset id="mainBroadcasterSet">
         <broadcaster id="viewHBookmarkSidebar"

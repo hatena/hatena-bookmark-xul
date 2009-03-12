@@ -5,21 +5,12 @@ const EXPORT = ['StatusBar'];
 this.__defineGetter__('aWin', function() Application.activeWindow);
 this.__defineGetter__('aDoc', function() Application.activeWindow.activeTab.document);
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
-let _addButton;
-this.__defineGetter__('addButton', function() {
-    if (!_addButton)
-        _addButton = document.getElementById('hBookmark-status-add');
-    return _addButton;
-});
-let _statusCount;
-this.__defineGetter__('statusCount', function() {
-    if (!_statusCount)
-        _statusCount = document.getElementById('hBookmark-status-count');
-    return _statusCount;
-});
+
+
+elementGetter(this, 'addButton', 'hBookmark-status-add', document);
+elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
 
 let countCache = new ExpireCache('uCount', 60 * 60); // 一時間キャッシュ
-let commentCache = new ExpireCache('uComment', 60 * 60); // 一時間キャッシュ
 
 var StatusBar = {
     goHome: function StatusBar_goHome() {
@@ -43,23 +34,6 @@ var StatusBar = {
         let doc = aDoc;
         if (isHttp)
             (doc.getElementsByTagName('head')[0] || doc.body).appendChild(s);
-    },
-    showComment: function StatusBar_showComment() {
-        let reqURL = 'http://b.hatena.ne.jp/entry/json/?url=' + encodeURIComponent(url);
-        let xhr = new XMLHttpRequest();
-        let self = this;
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-                let json = eval('(' + xhr.responseText + ')');
-                let bookmarks = json.bookmarks;
-                for (let i = 0;  i < bookmarks.length; i++) {
-                    let b = bookmarks[i];
-                    self.addUser(b);
-                }
-            }
-        };
-        xhr.open('GET', reqURL, true); // XXX
-        xhr.send(null);
     },
     checkBookmarked: function StatusBar_checkBookmarked() {
         if (isHttp && User.user && User.user.hasBookmark(aDoc.location.href)) {
