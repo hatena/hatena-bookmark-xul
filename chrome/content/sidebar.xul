@@ -41,15 +41,17 @@
         </hbox>
 
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
-              contextmenu="hBookmarkTagContext" flex="1">
+              contextmenu="hBookmarkTagContext" flex="1" persist="height">
             <treecols>
                 <treecol label="{{tag}}" primary="true" flex="1"/>
             </treecols>
             <treechildren/>
         </tree>
 
-        <tree id="bookmark-tree" hidecolumnpicker="true" flex="1"
-              context="hBookmarkItemContext">
+        <splitter resizebefore="flex" resizeafter="flex"/>
+
+        <tree id="bookmark-tree" seltype="single" hidecolumnpicker="true"
+              context="hBookmarkItemContext" flex="1" persist="height">
             <treecols>
                 <treecol label="{{bookmark}}" flex="1"/>
             </treecols>
