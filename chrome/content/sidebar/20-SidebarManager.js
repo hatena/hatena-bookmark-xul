@@ -26,12 +26,13 @@ function initializeSidebar() {
     var bookmarkTreeView = new BookmarkTreeView();
     bookmarkTree.view = bookmarkTreeView;
 
+    tagTree.addEventListener("select", tagTreeView, false);
     tagTree.addEventListener("click", tagTreeView, false);
 
     tagTreeMenu.addEventListener("popupshowing", tagTreeCommand, false);
     tagTreeMenu.addEventListener("command", tagTreeCommand, false);
 
-    tagTree.addEventListener("select", bookmarkTreeView, false);
+    tagTree.addEventListener("HB_TagsSelected", bookmarkTreeView, false);
     bookmarkTree.addEventListener("select", bookmarkTreeView, false);
     bookmarkTree.addEventListener("click", bookmarkTreeView, false);
     bookmarkTree.addEventListener("keypress", bookmarkTreeView, false);

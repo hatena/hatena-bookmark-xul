@@ -29,11 +29,14 @@ extend(BookmarkTreeView.prototype, {
 
     handleEvent: function (event) {
         switch (event.type) {
+        case "HB_TagsSelected":
+            let tags = event.originalTarget.tags;
+            if (tags)
+                this.showByTags(tags);
+            break;
+
         case "select":
-            if (event.target.id === "tag-tree")
-                this.showByTags(event.target.view.wrappedJSObject.selectedTags);
-            else if (event.target.treeBoxObject === this._treeBox)
-                this.setBookmark();
+            this.setBookmark();
             break;
 
         case "click":
