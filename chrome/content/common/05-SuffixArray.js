@@ -41,10 +41,12 @@ SuffixArray.prototype = {
             return 0;
         });
         }, 'sort');
-        this.sary = sary.map(function([_,i]) i);
+//         this.sary = sary.map(function([_,i]) i);
+        let qsortSary = sary.map(function([_,i]) i);
         p.b(function() {
             // array with offset
             var OffsetArray = function(arr, off, len) {
+                arr = arr || new Array(len);
                 off = off || 0;
                 len = len || arr.length - off;
                 return {
@@ -54,6 +56,10 @@ SuffixArray.prototype = {
                                                           l || len-n),
                     length: len,
                     arr: arr
+                    , dump: function(n) {
+                        let l = len > n ? n : len;
+                        return arr.slice(off, off+l).join(',');
+                    }
                 };
             };
             /* create suffix array by induced sorting
@@ -65,34 +71,46 @@ SuffixArray.prototype = {
             function recSAIS(s, k/*, sa*/) {
                 let argn = 2;
                 // char type array
-//                 let CharType = function(t, n){
-//                     for (let i=0; i<n; i++) t[i]=0;
-//                     let mask = [
-//                         0x8000, 0x4000, 0x2000, 0x1000, // extended for 16bits
-//                         0x0800, 0x0400, 0x0200, 0x0100, // extended for 16bits
-//                         0x0080, 0x0040, 0x0020, 0x0010,
-//                         0x0008, 0x0004, 0x0002, 0x0001,
-//                     ];
+                let CharType = function(n){
+//                     let t = n instanceof Array ? n : new Array(n);
 //                     return {
-//                         get: function(i) {
-//                             // (t[(i)/16]&mask[(i)%16]) ? 1 : 0
-//                             return (t[i >> 4] & mask[i & 0x0f]) ? 1 : 0;
-//                         },
-//                         set: function(i, b) {
-//                             // t[(i)/16]=(b) ?
-//                             //   (mask[(i)%16]|t[(i)/16])
-//                             // : ((~mask[(i)%16])&t[(i)/16])
-//                             return t[i >> 4]
-//                                 = b ? (mask[i & 0x0f] | t[i >> 4])
-//                                 : ((~(mask[i & 0x0f])) & t[i >> 4]);
-//                         }
+//                         get: function(i) t[i],
+//                         set: function(i, b) t[i] = b,
+//                         isLMS: function(i) t[i] && !t[i-1]
 //                     };
-//                 };
+                    n = (n>>4)+1;
+                    let t = new Array(n);
+                    for (let i=0; i<n; i++) t[i]=0;
+                    let mask = [
+                        0x8000, 0x4000, 0x2000, 0x1000,
+                        0x0800, 0x0400, 0x0200, 0x0100,
+                        0x0080, 0x0040, 0x0020, 0x0010,
+                        0x0008, 0x0004, 0x0002, 0x0001,
+                    ];
+                    return {
+                        get: function(i) {
+                            // (t[(i)/16]&mask[(i)%16]) ? 1 : 0
+                            return t[i >> 4] & mask[i & 0x0f] ? 1 : 0;
+                        },
+                        set: function(i, b) {
+                            // t[(i)/16]=(b) ?
+                            //   (mask[(i)%16]|t[(i)/16])
+                            // : ((~mask[(i)%16])&t[(i)/16])
+                            return t[i >> 4]
+                                = b ? (mask[i & 0x0f] | t[i >> 4])
+                                : ((~(mask[i & 0x0f])) & t[i >> 4]);
+                        },
+                        isLMS: function(i) {
+                            return (t[i>>4] & mask[i&0x0f] ? 1 : 0)
+                                && !(t[(i-1)>>4] & mask[(i-1)&0x0f] ? 1 : 0);
+                        }
+                    };
+                };
 
                 // get buckets common
                 let getBucketsCommon = function(s, k) {
                     let n = s.length;
-                    let bkt = [];
+                    let bkt = new Array(k);
                     for (let i=0; i <= k; i++) bkt[i]=0; // clear all buckets
                     for (let i=0; i < n; i++) bkt[s.at(i)]++;
                     return bkt;
@@ -124,9 +142,7 @@ SuffixArray.prototype = {
                     let n = s.length;
                     for (let i=0; i<n; i++) {
                         let j = sa.at(i)-1;
-//                         if (j >= 0 && !t.get(j)) {
-                        if (j >= 0 &&
-                            !((t[j >> 4] & mask[j & 0x0f]) ? 1 : 0)) {
+                        if (j >= 0 && !t.get(j)) {
                             sa.set(bkt[s.at(j)]++, j);
                         }
                     }
@@ -134,41 +150,24 @@ SuffixArray.prototype = {
                 let induceSAs = function(t, sa, s, k) {
                     let bkt = getBucketsEnd(s,k) // find ends of buckets
                     for (let i=n-1; i>=0; i--) {
-                        j = sa.at(i)-1;
-//                         if (j >= 0 && t.get(j)) {
-                        if (j >= 0 &&
-                            ((t[j >> 4] & mask[j & 0x0f]) ? 1 : 0)) {
+                        let j = sa.at(i)-1;
+                        if (j >= 0 && t.get(j)) {
                             sa.set(--bkt[s.at(j)], j);
                         }
                     }
                 };
 
-                let n = /*arguments[argn++] ||*/ s.length;
-                let sa = arguments[argn++] || new OffsetArray([],0,n);
-//                 let t = new CharType([], (n>>4)+1);
-                let t = [];
-                for (let i=0, size=(n>>4)+1; i<size; i++) t[i]=0;
+                let n = s.length;
+                let sa = arguments[argn++] || new OffsetArray(null,0,n);
+                let t = new CharType(n);
                 let bkt;
 
-                let mask = [
-                    0x8000, 0x4000, 0x2000, 0x1000, // extended for 16bits
-                    0x0800, 0x0400, 0x0200, 0x0100, // extended for 16bits
-                    0x0080, 0x0040, 0x0020, 0x0010,
-                    0x0008, 0x0004, 0x0002, 0x0001,
-                ];
-
                 // Classify the type of each character
-//                 t.set(n-2, 0); t.set(n-1, 1); // the sentinel must be in s1
-                t[(n-2) >> 4] = (~(mask[(n-2) & 0x0f])) & t[(n-2) >> 4];
-                t[(n-1) >> 4] = mask[(n-1) & 0x0f] | t[(n-1) >> 4];
+                t.set(n-2, 0); t.set(n-1, 1); // the sentinel must be in s1
                 for (let i=n-3; i>=0; i--) {
                     let ch1 = s.at(i);
                     let ch2 = s.at(i+1);
-//                     t.set(i, (ch1 < ch2 || (ch1==ch2 && t.get(i+1)==1)) ? 1:0);
-                    t[i >> 4] = ((ch1 < ch2 || (ch1==ch2 && (
-                        (t[(i+1) >> 4] & mask[(i+1) & 0x0f]) ? 1 : 0
-                    ) == 1)) ? 1:0) ? (mask[i & 0x0f] | t[i >> 4])
-                        : ((~(mask[i & 0x0f])) & t[i >> 4]);
+                    t.set(i, (ch1 < ch2 || (ch1==ch2 && t.get(i+1)==1)) ? 1:0);
                 }
 
                 // stage 1: reduce the problem by at least 1/2
@@ -176,12 +175,7 @@ SuffixArray.prototype = {
                 bkt = getBucketsEnd(s, k);
                 for (let i=0; i<n; i++) sa.set(i, -1);
                 for (let i=1; i<n; i++) {
-//                     if (t.get(i) && !t.get(i-1)) { // isLMS
-                    if ((
-                        (t[i >> 4] & mask[i & 0x0f]) ? 1 : 0
-                    ) && !(
-                        (t[(i-1) >> 4] & mask[(i-1) & 0x0f]) ? 1 : 0
-                    )) { // isLMS
+                    if (t.isLMS(i)) {
                         sa.set(--bkt[s.at(i)], i);
                     }
                 }
@@ -195,12 +189,7 @@ SuffixArray.prototype = {
                 let n1 = 0;
                 for (let i=0; i<n; i++) {
                     let sai = sa.at(i);
-//                     if (sai > 0 && t.get(sai) && !t.get(sai-1)) { // isLMS
-                    if (sai > 0 && (
-                        (t[sai >> 4] & mask[sai & 0x0f]) ? 1 : 0
-                    ) && !(
-                        (t[(sai-1) >> 4] & mask[(sai-1) & 0x0f]) ? 1 : 0
-                    )) { // isLMS
+                    if (sai > 0 && t.isLMS(sai)) {
                         sa.set(n1++, sai);
                     }
                 }
@@ -215,26 +204,12 @@ SuffixArray.prototype = {
                         let p1 = pos+d;
                         let p2 = prev+d;
                         if (prev == -1 || s.at(p1) != s.at(p2)
-//                             || t.get(p1) != t.get(p2)) {
-                            || (
-                                (t[p1 >> 4] & mask[p1 & 0x0f]) ? 1 : 0
-                            ) != (
-                                (t[p2 >> 4] & mask[p2 & 0x0f]) ? 1 : 0
-                            )) {
-                            diff = true; break;
-                        } else if (d>0 && // && (isLMS(pos1) || isLMS(pos2))
-//                                    ((p1>0 && t.get(p1) && !t.get(p1-1)) ||
-//                                     (p2>0 && t.get(p2) && !t.get(p2-1)))) {
-                                   ((p1>0 && (
-                                       (t[p1 >> 4] & mask[p1 & 0x0f]) ? 1 : 0
-                                   ) && !(
-                                       (t[(p1-1) >> 4] & mask[(p1-1) & 0x0f]) ? 1 : 0
-                                   )) ||
-                                    (p2>0 && (
-                                       (t[p2 >> 4] & mask[p2 & 0x0f]) ? 1 : 0
-                                    ) && !(
-                                        (t[(p2-1) >> 4] & mask[(p2-1) & 0x0f]) ? 1 : 0
-                                    )))) {
+                            || t.get(p1) != t.get(p2)) {
+                            diff = true;
+                            break;
+                        } else if (d>0 &&
+                                   ((p1>0 && t.isLMS(p1)) ||
+                                    (p2>0 && t.isLMS(p2)))) {
                             break;
                         }
                     }
@@ -242,7 +217,7 @@ SuffixArray.prototype = {
                         name++;
                         prev=pos;
                     }
-                    pos = ((pos & 0x01) == 0) ? (pos >> 1) : ((pos-1) >> 1);
+                    pos = (pos >> 1);
                     sa.set(n1+pos, name-1);
                 }
                 for (let i=n-1, j=n-1; i>=n1; i--) {
@@ -267,16 +242,11 @@ SuffixArray.prototype = {
                 bkt = getBucketsEnd(s, k); // find ends of buckets
                 // put all left-most S characters into their buckets
                 for (let i=1, j=0; i<n; i++) {
-//                     if (t.get(i) && !t.get(i-1)) { // isLMS
-                    if ((
-                        (t[i >> 4] & mask[i & 0x0f]) ? 1 : 0
-                    ) && !(
-                        (t[(i-1) >> 4] & mask[(i-1) & 0x0f]) ? 1 : 0
-                    )) { // isLMS
+                    if (t.isLMS(i)) {
                         s1.set(j++, i); // get p1
                     }
                 }
-                for (let i=0; i<n1; i++) sa1.set(i, s1.at(sa.at(i)));
+                for (let i=0; i<n1; i++) sa1.set(i, s1.at(sa1.at(i)));
                 for (let i=n1; i<n; i++) sa.set(i, -1); // init sa[n1..n-1]
                 for (let i=n1-1; i>=0; i--) {
                     let j=sa.at(i); sa.set(i, -1);
@@ -291,17 +261,21 @@ SuffixArray.prototype = {
                s:  input string
                returns sa : int array */
             function SAIS(s) {
-                let ss = [];
                 let n = s.length;
+                let ss = new Array(n+1);
                 for (let i=0; i<n; i++) {
-                    ss.push(s.charCodeAt(i));
+                    ss[i] = s.charCodeAt(i);
                 }
-                return recSAIS(new OffsetArray(ss), 65536).arr;
+                ss[n] = 0;
+
+                return recSAIS(new OffsetArray(ss), 65535).arr.slice(1);
             }
             sary = SAIS(string);
         }, 'SAIS');
         this.sary = sary;
-        p(this.sary);
+        p('qsort', qsortSary.slice(0,1000));
+        p('SAIS', this.sary.slice(0,1000));
+        p('veryfy: ' + qsortSary.every(function(v,i)v==sary[i]));
     },
     set sary (sary) { this._sary = sary; this._len = sary.length },
     get sary () this._sary,
