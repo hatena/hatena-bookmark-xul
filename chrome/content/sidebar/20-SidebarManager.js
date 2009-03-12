@@ -30,6 +30,8 @@ function initializeSidebar() {
     tagTree.addEventListener("click", tagTreeView, false);
 
     tagTree.addEventListener("HB_TagsSelected", bookmarkTreeView, false);
+    let searchBox = document.getElementById("searchBox");
+    searchBox.addEventListener("input", bookmarkTreeView, false);
     bookmarkTree.addEventListener("select", bookmarkTreeView, false);
     bookmarkTree.addEventListener("click", bookmarkTreeView, false);
     bookmarkTree.addEventListener("keypress", bookmarkTreeView, false);

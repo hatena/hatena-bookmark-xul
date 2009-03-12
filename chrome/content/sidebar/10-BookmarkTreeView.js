@@ -23,6 +23,17 @@ extend(BookmarkTreeView.prototype, {
     showByTags: function (tags) {
         var prevRowCount = this.rowCount;
         this._items = Bookmark.findByTags(tags);
+        this.allRowsChanged(prevRowCount);
+    },
+
+    showBySearchString: function BTV_showBySearchString(string) {
+        let prevRowCount = this.rowCount;
+        let visibleRowCount = this._treeBox.getPageLength();
+        this._items = Bookmark.search(string, visibleRowCount);
+        this.allRowsChanged(prevRowCount);
+    },
+
+    allRowsChanged: function BTV_allRowsChanged(prevRowCount) {
         this._treeBox.rowCountChanged(0, -prevRowCount);
         this._treeBox.rowCountChanged(0, this.rowCount);
     },
@@ -33,6 +44,10 @@ extend(BookmarkTreeView.prototype, {
             let tags = event.originalTarget.tags;
             if (tags)
                 this.showByTags(tags);
+            break;
+
+        case "input":
+            this.showBySearchString(event.target.value);
             break;
 
         case "select":

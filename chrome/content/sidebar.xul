@@ -35,6 +35,11 @@
     </popupset>
 
     <vbox flex="1">
+        <hbox align="center">
+            <label value="検索:"/>
+            <textbox id="searchBox" flex="1"/>
+        </hbox>
+
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
               contextmenu="hBookmarkTagContext" flex="1">
             <treecols>

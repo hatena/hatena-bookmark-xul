@@ -88,7 +88,8 @@ extend(Bookmark, {
         });
     },
     search: function(str, limit) {
-        var [sql, args] = createWhereLike(str || '');
+        if (!str) return Bookmark.findRecent(limit);
+        var [sql, args] = createWhereLike(str);
         extend(args, {
             limit: limit || 10,
             order: 'date desc',
