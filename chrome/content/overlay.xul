@@ -47,10 +47,16 @@
                  id="hBookmark-status-add"
                  onclick="hBookmark.StatusBar.addBookmark();"
             />
+
             <label
                  id="hBookmark-status-count"
                  onclick="hBookmark.StatusBar.goEntry();"
                  value=""
+            />
+
+            <label
+                 id="hBookmark-status-comment"
+                 onclick="hBookmark.StatusBar.showComment();"
             />
 
             <hbox id="hBookmark-syncProgressBox" hidden="true">

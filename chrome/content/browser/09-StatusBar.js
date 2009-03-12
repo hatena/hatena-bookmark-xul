@@ -18,7 +18,8 @@ this.__defineGetter__('statusCount', function() {
     return _statusCount;
 });
 
-let countCache = new ExpireCache('ucount', 60 * 60); // 一時間キャッシュ
+let countCache = new ExpireCache('uCount', 60 * 60); // 一時間キャッシュ
+let commentCache = new ExpireCache('uComment', 60 * 60); // 一時間キャッシュ
 
 var StatusBar = {
     goHome: function StatusBar_goHome() {
@@ -42,6 +43,23 @@ var StatusBar = {
         let doc = aDoc;
         if (isHttp)
             (doc.getElementsByTagName('head')[0] || doc.body).appendChild(s);
+    },
+    showComment: function StatusBar_showComment() {
+        let reqURL = 'http://b.hatena.ne.jp/entry/json/?url=' + encodeURIComponent(url);
+        let xhr = new XMLHttpRequest();
+        let self = this;
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                let json = eval('(' + xhr.responseText + ')');
+                let bookmarks = json.bookmarks;
+                for (let i = 0;  i < bookmarks.length; i++) {
+                    let b = bookmarks[i];
+                    self.addUser(b);
+                }
+            }
+        };
+        xhr.open('GET', reqURL, true); // XXX
+        xhr.send(null);
     },
     checkBookmarked: function StatusBar_checkBookmarked() {
         if (isHttp && User.user && User.user.hasBookmark(aDoc.location.href)) {
@@ -67,11 +85,9 @@ var StatusBar = {
     checkCount: function StatusBar_checkCount() {
         if (!isHttp) return this.updateCount();
 
-
         let url = aDoc.location.href;
-        if (countCache.has(url)) {
+        if (countCache.has(url)) 
             return this.updateCount();
-        }
 
         let reqURL = 'http://b.hatena.ne.jp/entry.count?url=' + encodeURIComponent(url);
         let xhr = new XMLHttpRequest();
@@ -85,21 +101,6 @@ var StatusBar = {
         xhr.open('GET', reqURL, true);
         xhr.send(null);
 
-        // let reqURL = 'http://b.hatena.ne.jp/entry/json/?url=' + encodeURIComponent(url);
-        // let xhr = new XMLHttpRequest();
-        // let self = this;
-        // xhr.onreadystatechange = function() {
-        //     if (xhr.readyState == 4) {
-        //         let json = eval('(' + xhr.responseText + ')');
-        //         let bookmarks = json.bookmarks;
-        //         for (let i = 0;  i < bookmarks.length; i++) {
-        //             let b = bookmarks[i];
-        //             self.addUser(b);
-        //         }
-        //     }
-        // };
-        // xhr.open('GET', reqURL, true); // XXX
-        // xhr.send(null);
     },
 }
 
