@@ -12,20 +12,31 @@
     <script type="application/javascript" src="chrome://browser/content/utilityOverlay.js"/>
 
     <popupset id="mainPopupSet">
-        <menupopup id="tag-tree-menu">
-            <menuitem id="tag-tree-openAllBookmarks" label="{{すべてのブックマークを開く}}"/>
-            <menuseparator/>
-            <menuitem id="tag-tree-open" label="{{タグページを開く}}"/>
-            <menuitem id="tag-tree-openInNewTab" label="{{タグページを新しいタブで開く}}"/>
-            <menuseparator/>
-            <menuitem id="tag-tree-delete" label="{{%S タグを削除}}"/>
-            <menuitem id="tag-tree-rename" label="{{%S タグを置換}}"/>
+        <menupopup id="hBookmarkTagContext"
+                   onpopupshowing="return this._context.build(this);">
+            <menuitem id="hBookmarkTagContext_openAllBookmarks"
+                      label="すべてのブックマークを開く"
+                      oncommand="this.parentNode._context.openAllBookmarks();"/>
+            <menuseparator id="hBookmarkTagContext_openAllSeparator"/>
+            <menuitem id="hBookmarkTagContext_open"
+                      label="タグページを開く"
+                      oncommand="this.parentNode._context.openIn('current');"/>
+            <menuitem id="hBookmarkTagContext_openInNewTab"
+                      label="タグページを新しいタブで開く"
+                      oncommand="this.parentNode._context.openIn('tab');"/>
+            <menuseparator id="hBookmarkTagContext_openSeparator"/>
+            <menuitem id="hBookmarkTagContext_delete"
+                      label="%S タグを削除"
+                      oncommand="this.parentNode._context.delete();"/>
+            <menuitem id="hBookmarkTagContext_rename"
+                      label="%S タグを置換"
+                      oncommand="this.parentNode._context.rename();"/>
         </menupopup>
     </popupset>
 
     <vbox flex="1">
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
-              contextmenu="tag-tree-menu" flex="1">
+              contextmenu="hBookmarkTagContext" flex="1">
             <treecols>
                 <treecol label="{{tag}}" primary="true" flex="1"/>
             </treecols>

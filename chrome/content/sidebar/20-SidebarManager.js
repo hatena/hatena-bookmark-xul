@@ -19,8 +19,8 @@ function initializeSidebar() {
     var tagTreeView = new TagTreeView();
     tagTree.view = tagTreeView;
 
-    var tagTreeMenu = document.getElementById(tagTree.contextMenu);
-    var tagTreeCommand = new TagTreeCommand(tagTreeView);
+    let tagContext = document.getElementById("hBookmarkTagContext");
+    tagContext._context = new TagContext();
 
     var bookmarkTree = document.getElementById("bookmark-tree");
     var bookmarkTreeView = new BookmarkTreeView();
@@ -28,9 +28,6 @@ function initializeSidebar() {
 
     tagTree.addEventListener("select", tagTreeView, false);
     tagTree.addEventListener("click", tagTreeView, false);
-
-    tagTreeMenu.addEventListener("popupshowing", tagTreeCommand, false);
-    tagTreeMenu.addEventListener("command", tagTreeCommand, false);
 
     tagTree.addEventListener("HB_TagsSelected", bookmarkTreeView, false);
     bookmarkTree.addEventListener("select", bookmarkTreeView, false);
