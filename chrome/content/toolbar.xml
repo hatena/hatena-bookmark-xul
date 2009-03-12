@@ -19,7 +19,8 @@
         <implementation>
             <constructor><![CDATA[
                 let method = hBookmark.method;
-                // XXX ToDo: BookmarkChangedイベントに自身を結びつける。
+                hBookmark.EventService.createListener("BookmarksUpdated",
+                    method(this, "onBookmarksUpdated"));
                 window.addEventListener("resize",
                     method(this, "onResize"), false);
                 this.recentContainer.addEventListener("command",
@@ -110,6 +111,13 @@
                 <body><![CDATA[
                     if (event.target !== window) return;
                     this.redraw();
+                ]]></body>
+            </method>
+
+            <method name="onBookmarksUpdated">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    this.build();
                 ]]></body>
             </method>
         </implementation>

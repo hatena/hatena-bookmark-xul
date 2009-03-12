@@ -85,6 +85,7 @@ extend(Sync, {
         }
         BOOKMARK.db.commitTransaction();
         this.dispatch('complete');
+        EventService.dispatch("BookmarksUpdated");
 
         p(infos.length);
         p('time: ' + (Date.now() - now));
