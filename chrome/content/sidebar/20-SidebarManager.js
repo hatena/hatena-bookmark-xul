@@ -32,7 +32,7 @@ function initializeSidebar() {
     tagTreeMenu.addEventListener("command", tagTreeCommand, false);
 
     tagTree.addEventListener("select", bookmarkTreeView, false);
+    bookmarkTree.addEventListener("select", bookmarkTreeView, false);
     bookmarkTree.addEventListener("click", bookmarkTreeView, false);
     bookmarkTree.addEventListener("keypress", bookmarkTreeView, false);
-    bookmarkTree.addEventListener("contextmenu", bookmarkTreeView, false);
 }

@@ -32,6 +32,8 @@ extend(BookmarkTreeView.prototype, {
         case "select":
             if (event.target.id === "tag-tree")
                 this.showByTags(event.target.view.wrappedJSObject.selectedTags);
+            else if (event.target.treeBoxObject === this._treeBox)
+                this.setBookmark();
             break;
 
         case "click":
@@ -41,11 +43,13 @@ extend(BookmarkTreeView.prototype, {
         case "keypress":
             this.handleKeyPress(event);
             break;
-
-        case "contextmenu":
-            this.handleContextMenu(event);
-            break;
         }
+    },
+
+    setBookmark: function BTV_setBookmark() {
+        let row = this.selection.currentIndex;
+        let bookmark = (row === -1) ? null : this._items[row];
+        this._treeBox.treeBody.bookmark = bookmark;
     },
 
     handleClick: function BTV_handleClick(event) {
@@ -62,11 +66,5 @@ extend(BookmarkTreeView.prototype, {
         if (event.keyCode !== KeyEvent.DOM_VK_RETURN || row === -1) return;
         let bookmark = this._items[row];
         openUILink(bookmark.url, event);
-    },
-
-    handleContextMenu: function BTV_handleContextMenu(event) {
-        let row = this.selection.currentIndex;
-        let bookmark = this._items[row] || null;
-        this._treeBox.treeBody.bookmark = bookmark;
     }
 });
