@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
-<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/addPanel.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/toolbar.css"?>
 <?xml-stylesheet href="chrome://hatenabookmark/content/skin/browser.css" type="text/css"?>
+<?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
 <overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script type="application/javascript" src="autoloader.js"></script>
     <script type="text/javascript; version=1.8" charset="utf-8">
@@ -12,6 +13,24 @@
     <menupopup id="viewSidebarMenu">
         <menuitem observes="viewHBookmarkSidebar" />
     </menupopup>
+
+    <toolbarpalette id="BrowserToolbarPalette">
+        <toolbaritem id="hBookmarkDropdown">
+            <toolbarbutton class="bookmark-item"
+                           type="menu"
+                           container="true"
+                           label="Recent Hatena Bookmarks">
+                <menupopup context="hBookmarkItemContext"/>
+            </toolbarbutton>
+        </toolbaritem>
+    </toolbarpalette>
+
+    <toolbox id="navigator-toolbox">
+        <toolbar id="hBookmarkToolbar"
+                 class="chromeclass-toolbar"
+                 toolbarname="Hatena Bookmark Toolbar"
+                 accesskey="A"/>
+    </toolbox>
 
     <statusbar id="status-bar">
         <statusbarpanel id="hBookmark-statusBarPanel"

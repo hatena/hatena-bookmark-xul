@@ -16,6 +16,10 @@ extend(BookmarkTreeView.prototype, {
         this._treeBox = treeBox;
     },
 
+    getImageSrc: function BTV_getImageSrc(row, col) {
+        return favicon(this._items[row].url);
+    },
+
     showByTags: function (tags) {
         var prevRowCount = this.rowCount;
         this._items = Bookmark.findByTags(tags);
@@ -31,18 +35,38 @@ extend(BookmarkTreeView.prototype, {
             break;
 
         case "click":
-            this.handleClickEvent(event);
+            this.handleClick(event);
+            break;
+
+        case "keypress":
+            this.handleKeyPress(event);
+            break;
+
+        case "contextmenu":
+            this.handleContextMenu(event);
             break;
         }
     },
 
-    handleClickEvent: function BTV_handleClickEvent(event) {
-        if (event.button !== 0) return;
+    handleClick: function BTV_handleClick(event) {
+        if (event.button > 1) return;
         let row = {};
         this._treeBox.getCellAt(event.clientX, event.clientY, row, {}, {});
         if (row.value === -1) return;
-        let uriSpec = this._items[row.value].url;
-        let uri = IOService.newURI(uriSpec, null, null)
-        Application.activeWindow.activeTab.load(uri);
+        let bookmark = this._items[row.value];
+        openUILink(bookmark.url, event);
+    },
+
+    handleKeyPress: function BTV_handleKeyPress(event) {
+        let row = this.selection.currentIndex;
+        if (event.keyCode !== KeyEvent.DOM_VK_RETURN || row === -1) return;
+        let bookmark = this._items[row];
+        openUILink(bookmark.url, event);
+    },
+
+    handleContextMenu: function BTV_handleContextMenu(event) {
+        let row = this.selection.currentIndex;
+        let bookmark = this._items[row] || null;
+        this._treeBox.treeBody.bookmark = bookmark;
     }
 });

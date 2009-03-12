@@ -1,0 +1,6 @@
+#hBookmarkToolbar {
+   -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#toolbar");
+}
+#hBookmarkDropdown {
+   -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#dropdown");
+}

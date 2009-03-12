@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <popupset id="mainPopupSet">
+        <menupopup id="hBookmarkItemContext"
+                   onpopupshowing="return !!document.popupNode.bookmark;">
+            <menuitem label="Open"
+                      oncommand="openUILinkIn(document.popupNode.bookmark.url, 'current');"/>
+            <menuitem label="Open in New Window"
+                      oncommand="openUILinkIn(document.popupNode.bookmark.url, 'window');"/>
+            <menuitem label="Open in New Tab"
+                      oncommand="openUILinkIn(document.popupNode.bookmark.url, 'tab');"/>
+            <menuseparator/>
+            <menuitem label="Open Bookmark Entry"
+                      oncommand="openUILink('http://b.hatena.ne.jp/entry/' + document.popupNode.bookmark.url.replace(/#/g, '%23'), event);"/>
+        </menupopup>
+    </popupset>
+
+</overlay>
