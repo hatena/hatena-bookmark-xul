@@ -12,8 +12,10 @@ extend(TagContext.prototype, {
         return true;
     },
 
-    openAllBookmarks: function TC_openAllBookmarks() {
-        alert('Not implemented');
+    openAllBookmarks: function TC_openAllBookmarks(event) {
+        let bookmarks = Model.Bookmark.findByTags(this.tags);
+        let urls = bookmarks.map(function (b) b.url);
+        BrowserWindow.openLinks(urls, event);
     },
     openIn: function TC_opneIn(where) {
         let url = "http://b.hatena.ne.jp/" + User.user.name +

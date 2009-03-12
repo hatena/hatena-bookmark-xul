@@ -16,7 +16,7 @@
                    onpopupshowing="return this._context.build(this);">
             <menuitem id="hBookmarkTagContext_openAllBookmarks"
                       label="すべてのブックマークを開く"
-                      oncommand="this.parentNode._context.openAllBookmarks();"/>
+                      oncommand="this.parentNode._context.openAllBookmarks(event);"/>
             <menuseparator id="hBookmarkTagContext_openAllSeparator"/>
             <menuitem id="hBookmarkTagContext_open"
                       label="タグページを開く"
