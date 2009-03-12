@@ -29,6 +29,7 @@ extend(TagTreeView.prototype, {
     getCellText: function (row, col) this._visibleItems[row].currentTag,
     setTree: function (treeBox) {
         this._treeBox = treeBox;
+        if (!treeBox) return;
         this._treeBox.treeBody.tags = [];
         this._openRelatedTags(this._rootItem);
         this._visibleItems.forEach(function (item, i) item.index = i);

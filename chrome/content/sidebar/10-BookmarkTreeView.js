@@ -14,6 +14,8 @@ extend(BookmarkTreeView.prototype, {
     getCellText: function (row, col) this._items[row].title,
     setTree: function (treeBox) {
         this._treeBox = treeBox;
+        if (!treeBox) return;
+        this.showBySearchString("");
     },
 
     getImageSrc: function BTV_getImageSrc(row, col) {
@@ -29,7 +31,9 @@ extend(BookmarkTreeView.prototype, {
     showBySearchString: function BTV_showBySearchString(string) {
         let prevRowCount = this.rowCount;
         let visibleRowCount = this._treeBox.getPageLength();
-        this._items = Bookmark.search(string, visibleRowCount);
+        this._items = string
+            ? Bookmark.search(string, visibleRowCount)
+            : Bookmark.findRecent(visibleRowCount);
         this.allRowsChanged(prevRowCount);
     },
 

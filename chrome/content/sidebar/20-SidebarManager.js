@@ -29,10 +29,19 @@ function initializeSidebar() {
     tagTree.addEventListener("select", tagTreeView, false);
     tagTree.addEventListener("click", tagTreeView, false);
 
-    tagTree.addEventListener("HB_TagsSelected", bookmarkTreeView, false);
     let searchBox = document.getElementById("searchBox");
+    searchBox.addEventListener("keypress", mayFireInputEvent, false);
+
+    tagTree.addEventListener("HB_TagsSelected", bookmarkTreeView, false);
     searchBox.addEventListener("input", bookmarkTreeView, false);
     bookmarkTree.addEventListener("select", bookmarkTreeView, false);
     bookmarkTree.addEventListener("click", bookmarkTreeView, false);
     bookmarkTree.addEventListener("keypress", bookmarkTreeView, false);
+}
+
+function mayFireInputEvent(event) {
+    if (event.keyCode !== KeyEvent.DOM_VK_RETURN) return;
+    let ev = document.createEvent("UIEvent");
+    ev.initUIEvent("input", true, false, window, 0);
+    event.target.dispatchEvent(ev);
 }
