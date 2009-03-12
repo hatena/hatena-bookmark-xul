@@ -27,7 +27,9 @@
                     method(this, "onBookmarkCommand"), false);
                 this.recentContainer.addEventListener("click",
                     method(this, "onBookmarkClick"), false);
-                this.build();
+                // XXX コンストラクタ呼び出し時にはデータを取得できない……。
+                //this.build();
+                setTimeout(function (self) self.build(), 500, this)
             ]]></constructor>
 
             <field name="recentContainer">
