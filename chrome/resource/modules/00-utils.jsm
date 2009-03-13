@@ -94,6 +94,30 @@ var log = {
     }
 }
 
+var createElementBindDocument = function(doc) {
+    return function(name, attr) {
+        var children = Array.slice(arguments, 2);
+        var e = doc.createElement(name);
+        if (attr) for (let key in attr) e[key] = attr[key];//e.setAttribute(key, attr[key]);
+        children.map(function(el) el.nodeType > 0 ? el : doc.createTextNode(el)).
+            forEach(function(el) e.appendChild(el));
+        return e;
+    }
+}
+
+/*
+ * elementGetter(this, 'myList', 'my-list-id-name', document);
+ * list //=> document.getElementById('my-list-id-name');
+ */
+var elementGetter = function(self, name, idName, doc) {
+    var element;
+    self.__defineGetter__(name, function() {
+        if (!element) {
+            element = doc.getElementById(idName);
+        }
+        return element;
+    });
+}
 
 var isInclude = function(val, ary) {
     for (var i = 0;  i < ary.length; i++) {
@@ -200,78 +224,6 @@ var update = function (self, obj/*, ... */) {
     }
     return self;
 };
-
-/**
- * XPCOMインスタンスの実装しているインターフェース一覧を取得する。
- *
- * @param {Object} obj XPCOMインスタンス。
- * @return {Array} インターフェースのリスト。
- */
-function getInterfaces(obj){
-    var result = [];
-    
-    for(var i=0,len=INTERFACES.length ; i<len ; i++){
-        var ifc = INTERFACES[i];
-        if(obj instanceof ifc)
-            result.push(ifc);
-    }
-    
-    return result;
-}
-
-function createMock(sample, proto){
-    var non = function(){};
-    sample = typeof(sample)=='object'? sample : Cc[sample].createInstance();
-    
-    var ifcs = getInterfaces(sample);
-    var Mock = function(){};
-    
-    for(var key in sample){
-        try{
-            if(sample.__lookupGetter__(key))
-                continue;
-            
-            var val = sample[key];
-            switch (typeof(val)){
-            case 'number':
-            case 'string':
-                Mock.prototype[key] = val;
-                continue;
-                
-            case 'function':
-                Mock.prototype[key] = non;
-                continue;
-            }
-        } catch(e){
-            // コンポーネント実装により発生するプロパティ取得エラーを無視する
-        }
-    }
-    
-    Mock.prototype.QueryInterface = createQueryInterface(ifcs);
-    
-    // FIXME: extendに変える(アクセサをコピーできない)
-    update(Mock.prototype, proto);
-    update(Mock, Mock.prototype);
-    
-    return Mock;
-}
-
-function createQueryInterface(ifcNames){
-    var ifcs = ['nsISupports'].concat(ifcNames).map(function(ifcName){
-        return Ci[''+ifcName];
-    });
-    
-    return function(iid){
-        if(ifcs.some(function(ifc){
-            return iid.equals(ifc);
-        })){
-            return this;
-        }
-        
-        throw Components.results.NS_NOINTERFACE;
-    }
-}
-// end from Tombloo
 
 var bind = function bind(func, self) function () func.apply(self, Array.slice(arguments));
 var method = function method(self, methodName) function () self[methodName].apply(self, Array.slice(arguments));

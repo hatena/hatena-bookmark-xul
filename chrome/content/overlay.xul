@@ -47,10 +47,18 @@
                  id="hBookmark-status-add"
                  onclick="hBookmark.StatusBar.addBookmark();"
             />
+
             <label
                  id="hBookmark-status-count"
                  onclick="hBookmark.StatusBar.goEntry();"
                  value=""
+            />
+
+            <spacer width="3px" />
+
+            <image
+                 id="hBookmark-status-comment"
+                 onclick="hBookmark.CommentViewer.show(this);"
             />
 
             <hbox id="hBookmark-syncProgressBox" hidden="true">
@@ -63,6 +71,15 @@
             </hbox>
         </statusbarpanel>
     </statusbar>
+
+    <popupset id="mainPopupSet">
+        <panel id="hBookmark-panel-comment" 
+             orient="vertical"
+             noautofocus="true"
+             noautohide="false"
+        >
+        </panel>
+    </popupset>
 
     <broadcasterset id="mainBroadcasterSet">
         <broadcaster id="viewHBookmarkSidebar"

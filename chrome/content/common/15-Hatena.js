@@ -50,7 +50,7 @@ if (shared.has('User')) {
     
     User.prototype = {
         get name() this._name,
-        set rks() this._rks = rks,
+        set rks(rks) this._rks = rks,
         get rks() this._rks,
         get bCount() model('Bookmark').countAll(),
         hasBookmark: function user_hasBookmark(url) {

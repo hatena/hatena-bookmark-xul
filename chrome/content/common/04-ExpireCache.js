@@ -6,12 +6,20 @@
  */
 const EXPORT = ['ExpireCache'];
 
-var ExpireCache = function(key, defaultExpire) {
+var ExpireCache = function(key, defaultExpire, seriarizer) {
     this.key = key;
     this.defaultExpire = 60 * 30; // 30分
+    this.seriarizer = ExpireCache.Seriarizer[seriarizer];
 }
 
 this.__defineGetter__('now', function() (new Date-0));
+
+ExpireCache.Seriarizer = {};
+
+ExpireCache.Seriarizer.uneval = {
+    seriarize: function(value) uneval(value),
+    deseriarize: function(value) eval(value),
+}
 
 ExpireCache.prototype = {
     get key() this._key,
@@ -22,8 +30,18 @@ ExpireCache.prototype = {
     },
     get sharedKey() '_cache_' + this._key,
     get cache() shared[this.sharedKey],
+    deseriarize: function ExpireCache_deseriarize(value) {
+        if (!this.seriarizer) return value;
+
+        return this.seriarizer.deseriarize(value);
+    },
+    seriarize: function ExpireCache_seriarize(value) {
+        if (!this.seriarizer) return value;
+
+        return this.seriarizer.seriarize(value);
+    },
     get: function ExpireCache_get (key) {
-        return this.has(key) ? this.cache[key][0] : null;
+        return this.has(key) ? this.deseriarize(this.cache[key][0]) : null;
     },
     _update: function ExpireCache__update(key) {
         if (!this.cache[key]) return;
@@ -38,7 +56,7 @@ ExpireCache.prototype = {
     set: function ExpireCache_set(key, value, expire) {
         if (!expire) expire = this.defaultExpire;
         let e = now + (expire * 1000);
-        this.cache[key] = [value, e];
+        this.cache[key] = [this.seriarize(value), e];
     },
 }
 

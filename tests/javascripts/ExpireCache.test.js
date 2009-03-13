@@ -9,6 +9,13 @@ function warmUp() {
     hBookmark.extend(_global, hBookmark);
 }
 
+function testSeriarizer() {
+    let cache = new ExpireCache('unevaltest', null, 'uneval');
+    cache.set('foo', {foo: 1, bar: 2});
+    assert.equals(1, cache.get('foo').foo);
+    assert.equals(2, cache.get('foo').bar);
+}
+
 function testCache() {
     let cache = new ExpireCache();
     let cache2 = new ExpireCache('foo');
