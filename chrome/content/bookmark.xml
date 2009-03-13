@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="tooltip"
+             extends="chrome://global/content/bindings/popup.xml#tooltip">
+        <content>
+            <xul:label anonid="titleField"/>
+            <xul:description anonid="urlField"/>
+            <xul:description anonid="commentField"/>
+        </content>
+
+        <implementation>
+            <field name="titleField">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleField")
+            </field>
+            <field name="urlField">
+                document.getAnonymousElementByAttribute(this, "anonid", "urlField")
+            </field>
+            <field name="commentField">
+                document.getAnonymousElementByAttribute(this, "anonid", "commentField")
+            </field>
+
+            <method name="onPopupShowing">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    let bookmark = document.tooltipNode.bookmark;
+                    if (!bookmark) return false;
+                    this.titleField.value = bookmark.title;
+                    this.urlField.value = bookmark.url;
+                    this.commentField.value = bookmark.comment;
+                    this.commentField.hidden = !/\S/.test(bookmark.comment);
+                    return true;
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="popupshowing"
+                     action="return this.onPopupShowing(event);"/>
+        </handlers>
+    </binding>
+
+</bindings>

@@ -14,6 +14,8 @@ extend(BookmarkTreeView.prototype, {
     getCellText: function (row, col) this._items[row].title,
     setTree: function (treeBox) {
         this._treeBox = treeBox;
+        if (!treeBox) return;
+        this.showBySearchString("");
     },
 
     getImageSrc: function BTV_getImageSrc(row, col) {
@@ -23,15 +25,37 @@ extend(BookmarkTreeView.prototype, {
     showByTags: function (tags) {
         var prevRowCount = this.rowCount;
         this._items = Bookmark.findByTags(tags);
+        this.allRowsChanged(prevRowCount);
+    },
+
+    showBySearchString: function BTV_showBySearchString(string) {
+        let prevRowCount = this.rowCount;
+        let visibleRowCount = this._treeBox.getPageLength();
+        this._items = string
+            ? Bookmark.search(string, visibleRowCount)
+            : Bookmark.findRecent(visibleRowCount);
+        this.allRowsChanged(prevRowCount);
+    },
+
+    allRowsChanged: function BTV_allRowsChanged(prevRowCount) {
         this._treeBox.rowCountChanged(0, -prevRowCount);
         this._treeBox.rowCountChanged(0, this.rowCount);
     },
 
     handleEvent: function (event) {
         switch (event.type) {
+        case "HB_TagsSelected":
+            let tags = event.originalTarget.tags;
+            if (tags)
+                this.showByTags(tags);
+            break;
+
+        case "input":
+            this.showBySearchString(event.target.value);
+            break;
+
         case "select":
-            if (event.target.id === "tag-tree")
-                this.showByTags(event.target.view.wrappedJSObject.selectedTags);
+            this.setBookmark();
             break;
 
         case "click":
@@ -41,11 +65,13 @@ extend(BookmarkTreeView.prototype, {
         case "keypress":
             this.handleKeyPress(event);
             break;
-
-        case "contextmenu":
-            this.handleContextMenu(event);
-            break;
         }
+    },
+
+    setBookmark: function BTV_setBookmark() {
+        let row = this.selection.currentIndex;
+        let bookmark = (row === -1) ? null : this._items[row];
+        this._treeBox.treeBody.bookmark = bookmark;
     },
 
     handleClick: function BTV_handleClick(event) {
@@ -62,11 +88,5 @@ extend(BookmarkTreeView.prototype, {
         if (event.keyCode !== KeyEvent.DOM_VK_RETURN || row === -1) return;
         let bookmark = this._items[row];
         openUILink(bookmark.url, event);
-    },
-
-    handleContextMenu: function BTV_handleContextMenu(event) {
-        let row = this.selection.currentIndex;
-        let bookmark = this._items[row] || null;
-        this._treeBox.treeBody.bookmark = bookmark;
     }
 });

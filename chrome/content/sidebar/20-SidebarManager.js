@@ -19,20 +19,29 @@ function initializeSidebar() {
     var tagTreeView = new TagTreeView();
     tagTree.view = tagTreeView;
 
-    var tagTreeMenu = document.getElementById(tagTree.contextMenu);
-    var tagTreeCommand = new TagTreeCommand(tagTreeView);
+    let tagContext = document.getElementById("hBookmarkTagContext");
+    tagContext._context = new TagContext();
 
     var bookmarkTree = document.getElementById("bookmark-tree");
     var bookmarkTreeView = new BookmarkTreeView();
     bookmarkTree.view = bookmarkTreeView;
 
+    tagTree.addEventListener("select", tagTreeView, false);
     tagTree.addEventListener("click", tagTreeView, false);
 
-    tagTreeMenu.addEventListener("popupshowing", tagTreeCommand, false);
-    tagTreeMenu.addEventListener("command", tagTreeCommand, false);
+    let searchBox = document.getElementById("searchBox");
+    searchBox.addEventListener("keypress", mayFireInputEvent, false);
 
-    tagTree.addEventListener("select", bookmarkTreeView, false);
+    tagTree.addEventListener("HB_TagsSelected", bookmarkTreeView, false);
+    searchBox.addEventListener("input", bookmarkTreeView, false);
+    bookmarkTree.addEventListener("select", bookmarkTreeView, false);
     bookmarkTree.addEventListener("click", bookmarkTreeView, false);
     bookmarkTree.addEventListener("keypress", bookmarkTreeView, false);
-    bookmarkTree.addEventListener("contextmenu", bookmarkTreeView, false);
+}
+
+function mayFireInputEvent(event) {
+    if (event.keyCode !== KeyEvent.DOM_VK_RETURN) return;
+    let ev = document.createEvent("UIEvent");
+    ev.initUIEvent("input", true, false, window, 0);
+    event.target.dispatchEvent(ev);
 }

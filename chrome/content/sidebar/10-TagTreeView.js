@@ -29,6 +29,8 @@ extend(TagTreeView.prototype, {
     getCellText: function (row, col) this._visibleItems[row].currentTag,
     setTree: function (treeBox) {
         this._treeBox = treeBox;
+        if (!treeBox) return;
+        this._treeBox.treeBody.tags = [];
         this._openRelatedTags(this._rootItem);
         this._visibleItems.forEach(function (item, i) item.index = i);
     },
@@ -101,13 +103,28 @@ extend(TagTreeView.prototype, {
 
     handleEvent: function TTV_handleEvent(event) {
         switch (event.type) {
+        case "select":
+            this.setTags();
+            break;
+
         case "click":
-            this.handleClickEvent(event);
+            this.handleClick(event);
             break;
         }
     },
 
-    handleClickEvent: function TTV_handleClickEvent(event) {
+    setTags: function TTV_setTags() {
+        let treeChildren = this._treeBox.treeBody;
+        let index = this.selection.currentIndex;
+        treeChildren.tags = (index === -1)
+            ? [] : this._visibleItems[index].tags.concat();
+
+        let event = document.createEvent("Event");
+        event.initEvent("HB_TagsSelected", true, false);
+        treeChildren.dispatchEvent(event);
+    },
+
+    handleClick: function TTV_handleClick(event) {
         if (event.button !== 0) return;
         var row = {};
         var child = {};

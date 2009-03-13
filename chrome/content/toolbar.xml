@@ -7,7 +7,8 @@
         <content>
             <xul:toolbarbutton label="Hello"/>
             <xul:hbox anonid="recent-container" flex="1"
-                      context="hBookmarkItemContext">
+                      context="hBookmarkItemContext"
+                      tooltip="hBookmarkItemTooltip">
                 <xul:hbox anonid="body" flex="1"/>
                 <xul:toolbarbutton anonid="chevron" class="chevron" type="menu">
                     <xul:menupopup anonid="popup"
@@ -19,14 +20,17 @@
         <implementation>
             <constructor><![CDATA[
                 let method = hBookmark.method;
-                // XXX ToDo: BookmarkChangedイベントに自身を結びつける。
+                hBookmark.EventService.createListener("BookmarksUpdated",
+                    method(this, "onBookmarksUpdated"));
                 window.addEventListener("resize",
                     method(this, "onResize"), false);
                 this.recentContainer.addEventListener("command",
                     method(this, "onBookmarkCommand"), false);
                 this.recentContainer.addEventListener("click",
                     method(this, "onBookmarkClick"), false);
-                this.build();
+                // XXX コンストラクタ呼び出し時にはデータを取得できない……。
+                //this.build();
+                setTimeout(function (self) self.build(), 500, this)
             ]]></constructor>
 
             <field name="recentContainer">
@@ -110,6 +114,13 @@
                 <body><![CDATA[
                     if (event.target !== window) return;
                     this.redraw();
+                ]]></body>
+            </method>
+
+            <method name="onBookmarksUpdated">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    this.build();
                 ]]></body>
             </method>
         </implementation>
