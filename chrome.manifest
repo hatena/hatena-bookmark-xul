@@ -1,6 +1,8 @@
 content hatenabookmark  chrome/content/
 overlay chrome://browser/content/browser.xul    chrome://hatenabookmark/content/overlay.xul
 resource    hatenabookmark  chrome/resource/
-html        hatenabookmark  chrome/resource/html/
+#html        hatenabookmark  chrome/resource/html/
 skin    hatenabookmark  classic/1.0 chrome/skin/
 style   chrome://browser/content/browser.xul chrome://hatenabookmark/skin/bookmark.css
+locale hatenabookmark en-US chrome/locale/en-US/
+locale hatenabookmark ja    chrome/locale/ja/

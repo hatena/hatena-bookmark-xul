@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/css" href="bookmark.css"?>
+<!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/popups.dtd">
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <popupset id="mainPopupSet">
         <menupopup id="hBookmarkItemContext"
                    onpopupshowing="return !!document.popupNode.bookmark;">
-            <menuitem label="Open"
+            <menuitem label="&hBookmark.entryContext.openLabel;"
+                      accesskey="&hBookmark.entryContext.openKey;"
                       oncommand="openUILinkIn(document.popupNode.bookmark.url, 'current');"/>
-            <menuitem label="Open in New Window"
+            <menuitem label="&hBookmark.entryContext.openInNewWindowLabel;"
+                      accesskey="&hBookmark.entryContext.openInNewWindowKey;"
                       oncommand="openUILinkIn(document.popupNode.bookmark.url, 'window');"/>
-            <menuitem label="Open in New Tab"
+            <menuitem label="&hBookmark.entryContext.openInNewTabLabel;"
+                      accesskey="&hBookmark.entryContext.openInNewTabKey;"
                       oncommand="openUILinkIn(document.popupNode.bookmark.url, 'tab');"/>
             <menuseparator/>
-            <menuitem label="Open Bookmark Entry"
+            <menuitem label="&hBookmark.entryContext.openEntryLabel;"
+                      accesskey="&hBookmark.entryContext.openEntryKey;"
                       oncommand="openUILink('http://b.hatena.ne.jp/entry/' + document.popupNode.bookmark.url.replace(/#/g, '%23'), event);"/>
         </menupopup>
 

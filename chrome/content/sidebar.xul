@@ -2,11 +2,13 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
 <?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
 <?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
-
-<!-- {{ }} で囲まれた文字列はローカライズすべきもの -->
+<!DOCTYPE page SYSTEM "chrome://hatenabookmark/locale/sidebar.dtd" [
+    <!ENTITY % hBookmark.popups SYSTEM "chrome://hatenabookmark/locale/popups.dtd">
+    %hBookmark.popups;
+]>
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
       id="hBookmarkSidebar"
-      title="{{Hatena Bookmark Sidebar}}">
+      title="&hBookmark.sidebar.title;">
 
     <script type="application/javascript" src="autoloader.js"/>
     <script type="application/javascript" src="chrome://browser/content/utilityOverlay.js"/>
@@ -15,35 +17,36 @@
         <menupopup id="hBookmarkTagContext"
                    onpopupshowing="return this._context.build(this);">
             <menuitem id="hBookmarkTagContext_openAllBookmarks"
-                      label="すべてのブックマークを開く"
+                      label="&hBookmark.tagContext.openAllBookmarksLabel;"
                       oncommand="this.parentNode._context.openAllBookmarks(event);"/>
             <menuseparator id="hBookmarkTagContext_openAllSeparator"/>
             <menuitem id="hBookmarkTagContext_open"
-                      label="タグページを開く"
+                      label="&hBookmark.tagContext.openLabel;"
                       oncommand="this.parentNode._context.openIn('current');"/>
             <menuitem id="hBookmarkTagContext_openInNewTab"
-                      label="タグページを新しいタブで開く"
+                      label="&hBookmark.tagContext.openInNewTabLabel;"
                       oncommand="this.parentNode._context.openIn('tab');"/>
             <menuseparator id="hBookmarkTagContext_openSeparator"/>
             <menuitem id="hBookmarkTagContext_delete"
-                      label="%S タグを削除"
+                      label="Remove Tag &quot;%S&quot;"
                       oncommand="this.parentNode._context.delete();"/>
             <menuitem id="hBookmarkTagContext_rename"
-                      label="%S タグを置換"
+                      label="Rename Tag &quot;%S&quot;"
                       oncommand="this.parentNode._context.rename();"/>
         </menupopup>
     </popupset>
 
     <vbox flex="1">
         <hbox align="center">
-            <label value="検索:"/>
+            <label value="&hBookmark.sidebar.searchLabel;"/>
             <textbox id="searchBox" flex="1"/>
         </hbox>
 
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
               contextmenu="hBookmarkTagContext" flex="1" persist="height">
             <treecols>
-                <treecol label="{{tag}}" primary="true" flex="1"/>
+                <treecol label="&hBookmark.sidebar.tagsLabel;"
+                         primary="true" flex="1"/>
             </treecols>
             <treechildren/>
         </tree>
@@ -54,7 +57,8 @@
               hidecolumnpicker="true" flex="1" persist="height"
               context="hBookmarkItemContext" tooltip="hBookmarkItemTooltip">
             <treecols>
-                <treecol label="{{bookmark}}" flex="1"/>
+                <treecol label="&hBookmark.sidebar.bookmarksLabel;"
+                         flex="1"/>
             </treecols>
             <treechildren/>
         </tree>

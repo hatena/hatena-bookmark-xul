@@ -1,0 +1,12 @@
+<!ENTITY hBookmark.tagContext.openAllBookmarksLabel "すべてのブックマークを開く">
+<!ENTITY hBookmark.tagContext.openLabel "タグページを開く">
+<!ENTITY hBookmark.tagContext.openInNewTabLabel "タグページを新しいタブで開く">
+
+<!ENTITY hBookmark.entryContext.openLabel "開く">
+<!ENTITY hBookmark.entryContext.openKey "O">
+<!ENTITY hBookmark.entryContext.openInNewWindowLabel "新しいウィンドウで開く">
+<!ENTITY hBookmark.entryContext.openInNewWindowKey "N">
+<!ENTITY hBookmark.entryContext.openInNewTabLabel "新しいタブで開く">
+<!ENTITY hBookmark.entryContext.openInNewTabKey "W">
+<!ENTITY hBookmark.entryContext.openEntryLabel "ブックマークエントリを開く">
+<!ENTITY hBookmark.entryContext.openEntryKey "E">
