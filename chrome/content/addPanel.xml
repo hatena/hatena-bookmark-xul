@@ -24,7 +24,10 @@
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="Comment:"/>
-                        <xul:textbox anonid="commentField"/>
+                        <xul:textbox anonid="commentField"
+                                     class="hBookmarkTagComplete"
+                                     type="autocomplete"
+                                     autocompletesearch="hbookmark-tag"/>
                     </xul:row>
                 </xul:rows>
             </xul:grid>
@@ -70,6 +73,67 @@
                 ]]></body>
             </method>
         </implementation>
+    </binding>
+
+    <binding id="tag-complete">
+        <implementation implements="nsIObserver">
+            <constructor><![CDATA[
+                let os = hBookmark.ObserverService;
+                os.addObserver(this, "autocomplete-will-enter-text", false);
+                os.addObserver(this, "autocomplete-did-enter-text", false);
+            ]]></constructor>
+
+            <destructor><![CDATA[
+                let os = hBookmark.ObserverService;
+                os.removeObserver(this, "autocomplete-will-enter-text");
+                os.removeObserver(this, "autocomplete-did-enter-text");
+            ]]></destructor>
+
+            <field name="_beforeTag">""</field>
+            <field name="_afterTag">""</field>
+
+            <field name="_isCompleting">false</field>
+
+            <method name="_setSearchParam">
+                <body><![CDATA[
+                    let comment = this.value;
+                    let caretPos = this.selectionStart;
+
+                    let before = comment.substring(0, caretPos);
+                    let after = comment.substring(caretPos);
+                    let partialTag = "";
+                    let match;
+                    if ((match = /^(?:\[[^?%\/\[\]]+\])\[([^?%\/\[\]]+)$/)) {
+                        partialTag = match[1];
+                        before = before.substring(0,
+                                     before.length - partialTag.length)
+                    }
+
+                    this._beforeTag = before;
+                    this._afterTag = after;
+                    this.searchParam = partialTag;
+                ]]></body>
+            </method>
+
+            <method name="observe">
+                <parameter name="subject"/>
+                <parameter name="topic"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                    if (subject !== this) return;
+                    hBookmark.p(topic);
+                    this._isCompleting =
+                        (topic === "autocomplete-will-enter-text");
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="input"
+                     action="if (!this._isCompleting) this._setSearchParam();"/>
+            <handler event="keypress" phase="capturing"
+                     action="if (!this._isCompleting) this._setSearchParam();"/>
+        </handlers>
     </binding>
 
 </bindings>
