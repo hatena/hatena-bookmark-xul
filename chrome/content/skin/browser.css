@@ -31,12 +31,12 @@
     background-color: #FFCCCC;
 }
     
-#hBookmark-status-comment {
+#hBookmark-status-comment[loading="false"] {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/b_comment.gif");
 }
 
-panel#hBookmark-panel-comment {
-    border: 1px solid #ddd;
+#hBookmark-status-comment[loading="true"] {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_comment_loading.gif");
 }
 
 iframe#hBookmark-comment-viewer {

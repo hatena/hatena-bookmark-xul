@@ -8,9 +8,7 @@ this.__defineGetter__('aWin', function() Application.activeWindow);
 this.__defineGetter__('aDoc', function() Application.activeWindow.activeTab.document);
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
 
-let iframe = document.createElement('iframe');
-iframe.setAttribute('src', 'chrome://hatenabookmark/content/comment.html') 
-iframe.setAttribute('id', 'hBookmark-comment-viewer');
+let iframe = null;
 
 elementGetter(this, 'panelComment', 'hBookmark-panel-comment', document);
 elementGetter(this, 'commentButton', 'hBookmark-status-comment', document);
@@ -22,7 +20,7 @@ window.addEventListener(CMD_EVENT_NAME, function(ev) {
     if (m) m(ev.getData('data'));
 }, false);
 
-throwEvent = function(method, data) {
+let throwEvent = function(method, data) {
      let ev = window.document.createEvent('DataContainerEvent');
      ev.initEvent(CMD_EVENT_NAME, false, false);
      ev.setData('method', method);
@@ -34,6 +32,14 @@ var CommentViewer = {
     show: function CommentViewer_show(target) {
         if (!isHttp) return;
 
+        if (!iframe) {
+            iframe = document.createElement('iframe');
+            iframe.setAttribute('src', 'chrome://hatenabookmark/content/comment.html') 
+            iframe.setAttribute('id', 'hBookmark-comment-viewer');
+
+            panelComment.appendChild(iframe);
+        }
+
         let url = aDoc.location.href;
         if (commentCache.has(url)) 
             return this.updateComment();
@@ -41,6 +47,7 @@ var CommentViewer = {
         let reqURL = 'http://b.hatena.ne.jp/entry/json/?url=' + encodeURIComponent(url);
         let xhr = new XMLHttpRequest();
         let self = this;
+        commentButton.setAttribute('loading', 'true'); 
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 commentCache.set(url, eval('(' + xhr.responseText + ')'));
@@ -52,8 +59,12 @@ var CommentViewer = {
     },
     updateComment: function CommentViewer_updateComment() {
         let data = commentCache.get(aDoc.location.href);
-        panelComment.openPopup(commentButton, 'before_end', 0, 0,false,false);
-        throwEvent('load-json', data);
+        if (data) {
+            panelComment.openPopup(commentButton, 'before_end', 0, 0,false,false);
+            // XXX: 非表示ユーザをフィルター
+            throwEvent('load-json', data);
+        }
+        commentButton.setAttribute('loading', 'false'); 
     },
     hide: function CommentViewer_hide() {
         if (panelComment.state != 'closed') {
@@ -76,8 +87,4 @@ CommentViewer.dispatchMethods = {
         }
     }
 }
-
-EventService.createListener('load', function(e) {
-    panelComment.appendChild(iframe);
-}, window);
 

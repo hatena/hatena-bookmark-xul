@@ -8,6 +8,7 @@
  * - 検索キャッシュ
  */
 
+/*
 var LocationBar = {
     init: function LocationBar_init () {
         let self = this;
@@ -166,9 +167,7 @@ AutoCompletePopupController.prototype =
         let res = this.controller.stopSearch();
         if (this.resultItems.length) {
             let self = this;
-            /*
-             * selection の Index 位置の復元
-             */
+            // selection の Index 位置の復元
             setTimeout(function(){
                 self.input.popup.adjustHeight();
                 self.input.openPopup();
@@ -341,5 +340,5 @@ AutoCompletePopupController.prototype =
 EventService.createListener('load', function() {
     LocationBar.init();
 });
-
+*/
 
