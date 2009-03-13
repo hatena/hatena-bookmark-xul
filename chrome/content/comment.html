@@ -1,15 +1,15 @@
 <html>
   <head>
-    <title>home</title>
-    <link rel="stylesheet" href="css/comment.css" type="text/css" media="screen" />
-    <link rel="shortcut icon" href="chrome://hatenabookmark/content/skin/home.gif" />
+    <title>comment viewer</title>
+    <link rel="stylesheet" href="skin/commentViewer.css" type="text/css" media="screen" />
     <script type="application/x-javascript" src="chrome://browser/content/utilityOverlay.js"></script>
     <script type="text/javascript; version=1.8" charset="utf-8" src="commentViewer.js"></script>
   </head>
   <body>
       <h1 id="head">
-        <span id="title">TITLE</span>
+        <span id="title"></span>
         <span id="count"></span>
+        <a id="close-button" href="javascript:close();"><img id="close-button-img" src="chrome://hatenabookmark/content/skin/images/close.gif" alt="close" title="close" /></a>
       </h1>
       <ul id="list">
       </ul>
