@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/toolbar.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/addPanel.css"?>
 <?xml-stylesheet href="chrome://hatenabookmark/content/skin/browser.css" type="text/css"?>
 <?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
 <!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/browser.dtd">
@@ -37,6 +38,8 @@
         <statusbarpanel id="hBookmark-statusBarPanel"
              collapsed="false"
         >
+            <label id="hBookmarkAddButton" value="Add"
+                   onclick="hBookmark.AddPanelManager.toggle();"/>
 
             <image
                  id="hBookmark-status-home"

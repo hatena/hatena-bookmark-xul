@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="add-panel"
+             extends="chrome://global/content/bindings/popup.xml#panel">
+        <content style="height: 10em;">
+            <xul:grid>
+                <xul:columns>
+                    <xul:column/>
+                    <xul:column flex="1"/>
+                </xul:columns>
+                <xul:rows>
+                    <xul:row align="center">
+                        <xul:label value="Title:"/>
+                        <xul:textbox anonid="titleField"
+                                     class="plain" readonly="true"/>
+                    </xul:row>
+                    <xul:row align="center">
+                        <xul:label value="URL:"/>
+                        <xul:textbox anonid="urlField"
+                                     class="plain" readonly="true"/>
+                    </xul:row>
+                    <xul:row align="center">
+                        <xul:label value="Comment:"/>
+                        <xul:textbox anonid="commentField"/>
+                    </xul:row>
+                </xul:rows>
+            </xul:grid>
+            <xul:hbox>
+                <xul:button label="Add to Bookmark"/>
+            </xul:hbox>
+        </content>
+
+        <implementation>
+            <field name="titleField">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleField")
+            </field>
+            <field name="urlField">
+                document.getAnonymousElementByAttribute(this, "anonid", "urlField")
+            </field>
+            <field name="commentField">
+                document.getAnonymousElementByAttribute(this, "anonid", "commentField")
+            </field>
+
+            <field name="targetBrowser">null</field>
+
+            <method name="toggle">
+                <body><![CDATA[
+                    if (this.collapsed)
+                        this.build();
+                    this.collapsed = !this.collapsed;
+                ]]></body>
+            </method>
+
+            <method name="build">
+                <body><![CDATA[
+                    let win = this.targetBrowser.contentWindow;
+                    let url = win.location.href;
+                    let bookmark = hBookmark.Model.Bookmark.findByUrl(url)[0] || {
+                        title:   (win.document && win.document.title) || url,
+                        url:     url,
+                        comment: ""
+                    };
+                    this.titleField.value = bookmark.title;
+                    this.urlField.value = bookmark.url;
+                    this.commentField.value = bookmark.comment;
+                    // XXX ToDo: DBが更新されていたらタグの表示を更新。
+                ]]></body>
+            </method>
+        </implementation>
+    </binding>
+
+</bindings>

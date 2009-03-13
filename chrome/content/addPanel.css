@@ -1,0 +1,3 @@
+.hBookmarkAddPanel {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#add-panel");
+}
