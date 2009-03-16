@@ -113,6 +113,30 @@
                 if (event.originalTarget === this.addButton)
                     this.addToBookmark();
             ]]></handler>
+
+            <handler event="keypress" phase="capturing"><![CDATA[
+                let target = document.getBindingParent(event.originalTarget);
+                if (target.localName !== "textbox" ||
+                    (target.type === "autocomplete" && target.popupOpen) ||
+                    event.ctrlKey || event.shiftKey ||
+                    event.altKey || event.metaKey)
+                    return;
+
+                switch (event.keyCode) {
+                case KeyEvent.DOM_VK_RETURN:
+                    this.addButton.doCommand();
+                    break;
+
+                case KeyEvent.DOM_VK_ESCAPE:
+                    this.hide();
+                    break;
+
+                default:
+                    return;
+                }
+                event.preventDefault();
+                event.stopPropagation();
+            ]]></handler>
         </handlers>
     </binding>
 
@@ -203,19 +227,8 @@
         <handlers>
             <handler event="input"
                      action="if (!this._isCompleting) this._setSearchParam();"/>
-            <handler event="keypress" phase="capturing"><![CDATA[
-                if (this.popupOpen) return;
-                if (event.keyCode === KeyEvent.DOM_VK_RETURN &&
-                    this.defaultCommand &&
-                    !event.ctrlKey && !event.shiftKey &&
-                    !event.altKey && !event.metaKey) {
-                    this.defaultCommand.doCommand();
-                    event.preventDefault();
-                    event.stopPropagation();
-                } else {
-                    this._setSearchParam();
-                }
-            ]]></handler>
+            <handler event="keypress" phase="capturing"
+                     action="this._setSearchParam();"/>
         </handlers>
     </binding>
 
