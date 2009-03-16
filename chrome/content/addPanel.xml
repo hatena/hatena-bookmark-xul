@@ -37,6 +37,10 @@
         </content>
 
         <implementation>
+            <constructor><![CDATA[
+                this.commentField.defaultCommand = this.addButton;
+            ]]></constructor>
+
             <field name="titleField">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleField")
             </field>
@@ -87,6 +91,20 @@
 
             <method name="addToBookmark">
                 <body><![CDATA[
+                    let bookmark = this.bookmark;
+                    let command = new hBookmark.RemoteCommand("edit", {
+                        query: {
+                            url:     bookmark.url,
+                            comment: bookmark.comment
+                        },
+                        onError: let (self = this) function () {
+                            //self.setError();
+                            self.show(bookmark);
+                        }
+                    });
+alert('Not implemented');
+                    //command.execute();
+                    this.hide();
                 ]]></body>
             </method>
         </implementation>
@@ -114,6 +132,8 @@
                 os.removeObserver(this, "autocomplete-will-enter-text");
                 os.removeObserver(this, "autocomplete-did-enter-text");
             ]]></destructor>
+
+            <field name="defaultCommand">null</field>
 
             <field name="_beforeTag">""</field>
             <field name="_afterTag">""</field>
@@ -184,8 +204,19 @@
         <handlers>
             <handler event="input"
                      action="if (!this._isCompleting) this._setSearchParam();"/>
-            <handler event="keypress" phase="capturing"
-                     action="if (!this._isCompleting) this._setSearchParam();"/>
+            <handler event="keypress" phase="capturing"><![CDATA[
+                if (this.popupOpen) return;
+                if (event.keyCode === KeyEvent.DOM_VK_RETURN &&
+                    this.defaultCommand &&
+                    !event.ctrlKey && !event.shiftKey &&
+                    !event.altKey && !event.metaKey) {
+                    this.defaultCommand.doCommand();
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    this._setSearchParam();
+                }
+            ]]></handler>
         </handlers>
     </binding>
 
