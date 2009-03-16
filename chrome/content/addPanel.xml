@@ -102,8 +102,7 @@
                             self.show(bookmark);
                         }
                     });
-alert('Not implemented');
-                    //command.execute();
+                    command.execute();
                     this.hide();
                 ]]></body>
             </method>
