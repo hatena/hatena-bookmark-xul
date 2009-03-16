@@ -63,10 +63,13 @@
             <image
                  id="hBookmark-status-comment"
                  onclick="hBookmark.CommentViewer.show(this);"
+                 loading="false"
             />
 
             <hbox id="hBookmark-syncProgressBox" hidden="true">
-                <image src="http://b.hatena.ne.jp/images/loading.gif" width="16px" height="16px" />
+                <!--
+                    <image src="http://b.hatena.ne.jp/images/loading.gif" width="16px" height="16px" />
+                -->
                 <progressmeter 
                 id="hBookmark-syncProgressMeter"
                 style="width: 50px"

@@ -1,0 +1,102 @@
+
+/* BASIC {{{ */
+body,h1,h2,h3,h4,h5,h5,ul,ol,li,dl,dt,dd,form,textarea,input,select,blockquote {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 90%/1.4 "Arial", "Helvetica", sans-serif;
+}
+
+body {
+  background: #F7F9FD;
+}
+
+img { 
+  border: none;
+  vertical-align: middle;
+}
+
+h1 {
+    padding: 3px;
+    background-color: #FFF;
+    border-bottom: #5279E7 solid 1px;
+}
+
+fieldset {
+  border: 0;
+}
+
+input {
+  *margin: -1px 0;
+}
+
+.note {
+    font-size: 90%;
+}
+
+*{
+  margin:0;
+  padding:0;
+}
+
+ul li {
+  text-indent: 0px;
+  display: list-item;
+  padding: 2px 4px 1px 4px;
+  margin: 0;
+  font-size: 100%;
+  color: #000;
+  word-wrap: break-word;
+}
+
+ul li a.username {
+  font-weight: normal;
+  padding: 0 3px 0 3px;
+  color: #0064F2;
+}
+
+ul li {
+  color: #333;
+}
+
+ul li.mine a.username {
+  font-weight: bold;
+} 
+
+span.comment {
+  padding: 0 3px 0 3px;
+}
+
+span.timestamp {
+  color: #888;
+  font-size: 85%;
+} 
+
+a.tag {
+    text-decoration: none;
+    color: #66c;
+    font-size: 90%;
+}
+
+a#close-buttton {
+    display: absolute;
+    right: 5px;
+    top: 3px;
+    float: right;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

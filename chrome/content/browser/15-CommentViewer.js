@@ -8,18 +8,37 @@ this.__defineGetter__('aWin', function() Application.activeWindow);
 this.__defineGetter__('aDoc', function() Application.activeWindow.activeTab.document);
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
 
-let iframe = document.createElement('iframe');
-iframe.setAttribute('src', 'chrome://hatenabookmark/content/comment.html') 
-iframe.setAttribute('id', 'hBookmark-comment-viewer');
-iframe.setAttribute('width', '400px');
-iframe.setAttribute('height', '400px');
+let iframe = null;
 
 elementGetter(this, 'panelComment', 'hBookmark-panel-comment', document);
 elementGetter(this, 'commentButton', 'hBookmark-status-comment', document);
 
+const CMD_EVENT_NAME = 'hBookmark-view-comments';
+
+window.addEventListener(CMD_EVENT_NAME, function(ev) {
+    let m = CommentViewer.dispatchMethods[ev.getData('method')];
+    if (m) m(ev.getData('data'));
+}, false);
+
+let throwEvent = function(method, data) {
+     let ev = window.document.createEvent('DataContainerEvent');
+     ev.initEvent(CMD_EVENT_NAME, false, false);
+     ev.setData('method', method);
+     ev.setData('data', data);
+     window.dispatchEvent(ev);
+}
+
 var CommentViewer = {
     show: function CommentViewer_show(target) {
         if (!isHttp) return;
+
+        if (!iframe) {
+            iframe = document.createElement('iframe');
+            iframe.setAttribute('src', 'chrome://hatenabookmark/content/comment.html') 
+            iframe.setAttribute('id', 'hBookmark-comment-viewer');
+
+            panelComment.appendChild(iframe);
+        }
 
         let url = aDoc.location.href;
         if (commentCache.has(url)) 
@@ -28,6 +47,7 @@ var CommentViewer = {
         let reqURL = 'http://b.hatena.ne.jp/entry/json/?url=' + encodeURIComponent(url);
         let xhr = new XMLHttpRequest();
         let self = this;
+        commentButton.setAttribute('loading', 'true'); 
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4) {
                 commentCache.set(url, eval('(' + xhr.responseText + ')'));
@@ -39,78 +59,32 @@ var CommentViewer = {
     },
     updateComment: function CommentViewer_updateComment() {
         let data = commentCache.get(aDoc.location.href);
-        panelComment.openPopup(commentButton, 'before_end', 0, 0,false,false);
-        let ev = document.createEvent('DataContainerEvent');
-        ev.initEvent('hBookmark-view-comments', false, false);
-        ev.setData('data', data);
-        window.dispatchEvent(ev);
-    },
-}
-
-EventService.createListener('load', function(e) {
-    panelComment.appendChild(iframe);
-}, window);
-
-/*
-    showComment: function StatusBar_showComment() {
-        if (!isHttp) return;
-
-        let url = aDoc.location.href;
-        if (commentCache.has(url)) 
-            return this.updateComment();
-
-        let reqURL = 'http://b.hatena.ne.jp/entry/json/?url=' + encodeURIComponent(url);
-        let xhr = new XMLHttpRequest();
-        let self = this;
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-                commentCache.set(url, eval('(' + xhr.responseText + ')'));
-                self.updateComment();
-            }
-        };
-        xhr.open('GET', reqURL, true); // XXX
-        xhr.send(null);
-    },
-    updateComment: function StatusBar_updateComment() {
-        let json = commentCache.get(aDoc.location.href);
-
-        this.updateIFrame(json);
-    },
-    updateIFrame: function StatusBar_updateIFrame(json) {
-        let iframe = this.iframe;
-        iframe.update(json);
-        panelComment.openPopup(addButton, 'before_end', 0, 0,false,false);
-    },
-    get iframe() {
-        if (!this._iframe) {
-            let iframe = CommentIFrame;
-            panelComment.appendChild(iframe.iframe);
-            this._iframe = iframe;
+        if (data) {
+            panelComment.openPopup(commentButton, 'before_end', 0, 0,false,false);
+            // XXX: 非表示ユーザをフィルター
+            throwEvent('load-json', data);
         }
-        return this._iframe;
+        commentButton.setAttribute('loading', 'false'); 
     },
-
-let CommentIFrame = {
-    get iframe() {
-        if (!this._iframe) {
-            let iframe = document.createElement('iframe');
-            iframe.setAttribute('src', 'chrome://hatenabookmark/content/comment.html') 
-            iframe.setAttribute('id', 'hBookmark-comment-iframe');
-            iframe.setAttribute('width', 400);
-            iframe.setAttribute('height', 400);
-            this._iframe = iframe;
-            window.addEventListener('iframeLinkOpen', function(ev) {
-                p('open!');
-                p(ev.data);
-                p(keys(ev));
-            }, false);
+    hide: function CommentViewer_hide() {
+        if (panelComment.state != 'closed') {
+            panelComment.hidePopup();
         }
-        return this._iframe;
-    },
-    update: function(data) {
     }
 }
 
-*/
-
+CommentViewer.dispatchMethods = {
+    close: function() {
+        CommentViewer.hide();
+    },
+    rendered: function(o) {
+        if (o.height < 400) {
+            panelComment.setAttribute('height', '' + o.height + 'px');
+            iframe.setAttribute('height', '' + o.height + 'px');
+        } else {
+            panelComment.setAttribute('height', '400px');
+            iframe.setAttribute('height', '400px');
+        }
+    }
+}
 

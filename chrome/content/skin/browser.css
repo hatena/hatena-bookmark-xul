@@ -1,15 +1,15 @@
 
 /* StatusBar */
 #hBookmark-status-home {
-  list-style-image: url("chrome://hatenabookmark/content/skin/home.gif");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/home.gif");
 }
 
 #hBookmark-status-add[added="false"] {
-  list-style-image: url("chrome://hatenabookmark/content/skin/b.gif");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/b.gif");
 }
 
 #hBookmark-status-add[added="true"] {
-  list-style-image: url("chrome://hatenabookmark/content/skin/b_added.gif");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_added.gif");
 }
 
 #hBookmark-status-count {
@@ -31,8 +31,15 @@
     background-color: #FFCCCC;
 }
     
-#hBookmark-status-comment {
-  list-style-image: url("chrome://hatenabookmark/content/skin/b_comment.gif");
+#hBookmark-status-comment[loading="false"] {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_comment.gif");
 }
 
+#hBookmark-status-comment[loading="true"] {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_comment_loading.gif");
+}
+
+iframe#hBookmark-comment-viewer {
+    width: 400px;
+}
 
