@@ -75,9 +75,11 @@
         </implementation>
     </binding>
 
-    <binding id="tag-complete">
+    <binding id="tag-complete" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
         <implementation implements="nsIObserver">
             <constructor><![CDATA[
+                this.popup.__defineGetter__("overrideValue",
+                                            this._popup_getOverrideValue);
                 let os = hBookmark.ObserverService;
                 os.addObserver(this, "autocomplete-will-enter-text", false);
                 os.addObserver(this, "autocomplete-did-enter-text", false);
@@ -103,15 +105,32 @@
                     let after = comment.substring(caretPos);
                     let partialTag = "";
                     let match;
-                    if ((match = /^(?:\[[^?%\/\[\]]+\])\[([^?%\/\[\]]+)$/)) {
+                    if ((match = /^(?:\[[^?%\/\[\]]+\])*\[([^?%\/\[\]]+)$/.exec(before))) {
                         partialTag = match[1];
-                        before = before.substring(0,
-                                     before.length - partialTag.length)
+                        before = before.slice(0, -partialTag.length);
+                    }
+                    if ((match = /^[^?%\/\[\]]*(?=\])/.exec(after))) {
+                        partialTag += match[0];
+                        after = after.substring(match[0].length);
+                    } else {
+                        after = "]" + after;
                     }
 
                     this._beforeTag = before;
                     this._afterTag = after;
                     this.searchParam = partialTag;
+                    hBookmark.p("[@_setSearchParam]", before, partialTag, after);
+                ]]></body>
+            </method>
+
+            <method name="_popup_getOverrideValue">
+                <body><![CDATA[
+                    let input = this.input;
+                    let tree = this.tree;
+                    let col = tree.columns.getNamedColumn("treecolAutoCompleteValue");
+                    return input._beforeTag +
+                           tree.view.getCellText(tree.currentIndex, col) +
+                           input._afterTag;
                 ]]></body>
             </method>
 
