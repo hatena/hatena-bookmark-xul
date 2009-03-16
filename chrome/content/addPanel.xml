@@ -32,7 +32,7 @@
                 </xul:rows>
             </xul:grid>
             <xul:hbox>
-                <xul:button label="Add to Bookmark"/>
+                <xul:button anonid="addButton" label="Add to Bookmark"/>
             </xul:hbox>
         </content>
 
@@ -46,60 +46,57 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
+            <field name="addButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "addButton")
+            </field>
 
-            <!--
-            <field name="targetBrowser">null</field>
-            -->
-
-            <field name="_targetBrowser">null</field>
-            <property name="targetBrowser"
-                      onget="return this._targetBrowser">
+            <property name="bookmark">
+                <getter><![CDATA[
+                    return {
+                        title:   this.titleField.value,
+                        url:     this.urlField.value,
+                        comment: this.commentField.value
+                    };
+                ]]></getter>
                 <setter><![CDATA[
-                    if (this._targetBrowser)
-                        this._targetBrowser.removeEventListener("pagehide", this._onPageHide, false);
-                    this._targetBrowser = val;
-                    if (this._targetBrowser)
-                        this._targetBrowser.addEventListener("pagehide", this._onPageHide, false);
+                    this.titleField.value   = val.title;
+                    this.urlField.value     = val.url;
+                    this.commentField.value = val.comment;
+                    // this.updateTags();
                     return val;
                 ]]></setter>
             </property>
 
-            <field name="_onPageHide"><![CDATA[
-                hBookmark.bind(function (event) {
-                    if (event.target === this.targetBrowser.contentDocument &&
-                        !this.collapsed)
-                        // 直接呼び出すとパネルの領域が残った
-                        // ままになることがあるので遅延させる。
-                        setTimeout(hBookmark.bind(this.toggle, this), 0);
-                }, this)
-            ]]></field>
+            <property name="isOpen" readonly="true"
+                      onget="return !this.collapsed;"/>
 
-            <field name="targetWindow">null</field>
-
-            <method name="toggle">
+            <method name="show">
+                <parameter name="bookmark"/>
                 <body><![CDATA[
-                    if (this.collapsed)
-                        this.build();
-                    this.collapsed = !this.collapsed;
+                    if (bookmark.url !== this.bookmark.url)
+                        this.bookmark = bookmark;
+                    this.collapsed = false;
                 ]]></body>
             </method>
 
-            <method name="build">
+            <method name="hide">
                 <body><![CDATA[
-                    let win = this.targetBrowser.contentWindow;
-                    let url = win.location.href;
-                    let bookmark = hBookmark.Model.Bookmark.findByUrl(url)[0] || {
-                        title:   (win.document && win.document.title) || url,
-                        url:     url,
-                        comment: ""
-                    };
-                    this.titleField.value = bookmark.title;
-                    this.urlField.value = bookmark.url;
-                    this.commentField.value = bookmark.comment;
-                    // XXX ToDo: DBが更新されていたらタグの表示を更新。
+                    this.collapsed = true;
+                ]]></body>
+            </method>
+
+            <method name="addToBookmark">
+                <body><![CDATA[
                 ]]></body>
             </method>
         </implementation>
+
+        <handlers>
+            <handler event="command"><![CDATA[
+                if (event.originalTarget === this.addButton)
+                    this.addToBookmark();
+            ]]></handler>
+        </handlers>
     </binding>
 
     <binding id="tag-complete" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
