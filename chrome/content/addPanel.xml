@@ -47,7 +47,34 @@
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
 
+            <!--
             <field name="targetBrowser">null</field>
+            -->
+
+            <field name="_targetBrowser">null</field>
+            <property name="targetBrowser"
+                      onget="return this._targetBrowser">
+                <setter><![CDATA[
+                    if (this._targetBrowser)
+                        this._targetBrowser.removeEventListener("pagehide", this._onPageHide, false);
+                    this._targetBrowser = val;
+                    if (this._targetBrowser)
+                        this._targetBrowser.addEventListener("pagehide", this._onPageHide, false);
+                    return val;
+                ]]></setter>
+            </property>
+
+            <field name="_onPageHide"><![CDATA[
+                hBookmark.bind(function (event) {
+                    if (event.target === this.targetBrowser.contentDocument &&
+                        !this.collapsed)
+                        // 直接呼び出すとパネルの領域が残った
+                        // ままになることがあるので遅延させる。
+                        setTimeout(hBookmark.bind(this.toggle, this), 0);
+                }, this)
+            ]]></field>
+
+            <field name="targetWindow">null</field>
 
             <method name="toggle">
                 <body><![CDATA[
@@ -95,6 +122,7 @@
             <field name="_afterTag">""</field>
 
             <field name="_isCompleting">false</field>
+            <field name="_caretPos">0</field>
 
             <method name="_setSearchParam">
                 <body><![CDATA[
@@ -119,7 +147,7 @@
                     this._beforeTag = before;
                     this._afterTag = after;
                     this.searchParam = partialTag;
-                    hBookmark.p("[@_setSearchParam]", before, partialTag, after);
+                    //hBookmark.p("[@_setSearchParam]", before, partialTag, after);
                 ]]></body>
             </method>
 
@@ -134,15 +162,24 @@
                 ]]></body>
             </method>
 
+            <method name="_adjustCaretPos">
+                <body><![CDATA[
+                    let pos = this.value.indexOf("]", this._caretPos);
+                    if (pos !== -1)
+                        this.setSelectionRange(pos + 1, pos + 1);
+                ]]></body>
+            </method>
+
             <method name="observe">
                 <parameter name="subject"/>
                 <parameter name="topic"/>
                 <parameter name="data"/>
                 <body><![CDATA[
                     if (subject !== this) return;
-                    hBookmark.p(topic);
-                    this._isCompleting =
-                        (topic === "autocomplete-will-enter-text");
+                    if (topic === "autocomplete-will-enter-text")
+                        this._caretPos = this.selectionStart;
+                    else
+                        this._adjustCaretPos();
                 ]]></body>
             </method>
         </implementation>
