@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/addPanel.dtd">
 <bindings xmlns="http://www.mozilla.org/xbl"
           xmlns:xbl="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <binding id="add-panel"
              extends="chrome://global/content/bindings/popup.xml#panel">
-        <content style="height: 10em;">
+        <content><!-- persist="height" -->
+            <xul:toolbox>
+                <xul:toolbar align="center">
+                    <xul:label anonid="panelTitle"/>
+                    <xul:spacer flex="1"/>
+                    <xul:toolbarbutton anonid="closeButton"
+                                       class="tabs-closebutton"
+                                       oncommand="document.getBindingParent(this).hide();"/>
+                </xul:toolbar>
+            </xul:toolbox>
+            <xul:label anonid="errorField" hidden="true"/>
             <xul:grid>
                 <xul:columns>
                     <xul:column/>
@@ -13,17 +24,23 @@
                 </xul:columns>
                 <xul:rows>
                     <xul:row align="center">
-                        <xul:label value="Title:"/>
-                        <xul:textbox anonid="titleField"
-                                     class="plain" readonly="true"/>
+                        <xul:label value="&hBookmark.addPanel.titleLabel;"/>
+                        <xul:hbox align="center">
+                            <xul:textbox anonid="titleField" flex="1"/>
+                            <xul:button anonid="editTitleButton"
+                                        label="&hBookmark.addPanel.editTitleLabel;"
+                                        oncommand="var panel = document.getBindingParent(this); panel.isTitleEditable = true; panel.titleField.focus();"/>
+                            <xul:button anonid="cancelEditTitleButton"
+                                        label="&hBookmark.addPanel.cancelEditTitleLabel;"
+                                        oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
+                        </xul:hbox>
                     </xul:row>
                     <xul:row align="center">
-                        <xul:label value="URL:"/>
-                        <xul:textbox anonid="urlField"
-                                     class="plain" readonly="true"/>
+                        <xul:label value="&hBookmark.addPanel.urlLabel;"/>
+                        <xul:label anonid="urlField" class="text-link hBookmarkLink"/>
                     </xul:row>
                     <xul:row align="center">
-                        <xul:label value="Comment:"/>
+                        <xul:label value="&hBookmark.addPanel.commentLabel;"/>
                         <xul:textbox anonid="commentField"
                                      class="hBookmarkTagComplete"
                                      type="autocomplete"
@@ -32,17 +49,26 @@
                 </xul:rows>
             </xul:grid>
             <xul:hbox>
-                <xul:button anonid="addButton" label="Add to Bookmark"/>
+                <xul:button anonid="saveButton"/>
             </xul:hbox>
         </content>
 
         <implementation>
-            <constructor><![CDATA[
-                this.commentField.defaultCommand = this.addButton;
-            ]]></constructor>
-
+            <field name="splitter">null</field>
+            <field name="panelTitle">
+                document.getAnonymousElementByAttribute(this, "anonid", "panelTitle")
+            </field>
+            <field name="closeButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "closeButton")
+            </field>
             <field name="titleField">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleField")
+            </field>
+            <field name="editTitleButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "editTitleButton")
+            </field>
+            <field name="cancelEditTitleButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "cancelEditTitleButton")
             </field>
             <field name="urlField">
                 document.getAnonymousElementByAttribute(this, "anonid", "urlField")
@@ -50,55 +76,118 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
-            <field name="addButton">
-                document.getAnonymousElementByAttribute(this, "anonid", "addButton")
+            <field name="saveButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "saveButton")
             </field>
+            <field name="errorField">
+                document.getAnonymousElementByAttribute(this, "anonid", "errorField")
+            </field>
+
+            <field name="strings">
+                new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
+            </field>
+
+            <field name="_bookmark">({ title: "", url: "", comment: "" })</field>
+            <field name="_originalTitle">""</field>
 
             <property name="bookmark">
                 <getter><![CDATA[
-                    return {
+                    return hBookmark.extend(this._bookmark, {
                         title:   this.titleField.value,
                         url:     this.urlField.value,
                         comment: this.commentField.value
-                    };
+                    });
                 ]]></getter>
                 <setter><![CDATA[
-                    this.titleField.value   = val.title;
-                    this.urlField.value     = val.url;
-                    this.commentField.value = val.comment;
-                    // this.updateTags();
-                    return val;
+                    if (val.url !== this._bookmark.url)
+                        this.updateFields(val);
+                    return this._bookmark = val;
                 ]]></setter>
             </property>
 
             <property name="isOpen" readonly="true"
                       onget="return !this.collapsed;"/>
 
+            <property name="isTitleEditable"
+                      onget="return !this.titleField.readOnly;">
+                <setter><![CDATA[
+                    this.titleField.readOnly = !val;
+                    this.editTitleButton.hidden = val;
+                    this.cancelEditTitleButton.hidden = !val;
+                    if (!val)
+                        this.titleField.value = this._originalTitle;
+                    return val;
+                ]]></setter>
+            </property>
+
+            <property name="isTitleChanged" readonly="true"
+                      onget="return this.titleField.value !== this._originalTitle;"/>
+
             <method name="show">
                 <parameter name="bookmark"/>
                 <body><![CDATA[
-                    if (bookmark.url !== this.bookmark.url)
-                        this.bookmark = bookmark;
+                    this.bookmark = bookmark;
+                    this.setAddOrEdit(!!bookmark.temporary);
+                    this.clearError();
                     this.collapsed = false;
+                    this.splitter.collapsed = false;
                 ]]></body>
             </method>
 
             <method name="hide">
                 <body><![CDATA[
                     this.collapsed = true;
+                    this.splitter.collapsed = true;
                 ]]></body>
             </method>
 
-            <method name="addToBookmark">
+            <method name="updateFields">
+                <parameter name="bookmark"/>
                 <body><![CDATA[
-                    let bookmark = this.bookmark;
+                    this._originalTitle     = bookmark.title;
+                    this.titleField.value   = bookmark.title;
+                    this.isTitleEditable    = false;
+                    this.urlField.value     = bookmark.url;
+                    this.urlField.href      = bookmark.url;
+                    this.commentField.value = bookmark.comment;
+                ]]></body>
+            </method>
+
+            <method name="setAddOrEdit">
+                <parameter name="add"/>
+                <body><![CDATA[
+                    let type = add ? ".add" : ".edit";
+                    this.panelTitle.value =
+                        this.strings.get("title" + type);
+                    this.closeButton.tooltipText =
+                        this.strings.get("closeTooltip" + type);
+                    this.saveButton.label =
+                        this.strings.get("saveLabel" + type);
+                ]]></body>
+            </method>
+
+            <method name="setError">
+                <parameter name="message"/>
+                <body><![CDATA[
+                    this.errorField.value = message;
+                    this.errorField.hidden = false;
+                ]]></body>
+            </method>
+
+            <method name="clearError">
+                <parameter name="message"/>
+                <body><![CDATA[
+                    this.errorField.hidden = true;
+                ]]></body>
+            </method>
+
+            <method name="saveBookmark">
+                <body><![CDATA[
                     let command = new hBookmark.RemoteCommand("edit", {
-                        query: {
-                            url:     bookmark.url,
-                            comment: bookmark.comment
-                        },
+                        bookmark: this.bookmark,
+                        changeTitle: this.isTitleChanged,
                         onError: let (self = this) function () {
-                            //self.setError();
+                            self.setError('error');
                             self.show(bookmark);
                         }
                     });
@@ -110,8 +199,8 @@
 
         <handlers>
             <handler event="command"><![CDATA[
-                if (event.originalTarget === this.addButton)
-                    this.addToBookmark();
+                if (event.originalTarget === this.saveButton)
+                    this.saveBookmark();
             ]]></handler>
 
             <handler event="keypress" phase="capturing"><![CDATA[
@@ -124,7 +213,7 @@
 
                 switch (event.keyCode) {
                 case KeyEvent.DOM_VK_RETURN:
-                    this.addButton.doCommand();
+                    this.saveButton.doCommand();
                     break;
 
                 case KeyEvent.DOM_VK_ESCAPE:
@@ -155,8 +244,6 @@
                 os.removeObserver(this, "autocomplete-will-enter-text");
                 os.removeObserver(this, "autocomplete-did-enter-text");
             ]]></destructor>
-
-            <field name="defaultCommand">null</field>
 
             <field name="_beforeTag">""</field>
             <field name="_afterTag">""</field>
@@ -230,6 +317,21 @@
             <handler event="keypress" phase="capturing"
                      action="this._setSearchParam();"/>
         </handlers>
+    </binding>
+
+    <binding id="link"
+             extends="chrome://global/content/bindings/text.xml#text-link">
+        <implementation>
+            <method name="open">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    let href = this.href;
+                    if (!href || this.disabled || event.getPreventDefault())
+                        return;
+                    openUILink(href, event);
+                ]]></body>
+            </method>
+        </implementation>
     </binding>
 
 </bindings>

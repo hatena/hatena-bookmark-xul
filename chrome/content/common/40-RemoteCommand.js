@@ -51,6 +51,7 @@ extend(RemoteCommand.prototype, {
     get user RC_get_user() this.options.user || User.user,
 
     execute: function RC_execute() {
+        this.hook();
         this.xhr = net.post(this.url, method(this, 'onComplete'),
                             method(this, 'onError'), true, this.query);
         this.setTimeoutHandler();
@@ -92,5 +93,24 @@ extend(RemoteCommand.prototype, {
         if (this._timerId)
             clearTimeout(this._timerId);
         this._timerId = 0;
+    },
+
+    hook: function RC_hook() {
+        let hookName =
+            this.type.replace(/_(.)/g, function (m, c) c.toUpperCase()) + "Hook";
+        if (hookName in this)
+            this[hookName]();
+    },
+
+    editHook: function RC_editHook() {
+        let bookmark = this.options.bookmark;
+        if (this.options.query || !bookmark) return;
+        let query = {
+            url:     bookmark.url,
+            comment: bookmark.comment
+        };
+        if (this.options.changeTitle)
+            query.title = bookmark.title;
+        this.options.query = query;
     }
 });

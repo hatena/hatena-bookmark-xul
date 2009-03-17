@@ -19,6 +19,9 @@
             <menuitem label="&hBookmark.entryContext.openEntryLabel;"
                       accesskey="&hBookmark.entryContext.openEntryKey;"
                       oncommand="openUILink('http://b.hatena.ne.jp/entry/' + document.popupNode.bookmark.url.replace(/#/g, '%23'), event);"/>
+            <menuitem label="&hBookmark.entryContext.editLabel;"
+                      accesskey="&hBookmark.entryContext.editKey;"
+                      oncommand="getTopWin().hBookmark.AddPanelManager.currentPanel.show(document.popupNode.bookmark);"/>
         </menupopup>
 
         <tooltip id="hBookmarkItemTooltip"/>

@@ -1,0 +1,5 @@
+<!ENTITY hBookmark.addPanel.titleLabel "タイトル:">
+<!ENTITY hBookmark.addPanel.editTitleLabel "タイトルを変更...">
+<!ENTITY hBookmark.addPanel.cancelEditTitleLabel "キャンセル">
+<!ENTITY hBookmark.addPanel.urlLabel "URL:">
+<!ENTITY hBookmark.addPanel.commentLabel "コメント:">
