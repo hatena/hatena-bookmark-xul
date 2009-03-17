@@ -149,15 +149,9 @@
 
             <method name="addToBookmark">
                 <body><![CDATA[
-                    let bookmark = this.bookmark;
-                    let query = {
-                        url:     bookmark.url,
-                        comment: bookmark.comment
-                    };
-                    if (this.isTitleChanged)
-                        query.title = bookmark.title;
                     let command = new hBookmark.RemoteCommand("edit", {
-                        query: query,
+                        bookmark: this.bookmark,
+                        changeTitle: this.isTitleChanged,
                         onError: let (self = this) function () {
                             //self.setError();
                             self.show(bookmark);
