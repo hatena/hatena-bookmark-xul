@@ -46,9 +46,10 @@
         <statusbarpanel id="hBookmark-statusBarPanel"
              collapsed="false"
         >
-            <label id="hBookmarkAddButton" value="Add"
+            <image id="hBookmarkAddButton" added="false"
                    onclick="hBookmark.AddPanelManager.toggle();"/>
 
+            <!--
             <image
                  id="hBookmark-status-home"
                  onclick="hBookmark.StatusBar.goHome();"
@@ -59,6 +60,7 @@
                  id="hBookmark-status-add"
                  onclick="hBookmark.StatusBar.addBookmark();"
             />
+            -->
 
             <label
                  id="hBookmark-status-count"

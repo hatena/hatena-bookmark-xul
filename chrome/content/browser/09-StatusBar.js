@@ -7,7 +7,7 @@ this.__defineGetter__('aDoc', function() Application.activeWindow.activeTab.docu
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
 
 
-elementGetter(this, 'addButton', 'hBookmark-status-add', document);
+elementGetter(this, 'addButton', 'hBookmarkAddButton', document);
 elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
 
 let countCache = new ExpireCache('uCount', 60 * 60); // 一時間キャッシュ

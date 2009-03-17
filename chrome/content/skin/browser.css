@@ -4,11 +4,11 @@
   list-style-image: url("chrome://hatenabookmark/content/skin/images/home.gif");
 }
 
-#hBookmark-status-add[added="false"] {
+#hBookmarkAddButton[added="false"] {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/b.gif");
 }
 
-#hBookmark-status-add[added="true"] {
+#hBookmarkAddButton[added="true"] {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/b_added.gif");
 }
 
@@ -48,10 +48,12 @@ iframe#hBookmark-comment-viewer {
  */
 #PopupAutoCompleteRichResult[hiddenByHBookmark="true"] {
     /* XXX */
+    /*
     visibility: hidden !important; 
     -moz-appearance: none !important;
     background-color: transparent !important;
     display: none;
+    */
 }
 
 #hBookmark-search-icon {

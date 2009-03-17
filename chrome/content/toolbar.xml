@@ -5,7 +5,6 @@
 
     <binding id="toolbar" extends="#toolbar-item-base">
         <content>
-            <xul:toolbarbutton label="Hello"/>
             <xul:hbox anonid="recent-container" flex="1"
                       context="hBookmarkItemContext"
                       tooltip="hBookmarkItemTooltip">

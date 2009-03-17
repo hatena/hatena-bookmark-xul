@@ -16,25 +16,23 @@ elementGetter(this, 'icon', 'hBookmark-search-icon', document);
 
 let E = createElementBindDocument(document);
 let Bookmark = model('Bookmark');
+
 window.addEventListener('load', function() {
     list.setAttribute('rows', 3);
     list.addEventListener('keypress', LocationBar.listKeypressHandler, false);
     list.addEventListener('click', LocationBar.goLink, false);
     list.addEventListener('select', LocationBar.selectHandler, false);
+
+    LocationBar.bar.inputField.addEventListener('keydown', LocationBar.barKeyDownHandler, true);
+    LocationBar.bar.inputField.addEventListener('keyup', LocationBar.barKeyUpHandler, false);
 }, false);
 
 var LocationBar = {
     inited: false,
     init: function LocationBar_init () {
         addAround(LocationBarHelpers, '_searchBegin', function(proceed, args, target) {
-            if (!LocationBar.inited) {
-                LocationBar.bar.controller.input.addEventListener('keydown', LocationBar.barKeyDownHandler, true);
-                LocationBar.bar.controller.input.addEventListener('keyup', LocationBar.barKeyUpHandler, false);
-                LocationBar.inited = true;
-            }
-            if (LocationBar.searchEnabled) {
+            if (LocationBar.searchEnabled)
                 LocationBar.search();
-            }
             proceed(args);
         });
     },
@@ -45,6 +43,12 @@ var LocationBar = {
         (bar.controller.input || b.mController.input).textValue = list.selectedItem.value;
         */
     },
+    _fakeController: null,
+    get fakeController() {
+        if (!this._fakeController) 
+            this._fakeController = new FakeAutoCompletePopupController(bar.mController);
+        return this._fakeController;
+    },
     get searchEnabled() this._isSearch,
     set searchEnabled(bool) {
         if (bool) {
@@ -52,15 +56,20 @@ var LocationBar = {
             /* XXX: 本当は AutoComplete をきちんと切りたい… 
              * ここで要素が見えてないと AutoComplete がエラーになるので直す
              */
+            bar.mController = this.fakeController;
             document.getElementById('PopupAutoCompleteRichResult').setAttribute('hiddenByHBookmark', true);
             icon.removeAttribute('searchdisabled');
             this.search();
         } else {
             this._isSearch = false;
+            bar.mController = this.fakeController.controller;
             document.getElementById('PopupAutoCompleteRichResult').removeAttribute('hiddenByHBookmark');
             icon.setAttribute('searchdisabled', true);
             this.hide();
         }
+    },
+    eventStopper: function(ev) {
+        ev.stopPropagation();
     },
     iconClickHandler: function(ev) {
         setTimeout(function() {
@@ -191,6 +200,68 @@ var LocationBar = {
     },
     get bar function() document.getElementById('urlbar'),
 };
+
+/*
+ * Fx 3.0 では urlbar の autocomplete を無効化する方法が不明なため、
+ * 何もしない nsIAutoCompleteController の偽コントローラを作る
+ */
+function FakeAutoCompletePopupController(aBaseController) 
+{
+    this.init(aBaseController);
+}
+
+FakeAutoCompletePopupController.prototype = {
+    get controller() this.__originalController__,
+    init : function(controller) this.__originalController__ = controller,
+
+    STATUS_NONE              : Ci.nsIAutoCompleteController.STATUS_NONE, 
+    STATUS_SEARCHING         : Ci.nsIAutoCompleteController.STATUS_SEARCHING,
+    STATUS_COMPLETE_NO_MATCH : Ci.nsIAutoCompleteController.STATUS_COMPLETE_NO_MATCH,
+    STATUS_COMPLETE_MATCH    : Ci.nsIAutoCompleteController.STATUS_COMPLETE_MATCH,
+    get input() 
+        this.controller.input,
+    set input(aValue) 
+        this.controller.input = aValue,
+    get searchStatus() 
+        this.controller.searchStatus,
+    set searchStatus(aValue) 
+        this.controller.searchStatus = aValue,
+    get matchCount() 
+        0,
+    startSearch : function(aString) 
+        this.controller.startSearch(aString),
+    stopSearch : function() 
+        this.controller.stopSearch(),
+    handleText : function(aIgnoreSelection) 
+        this.controller.handleText(aIgnoreSelection),
+    handleEnter : function(aIsPopupSelection) 
+        this.controller.handleEnter(aIsPopupSelection),
+    handleEscape : function() 
+        this.controller.handleEscape(),
+    handleStartComposition : function() 
+        this.controller.handleStartComposition(),
+    handleEndComposition : function() 
+        this.controller.handleEndComposition(),
+    handleTab : function() 
+        this.controller.handleTab(),
+    handleKeyNavigation : function(aKey) 
+        this.controller.handleKeyNavigation(aKey),
+    handleDelete : function() 
+        this.controller.handleDelete(),
+    getValueAt : function(aIndex) 
+        null,
+    getCommentAt : function(aIndex) 
+        null,
+    getStyleAt : function(aIndex) 
+        null,
+    getImageAt : function(aIndex) 
+        null,
+    get searchString() 
+        this.controller.searchString,
+    set searchString(aValue)
+        this.controller.searchString = aValue,
+    QueryInterface: XPCOMUtils.generateQI([Ci.nsIAutoCompleteController, Ci.nsISupports]),
+}; 
 
 /*
 LocationBar.__Searcher = {
