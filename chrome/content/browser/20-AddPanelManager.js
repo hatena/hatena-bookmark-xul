@@ -13,10 +13,15 @@ var AddPanelManager = {
     },
 
     setupPanel: function APM_setupPanel(browser) {
+        let splitter = document.createElementNS(XUL_NS, "splitter");
+        splitter.setAttribute("collapsed", "true");
+        splitter.setAttribute("style", "min-height: 0;");
         let panel = document.createElementNS(XUL_NS, "vbox");
         panel.setAttribute("class", "hBookmarkAddPanel");
         panel.setAttribute("collapsed", "true");
+        browser.parentNode.appendChild(splitter);
         browser.parentNode.appendChild(panel);
+        panel.splitter = splitter;
     },
 
     get currentPanel APM_get_currentPanel() {

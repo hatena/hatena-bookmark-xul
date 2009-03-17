@@ -6,7 +6,7 @@
 
     <binding id="add-panel"
              extends="chrome://global/content/bindings/popup.xml#panel">
-        <content>
+        <content><!-- persist="height" -->
             <xul:toolbox>
                 <xul:toolbar align="center">
                     <xul:label anonid="panelTitle"/>
@@ -54,6 +54,7 @@
         </content>
 
         <implementation>
+            <field name="splitter">null</field>
             <field name="panelTitle">
                 document.getAnonymousElementByAttribute(this, "anonid", "panelTitle")
             </field>
@@ -129,12 +130,14 @@
                     this.setAddOrEdit(!!bookmark.temporary);
                     this.clearError();
                     this.collapsed = false;
+                    this.splitter.collapsed = false;
                 ]]></body>
             </method>
 
             <method name="hide">
                 <body><![CDATA[
                     this.collapsed = true;
+                    this.splitter.collapsed = true;
                 ]]></body>
             </method>
 
