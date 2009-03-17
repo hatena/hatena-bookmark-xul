@@ -41,6 +41,7 @@
             </xul:grid>
             <xul:hbox>
                 <xul:button anonid="addButton" label="Add to Bookmark"/>
+                <xul:button anonid="saveButton" label="Save"/>
             </xul:hbox>
         </content>
 
@@ -61,19 +62,24 @@
             <field name="addButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "addButton")
             </field>
+            <field name="saveButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "saveButton")
+            </field>
 
             <property name="bookmark">
                 <getter><![CDATA[
                     return {
                         title:   this.titleField.value,
                         url:     this.urlField.value,
-                        comment: this.commentField.value
+                        comment: this.commentField.value,
                     };
                 ]]></getter>
                 <setter><![CDATA[
                     this.titleField.value   = val.title;
                     this.urlField.value     = val.url;
                     this.commentField.value = val.comment;
+                    this.addButton.hidden   = !val.isNew;
+                    this.saveButton.hidden  = !!val.isNew;
                     // this.updateTags();
                     return val;
                 ]]></setter>
@@ -118,7 +124,8 @@
 
         <handlers>
             <handler event="command"><![CDATA[
-                if (event.originalTarget === this.addButton)
+                if (event.originalTarget === this.addButton ||
+                    event.originalTarget === this.saveButton)
                     this.addToBookmark();
             ]]></handler>
 

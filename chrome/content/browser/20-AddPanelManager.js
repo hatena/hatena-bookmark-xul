@@ -17,6 +17,10 @@ var AddPanelManager = {
         browser.parentNode.appendChild(panel);
     },
 
+    get currentPanel APM_get_currentPanel() {
+        return this.getPanelForBrowser(gBrowser.selectedBrowser);
+    },
+
     getPanelForBrowser: function APM_getPanelForBrowser(browser) {
         let panel = browser.nextSibling;
         while (panel && !/\bhBookmarkAddPanel\b/.test(panel.className))
@@ -30,14 +34,14 @@ var AddPanelManager = {
         return Model.Bookmark.findByUrl(url)[0] || {
             title:   (win.document && win.document.title) || url,
             url:     url,
-            comment: ""
+            comment: "",
+            isNew:   true
         };
     },
 
     toggle: function APM_toggle() {
-        let browser = gBrowser.selectedBrowser;
-        let panel = this.getPanelForBrowser(browser);
-        let bookmark = this.getBookmarkForBrowser(browser);
+        let panel = this.currentPanel;
+        let bookmark = this.getBookmarkForBrowser(gBrowser.selectedBrowser);
         if (panel.isOpen && panel.bookmark.url === bookmark.url)
             panel.hide();
         else
