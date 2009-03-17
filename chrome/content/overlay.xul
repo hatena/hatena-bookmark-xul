@@ -25,6 +25,13 @@
                 <menupopup context="hBookmarkItemContext"/>
             </toolbarbutton>
         </toolbaritem>
+        <toolbaritem id="urlbar-container">
+               <textbox id="urlbar">
+                    <hbox id="urlbar-icons">
+                        <image id="hBookmark-search-icon" searchdisabled="true" onclick="hBookmark.LocationBar.iconClickHandler(event);" />
+                    </hbox>
+                </textbox>
+        </toolbaritem>
     </toolbarpalette>
 
     <toolbox id="navigator-toolbox">
@@ -33,6 +40,7 @@
                  toolbarname="&hBookmark.toolbar.title;"
                  accesskey="&hBookmark.toolbar.titleKey;"/>
     </toolbox>
+
 
     <statusbar id="status-bar">
         <statusbarpanel id="hBookmark-statusBarPanel"
@@ -85,6 +93,15 @@
              noautofocus="true"
              noautohide="false"
         >
+        </panel>
+        <panel 
+            id="hBookmark-panel-urlbar" 
+            noautofocus="true"
+            noautohide="false"
+        >
+            <richlistbox 
+            disableKeyNavigation="true"
+            id="hBookmark-urlbar-listbox" flex="1" />
         </panel>
     </popupset>
 

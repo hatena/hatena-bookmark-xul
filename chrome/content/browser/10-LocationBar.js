@@ -7,30 +7,193 @@
  * - 外観の実装
  * - 検索キャッシュ
  */
+var EXPORT = ['LocationBar'];
 
-/*
+elementGetter(this, 'bar', 'urlbar', document);
+elementGetter(this, 'panel', 'hBookmark-panel-urlbar', document);
+elementGetter(this, 'list', 'hBookmark-urlbar-listbox', document);
+elementGetter(this, 'icon', 'hBookmark-search-icon', document);
+
+let E = createElementBindDocument(document);
+let Bookmark = model('Bookmark');
+window.addEventListener('load', function() {
+    list.setAttribute('rows', 3);
+    list.addEventListener('keypress', LocationBar.listKeypressHandler, false);
+    list.addEventListener('click', LocationBar.goLink, false);
+    list.addEventListener('select', LocationBar.selectHandler, false);
+}, false);
+
 var LocationBar = {
+    inited: false,
     init: function LocationBar_init () {
-        let self = this;
-
-        let bar = this.bar;
-        if (bar && bar.mController.__mController__) return;
-
-        let controller = new AutoCompletePopupController(bar.mController);
-        bar.mController = controller;
-
         addAround(LocationBarHelpers, '_searchBegin', function(proceed, args, target) {
-            LocationBar.Searcher.searchBegin();
+            if (!LocationBar.inited) {
+                LocationBar.bar.controller.input.addEventListener('keydown', LocationBar.barKeyDownHandler, true);
+                LocationBar.bar.controller.input.addEventListener('keyup', LocationBar.barKeyUpHandler, false);
+                LocationBar.inited = true;
+            }
+            if (LocationBar.searchEnabled) {
+                LocationBar.search();
+            }
             proceed(args);
         });
     },
-    get bar() 
-    {
-        return document.getElementById('urlbar');
+    _isSearch: false,
+    selectHandler: function(ev) {
+        /*
+        let b = LocationBar.bar;
+        (bar.controller.input || b.mController.input).textValue = list.selectedItem.value;
+        */
     },
+    get searchEnabled() this._isSearch,
+    set searchEnabled(bool) {
+        if (bool) {
+            this._isSearch = true;
+            /* XXX: 本当は AutoComplete をきちんと切りたい… 
+             * ここで要素が見えてないと AutoComplete がエラーになるので直す
+             */
+            document.getElementById('PopupAutoCompleteRichResult').setAttribute('hiddenByHBookmark', true);
+            icon.removeAttribute('searchdisabled');
+            this.search();
+        } else {
+            this._isSearch = false;
+            document.getElementById('PopupAutoCompleteRichResult').removeAttribute('hiddenByHBookmark');
+            icon.setAttribute('searchdisabled', true);
+            this.hide();
+        }
+    },
+    iconClickHandler: function(ev) {
+        setTimeout(function() {
+            // タイミングをずらさないとうまくいかない
+            LocationBar.toggle();
+        }, 0);
+        ev.stopPropagation();
+    },
+    toggle: function() {
+        if (LocationBar.searchEnabled) {
+            LocationBar.searchEnabled = false;
+        } else {
+            LocationBar.searchEnabled = true;
+            setTimeout(function() LocationBar.search(), 100);
+        }
+    },
+    barKeyDownHandler: function(ev) {
+        /* ここで stop すると、選択の List の挙動を変更できる
+        p('keydown' + ev.keyCode);
+        */
+        let keyCode = ev.keyCode;
+        if (ev.ctrlKey && keyCode == ev.DOM_VK_CONTROL) {
+            if (!LocationBar.ctrlTimer) {
+                LocationBar.ctrlTimer = setTimeout(
+                function() { 
+                    LocationBar.toggle();
+                    LocationBar.clearTimer();
+                }, 500);
+            }
+            ev.stopPropagation();
+        } else if (LocationBar.searchEnabled) {
+            ev.stopPropagation();
+            setTimeout(function() {
+                /* keyup 後にフォーカス移動をしたいので setTimeout */
+                if (keyCode == ev.DOM_VK_DOWN || (keyCode == ev.DOM_VK_TAB && !ev.shiftKey)) {
+                    list.focus();
+                    list.selectedIndex = 0;
+                } else if (keyCode == ev.DOM_VK_UP || (keyCode == ev.DOM_VK_TAB && ev.shiftKey)) {
+                    list.focus();
+                    list.selectedIndex = list.getRowCount() - 1;
+                    list.ensureIndexIsVisible(list.selectedIndex);
+                }
+            }, 0);
+        }
+    },
+    barKeyUpHandler: function(ev) {
+            if (LocationBar.ctrlTimer) {
+                LocationBar.clearTimer();
+            }
+    },
+    clearTimer: function() {
+        clearTimeout(LocationBar.ctrlTimer);
+        delete LocationBar.ctrlTimer;
+    },
+    clear: function() {
+        while(list.firstChild) list.removeChild(list.firstChild);
+    },
+    search: function LocationBar_search() {
+        if (!this.bar.controller.input) return;
+
+        let word = this.bar.controller.input.textValue;
+        p('LocationBarSearch: ' + word);
+        let res = Bookmark.search(word, 10);
+        this.clear();
+        let row = list.getAttribute('rows');
+        if (res.length > 0) {
+           let height;
+           res.forEach(function(b) {
+               let item = E('richlistitem', {'class': 'hBookmark-urlbar-listitem', value:b.url},
+                   E('hbox', null, 
+                       E('vbox', null,
+                           E('image', {src: b.favicon, width:'16px', height:'16px'}),
+                           E('image', {'class': 'hBookmark-urlbar-entrylink'})
+                       ),
+                       E('vbox', null, 
+                           E('label', {'class': 'hBookmark-urlbar-title', value: b.title, tooltiptext: b.title}),
+                           E('hbox', {tooltiptext: b.comment},
+                               E('label', {'class': 'hBookmark-urlbar-tags', value: b.tags.join(', ')}),
+                               E('label', {'class': 'hBookmark-urlbar-comment', value: b.body})
+                           ),
+                           E('label', {'class': 'hBookmark-urlbar-url', value: b.url, tooltiptext: b.url})
+                       )
+                   )
+               );
+               list.appendChild(item);
+               let rect = item.getBoundingClientRect();
+               height = parseInt(rect.bottom - rect.top);
+           });
+           setTimeout(function() {
+               list.setAttribute('height', '' + (height * Math.min(row, res.length)) + 'px');
+               panel.openPopup(LocationBar.bar, 'after_end', 0, 0,false,false);
+           }, 10);
+        } else {
+            panel.hidePopup();
+        }
+    },
+    listKeypressHandler: function LocationBar_listKeypressHandler(ev) {
+        if (ev.keyCode == ev.DOM_VK_RETURN || ev.keyCode == ev.DOM_VK_ENTER) {
+            LocationBar.goLink(ev);
+        }
+    },
+    hide: function() {
+        panel.hidePopup();
+    },
+    _goLink: function(url, ev) {
+        if (ev.target.getAttribute('class') == 'hBookmark-urlbar-entrylink') {
+            url = entryURL(url);
+        }
+        openUILink(url, ev);
+        LocationBar.searchEnabled = false;
+    },
+    goLink: function LocationBar_goLink(ev) {
+        ev.stopPropagation();
+        ev.preventDefault();
+        let item = ev.target.selectedItem;
+        if (item && item.value) {
+            LocationBar._goLink(item.value, ev);
+            LocationBar.hide();
+        } else {
+            setTimeout(function() {
+                let item = list.selectedItem;
+                if (item && item.value) {
+                    LocationBar._goLink(item.value, ev);
+                    LocationBar.hide();
+                }
+            }, 0);
+        }
+    },
+    get bar function() document.getElementById('urlbar'),
 };
 
-LocationBar.Searcher = {
+/*
+LocationBar.__Searcher = {
     lastWord: null,
     searchBegin: function() {
         let word = this.controller.input.textValue;
@@ -336,9 +499,9 @@ AutoCompletePopupController.prototype =
  
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIAutoCompleteController, Ci.nsISupports]),
 }; 
+*/
 
 EventService.createListener('load', function() {
     LocationBar.init();
 });
-*/
 
