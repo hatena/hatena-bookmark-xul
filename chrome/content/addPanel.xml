@@ -5,7 +5,7 @@
 
     <binding id="add-panel"
              extends="chrome://global/content/bindings/popup.xml#panel">
-        <content style="height: 10em;">
+        <content>
             <xul:toolbox>
                 <xul:toolbar align="center">
                     <xul:label value="Add to Bookmark"/>
@@ -22,13 +22,19 @@
                 <xul:rows>
                     <xul:row align="center">
                         <xul:label value="Title:"/>
-                        <xul:textbox anonid="titleField"
-                                     class="plain" readonly="true"/>
+                        <xul:hbox align="center">
+                            <xul:textbox anonid="titleField" flex="1"/>
+                            <xul:button anonid="editTitleButton"
+                                        label="Edit Title…"
+                                        oncommand="var panel = document.getBindingParent(this); panel.isTitleEditable = true; panel.titleField.focus();"/>
+                            <xul:button anonid="cancelEditTitleButton"
+                                        label="Cancel"
+                                        oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
+                        </xul:hbox>
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="URL:"/>
-                        <xul:textbox anonid="urlField"
-                                     class="plain" readonly="true"/>
+                        <xul:label anonid="urlField" class="text-link"/>
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="Comment:"/>
@@ -46,12 +52,14 @@
         </content>
 
         <implementation>
-            <constructor><![CDATA[
-                this.commentField.defaultCommand = this.addButton;
-            ]]></constructor>
-
             <field name="titleField">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleField")
+            </field>
+            <field name="editTitleButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "editTitleButton")
+            </field>
+            <field name="cancelEditTitleButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "cancelEditTitleButton")
             </field>
             <field name="urlField">
                 document.getAnonymousElementByAttribute(this, "anonid", "urlField")
@@ -66,33 +74,48 @@
                 document.getAnonymousElementByAttribute(this, "anonid", "saveButton")
             </field>
 
+            <field name="_bookmark">({ title: "", url: "", comment: "" })</field>
+            <field name="_originalTitle">""</field>
+
             <property name="bookmark">
                 <getter><![CDATA[
-                    return {
+                    return hBookmark.extend(this._bookmark, {
                         title:   this.titleField.value,
                         url:     this.urlField.value,
-                        comment: this.commentField.value,
-                    };
+                        comment: this.commentField.value
+                    });
                 ]]></getter>
                 <setter><![CDATA[
-                    this.titleField.value   = val.title;
-                    this.urlField.value     = val.url;
-                    this.commentField.value = val.comment;
-                    this.addButton.hidden   = !val.isNew;
-                    this.saveButton.hidden  = !!val.isNew;
-                    // this.updateTags();
-                    return val;
+                    if (val.url !== this._bookmark.url)
+                        this.updateFields(val);
+                    return this._bookmark = val;
                 ]]></setter>
             </property>
 
             <property name="isOpen" readonly="true"
                       onget="return !this.collapsed;"/>
 
+            <property name="isTitleEditable"
+                      onget="return !this.titleField.readOnly;">
+                <setter><![CDATA[
+                    this.titleField.readOnly = !val;
+                    this.editTitleButton.hidden = val;
+                    this.cancelEditTitleButton.hidden = !val;
+                    if (!val)
+                        this.titleField.value = this._originalTitle;
+                    return val;
+                ]]></setter>
+            </property>
+
+            <property name="isTitleChanged" readonly="true"
+                      onget="return this.titleField.value !== this._originalTitle;"/>
+
             <method name="show">
                 <parameter name="bookmark"/>
                 <body><![CDATA[
-                    if (bookmark.url !== this.bookmark.url)
-                        this.bookmark = bookmark;
+                    this.bookmark = bookmark;
+                    this.setAddOrEdit(!!bookmark.temporary);
+                    //this.clearError();
                     this.collapsed = false;
                 ]]></body>
             </method>
@@ -103,14 +126,38 @@
                 ]]></body>
             </method>
 
+            <method name="updateFields">
+                <parameter name="bookmark"/>
+                <body><![CDATA[
+                    this._originalTitle     = bookmark.title;
+                    this.titleField.value   = bookmark.title;
+                    this.isTitleEditable    = false;
+                    this.urlField.value     = bookmark.url;
+                    this.urlField.setAttribute("href", bookmark.url);
+                    this.commentField.value = bookmark.comment;
+                ]]></body>
+            </method>
+
+            <method name="setAddOrEdit">
+                <parameter name="add"/>
+                <body><![CDATA[
+                    this.addButton.hidden  = !add;
+                    this.saveButton.hidden = add;
+                    // XXX ToDo: ツールバーのタイトルも変更する。
+                ]]></body>
+            </method>
+
             <method name="addToBookmark">
                 <body><![CDATA[
                     let bookmark = this.bookmark;
+                    let query = {
+                        url:     bookmark.url,
+                        comment: bookmark.comment
+                    };
+                    if (this.isTitleChanged)
+                        query.title = bookmark.title;
                     let command = new hBookmark.RemoteCommand("edit", {
-                        query: {
-                            url:     bookmark.url,
-                            comment: bookmark.comment
-                        },
+                        query: query,
                         onError: let (self = this) function () {
                             //self.setError();
                             self.show(bookmark);
@@ -170,8 +217,6 @@
                 os.removeObserver(this, "autocomplete-will-enter-text");
                 os.removeObserver(this, "autocomplete-did-enter-text");
             ]]></destructor>
-
-            <field name="defaultCommand">null</field>
 
             <field name="_beforeTag">""</field>
             <field name="_afterTag">""</field>

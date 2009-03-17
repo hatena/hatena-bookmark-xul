@@ -1,5 +1,7 @@
 const EXPORT = ["AddPanelManager"];
 
+let Bookmark = Model.Bookmark;
+
 var AddPanelManager = {
     init: function APM_init() {
         gBrowser.browsers.forEach(AddPanelManager.setupPanel);
@@ -31,12 +33,15 @@ var AddPanelManager = {
     getBookmarkForBrowser: function APM_getBookmarkForBrowser(browser) {
         let win = browser.contentWindow;
         let url = win.location.href;
-        return Model.Bookmark.findByUrl(url)[0] || {
-            title:   (win.document && win.document.title) || url,
-            url:     url,
-            comment: "",
-            isNew:   true
-        };
+        let bookmark = Bookmark.findByUrl(url)[0];
+        if (!bookmark) {
+            bookmark = extend(new Bookmark(), {
+                title:   (win.document && win.document.title) || url,
+                url:     url,
+                comment: "",
+            });
+        }
+        return bookmark;
     },
 
     toggle: function APM_toggle() {
