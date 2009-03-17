@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/addPanel.dtd">
 <bindings xmlns="http://www.mozilla.org/xbl"
           xmlns:xbl="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -8,9 +9,10 @@
         <content>
             <xul:toolbox>
                 <xul:toolbar align="center">
-                    <xul:label value="Add to Bookmark"/>
+                    <xul:label anonid="panelTitle"/>
                     <xul:spacer flex="1"/>
-                    <xul:toolbarbutton class="tabs-closebutton"
+                    <xul:toolbarbutton anonid="closeButton"
+                                       class="tabs-closebutton"
                                        oncommand="document.getBindingParent(this).hide();"/>
                 </xul:toolbar>
             </xul:toolbox>
@@ -22,23 +24,23 @@
                 </xul:columns>
                 <xul:rows>
                     <xul:row align="center">
-                        <xul:label value="Title:"/>
+                        <xul:label value="&hBookmark.addPanel.titleLabel;"/>
                         <xul:hbox align="center">
                             <xul:textbox anonid="titleField" flex="1"/>
                             <xul:button anonid="editTitleButton"
-                                        label="Edit Title…"
+                                        label="&hBookmark.addPanel.editTitleLabel;"
                                         oncommand="var panel = document.getBindingParent(this); panel.isTitleEditable = true; panel.titleField.focus();"/>
                             <xul:button anonid="cancelEditTitleButton"
-                                        label="Cancel"
+                                        label="&hBookmark.addPanel.cancelEditTitleLabel;"
                                         oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
                         </xul:hbox>
                     </xul:row>
                     <xul:row align="center">
-                        <xul:label value="URL:"/>
+                        <xul:label value="&hBookmark.addPanel.urlLabel;"/>
                         <xul:label anonid="urlField" class="text-link hBookmarkLink"/>
                     </xul:row>
                     <xul:row align="center">
-                        <xul:label value="Comment:"/>
+                        <xul:label value="&hBookmark.addPanel.commentLabel;"/>
                         <xul:textbox anonid="commentField"
                                      class="hBookmarkTagComplete"
                                      type="autocomplete"
@@ -47,12 +49,17 @@
                 </xul:rows>
             </xul:grid>
             <xul:hbox>
-                <xul:button anonid="addButton" label="Add to Bookmark"/>
-                <xul:button anonid="saveButton" label="Save"/>
+                <xul:button anonid="saveButton"/>
             </xul:hbox>
         </content>
 
         <implementation>
+            <field name="panelTitle">
+                document.getAnonymousElementByAttribute(this, "anonid", "panelTitle")
+            </field>
+            <field name="closeButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "closeButton")
+            </field>
             <field name="titleField">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleField")
             </field>
@@ -68,14 +75,15 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
-            <field name="addButton">
-                document.getAnonymousElementByAttribute(this, "anonid", "addButton")
-            </field>
             <field name="saveButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "saveButton")
             </field>
             <field name="errorField">
                 document.getAnonymousElementByAttribute(this, "anonid", "errorField")
+            </field>
+
+            <field name="strings">
+                new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
             </field>
 
             <field name="_bookmark">({ title: "", url: "", comment: "" })</field>
@@ -145,9 +153,13 @@
             <method name="setAddOrEdit">
                 <parameter name="add"/>
                 <body><![CDATA[
-                    this.addButton.hidden  = !add;
-                    this.saveButton.hidden = add;
-                    // XXX ToDo: ツールバーのタイトルも変更する。
+                    let type = add ? ".add" : ".edit";
+                    this.panelTitle.value =
+                        this.strings.get("title" + type);
+                    this.closeButton.tooltipText =
+                        this.strings.get("closeTooltip" + type);
+                    this.saveButton.label =
+                        this.strings.get("saveLabel" + type);
                 ]]></body>
             </method>
 
@@ -166,7 +178,7 @@
                 ]]></body>
             </method>
 
-            <method name="addToBookmark">
+            <method name="saveBookmark">
                 <body><![CDATA[
                     let command = new hBookmark.RemoteCommand("edit", {
                         bookmark: this.bookmark,
@@ -184,9 +196,8 @@
 
         <handlers>
             <handler event="command"><![CDATA[
-                if (event.originalTarget === this.addButton ||
-                    event.originalTarget === this.saveButton)
-                    this.addToBookmark();
+                if (event.originalTarget === this.saveButton)
+                    this.saveBookmark();
             ]]></handler>
 
             <handler event="keypress" phase="capturing"><![CDATA[
@@ -199,7 +210,7 @@
 
                 switch (event.keyCode) {
                 case KeyEvent.DOM_VK_RETURN:
-                    this.addButton.doCommand();
+                    this.saveButton.doCommand();
                     break;
 
                 case KeyEvent.DOM_VK_ESCAPE:

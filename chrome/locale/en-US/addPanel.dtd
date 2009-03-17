@@ -1,0 +1,5 @@
+<!ENTITY hBookmark.addPanel.titleLabel "Title:">
+<!ENTITY hBookmark.addPanel.editTitleLabel "Edit Title…">
+<!ENTITY hBookmark.addPanel.cancelEditTitleLabel "Cancel">
+<!ENTITY hBookmark.addPanel.urlLabel "URL:">
+<!ENTITY hBookmark.addPanel.commentLabel "Comment:">
