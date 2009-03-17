@@ -6,6 +6,14 @@
     <binding id="add-panel"
              extends="chrome://global/content/bindings/popup.xml#panel">
         <content style="height: 10em;">
+            <xul:toolbox>
+                <xul:toolbar align="center">
+                    <xul:label value="Add to Bookmark"/>
+                    <xul:spacer flex="1"/>
+                    <xul:toolbarbutton label="Close"
+                                       oncommand="document.getBindingParent(this).hide();"/>
+                </xul:toolbar>
+            </xul:toolbox>
             <xul:grid>
                 <xul:columns>
                     <xul:column/>
