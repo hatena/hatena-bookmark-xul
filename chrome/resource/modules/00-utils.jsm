@@ -98,7 +98,7 @@ var createElementBindDocument = function(doc) {
     return function(name, attr) {
         var children = Array.slice(arguments, 2);
         var e = doc.createElement(name);
-        if (attr) for (let key in attr) e[key] = attr[key];//e.setAttribute(key, attr[key]);
+        if (attr) for (let key in attr) e.setAttribute(key, attr[key]);
         children.map(function(el) el.nodeType > 0 ? el : doc.createTextNode(el)).
             forEach(function(el) e.appendChild(el));
         return e;
@@ -117,6 +117,10 @@ var elementGetter = function(self, name, idName, doc) {
         }
         return element;
     });
+}
+
+var entryURL = function(url) {
+    return 'http://b.hatena.ne.jp/entry/' + url.replace('#', '%23');
 }
 
 var isInclude = function(val, ary) {
