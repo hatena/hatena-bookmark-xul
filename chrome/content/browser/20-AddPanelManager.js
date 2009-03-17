@@ -15,14 +15,33 @@ var AddPanelManager = {
         panel.setAttribute("class", "hBookmarkAddPanel");
         panel.setAttribute("collapsed", "true");
         browser.parentNode.appendChild(panel);
-        panel.targetBrowser = browser;
+    },
+
+    getPanelForBrowser: function APM_getPanelForBrowser(browser) {
+        let panel = browser.nextSibling;
+        while (panel && !/\bhBookmarkAddPanel\b/.test(panel.className))
+            panel = panel.nextSibling;
+        return panel;
+    },
+
+    getBookmarkForBrowser: function APM_getBookmarkForBrowser(browser) {
+        let win = browser.contentWindow;
+        let url = win.location.href;
+        return Model.Bookmark.findByUrl(url)[0] || {
+            title:   (win.document && win.document.title) || url,
+            url:     url,
+            comment: ""
+        };
     },
 
     toggle: function APM_toggle() {
-        let panel = gBrowser.selectedBrowser.nextSibling;
-        while (!/\bhBookmarkAddPanel\b/.test(panel.className))
-            panel = panel.nextSibling;
-        panel.toggle();
+        let browser = gBrowser.selectedBrowser;
+        let panel = this.getPanelForBrowser(browser);
+        let bookmark = this.getBookmarkForBrowser(browser);
+        if (panel.isOpen && panel.bookmark.url === bookmark.url)
+            panel.hide();
+        else
+            panel.show(bookmark);
     }
 };
 

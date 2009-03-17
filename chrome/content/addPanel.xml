@@ -32,11 +32,15 @@
                 </xul:rows>
             </xul:grid>
             <xul:hbox>
-                <xul:button label="Add to Bookmark"/>
+                <xul:button anonid="addButton" label="Add to Bookmark"/>
             </xul:hbox>
         </content>
 
         <implementation>
+            <constructor><![CDATA[
+                this.commentField.defaultCommand = this.addButton;
+            ]]></constructor>
+
             <field name="titleField">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleField")
             </field>
@@ -46,33 +50,94 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
+            <field name="addButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "addButton")
+            </field>
 
-            <field name="targetBrowser">null</field>
+            <property name="bookmark">
+                <getter><![CDATA[
+                    return {
+                        title:   this.titleField.value,
+                        url:     this.urlField.value,
+                        comment: this.commentField.value
+                    };
+                ]]></getter>
+                <setter><![CDATA[
+                    this.titleField.value   = val.title;
+                    this.urlField.value     = val.url;
+                    this.commentField.value = val.comment;
+                    // this.updateTags();
+                    return val;
+                ]]></setter>
+            </property>
 
-            <method name="toggle">
+            <property name="isOpen" readonly="true"
+                      onget="return !this.collapsed;"/>
+
+            <method name="show">
+                <parameter name="bookmark"/>
                 <body><![CDATA[
-                    if (this.collapsed)
-                        this.build();
-                    this.collapsed = !this.collapsed;
+                    if (bookmark.url !== this.bookmark.url)
+                        this.bookmark = bookmark;
+                    this.collapsed = false;
                 ]]></body>
             </method>
 
-            <method name="build">
+            <method name="hide">
                 <body><![CDATA[
-                    let win = this.targetBrowser.contentWindow;
-                    let url = win.location.href;
-                    let bookmark = hBookmark.Model.Bookmark.findByUrl(url)[0] || {
-                        title:   (win.document && win.document.title) || url,
-                        url:     url,
-                        comment: ""
-                    };
-                    this.titleField.value = bookmark.title;
-                    this.urlField.value = bookmark.url;
-                    this.commentField.value = bookmark.comment;
-                    // XXX ToDo: DBが更新されていたらタグの表示を更新。
+                    this.collapsed = true;
+                ]]></body>
+            </method>
+
+            <method name="addToBookmark">
+                <body><![CDATA[
+                    let bookmark = this.bookmark;
+                    let command = new hBookmark.RemoteCommand("edit", {
+                        query: {
+                            url:     bookmark.url,
+                            comment: bookmark.comment
+                        },
+                        onError: let (self = this) function () {
+                            //self.setError();
+                            self.show(bookmark);
+                        }
+                    });
+                    command.execute();
+                    this.hide();
                 ]]></body>
             </method>
         </implementation>
+
+        <handlers>
+            <handler event="command"><![CDATA[
+                if (event.originalTarget === this.addButton)
+                    this.addToBookmark();
+            ]]></handler>
+
+            <handler event="keypress" phase="capturing"><![CDATA[
+                let target = document.getBindingParent(event.originalTarget);
+                if (target.localName !== "textbox" ||
+                    (target.type === "autocomplete" && target.popupOpen) ||
+                    event.ctrlKey || event.shiftKey ||
+                    event.altKey || event.metaKey)
+                    return;
+
+                switch (event.keyCode) {
+                case KeyEvent.DOM_VK_RETURN:
+                    this.addButton.doCommand();
+                    break;
+
+                case KeyEvent.DOM_VK_ESCAPE:
+                    this.hide();
+                    break;
+
+                default:
+                    return;
+                }
+                event.preventDefault();
+                event.stopPropagation();
+            ]]></handler>
+        </handlers>
     </binding>
 
     <binding id="tag-complete" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
@@ -91,10 +156,13 @@
                 os.removeObserver(this, "autocomplete-did-enter-text");
             ]]></destructor>
 
+            <field name="defaultCommand">null</field>
+
             <field name="_beforeTag">""</field>
             <field name="_afterTag">""</field>
 
             <field name="_isCompleting">false</field>
+            <field name="_caretPos">0</field>
 
             <method name="_setSearchParam">
                 <body><![CDATA[
@@ -119,7 +187,7 @@
                     this._beforeTag = before;
                     this._afterTag = after;
                     this.searchParam = partialTag;
-                    hBookmark.p("[@_setSearchParam]", before, partialTag, after);
+                    //hBookmark.p("[@_setSearchParam]", before, partialTag, after);
                 ]]></body>
             </method>
 
@@ -134,15 +202,24 @@
                 ]]></body>
             </method>
 
+            <method name="_adjustCaretPos">
+                <body><![CDATA[
+                    let pos = this.value.indexOf("]", this._caretPos);
+                    if (pos !== -1)
+                        this.setSelectionRange(pos + 1, pos + 1);
+                ]]></body>
+            </method>
+
             <method name="observe">
                 <parameter name="subject"/>
                 <parameter name="topic"/>
                 <parameter name="data"/>
                 <body><![CDATA[
                     if (subject !== this) return;
-                    hBookmark.p(topic);
-                    this._isCompleting =
-                        (topic === "autocomplete-will-enter-text");
+                    if (topic === "autocomplete-will-enter-text")
+                        this._caretPos = this.selectionStart;
+                    else
+                        this._adjustCaretPos();
                 ]]></body>
             </method>
         </implementation>
@@ -151,7 +228,7 @@
             <handler event="input"
                      action="if (!this._isCompleting) this._setSearchParam();"/>
             <handler event="keypress" phase="capturing"
-                     action="if (!this._isCompleting) this._setSearchParam();"/>
+                     action="this._setSearchParam();"/>
         </handlers>
     </binding>
 

@@ -67,10 +67,10 @@ TagSearchResult.prototype = {
     constructor: TagSearchResult,
     get wrappedJSObject () this,
 
+    getValueAt: function TSR_getValueAt(index) this._tags[index].name,
     getCommentAt: function TSR_getCommentAt(index) this._tags[index].name,
     getImageAt: function TSR_getImageAt(index) {},
     getStyleAt: function TSR_getStyleAt(index) {},
-    getValueAt: function TSR_getValueAt(index) this._tags[index].name,
     removeValueAt: function TSR_removeValueAt(rowIndex, removeFromDb) {},
 
     QueryInterface: XPCOMUtils.generateQI([
