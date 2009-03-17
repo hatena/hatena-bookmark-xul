@@ -34,7 +34,7 @@
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="URL:"/>
-                        <xul:label anonid="urlField" class="text-link"/>
+                        <xul:label anonid="urlField" class="text-link hBookmarkLink"/>
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="Comment:"/>
@@ -133,7 +133,7 @@
                     this.titleField.value   = bookmark.title;
                     this.isTitleEditable    = false;
                     this.urlField.value     = bookmark.url;
-                    this.urlField.setAttribute("href", bookmark.url);
+                    this.urlField.href      = bookmark.url;
                     this.commentField.value = bookmark.comment;
                 ]]></body>
             </method>
@@ -290,6 +290,21 @@
             <handler event="keypress" phase="capturing"
                      action="this._setSearchParam();"/>
         </handlers>
+    </binding>
+
+    <binding id="link"
+             extends="chrome://global/content/bindings/text.xml#text-link">
+        <implementation>
+            <method name="open">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    let href = this.href;
+                    if (!href || this.disabled || event.getPreventDefault())
+                        return;
+                    openUILink(href, event);
+                ]]></body>
+            </method>
+        </implementation>
     </binding>
 
 </bindings>

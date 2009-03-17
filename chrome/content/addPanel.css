@@ -4,3 +4,6 @@
 .hBookmarkTagComplete {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#tag-complete");
 }
+.hBookmarkLink {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#link");
+}
