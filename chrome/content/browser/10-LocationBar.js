@@ -14,25 +14,39 @@ elementGetter(this, 'panel', 'hBookmark-panel-urlbar', document);
 elementGetter(this, 'list', 'hBookmark-urlbar-listbox', document);
 elementGetter(this, 'icon', 'hBookmark-search-icon', document);
 
+const nsIDOMKeyEvent = Ci.nsIDOMKeyEvent;
+
 let E = createElementBindDocument(document);
 let Bookmark = model('Bookmark');
 
 window.addEventListener('load', function() {
-    list.setAttribute('rows', 3);
     list.addEventListener('keypress', LocationBar.listKeypressHandler, false);
+    // list.addEventListener('mousemove', LocationBar.listMousemoveHandler, false);
     list.addEventListener('click', LocationBar.goLink, false);
     list.addEventListener('select', LocationBar.selectHandler, false);
 
     LocationBar.bar.inputField.addEventListener('keydown', LocationBar.barKeyDownHandler, true);
+    LocationBar.bar.inputField.addEventListener('keypress', LocationBar.barKeyPressHandler, false);
     LocationBar.bar.inputField.addEventListener('keyup', LocationBar.barKeyUpHandler, false);
+
+    // LocationBar.bar.inputField.addEventListener('focus', function(ev) {
+    //     if (LocationBar.searchEnabled) {
+    //         LocationBar.show();
+    //         list.focus();
+    //         list.getItemAtIndex(0).focus();
+    //         p('focused');
+    //     }
+    // }, true);
 }, false);
 
 var LocationBar = {
     inited: false,
     init: function LocationBar_init () {
         addAround(LocationBarHelpers, '_searchBegin', function(proceed, args, target) {
+            /*
             if (LocationBar.searchEnabled)
                 LocationBar.search();
+            */
             proceed(args);
         });
     },
@@ -52,20 +66,22 @@ var LocationBar = {
     get searchEnabled() this._isSearch,
     set searchEnabled(bool) {
         if (bool) {
-            this._isSearch = true;
+            LocationBar._isSearch = true;
             /* XXX: 本当は AutoComplete をきちんと切りたい… 
              * ここで要素が見えてないと AutoComplete がエラーになるので直す
              */
-            bar.mController = this.fakeController;
+            bar.mController = LocationBar.fakeController;
             document.getElementById('PopupAutoCompleteRichResult').setAttribute('hiddenByHBookmark', true);
+            document.getElementById('PopupAutoCompleteRichResult').hidePopup();
             icon.removeAttribute('searchdisabled');
-            this.search();
+            LocationBar.search();
         } else {
-            this._isSearch = false;
-            bar.mController = this.fakeController.controller;
+            LocationBar._isSearch = false;
+            bar.mController = LocationBar.fakeController.controller;
             document.getElementById('PopupAutoCompleteRichResult').removeAttribute('hiddenByHBookmark');
             icon.setAttribute('searchdisabled', true);
-            this.hide();
+            LocationBar.searchLastWord = null;
+            LocationBar.hide();
         }
     },
     eventStopper: function(ev) {
@@ -86,6 +102,10 @@ var LocationBar = {
             setTimeout(function() LocationBar.search(), 100);
         }
     },
+    barKeyPressHandler: function(ev) {
+        if (LocationBar.searchEnabled)
+            setTimeout(function() LocationBar.search() , 0);
+    },
     barKeyDownHandler: function(ev) {
         /* ここで stop すると、選択の List の挙動を変更できる
         p('keydown' + ev.keyCode);
@@ -102,23 +122,28 @@ var LocationBar = {
             ev.stopPropagation();
         } else if (LocationBar.searchEnabled) {
             ev.stopPropagation();
+            if (keyCode == ev.DOM_VK_TAB)
+                ev.preventDefault();
             setTimeout(function() {
-                /* keyup 後にフォーカス移動をしたいので setTimeout */
+                // keyup 後にフォーカス移動をしたいので setTimeout
+
                 if (keyCode == ev.DOM_VK_DOWN || (keyCode == ev.DOM_VK_TAB && !ev.shiftKey)) {
+                    LocationBar.show();
                     list.focus();
                     list.selectedIndex = 0;
                 } else if (keyCode == ev.DOM_VK_UP || (keyCode == ev.DOM_VK_TAB && ev.shiftKey)) {
+                    LocationBar.show();
                     list.focus();
-                    list.selectedIndex = list.getRowCount() - 1;
+                    list.currentIndex = list.getRowCount() - 1;
                     list.ensureIndexIsVisible(list.selectedIndex);
                 }
-            }, 0);
+            }, 10);
         }
     },
     barKeyUpHandler: function(ev) {
-            if (LocationBar.ctrlTimer) {
-                LocationBar.clearTimer();
-            }
+        if (LocationBar.ctrlTimer) {
+            LocationBar.clearTimer();
+        }
     },
     clearTimer: function() {
         clearTimeout(LocationBar.ctrlTimer);
@@ -127,49 +152,121 @@ var LocationBar = {
     clear: function() {
         while(list.firstChild) list.removeChild(list.firstChild);
     },
+    searchLastWord: null,
     search: function LocationBar_search() {
-        if (!this.bar.controller.input) return;
+        let word = bar.inputField.value;
 
-        let word = this.bar.controller.input.textValue;
+        if (!word || (LocationBar.searchLastWord == word)) {
+            LocationBar.hide();
+            return;
+        }
+
+        LocationBar.searchLastWord = word;
         p('LocationBarSearch: ' + word);
         let res = Bookmark.search(word, 10);
         this.clear();
-        let row = list.getAttribute('rows');
         if (res.length > 0) {
-           let height;
-           res.forEach(function(b) {
-               let item = E('richlistitem', {'class': 'hBookmark-urlbar-listitem', value:b.url},
-                   E('hbox', null, 
-                       E('vbox', null,
-                           E('image', {src: b.favicon, width:'16px', height:'16px'}),
-                           E('image', {'class': 'hBookmark-urlbar-entrylink'})
-                       ),
-                       E('vbox', null, 
-                           E('label', {'class': 'hBookmark-urlbar-title', value: b.title, tooltiptext: b.title}),
-                           E('hbox', {tooltiptext: b.comment},
-                               E('label', {'class': 'hBookmark-urlbar-tags', value: b.tags.join(', ')}),
-                               E('label', {'class': 'hBookmark-urlbar-comment', value: b.body})
-                           ),
-                           E('label', {'class': 'hBookmark-urlbar-url', value: b.url, tooltiptext: b.url})
-                       )
-                   )
-               );
-               list.appendChild(item);
-               let rect = item.getBoundingClientRect();
-               height = parseInt(rect.bottom - rect.top);
-           });
-           setTimeout(function() {
-               list.setAttribute('height', '' + (height * Math.min(row, res.length)) + 'px');
-               panel.openPopup(LocationBar.bar, 'after_end', 0, 0,false,false);
-           }, 10);
+            LocationBar.resultRender(res);
         } else {
-            panel.hidePopup();
+            LocationBar.hide();
+        }
+    },
+    resultRender: function(res) {
+        let row = list.getAttribute('rows');
+        let height;
+        res.forEach(function(b) {
+            let tags;
+            let item = E('richlistitem', {'class': 'hBookmark-urlbar-listitem', value:b.url},
+                E('hbox', null, 
+                    E('vbox', null,
+                        E('image', {src: b.favicon, width:'16px', height:'16px'}),
+                        E('image', {'class': 'hBookmark-urlbar-entrylink'})
+                    ),
+                    E('vbox', null, 
+                        E('label', {'class': 'hBookmark-urlbar-title', value: b.title, tooltiptext: b.title}),
+                        E('hbox', {tooltiptext: b.comment},
+                            tags = E('label', {'class': 'hBookmark-urlbar-tags', value: b.tags.join(', ')}),
+                            E('label', {'class': 'hBookmark-urlbar-comment', value: b.body})
+                        ),
+
+                        E('hbox', null,
+                            E('label', {'class': 'hBookmark-urlbar-url', value: b.url, tooltiptext: b.url}),
+                            E('label', {'class': 'hBookmark-urlbar-date', value: b.dateYMD, tooltiptext: b.dateYMD})
+                        )
+                    )
+                )
+            );
+            if (b.tags.length == 0) tags.parentNode.removeChild(tags);
+            list.appendChild(item);
+            let rect = item.getBoundingClientRect();
+            height = parseInt(rect.bottom - rect.top);
+        });
+        if (height) {
+            list.setAttribute('height', '' + (height * Math.min(row, res.length)) + 'px');
+        } else {
+            // XXX
+            // なんで height が空？
+            // list.setAttribute('height', '' + (50 * Math.min(row, res.length)) + 'px');
+            // setTimeout(function() {
+            //     panel.openPopup(bar, 'after_end', 0, 0,false,false);
+            // }, 200);
+        }
+        setTimeout(function() {
+            list.setAttribute('rows', 6);
+            // let pRef = list.parentNode;
+            // list.parentNode.removeChild(list);
+            // pRef.appendChild(list);
+            LocationBar.show();
+        }, 0);
+    },
+    listMousemoveHandler: function LocationBar_listMousemoveHandler(ev) {
+        // XXX
+        if (ev.target.tagName == 'richlistitem') {
+            list.selectedItem = ev.target;
+            list.currentIndex = list.selectedIndex;
         }
     },
     listKeypressHandler: function LocationBar_listKeypressHandler(ev) {
         if (ev.keyCode == ev.DOM_VK_RETURN || ev.keyCode == ev.DOM_VK_ENTER) {
             LocationBar.goLink(ev);
+        } else if (ev.keyCode == ev.DOM_VK_TAB) {
+            // next
+            if (ev.shiftKey) {
+                if (list.selectedIndex == 0) {
+                    LocationBar.listControler.last();
+                } else {
+                    list.selectedIndex = list.selectedIndex - 1;
+                }
+            } else {
+                if (list.selectedIndex == list.getRowCount() - 1) {
+                    LocationBar.listControler.first();
+                } else {
+                    list.selectedIndex = list.selectedIndex + 1;
+                }
+            }
+            list.ensureIndexIsVisible(list.selectedIndex);
+        } else if (ev.keyCode == 8) { // backspace?
+            ev.stopPropagation();
+            ev.preventDefault();
+            bar.inputField.focus();
         }
+    },
+    listControler: {
+        first: function() {
+            list.selectedIndex = 0;
+            list.ensureIndexIsVisible(list.selectedIndex);
+        },
+        last: function() {
+            list.selectedIndex = list.getRowCount() - 1;
+            list.ensureIndexIsVisible(list.selectedIndex);
+        },
+        clear: function() {
+            list.selectedIndex = -1;
+            LocationBar.hide();
+        },
+    },
+    show: function() {
+        panel.openPopup(bar, 'after_end', 0, 0,false,false);
     },
     hide: function() {
         panel.hidePopup();
@@ -229,24 +326,35 @@ FakeAutoCompletePopupController.prototype = {
     get matchCount() 
         0,
     startSearch : function(aString) 
-        this.controller.startSearch(aString),
+        null,
+        //this.controller.startSearch(aString),
     stopSearch : function() 
-        this.controller.stopSearch(),
+        null,
+        //this.controller.stopSearch(),
     handleText : function(aIgnoreSelection) 
-        this.controller.handleText(aIgnoreSelection),
+        null,
+        //this.controller.handleText(aIgnoreSelection),
     handleEnter : function(aIsPopupSelection) 
         this.controller.handleEnter(aIsPopupSelection),
     handleEscape : function() 
+        //false,
         this.controller.handleEscape(),
     handleStartComposition : function() 
-        this.controller.handleStartComposition(),
+        null,
+        //this.controller.handleStartComposition(),
     handleEndComposition : function() 
-        this.controller.handleEndComposition(),
-    handleTab : function() 
-        this.controller.handleTab(),
-    handleKeyNavigation : function(aKey) 
-        this.controller.handleKeyNavigation(aKey),
+        null,
+        //this.controller.handleEndComposition(),
+    handleTab : function() {
+        return null;
+        //return this.controller.handleTab();
+    },
+    handleKeyNavigation : function(aKey) {
+        //return true;
+        return this.controller.handleKeyNavigation(aKey);
+    },
     handleDelete : function() 
+        //false,
         this.controller.handleDelete(),
     getValueAt : function(aIndex) 
         null,

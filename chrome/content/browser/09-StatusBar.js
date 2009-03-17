@@ -3,12 +3,21 @@ const EXPORT = ['StatusBar'];
 
 // local utility 
 this.__defineGetter__('aWin', function() Application.activeWindow);
-this.__defineGetter__('aDoc', function() Application.activeWindow.activeTab.document);
+this.__defineGetter__('aDoc', function() {
+    // chrome スキームなどで、 fuel がエラー
+    try {
+        return aWin.activeTab.document;
+    } catch(e) { return null; }
+});
+this.__defineGetter__('locationURL', function() {
+    return aDoc ? aDoc.location.href : null;
+});
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
 
 
 elementGetter(this, 'addButton', 'hBookmarkAddButton', document);
 elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
+
 
 let countCache = new ExpireCache('uCount', 60 * 60); // 一時間キャッシュ
 
@@ -20,7 +29,7 @@ var StatusBar = {
     },
     goEntry: function StatusBar_goEntry() {
         if (isHttp) {
-            let url = aDoc.location.href;
+            let url = locationURL;
 
             aWin.open(newURI('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23')));
         }
@@ -36,7 +45,7 @@ var StatusBar = {
             (doc.getElementsByTagName('head')[0] || doc.body).appendChild(s);
     },
     checkBookmarked: function StatusBar_checkBookmarked() {
-        if (isHttp && User.user && User.user.hasBookmark(aDoc.location.href)) {
+        if (isHttp && User.user && User.user.hasBookmark(locationURL)) {
             addButton.setAttribute('added', true);
         } else {
             addButton.setAttribute('added', false);
@@ -47,7 +56,7 @@ var StatusBar = {
         this.checkCount();
     },
     updateCount: function StatusBar_updateCount() {
-        statusCount.value = countCache.get(aDoc.location.href) || '';
+        statusCount.value = countCache.get(locationURL) || '';
         if (statusCount.value >= 5) {
             statusCount.setAttribute('users', 'many');
         } else if (statusCount.value >= 1) {
@@ -59,7 +68,7 @@ var StatusBar = {
     checkCount: function StatusBar_checkCount() {
         if (!isHttp) return this.updateCount();
 
-        let url = aDoc.location.href;
+        let url = locationURL;
         if (countCache.has(url)) 
             return this.updateCount();
 

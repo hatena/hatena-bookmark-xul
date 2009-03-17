@@ -122,6 +122,10 @@ extend(Bookmark.prototype, {
         }
         return this._favicon.spec.toString();
     },
+    get dateYMD() {
+        let d = this.date.toString();
+        return [d.substr(0,4), d.substr(4,2), d.substr(6,2)].join('/');
+    },
     get searchData() {
         let res = this.db.execute(<>
             SELECT
