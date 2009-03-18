@@ -113,6 +113,12 @@ function testSuggest() {
     assert.equals(line.suggest(3), []);
     assert.equals(line.suggest(4), []);
     assert.equals(line.suggest(5), []);
+
+    line = new TagCompleter.InputLine('[*こ', TestTags);
+    assert.equals(line.suggest(0), []);
+    assert.equals(line.suggest(1), TestTags);
+    assert.equals(line.suggest(2), ['*これはほげ']);
+    assert.equals(line.suggest(3), ['*これはほげ']);
 }
 
 function testInsertion() {
