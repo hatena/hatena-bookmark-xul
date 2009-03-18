@@ -101,11 +101,12 @@ function testSuggest() {
     let line = new TagCompleter.InputLine('[a', TestTags);
     let tags = line.suggest(2); // caret pos, デフォルトだと 10 個
     assert.equals(tags, ['aaa', 'abc', 'array', 'arrya', 'as3']);
+    tags = line.suggest(1);
+    assert.equals(tags, TestTags);
+
     line.maxSuggest = 2;
     tags = line.suggest(2);
     assert.equals(tags, ['aaa', 'abc']);
-    tags = line.suggest(1);
-    assert.equals(tags, TestTags);
 
     line = new TagCompleter.InputLine('[ano][bar]', TestTags);
     assert.equals(line.suggest(0), []);

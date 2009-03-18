@@ -51,11 +51,12 @@ TagCompleter.InputLine.prototype = {
         // let lastPos = val.indexOf(']', firstPos);
     },
     suggest: function(pos) {
-    /*
-    createWords: function(word, limit) {
+        let word = this.posWord(pos);
+        if (word === null) return [];
+
+        let limit = this.maxSuggest;
         var words = [];
         var w = word.toUpperCase();
-
         var spaceMatched = function(tKey, index, ws, first) {
             if (ws.length == 0) return true;
             var i;
@@ -71,20 +72,17 @@ TagCompleter.InputLine.prototype = {
             if (sep[i]) ws.push(sep[i]);
         }
 
-        for (var i = 0, len = this.tagsKeys.length;  i < len; i++) {
-            var tKey = this.tagsKeys[i];
+        let suggestTags = this.suggestTags;
+        for (var i = 0, len = suggestTags.length;  i < len; i++) {
 
+            var tKey = this.suggestTags[i];
             if (spaceMatched(tKey.toUpperCase(), 0, Array.prototype.slice.apply(ws), true)) {
-                words.push({
-                    name: tKey,
-                    count: this.tags[tKey].count
-                });
+                words.push(tKey);
             }
             if (words.length >= limit) break;
         }
         return words;
-    },
-        */
+
     },
     insertionTag: function(tagName, pos) {
     },
