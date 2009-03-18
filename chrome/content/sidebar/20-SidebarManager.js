@@ -37,6 +37,7 @@ function initializeSidebar() {
     bookmarkTree.addEventListener("select", bookmarkTreeView, false);
     bookmarkTree.addEventListener("click", bookmarkTreeView, false);
     bookmarkTree.addEventListener("keypress", bookmarkTreeView, false);
+    EventService.createListener("BookmarksUpdated", bookmarkTreeView, false);
 }
 
 function mayFireInputEvent(event) {

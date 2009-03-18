@@ -6,6 +6,10 @@ function BookmarkTreeView() {
     this.selection = null;
     this._items = [];
     this._treeBox = null;
+    this._shownBy = "search";
+    this._searchString = "";
+    this._tags = null;
+
 }
 
 BookmarkTreeView.prototype.__proto__ = TreeView.prototype;
@@ -15,7 +19,7 @@ extend(BookmarkTreeView.prototype, {
     setTree: function (treeBox) {
         this._treeBox = treeBox;
         if (!treeBox) return;
-        this.showBySearchString("");
+        this.update();
     },
 
     getImageSrc: function BTV_getImageSrc(row, col) {
@@ -25,6 +29,8 @@ extend(BookmarkTreeView.prototype, {
     showByTags: function (tags) {
         var prevRowCount = this.rowCount;
         this._items = Bookmark.findByTags(tags);
+        this._shownBy = "tags";
+        this._tags = tags;
         this.allRowsChanged(prevRowCount);
     },
 
@@ -34,6 +40,8 @@ extend(BookmarkTreeView.prototype, {
         this._items = string
             ? Bookmark.search(string, visibleRowCount)
             : Bookmark.findRecent(visibleRowCount);
+        this._shownBy = "search";
+        this._searchString = string;
         this.allRowsChanged(prevRowCount);
     },
 
@@ -48,6 +56,10 @@ extend(BookmarkTreeView.prototype, {
             let tags = event.originalTarget.tags;
             if (tags)
                 this.showByTags(tags);
+            break;
+
+        case "BookmarksUpdated":
+            this.update();
             break;
 
         case "input":
@@ -65,6 +77,13 @@ extend(BookmarkTreeView.prototype, {
         case "keypress":
             this.handleKeyPress(event);
             break;
+        }
+    },
+
+    update: function BTV_update() {
+        switch (this._shownBy) {
+        case "search": this.showBySearchString(this._searchString); break;
+        case "tags":   this.showByTags(this._tags);                 break;
         }
     },
 
