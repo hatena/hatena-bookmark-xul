@@ -55,6 +55,8 @@
 
         <implementation>
             <constructor><![CDATA[
+                this.inputHandler = new hBookmark.TagCompleter.InputHandler(this.commentField.inputField);
+                // this.commentField.inputField.addEventListener('keypress', hBookmark.TagCompleter.
                 // this.commentField.inputField.addEventListener('keypress', function(ev) { 
                 // let panel = document.getBindingParent(document.getBindingParent(ev.target));
                 // panel.method();

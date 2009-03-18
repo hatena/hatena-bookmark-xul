@@ -2,7 +2,44 @@
 var EXPORT = ['TagCompleter'];
 
 var TagCompleter = {
+    reloadTags: function() {
+        this._tags = model('Tag').findDistinctTags().map(function(t) t.name);
+    },
+    get tags() {
+        if (!this._tags) {
+            this.reloadTags();
+        }
+        return this._tags;
+    }
 };
+
+TagCompleter.InputHandler = function(input) {
+    this.input = input;
+    this.inputLine = new TagCompleter.InputLine('', []);
+    delete this.inputLine['suggestTags'];
+    this.inputLine.__defineGetter__('suggestTags', function() TagCompleter.tags);
+    input.addEventListener('keyup', method(this, 'inputKeyupHandler'), false);
+    input.addEventListener('keydown', method(this, 'inputKeydownHandler'), false);
+}
+
+TagCompleter.InputHandler.prototype = {
+    get textbox() 
+        document.getBindingParent(this.input),
+    get addPanel() 
+        document.getBindingParent(this.textbox),
+    updateLineValue: function() 
+        this.inputLine.value = this.input.value,
+    updateValue: function() 
+        this.input.value = this.inputLine.value,
+    inputKeyupHandler: function(ev) {
+        let caretPos = this.textbox.selectionEnd;
+        this.updateLineValue();
+        p(this.inputLine.suggest(caretPos));
+    },
+    inputKeydownHandler: function(ev) {
+        //ev.stopPropagation();
+    },
+}
 
 TagCompleter.InputLine = function(value, tags) {
     this.suggestTags = tags;
@@ -137,5 +174,9 @@ TagCompleter.InputLine.prototype = {
         return [comment, tags];
     },
 }
+
+EventService.createListener('UserChange', function() {
+    TagCompleter.reloadTags();
+}, User);
 
 
