@@ -6,6 +6,10 @@ function BookmarkTreeView() {
     this.selection = null;
     this._items = [];
     this._treeBox = null;
+    this._shownBy = "search";
+    this._searchString = "";
+    this._tags = null;
+
 }
 
 BookmarkTreeView.prototype.__proto__ = TreeView.prototype;
@@ -15,7 +19,7 @@ extend(BookmarkTreeView.prototype, {
     setTree: function (treeBox) {
         this._treeBox = treeBox;
         if (!treeBox) return;
-        this.showBySearchString("");
+        this.update();
     },
 
     getImageSrc: function BTV_getImageSrc(row, col) {
@@ -23,21 +27,26 @@ extend(BookmarkTreeView.prototype, {
     },
 
     showByTags: function (tags) {
-        var prevRowCount = this.rowCount;
-        this._items = Bookmark.findByTags(tags);
-        this.allRowsChanged(prevRowCount);
+        this._shownBy = "tags";
+        this._tags = tags;
+        let bookmarks = Bookmark.findByTags(tags);
+        this.setBookmarks(bookmarks);
     },
 
     showBySearchString: function BTV_showBySearchString(string) {
-        let prevRowCount = this.rowCount;
         let visibleRowCount = this._treeBox.getPageLength();
-        this._items = string
+        this._shownBy = "search";
+        this._searchString = string;
+        let bookmarks = string
             ? Bookmark.search(string, visibleRowCount)
             : Bookmark.findRecent(visibleRowCount);
-        this.allRowsChanged(prevRowCount);
+        this.setBookmarks(bookmarks);
     },
 
-    allRowsChanged: function BTV_allRowsChanged(prevRowCount) {
+    setBookmarks: function BTV_setBookmarks(bookmarks) {
+        let prevRowCount = this.rowCount;
+        this._items = bookmarks;
+        this._treeBox.treeBody.bookmarks = bookmarks;
         this._treeBox.rowCountChanged(0, -prevRowCount);
         this._treeBox.rowCountChanged(0, this.rowCount);
     },
@@ -50,37 +59,53 @@ extend(BookmarkTreeView.prototype, {
                 this.showByTags(tags);
             break;
 
+        case "BookmarksUpdated":
+            this.update();
+            break;
+
         case "input":
             this.showBySearchString(event.target.value);
             break;
 
-        case "select":
-            this.setBookmark();
-            break;
-
-        case "click":
-            this.handleClick(event);
-            break;
-
-        case "keypress":
-            this.handleKeyPress(event);
-            break;
+        case "select":    this.handleSelect();         break;
+        case "mouseover": this.handleMouseOver(event); break;
+        case "mousemove": this.handleMouseMove(event); break;
+        case "click":     this.handleClick(event);     break;
+        case "keypress":  this.handleKeyPress(event);  break;
         }
     },
 
-    setBookmark: function BTV_setBookmark() {
+    update: function BTV_update() {
+        switch (this._shownBy) {
+        case "search": this.showBySearchString(this._searchString); break;
+        case "tags":   this.showByTags(this._tags);                 break;
+        }
+    },
+
+    handleSelect: function BTV_handleSelect() {
         let row = this.selection.currentIndex;
         let bookmark = (row === -1) ? null : this._items[row];
         this._treeBox.treeBody.bookmark = bookmark;
     },
 
+    handleMouseOver: function BTV_handleMouseOver(event) {
+        document.tooltipNode = event.target;
+    },
+
+    handleMouseMove: function BTV_handleMouseMove(event) {
+        this._treeBox.treeBody.bookmark = this._getBookmarkOnCursor(event);
+    },
+
     handleClick: function BTV_handleClick(event) {
-        if (event.button > 1) return;
+        let bookmark = this._getBookmarkOnCursor(event);
+        if ((event.button === 0 || event.button === 1) && bookmark)
+            openUILink(bookmark.url, event);
+    },
+
+    _getBookmarkOnCursor: function BTV__getBookmarkOnCursor(event) {
         let row = {};
         this._treeBox.getCellAt(event.clientX, event.clientY, row, {}, {});
-        if (row.value === -1) return;
-        let bookmark = this._items[row.value];
-        openUILink(bookmark.url, event);
+        return this._items[row.value] || null;
     },
 
     handleKeyPress: function BTV_handleKeyPress(event) {

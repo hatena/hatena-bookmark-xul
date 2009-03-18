@@ -27,12 +27,17 @@
                       label="&hBookmark.tagContext.openInNewTabLabel;"
                       oncommand="this.parentNode._context.openIn('tab');"/>
             <menuseparator id="hBookmarkTagContext_openSeparator"/>
+            <menuitem id="hBookmarkTagContext_editTag"
+                      oncommand="this.parentNode._context.editTag(event);"
+                      onclick="checkForMiddleClick(this, event);"/>
+            <!--
             <menuitem id="hBookmarkTagContext_delete"
                       label="Remove Tag &quot;%S&quot;"
                       oncommand="this.parentNode._context.delete();"/>
             <menuitem id="hBookmarkTagContext_rename"
                       label="Rename Tag &quot;%S&quot;"
                       oncommand="this.parentNode._context.rename();"/>
+            -->
         </menupopup>
     </popupset>
 
@@ -54,13 +59,13 @@
         <splitter resizebefore="flex" resizeafter="flex"/>
 
         <tree id="bookmark-tree" seltype="single"
-              hidecolumnpicker="true" flex="1" persist="height"
-              context="hBookmarkItemContext" tooltip="hBookmarkItemTooltip">
+              hidecolumnpicker="true" flex="1" persist="height">
             <treecols>
                 <treecol label="&hBookmark.sidebar.bookmarksLabel;"
                          flex="1"/>
             </treecols>
-            <treechildren/>
+            <treechildren context="hBookmarkEntryContext"
+                          tooltip="hBookmarkItemTooltip"/>
         </tree>
     </vbox>
 

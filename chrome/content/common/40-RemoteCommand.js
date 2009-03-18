@@ -30,7 +30,10 @@ extend(RemoteCommand, {
         follow                  : 'api.follow.json',
         following               : 'api.following.json',
         follow_suggest_ignore   : 'api.follow_suggest_ignore.json',
-        unfollow_suggest_ignore : 'api.unfollow_suggest_ignore.json'
+        unfollow_suggest_ignore : 'api.unfollow_suggest_ignore.json',
+
+        // Alias
+        delete                  : 'api.delete_bookmark.json'
     }
 });
 
@@ -112,5 +115,26 @@ extend(RemoteCommand.prototype, {
         if (this.options.changeTitle)
             query.title = bookmark.title;
         this.options.query = query;
+    },
+
+    deleteHook: function RC_deleteHook() {
+        let options = this.options;
+        if (options.query || (!options.bookmark && !options.bookmarks))
+            return;
+        this.options.query = options.bookmark
+            ? { url: options.bookmark.url }
+            : { urllist: options.bookmarks.map(function (b) b.url).join("|") };
+        let bookmarks = options.bookmarks || [options.bookmark];
+        let onComplete = this.options.onComplete
+        this.options.onComplete = function (result) {
+            if (!result.success) {
+                this.onError();
+                return;
+            }
+            if (onComplete)
+                onComplete.apply(this, arguments);
+            p('remove bookmarks', bookmarks.map(function (b) b.url).join("\n"));
+            Model.Bookmark.deleteBookmarks(bookmarks);
+        };
     }
 });

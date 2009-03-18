@@ -12,3 +12,7 @@
 <!ENTITY hBookmark.entryContext.openEntryKey "B">
 <!ENTITY hBookmark.entryContext.editLabel "編集...">
 <!ENTITY hBookmark.entryContext.editKey "E">
+<!ENTITY hBookmark.entryContext.deleteLabel "削除">
+<!ENTITY hBookmark.entryContext.deleteKey "D">
+<!ENTITY hBookmark.entryContext.deleteAllLabel "すべて削除">
+<!ENTITY hBookmark.entryContext.deleteAllKey "L">

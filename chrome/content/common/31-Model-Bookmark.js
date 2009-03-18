@@ -99,6 +99,17 @@ extend(Bookmark, {
              where {sql}
         </>.toString(), args);
         return res;
+    },
+    deleteBookmarks: function(bookmarks) {
+        let bmIds = bookmarks.filter(function (b) b.id > 0)
+                             .map(function (b) b.id);
+        if (!bmIds.length) return;
+        let placeholder = bmIds.map(function () "?").join(",");
+        Model.Tag.db.execute("delete from tags where bookmark_id in (" +
+                             placeholder + ")", bmIds);
+        Bookmark.db.execute("delete from bookmarks where id in (" +
+                            placeholder + ")", bmIds);
+        EventService.dispatch("BookmarksUpdated");
     }
 });
 

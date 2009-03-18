@@ -12,3 +12,7 @@
 <!ENTITY hBookmark.entryContext.openInNewTabKey "B">
 <!ENTITY hBookmark.entryContext.editLabel "Edit…">
 <!ENTITY hBookmark.entryContext.editTabKey "E">
+<!ENTITY hBookmark.entryContext.deleteLabel "Delete">
+<!ENTITY hBookmark.entryContext.deleteKey "D">
+<!ENTITY hBookmark.entryContext.deleteAllLabel "Delete All">
+<!ENTITY hBookmark.entryContext.deleteAllKey "L">
