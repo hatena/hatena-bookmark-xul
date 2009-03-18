@@ -22,7 +22,7 @@
                            type="menu"
                            container="true"
                            label="&hBookmark.toolbar.recentLabel;">
-                <menupopup context="hBookmarkItemContext"/>
+                <menupopup context="hBookmarkEntryContext"/>
             </toolbarbutton>
         </toolbaritem>
         <toolbaritem id="urlbar-container">
