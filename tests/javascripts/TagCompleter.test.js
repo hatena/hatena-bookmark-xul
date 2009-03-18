@@ -95,6 +95,9 @@ function testPosWord () {
     assert.equals(line.posWord(10), null);
 
     assert.equals(line.posWord(11), null);
+
+    line = new TagCompleter.InputLine('a', TestTags);
+    assert.equals(line.posWord(1), null);
 }
 
 function testSuggest() {
@@ -102,7 +105,7 @@ function testSuggest() {
     let tags = line.suggest(2); // caret pos, デフォルトだと 10 個
     assert.equals(tags, ['aaa', 'abc', 'array', 'arrya', 'as3']);
     tags = line.suggest(1);
-    assert.equals(tags, TestTags);
+    assert.equals(tags, []);
 
     line.maxSuggest = 2;
     tags = line.suggest(2);
@@ -116,9 +119,12 @@ function testSuggest() {
 
     line = new TagCompleter.InputLine('[*こ', TestTags);
     assert.equals(line.suggest(0), []);
-    assert.equals(line.suggest(1), TestTags);
+    assert.equals(line.suggest(1), []);
     assert.equals(line.suggest(2), ['*これはほげ']);
     assert.equals(line.suggest(3), ['*これはほげ']);
+
+    line = new TagCompleter.InputLine('', TestTags);
+    assert.equals(line.suggest(0), []);
 }
 
 function testInsertion() {

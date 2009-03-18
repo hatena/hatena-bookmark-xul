@@ -1,9 +1,19 @@
 
 var EXPORT = ['TagCompleter'];
 
+elementGetter(this, 'panel', 'hBookmark-panel-tagcomplete', document);
+elementGetter(this, 'list', 'hBookmark-tagcomplete-listbox', document);
+
+let E = createElementBindDocument(document);
+
 var TagCompleter = {
     reloadTags: function() {
-        this._tags = model('Tag').findDistinctTags().map(function(t) t.name);
+        let dTags =  model('Tag').findDistinctTags();
+        let tags = [];
+        let tagsCount = {};
+        dTags.forEach(function(e) { tags.push(e.name);tagsCount[e.name] = e.count;});
+        this._tags = tags;
+        this.tagsCount = tagsCount;
     },
     get tags() {
         if (!this._tags) {
@@ -12,6 +22,68 @@ var TagCompleter = {
         return this._tags;
     }
 };
+
+TagCompleter.List = {
+    clear: function() {
+        list.selectedIndex = -1;
+        while(list.firstChild) list.removeChild(list.firstChild);
+    },
+    showTags: function(tags, el) {
+        this.clear();
+        let tagsCount = TagCompleter.tagsCount;
+        tags.forEach(function(tag) {
+            let item = E('richlistitem', {flex:1, 'class': 'hBookmark-tagcomplete-listitem', value:tag},
+                E('hbox', {flex:1}, 
+
+                    E('label', {'class': 'hBookmark-tagcomplete-tagname', value: tag}),
+                    E('spacer', {flex: 1}),
+                    E('label', {'class': 'hBookmark-tagcomplete-tagcount', value: tagsCount[tag]})
+                )
+            );
+            list.appendChild(item);
+        });
+        this.show(el);
+    },
+    isOne: function() {
+        return list.getRowCount() == 1;
+    },
+    get shown() panel.state == 'open',
+    show: function(el) {
+        panel.openPopup(el, 'after_start', 0, 0,false,false);
+    },
+    hide: function() {
+        panel.hidePopup();
+    },
+    next: function() {
+        if (list.selectedIndex == list.getRowCount() - 1) {
+            this.first();
+        } else {
+            list.selectedIndex = list.selectedIndex + 1;
+        }
+    },
+    prev: function() {
+        if (list.selectedIndex == 0) {
+            this.last();
+        } else {
+            list.selectedIndex = list.selectedIndex - 1;
+        }
+    },
+    first: function() {
+        list.selectedIndex = 0;
+        list.ensureIndexIsVisible(list.selectedIndex);
+    },
+    last: function() {
+        list.selectedIndex = list.getRowCount() - 1;
+        list.ensureIndexIsVisible(list.selectedIndex);
+    },
+    getCurrentTag: function(force) {
+        let item = list.selectedItem;
+        if (!item && force) {
+            item = list.getItemAtIndex(0);
+        }
+        return item ? item.value : null;
+    }
+}
 
 TagCompleter.InputHandler = function(input) {
     this.input = input;
@@ -31,13 +103,68 @@ TagCompleter.InputHandler.prototype = {
         this.inputLine.value = this.input.value,
     updateValue: function() 
         this.input.value = this.inputLine.value,
+    lastCaretPos: null,
     inputKeyupHandler: function(ev) {
-        let caretPos = this.textbox.selectionEnd;
+        let caretPos = this.caretPos;
+        if (caretPos == this.lastCaretPos) return;
+        this.lastCaretPos = caretPos;
         this.updateLineValue();
-        p(this.inputLine.suggest(caretPos));
+        let words = this.inputLine.suggest(caretPos);
+        if (words.length) {
+            TagCompleter.List.showTags(words, this.input);
+        } else {
+            TagCompleter.List.hide();
+        }
     },
+    get caretPos() this.textbox.selectionEnd,
     inputKeydownHandler: function(ev) {
-        //ev.stopPropagation();
+        let tList = TagCompleter.List;
+        let keyCode = ev.keyCode;
+        if (tList.shown) {
+            let caret = this.text
+            let stopEvent = false;
+            if (keyCode == ev.DOM_VK_ENTER || keyCode == ev.DOM_VK_RETURN) {
+                this.insert(true);
+                stopEvent = true;
+            } else if (keyCode == ev.DOM_VK_TAB) {
+                if (tList.isOne()) {
+                    this.insert(true);
+                } else if (ev.shiftKey) {
+                    tList.prev();
+                } else {
+                    tList.next();
+                }
+                stopEvent = true;
+            } else if (keyCode == ev.DOM_VK_UP) {
+                tList.prev();
+                stopEvent = true;
+            } else if (keyCode == ev.DOM_VK_DOWN) {
+                tList.next();
+                stopEvent = true;
+            }
+
+            if (stopEvent) {
+                ev.stopPropagation();
+                ev.preventDefault();
+            }
+        } else {
+            // submit
+            // 本来はここではすべきでない
+
+            if (keyCode == ev.DOM_VK_ENTER || keyCode == ev.DOM_VK_RETURN) {
+                this.addPanel.saveBookmark();
+            }
+        }
+    },
+    insert: function(force) {
+        let tag = TagCompleter.List.getCurrentTag(force);
+        let line = this.inputLine;
+        if (tag) {
+            let pos = line.insertionTag(tag, this.caretPos);
+            this.updateValue();
+            this.textbox.setSelectionRange(pos + 1, pos + 1);
+        }
+        TagCompleter.List.hide();
     },
 }
 
@@ -70,7 +197,9 @@ TagCompleter.InputLine.prototype = {
         this.updateByCommentTags(comment,tags);
     },
     posWord: function(pos) {
+        if (pos == 0) return null;
         let val = this.value;
+        if (val.indexOf('[') == -1) return null;
         let lastIndex = val.lastIndexOf('[', pos);
         if (lastIndex >= pos) {
             return null;
@@ -100,7 +229,7 @@ TagCompleter.InputLine.prototype = {
     },
     suggest: function(pos) {
         let word = this.posWord(pos);
-        if (word === null) return [];
+        if (!word) return [];
         
         if (this.migemo) {
             return this.migemoSuggest(word);

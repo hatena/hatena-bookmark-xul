@@ -106,6 +106,17 @@
             rows="6"
             id="hBookmark-urlbar-listbox" flex="1" />
         </panel>
+        <panel 
+            id="hBookmark-panel-tagcomplete" 
+            noautofocus="true"
+            noautohide="false"
+        >
+            <richlistbox 
+            disableKeyNavigation="true"
+            rows="10"
+            id="hBookmark-tagcomplete-listbox" 
+            />
+        </panel>
     </popupset>
 
     <broadcasterset id="mainBroadcasterSet">

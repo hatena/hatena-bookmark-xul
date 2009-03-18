@@ -8,7 +8,7 @@ let Tag = Model.Entity({
 });
 
 extend(Tag, {
-    findDistinctTags: function () this.find({ group: "name" }),
+    findDistinctTags: function () this.find('select count(name) as `count`, name from tags group by name'),
 
     findRelatedTags: function (tagNames) {
         if (!tagNames || !tagNames.length)
@@ -69,3 +69,4 @@ extend(Tag, {
 
 Model.Tag = Tag;
 Model.MODELS.push("Tag");
+
