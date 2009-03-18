@@ -55,8 +55,8 @@ SuffixArray.prototype = {
                     slice: function(n, l) new OffsetArray(arr, off+n,
                                                           l || len-n),
                     length: len,
-                    arr: arr
-                    , dump: function(n) {
+                    arr: arr,
+                    dump: function(n) {
                         let l = len > n ? n : len;
                         return arr.slice(off, off+l).join(',');
                     }
@@ -72,87 +72,92 @@ SuffixArray.prototype = {
                 let argn = 2;
                 // char type array
                 let CharType = function(n){
-//                     let t = n instanceof Array ? n : new Array(n);
-//                     return {
-//                         get: function(i) t[i],
-//                         set: function(i, b) t[i] = b,
-//                         isLMS: function(i) t[i] && !t[i-1]
-//                     };
-                    n = (n>>4)+1;
-                    let t = new Array(n);
-                    for (let i=0; i<n; i++) t[i]=0;
-                    let mask = [
-                        0x8000, 0x4000, 0x2000, 0x1000,
-                        0x0800, 0x0400, 0x0200, 0x0100,
-                        0x0080, 0x0040, 0x0020, 0x0010,
-                        0x0008, 0x0004, 0x0002, 0x0001,
-                    ];
+                    let t = n instanceof Array ? n : new Array(n);
                     return {
-                        get: function(i) {
-                            // (t[(i)/16]&mask[(i)%16]) ? 1 : 0
-                            return t[i >> 4] & mask[i & 0x0f] ? 1 : 0;
+                        get: function(i) t[i],
+                        set: function(i, b) t[i] = b,
+                        isLMS: function(i) t[i] && !t[i-1]
+                    };
+//                     n = (n>>4)+1;
+//                     let t = new Array(n);
+//                     for (let i=0; i<n; i++) t[i]=0;
+//                     let mask = [
+//                         0x8000, 0x4000, 0x2000, 0x1000,
+//                         0x0800, 0x0400, 0x0200, 0x0100,
+//                         0x0080, 0x0040, 0x0020, 0x0010,
+//                         0x0008, 0x0004, 0x0002, 0x0001,
+//                     ];
+//                     return {
+//                         get: function(i) {
+//                             // (t[(i)/16]&mask[(i)%16]) ? 1 : 0
+//                             return t[i >> 4] & mask[i & 0x0f] ? 1 : 0;
+//                         },
+//                         set: function(i, b) {
+//                             // t[(i)/16]=(b) ?
+//                             //   (mask[(i)%16]|t[(i)/16])
+//                             // : ((~mask[(i)%16])&t[(i)/16])
+//                             return t[i >> 4]
+//                                 = b ? (mask[i & 0x0f] | t[i >> 4])
+//                                 : ((~(mask[i & 0x0f])) & t[i >> 4]);
+//                         },
+//                         isLMS: function(i) {
+//                             return (t[i>>4] & mask[i&0x0f] ? 1 : 0)
+//                                 && !(t[(i-1)>>4] & mask[(i-1)&0x0f] ? 1 : 0);
+//                         }
+//                     };
+                };
+
+                let Buckets = function(s, k) {
+                    let start = new Array(k);
+                    let end = new Array(k);
+                    let n = s.length;
+                    let sum = 0;
+                    for (let i=0; i <= k; i++) start[i] = 0;
+                    for (let i=0; i < n; i++) start[s.at(i)]++;
+                    for (let i=0; i <= k; i++) {
+                        let t = sum;
+                        sum += start[i];
+                        start[i] = t;
+                        end[i] = sum;
+                    }
+                    return {
+                        cloneStartTo: function(bkt) {
+                            for (let i=0; i <= k; i++) bkt[i] = start[i];
+                            return bkt;
                         },
-                        set: function(i, b) {
-                            // t[(i)/16]=(b) ?
-                            //   (mask[(i)%16]|t[(i)/16])
-                            // : ((~mask[(i)%16])&t[(i)/16])
-                            return t[i >> 4]
-                                = b ? (mask[i & 0x0f] | t[i >> 4])
-                                : ((~(mask[i & 0x0f])) & t[i >> 4]);
+                        cloneEndTo: function(bkt) {
+                            for (let i=0; i <= k; i++) bkt[i] = end[i];
+                            return bkt;
                         },
-                        isLMS: function(i) {
-                            return (t[i>>4] & mask[i&0x0f] ? 1 : 0)
-                                && !(t[(i-1)>>4] & mask[(i-1)&0x0f] ? 1 : 0);
+                        get start() {
+                            let bkt = new Array(k);
+                            for (let i=0; i <= k; i++) bkt[i] = start[i];
+                            return bkt;
+                        },
+                        get end() {
+                            let bkt = new Array(k);
+                            for (let i=0; i <= k; i++) bkt[i] = end[i];
+                            return bkt;
                         }
                     };
                 };
+                let bkts = new Buckets(s, k);
 
-                // get buckets common
-                let getBucketsCommon = function(s, k) {
+                // merged induceSAl and induceSAs
+                let induceSA = function(t, sa, s, bkts) {
+                    let bktStart = bkts.start;
+                    let bktEnd = bkts.end;
                     let n = s.length;
-                    let bkt = new Array(k);
-                    for (let i=0; i <= k; i++) bkt[i]=0; // clear all buckets
-                    for (let i=0; i < n; i++) bkt[s.at(i)]++;
-                    return bkt;
-                };
-                // find buckets
-                let getBuckets = function(s, k) {
-                    let sum = 0;
-                    let bkt = getBucketsCommon(s, k);
-                    for (let i=0; i <= k; i++) {
-                        let t = sum;
-                        sum += bkt[i];
-                        bkt[i] = t;
-                    }
-                    return bkt;
-                };
-                // find end of buckets
-                let getBucketsEnd = function(s, k) {
-                    let sum = 0;
-                    let bkt = getBucketsCommon(s, k);
-                    for (let i=0; i <= k; i++) {
-                        sum += bkt[i];
-                        bkt[i] = sum;
-                    }
-                    return bkt;
-                };
-
-                let induceSAl = function(t, sa, s, k) {
-                    let bkt = getBuckets(s,k); // find starts of buckets
-                    let n = s.length;
-                    for (let i=0; i<n; i++) {
+                    for (let i=0; i < n; i++) {
                         let j = sa.at(i)-1;
                         if (j >= 0 && !t.get(j)) {
-                            sa.set(bkt[s.at(j)]++, j);
+                            sa.set(bktStart[s.at(j)]++, j);
                         }
                     }
-                };
-                let induceSAs = function(t, sa, s, k) {
-                    let bkt = getBucketsEnd(s,k) // find ends of buckets
-                    for (let i=n-1; i>=0; i--) {
+                    for (let i=n-1; i >= 0; i--) {
                         let j = sa.at(i)-1;
                         if (j >= 0 && t.get(j)) {
-                            sa.set(--bkt[s.at(j)], j);
+                            sa.set(--bktEnd[s.at(j)], j);
                         }
                     }
                 };
@@ -160,11 +165,13 @@ SuffixArray.prototype = {
                 let n = s.length;
                 let sa = arguments[argn++] || new OffsetArray(null,0,n);
                 let t = new CharType(n);
-                let bkt;
+                let bkt = new Array(k);
+                let n1 = 0;
+                let name = 0;
 
                 // Classify the type of each character
                 t.set(n-2, 0); t.set(n-1, 1); // the sentinel must be in s1
-                for (let i=n-3; i>=0; i--) {
+                for (let i=n-3; i >= 0; i--) {
                     let ch1 = s.at(i);
                     let ch2 = s.at(i+1);
                     t.set(i, (ch1 < ch2 || (ch1==ch2 && t.get(i+1)==1)) ? 1:0);
@@ -172,55 +179,50 @@ SuffixArray.prototype = {
 
                 // stage 1: reduce the problem by at least 1/2
                 // sort all the S-substrings
-                bkt = getBucketsEnd(s, k);
-                for (let i=0; i<n; i++) sa.set(i, -1);
-                for (let i=1; i<n; i++) {
-                    if (t.isLMS(i)) {
-                        sa.set(--bkt[s.at(i)], i);
-                    }
+                bkts.cloneEndTo(bkt);
+                for (let i=0; i < n; i++) sa.set(i, -1);
+                for (let i=n-2, t0=0, t1=t.get(n-1); 0 <= i; i--,t1=t0) {
+                    if (!(t0 = t.get(i)) && t1) sa.set(--bkt[s.at(i+1)], i+1);
                 }
 
-                induceSAl(t, sa, s, k);
-                induceSAs(t, sa, s, k);
+                induceSA(t, sa, s, bkts);
 
                 // compact all the sorted substrings
                 // into the first n1 items of SA
                 // 2*n1 must be not larger than n (proveable)
-                let n1 = 0;
-                for (let i=0; i<n; i++) {
+                for (let i=0; i < n; i++) {
                     let sai = sa.at(i);
                     if (sai > 0 && t.isLMS(sai)) {
                         sa.set(n1++, sai);
                     }
                 }
 
-                // find the lexicographic names of all substrings
-                for (let i=n1; i<n; i++) sa.set(i, -1); // init
-                let name=0;
-                let prev=-1;
-                for (let i=0; i<n1; i++) {
-                    let pos = sa.at(i); let diff = false;
-                    for (let d=0; d<n; d++) {
-                        let p1 = pos+d;
-                        let p2 = prev+d;
-                        if (prev == -1 || s.at(p1) != s.at(p2)
-                            || t.get(p1) != t.get(p2)) {
-                            diff = true;
-                            break;
-                        } else if (d>0 &&
-                                   ((p1>0 && t.isLMS(p1)) ||
-                                    (p2>0 && t.isLMS(p2)))) {
-                            break;
-                        }
+                // store the length of all substrings
+                for (let i=n1; i < n; i++) sa.set(i, -1); // init
+                for (let i=n-2, j=n, t0=0, t1=t.get(n-1); 0 <= i; i--,t1=t0) {
+                    if (!(t0 = t.get(i)) && t1) {
+                        sa.set(n1 + ((i+1) >> 1), j-i-1);
+                        j = i+1;
                     }
-                    if (diff) {
-                        name++;
-                        prev=pos;
-                    }
-                    pos = (pos >> 1);
-                    sa.set(n1+pos, name-1);
                 }
-                for (let i=n-1, j=n-1; i>=n1; i--) {
+                // find the lexicographic names of all substrings
+                for (let i=0, q=n, qlen=0; i < n1; i++) {
+                    let p = sa.at(i);
+                    let plen = sa.at(n1 + (p >> 1));
+                    let diff=1;
+                    if (plen == qlen) {
+                        let j;
+                        for (j=0; j < plen && s.at(p+j) == s.at(q+j); j++);
+                        if (j==plen) diff=0;
+                    }
+                    if (diff != 0) {
+                        name++;
+                        q = p;
+                        qlen = plen;
+                    }
+                    sa.set(n1 + (p >> 1), name-1);
+                }
+                for (let i=n-1, j=n-1; i >= n1; i--) {
                     let sai = sa.at(i);
                     if (sai >= 0) sa.set(j--, sai);
                 }
@@ -239,21 +241,20 @@ SuffixArray.prototype = {
                 }
 
                 // stage 3: induce the result for the original problem
-                bkt = getBucketsEnd(s, k); // find ends of buckets
+                bkts.cloneEndTo(bkt);
                 // put all left-most S characters into their buckets
-                for (let i=1, j=0; i<n; i++) {
+                for (let i=1, j=0; i < n; i++) {
                     if (t.isLMS(i)) {
                         s1.set(j++, i); // get p1
                     }
                 }
-                for (let i=0; i<n1; i++) sa1.set(i, s1.at(sa1.at(i)));
-                for (let i=n1; i<n; i++) sa.set(i, -1); // init sa[n1..n-1]
-                for (let i=n1-1; i>=0; i--) {
+                for (let i=0; i < n1; i++) sa1.set(i, s1.at(sa1.at(i)));
+                for (let i=n1; i < n; i++) sa.set(i, -1); // init sa[n1..n-1]
+                for (let i=n1-1; i >= 0; i--) {
                     let j=sa.at(i); sa.set(i, -1);
                     sa.set(--bkt[s.at(j)], j);
                 }
-                induceSAl(t, sa, s, k);
-                induceSAs(t, sa, s, k);
+                induceSA(t, sa, s, bkts);
 
                 return sa;
             }
