@@ -170,6 +170,12 @@ addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
     target.updateTags();
 });
 
+addAround(Bookmark, ["delete", "deleteById", "deleteAll"], function (proceed, args) {
+    let result = proceed(args);
+    EventService.dispatch("BookmarksUpdated");
+    return result;
+});
+
 Model.Bookmark = Bookmark;
 Model.MODELS.push("Bookmark");
 

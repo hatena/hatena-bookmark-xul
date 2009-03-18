@@ -32,7 +32,15 @@ extend(EntryContext.prototype, {
     },
 
     delete: function EC_delete() {
-        alert('Not implemented');
+        let bookmark = this.bookmark;
+        let command = new RemoteCommand('delete', {
+            bookmark: bookmark,
+            onError: function () {
+                p('failed to delete bookmark ' + bookmark.url);
+                //UIUtils.notifyError('deleteBookmark', bookmark);
+            }
+        });
+        command.execute();
     },
 
     deleteAll: function EC_deleteAll() {
