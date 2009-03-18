@@ -45,6 +45,18 @@ const CryptoHash =
 const StorageStatementWrapper =
     Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');
 
+var XMigemoCore, XMigemoTextUtils;
+try{
+    // XUL migemo
+    XMigemoCore = Cc['@piro.sakura.ne.jp/xmigemo/factory;1']
+                            .getService(Components.interfaces.pIXMigemoFactory)
+                            .getService('ja');
+    XMigemoTextUtils = Cc['@piro.sakura.ne.jp/xmigemo/text-utility;1']
+                            .getService(Ci.pIXMigemoTextUtils);
+}
+catch(ex if ex instanceof TypeError){}
+
+
 const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 const XBL_NS = "http://www.mozilla.org/xbl";
 const XHTML_NS = "http://www.w3.org/1999/xhtml";

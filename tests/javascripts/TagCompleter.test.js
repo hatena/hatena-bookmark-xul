@@ -123,6 +123,11 @@ function testInsertion() {
     assert.equals(line.value, '[abc]');
 
     line = new TagCompleter.InputLine('[a', TestTags);
+    assert.equals(3, line.insertionTag('a', 2));
+    assert.equals(line.suggest(3), []);
+    assert.equals(line.value, '[a]');
+
+    line = new TagCompleter.InputLine('[a', TestTags);
     assert.equals(5, line.insertionTag('abc', 1));
     assert.equals(line.suggest(5), []);
     assert.equals(line.value, '[abc]a');
