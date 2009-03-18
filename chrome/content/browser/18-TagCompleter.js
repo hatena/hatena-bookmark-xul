@@ -7,6 +7,7 @@ var TagCompleter = {
 TagCompleter.InputLine = function(value, tags) {
     this.suggestTags = tags;
     this.value = value;
+    this.maxSuggest = 10; // default
 }
 
 TagCompleter.InputLine.prototype = {
@@ -20,8 +21,8 @@ TagCompleter.InputLine.prototype = {
         if (lastIndex == -1) {
             this.value = '[' + tagName + ']' + val;
         } else {
-            var prefix = val.substring(0, lastIndex + 1);
-            var suffix = val.substr(lastIndex + 1);
+            let prefix = val.substring(0, lastIndex + 1);
+            let suffix = val.substr(lastIndex + 1);
             this.value = prefix + '[' + tagName + ']' + suffix;
         }
         this.uniqTextTags();
@@ -31,7 +32,59 @@ TagCompleter.InputLine.prototype = {
         tags = tags.filter(function(t) tagName != t);
         this.updateByCommentTags(comment,tags);
     },
+    posWord: function(pos) {
+        let val = this.value;
+        let lastIndex = val.lastIndexOf('[', pos);
+        if (lastIndex >= pos) {
+            return null;
+        }
+        let firstIndex = val.indexOf(']', pos);
+        if (firstIndex < pos && (firstIndex != -1)) {
+            return null;
+        }
+        val = val.substring(lastIndex + 1, pos);
+        if (val.indexOf(']') != -1) {
+            return null;
+        }
+        return val;
+
+        // let lastPos = val.indexOf(']', firstPos);
+    },
     suggest: function(pos) {
+    /*
+    createWords: function(word, limit) {
+        var words = [];
+        var w = word.toUpperCase();
+
+        var spaceMatched = function(tKey, index, ws, first) {
+            if (ws.length == 0) return true;
+            var i;
+            if (((i = tKey.indexOf(ws.shift(), index)) >= 0) && !(first && i != 0)) {
+                return spaceMatched(tKey, i+2, ws, false);
+            }
+            return false;
+        }
+
+        var sep = w.split(/\s+/);
+        var ws = [];
+        for (var i = 0;  i < sep.length; i++) {
+            if (sep[i]) ws.push(sep[i]);
+        }
+
+        for (var i = 0, len = this.tagsKeys.length;  i < len; i++) {
+            var tKey = this.tagsKeys[i];
+
+            if (spaceMatched(tKey.toUpperCase(), 0, Array.prototype.slice.apply(ws), true)) {
+                words.push({
+                    name: tKey,
+                    count: this.tags[tKey].count
+                });
+            }
+            if (words.length >= limit) break;
+        }
+        return words;
+    },
+        */
     },
     insertionTag: function(tagName, pos) {
     },

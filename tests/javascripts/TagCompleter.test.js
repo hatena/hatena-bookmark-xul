@@ -80,6 +80,23 @@ function testDeleteTag() {
     assert.equals(line.value, '[aaコメント');
 }
 
+function testPosWord () {
+    let line = new TagCompleter.InputLine('[foo][bar]moo', TestTags);
+    assert.equals(line.posWord(0), null);
+    assert.equals(line.posWord(1), "");
+    assert.equals(line.posWord(2), 'f');
+    assert.equals(line.posWord(3), 'fo');
+    assert.equals(line.posWord(4), 'foo');
+    assert.equals(line.posWord(5), null);
+    assert.equals(line.posWord(6), "");
+    assert.equals(line.posWord(7), 'b');
+    assert.equals(line.posWord(8), 'ba');
+    assert.equals(line.posWord(9), 'bar');
+    assert.equals(line.posWord(10), null);
+
+    assert.equals(line.posWord(11), null);
+}
+
 function testSuggest() {
     let line = new TagCompleter.InputLine('[a', TestTags);
     let tags = line.suggest(2); // caret pos, デフォルトだと 10 個
