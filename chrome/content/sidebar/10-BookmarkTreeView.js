@@ -67,17 +67,11 @@ extend(BookmarkTreeView.prototype, {
             this.showBySearchString(event.target.value);
             break;
 
-        case "select":
-            this.handleSelect();
-            break;
-
-        case "click":
-            this.handleClick(event);
-            break;
-
-        case "keypress":
-            this.handleKeyPress(event);
-            break;
+        case "select":    this.handleSelect();         break;
+        case "mouseover": this.handleMouseOver(event); break;
+        case "mousemove": this.handleMouseMove(event); break;
+        case "click":     this.handleClick(event);     break;
+        case "keypress":  this.handleKeyPress(event);  break;
         }
     },
 
@@ -94,13 +88,24 @@ extend(BookmarkTreeView.prototype, {
         this._treeBox.treeBody.bookmark = bookmark;
     },
 
+    handleMouseOver: function BTV_handleMouseOver(event) {
+        document.tooltipNode = event.target;
+    },
+
+    handleMouseMove: function BTV_handleMouseMove(event) {
+        this._treeBox.treeBody.bookmark = this._getBookmarkOnCursor(event);
+    },
+
     handleClick: function BTV_handleClick(event) {
-        if (event.button > 1) return;
+        let bookmark = this._getBookmarkOnCursor(event);
+        if ((event.button === 0 || event.button === 1) && bookmark)
+            openUILink(bookmark.url, event);
+    },
+
+    _getBookmarkOnCursor: function BTV__getBookmarkOnCursor(event) {
         let row = {};
         this._treeBox.getCellAt(event.clientX, event.clientY, row, {}, {});
-        if (row.value === -1) return;
-        let bookmark = this._items[row.value];
-        openUILink(bookmark.url, event);
+        return this._items[row.value] || null;
     },
 
     handleKeyPress: function BTV_handleKeyPress(event) {

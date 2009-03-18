@@ -59,13 +59,13 @@
         <splitter resizebefore="flex" resizeafter="flex"/>
 
         <tree id="bookmark-tree" seltype="single"
-              hidecolumnpicker="true" flex="1" persist="height"
-              context="hBookmarkEntryContext" tooltip="hBookmarkItemTooltip">
+              hidecolumnpicker="true" flex="1" persist="height">
             <treecols>
                 <treecol label="&hBookmark.sidebar.bookmarksLabel;"
                          flex="1"/>
             </treecols>
-            <treechildren/>
+            <treechildren context="hBookmarkEntryContext"
+                          tooltip="hBookmarkItemTooltip"/>
         </tree>
     </vbox>
 
