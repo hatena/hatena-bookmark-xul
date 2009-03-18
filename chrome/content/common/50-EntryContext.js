@@ -11,7 +11,12 @@ extend(EntryContext.prototype, {
         if (!target.bookmark) return false;
         this.bookmark  = target.bookmark;
         this.bookmarks = target.bookmarks || null;
+        this._getItem("deleteAll").hidden = !this.bookmarks;
         return true;
+    },
+
+    _getItem: function EC__getItem(key) {
+        return document.getElementById("hBookmarkEntryContext_" + key);
     },
 
     openIn: function EC_openIn(where) {
@@ -24,5 +29,13 @@ extend(EntryContext.prototype, {
 
     edit: function EC_edit() {
         getTopWin().hBookmark.AddPanelManager.currentPanel.show(this.bookmark);
+    },
+
+    delete: function EC_delete() {
+        alert('Not implemented');
+    },
+
+    deleteAll: function EC_deleteAll() {
+        alert('Not implemented');
     }
 });

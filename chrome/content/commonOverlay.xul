@@ -27,8 +27,16 @@
             <menuitem id="hBookmarkEntryContext_edit"
                       label="&hBookmark.entryContext.editLabel;"
                       accesskey="&hBookmark.entryContext.editKey;"
-                      oncommand="this.parentNode._context.edit();
-                                 getTopWin().hBookmark.AddPanelManager.currentPanel.show(document.popupNode.bookmark);"/>
+                      oncommand="this.parentNode._context.edit();"/>
+            <menuseparator id="hBookmarkEntryContext_beforeDeleteSeparator"/>
+            <menuitem id="hBookmarkEntryContext_delete"
+                      label="&hBookmark.entryContext.deleteLabel;"
+                      accesskey="&hBookmark.entryContext.deleteKey;"
+                      oncommand="this.parentNode._context.delete();"/>
+            <menuitem id="hBookmarkEntryContext_deleteAll"
+                      label="&hBookmark.entryContext.deleteAllLabel;"
+                      accesskey="&hBookmark.entryContext.deleteAllKey;"
+                      oncommand="this.parentNode._context.deleteAll();"/>
         </menupopup>
 
         <tooltip id="hBookmarkItemTooltip"/>

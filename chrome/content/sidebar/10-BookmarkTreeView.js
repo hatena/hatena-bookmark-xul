@@ -27,25 +27,26 @@ extend(BookmarkTreeView.prototype, {
     },
 
     showByTags: function (tags) {
-        var prevRowCount = this.rowCount;
-        this._items = Bookmark.findByTags(tags);
         this._shownBy = "tags";
         this._tags = tags;
-        this.allRowsChanged(prevRowCount);
+        let bookmarks = Bookmark.findByTags(tags);
+        this.setBookmarks(bookmarks);
     },
 
     showBySearchString: function BTV_showBySearchString(string) {
-        let prevRowCount = this.rowCount;
         let visibleRowCount = this._treeBox.getPageLength();
-        this._items = string
-            ? Bookmark.search(string, visibleRowCount)
-            : Bookmark.findRecent(visibleRowCount);
         this._shownBy = "search";
         this._searchString = string;
-        this.allRowsChanged(prevRowCount);
+        let bookmarks = string
+            ? Bookmark.search(string, visibleRowCount)
+            : Bookmark.findRecent(visibleRowCount);
+        this.setBookmarks(bookmarks);
     },
 
-    allRowsChanged: function BTV_allRowsChanged(prevRowCount) {
+    setBookmarks: function BTV_setBookmarks(bookmarks) {
+        let prevRowCount = this.rowCount;
+        this._items = bookmarks;
+        this._treeBox.treeBody.bookmarks = bookmarks;
         this._treeBox.rowCountChanged(0, -prevRowCount);
         this._treeBox.rowCountChanged(0, this.rowCount);
     },
@@ -67,7 +68,7 @@ extend(BookmarkTreeView.prototype, {
             break;
 
         case "select":
-            this.setBookmark();
+            this.handleSelect();
             break;
 
         case "click":
@@ -87,7 +88,7 @@ extend(BookmarkTreeView.prototype, {
         }
     },
 
-    setBookmark: function BTV_setBookmark() {
+    handleSelect: function BTV_handleSelect() {
         let row = this.selection.currentIndex;
         let bookmark = (row === -1) ? null : this._items[row];
         this._treeBox.treeBody.bookmark = bookmark;
