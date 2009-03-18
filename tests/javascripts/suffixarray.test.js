@@ -40,6 +40,7 @@ function testNagayama() {
     //var data = utils.readFrom('data/secondlife.search.data', 'UTF-8');
     var data = utils.readFrom('data/nagayama.search.data', 'UTF-8');
     // var data = utils.readFrom('data/naoya.search.data', 'UTF-8');
+//     var data = utils.readFrom('data/otsune.search.data', 'UTF-8');
     data = data.substr(0, data.length * 3/4);
     assert.isTrue(data.length);
     var sary, finder, indexes;
