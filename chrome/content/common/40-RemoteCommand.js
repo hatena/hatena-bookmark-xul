@@ -118,9 +118,13 @@ extend(RemoteCommand.prototype, {
     },
 
     deleteHook: function RC_deleteHook() {
-        let bookmark = this.options.bookmark;
-        if (this.options.query || !bookmark) return;
-        this.options.query = { url: bookmark.url };
+        let options = this.options;
+        if (options.query || (!options.bookmark && !options.bookmarks))
+            return;
+        this.options.query = options.bookmark
+            ? { url: options.bookmark.url }
+            : { urllist: options.bookmarks.map(function (b) b.url).join("|") };
+        let bookmarks = options.bookmarks || [options.bookmark];
         let onComplete = this.options.onComplete
         this.options.onComplete = function (result) {
             if (!result.success) {
@@ -129,8 +133,8 @@ extend(RemoteCommand.prototype, {
             }
             if (onComplete)
                 onComplete.apply(this, arguments);
-            p('remove bookmark ' + bookmark.url);
-            Model.Bookmark.deleteBookmarks(bookmark);
+            p('remove bookmarks', bookmarks.map(function (b) b.url).join("\n"));
+            Model.Bookmark.deleteBookmarks(bookmarks);
         };
     }
 });

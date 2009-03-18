@@ -44,6 +44,16 @@ extend(EntryContext.prototype, {
     },
 
     deleteAll: function EC_deleteAll() {
-        alert('Not implemented');
+        let bookmarks = this.bookmarks;
+        if (!UIUtils.confirmDeleteAllBookmarks(bookmarks)) return;
+        let command = new RemoteCommand('delete', {
+            bookmarks: bookmarks,
+            onError: function () {
+                //UIUtils.notifyError(...);
+                hBookmark.p('failed to deleteAll',
+                            bookmarks.map(function (b) b.url).join("\n"));
+            }
+        });
+        command.execute();
     }
 });
