@@ -41,19 +41,25 @@
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.commentLabel;"/>
-                        <xul:textbox anonid="commentField"
-                                     class="hBookmarkTagComplete"
-                                     type="autocomplete"
-                                     autocompletesearch="hbookmark-tag"/>
+                        <xul:textbox 
+                            anonid="commentField"
+                            class="hBookmarkMyTagComplete"
+                        />
                     </xul:row>
                 </xul:rows>
             </xul:grid>
             <xul:hbox>
-                <xul:button anonid="saveButton"/>
+                <xul:button anonid="saveButton" default="true"/>
             </xul:hbox>
         </content>
 
         <implementation>
+            <constructor><![CDATA[
+                // this.commentField.inputField.addEventListener('keypress', function(ev) { 
+                // let panel = document.getBindingParent(document.getBindingParent(ev.target));
+                // panel.method();
+            ]]></constructor>
+
             <field name="splitter">null</field>
             <field name="panelTitle">
                 document.getAnonymousElementByAttribute(this, "anonid", "panelTitle")
@@ -204,6 +210,7 @@
             ]]></handler>
 
             <handler event="keypress" phase="capturing"><![CDATA[
+                /*
                 let target = document.getBindingParent(event.originalTarget);
                 if (target.localName !== "textbox" ||
                     (target.type === "autocomplete" && target.popupOpen) ||
@@ -225,6 +232,7 @@
                 }
                 event.preventDefault();
                 event.stopPropagation();
+                */
             ]]></handler>
         </handlers>
     </binding>
