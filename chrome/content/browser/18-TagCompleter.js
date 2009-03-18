@@ -28,9 +28,17 @@ TagCompleter.List = {
         list.selectedIndex = -1;
         while(list.firstChild) list.removeChild(list.firstChild);
     },
+    listClickHandler: function(e) {
+        e.stopPropagation();
+        list.selectedItem = e.currentTarget;
+        let ev = document.createEvent('UIEvents');
+        ev.initEvent('complete', true, false);
+        list.dispatchEvent(ev);
+    },
     showTags: function(tags, el) {
         this.clear();
         let tagsCount = TagCompleter.tagsCount;
+        let self = this;
         tags.forEach(function(tag) {
             let item = E('richlistitem', {flex:1, 'class': 'hBookmark-tagcomplete-listitem', value:tag},
                 E('hbox', {flex:1}, 
@@ -40,6 +48,7 @@ TagCompleter.List = {
                     E('label', {'class': 'hBookmark-tagcomplete-tagcount', value: tagsCount[tag]})
                 )
             );
+            item.addEventListener('click', method(self, 'listClickHandler'), false);
             list.appendChild(item);
         });
         this.show(el);
@@ -92,6 +101,7 @@ TagCompleter.InputHandler = function(input) {
     this.inputLine.__defineGetter__('suggestTags', function() TagCompleter.tags);
     input.addEventListener('keyup', method(this, 'inputKeyupHandler'), false);
     input.addEventListener('keydown', method(this, 'inputKeydownHandler'), false);
+    list.addEventListener('complete', method(this, 'listCompleteHandler'), false);
 }
 
 TagCompleter.InputHandler.prototype = {
@@ -155,6 +165,10 @@ TagCompleter.InputHandler.prototype = {
                 this.addPanel.saveBookmark();
             }
         }
+    },
+    listCompleteHandler: function(ev) {
+        p('pppp');
+        this.insert(true);
     },
     insert: function(force) {
         let tag = TagCompleter.List.getCurrentTag(force);
