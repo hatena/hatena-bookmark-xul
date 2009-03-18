@@ -49,9 +49,14 @@ TagCompleter.List = {
                 )
             );
             item.addEventListener('click', method(self, 'listClickHandler'), false);
+            item.addEventListener('mouseover', method(self, 'listMousemoveHandler'), false);
             list.appendChild(item);
         });
         this.show(el);
+    },
+    listMousemoveHandler: function(e) {
+
+        list.selectedItem = e.currentTarget;
     },
     isOne: function() {
         return list.getRowCount() == 1;
