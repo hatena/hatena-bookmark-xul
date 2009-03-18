@@ -99,6 +99,17 @@ extend(Bookmark, {
              where {sql}
         </>.toString(), args);
         return res;
+    },
+    deleteBookmarks: function(bookmarks) {
+        bookmarks = [].concat(bookmarks);
+        let bmIds = bookmarks.filter(function (b) b.id > 0)
+                             .map(function (b) b.id);
+        let placeholder = bmIds.map(function () "?").join(",");
+        Model.Tag.db.execute("delete from tags where bookmark_id in (" +
+                             placeholder + ")", bmIds);
+        Bookmark.db.execute("delete from bookmarks where id in (" +
+                            placeholder + ")", bmIds);
+        EventService.dispatch("BookmarksUpdated");
     }
 });
 
@@ -168,12 +179,6 @@ addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
     target.search = [target.title, target.comment, target.url].join("\n"); // SQLite での検索用
     proceed(args);
     target.updateTags();
-});
-
-addAround(Bookmark, ["delete", "deleteById", "deleteAll"], function (proceed, args) {
-    let result = proceed(args);
-    EventService.dispatch("BookmarksUpdated");
-    return result;
 });
 
 Model.Bookmark = Bookmark;

@@ -130,7 +130,7 @@ extend(RemoteCommand.prototype, {
             if (onComplete)
                 onComplete.apply(this, arguments);
             p('remove bookmark ' + bookmark.url);
-            bookmark.remove();
+            Model.Bookmark.deleteBookmarks(bookmark);
         };
     }
 });

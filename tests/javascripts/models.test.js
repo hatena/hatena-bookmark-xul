@@ -61,6 +61,10 @@ function testBookmark() {
 
     res = BOOKMARK.findRecent(1);
     assert.isTrue(res.length == 1);
+
+    assert.equals(1, model('Tag').findByName('huga').length);
+    BOOKMARK.deleteBookmarks(b2);
+    assert.equals(0, model('Tag').findByName('huga').length);
 }
 
 function testTag() {
