@@ -38,7 +38,7 @@ extend(TagContext.prototype, {
 
     openBookmarks: function TC_openBookmarks(event) {
         let urls = this.bookmarks.map(function (b) b.url);
-        BrowserWindow.openLinks(urls, event);
+        UIUtils.openLinks(urls, event);
     },
     openIn: function TC_opneIn(where) {
         let url = getURIFor("tags", this.tags);
