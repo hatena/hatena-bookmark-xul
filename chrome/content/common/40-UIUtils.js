@@ -6,9 +6,9 @@ let PS = Cc["@mozilla.org/embedcomp/prompt-service;1"].
 var UIUtils = {
     popupStrings: new Strings("chrome://hatenabookmark/locale/popups.properties"),
 
-    confirmDeleteAllBookmarks: function UIU_confirmDelAllBm(bookmarks) {
+    confirmDeleteBookmarks: function UIU_confirmDeleteBookmarks(bookmarks) {
         let title = this.popupStrings.get("prompt.title");
-        let message = this.popupStrings.get("prompt.confirmDeleteAllBookmarks",
+        let message = this.popupStrings.get("prompt.confirmDeleteBookmarks",
                                             [bookmarks.length])
         return PS.confirm(window.top, title, message);
     }

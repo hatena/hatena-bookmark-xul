@@ -45,7 +45,7 @@ extend(EntryContext.prototype, {
 
     deleteAll: function EC_deleteAll() {
         let bookmarks = this.bookmarks;
-        if (!UIUtils.confirmDeleteAllBookmarks(bookmarks)) return;
+        if (!UIUtils.confirmDeleteBookmarks(bookmarks)) return;
         let command = new RemoteCommand('delete', {
             bookmarks: bookmarks,
             onError: function () {
