@@ -52,6 +52,8 @@
             </xul:grid>
             <xul:hbox>
                 <xul:button anonid="saveButton" default="true"/>
+                <xul:spacer flex="1"/>
+                <xul:resizer dir="bottomright"/>
             </xul:hbox>
         </content>
 
@@ -115,8 +117,12 @@
                 ]]></setter>
             </property>
 
+            <!--
             <property name="isOpen" readonly="true"
                       onget="return !this.collapsed;"/>
+            -->
+            <property name="isOpen" readonly="true"
+                      onget="return this.parentNode.state === 'open';"/>
 
             <property name="isTitleEditable"
                       onget="return !this.titleField.readOnly;">
@@ -139,16 +145,18 @@
                     this.bookmark = bookmark;
                     this.setAddOrEdit(!!bookmark.temporary);
                     this.clearError();
-                    this.collapsed = false;
-                    this.splitter.collapsed = false;
+                    //this.collapsed = false;
+                    //this.splitter.collapsed = false;
+                    this.parentNode.openPopupAtScreen(window.screenX, window.screenY);
                     this.commentField.focus();
                 ]]></body>
             </method>
 
             <method name="hide">
                 <body><![CDATA[
-                    this.collapsed = true;
-                    this.splitter.collapsed = true;
+                    //this.collapsed = true;
+                    //this.splitter.collapsed = true;
+                    this.parentNode.hidePopup();
                 ]]></body>
             </method>
 

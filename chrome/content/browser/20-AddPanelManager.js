@@ -3,6 +3,12 @@ const EXPORT = ["AddPanelManager"];
 let Bookmark = Model.Bookmark;
 
 var AddPanelManager = {
+    get _container APM_get__container() {
+        let container = document.getElementById("hBookmarkAddPanelConatainer");
+        delete this._container;
+        return this._container = container;
+    },
+
     init: function APM_init() {
         gBrowser.browsers.forEach(AddPanelManager.setupPanel);
         gBrowser.addEventListener("TabOpen", AddPanelManager.onTabOpen, false);
@@ -25,6 +31,7 @@ var AddPanelManager = {
     },
 
     get currentPanel APM_get_currentPanel() {
+        return this._container.firstChild;
         return this.getPanelForBrowser(gBrowser.selectedBrowser);
     },
 
@@ -65,4 +72,4 @@ var AddPanelManager = {
     }
 };
 
-window.addEventListener("load", AddPanelManager.init, false);
+//window.addEventListener("load", AddPanelManager.init, false);
