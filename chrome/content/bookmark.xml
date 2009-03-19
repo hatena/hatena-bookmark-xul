@@ -7,8 +7,8 @@
              extends="chrome://global/content/bindings/popup.xml#tooltip">
         <content>
             <xul:label anonid="titleField"/>
-            <xul:description anonid="urlField"/>
-            <xul:description anonid="commentField"/>
+            <xul:label anonid="urlField"/>
+            <xul:label anonid="commentField"/>
         </content>
 
         <implementation>
@@ -21,24 +21,21 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
-
-            <method name="onPopupShowing">
-                <parameter name="event"/>
-                <body><![CDATA[
-                    let bookmark = document.tooltipNode.bookmark;
-                    if (!bookmark) return false;
-                    this.titleField.value = bookmark.title;
-                    this.urlField.value = bookmark.url;
-                    this.commentField.value = bookmark.comment;
-                    this.commentField.hidden = !/\S/.test(bookmark.comment);
-                    return true;
-                ]]></body>
-            </method>
         </implementation>
 
         <handlers>
-            <handler event="popupshowing"
-                     action="return this.onPopupShowing(event);"/>
+            <handler event="popupshowing">
+                let target = document.tooltipNode;
+                let bookmark = ("hoveredBookmark" in target)
+                    ? target.hoveredBookmark : target.bookmark;
+                if (!bookmark) return false;
+                this.titleField.value = bookmark.title;
+                this.urlField.value = bookmark.url;
+                this.urlField.hidden = (bookmark.title === bookmark.url);
+                this.commentField.value = bookmark.comment;
+                this.commentField.hidden = !/\S/.test(bookmark.comment);
+                return true;
+            </handler>
         </handlers>
     </binding>
 
