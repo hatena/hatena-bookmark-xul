@@ -18,7 +18,7 @@ if (shared.has('User')) {
     extend(User, {
         login: function User_loginCheck () {
             let xhr = net.get(MY_NAME_URL, null, null, false);
-            let res = eval('(' + xhr.responseText + ')');
+            let res = decodeJSON(xhr.responseText);
             if (res.login) {
                 this.setUser(res);
                 return this.user;

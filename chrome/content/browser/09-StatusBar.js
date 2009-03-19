@@ -55,8 +55,8 @@ var StatusBar = {
         this.checkBookmarked();
         this.checkCount();
     },
-    updateCount: function StatusBar_updateCount() {
-        statusCount.value = countCache.get(locationURL) || '';
+    checkCount: function StatusBar_checkCount() {
+        statusCount.value = isHttp ? HTTPCache.counter.get(locationURL) : 0;
         if (statusCount.value >= 5) {
             statusCount.setAttribute('users', 'many');
         } else if (statusCount.value >= 1) {
@@ -65,27 +65,13 @@ var StatusBar = {
             statusCount.setAttribute('users', 'none');
         }
     },
-    checkCount: function StatusBar_checkCount() {
-        if (!isHttp) return this.updateCount();
-
-        let url = locationURL;
-        if (countCache.has(url)) 
-            return this.updateCount();
-
-        let reqURL = 'http://b.hatena.ne.jp/entry.count?url=' + encodeURIComponent(url);
-        let xhr = new XMLHttpRequest();
-        let self = this;
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-                countCache.set(url, xhr.responseText||0);
-                self.updateCount();
-            }
-        };
-        xhr.open('GET', reqURL, true);
-        xhr.send(null);
-
-    },
 }
+
+// XXX: うーん
+getBrowser().addEventListener('DOMContentLoaded', function() {
+    StatusBar.update();
+}, false);
+
 
 Application.activeWindow.events.addListener('TabSelect', function() {
     StatusBar.update();

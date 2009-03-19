@@ -88,7 +88,7 @@ HTTPCache.prototype = {
                 val = val.substring(1);
                 val = val.substr(0, val.lastIndexOf(')'));
             }
-            val = JSON.fromString(val);
+            val = decodeJSON(val);
         }
         cache.set(url, val);
         return cache.get(url);

@@ -41,24 +41,11 @@ var CommentViewer = {
         }
 
         let url = aDoc.location.href;
-        if (commentCache.has(url)) 
-            return this.updateComment();
-
-        let reqURL = 'http://b.hatena.ne.jp/entry/json/?url=' + encodeURIComponent(url);
-        let xhr = new XMLHttpRequest();
-        let self = this;
         commentButton.setAttribute('loading', 'true'); 
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-                commentCache.set(url, eval('(' + xhr.responseText + ')'));
-                self.updateComment();
-            }
-        };
-        xhr.open('GET', reqURL, true);
-        xhr.send(null);
+        let data = HTTPCache.comment.get(url);
+        this.updateComment(data);
     },
-    updateComment: function CommentViewer_updateComment() {
-        let data = commentCache.get(aDoc.location.href);
+    updateComment: function CommentViewer_updateComment(data) {
         if (data) {
             panelComment.openPopup(commentButton, 'before_end', 0, 0,false,false);
             // XXX: 非表示ユーザをフィルター
