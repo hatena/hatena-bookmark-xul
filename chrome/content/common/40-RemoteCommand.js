@@ -62,8 +62,7 @@ extend(RemoteCommand.prototype, {
 
     onComplete: function RC_onComplete(xhr) {
         this.clearTimeoutHandler();
-        // XXX ToDo: JSONオブジェクト or JSON.jsmを使う。
-        let json = eval('(' + xhr.responseText + ')');
+        let json = decodeJSON(xhr.responseText);
         (this.options.onComplete || NOP).call(this, json);
         this.dispatch("complete");
     },
