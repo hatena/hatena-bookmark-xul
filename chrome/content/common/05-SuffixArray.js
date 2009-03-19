@@ -19,30 +19,30 @@ SuffixArray.prototype = {
         let str;
         let index;
         let dLen = this.defaultLength;
-        p.b(function() {
-        for (let i = 0, len = string.length; i < len; i++) {
-            str = string.substr(i, dLen);
-            sary[saryIndex++] = [str, i];
-            // index = str.indexOf("\n");
-            // if (index != 0) {
-            //     if (index != -1)
-            //         str = str.substr(0, index);
-            //     sary[saryIndex++] = [str, i];
-            // }
-        }
-//         }, 'create');
 //         p.b(function() {
-        sary.sort(function(a, b) {
-            if (a[0] > b[0]) {
-                return 1;
-            } else if (a[0] < b[0]) {
-                return -1;
-            }
-            return 0;
-        });
-        }, 'qsort');
+//         for (let i = 0, len = string.length; i < len; i++) {
+//             str = string.substr(i, dLen);
+//             sary[saryIndex++] = [str, i];
+//             // index = str.indexOf("\n");
+//             // if (index != 0) {
+//             //     if (index != -1)
+//             //         str = str.substr(0, index);
+//             //     sary[saryIndex++] = [str, i];
+//             // }
+//         }
+// //         }, 'create');
+// //         p.b(function() {
+//         sary.sort(function(a, b) {
+//             if (a[0] > b[0]) {
+//                 return 1;
+//             } else if (a[0] < b[0]) {
+//                 return -1;
+//             }
+//             return 0;
+//         });
+//         }, 'qsort');
+//         let qsortSary = sary.map(function([_,i]) i);
 //         this.sary = sary.map(function([_,i]) i);
-        let qsortSary = sary.map(function([_,i]) i);
         p.b(function() {
             function recSAIS(s, k, off, n, sa, n0) {
                 // char type array
@@ -235,19 +235,34 @@ SuffixArray.prototype = {
             function SAIS(s) {
                 let n = s.length;
                 let ss = new Array(n+1);
+                let embedded = false;
                 for (let i=0; i<n; i++) {
-                    ss[i] = s.charCodeAt(i);
+                    let ch = s.charCodeAt(i);
+                    if (ch == 0x0c) embedded = !embedded;
+                    if (embedded) ch = 0x0c;
+                    ss[i] = ch;
                 }
                 ss[n] = 0;
+                p('input', ss.map(function(v,i) [i,v]).join('|'));
 
-                return recSAIS(ss, 65535).slice(1);
+                let sary = recSAIS(ss, 65535);
+                return sary.slice(1).filter(function(i) ss[i]!=0x0c);
             }
             sary = SAIS(string);
         }, 'SAIS');
         this.sary = sary;
-        p('qsort', qsortSary.slice(0,1000));
+//         p('qsort', qsortSary.slice(0,1000));
         p('SAIS', this.sary.slice(0,1000));
-        p('veryfy: ' + qsortSary.every(function(v,i)v==sary[i]));
+        let esc = function(str) {
+            let r='';
+            for (let i=0,n=str.length; i<n; i++) {
+                let ch = str.charCodeAt(i);
+                r += ch <= 0x0f ? ('[0x'+ch.toString(16)+']') : str[i];
+            }
+            return r;
+        };
+        p('substr', this.sary.map(function(i) esc(string.substr(i))));
+//         p('veryfy: ' + qsortSary.every(function(v,i)v==sary[i]));
     },
     set sary (sary) { this._sary = sary; this._len = sary.length },
     get sary () this._sary,

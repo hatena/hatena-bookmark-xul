@@ -37,6 +37,11 @@ function tearDown() {
 }
 
 function testNagayama() {
+    var test = utils.readFrom('data/test.null.data', 'UTF-8');
+    sary = new SuffixArray(test);
+    sary.make();
+    return;
+
     //var data = utils.readFrom('data/secondlife.search.data', 'UTF-8');
     var data = utils.readFrom('data/nagayama.search.data', 'UTF-8');
     // var data = utils.readFrom('data/naoya.search.data', 'UTF-8');
