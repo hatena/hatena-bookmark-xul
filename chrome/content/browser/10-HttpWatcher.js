@@ -31,7 +31,6 @@ var HttpWatcher = {
     },
 
     onRequest: function HW_onRequest(channel) {
-        p("on request");
         let data = this._getPostData(channel);
         this.pushTask(data.url, data);
     },
@@ -55,16 +54,16 @@ var HttpWatcher = {
         let result = {};
         string.replace(/\+/g, "%20").split("&").forEach(function (pair) {
             let [key, value] = pair.split("=");
-            // XXX 不正な文字列に対する例外処理が必要。
-            result[key] = decodeURIComponent(value);
+            try {
+                value = decodeURIComponent(value);
+            } catch (ex) {}
+            result[key] = value;
         });
         return result;
     },
 
     onResponse: function HW_onResponse(channel) {
-        p("on response", uneval(this.taskSet));
         let url = this._getBookmakedURL(channel);
-        p("url: " + url);
         if (!url) return;
         let task = this.popTask(url);
         if (!task) return;
@@ -85,17 +84,17 @@ var HttpWatcher = {
         p('performTask');
         // XXX: Sync に依存してしまう
         Sync.sync();
-        /*
+
         let bookmark = Model.Bookmark.findByUrl(task.url)[0];
-        if (!bookmark) {
-            bookmark = new Model.Bookmark();
-            bookmark.url = task.url;
-            bookmark.title = task.title || "(No title)";
+        if (bookmark) {
+            // すでに存在するブックマークは Sync で
+            // 同期できないので、ここで DB を更新しておく。
+            if (task.title)
+                bookmark.title = task.title;
+            bookmark.comment = task.comment;
+            bookmark.save();
+            EventService.dispatch('BookmarksUpdated');
         }
-        bookmark.comment = task.comment;
-        bookmark.date = new Date();
-        bookmark.save();
-        */
     },
 
     startObserving: function HW_startObserving() {
