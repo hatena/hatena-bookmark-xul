@@ -32,8 +32,9 @@ Prefs.prototype = {
             switch (type)
             {
                 case PrefService.PREF_STRING:
-                    // for multibyte
-                    return decodeURIComponent(escape(prefs.getCharPref(name)));
+                    // for multibyte and localized values
+                    return prefs.getComplexValue(name,
+                                                 Ci.nsIPrefLocalizedString).data;
                     break;
                 case PrefService.PREF_INT:
                     return prefs.getIntPref(name);

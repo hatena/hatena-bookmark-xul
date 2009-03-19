@@ -5,12 +5,31 @@ let PS = Cc["@mozilla.org/embedcomp/prompt-service;1"].
 
 var UIUtils = {
     popupStrings: new Strings("chrome://hatenabookmark/locale/popups.properties"),
+    errorStrings: new Strings("chrome://hatenabookmark/locale/errors.properties"),
 
     confirmDeleteBookmarks: function UIU_confirmDeleteBookmarks(bookmarks) {
         let title = this.popupStrings.get("prompt.title");
         let message = this.popupStrings.get("prompt.confirmDeleteBookmarks",
                                             [bookmarks.length])
         return PS.confirm(window.top, title, message);
+    },
+
+    alertBookmarkError: function UIU_alertBookmarkError(operation, bookmarks) {
+        let alertTitle = this.popupStrings.get("prompt.title");
+        let message = "";
+        switch (operation) {
+        case 'delete':
+            let titles = [].concat(bookmarks).map(function (b) b.title);
+            const MAX_BOOKMARK_DISPLAY_COUNT = 10;
+            if (titles.length > MAX_BOOKMARK_DISPLAY_COUNT) {
+                titles.length = MAX_BOOKMARK_DISPLAY_COUNT;
+                titles.push(Prefs.global.get("intl.ellipsis"));
+            }
+            message = this.errorStrings.get('failToDeleteBookmarks') +
+                      "\n\n" + titles.join("\n");
+            break;
+        }
+        PS.alert(window.top, alertTitle, message);
     },
 
     openLinks: function UIU_openLinks(uris, event) {

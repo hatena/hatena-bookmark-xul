@@ -40,33 +40,36 @@ extend(TagContext.prototype, {
         let urls = this.bookmarks.map(function (b) b.url);
         UIUtils.openLinks(urls, event);
     },
+
     openIn: function TC_opneIn(where) {
         let url = getURIFor("tags", this.tags);
         openUILinkIn(url, where);
     },
+
     /*
     delete: function TC_delete() {
         let tag = this.tags.pop();
         alert('Not implemented');
     },
+
     rename: function TC_rename() {
         let tag = this.tags.pop();
         alert('Not implemented');
     },
     */
+
     editTag: function TC_editTag(event) {
         let url = getURIFor("editTag", this.tag);
         openUILink(url, event);
     },
+
     deleteBookmarks: function TC_deleteBookmarks() {
         let bookmarks = this.bookmarks;
         if (!UIUtils.confirmDeleteBookmarks(bookmarks)) return;
         let command = new RemoteCommand("delete", {
             bookmarks: bookmarks,
             onError: function () {
-                //UIUtils.notifyError();
-                p('Failed to remove bookmarks',
-                  bookmarks.map(function (b) b.url).join("\n"));
+                UIUtils.alertBookmarkError("delete", bookmarks);
             }
         });
         command.execute();
