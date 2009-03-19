@@ -12,6 +12,13 @@
     // ]]>
     </script>
 
+    <keyset>
+        <key id="hBookmark-key"
+            modifiers="accel,alt" 
+            key="b"
+            oncommand="hBookmark.AddPanelManager.toggle();" />
+    </keyset>
+
     <menupopup id="viewSidebarMenu">
         <menuitem observes="viewHBookmarkSidebar" />
     </menupopup>
