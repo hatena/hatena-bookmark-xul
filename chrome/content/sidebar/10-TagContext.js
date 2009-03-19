@@ -31,9 +31,10 @@ extend(TagContext.prototype, {
         return true;
     },
 
+    get bookmarks TC_get_bookmarks() Model.Bookmark.findByTags(this.tags),
+
     openAllBookmarks: function TC_openAllBookmarks(event) {
-        let bookmarks = Model.Bookmark.findByTags(this.tags);
-        let urls = bookmarks.map(function (b) b.url);
+        let urls = this.bookmarks.map(function (b) b.url);
         BrowserWindow.openLinks(urls, event);
     },
     openIn: function TC_opneIn(where) {
@@ -53,5 +54,18 @@ extend(TagContext.prototype, {
     editTag: function TC_editTag(event) {
         let url = getURIFor("editTag", this.tag);
         openUILink(url, event);
+    },
+    deleteBookmarks: function TC_deleteBookmarks() {
+        let bookmarks = this.bookmarks;
+        if (!UIUtils.confirmDeleteAllBookmarks(bookmarks)) return;
+        let command = new RemoteCommand("delete", {
+            bookmarks: bookmarks,
+            onError: function () {
+                //UIUtils.notifyError();
+                p('Failed to remove bookmarks',
+                  bookmarks.map(function (b) b.url).join("\n"));
+            }
+        });
+        command.execute();
     }
 });

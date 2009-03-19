@@ -1,6 +1,7 @@
 <!ENTITY hBookmark.tagContext.openAllBookmarksLabel "Open All Bookmarks">
 <!ENTITY hBookmark.tagContext.openLabel "Open Tag Page">
 <!ENTITY hBookmark.tagContext.openInNewTabLabel "Open Tag Page in New Tab">
+<!ENTITY hBookmark.tagContext.deleteBookmarksLabel "Delete Related Bookmarks">
 
 <!ENTITY hBookmark.entryContext.openLabel "Open">
 <!ENTITY hBookmark.entryContext.openKey "O">

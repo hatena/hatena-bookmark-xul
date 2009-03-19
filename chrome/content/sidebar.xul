@@ -38,6 +38,10 @@
                       label="Rename Tag &quot;%S&quot;"
                       oncommand="this.parentNode._context.rename();"/>
             -->
+            <menuseparator id="hBookmarkTagContext_editSeparator"/>
+            <menuitem id="hBookmarkTagContext_deleteBookmarks"
+                      label="&hBookmark.tagContext.deleteBookmarksLabel;"
+                      oncommand="this.parentNode._context.deleteBookmarks();"/>
         </menupopup>
     </popupset>
 
