@@ -274,6 +274,31 @@ function unEscapeURIForUI(charset, string)
     Cc['@mozilla.org/intl/texttosuburi;1'].getService(Ci.nsITextToSubURI).unEscapeURIForUI(charset, string);
 
 /*
+ * JSON デコード/エンコード
+ */
+function decodeJSON(json) {
+    try {
+        return (typeof JSON === "object")
+            ? JSON.parse(json)
+            : Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON)
+                                           .decode(json);
+    } catch (ex) {
+        return null;
+    }
+}
+
+function encodeJSON(object) {
+    try {
+        return (typeof JSON === "object")
+            ? JSON.stringify(object)
+            : Cc['@mozilla.org/dom/json;1'].createInstance(Ci.nsIJSON)
+                                           .encode(object);
+    } catch (ex) {
+        return "";
+    }
+}
+
+/*
  * favicon 取得
  */
 
