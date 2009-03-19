@@ -35,27 +35,33 @@ var AddPanelManager = {
         return panel;
     },
 
-    getBookmarkForBrowser: function APM_getBookmarkForBrowser(browser) {
-        let win = browser.contentWindow;
-        let url = win.location.href;
+    // XXX AddPanelManagerではなく全体に属すべき。
+    getBookmarkFor: function APM_getBookmarkFor(item) {
+        if (item.url) return item;
+        let win = item instanceof Ci.nsIDOMWindow ? item : null;
+        let url = win ? win.location.href :
+            (item instanceof Ci.nsIURI) ? item.spec : String(item);
         let bookmark = Bookmark.findByUrl(url)[0];
-        if (!bookmark) {
-            bookmark = extend(new Bookmark(), {
-                title:   (win.document && win.document.title) || url,
-                url:     url,
-                comment: "",
-            });
-        }
+        if (bookmark) return bookmark;
+        bookmark = new Bookmark();
+        bookmark.title = win ? (win.document.title || url) : "";
+        bookmark.url = url;
+        bookmark.comment = "";
         return bookmark;
     },
 
     toggle: function APM_toggle() {
         let panel = this.currentPanel;
-        let bookmark = this.getBookmarkForBrowser(gBrowser.selectedBrowser);
+        let bookmark = this.getBookmarkFor(gBrowser.contentWindow);
         if (panel.isOpen && panel.bookmark.url === bookmark.url)
             panel.hide();
         else
             panel.show(bookmark);
+    },
+
+    showPanel: function APM_showPanel(item) {
+        let bookmark = this.getBookmarkFor(item);
+        this.currentPanel.show(bookmark);
     }
 };
 
