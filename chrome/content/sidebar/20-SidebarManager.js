@@ -40,6 +40,8 @@ function initializeSidebar() {
     bookmarkTree.body.addEventListener("mouseover", bookmarkTreeView, false);
     bookmarkTree.body.addEventListener("mousemove", bookmarkTreeView, false);
     EventService.createListener("BookmarksUpdated", bookmarkTreeView, false);
+
+    searchBox.focus();
 }
 
 function mayFireInputEvent(event) {

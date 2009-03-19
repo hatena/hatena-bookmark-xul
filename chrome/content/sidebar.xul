@@ -50,11 +50,6 @@
     </popupset>
 
     <vbox flex="1">
-        <hbox align="center">
-            <label value="&hBookmark.sidebar.searchLabel;"/>
-            <textbox id="searchBox" flex="1"/>
-        </hbox>
-
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
               contextmenu="hBookmarkTagContext" flex="1" persist="height">
             <treecols>
@@ -75,6 +70,11 @@
             <treechildren context="hBookmarkEntryContext"
                           tooltip="hBookmarkItemTooltip"/>
         </tree>
+
+        <hbox align="center">
+            <label value="&hBookmark.sidebar.searchLabel;"/>
+            <textbox id="searchBox" flex="1"/>
+        </hbox>
     </vbox>
 
 </page>
