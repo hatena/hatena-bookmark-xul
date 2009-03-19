@@ -51,6 +51,12 @@ extend(BookmarkTreeView.prototype, {
         this._treeBox.rowCountChanged(0, this.rowCount);
     },
 
+    setSelectedBookmark: function BTV_setSelectedBookmark() {
+        let row = this.selection.currentIndex;
+        let bookmark = this._items[row] || null;
+        this._treeBox.treeBody.bookmark = bookmark;
+    },
+
     handleEvent: function (event) {
         switch (event.type) {
         case "HB_TagsSelected":
@@ -67,7 +73,11 @@ extend(BookmarkTreeView.prototype, {
             this.showBySearchString(event.target.value);
             break;
 
-        case "select":    this.handleSelect();         break;
+        case "focus":
+        case "select":
+            this.setSelectedBookmark();
+            break;
+
         case "mouseover": this.handleMouseOver(event); break;
         case "mousemove": this.handleMouseMove(event); break;
         case "click":     this.handleClick(event);     break;
@@ -82,27 +92,22 @@ extend(BookmarkTreeView.prototype, {
         }
     },
 
-    handleSelect: function BTV_handleSelect() {
-        let row = this.selection.currentIndex;
-        let bookmark = (row === -1) ? null : this._items[row];
-        this._treeBox.treeBody.bookmark = bookmark;
-    },
-
     handleMouseOver: function BTV_handleMouseOver(event) {
         document.tooltipNode = event.target;
     },
 
     handleMouseMove: function BTV_handleMouseMove(event) {
-        this._treeBox.treeBody.bookmark = this._getBookmarkOnCursor(event);
+        this._treeBox.treeBody.hoveredBookmark =
+            this._getBookmarkAtCurosr(event);
     },
 
     handleClick: function BTV_handleClick(event) {
-        let bookmark = this._getBookmarkOnCursor(event);
+        let bookmark = this._getBookmarkAtCurosr(event);
         if ((event.button === 0 || event.button === 1) && bookmark)
             openUILink(bookmark.url, event);
     },
 
-    _getBookmarkOnCursor: function BTV__getBookmarkOnCursor(event) {
+    _getBookmarkAtCurosr: function BTV__getBookmarkAtCurosr(event) {
         let row = {};
         this._treeBox.getCellAt(event.clientX, event.clientY, row, {}, {});
         return this._items[row.value] || null;

@@ -7,6 +7,8 @@ function EntryContext(popup) {
 }
 
 extend(EntryContext.prototype, {
+    strings: new Strings("chrome://hatenabookmark/locale/popups.properties"),
+
     build: function EC_build(target) {
         if (!target.bookmark) return false;
         this.bookmark  = target.bookmark;
@@ -36,8 +38,7 @@ extend(EntryContext.prototype, {
         let command = new RemoteCommand('delete', {
             bookmark: bookmark,
             onError: function () {
-                p('failed to delete bookmark ' + bookmark.url);
-                //UIUtils.notifyError('deleteBookmark', bookmark);
+                UIUtils.alertBookmarkError('delete', bookmark);
             }
         });
         command.execute();
@@ -45,13 +46,11 @@ extend(EntryContext.prototype, {
 
     deleteAll: function EC_deleteAll() {
         let bookmarks = this.bookmarks;
-        if (!UIUtils.confirmDeleteAllBookmarks(bookmarks)) return;
+        if (!UIUtils.confirmDeleteBookmarks(bookmarks)) return;
         let command = new RemoteCommand('delete', {
             bookmarks: bookmarks,
             onError: function () {
-                //UIUtils.notifyError(...);
-                hBookmark.p('failed to deleteAll',
-                            bookmarks.map(function (b) b.url).join("\n"));
+                UIUtils.alertBookmarkError('delete', bookmarks);
             }
         });
         command.execute();

@@ -26,32 +26,52 @@ extend(TagContext.prototype, {
         if (!tags || !tags.length) return false;
         this.tags = tags.concat();
         this.tag = tags[tags.length - 1];
-        document.getElementById("hBookmarkTagContext_editTag").label =
+        let editTagItem =
+            document.getElementById("hBookmarkTagContext_editTag");
+        editTagItem.label =
             this.strings.get("tagContext.editTagLabel", [this.tag]);
+        editTagItem.accessKey = this.strings.get("tagContext.editTagKey");
         return true;
     },
 
-    openAllBookmarks: function TC_openAllBookmarks(event) {
-        let bookmarks = Model.Bookmark.findByTags(this.tags);
-        let urls = bookmarks.map(function (b) b.url);
-        BrowserWindow.openLinks(urls, event);
+    get bookmarks TC_get_bookmarks() Model.Bookmark.findByTags(this.tags),
+
+    openBookmarks: function TC_openBookmarks(event) {
+        let urls = this.bookmarks.map(function (b) b.url);
+        UIUtils.openLinks(urls, event);
     },
+
     openIn: function TC_opneIn(where) {
         let url = getURIFor("tags", this.tags);
         openUILinkIn(url, where);
     },
+
     /*
     delete: function TC_delete() {
         let tag = this.tags.pop();
         alert('Not implemented');
     },
+
     rename: function TC_rename() {
         let tag = this.tags.pop();
         alert('Not implemented');
     },
     */
+
     editTag: function TC_editTag(event) {
         let url = getURIFor("editTag", this.tag);
         openUILink(url, event);
+    },
+
+    deleteBookmarks: function TC_deleteBookmarks() {
+        let bookmarks = this.bookmarks;
+        if (!UIUtils.confirmDeleteBookmarks(bookmarks)) return;
+        let command = new RemoteCommand("delete", {
+            bookmarks: bookmarks,
+            onError: function () {
+                UIUtils.alertBookmarkError("delete", bookmarks);
+            }
+        });
+        command.execute();
     }
 });

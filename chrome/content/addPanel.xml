@@ -37,7 +37,9 @@
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.urlLabel;"/>
-                        <xul:label anonid="urlField" class="text-link hBookmarkLink"/>
+                        <xul:label anonid="urlField"
+                                   class="text-link hBookmarkLink"
+                                   crop="end"/>
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.commentLabel;"/>
@@ -139,6 +141,7 @@
                     this.clearError();
                     this.collapsed = false;
                     this.splitter.collapsed = false;
+                    this.commentField.focus();
                 ]]></body>
             </method>
 
