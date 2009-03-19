@@ -73,6 +73,7 @@
             <image
                  id="hBookmark-status-comment"
                  onclick="hBookmark.CommentViewer.show(this);"
+                 tooltiptext="ブックマークコメントを見る"
                  loading="false"
             />
 
@@ -82,6 +83,7 @@
                 -->
                 <progressmeter 
                 id="hBookmark-syncProgressMeter"
+                tooltiptext="ブックマークデータ同期中"
                 style="width: 50px"
                 width="50px" mode="determined" value="82" 
                 />

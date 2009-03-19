@@ -67,18 +67,39 @@ var StatusBar = {
     },
 }
 
-// XXX: うーん
-getBrowser().addEventListener('DOMContentLoaded', function() {
-    StatusBar.update();
-}, false);
 
 
 Application.activeWindow.events.addListener('TabSelect', function() {
     StatusBar.update();
 });
 
+/*
+let ProgressListenr = {
+    QueryInterface: XPCOMUtils.generateQI([
+        Ci.nsIWebProgressListener,
+        Ci.nsIXULBrowserWindow
+    ]),
+    onStateChange: function (webProgress, request, flags, status)
+    {
+         if (flags & (Ci.nsIWebProgressListener.STATE_IS_DOCUMENT | Ci.nsIWebProgressListener.STATE_IS_WINDOW)) {
+             if (flags & Ci.nsIWebProgressListener.STATE_START) {
+                StatusBar.update();
+             }
+         }
+    },
+    onSecurityChange: function (webProgress, aRequest, aState) {},
+    onStatusChange: function (webProgress, request, status, message) {},
+    onProgressChange: function (webProgress, request, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) {},
+    onLocationChange: function () {},
+}
+*/
+
+
+// XXX: うーん
+// getBrowser().addProgressListener(ProgressListenr, Ci.nsIWebProgress.NOTIFY_ALL);
+
 Application.activeWindow.events.addListener('TabOpen', function() {
-    // XXX: このタイミングが微妙
+    //getBrowser().addProgressListener(ProgressListenr, Ci.nsIWebProgress.NOTIFY_ALL);
     getBrowser().addEventListener('DOMContentLoaded', function() {
         StatusBar.update();
     }, false);
@@ -86,5 +107,6 @@ Application.activeWindow.events.addListener('TabOpen', function() {
 
 EventService.createListener('UserChange', function() {
     StatusBar.checkBookmarked();
+    StatusBar.update();
 }, User);
 

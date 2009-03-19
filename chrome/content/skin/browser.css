@@ -24,11 +24,10 @@
 #hBookmark-status-count[users="few"] ,
 #hBookmark-status-count[users="many"] {
     display:inline;
-    padding-left:3px;
-    padding-right:3px;
+    padding-left:0px;
+    padding-right:0px;
     font-weight: bold;
-    color: #FF0000;
-    background-color: #FFCCCC;
+    color: #333;
 }
     
 #hBookmark-status-comment[loading="false"] {
