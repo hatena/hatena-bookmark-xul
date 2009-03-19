@@ -100,6 +100,15 @@ function testPosWord () {
     assert.equals(line.posWord(1), null);
 }
 
+function testMigemoSuggest() {
+    if (XMigemoCore) {
+        // migemo インストールしてない場合、テストを skip する
+        let line = new TagCompleter.InputLine('[kore', TestTags);
+        line.useMigemo = true;
+        assert.equals(line.suggest(5), ['*これはほげ']);
+    }
+}
+
 function testSuggest() {
     let line = new TagCompleter.InputLine('[a', TestTags);
     let tags = line.suggest(2); // caret pos, デフォルトだと 10 個

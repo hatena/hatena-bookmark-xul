@@ -4,7 +4,7 @@
  * 現在はブラウザを閉じるとすべて消える
  * 本当は storage.jsm を利用して、適宜キャッシュを削除すべき
  */
-const EXPORT = ['ExpireCache'];
+const EXPORT = ['ExpireCache', 'HTTPCache'];
 
 var ExpireCache = function(key, defaultExpire, seriarizer) {
     this.key = key;
@@ -59,4 +59,64 @@ ExpireCache.prototype = {
         this.cache[key] = [this.seriarize(value), e];
     },
 }
+
+/*
+ * HTTP 上のデータを抽象化
+ */
+var HTTPCache = function(key, options) {
+    if (!options) options = {};
+    this.options = options;
+    this.cache = new ExpireCache(key, options.expire, options.seriarizer);
+}
+
+HTTPCache.prototype = {
+    createURL: function HTTPCache_createURL (url) {
+        if (this.options.encoder)
+            url = this.options.encoder(url);
+        return (this.options.baseURL || '') + url;
+    },
+    get: function HTTPCache_get (url, force) {
+        let cache = this.cache;
+        if (!force && cache.has(url)) {
+            return cache.get(url);
+        }
+        let res = net.get(this.createURL(url));
+        let val = res.responseText;
+        if (this.options.json) {
+            // ({foo: 'bar'}) な JSON 対策
+            if (val.indexOf('(') == 0) {
+                val = val.substring(1);
+                val = val.substr(0, val.lastIndexOf(')'));
+            }
+            val = JSON.fromString(val);
+        }
+        cache.set(url, val);
+        return cache.get(url);
+    },
+    has: function HTTPCache_has (url) {
+        let cache = this.cache;
+        return cache.has(url);
+    }
+}
+
+HTTPCache.counter = new HTTPCache('counterCache', {
+    expire: 60 * 60,
+    baseURL: 'http://b.hatena.ne.jp/entry.count?url=',
+    encoder: encodeURIComponent,
+});
+
+HTTPCache.comment = new HTTPCache('commentCache', {
+    expire: 60 * 30,
+    baseURL: 'http://b.hatena.ne.jp/entry/json/?url=',
+    seriarizer: 'uneval',
+    json: true,
+    encoder: encodeURIComponent,
+});
+
+HTTPCache.entry = HTTPCache.comment;
+
+
+
+
+
 

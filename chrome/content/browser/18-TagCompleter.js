@@ -107,6 +107,10 @@ TagCompleter.InputHandler = function(input) {
     input.addEventListener('keyup', method(this, 'inputKeyupHandler'), false);
     input.addEventListener('keydown', method(this, 'inputKeydownHandler'), false);
     list.addEventListener('complete', method(this, 'listCompleteHandler'), false);
+    if (XMigemoCore) {
+        // XXX: 現在は XMigemoCore があったら即有効に
+        this.inputLine.useMigemo = true;
+    }
 }
 
 TagCompleter.InputHandler.prototype = {
@@ -238,6 +242,7 @@ TagCompleter.InputLine.prototype = {
         let regex = new RegExp(XMigemoTextUtils.getANDFindRegExpFromTerms(XMigemoCore.getRegExps(word, 'gi')));
         let words = [];
         let suggestTags = this.suggestTags;
+        let limit = this.maxSuggest;
         for (let i = 0, len = suggestTags.length;  i < len; i++) {
             let tKey = suggestTags[i];
             if (regex.test(tKey))
@@ -250,7 +255,7 @@ TagCompleter.InputLine.prototype = {
         let word = this.posWord(pos);
         if (!word) return [];
         
-        if (this.migemo) {
+        if (this.useMigemo && XMigemoCore) {
             return this.migemoSuggest(word);
         } 
 

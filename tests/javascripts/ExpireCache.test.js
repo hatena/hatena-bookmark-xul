@@ -35,4 +35,17 @@ function testCache() {
     assert.isFalse(cache.has('bar'));
 }
 
+function testHTTPCounter() {
+    assert.isTrue(HTTPCache.counter.get('http://www.hatena.ne.jp/my') > 10);
+    assert.isTrue(HTTPCache.counter.has('http://www.hatena.ne.jp/my'));
+    assert.isTrue(HTTPCache.counter.get('http://www.hatena.ne.jp/my') > 10);
+}
+
+function testHTTPComment() {
+    let res = HTTPCache.comment.get('http://www.hatena.ne.jp/my');
+    assert.isTrue(res);
+    assert.isTrue(res.count);
+    assert.isTrue(res.title);
+}
+
 
