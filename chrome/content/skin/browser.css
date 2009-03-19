@@ -74,7 +74,6 @@ iframe#hBookmark-comment-viewer {
   -moz-border-right-colors: #000 !important;
   -moz-border-bottom-colors: #000 !important;
   -moz-border-left-colors: #000 !important;
-
 }
 
 #hBookmark-urlbar-listbox {
@@ -119,5 +118,56 @@ image.hBookmark-urlbar-entrylink {
 #hBookmark-urlbar-listbox * label.hBookmark-urlbar-date {
   color: #999;
 }
+
+/* tag complete */
+#hBookmark-panel-tagcomplete {
+    margin: 0px !important;
+    padding: 0px !important;
+    -moz-appearance: none !important;
+    border: 1px solid !important;
+    -moz-border-top-colors: #555 !important;
+    -moz-border-right-colors: #555 !important;
+    -moz-border-bottom-colors: #555 !important;
+    -moz-border-left-colors: #555 !important;
+}
+
+#hBookmark-tagcomplete-listbox {
+    min-width: 150px;
+    -moz-appearance: none !important;
+    margin: 0px !important;
+    padding: 0px !important;
+}
+
+.hBookmark-tagcomplete-listitem {
+    padding: 2px 0px 2px 0px;
+}
+
+.hBookmark-tagcomplete-listitem[selected="true"] {
+    background-color: #2C6EBD;
+    cursor: pointer !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+.hBookmark-tagcomplete-listitem[current="true"] {
+    background-color: #2C6EBD;
+    cursor: pointer !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+/*
+.hBookmark-tagcomplete-listitem:hover {
+    background-color: #2C6EBD;
+    cursor: pointer !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+*/
+
+
+
+
+
+
 
 

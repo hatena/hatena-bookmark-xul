@@ -1,12 +1,4 @@
-/*
- * 実装 ToDo
- * - マウスクリック時の location の移動
- * - user_pref でオフの時の動作
- * - ツールバーをカスタマイズ後の挙動？
- * - busy のオンオフ
- * - 外観の実装
- * - 検索キャッシュ
- */
+
 var EXPORT = ['LocationBar'];
 
 elementGetter(this, 'bar', 'urlbar', document);
