@@ -9,8 +9,6 @@
 
 <!ENTITY hBookmark.entryContext.openLabel "Open">
 <!ENTITY hBookmark.entryContext.openKey "O">
-<!ENTITY hBookmark.entryContext.openInNewWindowLabel "Open in New Window">
-<!ENTITY hBookmark.entryContext.openInNewWindowKey "N">
 <!ENTITY hBookmark.entryContext.openInNewTabLabel "Open in New Tab">
 <!ENTITY hBookmark.entryContext.openInNewTabKey "W">
 <!ENTITY hBookmark.entryContext.openEntryLabel "Open Bookmark Entry">
