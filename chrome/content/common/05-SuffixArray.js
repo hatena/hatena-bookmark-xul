@@ -19,63 +19,32 @@ SuffixArray.prototype = {
         let str;
         let index;
         let dLen = this.defaultLength;
+        p.b(function() {
+        for (let i = 0, len = string.length; i < len; i++) {
+            str = string.substr(i, dLen);
+            sary[saryIndex++] = [str, i];
+            // index = str.indexOf("\n");
+            // if (index != 0) {
+            //     if (index != -1)
+            //         str = str.substr(0, index);
+            //     sary[saryIndex++] = [str, i];
+            // }
+        }
+//         }, 'create');
 //         p.b(function() {
-//         for (let i = 0, len = string.length; i < len; i++) {
-//             str = string.substr(i, dLen);
-//             sary[saryIndex++] = [str, i];
-//             // index = str.indexOf("\n");
-//             // if (index != 0) {
-//             //     if (index != -1)
-//             //         str = str.substr(0, index);
-//             //     sary[saryIndex++] = [str, i];
-//             // }
-//         }
-// //         }, 'create');
-// //         p.b(function() {
-//         sary.sort(function(a, b) {
-//             if (a[0] > b[0]) {
-//                 return 1;
-//             } else if (a[0] < b[0]) {
-//                 return -1;
-//             }
-//             return 0;
-//         });
-//         }, 'qsort');
-//         let qsortSary = sary.map(function([_,i]) i);
+        sary.sort(function(a, b) {
+            if (a[0] > b[0]) {
+                return 1;
+            } else if (a[0] < b[0]) {
+                return -1;
+            }
+            return 0;
+        });
+        }, 'qsort');
+        let qsortSary = sary.map(function([_,i]) i);
 //         this.sary = sary.map(function([_,i]) i);
         p.b(function() {
             function recSAIS(s, k, off, n, sa, n0) {
-                // char type array
-//                 let CharType = function(n){
-//                     n = (n>>4)+1;
-//                     let t = new Array(n);
-//                     for (let i=0; i<n; i++) t[i]=0;
-//                     let mask = [
-//                         0x8000, 0x4000, 0x2000, 0x1000,
-//                         0x0800, 0x0400, 0x0200, 0x0100,
-//                         0x0080, 0x0040, 0x0020, 0x0010,
-//                         0x0008, 0x0004, 0x0002, 0x0001,
-//                     ];
-//                     return {
-//                         get: function(i) {
-//                             // (t[(i)/16]&mask[(i)%16]) ? 1 : 0
-//                             return t[i >> 4] & mask[i & 0x0f] ? 1 : 0;
-//                         },
-//                         set: function(i, b) {
-//                             // t[(i)/16]=(b) ?
-//                             //   (mask[(i)%16]|t[(i)/16])
-//                             // : ((~mask[(i)%16])&t[(i)/16])
-//                             return t[i >> 4]
-//                                 = b ? (mask[i & 0x0f] | t[i >> 4])
-//                                 : ((~(mask[i & 0x0f])) & t[i >> 4]);
-//                         },
-//                         isLMS: function(i) {
-//                             return (t[i>>4] & mask[i&0x0f] ? 1 : 0)
-//                                 && !(t[(i-1)>>4] & mask[(i-1)&0x0f] ? 1 : 0);
-//                         }
-//                     };
-//                 };
-
                 let Buckets = function(s, k, off, n) {
                     let start = new Array(k);
                     let end = new Array(k);
@@ -133,25 +102,25 @@ SuffixArray.prototype = {
                 n = n || s.length;
                 sa = sa || new Array(n);
                 n0 = n0 || n;
-                let t = new Array(n);//new CharType(n);
+                let t = new Array(n);
                 let bkt = new Array(k);
                 let n1 = 0;
                 let name = 0;
                 let bkts = new Buckets(s, k, off, n);
 
                 // Classify the type of each character
-                t[n-2] = 0; t[n-1] = 1; // the sentinel must be in s1
+                t[n-2] = false; t[n-1] = true; // the sentinel must be in s1
                 for (let i=n-3, o=off+n-3; i >= 0; i--, o--) {
                     let ch1 = s[o];
                     let ch2 = s[o+1];
-                    t[i] = (ch1 < ch2 || (ch1==ch2 && t[i+1])) ? 1:0;
+                    t[i] = (ch1 < ch2 || (ch1==ch2 && t[i+1]));
                 }
 
                 // stage 1: reduce the problem by at least 1/2
                 // sort all the S-substrings
                 bkts.cloneEndTo(bkt);
                 for (let i=0; i < n; i++) sa[i] = -1;
-                for (let i=n-2, t0=0, t1=t[n-1], o=off+n-1; 0 <= i;
+                for (let i=n-2, t0=false, t1=t[n-1], o=off+n-1; 0 <= i;
                      i--, o--, t1=t0) {
                     if (!(t0 = t[i]) && t1) sa[--bkt[s[o]]] = i+1;
                 }
@@ -170,10 +139,11 @@ SuffixArray.prototype = {
 
                 // store the length of all substrings
                 for (let i=n1; i < n; i++) sa[i] = -1; // init
-                for (let i=n-2, j=n, t0=0, t1=t[n-1]; 0 <= i; i--, t1=t0) {
+                for (let i=n-2, o=n-1, j=n, t0=false, t1=t[n-1]; 0 <= i;
+                     i--, o--, t1=t0) {
                     if (!(t0 = t[i]) && t1) {
-                        sa[n1 + ((i+1) >> 1)] = j-i-1;
-                        j = i+1;
+                        sa[n1 + (o >> 1)] = j-o;
+                        j = o;
                     }
                 }
                 // find the lexicographic names of all substrings
@@ -243,7 +213,7 @@ SuffixArray.prototype = {
                     ss[i] = ch;
                 }
                 ss[n] = 0;
-                p('input', ss.map(function(v,i) [i,v]).join('|'));
+//                 p('input', ss.map(function(v,i) [i,v]).join('|'));
 
                 let sary = recSAIS(ss, 65535);
                 return sary.slice(1).filter(function(i) ss[i]!=0x0c);
@@ -251,18 +221,18 @@ SuffixArray.prototype = {
             sary = SAIS(string);
         }, 'SAIS');
         this.sary = sary;
-//         p('qsort', qsortSary.slice(0,1000));
+        p('qsort', qsortSary.slice(0,1000));
         p('SAIS', this.sary.slice(0,1000));
-        let esc = function(str) {
-            let r='';
-            for (let i=0,n=str.length; i<n; i++) {
-                let ch = str.charCodeAt(i);
-                r += ch <= 0x0f ? ('[0x'+ch.toString(16)+']') : str[i];
-            }
-            return r;
-        };
-        p('substr', this.sary.map(function(i) esc(string.substr(i))));
-//         p('veryfy: ' + qsortSary.every(function(v,i)v==sary[i]));
+//         let esc = function(str) {
+//             let r='';
+//             for (let i=0,n=str.length; i<n; i++) {
+//                 let ch = str.charCodeAt(i);
+//                 r += ch <= 0x0f ? ('[0x'+ch.toString(16)+']') : str[i];
+//             }
+//             return r;
+//         };
+//         p('substr', this.sary.map(function(i) esc(string.substr(i))));
+        p('veryfy: ' + qsortSary.every(function(v,i)v==sary[i]));
     },
     set sary (sary) { this._sary = sary; this._len = sary.length },
     get sary () this._sary,
