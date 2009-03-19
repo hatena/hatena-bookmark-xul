@@ -86,13 +86,13 @@ SuffixArray.prototype = {
                     let bktEnd = bkts.end;
                     for (let i=0; i < n; i++) {
                         let j = sa[i]-1;
-                        if (j >= 0 && !t[j]) {
+                        if (0 <= j && !t[j]) {
                             sa[bktStart[s[off+j]]++] = j;
                         }
                     }
-                    for (let i=n-1; i >= 0; i--) {
+                    for (let i=n-1; 0 <= i; i--) {
                         let j = sa[i]-1;
-                        if (j >= 0 && t[j]) {
+                        if (0 <= j && t[j]) {
                             sa[--bktEnd[s[off+j]]] = j;
                         }
                     }
@@ -110,7 +110,7 @@ SuffixArray.prototype = {
 
                 // Classify the type of each character
                 t[n-2] = false; t[n-1] = true; // the sentinel must be in s1
-                for (let i=n-3, o=off+n-3; i >= 0; i--, o--) {
+                for (let i=n-3, o=off+n-3; 0 <= i; i--, o--) {
                     let ch1 = s[o];
                     let ch2 = s[o+1];
                     t[i] = (ch1 < ch2 || (ch1==ch2 && t[i+1]));
@@ -132,7 +132,7 @@ SuffixArray.prototype = {
                 // 2*n1 must be not larger than n (proveable)
                 for (let i=0; i < n; i++) {
                     let sai = sa[i];
-                    if (sai > 0 && t[sai] && !t[sai-1]) {
+                    if (0 < sai && t[sai] && !t[sai-1]) {
                         sa[n1++] = sai;
                     }
                 }
@@ -149,23 +149,24 @@ SuffixArray.prototype = {
                 // find the lexicographic names of all substrings
                 for (let i=0, q=n, qlen=0; i < n1; i++) {
                     let p = sa[i];
-                    let plen = sa[n1 + (p >> 1)];
-                    let diff=1;
+                    let nn = n1+(p >> 1);
+                    let plen = sa[nn];
+                    let diff = true;
                     if (plen == qlen) {
-                        let j;
-                        for (j=0; j < plen && s[off+p+j] == s[off+q+j]; j++);
-                        if (j==plen) diff=0;
+                        let j, op=off+p, oq=off+q;
+                        for (j=0; j < plen && s[op+j] == s[oq+j]; j++);
+                        if (j == plen) diff = false;
                     }
-                    if (diff != 0) {
+                    if (diff) {
                         name++;
                         q = p;
                         qlen = plen;
                     }
-                    sa[n1 + (p >> 1)] = name-1;
+                    sa[nn] = name-1;
                 }
-                for (let i=n-1, j=n-1; i >= n1; i--) {
+                for (let i=n-1, j=n-1; n1 <= i; i--) {
                     let sai = sa[i];
-                    if (sai >= 0) sa[j--] = sai;
+                    if (0 <= sai) sa[j--] = sai;
                 }
 
                 // stage 2: solve the reduced problem
@@ -176,7 +177,7 @@ SuffixArray.prototype = {
                     recSAIS(s1, name-1, n-n1, n0+n1-n, sa, n1);
                 } else {
                     // generate the suffix array of s1 directly
-                    for (let i=0, o=off1; i<n1; i++, o++) {
+                    for (let i=0, o=off1; i < n1; i++, o++) {
                         sa[s1[o]] = i;
                     }
                 }
@@ -184,14 +185,14 @@ SuffixArray.prototype = {
                 // stage 3: induce the result for the original problem
                 bkts.cloneEndTo(bkt);
                 // put all left-most S characters into their buckets
-                for (let i=1, j=off1; i < n; i++) {
-                    if (t[i] && !t[i-1]) {
+                for (let i=1, j=off1, t0=t[0], t1=false; i < n; i++, t0=t1) {
+                    if ((t1 = t[i]) && !t0) {
                         s1[j++] = i; // get p1
                     }
                 }
                 for (let i=0; i < n1; i++) sa[i] = s1[off1+sa[i]];
                 for (let i=n1; i < n; i++) sa[i] = -1;
-                for (let i=n1-1; i >= 0; i--) {
+                for (let i=n1-1; 0 <= i; i--) {
                     let j=sa[i]; sa[i] = -1;
                     sa[--bkt[s[off+j]]] = j;
                 }
@@ -206,7 +207,7 @@ SuffixArray.prototype = {
                 let n = s.length;
                 let ss = new Array(n+1);
                 let embedded = false;
-                for (let i=0; i<n; i++) {
+                for (let i=0; i < n; i++) {
                     let ch = s.charCodeAt(i);
                     if (ch == 0x0c) embedded = !embedded;
                     if (embedded) ch = 0x0c;
