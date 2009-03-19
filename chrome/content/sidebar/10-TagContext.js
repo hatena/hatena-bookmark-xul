@@ -26,14 +26,17 @@ extend(TagContext.prototype, {
         if (!tags || !tags.length) return false;
         this.tags = tags.concat();
         this.tag = tags[tags.length - 1];
-        document.getElementById("hBookmarkTagContext_editTag").label =
+        let editTagItem =
+            document.getElementById("hBookmarkTagContext_editTag");
+        editTagItem.label =
             this.strings.get("tagContext.editTagLabel", [this.tag]);
+        editTagItem.accessKey = this.strings.get("tagContext.editTagKey");
         return true;
     },
 
     get bookmarks TC_get_bookmarks() Model.Bookmark.findByTags(this.tags),
 
-    openAllBookmarks: function TC_openAllBookmarks(event) {
+    openBookmarks: function TC_openBookmarks(event) {
         let urls = this.bookmarks.map(function (b) b.url);
         BrowserWindow.openLinks(urls, event);
     },

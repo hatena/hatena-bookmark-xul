@@ -16,15 +16,18 @@
     <popupset id="mainPopupSet">
         <menupopup id="hBookmarkTagContext"
                    onpopupshowing="return this._context.build(this);">
-            <menuitem id="hBookmarkTagContext_openAllBookmarks"
-                      label="&hBookmark.tagContext.openAllBookmarksLabel;"
-                      oncommand="this.parentNode._context.openAllBookmarks(event);"/>
-            <menuseparator id="hBookmarkTagContext_openAllSeparator"/>
+            <menuitem id="hBookmarkTagContext_openBookmarks"
+                      label="&hBookmark.tagContext.openBookmarksLabel;"
+                      accesskey="&hBookmark.tagContext.openBookmarksKey;"
+                      oncommand="this.parentNode._context.openBookmarks(event);"/>
+            <menuseparator id="hBookmarkTagContext_openBookmarksSeparator"/>
             <menuitem id="hBookmarkTagContext_open"
                       label="&hBookmark.tagContext.openLabel;"
+                      accesskey="&hBookmark.tagContext.openKey;"
                       oncommand="this.parentNode._context.openIn('current');"/>
             <menuitem id="hBookmarkTagContext_openInNewTab"
                       label="&hBookmark.tagContext.openInNewTabLabel;"
+                      accesskey="&hBookmark.tagContext.openInNewTabKey;"
                       oncommand="this.parentNode._context.openIn('tab');"/>
             <menuseparator id="hBookmarkTagContext_openSeparator"/>
             <menuitem id="hBookmarkTagContext_editTag"
@@ -41,6 +44,7 @@
             <menuseparator id="hBookmarkTagContext_editSeparator"/>
             <menuitem id="hBookmarkTagContext_deleteBookmarks"
                       label="&hBookmark.tagContext.deleteBookmarksLabel;"
+                      accesskey="&hBookmark.tagContext.deleteBookmarksKey;"
                       oncommand="this.parentNode._context.deleteBookmarks();"/>
         </menupopup>
     </popupset>
