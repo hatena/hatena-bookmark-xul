@@ -13,6 +13,11 @@ var ContextMenu = {
         // contextMenu.removeEventListenr('popupshowing', ContextMenu.contextMenuHandler, false);
     },
     contextMenuHandler: function(ev) {
+        if (gContextMenu.onTextInput || gContextMenu.onMailtoLink || gContextMenu.onMathML || gContextMenu.isTextSelected) {
+            addentry.setAttribute('hidden', true);
+            addlink.setAttribute('hidden', true);
+            return;
+        }
         if (gContextMenu.onLink) {
             addentry.setAttribute('hidden', true);
             addlink.removeAttribute('hidden');

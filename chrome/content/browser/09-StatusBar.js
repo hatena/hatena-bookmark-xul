@@ -95,6 +95,8 @@ var StatusBar = {
     },
     loadHandler: function() {
         StatusBar.registerPrefsListeners();
+        StatusBar.update();
+        getBrowser().addEventListener('DOMContentLoaded', StatusBar.update, false);
     }
 }
 
