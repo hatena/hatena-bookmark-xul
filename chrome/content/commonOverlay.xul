@@ -10,10 +10,6 @@
                       label="&hBookmark.entryContext.openLabel;"
                       accesskey="&hBookmark.entryContext.openKey;"
                       oncommand="this.parentNode._context.openIn('current');"/>
-            <menuitem id="hBookmarkEntryContext_openInNewWindow"
-                      label="&hBookmark.entryContext.openInNewWindowLabel;"
-                      accesskey="&hBookmark.entryContext.openInNewWindowKey;"
-                      oncommand="this.parentNode._context.openIn('window');"/>
             <menuitem id="hBookmarkEntryContext_openInNewTab"
                       label="&hBookmark.entryContext.openInNewTabLabel;"
                       accesskey="&hBookmark.entryContext.openInNewTabKey;"

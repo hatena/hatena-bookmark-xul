@@ -9,8 +9,6 @@
 
 <!ENTITY hBookmark.entryContext.openLabel "開く">
 <!ENTITY hBookmark.entryContext.openKey "O">
-<!ENTITY hBookmark.entryContext.openInNewWindowLabel "新しいウィンドウで開く">
-<!ENTITY hBookmark.entryContext.openInNewWindowKey "N">
 <!ENTITY hBookmark.entryContext.openInNewTabLabel "新しいタブで開く">
 <!ENTITY hBookmark.entryContext.openInNewTabKey "W">
 <!ENTITY hBookmark.entryContext.openEntryLabel "ブックマークエントリを開く">
