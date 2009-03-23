@@ -9,7 +9,8 @@
         <content>
             <xul:hbox>
                 <xul:image anonid="userIcon"/>
-                <xul:label anonid="userNameField" class="text-link"/>
+                <xul:label anonid="userNameField"
+                           class="text-link hBookmarkLink"/>
             </xul:hbox>
             <xul:label anonid="errorField" hidden="true"/>
             <xul:grid>
@@ -52,6 +53,9 @@
                 this.inputHandler = new hBookmark.TagCompleter.InputHandler(this.commentField.inputField);
             ]]></constructor>
 
+            <field name="userIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "userIcon")
+            </field>
             <field name="userNameField">
                 document.getAnonymousElementByAttribute(this, "anonid", "userNameField")
             </field>
@@ -145,7 +149,13 @@
                     this.urlField.value     = bookmark.url;
                     this.urlField.href      = bookmark.url;
                     this.commentField.value = bookmark.comment;
-                    this.userNameField.value = hBookmark.User.user.name;
+                    let user = hBookmark.User.user;
+                    this.userNameField.value = user.name;
+                    this.userNameField.href = user.bookmarkHomepage;
+                    let iconURL = user.getProfileIcon(false);
+                    new hBookmark.IconLoader(iconURL, function (dataURL) {
+                        this.userIcon.src = dataURL;
+                    }, this);
                     setTimeout(function (self) {
                         let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
                         if (res.title === bookmark.title) return;
