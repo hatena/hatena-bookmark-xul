@@ -30,10 +30,11 @@ var AddPanelManager = {
         panel.splitter = splitter;
     },
 
-    get currentPanel APM_get_currentPanel() {
-        return this._container.firstChild;
-        return this.getPanelForBrowser(gBrowser.selectedBrowser);
-    },
+    //get currentPanel APM_get_currentPanel() {
+    //    return this._container.firstChild;
+    //    return this.getPanelForBrowser(gBrowser.selectedBrowser);
+    //},
+    currentPanel: null,
 
     getPanelForBrowser: function APM_getPanelForBrowser(browser) {
         let panel = browser.nextSibling;
@@ -58,17 +59,27 @@ var AddPanelManager = {
     },
 
     toggle: function APM_toggle() {
-        let panel = this.currentPanel;
-        let bookmark = this.getBookmarkFor(gBrowser.contentWindow);
-        if (panel.isOpen && panel.bookmark.url === bookmark.url)
-            panel.hide();
-        else
-            panel.show(bookmark);
+        this.showPanel(this.getBookmarkFor(gBrowser.contentWindow));
+        //let panel = this.currentPanel;
+        //let bookmark = this.getBookmarkFor(gBrowser.contentWindow);
+        //if (panel.isOpen && panel.bookmark.url === bookmark.url)
+        //    panel.hide();
+        //else
+        //    panel.show(bookmark);
     },
 
     showPanel: function APM_showPanel(item) {
         let bookmark = this.getBookmarkFor(item);
-        this.currentPanel.show(bookmark);
+        //this.currentPanel.show(bookmark);
+        if (!this.currentPanel || this.currentPanel.closed) {
+            this.currentPanel = window.openDialog(
+                "chrome://hatenabookmark/content/addPanel.xul",
+                "_blank",
+                "chrome, dialog, resizable, alwaysRaised, centerscreen",
+                { bookmark: bookmark });
+            return;
+        }
+        this.currentPanel.document.getElementById("hBookmarkAddPanelContent").show(bookmark);
     }
 };
 

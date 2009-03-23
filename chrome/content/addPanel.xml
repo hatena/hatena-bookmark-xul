@@ -7,6 +7,7 @@
     <binding id="add-panel"
              extends="chrome://global/content/bindings/popup.xml#panel">
         <content><!-- persist="height" -->
+            <!--
             <xul:toolbox>
                 <xul:toolbar align="center">
                     <xul:label anonid="panelTitle"/>
@@ -16,6 +17,10 @@
                                        oncommand="document.getBindingParent(this).hide();"/>
                 </xul:toolbar>
             </xul:toolbox>
+            -->
+            <xul:hbox>
+                <xul:label anonid="userNameField"/>
+            </xul:hbox>
             <xul:label anonid="errorField" hidden="true"/>
             <xul:grid>
                 <xul:columns>
@@ -50,11 +55,13 @@
                     </xul:row>
                 </xul:rows>
             </xul:grid>
+            <!--
             <xul:hbox>
                 <xul:button anonid="saveButton" default="true"/>
                 <xul:spacer flex="1"/>
                 <xul:resizer dir="bottomright"/>
             </xul:hbox>
+            -->
         </content>
 
         <implementation>
@@ -66,12 +73,17 @@
                 // panel.method();
             ]]></constructor>
 
+            <!--
             <field name="splitter">null</field>
             <field name="panelTitle">
                 document.getAnonymousElementByAttribute(this, "anonid", "panelTitle")
             </field>
             <field name="closeButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "closeButton")
+            </field>
+            -->
+            <field name="userNameField">
+                document.getAnonymousElementByAttribute(this, "anonid", "userNameField")
             </field>
             <field name="titleField">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleField")
@@ -88,11 +100,17 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
+            <!--
             <field name="saveButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "saveButton")
             </field>
+            -->
             <field name="errorField">
                 document.getAnonymousElementByAttribute(this, "anonid", "errorField")
+            </field>
+            <field name="dialog">
+                document.documentElement
+
             </field>
 
             <field name="strings">
@@ -147,7 +165,6 @@
                     this.clearError();
                     //this.collapsed = false;
                     //this.splitter.collapsed = false;
-                    this.parentNode.openPopupAtScreen(window.screenX, window.screenY);
                     // 遅延しないとうまく focus があたらない？
                     // これでもタイミング次第では focus あわないので:w
                     // panel の表示にあわせて focus したほうがよいかも
@@ -174,6 +191,7 @@
                     this.urlField.value     = bookmark.url;
                     this.urlField.href      = bookmark.url;
                     this.commentField.value = bookmark.comment;
+                    this.userNameField.value = hBookmark.User.user.name;
                 ]]></body>
             </method>
 
@@ -181,11 +199,13 @@
                 <parameter name="add"/>
                 <body><![CDATA[
                     let type = add ? ".add" : ".edit";
-                    this.panelTitle.value =
+                    //this.panelTitle.value =
+                    document.title =
                         this.strings.get("title" + type);
-                    this.closeButton.tooltipText =
-                        this.strings.get("closeTooltip" + type);
-                    this.saveButton.label =
+                    //this.closeButton.tooltipText =
+                    //    this.strings.get("closeTooltip" + type);
+                    //this.saveButton.label =
+                    this.dialog.getButton("accept").label =
                         this.strings.get("saveLabel" + type);
                 ]]></body>
             </method>
