@@ -1,4 +1,11 @@
 
+/* context menu*/
+
+#hBookmark-menu-addlink,
+#hBookmark-menu-addentry {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_plus_on.png");
+}
+
 /* StatusBar */
 #hBookmark-statusBarPanel {
     margin: 0px;
@@ -51,17 +58,18 @@
     */
 }
     
-#hBookmark-status-comment[loading="false"] {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment.png");
-}
-
-#hBookmark-status-comment[loading="true"] {
+#hBookmark-status-comment {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/comment.png");
 }
 
 #hBookmark-status-comment[comment="true"] {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/comment_on.png");
 }
+
+#hBookmark-status-comment[loading="true"] {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment_loading.gif");
+}
+
 
 iframe#hBookmark-comment-viewer {
     width: 400px;

@@ -158,9 +158,22 @@
                     }, this);
                     setTimeout(function (self) {
                         let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
-                        if (res.title === bookmark.title) return;
-                        self._originalTitle   = res.title;
-                        self.titleField.value = res.title;
+                        if (!res) {
+                            let xhr = hBookmark.net.get(bookmark.url);
+                            // とりあえずやっつけ
+                            // loading icon だしたほうがよさそう
+                            let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
+                            if (m) {
+                                self._originalTitle   = m[1];
+                                self.titleField.value = m[1];
+                            }
+                        } else {
+                            if (res.title === bookmark.title) return;
+                            if (res) {
+                                self._originalTitle   = res.title;
+                                self.titleField.value = res.title;
+                            }
+                        }
                     }, 0, this);
                 ]]></body>
             </method>

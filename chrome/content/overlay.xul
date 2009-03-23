@@ -27,10 +27,17 @@
          <!-- label に DTD 参照入れるとなぜかエラー？ -->
          <menuitem
              class="menuitem-iconic"
-             insertafter="context-bookmarklink"
-             label="はてなブックマークに追加"
-             id="hBookmark-menu-add"
+             insertafter="context-bookmarkpage"
+             label="このページをはてなブックマークに追加"
+             id="hBookmark-menu-addentry"
              oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);"
+         />
+         <menuitem
+             class="menuitem-iconic"
+             insertafter="context-bookmarklink"
+             label="このリンクをはてなブックマークに追加"
+             id="hBookmark-menu-addlink"
+             oncommand="hBookmark.AddPanelManager.showPanel(gContextMenu.linkURL);"
          />
     </popup>
 
