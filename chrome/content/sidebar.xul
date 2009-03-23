@@ -53,8 +53,11 @@
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
               contextmenu="hBookmarkTagContext" flex="1" persist="height">
             <treecols>
-                <treecol label="&hBookmark.sidebar.tagsLabel;"
+                <treecol id="hBookmarkTagTree_currentTag"
+                         label="&hBookmark.sidebar.tagsLabel;"
                          primary="true" flex="1"/>
+                <treecol id="hBookmarkTagTree_count"
+                         label="{{Count}}"/>
             </treecols>
             <treechildren/>
         </tree>

@@ -23,14 +23,13 @@ extend(Tag, {
             bmIds = this.find(cond).map(function (tag) tag.bookmark_id);
             if (!bmIds.length) return bmIds;
         }
-        var condition = { group: "name" };
-        var where = "name NOT IN (" + tagNames.map(function (name, i) {
-            var paramName = "name" + i;
-            condition[paramName] = name;
-            return ":" + paramName;
-        }).join(",") + ") AND bookmark_id IN (" + bmIds.join(",") + ")";
-        condition.where = where;
-        return this.find(condition);
+        let query = "select count(name) as `count`, name from tags " +
+                    "where name not in (" +
+                    tagNames.map(function () "?").join() +
+                    ") and bookmark_id in (" +
+                    bmIds.map(function () "?").join() +
+                    ") group by name";
+        return this.find(query, tagNames.concat(bmIds));
     },
 
     findTagCandidates: function Tag_findTagCandidates(partialTag) {
