@@ -148,7 +148,12 @@
                     //this.collapsed = false;
                     //this.splitter.collapsed = false;
                     this.parentNode.openPopupAtScreen(window.screenX, window.screenY);
-                    this.commentField.focus();
+                    // 遅延しないとうまく focus があたらない？
+                    // これでもタイミング次第では focus あわないので:w
+                    // panel の表示にあわせて focus したほうがよいかも
+                    setTimeout(function(self) {
+                    self.commentField.focus();
+                    }, 10, this);
                 ]]></body>
             </method>
 
@@ -223,6 +228,11 @@
             ]]></handler>
 
             <handler event="keypress" phase="capturing"><![CDATA[
+                if (event.keyCode == KeyEvent.DOM_VK_ESCAPE) {
+                    this.hide();
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
                 /*
                 let target = document.getBindingParent(event.originalTarget);
                 if (target.localName !== "textbox" ||
@@ -233,7 +243,7 @@
 
                 switch (event.keyCode) {
                 case KeyEvent.DOM_VK_RETURN:
-                    this.saveButton.doCommand();
+                    // this.saveButton.doCommand();
                     break;
 
                 case KeyEvent.DOM_VK_ESCAPE:
