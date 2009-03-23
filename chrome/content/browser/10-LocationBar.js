@@ -17,18 +17,10 @@ window.addEventListener('load', function() {
     list.addEventListener('click', LocationBar.goLink, false);
     list.addEventListener('select', LocationBar.selectHandler, false);
 
+    LocationBar.bar.addEventListener('keypress', LocationBar.barKeyPressTabHandler, true);
     LocationBar.bar.inputField.addEventListener('keydown', LocationBar.barKeyDownHandler, true);
     LocationBar.bar.inputField.addEventListener('keypress', LocationBar.barKeyPressHandler, false);
-    LocationBar.bar.inputField.addEventListener('keyup', LocationBar.barKeyUpHandler, false);
-
-    // LocationBar.bar.inputField.addEventListener('focus', function(ev) {
-    //     if (LocationBar.searchEnabled) {
-    //         LocationBar.show();
-    //         list.focus();
-    //         list.getItemAtIndex(0).focus();
-    //         p('focused');
-    //     }
-    // }, true);
+    LocationBar.bar.inputField.addEventListener('keyup', LocationBar.barKeyUpHandler, true);
 }, false);
 
 var LocationBar = {
@@ -94,22 +86,31 @@ var LocationBar = {
             setTimeout(function() LocationBar.search(), 100);
         }
     },
+    barKeyPressTabHandler: function(ev) {
+        if (LocationBar.searchEnabled && ev.keyCode == ev.DOM_VK_TAB) {
+            ev.preventDefault();
+            ev.stopPropagation();
+        }
+    },
     barKeyPressHandler: function(ev) {
         if (LocationBar.searchEnabled)
             setTimeout(function() LocationBar.search() , 0);
     },
+    keyUpFlag: true,
     barKeyDownHandler: function(ev) {
         /* ここで stop すると、選択の List の挙動を変更できる
         p('keydown' + ev.keyCode);
         */
         let keyCode = ev.keyCode;
         if (ev.ctrlKey && keyCode == ev.DOM_VK_CONTROL) {
-            if (!LocationBar.ctrlTimer) {
+            if (!LocationBar.ctrlTimer && this.keyUpFlag) {
+                this.keyUpFlag = false;
                 LocationBar.ctrlTimer = setTimeout(
                 function() { 
                     LocationBar.toggle();
                     LocationBar.clearTimer();
                 }, 500);
+                ev.preventDefault();
             }
             ev.stopPropagation();
         } else if (LocationBar.searchEnabled) {
@@ -133,6 +134,7 @@ var LocationBar = {
         }
     },
     barKeyUpHandler: function(ev) {
+        this.keyUpFlag = true;
         if (LocationBar.ctrlTimer) {
             LocationBar.clearTimer();
         }

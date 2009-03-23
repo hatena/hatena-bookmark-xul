@@ -23,6 +23,18 @@
         <menuitem observes="viewHBookmarkSidebar" />
     </menupopup>
 
+    <popup id="contentAreaContextMenu"> 
+         <!-- label に DTD 参照入れるとなぜかエラー？ -->
+         <menuitem
+             class="menuitem-iconic"
+             insertafter="context-bookmarklink"
+             label="はてなブックマークに追加"
+             id="hBookmark-menu-add"
+             oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);"
+         />
+    </popup>
+
+
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbaritem id="hBookmarkDropdown">
             <toolbarbutton class="bookmark-item"
@@ -61,7 +73,6 @@
                  id="hBookmark-status-home"
                  onclick="hBookmark.StatusBar.goHome();"
             />
-            <spacer width="3px" />
             <image
                  added="false"
                  id="hBookmark-status-add"
@@ -75,8 +86,6 @@
                  value=""
             />
 
-            <spacer width="3px" />
-
             <image
                  id="hBookmark-status-comment"
                  onclick="hBookmark.CommentViewer.show(this);"
@@ -85,12 +94,10 @@
             />
 
             <hbox id="hBookmark-syncProgressBox" hidden="true">
-                <!--
-                    <image src="http://b.hatena.ne.jp/images/loading.gif" width="16px" height="16px" />
-                -->
+                <label value="&hBookmark.statusbar.now_syncing;" />
                 <progressmeter 
                 id="hBookmark-syncProgressMeter"
-                tooltiptext="ブックマークデータ同期中"
+                tooltiptext="&hBookmark.statusbar.now_syncing;"
                 style="width: 50px"
                 width="50px" mode="determined" value="82" 
                 />
@@ -148,7 +155,9 @@
     // <![CDATA[
     (function() {
         with(hBookmark) {
-            Application.console.open();
+            if (hBookmark.nowDebug) {
+                Application.console.open();
+            }
 
             EventService.dispatch('preload', window);
 

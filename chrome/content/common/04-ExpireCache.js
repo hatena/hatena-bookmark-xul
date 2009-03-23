@@ -78,6 +78,7 @@ HTTPCache.prototype = {
     get: function HTTPCache_get (url, force) {
         let cache = this.cache;
         if (!force && cache.has(url)) {
+            p('http using cache: ' + url);
             return cache.get(url);
         }
         let res = net.get(this.createURL(url));
@@ -91,6 +92,7 @@ HTTPCache.prototype = {
             val = decodeJSON(val);
         }
         cache.set(url, val);
+        p('http not using cache: ' + url);
         return cache.get(url);
     },
     has: function HTTPCache_has (url) {

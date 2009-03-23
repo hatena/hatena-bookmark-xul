@@ -4,3 +4,8 @@
 
 <!ENTITY hBookmark.sidebar.label "はてなブックマーク">
 <!ENTITY hBookmark.sidebar.key "A">
+
+<!ENTITY hBookmark.statusbar.now_syncing "データを同期しています...">
+
+<!ENTITY hBookmark.menu.add "このページをはてブに追加">
+<!ENTITY hBookmark.menu.addlink "このリンクをはてブに追加">

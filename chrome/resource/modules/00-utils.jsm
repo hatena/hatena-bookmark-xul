@@ -87,10 +87,8 @@ p.b = function (func, name) {
     return t;
 }
 
-
 /*
  * log は、実際にエラーコンソールに通知用
- * ToDo: user_pref でこの拡張のデバッグが true なら、info の内容も表示する 
  */
 var log = {
     error: function (msg) {
@@ -102,10 +100,14 @@ var log = {
         }
     },
     info: function (msg) {
-        if (Application.prefs.get('extensions.hatenabookmark.debug.log').value) {
+        if (nowDebug) {
             Application.console.log(msg.toString());
         }
     }
+}
+
+var nowDebug = function() {
+    return !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
 }
 
 var createElementBindDocument = function(doc) {

@@ -1,41 +1,66 @@
 
 /* StatusBar */
+#hBookmark-statusBarPanel {
+    margin: 0px;
+    padding: 0px;
+}
+
 #hBookmark-status-home {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/home.gif");
 }
 
 #hBookmarkAddButton[added="false"] {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/b.gif");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_plus.png");
 }
 
 #hBookmarkAddButton[added="true"] {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_added.gif");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_plus_on.png");
 }
 
 #hBookmark-status-count {
+  background-image: url("chrome://hatenabookmark/content/skin/images/nbookmarks.png");
+  width: 30px;
+  height: 16px;
+  padding:2px 3px 0 0;
+  margin:0px;
+  text-align: right;
+  font-size: 10px;
+
+  font-family: verdana;
+  font-weight: bold;
+  color: #FFF;
 }
 
 #hBookmark-status-count[users="none"] {
+  color: #DDD;
+    /*
     display:none;
     padding-left:0px;
     padding-right:0px;
+    */
 }
 
 #hBookmark-status-count[users="few"] ,
 #hBookmark-status-count[users="many"] {
+    /*
     display:inline;
     padding-left:0px;
     padding-right:0px;
     font-weight: bold;
     color: #333;
+    */
 }
     
 #hBookmark-status-comment[loading="false"] {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_comment.gif");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment.png");
 }
 
 #hBookmark-status-comment[loading="true"] {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_comment_loading.gif");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment.png");
+}
+
+#hBookmark-status-comment[comment="true"] {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment_on.png");
 }
 
 iframe#hBookmark-comment-viewer {
@@ -56,11 +81,11 @@ iframe#hBookmark-comment-viewer {
 }
 
 #hBookmark-search-icon {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/search-enable.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/search_on.png");
   visibility: inherit !important;
 }
 #hBookmark-search-icon[searchdisabled="true"] {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/search-disable.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/search.png");
   visibility: inherit !important;
 }
 

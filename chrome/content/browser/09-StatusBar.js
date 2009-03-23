@@ -51,12 +51,17 @@ var StatusBar = {
             addButton.setAttribute('added', false);
         }
     },
+    lastURL: null,
     update: function StatsuBar_update() {
-        this.checkBookmarked();
-        this.checkCount();
+        let lURL = locationURL;
+        if (StatusBar.lastURL == lURL) return;
+
+        StatusBar.lastURL = lURL;
+        StatusBar.checkBookmarked();
+        StatusBar.checkCount();
     },
     checkCount: function StatusBar_checkCount() {
-        statusCount.value = isHttp ? HTTPCache.counter.get(locationURL) : 0;
+        statusCount.value = (isHttp ? HTTPCache.counter.get(locationURL) : '0') || '0';
         if (statusCount.value >= 5) {
             statusCount.setAttribute('users', 'many');
         } else if (statusCount.value >= 1) {
@@ -100,13 +105,10 @@ let ProgressListenr = {
 
 Application.activeWindow.events.addListener('TabOpen', function() {
     //getBrowser().addProgressListener(ProgressListenr, Ci.nsIWebProgress.NOTIFY_ALL);
-    getBrowser().addEventListener('DOMContentLoaded', function() {
-        StatusBar.update();
-    }, false);
+    getBrowser().addEventListener('DOMContentLoaded', StatusBar.update, false);
 });
 
 EventService.createListener('UserChange', function() {
-    StatusBar.checkBookmarked();
     StatusBar.update();
 }, User);
 

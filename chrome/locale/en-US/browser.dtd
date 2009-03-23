@@ -4,3 +4,8 @@
 
 <!ENTITY hBookmark.sidebar.label "Hatena Bookmark">
 <!ENTITY hBookmark.sidebar.key "A">
+
+<!ENTITY hBookmark.statusbar.now_syncing "Sync...">
+
+<!ENTITY hBookmark.menu.add "This page add to HatenaBookmark.">
+<!ENTITY hBookmark.menu.addlink "This link add to HatenaBookmark.">
