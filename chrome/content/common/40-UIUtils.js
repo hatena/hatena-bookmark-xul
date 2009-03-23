@@ -7,6 +7,16 @@ var UIUtils = {
     popupStrings: new Strings("chrome://hatenabookmark/locale/popups.properties"),
     errorStrings: new Strings("chrome://hatenabookmark/locale/errors.properties"),
 
+    encourageLogin: function UIU_encourageLogin() {
+        let win = getTopWin();
+        let pressed = PS.confirmEx(
+            win, this.popupStrings.get("prompt.title"),
+            this.popupStrings.get("prompt.encourageLogin"),
+            PS.STD_YES_NO_BUTTONS, null, null, null, null, {});
+        if (pressed !== 0) return;
+        openUILinkIn("http://www.hatena.ne.jp/login", "current");
+    },
+
     confirmDeleteBookmarks: function UIU_confirmDeleteBookmarks(bookmarks) {
         let title = this.popupStrings.get("prompt.title");
         let message = this.popupStrings.get("prompt.confirmDeleteBookmarks",

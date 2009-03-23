@@ -40,6 +40,10 @@ var AddPanelManager = {
     },
 
     showPanel: function APM_showPanel(item) {
+        if (!User.user) {
+            UIUtils.encourageLogin();
+            return;
+        }
         let bookmark = this.getBookmarkFor(item);
         let panel = this.panelContent;
         if (panel) {
