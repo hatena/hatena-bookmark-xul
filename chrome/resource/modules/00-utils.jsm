@@ -71,7 +71,7 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm');
  * p は一時デバッグ用
  */
 var p = function (value) {
-    Application.console.log(Array.map(arguments, String).join("\n"));
+    log.info(value);
     return value;
 }
 
@@ -102,7 +102,9 @@ var log = {
         }
     },
     info: function (msg) {
-        Application.console.log(msg.toString());
+        if (Application.prefs.get('extensions.hatenabookmark.debug.log').value) {
+            Application.console.log(msg.toString());
+        }
     }
 }
 
