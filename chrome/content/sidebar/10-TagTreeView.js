@@ -6,10 +6,11 @@ const AtomService =
 var Tag = model("Tag");
 
 function TagTreeItem(tag, parentItem) {
-    this.currentTag = tag;
+    this.currentTag = tag && tag.name;
+    this.count = tag && tag.count;
     this.parent = parentItem;
     this.index = -1;
-    this.tags = parentItem ? parentItem.tags.concat(tag) : [];
+    this.tags = parentItem ? parentItem.tags.concat(tag.name) : [];
     this.level = parentItem ? parentItem.level + 1 : -1;
     this.hasNext = true;
     this.isOpen = false;
@@ -26,7 +27,10 @@ function TagTreeView() {
 TagTreeView.prototype.__proto__ = TreeView.prototype;
 extend(TagTreeView.prototype, {
     get rowCount () this._visibleItems.length,
-    getCellText: function (row, col) this._visibleItems[row].currentTag,
+    getCellText: function (row, col) {
+        let field = col.id.substring("hBookmarkTagTree_".length);
+        return this._visibleItems[row][field];
+    },
     setTree: function (treeBox) {
         this._treeBox = treeBox;
         if (!treeBox) return;
@@ -53,7 +57,8 @@ extend(TagTreeView.prototype, {
     },
 
     getCellProperties: function (row, col, properties) {
-        properties.AppendElement(AtomService.getAtom("Name"));
+        if (col.id === "hBookmarkTagTree_currentTag")
+            properties.AppendElement(AtomService.getAtom("Name"));
     },
 
     toggleOpenState: function (index) {
@@ -76,7 +81,7 @@ extend(TagTreeView.prototype, {
     _openRelatedTags: function (parentItem) {
         var tags = Tag.findRelatedTags(parentItem.tags);
         if (!tags.length) return 0;
-        var items = tags.map(function (t) new TagTreeItem(t.name, parentItem));
+        var items = tags.map(function (t) new TagTreeItem(t, parentItem));
         items[items.length - 1].hasNext = false;
         var visibleItems = this._visibleItems;
         var spliceArgs = [parentItem.index + 1, 0].concat(items);
