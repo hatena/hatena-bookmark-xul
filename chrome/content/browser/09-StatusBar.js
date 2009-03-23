@@ -17,7 +17,7 @@ this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexO
 
 elementGetter(this, 'addButton', 'hBookmarkAddButton', document);
 elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
-
+elementGetter(this, 'statusComment', 'hBookmark-status-comment', document);
 
 let countCache = new ExpireCache('uCount', 60 * 60); // 一時間キャッシュ
 
@@ -34,16 +34,6 @@ var StatusBar = {
             aWin.open(newURI('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23')));
         }
     },
-    addBookmark: function StatusBar_addBookmark() {
-        let d = new Date;
-        let contentDocument = window._content.document;
-        let s = contentDocument.createElement('script');
-        s.charset = 'UTF-8';
-        s.src = 'http://b.hatena.ne.jp/js/Hatena/Bookmark/let.js?' + d.getFullYear() + d.getMonth() + d.getDate();
-        let doc = aDoc;
-        if (isHttp)
-            (doc.getElementsByTagName('head')[0] || doc.body).appendChild(s);
-    },
     checkBookmarked: function StatusBar_checkBookmarked() {
         if (isHttp && User.user && User.user.hasBookmark(locationURL)) {
             addButton.setAttribute('added', true);
@@ -57,22 +47,58 @@ var StatusBar = {
         if (StatusBar.lastURL == lURL) return;
 
         StatusBar.lastURL = lURL;
-        StatusBar.checkBookmarked();
-        StatusBar.checkCount();
+        if (StatusBar.prefs.get('addButton'))
+            StatusBar.checkBookmarked();
+        if (StatusBar.prefs.get('counter'))
+            StatusBar.checkCount();
+    },
+    get prefs() {
+        if (!StatusBar._prefs) {
+            StatusBar._prefs = new Prefs('extensions.hatenabookmark.statusbar.');
+        }
+        return StatusBar._prefs;
     },
     checkCount: function StatusBar_checkCount() {
         statusCount.value = (isHttp ? HTTPCache.counter.get(locationURL) : '0') || '0';
         if (statusCount.value >= 5) {
             statusCount.setAttribute('users', 'many');
+            statusComment.setAttribute('comment', true);
         } else if (statusCount.value >= 1) {
+            statusComment.setAttribute('comment', true);
             statusCount.setAttribute('users', 'few');
         } else {
+            statusCount.removeAttribute('comment');
             statusCount.setAttribute('users', 'none');
         }
     },
+    registerPrefsListeners: function () {
+        StatusBar.prefs.createListener('addButton', StatusBar.prefsAddButtonHandler);
+        StatusBar.prefs.createListener('counter', StatusBar.prefsCounterHandler);
+        StatusBar.prefsAddButtonHandler();
+        StatusBar.prefsCounterHandler();
+    },
+    prefsAddButtonHandler: function(e) {
+        if (StatusBar.prefs.get('addButton')) {
+            addButton.removeAttribute('hidden');
+        } else {
+            addButton.setAttribute('hidden', true);
+        }
+    },
+    prefsCounterHandler: function(e) {
+        if (StatusBar.prefs.get('counter')) {
+            statusCount.removeAttribute('hidden');
+            statusComment.removeAttribute('hidden');
+        } else {
+            statusCount.setAttribute('hidden', true);
+            statusComment.setAttribute('hidden', true);
+        }
+    },
+    loadHandler: function() {
+        StatusBar.registerPrefsListeners();
+    }
 }
 
-
+window.addEventListener('load', StatusBar.loadHandler, false);
 
 Application.activeWindow.events.addListener('TabSelect', function() {
     StatusBar.update();
