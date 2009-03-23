@@ -145,6 +145,12 @@
                     this.urlField.href      = bookmark.url;
                     this.commentField.value = bookmark.comment;
                     this.userNameField.value = hBookmark.User.user.name;
+                    setTimeout(function (self) {
+                        let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
+                        if (res.title === bookmark.title) return;
+                        self._originalTitle   = res.title;
+                        self.titleField.value = res.title;
+                    }, 0, this);
                 ]]></body>
             </method>
 
