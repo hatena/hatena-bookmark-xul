@@ -3,8 +3,10 @@
 <?xml-stylesheet type="text/css" href="addPanel.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/skin/browser.css"?>
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="hBookmarkAddPanelWindow"
         buttons="accept,cancel"
         defaultButton="accept"
+        persist="screenX screenY width height"
         onload="var bookmark = window.arguments[0] &amp;&amp; window.arguments[0].bookmark;
                 if (bookmark)
                     document.getElementById('hBookmarkAddPanelContent').show(bookmark);"

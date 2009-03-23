@@ -3,45 +3,7 @@ const EXPORT = ["AddPanelManager"];
 let Bookmark = Model.Bookmark;
 
 var AddPanelManager = {
-    get _container APM_get__container() {
-        let container = document.getElementById("hBookmarkAddPanelConatainer");
-        delete this._container;
-        return this._container = container;
-    },
-
-    init: function APM_init() {
-        gBrowser.browsers.forEach(AddPanelManager.setupPanel);
-        gBrowser.addEventListener("TabOpen", AddPanelManager.onTabOpen, false);
-    },
-
-    onTabOpen: function APM_onTabOpen(event) {
-        AddPanelManager.setupPanel(event.originalTarget.linkedBrowser);
-    },
-
-    setupPanel: function APM_setupPanel(browser) {
-        let splitter = document.createElementNS(XUL_NS, "splitter");
-        splitter.setAttribute("collapsed", "true");
-        splitter.setAttribute("style", "min-height: 0;");
-        let panel = document.createElementNS(XUL_NS, "vbox");
-        panel.setAttribute("class", "hBookmarkAddPanel");
-        panel.setAttribute("collapsed", "true");
-        browser.parentNode.appendChild(splitter);
-        browser.parentNode.appendChild(panel);
-        panel.splitter = splitter;
-    },
-
-    //get currentPanel APM_get_currentPanel() {
-    //    return this._container.firstChild;
-    //    return this.getPanelForBrowser(gBrowser.selectedBrowser);
-    //},
     currentPanel: null,
-
-    getPanelForBrowser: function APM_getPanelForBrowser(browser) {
-        let panel = browser.nextSibling;
-        while (panel && !/\bhBookmarkAddPanel\b/.test(panel.className))
-            panel = panel.nextSibling;
-        return panel;
-    },
 
     // XXX AddPanelManagerではなく全体に属すべき。
     getBookmarkFor: function APM_getBookmarkFor(item) {
@@ -58,29 +20,36 @@ var AddPanelManager = {
         return bookmark;
     },
 
+    get panelDialog APM_get_panelDialog() {
+        return this.currentPanel && this.currentPanel.document.documentElement;
+    },
+
+    get panelContent APM_get_panelContent() {
+        if (!this.currentPanel || this.currentPanel.closed)
+            return null;
+        let doc = this.currentPanel.document;
+        return doc.getElementById("hBookmarkAddPanelContent");
+    },
+
     toggle: function APM_toggle() {
-        this.showPanel(this.getBookmarkFor(gBrowser.contentWindow));
-        //let panel = this.currentPanel;
-        //let bookmark = this.getBookmarkFor(gBrowser.contentWindow);
-        //if (panel.isOpen && panel.bookmark.url === bookmark.url)
-        //    panel.hide();
-        //else
-        //    panel.show(bookmark);
+        let panel = this.panelContent;
+        if (panel && panel.bookmark.url === gBrowser.currentURI.spec)
+            this.panelDialog.cancelDialog();
+        else
+            this.showPanel(gBrowser.contentWindow);
     },
 
     showPanel: function APM_showPanel(item) {
         let bookmark = this.getBookmarkFor(item);
-        //this.currentPanel.show(bookmark);
-        if (!this.currentPanel || this.currentPanel.closed) {
+        let panel = this.panelContent;
+        if (panel) {
+            panel.show(bookmark);
+        } else {
             this.currentPanel = window.openDialog(
                 "chrome://hatenabookmark/content/addPanel.xul",
                 "_blank",
                 "chrome, dialog, resizable, alwaysRaised, centerscreen",
                 { bookmark: bookmark });
-            return;
         }
-        this.currentPanel.document.getElementById("hBookmarkAddPanelContent").show(bookmark);
     }
 };
-
-//window.addEventListener("load", AddPanelManager.init, false);
