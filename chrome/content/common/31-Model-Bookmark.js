@@ -13,7 +13,8 @@ let Bookmark = Model.Entity({
 });
 
 let createWhereLike = function (word) {
-    var words = word.split(/\s+/);
+    // sqlite での検索は case_sensitive_like = 1 で行った方が速いため
+    var words = word.toLowerCase().split(/\s+/);
     var sql = [];
     var args = {};
     var c = 0;
@@ -89,6 +90,7 @@ extend(Bookmark, {
     },
     search: function(str, limit) {
         if (!str) return Bookmark.findRecent(limit);
+        Bookmark.db.connection.executeSimpleSQL('PRAGMA case_sensitive_like = 1');
         var [sql, args] = createWhereLike(str);
         extend(args, {
             limit: limit || 10,
@@ -176,7 +178,7 @@ addAround(Bookmark, 'initialize', function(proceed, args, target) {
 });
 
 addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
-    target.search = [target.title, target.comment, target.url].join("\n"); // SQLite での検索用
+    target.search = [target.title, target.comment, target.url].join("\n").toLowerCase(); // SQLite での検索用
     proceed(args);
     target.updateTags();
 });

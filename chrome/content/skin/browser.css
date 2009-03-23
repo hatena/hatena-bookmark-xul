@@ -118,10 +118,14 @@ iframe#hBookmark-comment-viewer {
 
 image.hBookmark-urlbar-entrylink {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/b_link.gif");
-  padding-top: 5px;
-  padding-bottom: 5px;
   cursor: pointer;
 }
+
+image.hBookmark-urlbar-entryedit {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/edit.gif");
+  cursor: pointer;
+}
+
 
 #hBookmark-urlbar-listbox * label.hBookmark-urlbar-title {
     font-size: 1.2em;
@@ -133,6 +137,11 @@ image.hBookmark-urlbar-entrylink {
 
 #hBookmark-urlbar-listbox * label.hBookmark-urlbar-commentbody {
   color: #555;
+}
+
+#hBookmark-urlbar-listbox * label.hBookmark-urlbar-commentnone {
+  color: #BBB;
+  font-style: italic;
 }
 
 #hBookmark-urlbar-listbox * label.hBookmark-urlbar-url {

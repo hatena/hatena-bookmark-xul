@@ -6,6 +6,7 @@
 <!ENTITY hBookmark.sidebar.key "A">
 
 <!ENTITY hBookmark.statusbar.now_syncing "Sync...">
+<!ENTITY hBookmark.statusbar.tooltip.addButton "add to HatenaBookmark">
 
 <!ENTITY hBookmark.menu.add "This page add to HatenaBookmark.">
 <!ENTITY hBookmark.menu.addlink "This link add to HatenaBookmark.">

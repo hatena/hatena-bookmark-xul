@@ -104,7 +104,7 @@ var log = {
     },
     info: function (msg) {
         if (nowDebug) {
-            Application.console.log(msg.toString());
+            Application.console.log((msg || '').toString());
         }
     }
 }

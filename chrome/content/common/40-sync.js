@@ -51,12 +51,14 @@ extend(Sync, {
         let BOOKMARK  = model('Bookmark');
 
         let text = req.responseText;
+        let commentRe = new RegExp('\\s+$','');
         let [bookmarks, infos] = this.createDataStructure(text);
         p(sprintf('start: %d data', infos.length));
         let now = Date.now();
         p('start');
         this.db.beginTransaction();
-        for (let i = 0, len = infos.length;  i < len; i++) {
+        let len = infos.length;
+        for (let i = len - 1;  i > 0; i--) {
             let bi = i * 3;
             let timestamp = infos[i].split("\t", 2)[1];
             let title = bookmarks[bi];
@@ -64,7 +66,7 @@ extend(Sync, {
             let url = bookmarks[bi+2];
             let b = new BOOKMARK;
             b.title = title;
-            b.comment = comment;
+            b.comment = comment.replace(commentRe, '');
             b.url = url;
             b.date = parseInt(timestamp);
             if (url) {
@@ -75,9 +77,10 @@ extend(Sync, {
                 }
             } else {
             }
-            if (i % 100 == 0) {
-                this.dispatch('progress', { value: i/len*100|0 });
+            if (i % 200 == 0) {
+                this.dispatch('progress', { value: (len-i)/len*100|0 });
                 this.db.commitTransaction();
+                EventService.dispatch("BookmarksUpdated");
                 async.wait(1000);
                 this.db.beginTransaction();
                 p('wait: ' + (Date.now() - now));

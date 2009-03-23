@@ -186,22 +186,25 @@ var LocationBar = {
             LocationBar.hide();
         }
     },
+    commentNone: decodeURIComponent(escape('コメント無し')),
     resultRender: function(res) {
         let row = list.getAttribute('rows');
         let height;
         res.forEach(function(b) {
             let tags;
+            let comment;
             let item = E('richlistitem', {'class': 'hBookmark-urlbar-listitem', value:b.url},
                 E('hbox', null, 
                     E('vbox', null,
                         E('image', {src: b.favicon, width:'16px', height:'16px'}),
-                        E('image', {'class': 'hBookmark-urlbar-entrylink'})
+                        E('image', {'class': 'hBookmark-urlbar-entrylink'}),
+                        E('image', {'class': 'hBookmark-urlbar-entryedit'})
                     ),
                     E('vbox', null, 
                         E('label', {'class': 'hBookmark-urlbar-title', value: b.title, tooltiptext: b.title}),
                         E('hbox', {tooltiptext: b.comment},
                             tags = E('label', {'class': 'hBookmark-urlbar-tags', value: b.tags.join(', ')}),
-                            E('label', {'class': 'hBookmark-urlbar-comment', value: b.body})
+                            comment = E('label', {'class': 'hBookmark-urlbar-commentbody', value: b.body})
                         ),
 
                         E('hbox', null,
@@ -211,7 +214,13 @@ var LocationBar = {
                     )
                 )
             );
-            if (b.tags.length == 0) tags.parentNode.removeChild(tags);
+            if (b.tags.length == 0) {
+                tags.parentNode.removeChild(tags);
+                if (b.body.length == 0) {
+                    comment.setAttribute('value', LocationBar.commentNone);
+                    comment.setAttribute('class', 'hBookmark-urlbar-commentnone');
+                }
+            }
             list.appendChild(item);
             let rect = item.getBoundingClientRect();
             height = parseInt(rect.bottom - rect.top);
@@ -289,7 +298,10 @@ var LocationBar = {
     _goLink: function(url, ev) {
         if (ev.target.getAttribute('class') == 'hBookmark-urlbar-entrylink') {
             url = entryURL(url);
-        }
+        } else if (ev.target.getAttribute('class') == 'hBookmark-urlbar-entryedit') {
+            hBookmark.AddPanelManager.showPanel(url);
+            return;
+        } 
         openUILink(url, ev);
         LocationBar.searchEnabled = false;
     },

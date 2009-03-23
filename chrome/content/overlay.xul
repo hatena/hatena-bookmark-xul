@@ -65,20 +65,19 @@
         <statusbarpanel id="hBookmark-statusBarPanel"
              collapsed="false"
         >
-            <image id="hBookmarkAddButton" added="false"
-                   onclick="hBookmark.AddPanelManager.toggle();"/>
+            <hbox id="hBookmark-syncProgressBox" hidden="true">
+                <label value="&hBookmark.statusbar.now_syncing;" />
+                <progressmeter 
+                id="hBookmark-syncProgressMeter"
+                tooltiptext="&hBookmark.statusbar.now_syncing;"
+                style="width: 50px"
+                width="50px" mode="determined" value="82" 
+                />
+            </hbox>
 
-            <!--
-            <image
-                 id="hBookmark-status-home"
-                 onclick="hBookmark.StatusBar.goHome();"
-            />
-            <image
-                 added="false"
-                 id="hBookmark-status-add"
-                 onclick="hBookmark.StatusBar.addBookmark();"
-            />
-            -->
+            <image id="hBookmarkAddButton" added="false"
+                   tooltiptext="&hBookmark.statusbar.tooltip.addButton;"
+                   onclick="hBookmark.AddPanelManager.toggle();"/>
 
             <label
                  id="hBookmark-status-count"
@@ -89,19 +88,9 @@
             <image
                  id="hBookmark-status-comment"
                  onclick="hBookmark.CommentViewer.show(this);"
-                 tooltiptext="ブックマークコメントを見る"
                  loading="false"
             />
 
-            <hbox id="hBookmark-syncProgressBox" hidden="true">
-                <label value="&hBookmark.statusbar.now_syncing;" />
-                <progressmeter 
-                id="hBookmark-syncProgressMeter"
-                tooltiptext="&hBookmark.statusbar.now_syncing;"
-                style="width: 50px"
-                width="50px" mode="determined" value="82" 
-                />
-            </hbox>
         </statusbarpanel>
     </statusbar>
 

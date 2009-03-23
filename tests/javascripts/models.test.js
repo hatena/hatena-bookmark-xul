@@ -53,6 +53,9 @@ function testBookmark() {
     b.date = 0;
     b.save();
 
+    var b3 = BOOKMARK.findByUrl(b.url);
+    assert.equals(b.comment, b3[0].comment);
+
     res = BOOKMARK.findByTags('hoge');
     assert.isTrue(res.length == 2);
 
@@ -63,8 +66,9 @@ function testBookmark() {
     assert.isTrue(res.length == 1);
 
     assert.equals(1, model('Tag').findByName('huga').length);
-    BOOKMARK.deleteBookmarks(b2);
+    BOOKMARK.deleteBookmarks([b2]);
     assert.equals(0, model('Tag').findByName('huga').length);
+
 }
 
 function testTag() {
@@ -91,3 +95,5 @@ function testTag() {
     tags = Tag.findByName("Perl");
     assert.equals(tags.length, 0);
 }
+
+
