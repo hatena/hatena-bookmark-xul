@@ -4,5 +4,6 @@ resource    hatenabookmark  chrome/resource/
 #html        hatenabookmark  chrome/resource/html/
 skin    hatenabookmark  classic/1.0 chrome/skin/
 style   chrome://browser/content/browser.xul chrome://hatenabookmark/skin/bookmark.css
+# style   chrome://global/content/customizeToolbar.xul chrome://hatenabookmark/skin/bookmark.css
 locale hatenabookmark en-US chrome/locale/en-US/
 locale hatenabookmark ja    chrome/locale/ja/

@@ -43,8 +43,15 @@
 
 
     <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton 
+            id="hBookmark-toolbar-add" 
+            label="&hBookmark.menu.add;"
+            tooltiptext="&hBookmark.menu.add;"
+            oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);" />
+
         <toolbaritem id="hBookmarkDropdown">
-            <toolbarbutton class="bookmark-item"
+            <toolbarbutton 
+                           class="bookmark-item toolbarbutton-1"
                            type="menu"
                            container="true"
                            label="&hBookmark.toolbar.recentLabel;">
