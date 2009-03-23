@@ -15,4 +15,5 @@ pref("extensions.hatenabookmark.locationbar.search", true);
 pref("extensions.hatenabookmark.statusbar.counter", true);
 pref("extensions.hatenabookmark.statusbar.addButton", true);
 
-
+// addPanel tagsuggest
+pref("extensions.hatenabookmark.addPanel.tagMaxResult", 20);

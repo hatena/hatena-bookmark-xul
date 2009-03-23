@@ -59,7 +59,9 @@ if (shared.has('User')) {
         },
         get database() {
             if (!this._db) {
-                this._db = new Database('hatena.bookmark.' + this.name + '.sqlite');
+                let dir = this.configDir;
+                dir.append('bookmark.sqlite');
+                this._db = new Database(dir);
             }
             return this._db;
         },
@@ -68,6 +70,18 @@ if (shared.has('User')) {
             if (this._db) {
                 this._db.connection.close();
             }
+        },
+        get configDir() {
+            let pd = DirectoryService.get("ProfD", Ci.nsIFile);
+            pd.append('hatenabookmark');
+            if (!pd.exists() || !pd.isDirectory()) {
+                pd.create(Ci.nsIFile.DIRECTORY_TYPE, 0664);
+            }
+            pd.append(this.name);
+            if (!pd.exists() || !pd.isDirectory()) {
+                pd.create(Ci.nsIFile.DIRECTORY_TYPE, 0664);
+            }
+            return pd;
         }
     };
 

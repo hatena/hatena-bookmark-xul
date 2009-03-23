@@ -176,7 +176,6 @@ TagCompleter.InputHandler.prototype = {
         }
     },
     listCompleteHandler: function(ev) {
-        p('pppp');
         this.insert(true);
     },
     insert: function(force) {
@@ -194,10 +193,18 @@ TagCompleter.InputHandler.prototype = {
 TagCompleter.InputLine = function(value, tags) {
     this.suggestTags = tags;
     this.value = value;
-    this.maxSuggest = 10; // default
+    this.maxSuggest = Application.prefs.get('extensions.hatenabookmark.addPanel.tagMaxResult').value;
 }
 
 TagCompleter.InputLine.prototype = {
+    /*
+    get prefs() {
+        if (this._prefs) {
+            this._prefs = new Prefs('extensions.hatenabookmark.addPanel.');
+        }
+        return this._prefs;
+    },
+    */
     get value() this._text,
     set value(val) {
         this._text = val;

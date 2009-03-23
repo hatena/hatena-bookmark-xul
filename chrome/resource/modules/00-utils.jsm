@@ -18,6 +18,9 @@ const Application =
     getService("@mozilla.org/fuel/application;1", Ci.fuelIApplication);
 const PrefetchService =
     getService("@mozilla.org/prefetch-service;1", Ci.nsIPrefetchService);
+const DirectoryService =
+    getService('@mozilla.org/file/directory_service;1', Ci.nsIProperties);
+
 const ObserverService =
     getService("@mozilla.org/observer-service;1", Ci.nsIObserverService);
 const StorageService =
