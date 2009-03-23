@@ -6,16 +6,10 @@
 
     <binding id="add-panel"
              extends="chrome://global/content/bindings/popup.xml#panel">
-        <content><!-- persist="height" -->
-            <xul:toolbox>
-                <xul:toolbar align="center">
-                    <xul:label anonid="panelTitle"/>
-                    <xul:spacer flex="1"/>
-                    <xul:toolbarbutton anonid="closeButton"
-                                       class="tabs-closebutton"
-                                       oncommand="document.getBindingParent(this).hide();"/>
-                </xul:toolbar>
-            </xul:toolbox>
+        <content>
+            <xul:hbox>
+                <xul:label anonid="userNameField"/>
+            </xul:hbox>
             <xul:label anonid="errorField" hidden="true"/>
             <xul:grid>
                 <xul:columns>
@@ -43,35 +37,22 @@
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.commentLabel;"/>
-                        <xul:textbox 
+                        <xul:textbox
                             anonid="commentField"
                             class="hBookmarkMyTagComplete"
                         />
                     </xul:row>
                 </xul:rows>
             </xul:grid>
-            <xul:hbox>
-                <xul:button anonid="saveButton" default="true"/>
-                <xul:spacer flex="1"/>
-                <xul:resizer dir="bottomright"/>
-            </xul:hbox>
         </content>
 
         <implementation>
             <constructor><![CDATA[
                 this.inputHandler = new hBookmark.TagCompleter.InputHandler(this.commentField.inputField);
-                // this.commentField.inputField.addEventListener('keypress', hBookmark.TagCompleter.
-                // this.commentField.inputField.addEventListener('keypress', function(ev) { 
-                // let panel = document.getBindingParent(document.getBindingParent(ev.target));
-                // panel.method();
             ]]></constructor>
 
-            <field name="splitter">null</field>
-            <field name="panelTitle">
-                document.getAnonymousElementByAttribute(this, "anonid", "panelTitle")
-            </field>
-            <field name="closeButton">
-                document.getAnonymousElementByAttribute(this, "anonid", "closeButton")
+            <field name="userNameField">
+                document.getAnonymousElementByAttribute(this, "anonid", "userNameField")
             </field>
             <field name="titleField">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleField")
@@ -88,11 +69,12 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
-            <field name="saveButton">
-                document.getAnonymousElementByAttribute(this, "anonid", "saveButton")
-            </field>
             <field name="errorField">
                 document.getAnonymousElementByAttribute(this, "anonid", "errorField")
+            </field>
+            <field name="dialog">
+                document.documentElement
+
             </field>
 
             <field name="strings">
@@ -117,13 +99,6 @@
                 ]]></setter>
             </property>
 
-            <!--
-            <property name="isOpen" readonly="true"
-                      onget="return !this.collapsed;"/>
-            -->
-            <property name="isOpen" readonly="true"
-                      onget="return this.parentNode.state === 'open';"/>
-
             <property name="isTitleEditable"
                       onget="return !this.titleField.readOnly;">
                 <setter><![CDATA[
@@ -145,9 +120,6 @@
                     this.bookmark = bookmark;
                     this.setAddOrEdit(!!bookmark.temporary);
                     this.clearError();
-                    //this.collapsed = false;
-                    //this.splitter.collapsed = false;
-                    this.parentNode.openPopupAtScreen(window.screenX, window.screenY);
                     // 遅延しないとうまく focus があたらない？
                     // これでもタイミング次第では focus あわないので:w
                     // panel の表示にあわせて focus したほうがよいかも
@@ -159,9 +131,7 @@
 
             <method name="hide">
                 <body><![CDATA[
-                    //this.collapsed = true;
-                    //this.splitter.collapsed = true;
-                    this.parentNode.hidePopup();
+                    this.dialog.cancelDialog();
                 ]]></body>
             </method>
 
@@ -174,6 +144,13 @@
                     this.urlField.value     = bookmark.url;
                     this.urlField.href      = bookmark.url;
                     this.commentField.value = bookmark.comment;
+                    this.userNameField.value = hBookmark.User.user.name;
+                    setTimeout(function (self) {
+                        let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
+                        if (res.title === bookmark.title) return;
+                        self._originalTitle   = res.title;
+                        self.titleField.value = res.title;
+                    }, 0, this);
                 ]]></body>
             </method>
 
@@ -181,11 +158,9 @@
                 <parameter name="add"/>
                 <body><![CDATA[
                     let type = add ? ".add" : ".edit";
-                    this.panelTitle.value =
+                    document.title =
                         this.strings.get("title" + type);
-                    this.closeButton.tooltipText =
-                        this.strings.get("closeTooltip" + type);
-                    this.saveButton.label =
+                    this.dialog.getButton("accept").label =
                         this.strings.get("saveLabel" + type);
                 ]]></body>
             </method>
@@ -211,53 +186,17 @@
                         bookmark: this.bookmark,
                         changeTitle: this.isTitleChanged,
                         onError: let (self = this) function () {
-                            self.setError('error');
-                            self.show(bookmark);
+                            let win = getTopWin();
+                            //self.setError('error');
+                            //self.show(bookmark);
+                            //win.alert('error');
+                            win.hBookmark.AddPanelManager.showPanel(bookmark);
                         }
                     });
                     command.execute();
-                    this.hide();
                 ]]></body>
             </method>
         </implementation>
-
-        <handlers>
-            <handler event="command"><![CDATA[
-                if (event.originalTarget === this.saveButton)
-                    this.saveBookmark();
-            ]]></handler>
-
-            <handler event="keypress" phase="capturing"><![CDATA[
-                if (event.keyCode == KeyEvent.DOM_VK_ESCAPE) {
-                    this.hide();
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                /*
-                let target = document.getBindingParent(event.originalTarget);
-                if (target.localName !== "textbox" ||
-                    (target.type === "autocomplete" && target.popupOpen) ||
-                    event.ctrlKey || event.shiftKey ||
-                    event.altKey || event.metaKey)
-                    return;
-
-                switch (event.keyCode) {
-                case KeyEvent.DOM_VK_RETURN:
-                    // this.saveButton.doCommand();
-                    break;
-
-                case KeyEvent.DOM_VK_ESCAPE:
-                    this.hide();
-                    break;
-
-                default:
-                    return;
-                }
-                event.preventDefault();
-                event.stopPropagation();
-                */
-            ]]></handler>
-        </handlers>
     </binding>
 
     <binding id="tag-complete" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">

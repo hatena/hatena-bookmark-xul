@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
+<?xml-stylesheet type="text/css" href="addPanel.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/skin/browser.css"?>
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="hBookmarkAddPanelWindow"
+        buttons="accept,cancel"
+        defaultButton="accept"
+        persist="screenX screenY width height"
+        onload="var bookmark = window.arguments[0] &amp;&amp; window.arguments[0].bookmark;
+                if (bookmark)
+                    document.getElementById('hBookmarkAddPanelContent').show(bookmark);"
+        ondialogaccept="document.getElementById('hBookmarkAddPanelContent').saveBookmark();">
+    <script type="application/javascript"
+            src="chrome://hatenabookmark/content/autoloader.js"/>
+    <script type="application/javascript"
+            src="chrome://browser/content/utilityOverlay.js"/>
+    <popupset>
+        <panel 
+            id="hBookmark-panel-tagcomplete" 
+            noautofocus="true"
+            noautohide="false"
+        >
+            <richlistbox 
+            disableKeyNavigation="true"
+            rows="10"
+            id="hBookmark-tagcomplete-listbox" 
+            />
+        </panel>
+    </popupset>
+    <vbox id="hBookmarkAddPanelContent" class="hBookmarkAddPanel"/>
+</dialog>

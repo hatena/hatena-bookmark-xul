@@ -30,7 +30,7 @@ extend(EntryContext.prototype, {
     },
 
     edit: function EC_edit() {
-        getTopWin().hBookmark.AddPanelManager.currentPanel.show(this.bookmark);
+        getTopWin().hBookmark.AddPanelManager.showPanel(this.bookmark);
     },
 
     delete: function EC_delete() {
