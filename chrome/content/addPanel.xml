@@ -183,7 +183,9 @@
                     this.editTitleButton.hidden = user.private;
                     this.isTitleEditable    = false;
                     this.urlField.value     = bookmark.url;
-                    this.urlField.href      = bookmark.url;
+                    this.urlField.href =
+                        hBookmark.UIUtils.isSafeLink(bookmark.url)
+                        ? bookmark.url : "";
                     this.usersRow.hidden    = true;
                     this.commentField.value = bookmark.comment;
                     this.userNameField.value = user.name;

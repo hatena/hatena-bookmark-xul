@@ -94,6 +94,10 @@ var UIUtils = {
         win.getBrowser().loadTabs(uris, loadInBackground, replaceCurrentTab);
     },
 
+    isSafeLink: function UIU_isSafeLink(uri) {
+        return /^(?:https?|ftp):\/\//.test(uri);
+    },
+
     getUsersText: function UIU_getUsersText(count) {
         let ruleNum = +this.addPanelStrings.get("usersPluralRuleNum");
         let get = PluralForm.makeGetter(ruleNum)[0];
