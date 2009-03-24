@@ -2,8 +2,10 @@
 <?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
 <?xml-stylesheet type="text/css" href="addPanel.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/skin/browser.css"?>
+<!DOCTYPE dialog SYSTEM "chrome://hatenabookmark/locale/addPanel.dtd">
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         id="hBookmarkAddPanelWindow"
+        buttonlabelextra2="&hBookmark.addPanel.deleteLabel;"
         buttons="accept,cancel"
         defaultButton="accept"
         width="550"
@@ -11,7 +13,8 @@
         onload="var bookmark = window.arguments[0] &amp;&amp; window.arguments[0].bookmark;
                 if (bookmark)
                     document.getElementById('hBookmarkAddPanelContent').show(bookmark);"
-        ondialogaccept="document.getElementById('hBookmarkAddPanelContent').saveBookmark();">
+        ondialogaccept="document.getElementById('hBookmarkAddPanelContent').saveBookmark();"
+        ondialogextra2="document.getElementById('hBookmarkAddPanelContent').deleteBookmark();">
     <script type="application/javascript"
             src="chrome://hatenabookmark/content/autoloader.js"/>
     <script type="application/javascript"

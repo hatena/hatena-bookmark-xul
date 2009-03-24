@@ -221,6 +221,8 @@
                         this.strings.get("title" + type);
                     this.dialog.getButton("accept").label =
                         this.strings.get("saveLabel" + type);
+                    this.dialog.buttons =
+                        add ? "accept,cancel" : "accept,cancel,extra2";
                 ]]></body>
             </method>
 
@@ -253,6 +255,16 @@
                         }
                     });
                     command.execute();
+                ]]></body>
+            </method>
+
+            <method name="deleteBookmark">
+                <body><![CDATA[
+                    let command = new hBookmark.RemoteCommand("delete", {
+                        bookmark: this.bookmark,
+                    });
+                    command.execute();
+                    this.hide();
                 ]]></body>
             </method>
         </implementation>
