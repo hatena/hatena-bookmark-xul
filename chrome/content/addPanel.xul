@@ -9,6 +9,7 @@
         buttons="accept,cancel"
         defaultButton="accept"
         width="550"
+        height="250"
         persist="screenX screenY width height"
         onload="var bookmark = window.arguments[0] &amp;&amp; window.arguments[0].bookmark;
                 if (bookmark)

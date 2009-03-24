@@ -50,10 +50,12 @@ var CommentViewer = {
         let data = HTTPCache.comment.get(url);
         if (data)
             data.favicon = favicon(url);
-        this.updateComment(data);
+        setTimeout(function(self) {
+            self.updateComment(data);
+        }, 10, this);
     },
     updateComment: function CommentViewer_updateComment(data) {
-        if (data) {
+        if (data && data.title) {
             panelComment.openPopup(commentButton, 'before_end', 0, 0,false,false);
             // 非表示ユーザをフィルター
             let regex = User.user.ignores;
