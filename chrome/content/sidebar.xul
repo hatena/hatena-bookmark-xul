@@ -55,9 +55,12 @@
             <treecols>
                 <treecol id="hBookmarkTagTree_currentTag"
                          label="&hBookmark.sidebar.tagsLabel;"
-                         primary="true" flex="1"/>
+                         primary="true" flex="1"
+                         persist="width sortDirection sortActive"/>
+                <splitter class="tree-splitter"/>
                 <treecol id="hBookmarkTagTree_count"
-                         label="{{Count}}"/>
+                         label="{{Count}}"
+                         persist="width sortDirection sortActive"/>
             </treecols>
             <treechildren/>
         </tree>

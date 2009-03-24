@@ -21,6 +21,8 @@ function TagTreeView() {
     this._visibleItems = [];
     this._rootItem = new TagTreeItem();
     this._treeBox = null;
+    this._sortBy = null;
+    this._sortDir = null;
     this.selection = null;
 }
 
@@ -35,6 +37,7 @@ extend(TagTreeView.prototype, {
         this._treeBox = treeBox;
         if (!treeBox) return;
         this._treeBox.treeBody.tags = [];
+        this._setSortKey();
         this._openRelatedTags(this._rootItem);
         this._visibleItems.forEach(function (item, i) item.index = i);
     },
@@ -61,6 +64,42 @@ extend(TagTreeView.prototype, {
             properties.AppendElement(AtomService.getAtom("Name"));
     },
 
+    cycleHeader: function TTV_cycleHeader(col) {
+        let sortDir = col.element.getAttribute("sortDirection");
+        sortDir = (sortDir === "ascending")  ? "descending" :
+                  (sortDir === "descending") ? "natural"    : "ascending";
+        let cols = col.columns;
+        for (let c = cols.getFirstColumn(); c; c = c.getNext()) {
+            if (c === col) {
+                c.element.setAttribute("sortDirection", sortDir);
+                c.element.setAttribute("sortActive", "true");
+            } else {
+                c.element.setAttribute("sortDirection", "natural");
+                c.element.removeAttribute("sortActive")
+            }
+        }
+        this._sortBy = col.element.id.substring("hBookmarkTagTree_".length);
+        this._sortDir = sortDir;
+
+        this._treeBox.rowCountChanged(0, -this.rowCount);
+        this._visibleItems.length = 0;
+        this._openRelatedTags(this._rootItem);
+        this._visibleItems.forEach(function (item, i) item.index = i);
+        this._treeBox.rowCountChanged(0, this.rowCount);
+    },
+
+    _setSortKey: function TTV__setSortKey() {
+        let cols = this._treeBox.columns;
+        for (let col = cols.getFirstColumn(); col; col = col.getNext()) {
+            let element = col.element;
+            if (element.getAttribute("sortActive") === "true") {
+                this._sortBy = element.id.substring("hBookmarkTagTree_".length);
+                this._sortDir = element.getAttribute("sortDirection");
+                break;
+            }
+        }
+    },
+
     toggleOpenState: function (index) {
         var visibleItems = this._visibleItems;
         var item = visibleItems[index];
@@ -83,6 +122,10 @@ extend(TagTreeView.prototype, {
         if (!tags.length) return 0;
         var items = tags.map(function (t) new TagTreeItem(t, parentItem));
         items[items.length - 1].hasNext = false;
+        if (this._sortBy === "count" && this._sortDir !== "natural")
+            items.sort(function (a, b) a.count - b.count);
+        if (this._sortDir === "descending")
+            items.reverse();
         var visibleItems = this._visibleItems;
         var spliceArgs = [parentItem.index + 1, 0].concat(items);
         visibleItems.splice.apply(visibleItems, spliceArgs);
