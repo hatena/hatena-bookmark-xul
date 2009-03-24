@@ -33,7 +33,8 @@ var ToolbarInstaller = {
             if (flag) {
                 newSet = newSet.join(',');
                 toolbar.currentSet = newSet;
-                toolbar.setAttribute('currentSet', newSet);
+                toolbar.setAttribute('currentset', newSet);
+                document.getElementById('navigator-toolbox').ownerDocument.persist(toolbar.id, 'currentset');
                 BrowserToolboxCustomizeDone(true);
             }
         } catch(e) {

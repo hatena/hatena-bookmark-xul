@@ -164,6 +164,7 @@
                     if (!Application.prefs.get('extensions.hatenabookmark.install').value) {
                         Application.prefs.get('extensions.hatenabookmark.install').value = true;
                         EventService.dispatch('Install');
+                        toggleSidebar('viewHBookmarkSidebar'); // 初回はサイドバーを表示
                     }
 
                     EventService.dispatch('firstPreload', window);
