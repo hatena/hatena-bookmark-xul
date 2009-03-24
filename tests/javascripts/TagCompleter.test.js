@@ -4,7 +4,7 @@ var hBookmark;
 
 function warmUp() {
     utils.include("btil.js");
-    var global = loadAutoloader("chrome://hatenabookmark/content/browser.xul");
+    var global = loadAutoloader("chrome://hatenabookmark/content/addPanel.xul");
     hBookmark = global.hBookmark;
     hBookmark.extend(_global, hBookmark);
 }

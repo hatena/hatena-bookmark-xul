@@ -347,10 +347,11 @@ TagCompleter.InputLine.prototype = {
         let lastIndex = 0;
         while ((match = re.exec(str))) {
             lastIndex += match[0].length; 
-            //if (lastIndex == re.lastIndex) 
-            let tag = match[1];
-            if (!tags.some(function(t) tag == t))
-                tags.push(match[1]);
+            if (lastIndex == re.lastIndex) {
+                let tag = match[1];
+                if (!tags.some(function(t) tag == t))
+                    tags.push(match[1]);
+            }
         }
         let comment = str.substring(lastIndex) || '';
         return [comment, tags];

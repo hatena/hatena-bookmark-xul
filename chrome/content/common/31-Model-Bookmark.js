@@ -46,18 +46,21 @@ extend(Bookmark, {
         return tags;
     },
     parse: function(str) {
-        /*
-         * XXX: [hoge][huga] foo [baz] の baz もまっちしてしまう
-         */
-        let regex = new RegExp('\\[([^\:\\[\\]]+)\\]', 'g');
+        let re = /\[([^\[\]]+)\]/g;
         let match;
         let tags = [];
         let lastIndex = 0;
-        while (( match = regex.exec(str) )) {
-            tags.push(match[1]);
-            lastIndex = regex.lastIndex;
+        while ((match = re.exec(str))) {
+            lastIndex += match[0].length; 
+            if (lastIndex == re.lastIndex) {
+                let tag = match[1];
+                if (!tags.some(function(t) tag == t))
+                    tags.push(match[1]);
+            }
         }
-        return [tags, str.substring(lastIndex)];
+        let comment = str.substring(lastIndex) || '';
+
+        return [tags, comment];
     },
     findByTags: function(tags) {
         tags = [].concat(tags);
