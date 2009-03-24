@@ -1,4 +1,46 @@
 
+* {
+    font-family:"Arial","Helvetica",sans-serif;
+}
+
+row.username-line {
+    margin-bottom: 5px;
+}
+
+dialog#hBookmarkAddPanelWindow {
+    background-color: #FFF !important;
+    border: 5px solid #E9F0F8 !important;
+}
+
+label[anonid="titleLabel"] {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+row[anonid="messageRow"] {
+    padding: 4px;
+    margin: 5px 3px 5px 3px;
+    background-color: #FFDDDD;
+    -moz-border-radius: 7px;
+    font-weight: bold;
+    color: #555;
+}
+
+label[anonid="usersField"] {
+  background: url(http://b.hatena.ne.jp/images/page.gif) left 0px no-repeat;
+  color: #FF6e6e !important;
+  font-weight: bold;
+  padding-left: 14px;
+  font-size: 10px;
+  font-family: verdana;
+}
+
+textbox {
+}
+
+
+
+
 .hBookmarkAddPanel {
     -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#add-panel");
 }

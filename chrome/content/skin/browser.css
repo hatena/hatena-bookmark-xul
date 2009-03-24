@@ -118,7 +118,9 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton {
 }
 
 iframe#hBookmark-comment-viewer {
+  /*
 width: 800px;
+*/
 }
 
 /*

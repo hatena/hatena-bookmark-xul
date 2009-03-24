@@ -14,12 +14,18 @@
                     <xul:column flex="1"/>
                 </xul:columns>
                 <xul:rows>
-                    <xul:row align="center">
-                        <xul:spacer/>
+                    <xul:row align="center" class="username-line">
+                        <xul:hbox align="right">
+                        <!--
+                        <xul:image src="chrome://hatenabookmark/content/skin/images/favicon.ico" height="16px" width="16px" />
+                        -->
+                        <xul:label value="ようこそ" />
+                        </xul:hbox>
                         <xul:hbox align="center">
                             <xul:image anonid="userIcon"/>
                             <xul:label anonid="userNameField"
                                        class="text-link hBookmarkLink"/>
+                            <xul:label value="さん" />
                         </xul:hbox>
                     </xul:row>
                     <xul:row anonid="messageRow">
