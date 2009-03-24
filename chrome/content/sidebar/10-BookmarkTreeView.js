@@ -66,6 +66,7 @@ extend(BookmarkTreeView.prototype, {
             break;
 
         case "BookmarksUpdated":
+        case "UserChange":
             this.update();
             break;
 

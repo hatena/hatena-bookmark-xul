@@ -16,8 +16,16 @@ var UIUtils = {
             win, this.popupStrings.get("prompt.title"),
             this.popupStrings.get("prompt.encourageLogin"),
             PS.STD_YES_NO_BUTTONS, null, null, null, null, {});
-        if (pressed !== 0) return;
-        openUILinkIn("http://www.hatena.ne.jp/login", "current");
+        if (pressed === 0)
+            this.openLogin(null);
+    },
+
+    openLogin: function UIU_openLogin(event) {
+        openUILink("https://www.hatena.ne.jp/login", event);
+    },
+
+    openAddBookmark: function UIU_openAddBookmark(event) {
+        openUILink("http://b.hatena.ne.jp/" + User.user.name + "/add", event);
     },
 
     confirmDeleteBookmarks: function UIU_confirmDeleteBookmarks(bookmarks) {
