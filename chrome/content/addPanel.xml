@@ -21,15 +21,22 @@
                 <xul:rows>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.titleLabel;"/>
-                        <xul:hbox align="center">
-                            <xul:textbox anonid="titleField" flex="1"/>
-                            <xul:button anonid="editTitleButton"
-                                        label="&hBookmark.addPanel.editTitleLabel;"
-                                        oncommand="var panel = document.getBindingParent(this); panel.isTitleEditable = true; panel.titleField.focus();"/>
-                            <xul:button anonid="cancelEditTitleButton"
-                                        label="&hBookmark.addPanel.cancelEditTitleLabel;"
-                                        oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
-                        </xul:hbox>
+                        <xul:vbox>
+                            <xul:hbox anonid="titleContainer"
+                                      align="center">
+                                <xul:label anonid="titleLabel"/>
+                                <xul:button anonid="editTitleButton"
+                                            label="&hBookmark.addPanel.editTitleLabel;"
+                                            oncommand="document.getBindingParent(this).isTitleEditable = true;"/>
+                            </xul:hbox>
+                            <xul:hbox anonid="editableTitleContainer"
+                                      align="center">
+                                <xul:textbox anonid="titleField" flex="1"/>
+                                <xul:button anonid="cancelEditTitleButton"
+                                            label="&hBookmark.addPanel.cancelEditTitleLabel;"
+                                            oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
+                            </xul:hbox>
+                        </xul:vbox>
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.urlLabel;"/>
@@ -59,6 +66,15 @@
             <field name="userNameField">
                 document.getAnonymousElementByAttribute(this, "anonid", "userNameField")
             </field>
+            <field name="titleContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleContainer")
+            </field>
+            <field name="editableTitleContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "editableTitleContainer")
+            </field>
+            <field name="titleLabel">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleLabel")
+            </field>
             <field name="titleField">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleField")
             </field>
@@ -87,8 +103,6 @@
             </field>
 
             <field name="_bookmark">({ title: "", url: "", comment: "" })</field>
-            <field name="_originalTitle">""</field>
-
             <property name="bookmark">
                 <getter><![CDATA[
                     return hBookmark.extend(this._bookmark, {
@@ -107,17 +121,18 @@
             <property name="isTitleEditable"
                       onget="return !this.titleField.readOnly;">
                 <setter><![CDATA[
-                    this.titleField.readOnly = !val;
-                    this.editTitleButton.hidden = val;
-                    this.cancelEditTitleButton.hidden = !val;
-                    if (!val)
-                        this.titleField.value = this._originalTitle;
+                    this.titleContainer.hidden = val;
+                    this.editableTitleContainer.hidden = !val;
+                    if (val)
+                        this.titleField.focus();
+                    else
+                        this.titleField.value = this.titleLabel.value;
                     return val;
                 ]]></setter>
             </property>
 
             <property name="isTitleChanged" readonly="true"
-                      onget="return this.titleField.value !== this._originalTitle;"/>
+                      onget="return this.titleField.value !== this.titleLabel.value;"/>
 
             <method name="show">
                 <parameter name="bookmark"/>
@@ -143,13 +158,14 @@
             <method name="updateFields">
                 <parameter name="bookmark"/>
                 <body><![CDATA[
-                    this._originalTitle     = bookmark.title;
+                    let user = hBookmark.User.user;
+                    this.titleLabel.value   = bookmark.title;
                     this.titleField.value   = bookmark.title;
+                    this.editTitleButton.hidden = user.private;
                     this.isTitleEditable    = false;
                     this.urlField.value     = bookmark.url;
                     this.urlField.href      = bookmark.url;
                     this.commentField.value = bookmark.comment;
-                    let user = hBookmark.User.user;
                     this.userNameField.value = user.name;
                     this.userNameField.href = user.bookmarkHomepage;
                     let iconURL = user.getProfileIcon(false);
@@ -160,7 +176,7 @@
                         let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
                         if (res) {
                             if (res.title === bookmark.title) return;
-                            self._originalTitle   = res.title;
+                            self.titleLabel.value = res.title;
                             self.titleField.value = res.title;
                         } else if (!bookmark.title) {
                             let xhr = hBookmark.net.get(bookmark.url);
@@ -168,7 +184,7 @@
                             // loading icon だしたほうがよさそう
                             let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
                             if (m) {
-                                self._originalTitle   = m[1];
+                                self.titleLabel.value = m[1];
                                 self.titleField.value = m[1];
                             }
                         }
