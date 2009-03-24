@@ -28,7 +28,8 @@ extend(Sync, {
         this.dispatch('start');
         if (b && b.date) {
             net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true, {
-                timestamp: b.date
+                timestamp: b.date,
+                _now: ((new Date())*1), // cache のため
             });
         } else {
             net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true);

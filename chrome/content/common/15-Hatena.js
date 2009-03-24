@@ -10,9 +10,9 @@ if (shared.has('User')) {
     /*
      * User オブジェクトは一つだけ
      */
-    User = function User_constructor (name, rks) {
+    User = function User_constructor (name, options) {
         this._name = name;
-        this._rks = rks;
+        this.options = options || {};
     };
 
     extend(User, {
@@ -42,7 +42,7 @@ if (shared.has('User')) {
                     return current;
                 }
             }
-            let user = new User(res.name, res.rks);
+            let user = new User(res.name, res);
             this.user = user;
             EventService.dispatch('UserChange', this);
         }
@@ -50,8 +50,22 @@ if (shared.has('User')) {
     
     User.prototype = {
         get name() this._name,
-        set rks(rks) this._rks = rks,
-        get rks() this._rks,
+        get rks() this.options.rks,
+        get private() this.options.private == 1,
+        get public() !this.private,
+        get ignores() {
+            if (this.options.ignores_regex) {
+                if (typeof this._ignores == 'undefined') {
+                    try {
+                        this._ignores = new RegExp(this.options.ignores_regex);
+                    } catch(e) {
+                        this._ignores = null;
+                    }
+                }
+                return this._ignores;
+            }
+            return null;
+        },
         get bCount() model('Bookmark').countAll(),
         hasBookmark: function user_hasBookmark(url) {
             let res = model('Bookmark').findByUrl(url);
