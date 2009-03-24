@@ -30,6 +30,8 @@
                 let method = hBookmark.method;
                 hBookmark.EventService.createListener("BookmarksUpdated",
                     method(this, "onBookmarksUpdated"));
+                hBookmark.EventService.createListener("UserChange",
+                    method(this, "onBookmarksUpdated"));
                 window.addEventListener("resize",
                     method(this, "onResize"), false);
                 this.recentContainer.addEventListener("command",
