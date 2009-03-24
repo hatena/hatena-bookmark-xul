@@ -16,11 +16,11 @@ toolbar[iconsize="small"] #hBookmark-toolbar-home-button {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/bookmark_home_small.png");
 }
 
-#hBookmarkDropdown toolbarbutton {
+#hBookmarkDropdownButton {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/recent_bookmarks.png");
 }
 
-toolbar[iconsize="small"] #hBookmarkDropdown toolbarbutton {
+toolbar[iconsize="small"] #hBookmarkDropdownButton {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/recent_bookmarks_small.png");
 }
 

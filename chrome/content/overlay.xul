@@ -45,27 +45,28 @@
             id="hBookmark-toolbar-add-button" 
             label="&hBookmark.toolbar.add;"
             tooltiptext="&hBookmark.toolbar.add;"
-            class="toolbarbutton-1  chromeclass-toolbar-additiona"
-            oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);" />
+            class="toolbarbutton-1 chromeclass-toolbar-additional"
+            oncommand="hBookmark.AddPanelManager.showPanel(window.content);" />
 
         <toolbarbutton 
             id="hBookmark-toolbar-home-button" 
             label="&hBookmark.toolbar.home;"
             tooltiptext="&hBookmark.toolbar.home;"
-            class="toolbarbutton-1  chromeclass-toolbar-additiona"
-            oncommand="openUILink('http://b.hatena.ne.jp/my', event);" />
+            class="toolbarbutton-1 chromeclass-toolbar-additional"
+            oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
+            onclick="checkForMiddleClick(this, event);" />
 
-        <!--
         <toolbaritem id="hBookmarkDropdown">
-            <toolbarbutton 
-                class="bookmark-item toolbarbutton-1  chromeclass-toolbar-additiona"
+            <toolbarbutton
+                id="hBookmarkDropdownButton"
+                class="chromeclass-toolbar-additional"
                 type="menu"
-                container="true"
-                label="&hBookmark.toolbar.recentLabel;">
+                label="&hBookmark.toolbar.recentLabel;"
+                tooltiptext="&hBookmark.toolbar.recentLabel;">
                 <menupopup context="hBookmarkEntryContext"/>
             </toolbarbutton>
         </toolbaritem>
-        -->
+
         <toolbaritem id="urlbar-container">
                <textbox id="urlbar">
                     <hbox id="urlbar-icons">
