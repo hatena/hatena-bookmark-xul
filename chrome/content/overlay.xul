@@ -56,7 +56,7 @@
             oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
             onclick="checkForMiddleClick(this, event);" />
 
-        <toolbaritem id="hBookmarkDropdown">
+        <toolbaritem id="hBookmark-toolbar-dropdown">
             <toolbarbutton
                 id="hBookmarkDropdownButton"
                 class="chromeclass-toolbar-additional"
