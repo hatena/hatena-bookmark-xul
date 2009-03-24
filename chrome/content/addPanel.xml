@@ -7,11 +7,6 @@
     <binding id="add-panel"
              extends="chrome://global/content/bindings/popup.xml#panel">
         <content>
-            <xul:hbox>
-                <xul:image anonid="userIcon"/>
-                <xul:label anonid="userNameField"
-                           class="text-link hBookmarkLink"/>
-            </xul:hbox>
             <xul:label anonid="errorField" hidden="true"/>
             <xul:grid>
                 <xul:columns>
@@ -20,10 +15,19 @@
                 </xul:columns>
                 <xul:rows>
                     <xul:row align="center">
+                        <xul:spacer/>
+                        <xul:hbox>
+                            <xul:image anonid="userIcon"/>
+                            <xul:label anonid="userNameField"
+                                       class="text-link hBookmarkLink"/>
+                        </xul:hbox>
+                    </xul:row>
+                    <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.titleLabel;"/>
                         <xul:vbox>
                             <xul:hbox anonid="titleContainer"
                                       align="center">
+                                <xul:image anonid="titleIcon"/>
                                 <xul:label anonid="titleLabel"/>
                                 <xul:button anonid="editTitleButton"
                                             label="&hBookmark.addPanel.editTitleLabel;"
@@ -76,6 +80,9 @@
             </field>
             <field name="editableTitleContainer">
                 document.getAnonymousElementByAttribute(this, "anonid", "editableTitleContainer")
+            </field>
+            <field name="titleIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleIcon")
             </field>
             <field name="titleLabel">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleLabel")
@@ -170,6 +177,7 @@
                 <parameter name="bookmark"/>
                 <body><![CDATA[
                     let user = hBookmark.User.user;
+                    this.titleIcon.src = hBookmark.favicon(bookmark.url);
                     this.titleLabel.value   = bookmark.title;
                     this.titleField.value   = bookmark.title;
                     this.editTitleButton.hidden = user.private;
