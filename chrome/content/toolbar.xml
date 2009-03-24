@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd">
 <bindings xmlns="http://www.mozilla.org/xbl"
           xmlns:xbl="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <binding id="toolbar" extends="#toolbar-item-base">
         <content>
+            <xul:toolbarbutton anonid="loginButton"
+                               label="&hBookmark.toolbar.loginLabel;"
+                               oncommand="hBookmark.UIUtils.openLogin(event);"
+                               onclick="checkForMiddleClick(this, event);"/>
+            <xul:toolbarbutton anonid="addBookmarkButton"
+                               label="&hBookmark.toolbar.addBookmarkLabel;"
+                               oncommand="hBookmark.UIUtils.openAddBookmark(event);"
+                               onclick="checkForMiddleClick(this, event);"/>
             <xul:hbox anonid="recent-container" flex="1"
                       context="hBookmarkEntryContext"
                       tooltip="hBookmarkItemTooltip">
@@ -29,9 +38,15 @@
                     method(this, "onBookmarkClick"), false);
                 // XXX コンストラクタ呼び出し時にはデータを取得できない……。
                 //this.build();
-                setTimeout(function (self) self.build(), 500, this)
+                setTimeout(method(this, "build"), 500);
             ]]></constructor>
 
+            <field name="loginButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "loginButton")
+            </field>
+            <field name="addBookmarkButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "addBookmarkButton")
+            </field>
             <field name="recentContainer">
                 document.getAnonymousElementByAttribute(this, "anonid", "recent-container")
             </field>
@@ -53,13 +68,23 @@
                     range.selectNodeContents(this.popup);
                     range.deleteContents();
 
-                    let bookmarks = this.getRecentBookmarks();
+                    let bookmarks;
+                    try {
+                        bookmarks = this.getRecentBookmarks();
+                    } catch (ex) {
+                        bookmarks = [];
+                    }
                     bookmarks.forEach(function (bookmark) {
                         let button = this._createToolbarButton(bookmark);
                         this.body.appendChild(button);
                         let item = this._createMenuItem(bookmark);
                         this.popup.appendChild(item);
                     }, this);
+
+                    let loggedin = !!hBookmark.User.user;
+                    this.loginButton.hidden = loggedin;
+                    this.addBookmarkButton.hidden = !loggedin ||
+                                                    !!bookmarks.length;
                     this.redraw();
                 ]]></body>
             </method>
