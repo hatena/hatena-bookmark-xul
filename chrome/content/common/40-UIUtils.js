@@ -1,11 +1,14 @@
 const EXPORT = ["UIUtils"];
 
+Cu.import("resource://gre/modules/PluralForm.jsm", this);
+
 let PS = Cc["@mozilla.org/embedcomp/prompt-service;1"].
          getService(Ci.nsIPromptService);
 
 var UIUtils = {
     popupStrings: new Strings("chrome://hatenabookmark/locale/popups.properties"),
     errorStrings: new Strings("chrome://hatenabookmark/locale/errors.properties"),
+    addPanelStrings: new Strings("chrome://hatenabookmark/locale/addPanel.properties"),
 
     encourageLogin: function UIU_encourageLogin() {
         let win = getTopWin();
@@ -89,5 +92,13 @@ var UIUtils = {
         let loadInBackground = (where === "tabshifted");
         let replaceCurrentTab = (where !== "tab");
         win.getBrowser().loadTabs(uris, loadInBackground, replaceCurrentTab);
+    },
+
+    getUsersText: function UIU_getUsersText(count) {
+        let ruleNum = +this.addPanelStrings.get("usersPluralRuleNum");
+        let get = PluralForm.makeGetter(ruleNum)[0];
+        let text = get(count, this.addPanelStrings.get("usersLabel"));
+        return text.replace(/#1/g, count);
+        return count + " users";
     }
 };

@@ -44,6 +44,11 @@
                                    class="text-link hBookmarkLink"
                                    crop="end"/>
                     </xul:row>
+                    <xul:row anonid="usersRow" align="center">
+                        <xul:spacer/>
+                        <xul:label anonid="usersField"
+                                   class="text-link hBookmarkLink"/>
+                    </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.commentLabel;"/>
                         <xul:textbox
@@ -86,6 +91,12 @@
             </field>
             <field name="urlField">
                 document.getAnonymousElementByAttribute(this, "anonid", "urlField")
+            </field>
+            <field name="usersRow">
+                document.getAnonymousElementByAttribute(this, "anonid", "usersRow")
+            </field>
+            <field name="usersField">
+                document.getAnonymousElementByAttribute(this, "anonid", "usersField")
             </field>
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
@@ -165,16 +176,18 @@
                     this.isTitleEditable    = false;
                     this.urlField.value     = bookmark.url;
                     this.urlField.href      = bookmark.url;
+                    this.usersRow.hidden    = true;
                     this.commentField.value = bookmark.comment;
                     this.userNameField.value = user.name;
                     this.userNameField.href = user.bookmarkHomepage;
-                    let iconURL = user.getProfileIcon(false);
-                    new hBookmark.IconLoader(iconURL, function (dataURL) {
-                        this.userIcon.src = dataURL;
-                    }, this);
+                    this.userIcon.src       = user.getProfileIcon(false);
                     setTimeout(function (self) {
                         let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
                         if (res) {
+                            self.usersField.value =
+                                hBookmark.UIUtils.getUsersText(res.count);
+                            self.usersField.href = res.entry_url;
+                            self.usersRow.hidden = false;
                             if (res.title === bookmark.title) return;
                             self.titleLabel.value = res.title;
                             self.titleField.value = res.title;
