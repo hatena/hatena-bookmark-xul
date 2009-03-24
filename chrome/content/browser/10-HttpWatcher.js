@@ -84,12 +84,12 @@ var HttpWatcher = {
         // XXX: Sync に依存してしまう
         let listener = Sync.createListener("complete", function onSync() {
             p('Sync completed');
+            listener.unlisten();
             if (Model.Bookmark.findByUrl(task.url).length) {
                 p('Sync succeeded');
-                listener.unlisten();
             } else {
                 p(task.url + ' is not registered.  Retry sync.');
-                // 同期が間に合わなかったら少し待って再度同期する。
+                // 同期が間に合わなかったら少し待ってもう一度だけ同期する。
                 setTimeout(method(Sync, 'sync'), 2000);
             }
         }, null, 0, false);
