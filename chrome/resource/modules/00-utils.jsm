@@ -128,9 +128,11 @@ var createElementBindDocument = function(doc) {
  * elementGetter(this, 'myList', 'my-list-id-name', document);
  * list //=> document.getElementById('my-list-id-name');
  */
-var elementGetter = function(self, name, idName, doc) {
+var elementGetter = function(self, name, idName, doc, uncache) {
     var element;
     self.__defineGetter__(name, function() {
+        if (uncache)
+            return doc.getElementById(idName);
         if (!element) {
             element = doc.getElementById(idName);
         }

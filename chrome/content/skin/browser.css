@@ -152,11 +152,13 @@ iframe#hBookmark-comment-viewer {
 image.hBookmark-urlbar-entrylink {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/b_link.gif");
   cursor: pointer;
+  display: none;
 }
 
 image.hBookmark-urlbar-entryedit {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/edit.gif");
   cursor: pointer;
+  margin-top: 3px;
 }
 
 

@@ -1,22 +1,24 @@
 
 var EXPORT = ['LocationBar'];
 
-elementGetter(this, 'bar', 'urlbar', document);
+// elementGetter(this, 'bar', 'urlbar', document);
 elementGetter(this, 'panel', 'hBookmark-panel-urlbar', document);
 elementGetter(this, 'list', 'hBookmark-urlbar-listbox', document);
-elementGetter(this, 'icon', 'hBookmark-search-icon', document);
+elementGetter(this, 'icon', 'hBookmark-search-icon', document, true);
 
 let E = createElementBindDocument(document);
 let Bookmark = model('Bookmark');
 
 var LocationBar = {
     registerEventListeners: function() {
+        p('reg');
         LocationBar.bar.addEventListener('keypress', LocationBar.barKeyPressTabHandler, true);
         LocationBar.bar.inputField.addEventListener('keydown', LocationBar.barKeyDownHandler, true);
         LocationBar.bar.inputField.addEventListener('keypress', LocationBar.barKeyPressHandler, false);
         LocationBar.bar.inputField.addEventListener('keyup', LocationBar.barKeyUpHandler, true);
     },
     unregisterEventListeners: function() {
+        p('unreg');
         LocationBar.searchEnabled = false;
         LocationBar.bar.removeEventListener('keypress', LocationBar.barKeyPressTabHandler, true);
         LocationBar.bar.inputField.removeEventListener('keydown', LocationBar.barKeyDownHandler, true);
@@ -65,7 +67,7 @@ var LocationBar = {
     _fakeController: null,
     get fakeController() {
         if (!this._fakeController) 
-            this._fakeController = new FakeAutoCompletePopupController(bar.mController);
+            this._fakeController = new FakeAutoCompletePopupController(LocationBar.bar.mController);
         return this._fakeController;
     },
     get searchEnabled() this._isSearch,
@@ -75,18 +77,19 @@ var LocationBar = {
                 UIUtils.encourageLogin();
                 return;
             }
+
             LocationBar._isSearch = true;
             /* XXX: 本当は AutoComplete をきちんと切りたい… 
              * ここで要素が見えてないと AutoComplete がエラーになるので直す
              */
-            bar.mController = LocationBar.fakeController;
+            LocationBar.bar.mController = LocationBar.fakeController;
             document.getElementById('PopupAutoCompleteRichResult').setAttribute('hiddenByHBookmark', true);
             document.getElementById('PopupAutoCompleteRichResult').hidePopup();
             icon.removeAttribute('searchdisabled');
             // LocationBar.search();
         } else {
             LocationBar._isSearch = false;
-            bar.mController = LocationBar.fakeController.controller;
+            LocationBar.bar.mController = LocationBar.fakeController.controller;
             document.getElementById('PopupAutoCompleteRichResult').removeAttribute('hiddenByHBookmark');
             icon.setAttribute('searchdisabled', true);
             LocationBar.searchLastWord = null;
@@ -173,7 +176,7 @@ var LocationBar = {
     },
     searchLastWord: null,
     search: function LocationBar_search() {
-        let word = bar.inputField.value;
+        let word = LocationBar.bar.inputField.value;
 
         if (!word || (LocationBar.searchLastWord == word)) {
             LocationBar.hide();
@@ -276,7 +279,7 @@ var LocationBar = {
         } else if (ev.keyCode == 8) { // backspace?
             ev.stopPropagation();
             ev.preventDefault();
-            bar.inputField.focus();
+            LocationBar.bar.inputField.focus();
         }
     },
     listControler: {
@@ -294,7 +297,7 @@ var LocationBar = {
         },
     },
     show: function() {
-        panel.openPopup(bar, 'after_end', 0, 0,false,false);
+        panel.openPopup(LocationBar.bar, 'after_end', 0, 0,false,false);
     },
     hide: function() {
         panel.hidePopup();
@@ -406,13 +409,14 @@ FakeAutoCompletePopupController.prototype = {
 
 EventService.createListener('load', function() {
     LocationBar.init();
+
+    // toolbox 変更時の処理
+    addAround(window, 'BrowserToolboxCustomizeDone', function(proceed, args, target) {
+        LocationBar.unregisterEventListeners();
+        proceed(args);
+        LocationBar.init();
+    });
 });
 
-// toolbox 変更時の処理
-addAround(window, 'BrowserToolboxCustomizeDone', function(proceed, args, target) {
-    LocationBar.unregisterEventListeners();
-    proceed(args);
-    LocationBar.init();
-});
 
 
