@@ -95,9 +95,12 @@ toolbar[iconsize="small"] #hBookmarkDropdown toolbarbutton {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/comment_loading.gif");
 }
 
+#hBookmark-panel-comment {
+  border: 1px solid #ddd;
+}
 
 iframe#hBookmark-comment-viewer {
-    width: 400px;
+    width: 800px;
 }
 
 /*

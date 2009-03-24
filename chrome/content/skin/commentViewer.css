@@ -1,14 +1,13 @@
-
 /* BASIC {{{ */
 body,h1,h2,h3,h4,h5,h5,ul,ol,li,dl,dt,dd,form,textarea,input,select,blockquote {
   margin: 0;
   padding: 0;
   list-style: none;
-  font: 90%/1.4 "Arial", "Helvetica", sans-serif;
+  font: 95%/1.4 "Arial", "Helvetica", sans-serif;
 }
 
 body {
-  background: #F7F9FD;
+  background: #edf1fd;
 }
 
 img { 
@@ -17,9 +16,17 @@ img {
 }
 
 h1 {
-    padding: 3px;
-    background-color: #FFF;
-    border-bottom: #5279E7 solid 1px;
+    padding: 7px;
+    margin-bottom: 0.5em;
+    border: 1px solid #2c6ebd;
+    border-bottom: #16375e solid 1px;
+    font-weight: bold;
+    color: #fff;
+    background: #2c6ebd url("chrome://hatenabookmark/content/skin/images/title_bg.png") left center;
+    -moz-border-radius: 2px;
+    position: fixed;
+    width: 100%;
+    margin: 0px;
 }
 
 fieldset {
@@ -39,27 +46,27 @@ input {
   padding:0;
 }
 
-ul li {
+ul#list {
+  padding: 45px 0 2em 7px;
+}
+
+ul#list li {
   text-indent: 0px;
   display: list-item;
-  padding: 2px 4px 1px 4px;
+  padding: 3px 20px 3px 5px;
   margin: 0;
-  font-size: 100%;
   color: #000;
   word-wrap: break-word;
+  line-height: 1.4;
 }
 
-ul li a.username {
+ul#list li a.username {
   font-weight: normal;
   padding: 0 3px 0 3px;
-  color: #0064F2;
+  color: #00d;
 }
 
-ul li {
-  color: #333;
-}
-
-ul li.mine a.username {
+ul#list li.mine a.username {
   font-weight: bold;
 } 
 
@@ -69,34 +76,17 @@ span.comment {
 
 span.timestamp {
   color: #888;
-  font-size: 85%;
+  font-size: 80%;
 } 
 
 a.tag {
-    text-decoration: none;
-    color: #66c;
-    font-size: 90%;
+  text-decoration: none;
+  color: #66c;
+  font-size: 90%;
 }
 
-a#close-buttton {
-    display: absolute;
-    right: 5px;
-    top: 3px;
-    float: right;
+a#close-button {
+  position: absolute;
+  right: 20px;
+  top: 8px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
