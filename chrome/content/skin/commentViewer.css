@@ -3,7 +3,7 @@ body,h1,h2,h3,h4,h5,h5,ul,ol,li,dl,dt,dd,form,textarea,input,select,blockquote {
   margin: 0;
   padding: 0;
   list-style: none;
-  font: 95%/1.4 "Arial", "Helvetica", sans-serif;
+  font: 90%/1.4 "Arial", "Helvetica", sans-serif;
 }
 
 body {
@@ -23,10 +23,16 @@ h1 {
     font-weight: bold;
     color: #fff;
     background: #2c6ebd url("chrome://hatenabookmark/content/skin/images/title_bg.png") left center;
-    -moz-border-radius: 2px;
+    -moz-border-radius: 1px;
     position: fixed;
     width: 100%;
     margin: 0px;
+}
+
+span#title {
+  background: url(chrome://hatenabookmark/content/skin/images/favicon.ico) left 2px no-repeat;
+  padding-left: 20px;
+  display: inline-block;
 }
 
 fieldset {
@@ -48,6 +54,7 @@ input {
 
 ul#list {
   padding: 45px 0 2em 7px;
+  color: #222;
 }
 
 ul#list li {
@@ -76,13 +83,12 @@ span.comment {
 
 span.timestamp {
   color: #888;
-  font-size: 80%;
+  font-size: 90%;
 } 
 
 a.tag {
   text-decoration: none;
   color: #66c;
-  font-size: 90%;
 }
 
 a#close-button {
