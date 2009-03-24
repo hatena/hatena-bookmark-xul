@@ -1,5 +1,9 @@
 
 /* toolbar */
+#hBookmarkToolbar {
+  min-height: 26px;
+}
+
 #hBookmark-toolbar-add-button {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/add_bookmark.png");
 }
