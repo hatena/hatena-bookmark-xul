@@ -71,6 +71,10 @@ var LocationBar = {
     get searchEnabled() this._isSearch,
     set searchEnabled(bool) {
         if (bool) {
+            if (!User.user) {
+                UIUtils.encourageLogin();
+                return;
+            }
             LocationBar._isSearch = true;
             /* XXX: 本当は AutoComplete をきちんと切りたい… 
              * ここで要素が見えてないと AutoComplete がエラーになるので直す
@@ -79,7 +83,7 @@ var LocationBar = {
             document.getElementById('PopupAutoCompleteRichResult').setAttribute('hiddenByHBookmark', true);
             document.getElementById('PopupAutoCompleteRichResult').hidePopup();
             icon.removeAttribute('searchdisabled');
-            LocationBar.search();
+            // LocationBar.search();
         } else {
             LocationBar._isSearch = false;
             bar.mController = LocationBar.fakeController.controller;
@@ -104,7 +108,7 @@ var LocationBar = {
             LocationBar.searchEnabled = false;
         } else {
             LocationBar.searchEnabled = true;
-            setTimeout(function() LocationBar.search(), 100);
+            // setTimeout(function() LocationBar.search(), 100);
         }
     },
     barKeyPressTabHandler: function(ev) {
@@ -336,7 +340,6 @@ function FakeAutoCompletePopupController(aBaseController)
 
 FakeAutoCompletePopupController.prototype = {
     destroy: function() {
-        this.controller.destroy();
     },
     get controller() this.__originalController__,
     init : function(controller) this.__originalController__ = controller,

@@ -74,7 +74,7 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm');
  * p は一時デバッグ用
  */
 var p = function (value) {
-    log.info(value);
+    log.info(''+value);
     return value;
 }
 

@@ -42,28 +42,30 @@
 
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton 
-            id="hBookmark-toolbar-add" 
+            id="hBookmark-toolbar-add-button" 
             label="&hBookmark.toolbar.add;"
             tooltiptext="&hBookmark.toolbar.add;"
             class="toolbarbutton-1  chromeclass-toolbar-additiona"
             oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);" />
 
         <toolbarbutton 
-            id="hBookmark-toolbar-home" 
+            id="hBookmark-toolbar-home-button" 
             label="&hBookmark.toolbar.home;"
             tooltiptext="&hBookmark.toolbar.home;"
             class="toolbarbutton-1  chromeclass-toolbar-additiona"
             oncommand="openUILink('http://b.hatena.ne.jp/my', event);" />
 
+        <!--
         <toolbaritem id="hBookmarkDropdown">
             <toolbarbutton 
-                           class="bookmark-item toolbarbutton-1  chromeclass-toolbar-additiona"
-                           type="menu"
-                           container="true"
-                           label="&hBookmark.toolbar.recentLabel;">
+                class="bookmark-item toolbarbutton-1  chromeclass-toolbar-additiona"
+                type="menu"
+                container="true"
+                label="&hBookmark.toolbar.recentLabel;">
                 <menupopup context="hBookmarkEntryContext"/>
             </toolbarbutton>
         </toolbaritem>
+        -->
         <toolbaritem id="urlbar-container">
                <textbox id="urlbar">
                     <hbox id="urlbar-icons">
@@ -85,7 +87,7 @@
         <statusbarpanel id="hBookmark-statusBarPanel"
              collapsed="false"
         >
-            <hbox id="hBookmark-syncProgressBox" hidden="true">
+            <hbox align="center" id="hBookmark-syncProgressBox" hidden="true">
                 <label value="&hBookmark.statusbar.now_syncing;" />
                 <progressmeter 
                 id="hBookmark-syncProgressMeter"
@@ -159,9 +161,13 @@
                 EventService.dispatch('load', window);
 
                 if (!shared.get('firstPreload')) {
+                    if (!Application.prefs.get('extensions.hatenabookmark.install').value) {
+                        Application.prefs.get('extensions.hatenabookmark.install').value = true;
+                        EventService.dispatch('Install');
+                    }
+
                     EventService.dispatch('firstPreload', window);
                     shared.set('firstPreload', true);
-
                 }
             }, false);
 
