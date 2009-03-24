@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/toolbar.css"?>
-<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/addPanel.css"?>
 <?xml-stylesheet href="chrome://hatenabookmark/content/skin/browser.css" type="text/css"?>
 <?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
 <!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/browser.dtd">
@@ -24,18 +23,17 @@
     </menupopup>
 
     <popup id="contentAreaContextMenu"> 
-         <!-- label に DTD 参照入れるとなぜかエラー？ -->
          <menuitem
              class="menuitem-iconic"
              insertafter="context-bookmarkpage"
-             label="このページをはてなブックマークに追加"
+             label="&hBookmark.menu.add;"
              id="hBookmark-menu-addentry"
              oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);"
          />
          <menuitem
              class="menuitem-iconic"
              insertafter="context-bookmarklink"
-             label="このリンクをはてなブックマークに追加"
+             label="&hBookmark.menu.addlink;"
              id="hBookmark-menu-addlink"
              oncommand="hBookmark.AddPanelManager.showPanel(gContextMenu.linkURL);"
          />
@@ -45,9 +43,17 @@
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton 
             id="hBookmark-toolbar-add" 
-            label="&hBookmark.menu.add;"
-            tooltiptext="&hBookmark.menu.add;"
+            label="&hBookmark.toolbar.add;"
+            tooltiptext="&hBookmark.toolbar.add;"
+            class="toolbarbutton-1"
             oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);" />
+
+        <toolbarbutton 
+            id="hBookmark-toolbar-home" 
+            label="&hBookmark.toolbar.home;"
+            tooltiptext="&hBookmark.toolbar.home;"
+            class="toolbarbutton-1"
+            oncommand="openUILink('http://b.hatena.ne.jp/my', event);" />
 
         <toolbaritem id="hBookmarkDropdown">
             <toolbarbutton 

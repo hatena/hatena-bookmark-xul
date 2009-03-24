@@ -109,9 +109,9 @@ var log = {
     }
 }
 
-var nowDebug = function() {
+this.__defineGetter__('nowDebug', function() {
     return !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
-}
+});
 
 var createElementBindDocument = function(doc) {
     return function(name, attr) {

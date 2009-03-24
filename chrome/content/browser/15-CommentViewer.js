@@ -48,7 +48,12 @@ var CommentViewer = {
     updateComment: function CommentViewer_updateComment(data) {
         if (data) {
             panelComment.openPopup(commentButton, 'before_end', 0, 0,false,false);
-            // XXX: 非表示ユーザをフィルター
+            // 非表示ユーザをフィルター
+            let regex = User.user.ignores;
+            if (regex) {
+                p('filter!' + regex);
+                data.bookmarks = data.bookmarks.filter(function(b) !regex.test(b.user));
+            }
             throwEvent('load-json', data);
         }
         commentButton.setAttribute('loading', 'false'); 
