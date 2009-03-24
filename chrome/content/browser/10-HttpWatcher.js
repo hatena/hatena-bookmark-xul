@@ -81,8 +81,16 @@ var HttpWatcher = {
     performTask: function HW_performTask(task) {
         // ブックマーク成功したら、sync する
         // これにより、リモートとのデータの同期がとれる
-        p('performTask');
         // XXX: Sync に依存してしまう
+        let listener = Sync.createListener("complete", function onSync() {
+            p('Sync completed');
+            listener.unlisten();
+            if (!Model.Bookmark.findByUrl(task.url).length) {
+                p(task.url + ' is not registered.  Retry sync.');
+                // 同期が間に合わなかったら少し待ってもう一度だけ同期する。
+                setTimeout(method(Sync, 'sync'), 2000);
+            }
+        }, null, 0, false);
         Sync.sync();
 
         let bookmark = Model.Bookmark.findByUrl(task.url)[0];
