@@ -6,20 +6,42 @@ elementGetter(this, 'list', 'hBookmark-tagcomplete-listbox', document);
 
 let E = createElementBindDocument(document);
 
+/*
+ * ToDo: 毎回 addPanel 呼び出されると作られるため重い
+ */
+
 var TagCompleter = {
     reloadTags: function() {
-        let dTags =  model('Tag').findDistinctTags();
-        let tags = [];
-        let tagsCount = {};
-        dTags.forEach(function(e) { tags.push(e.name);tagsCount[e.name] = e.count;});
-        this._tags = tags;
-        this.tagsCount = tagsCount;
+        let self = this;
+        p.b(function() {
+            let dTags =  model('Tag').findDistinctTags();
+            let tags = [];
+            let tagsCount = {};
+            dTags.forEach(function(e) { tags.push(e.name);tagsCount[e.name] = e.count;});
+            self.tagCache.set('tags', tags);
+            self.tagCache.set('tagsCount', tagsCount);
+        }, 'reloadTags');
+    },
+    clearCache: function clearCache() {
+        this.tagCache._tags = null;
+        this.tagCache.tagsCount = null;
+    },
+    get tagCache() {
+        if (!shared.has('tagCache')) {
+            shared.set('tagCache', new ExpireCache('tagcache', 30 * 60));
+        }
+        return shared.get('tagCache');
+    },
+    get tagsCount() {
+        return this.tagCache.get('tagsCount');
     },
     get tags() {
-        if (!this._tags) {
+        let t = this.tagCache.get('tags');
+        if (!t) {
             this.reloadTags();
+            return this.tagCache.get('tags');
         }
-        return this._tags;
+        return t;
     }
 };
 
@@ -336,7 +358,14 @@ TagCompleter.InputLine.prototype = {
 }
 
 EventService.createListener('UserChange', function() {
-    TagCompleter.reloadTags();
+    TagCompleter.clearTags();
 }, User);
+
+/*
+EventService.createListener('BookmarksUpdated', function() {
+    p('clearTags');
+});
+*/
+
 
 

@@ -51,6 +51,11 @@ extend(Sync, {
         let BOOKMARK  = model('Bookmark');
 
         let text = req.responseText;
+        if (!text.length) {
+            this.dispatch('complete');
+            return;
+        }
+
         let commentRe = new RegExp('\\s+$','');
         let [bookmarks, infos] = this.createDataStructure(text);
         p(sprintf('start: %d data', infos.length));

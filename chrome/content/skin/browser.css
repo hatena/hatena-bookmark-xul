@@ -2,11 +2,18 @@
 /* toolbar */
 #hBookmark-toolbar-add {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/toolbar_add_bookmark.png");
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_plus_on.png");
 }
 
 toolbar[iconsize="small"] #hBookmark-toolbar-add {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/toolbar_add_bookmark_small.png");
+}
+
+#hBookmark-toolbar-home {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/b.gif");
+}
+
+toolbar[iconsize="small"] #hBookmark-toolbar-home {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/b.gif");
 }
 
 /* context menu*/

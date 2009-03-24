@@ -1,6 +1,8 @@
 <!ENTITY hBookmark.toolbar.title "Hatena Bookmark Toolbar">
 <!ENTITY hBookmark.toolbar.titleKey "A">
 <!ENTITY hBookmark.toolbar.recentLabel "Recent Hatena Bookmarks">
+<!ENTITY hBookmark.toolbar.add "Add to HatenaBookmark">
+<!ENTITY hBookmark.toolbar.home "Open self HatenaBookmark page">
 
 <!ENTITY hBookmark.sidebar.label "Hatena Bookmark">
 <!ENTITY hBookmark.sidebar.key "A">
@@ -10,3 +12,4 @@
 
 <!ENTITY hBookmark.menu.add "This page add to HatenaBookmark.">
 <!ENTITY hBookmark.menu.addlink "This link add to HatenaBookmark.">
+
