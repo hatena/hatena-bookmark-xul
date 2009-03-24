@@ -16,6 +16,10 @@
             modifiers="accel,alt" 
             key="b"
             oncommand="hBookmark.AddPanelManager.toggle();" />
+        <key id="hBookmark-key"
+            modifiers="accel,alt" 
+            key="c"
+            oncommand="hBookmark.CommentViewer.show();" />
     </keyset>
 
     <menupopup id="viewSidebarMenu">

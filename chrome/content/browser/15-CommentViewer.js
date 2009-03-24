@@ -48,6 +48,8 @@ var CommentViewer = {
         }
         commentButton.setAttribute('loading', 'true'); 
         let data = HTTPCache.comment.get(url);
+        if (data)
+            data.favicon = favicon(url);
         this.updateComment(data);
     },
     updateComment: function CommentViewer_updateComment(data) {

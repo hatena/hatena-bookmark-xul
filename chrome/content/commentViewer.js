@@ -42,6 +42,7 @@ var dispatchMethods = {
                 clear();
             }
         }
+        $('favicon').src = data.favicon;
         $('title').appendChild(T(data.title));
         p.b(function() {
             if (data.bookmarks && data.bookmarks.length) {
@@ -113,7 +114,7 @@ let close = function() {
 
 let userIcon = function(username) {
     return E('img', {
-        src: 'http://www.hatena.ne.jp/users/' + username.substring(0, 2) + '/' + username + '/profile_s.gif',
+        src: 'https://www.hatena.ne.jp/users/' + username.substring(0, 2) + '/' + username + '/profile_s.gif',
         className: 'usericon',
         alt: username,
     });

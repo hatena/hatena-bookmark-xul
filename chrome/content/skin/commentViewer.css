@@ -29,9 +29,16 @@ h1 {
     margin: 0px;
 }
 
+img#favicon {
+    vertical-align: middle;
+    margin-bottom: 2px;
+}
+
 span#title {
+  /*
   background: url(chrome://hatenabookmark/content/skin/images/favicon.ico) left 2px no-repeat;
   padding-left: 20px;
+  */
   display: inline-block;
 }
 
