@@ -111,7 +111,7 @@ extend(RemoteCommand.prototype, {
             url:     bookmark.url,
             comment: bookmark.comment
         };
-        if (this.options.changeTitle)
+        if (this.options.changeTitle && User.user.public)
             query.title = bookmark.title;
         this.options.query = query;
     },
@@ -134,6 +134,9 @@ extend(RemoteCommand.prototype, {
                 onComplete.apply(this, arguments);
             p('remove bookmarks', bookmarks.map(function (b) b.url).join("\n"));
             Model.Bookmark.deleteBookmarks(bookmarks);
+        };
+        this.options.onError = this.options.onError || function () {
+            UIUtils.alertBookmarkError('delete', bookmarks);
         };
     }
 });
