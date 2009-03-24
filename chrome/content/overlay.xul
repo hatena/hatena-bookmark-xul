@@ -101,7 +101,9 @@
                    tooltiptext="&hBookmark.statusbar.tooltip.addButton;"
                    onclick="hBookmark.AddPanelManager.toggle();"/>
 
-            <label
+            <hbox
+                 align="center"
+                 pack="end"
                  id="hBookmark-status-count"
                  onclick="hBookmark.StatusBar.goEntry();"
                  value=""
