@@ -130,14 +130,14 @@ var LocationBar = {
         p('keydown' + ev.keyCode);
         */
         let keyCode = ev.keyCode;
-        if (ev.ctrlKey && keyCode == ev.DOM_VK_CONTROL) {
+        if (ev.ctrlKey && keyCode == ev.DOM_VK_CONTROL && LocationBar.prefs.get('searchToggle')) {
             if (!LocationBar.ctrlTimer && this.keyUpFlag) {
                 this.keyUpFlag = false;
                 LocationBar.ctrlTimer = setTimeout(
                 function() { 
                     LocationBar.toggle();
                     LocationBar.clearTimer();
-                }, 500);
+                }, LocationBar.prefs.get('searchToggleWait'));
                 ev.preventDefault();
             }
             ev.stopPropagation();
@@ -243,7 +243,7 @@ var LocationBar = {
             // }, 200);
         }
         setTimeout(function() {
-            list.setAttribute('rows', 6);
+            list.setAttribute('rows', LocationBar.prefs.get('resultRows'));
             // let pRef = list.parentNode;
             // list.parentNode.removeChild(list);
             // pRef.appendChild(list);

@@ -12,6 +12,9 @@ pref("extensions.hatenabookmark.debug.log", false);
 
 // location bar
 pref("extensions.hatenabookmark.locationbar.search", true);
+pref("extensions.hatenabookmark.locationbar.searchToggle", true);
+pref("extensions.hatenabookmark.locationbar.searchToggleWait", 500);
+pref("extensions.hatenabookmark.locationbar.resultRows", 6);
 
 // status bar
 pref("extensions.hatenabookmark.statusbar.counter", true);
