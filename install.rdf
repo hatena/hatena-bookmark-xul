@@ -6,8 +6,8 @@
         <em:name>HatenaBookmark</em:name>
         <em:version>0.0.1</em:version>
         <em:type>2</em:type>
-        <em:description>FIXME Description about this extension</em:description>
-        <em:creator>FIXME author</em:creator>
+        <em:description>Hatena Bookmark Firefox Add-on</em:description>
+        <em:creator>Hatena</em:creator>
         <em:targetApplication>
             <Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>

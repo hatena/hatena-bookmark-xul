@@ -1,26 +1,34 @@
 
 /* toolbar */
-#hBookmark-toolbar-add {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/toolbar_add_bookmark.png");
+#hBookmark-toolbar-add-button {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/add_bookmark.png");
 }
 
-toolbar[iconsize="small"] #hBookmark-toolbar-add {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/toolbar_add_bookmark_small.png");
+toolbar[iconsize="small"] #hBookmark-toolbar-add-button {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/add_bookmark_small.png");
 }
 
-#hBookmark-toolbar-home {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/b.gif");
+#hBookmark-toolbar-home-button {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/bookmark_home.png");
 }
 
-toolbar[iconsize="small"] #hBookmark-toolbar-home {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/b.gif");
+toolbar[iconsize="small"] #hBookmark-toolbar-home-button {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/bookmark_home_small.png");
+}
+
+#hBookmarkDropdown toolbarbutton {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/recent_bookmarks.png");
+}
+
+toolbar[iconsize="small"] #hBookmarkDropdown toolbarbutton {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/recent_bookmarks_small.png");
 }
 
 /* context menu*/
 
 #hBookmark-menu-addlink,
 #hBookmark-menu-addentry {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_plus_on.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/add_bookmark_small.png");
 }
 
 /* StatusBar */
@@ -87,9 +95,12 @@ toolbar[iconsize="small"] #hBookmark-toolbar-home {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/comment_loading.gif");
 }
 
+#hBookmark-panel-comment {
+  border: 1px solid #ddd;
+}
 
 iframe#hBookmark-comment-viewer {
-    width: 400px;
+    width: 800px;
 }
 
 /*
@@ -144,11 +155,13 @@ iframe#hBookmark-comment-viewer {
 image.hBookmark-urlbar-entrylink {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/b_link.gif");
   cursor: pointer;
+  display: none;
 }
 
 image.hBookmark-urlbar-entryedit {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/edit.gif");
   cursor: pointer;
+  margin-top: 3px;
 }
 
 

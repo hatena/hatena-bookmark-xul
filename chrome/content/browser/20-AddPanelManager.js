@@ -39,12 +39,15 @@ var AddPanelManager = {
             this.showPanel(gBrowser.contentWindow);
     },
 
-    showPanel: function APM_showPanel(item) {
+    showPanel: function APM_showPanel(item, options) {
         if (!User.user) {
             UIUtils.encourageLogin();
             return;
         }
         let bookmark = this.getBookmarkFor(item);
+        if (!bookmark.title && options && options.title)
+            bookmark.title = options.title;
+
         let panel = this.panelContent;
         if (panel) {
             panel.show(bookmark);

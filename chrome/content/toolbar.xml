@@ -93,7 +93,7 @@
 
             <method name="redraw">
                 <body><![CDATA[
-                    hBookmark.p('redraw');
+                    hBookmark.p('toolbar redraw');
                     Array.forEach(this.body.childNodes,
                                   function (button) button.hidden = false);
                     this.chevron.hidden = false;
