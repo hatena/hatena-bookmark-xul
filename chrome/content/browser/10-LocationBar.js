@@ -335,6 +335,9 @@ function FakeAutoCompletePopupController(aBaseController)
 }
 
 FakeAutoCompletePopupController.prototype = {
+    destroy: function() {
+        this.controller.destroy();
+    },
     get controller() this.__originalController__,
     init : function(controller) this.__originalController__ = controller,
 
@@ -401,4 +404,12 @@ FakeAutoCompletePopupController.prototype = {
 EventService.createListener('load', function() {
     LocationBar.init();
 });
+
+// toolbox 変更時の処理
+addAround(window, 'BrowserToolboxCustomizeDone', function(proceed, args, target) {
+    LocationBar.unregisterEventListeners();
+    proceed(args);
+    LocationBar.init();
+});
+
 

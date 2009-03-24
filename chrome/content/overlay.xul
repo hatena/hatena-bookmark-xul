@@ -45,19 +45,19 @@
             id="hBookmark-toolbar-add" 
             label="&hBookmark.toolbar.add;"
             tooltiptext="&hBookmark.toolbar.add;"
-            class="toolbarbutton-1"
+            class="toolbarbutton-1  chromeclass-toolbar-additiona"
             oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);" />
 
         <toolbarbutton 
             id="hBookmark-toolbar-home" 
             label="&hBookmark.toolbar.home;"
             tooltiptext="&hBookmark.toolbar.home;"
-            class="toolbarbutton-1"
+            class="toolbarbutton-1  chromeclass-toolbar-additiona"
             oncommand="openUILink('http://b.hatena.ne.jp/my', event);" />
 
         <toolbaritem id="hBookmarkDropdown">
             <toolbarbutton 
-                           class="bookmark-item toolbarbutton-1"
+                           class="bookmark-item toolbarbutton-1  chromeclass-toolbar-additiona"
                            type="menu"
                            container="true"
                            label="&hBookmark.toolbar.recentLabel;">
