@@ -64,7 +64,7 @@ extend(Sync, {
         p('start');
         this.db.beginTransaction();
         let len = infos.length;
-        for (let i = len - 1;  i > 0; i--) {
+        for (let i = len - 1;  i >= 0; i--) {
             let bi = i * 3;
             let timestamp = infos[i].split("\t", 2)[1];
             let title = bookmarks[bi];
