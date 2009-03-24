@@ -105,13 +105,15 @@
                  align="center"
                  pack="end"
                  id="hBookmark-status-count"
-                 onclick="hBookmark.StatusBar.goEntry();"
+                 onclick="hBookmark.StatusBar.goEntry(event);"
+                 tooltiptext="&hBookmark.statusbar.tooltip.counter;"
                  value=""
             />
 
             <image
                  id="hBookmark-status-comment"
-                 onclick="hBookmark.CommentViewer.show(this);"
+                 tooltiptext="&hBookmark.statusbar.tooltip.comment;"
+                 onclick="hBookmark.CommentViewer.showClick();"
                  loading="false"
             />
 

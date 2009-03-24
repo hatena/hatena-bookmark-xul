@@ -201,21 +201,21 @@ var LocationBar = {
             let tags;
             let comment;
             let item = E('richlistitem', {'class': 'hBookmark-urlbar-listitem', value:b.url},
-                E('hbox', null, 
+                E('hbox', {flex: '1'}, 
                     E('vbox', null,
                         E('image', {src: b.favicon, width:'16px', height:'16px'}),
                         E('image', {'class': 'hBookmark-urlbar-entrylink'}),
                         E('image', {'class': 'hBookmark-urlbar-entryedit'})
                     ),
-                    E('vbox', null, 
-                        E('label', {'class': 'hBookmark-urlbar-title', value: b.title, tooltiptext: b.title}),
+                    E('vbox', {flex: '1'}, 
+                        E('label', {'class': 'hBookmark-urlbar-title', crop: 'end', flex: '1', value: b.title, tooltiptext: b.title}),
                         E('hbox', {tooltiptext: b.comment},
                             tags = E('label', {'class': 'hBookmark-urlbar-tags', value: b.tags.join(', ')}),
-                            comment = E('label', {'class': 'hBookmark-urlbar-commentbody', value: b.body})
+                            comment = E('label', {'class': 'hBookmark-urlbar-commentbody',flex: '1',  crop: 'end',  value: b.body})
                         ),
 
                         E('hbox', null,
-                            E('label', {'class': 'hBookmark-urlbar-url', value: b.url, tooltiptext: b.url}),
+                            E('label', {'class': 'hBookmark-urlbar-url', value: b.url, flex: '1', crop: 'end', tooltiptext: b.url}),
                             E('label', {'class': 'hBookmark-urlbar-date', value: b.dateYMD, tooltiptext: b.dateYMD})
                         )
                     )

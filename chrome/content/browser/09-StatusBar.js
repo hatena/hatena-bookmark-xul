@@ -27,11 +27,12 @@ var StatusBar = {
         // XXX: 別タブで開きたい
         aWin.open(newURI('chrome://hatenabookmark/content/index.html'));
     },
-    goEntry: function StatusBar_goEntry() {
+    goEntry: function StatusBar_goEntry(event) {
         if (isHttp) {
             let url = locationURL;
 
-            aWin.open(newURI('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23')));
+            //openUILink(newURI('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23')));
+            openUILink('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23'), event);
         }
     },
     checkBookmarked: function StatusBar_checkBookmarked() {

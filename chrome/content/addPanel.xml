@@ -32,7 +32,7 @@
                             <xul:hbox anonid="titleContainer"
                                       align="center">
                                 <xul:image anonid="titleIcon"/>
-                                <xul:label anonid="titleLabel"/>
+                                <xul:label crop="end" flex="1" anonid="titleLabel"/>
                                 <xul:button anonid="editTitleButton"
                                             label="&hBookmark.addPanel.editTitleLabel;"
                                             oncommand="document.getBindingParent(this).isTitleEditable = true;"/>

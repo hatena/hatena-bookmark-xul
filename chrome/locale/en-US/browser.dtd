@@ -9,6 +9,8 @@
 
 <!ENTITY hBookmark.statusbar.now_syncing "Sync...">
 <!ENTITY hBookmark.statusbar.tooltip.addButton "add to HatenaBookmark">
+<!ENTITY hBookmark.statusbar.tooltip.counter "open hatena bookmark entry page">
+<!ENTITY hBookmark.statusbar.tooltip.comment "show comment">
 
 <!ENTITY hBookmark.menu.add "This page add to HatenaBookmark.">
 <!ENTITY hBookmark.menu.addlink "This link add to HatenaBookmark.">
