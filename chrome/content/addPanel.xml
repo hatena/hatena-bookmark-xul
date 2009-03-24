@@ -16,11 +16,15 @@
                 <xul:rows>
                     <xul:row align="center">
                         <xul:spacer/>
-                        <xul:hbox>
+                        <xul:hbox align="center">
                             <xul:image anonid="userIcon"/>
                             <xul:label anonid="userNameField"
                                        class="text-link hBookmarkLink"/>
                         </xul:hbox>
+                    </xul:row>
+                    <xul:row anonid="messageRow">
+                        <xul:spacer/>
+                        <xul:label anonid="messageField"/>
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.titleLabel;"/>
@@ -74,6 +78,12 @@
             </field>
             <field name="userNameField">
                 document.getAnonymousElementByAttribute(this, "anonid", "userNameField")
+            </field>
+            <field name="messageRow">
+                document.getAnonymousElementByAttribute(this, "anonid", "messageRow")
+            </field>
+            <field name="messageField">
+                document.getAnonymousElementByAttribute(this, "anonid", "messageField")
             </field>
             <field name="titleContainer">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleContainer")
@@ -156,7 +166,7 @@
                 <parameter name="bookmark"/>
                 <body><![CDATA[
                     this.bookmark = bookmark;
-                    this.setAddOrEdit(!!bookmark.temporary);
+                    this.setAddOrEdit(!!bookmark.temporary, bookmark);
                     this.clearError();
                     // 遅延しないとうまく focus があたらない？
                     // これでもタイミング次第では focus あわないので:w
@@ -177,20 +187,27 @@
                 <parameter name="bookmark"/>
                 <body><![CDATA[
                     let user = hBookmark.User.user;
+
+                    this.userIcon.src        = user.getProfileIcon(false);
+                    this.userNameField.value = user.name;
+                    this.userNameField.href  = user.bookmarkHomepage;
+
+                    this.messageRow.hidden = true;
+
                     this.titleIcon.src = hBookmark.favicon(bookmark.url);
-                    this.titleLabel.value   = bookmark.title;
-                    this.titleField.value   = bookmark.title;
+                    this.titleLabel.value       = bookmark.title;
+                    this.titleField.value       = bookmark.title;
                     this.editTitleButton.hidden = user.private;
-                    this.isTitleEditable    = false;
-                    this.urlField.value     = bookmark.url;
+                    this.isTitleEditable        = false;
+
+                    this.urlField.value = bookmark.url;
                     this.urlField.href =
                         hBookmark.UIUtils.isSafeLink(bookmark.url)
                         ? bookmark.url : "";
-                    this.usersRow.hidden    = true;
+                    this.usersRow.hidden = true;
+
                     this.commentField.value = bookmark.comment;
-                    this.userNameField.value = user.name;
-                    this.userNameField.href = user.bookmarkHomepage;
-                    this.userIcon.src       = user.getProfileIcon(false);
+
                     setTimeout(function (self) {
                         let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
                         if (res) {
@@ -198,6 +215,7 @@
                                 hBookmark.UIUtils.getUsersText(res.count);
                             self.usersField.href = res.entry_url;
                             self.usersRow.hidden = false;
+
                             if (res.title === bookmark.title) return;
                             self.titleLabel.value = res.title;
                             self.titleField.value = res.title;
@@ -217,6 +235,7 @@
 
             <method name="setAddOrEdit">
                 <parameter name="add"/>
+                <parameter name="bookmark"/>
                 <body><![CDATA[
                     let type = add ? ".add" : ".edit";
                     document.title =
@@ -225,6 +244,14 @@
                         this.strings.get("saveLabel" + type);
                     this.dialog.buttons =
                         add ? "accept,cancel" : "accept,cancel,extra2";
+                    if (!add) {
+                        let format = this.strings.get("dateFormat");
+                        let date = bookmark.dateObject.toLocaleFormat(format);
+                        let message = this.strings.get("alreadyBookmarked",
+                                                       [date]);
+                        this.messageField.value = message;
+                        this.messageRow.hidden = false;
+                    }
                 ]]></body>
             </method>
 
