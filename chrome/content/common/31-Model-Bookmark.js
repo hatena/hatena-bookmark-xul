@@ -28,7 +28,7 @@ let createWhereLike = function (word) {
         </>.toString(), arg];
     }
     for (var i = 0;  i < words.length; i++) {
-        var w = words[i];
+       var w = words[i];
         if (w.length) {
             var [sq, arg] = likeGenerateor(w);
             sql.push('(' + sq + ')');
@@ -138,6 +138,12 @@ extend(Bookmark.prototype, {
     get dateYMD() {
         let d = this.date.toString();
         return [d.substr(0,4), d.substr(4,2), d.substr(6,2)].join('/');
+    },
+    get dateObject() {
+        let d = this.date.toString();
+        return new Date(d.substring(0, 4), d.substring(4, 6),
+                        d.substring(6, 8), d.substring(8, 10),
+                        d.substring(10, 12), d.substring(12, 14));
     },
     get searchData() {
         let res = this.db.execute(<>
