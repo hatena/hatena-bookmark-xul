@@ -115,6 +115,9 @@
                  value=""
             />
 
+
+          <toolbarseparator class="hBookmark-status-separator" />
+
             <image
                  id="hBookmark-status-comment"
                  tooltiptext="&hBookmark.statusbar.tooltip.comment;"
