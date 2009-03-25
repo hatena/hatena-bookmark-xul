@@ -1,7 +1,10 @@
+<!ENTITY hBookmark.addPanel.welcomeUserLabel.before "Welcome">
+<!ENTITY hBookmark.addPanel.welcomeUserLabel.after "">
 <!ENTITY hBookmark.addPanel.titleLabel "Title:">
 <!ENTITY hBookmark.addPanel.editTitleLabel "Edit Title…">
 <!ENTITY hBookmark.addPanel.cancelEditTitleLabel "Cancel">
 <!ENTITY hBookmark.addPanel.urlLabel "URL:">
 <!ENTITY hBookmark.addPanel.commentLabel "Comment:">
+<!ENTITY hBookmark.addPanel.frequentTagsLabel "Tags">
 
 <!ENTITY hBookmark.addPanel.deleteLabel "Delete">
