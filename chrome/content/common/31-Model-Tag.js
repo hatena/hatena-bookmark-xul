@@ -23,13 +23,14 @@ extend(Tag, {
             bmIds = this.find(cond).map(function (tag) tag.bookmark_id);
             if (!bmIds.length) return bmIds;
         }
+        // XXX bmIdsをプレースホルダにするとブックマーク件数が多いとき落ちる
         let query = "select count(name) as `count`, name from tags " +
                     "where name not in (" +
                     tagNames.map(function () "?").join() +
                     ") and bookmark_id in (" +
-                    bmIds.map(function () "?").join() +
+                    bmIds.join() +
                     ") group by name";
-        return this.find(query, tagNames.concat(bmIds));
+        return this.find(query, tagNames);
     },
 
     findTagCandidates: function Tag_findTagCandidates(partialTag) {
