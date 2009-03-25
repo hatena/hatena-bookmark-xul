@@ -124,6 +124,10 @@ var createElementBindDocument = function(doc) {
     }
 }
 
+var UIEncodeText = function(str) {
+    return decodeURIComponent(escape(str));
+}
+
 /*
  * elementGetter(this, 'myList', 'my-list-id-name', document);
  * list //=> document.getElementById('my-list-id-name');

@@ -3,9 +3,15 @@
 
 const EXPORT = ["Sync"];
 
-var Sync = {};
-EventService.implement(Sync);
+var Sync;
+// Sync オブジェクトは一つだけ
 
+if (shared.has('Sync')) {
+    Sync = shared.get('Sync');
+} else {
+
+Sync = {};
+EventService.implement(Sync);
 extend(Sync, {
     init: function Sync_init () {
         let db = model('Bookmark').db;
@@ -19,29 +25,38 @@ extend(Sync, {
         let bookmarks = infos.splice(0, infos.length * 3/4);
         return [bookmarks, infos];
     },
+    _syncing: false,
     sync: function Sync_sync () {
         if (this._syncing) return;
+        this._syncing = true;
 
-        let url = User.user.dataURL;
-        let b = model('Bookmark').findFirst({order: 'date desc'});
+        try {
+             let url = User.user.dataURL;
+             let b = model('Bookmark').findFirst({order: 'date desc'});
 
-        this.dispatch('start');
-        if (b && b.date) {
-            net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true, {
-                timestamp: b.date,
-                _now: ((new Date())*1), // cache のため
-            });
-        } else {
-            net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true);
+             this.dispatch('start');
+             if (b && b.date) {
+                 net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true, {
+                     timestamp: b.date,
+                     _now: ((new Date())*1), // cache のため
+                 });
+             } else {
+                 net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true);
+             }
+        } catch(er) {
+            this.errorback();
         }
     },
+    get nowSyncing() this._syncing,
     errorback: function Sync_errorAll () {
+        this._syncing = false;
         this.dispatch('fail');
     },
     get db() {
         return User.user.database;
     },
     fetchCallback: function Sync_allCallback (req)  {
+    try {
         this.dispatch('progress', {value: 0});
         if (!User.user) {
             // XXX: データロード後にユーザが無い
@@ -49,13 +64,16 @@ extend(Sync, {
             return;
         }
 
-        let BOOKMARK  = model('Bookmark');
+        let BOOKMARK = model('Bookmark');
 
         let text = req.responseText;
         if (!text.length) {
             this.dispatch('complete');
             return;
         }
+
+        let items = Application.prefs.get("extensions.hatenabookmark.sync.oneTimeItmes").value || 200;
+        let waitTime = Application.prefs.get("extensions.hatenabookmark.sync.syncWait").value || 1000;
 
         let commentRe = new RegExp('\\s+$','');
         let [bookmarks, infos] = this.createDataStructure(text);
@@ -83,11 +101,11 @@ extend(Sync, {
                 }
             } else {
             }
-            if (i % 200 == 0) {
+            if (i % items == 0) {
                 this.dispatch('progress', { value: (len-i)/len*100|0 });
                 this.db.commitTransaction();
                 EventService.dispatch("BookmarksUpdated");
-                async.wait(1000);
+                async.wait(waitTime);
                 this.db.beginTransaction();
                 p('wait: ' + (Date.now() - now));
             }
@@ -98,13 +116,24 @@ extend(Sync, {
 
         p(infos.length);
         p('time: ' + (Date.now() - now));
+    } catch(er) {
+        this.errorback();
     }
+    }
+});
+
+Sync.completeListener = Sync.createListener('complete', function() {
+    Sync._syncing = false;
 });
 
 EventService.createListener('UserChange', function() {
     if (User.user)
         Sync.init();
 }, User);
+
+
+shared.set('Sync', Sync);
+}
 
 // EventService.createListener('firstPreload', function() {
 //     if (User.user) {

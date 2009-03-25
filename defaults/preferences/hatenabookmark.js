@@ -21,9 +21,15 @@ pref("extensions.hatenabookmark.statusbar.counter", true);
 pref("extensions.hatenabookmark.statusbar.addButton", true);
 
 // addPanel tagsuggest
-pref("extensions.hatenabookmark.addPanel.tagMaxResult", 20);
+pref("extensions.hatenabookmark.addPanel.tagCompleteEnabled", true);
+pref("extensions.hatenabookmark.addPanel.tagMaxResult", 12);
 pref("extensions.hatenabookmark.addPanel.initialTagCount", 30);
+pref("extensions.hatenabookmark.addPanel.tagListShow", true);
 
 // comment viewer
 pref("extensions.hatenabookmark.commentviwer.allShow", true);
+
+// Sync
+pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);
+pref("extensions.hatenabookmark.sync.syncWait", 1000);
 

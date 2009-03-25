@@ -185,10 +185,10 @@
                 EventService.dispatch('unload', window);
             }, false);
 
-            // setTimeout(function() {
-            // var features = "chrome,titlebar,toolbar,centerscreen,modal";
-            // window.openDialog('chrome://hatenabookmark/content/config.xul', "Preferences", features);
-            // }, 100);
+            setTimeout(function() {
+            var features = "chrome,titlebar,toolbar,centerscreen,modal";
+            window.openDialog('chrome://hatenabookmark/content/config.xul', "Preferences", features);
+            }, 100);
         }
     })();
     // ]]>

@@ -7,6 +7,7 @@
 <prefwindow id="hBookmark-config"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     width="400px"
+    title="はてなブックマーク拡張の設定"
     >
 
 <!--
@@ -62,11 +63,89 @@
     </vbox>
 </prefpane>
 
+
+<prefpane id="prefpane-addPanel" label="編集パネル" flex="1">
+    <preferences>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.tagCompleteEnabled"
+            name="extensions.hatenabookmark.addPanel.tagCompleteEnabled"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.tagMaxResult"
+            name="extensions.hatenabookmark.addPanel.tagMaxResult"
+            type="int"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.initialTagCount"
+            name="extensions.hatenabookmark.addPanel.initialTagCount"
+            type="int"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.tagListShow"
+            name="extensions.hatenabookmark.addPanel.tagListShow"
+            type="bool"/>
+    </preferences>
+
+    <vbox>
+        <groupbox orient="vertical">
+            <caption label="タグ補完" />
+            <hbox flex="1" align="center">
+                <checkbox id="addPanel.tagCompleteEnabled" flex="1"
+                    label="タグ補完を有効に"
+                    preference="extensions.hatenabookmark.addPanel.tagCompleteEnabled" />
+            </hbox>
+            <hbox flex="1" align="center">
+                <label value="タグ補完候補の最大件数"
+                    control="addPanel.tagMaxResult"/>
+                <textbox id="addPanel.tagMaxResult"
+                    preference="extensions.hatenabookmark.addPanel.tagMaxResult"
+                    type="number" min="1" increment="1"
+                    style="width: 5em;"
+                />
+                <spacer flex="1" />
+            </hbox>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="タグ表示" />
+            <hbox flex="1" align="center">
+                <checkbox id="addPanel.tagListShow" flex="1"
+                    label="タグ一覧の表示"
+                    preference="extensions.hatenabookmark.addPanel.tagListShow" />
+            </hbox>
+            <hbox flex="1" align="center">
+                <label value="タグ表示件数"
+                    control="addPanel.initialTagCount"/>
+                <textbox id="addPanel.initialTagCount"
+                    preference="extensions.hatenabookmark.addPanel.initialTagCount"
+                    type="number" min="1" increment="1"
+                    style="width: 5em;"
+                />
+                <spacer flex="1" />
+            </hbox>
+        </groupbox>
+    </vbox>
+</prefpane>
+
 <prefpane id="prefpane-shortcut" label="ショートカット" flex="1">
 </prefpane>
 
+<prefpane id="prefpane-sync" label="データ" flex="1">
+    <vbox>
+        <groupbox orient="vertical">
+            <caption label="同期" />
+                <button label="データの同期"
+                    oncommand="hBookmark.Config.sync();"
+                />
+                <button label="すべてのデータ同期しなおす"
+                    oncommand="hBookmark.Config.syncALL();"
+                />
+        </groupbox>
+        <groupbox orient="vertical">
+            <caption label="データの削除" />
+            <label value="未実装" />
+        </groupbox>
+    </vbox>
+</prefpane>
 
 <script type="application/javascript; version=1.8" charset="utf-8" src="chrome://hatenabookmark/content/autoloader.js" />
-<script type="application/javascript; version=1.8" charset="utf-8" src="chrome://hatenabookmark/content/config.js" />
 </prefwindow>
 
