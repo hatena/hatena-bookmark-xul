@@ -8,8 +8,6 @@ this.__defineGetter__('aWin', function() Application.activeWindow);
 this.__defineGetter__('aDoc', function() Application.activeWindow.activeTab.document);
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
 
-let iframe = null;
-
 elementGetter(this, 'panelComment', 'hBookmark-panel-comment', document);
 elementGetter(this, 'commentButton', 'hBookmark-status-comment', document);
 elementGetter(this, 'statusbar', 'status-bar', document);
@@ -39,13 +37,6 @@ var CommentViewer = {
             if (!isHttp) return;
             url = aDoc.location.href;
         }
-        if (!iframe) {
-            iframe = document.createElement('iframe');
-            iframe.setAttribute('src', 'chrome://hatenabookmark/content/comment.html') 
-            iframe.setAttribute('id', 'hBookmark-comment-viewer');
-
-            panelComment.appendChild(iframe);
-        }
         commentButton.setAttribute('loading', 'true'); 
         let data = HTTPCache.comment.get(url);
         if (data)
@@ -56,7 +47,8 @@ var CommentViewer = {
     },
     updateComment: function CommentViewer_updateComment(data) {
         if (data && data.title) {
-            panelComment.openPopup(commentButton, 'before_end', 0, 0,false,false);
+            CommentViewer.iframe.setAttribute('height', '0px');
+            panelComment.openPopup(statusbar, 'before_end', -20, -5,false,false);
             // 非表示ユーザをフィルター
             let regex = User.user.ignores;
             if (regex) {
@@ -69,6 +61,15 @@ var CommentViewer = {
             //}
         }
         commentButton.setAttribute('loading', 'false'); 
+    },
+    createIFrame: function() {
+        if (!CommentViewer.iframe) {
+            CommentViewer.iframe = document.createElement('iframe');
+            CommentViewer.iframe.setAttribute('src', 'chrome://hatenabookmark/content/comment.html') 
+            CommentViewer.iframe.setAttribute('id', 'hBookmark-comment-viewer');
+
+            panelComment.appendChild(CommentViewer.iframe);
+        }
     },
     hide: function CommentViewer_hide() {
         if (panelComment.state != 'closed') {
@@ -84,17 +85,24 @@ CommentViewer.dispatchMethods = {
     rendered: function(o) {
         // let doc = window.content.document;
         // let maxHeight = (doc.compatMode == 'CSS1Compat' ? doc.documentElement.clientHeight : doc.body.clientHeight) - 40;
-        let maxHeight = window.content.innerHeight - 80;
-        let maxWidth = window.content.innerWidth - 80;
+        let maxHeight = window.content.innerHeight - 40;
+        let maxWidth = window.content.innerWidth - 40;
+        if (o.height < 100)
+            o.height = 100;
         if (o.height < maxHeight) {
             panelComment.setAttribute('height', '' + o.height + 'px');
-            iframe.setAttribute('height', '' + o.height + 'px');
+            CommentViewer.iframe.setAttribute('height', '' + o.height + 'px');
         } else {
             panelComment.setAttribute('height', '' + maxHeight + 'px');
-            iframe.setAttribute('height',  '' + maxHeight + 'px');
+            CommentViewer.iframe.setAttribute('height',  '' + maxHeight + 'px');
         }
         panelComment.setAttribute('width', '' + maxWidth + 'px');
-        iframe.setAttribute('width', '' + maxWidth + 'px');
+        CommentViewer.iframe.setAttribute('width', '' + maxWidth + 'px');
     }
 }
+
+window.addEventListener('load', function() {
+    p('create');
+    CommentViewer.createIFrame();
+}, false);
 

@@ -106,10 +106,36 @@ a.tag {
   color: #66c;
 }
 
-#close-button {
+a.users {
+  text-decoration: underline;
+  color: #FF6e6e;
+  font-weight: bold;
+  padding-left: 14px;
+  font-size: 10px;
+  font-family: verdana;
+}
+
+#toggle-button-img {
+  cursor:pointer;
+  position: absolute;
+  right: 40px;
+  top: 0;
+  display: inline-block;
+  padding: 10px;
+}
+
+
+#close-button-img {
+  cursor:pointer;
   position: absolute;
   right: 15px;
   top: 0;
   display: inline-block;
   padding: 10px;
 }
+
+ul.nocommentall li.nocomment {
+    display: none !important;
+}
+
+

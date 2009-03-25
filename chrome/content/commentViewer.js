@@ -1,6 +1,12 @@
 
+/*
+ * yattuke shigoto.js
+ * 酷いコードですね
+ */
+
 const B_URL = 'http://b.hatena.ne.jp/';
 const CMD_EVENT_NAME = 'hBookmark-view-comments';
+const SHOW_PREFS_NAME = 'extensions.hatenabookmark.commentviwer.allShow';
 /*
  * comment.html から、外部 html リンクが開けてしまうと、セキュリティ的にまずいので注意
  */
@@ -12,6 +18,8 @@ window.addEventListener('click', function(e) {
     let t = e.target;
     if (t.id == 'close-button-img') 
         return close();
+    if (t.id == 'toggle-button-img') 
+        return toggle();
     if (t.tagName == 'A') {
         link = t.href;
     } else if (t.tagName == 'IMG') {
@@ -25,6 +33,27 @@ window.addEventListener('click', function(e) {
         close();
     }
 }, false);
+
+window.addEventListener('DOMContentLoaded', function() {
+    setCommentView();
+}, false);
+
+var toggle = function() {
+    Application.prefs.get(SHOW_PREFS_NAME).value = !Application.prefs.get(SHOW_PREFS_NAME).value;
+    setCommentView();
+}
+
+var setCommentView = function() {
+    let src;
+    if (Application.prefs.get(SHOW_PREFS_NAME).value) {
+         src = "chrome://hatenabookmark/content/skin/images/comment-viewer-toggle-on.gif";
+         $('list').className = '';
+    } else {
+         src = "chrome://hatenabookmark/content/skin/images/comment-viewer-toggle-off.gif";
+         $('list').className = 'nocommentall';
+    }
+    $('toggle-button-img').src = src;
+}
 
 let lastEID = null;
 
@@ -44,6 +73,18 @@ var dispatchMethods = {
         }
         $('favicon').src = data.favicon;
         $('title').appendChild(T(data.title));
+        let cEL = $('count');
+        setCommentView();
+
+        if (data.count) {
+            let c = data.count;
+            cEL.innerHTML = '' + c + ' user' + ((c > 1) ? 's' : '');
+            cEL.className = 'users';
+            cEL.href = data.entry_url;
+        } else {
+            cEL.href = '';
+            cEL.className = '';
+        }
         p.b(function() {
             if (data.bookmarks && data.bookmarks.length) {
                 data.bookmarks.forEach(function(b) {
@@ -61,6 +102,9 @@ var dispatchMethods = {
                     });
                     li.appendChild(E('span', {className: 'comment'}, b.comment));
                     li.appendChild(E('span', {className: 'timestamp'}, ymd));
+                    if (!b.comment) {
+                        li.className = 'nocomment';
+                    }
                     $('list').appendChild(li);
                 });
             } else {
@@ -74,7 +118,7 @@ var dispatchMethods = {
          */
         setTimeout(function() {
             let rect = document.body.getBoundingClientRect();
-            let height = rect.bottom - rect.top;
+            let height = parseInt(rect.bottom) - parseInt(rect.top) + 100; // うーん
             window.scrollTo(0, 0);
             throwEvent('rendered', {
                 height: parseInt(height),

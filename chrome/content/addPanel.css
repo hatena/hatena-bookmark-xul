@@ -27,7 +27,7 @@ row[anonid="messageRow"] {
 }
 
 label[anonid="usersField"] {
-  background: url(http://b.hatena.ne.jp/images/page.gif) left 0px no-repeat;
+  background: url(chrome://hatenabookmark/content/skin/images/page.gif) left 0px no-repeat;
   color: #FF6e6e !important;
   font-weight: bold;
   padding-left: 14px;
