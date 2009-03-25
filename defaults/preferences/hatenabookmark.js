@@ -20,6 +20,9 @@ pref("extensions.hatenabookmark.locationbar.resultRows", 6);
 pref("extensions.hatenabookmark.statusbar.counter", true);
 pref("extensions.hatenabookmark.statusbar.addButton", true);
 
+// addPanel 
+pref("extensions.hatenabookmark.addPanel.backgroundImage", '');
+
 // addPanel tagsuggest
 pref("extensions.hatenabookmark.addPanel.tagCompleteEnabled", true);
 pref("extensions.hatenabookmark.addPanel.tagMaxResult", 12);

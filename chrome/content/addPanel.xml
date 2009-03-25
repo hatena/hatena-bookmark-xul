@@ -72,7 +72,7 @@
                     </xul:row>
                 </xul:rows>
             </xul:grid>
-            <xul:groupbox>
+            <xul:groupbox anonid="tagSelectorGroup">
                 <xul:caption label="&hBookmark.addPanel.frequentTagsLabel;"/>
                 <xul:hbox anonid="tagSelector"
                           class="hBookmarkTagSelector"/>
@@ -81,6 +81,13 @@
 
         <implementation>
             <constructor><![CDATA[
+                let backgroundImage = Application.prefs.get('extensions.hatenabookmark.addPanel.backgroundImage').value;
+                if (backgroundImage) {
+                    // let w = document.getElementById('hBookmarkAddPanelWindow');
+                    // // w.style.backgroundImage = backgroundImage;
+                    // let s = w.getAttribute('style');
+                    // w.style = "background-image: url(' + backgroundImage + ');'";
+                }
                 this.inputHandler = new hBookmark.TagCompleter.InputHandler(this.commentField.inputField);
             ]]></constructor>
 
@@ -131,6 +138,9 @@
             </field>
             <field name="tagSelector">
                 document.getAnonymousElementByAttribute(this, "anonid", "tagSelector")
+            </field>
+            <field name="tagSelectorGroup">
+                document.getAnonymousElementByAttribute(this, "anonid", "tagSelectorGroup")
             </field>
             <field name="errorField">
                 document.getAnonymousElementByAttribute(this, "anonid", "errorField")
@@ -223,6 +233,12 @@
                     this.inputHandler.updateLineValue(); // タグを認識させる
                     // XXX Prefs#getは"."が入るとうまくいかない?
                     //let count = hBookmark.Prefs.bookmark.get("addPanel.initialTagCount");
+                    let shown = Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value;
+                    if (!shown) {
+                        this.tagSelectorGroup.setAttribute('hidden', true);
+                        return;
+                    }
+                    this.tagSelectorGroup.removeAttribute('hidden');
                     let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
                     this.tagSelector.build(count);
                     let tags = this.inputHandler.inputLine.tags;

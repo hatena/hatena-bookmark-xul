@@ -64,7 +64,7 @@
 </prefpane>
 
 
-<prefpane id="prefpane-addPanel" label="編集パネル" flex="1">
+<prefpane id="prefpane-addPanel" label="編集パネル" flex="1" onpaneload="updateUI();">
     <preferences>
         <preference 
             id="extensions.hatenabookmark.addPanel.tagCompleteEnabled"
@@ -82,6 +82,10 @@
             id="extensions.hatenabookmark.addPanel.tagListShow"
             name="extensions.hatenabookmark.addPanel.tagListShow"
             type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.backgroundImage"
+            name="extensions.hatenabookmark.addPanel.backgroundImage"
+            type="file"/>
     </preferences>
 
     <vbox>
@@ -122,6 +126,33 @@
                 <spacer flex="1" />
             </hbox>
         </groupbox>
+
+
+        <script type="application/x-javascript"><![CDATA[
+            let expname = 'extensions.hatenabookmark.addPanel.backgroundImage';
+            function updateUI() {
+                var file = document.getElementById(expname).value;
+                if (file) {
+                    var fileField = document.getElementById("myFileField");
+                    fileField.file = file;
+                    fileField.label = file.path;
+                }
+            }
+            function selectDir() {
+                var filePicker = Components.classes["@mozilla.org/filepicker;1"]
+                                 .createInstance(Components.interfaces.nsIFilePicker);
+                filePicker.init(window, "Choose a folder.", filePicker.modeOpen);
+                filePicker.appendFilters(Components.interfaces.nsIFilePicker.filterIamges);
+                if (filePicker.show() == filePicker.returnOK) {
+                    document.getElementById(expname).value = filePicker.file;
+                    updateUI();
+                }
+            }
+        ]]></script>
+        <hbox align="center">
+            <filefield id="myFileField" flex="1" />
+            <button label="Browse..." oncommand="selectDir();" />
+        </hbox>
     </vbox>
 </prefpane>
 

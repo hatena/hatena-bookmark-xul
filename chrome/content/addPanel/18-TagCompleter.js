@@ -152,6 +152,7 @@ TagCompleter.InputHandler.prototype = {
         if (caretPos == this.lastCaretPos) return;
         this.lastCaretPos = caretPos;
         this.updateLineValue();
+        if (!this.tagCompleteEnabled) return;
         let words = this.inputLine.suggest(caretPos);
         if (words.length) {
             TagCompleter.List.showTags(words, this.input);
@@ -233,6 +234,7 @@ TagCompleter.InputHandler.prototype = {
 TagCompleter.InputLine = function(value, tags) {
     this.suggestTags = tags;
     this.value = value;
+    this.tagCompleteEnabled = Application.prefs.get('extensions.hatenabookmark.addPanel.tagCompleteEnabled').value;
     this.maxSuggest = Application.prefs.get('extensions.hatenabookmark.addPanel.tagMaxResult').value;
 }
 
