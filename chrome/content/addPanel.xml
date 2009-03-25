@@ -72,6 +72,10 @@
                     </xul:row>
                 </xul:rows>
             </xul:grid>
+            <xul:groupbox>
+                <xul:caption label="{{Tags}}"/>
+                <xul:hbox anonid="tagsContainer" style="display: block;"/>
+            </xul:groupbox>
         </content>
 
         <implementation>
@@ -124,6 +128,9 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
+            <field name="tagsContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "tagsContainer")
+            </field>
             <field name="errorField">
                 document.getAnonymousElementByAttribute(this, "anonid", "errorField")
             </field>
@@ -136,6 +143,7 @@
                 new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
             </field>
 
+            <field name="_tags">[]</field>
             <field name="_bookmark">({ title: "", url: "", comment: "" })</field>
             <property name="bookmark">
                 <getter><![CDATA[
@@ -213,6 +221,7 @@
                     this.usersRow.hidden = true;
 
                     this.commentField.value = bookmark.comment;
+                    this.buildTags();
 
                     setTimeout(function (self) {
                         let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
@@ -236,6 +245,36 @@
                             }
                         }
                     }, 0, this);
+                ]]></body>
+            </method>
+
+            <method name="buildTags">
+                <body><![CDATA[
+                    let range = document.createRange();
+                    range.selectNodeContents(this.tagsContainer);
+                    range.deleteContents();
+
+                    this._tags = hBookmark.Model.Tag.findDistinctTags();
+                    let count = 30; // XXX ToDo: prefから取得する
+                    let freqTags = this._tags.concat()
+                        .sort(function (a, b) b.count - a.count)
+                        .slice(0, count)
+                        .sort(function (a, b) a.name > b.name ? 1 : -1);
+                    let fragment = document.createDocumentFragment();
+                    freqTags.forEach(function (tag) {
+                        let label = this.createTagLabel(tag);
+                        fragment.appendChild(label);
+                    }, this);
+                    this.tagsContainer.appendChild(fragment);
+                ]]></body>
+            </method>
+
+            <method name="createTagLabel">
+                <parameter name="tag"/>
+                <body><![CDATA[
+                    let label = document.createElementNS(hBookmark.XUL_NS, "label");
+                    label.setAttribute("value", tag.name);
+                    return label;
                 ]]></body>
             </method>
 
@@ -303,6 +342,12 @@
                 ]]></body>
             </method>
         </implementation>
+
+        <handlers>
+            <handler event="HB_TagChange"><![CDATA[
+                // Handle Tag Change
+            ]]></handler>
+        </handlers>
     </binding>
 
     <binding id="tag-complete" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
