@@ -15,17 +15,17 @@
                 </xul:columns>
                 <xul:rows>
                     <xul:row align="center" class="username-line">
-                        <xul:hbox align="right">
+                        <xul:hbox pack="end">
                         <!--
                         <xul:image src="chrome://hatenabookmark/content/skin/images/favicon.ico" height="16px" width="16px" />
                         -->
-                        <xul:label value="ようこそ" />
+                        <xul:label value="&hBookmark.addPanel.welcomeUserLabel.before;" />
                         </xul:hbox>
                         <xul:hbox align="center">
                             <xul:image anonid="userIcon"/>
                             <xul:label anonid="userNameField"
                                        class="text-link hBookmarkLink"/>
-                            <xul:label value="さん" />
+                            <xul:label value="&hBookmark.addPanel.welcomeUserLabel.after;" />
                         </xul:hbox>
                     </xul:row>
                     <xul:row anonid="messageRow">
@@ -72,6 +72,11 @@
                     </xul:row>
                 </xul:rows>
             </xul:grid>
+            <xul:groupbox>
+                <xul:caption label="&hBookmark.addPanel.frequentTagsLabel;"/>
+                <xul:hbox anonid="tagSelector"
+                          class="hBookmarkTagSelector"/>
+            </xul:groupbox>
         </content>
 
         <implementation>
@@ -124,6 +129,9 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
+            <field name="tagSelector">
+                document.getAnonymousElementByAttribute(this, "anonid", "tagSelector")
+            </field>
             <field name="errorField">
                 document.getAnonymousElementByAttribute(this, "anonid", "errorField")
             </field>
@@ -136,6 +144,7 @@
                 new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
             </field>
 
+            <field name="_tags">[]</field>
             <field name="_bookmark">({ title: "", url: "", comment: "" })</field>
             <property name="bookmark">
                 <getter><![CDATA[
@@ -198,8 +207,6 @@
                     this.userNameField.value = user.name;
                     this.userNameField.href  = user.bookmarkHomepage;
 
-                    this.messageRow.hidden = true;
-
                     this.titleIcon.src = hBookmark.favicon(bookmark.url);
                     this.titleLabel.value       = bookmark.title;
                     this.titleField.value       = bookmark.title;
@@ -213,6 +220,13 @@
                     this.usersRow.hidden = true;
 
                     this.commentField.value = bookmark.comment;
+                    this.inputHandler.updateLineValue(); // タグを認識させる
+                    // XXX Prefs#getは"."が入るとうまくいかない?
+                    //let count = hBookmark.Prefs.bookmark.get("addPanel.initialTagCount");
+                    let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
+                    this.tagSelector.build(count);
+                    let tags = this.inputHandler.inputLine.tags;
+                    this.tagSelector.update(tags);
 
                     setTimeout(function (self) {
                         let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
@@ -256,8 +270,8 @@
                         let message = this.strings.get("alreadyBookmarked",
                                                        [date]);
                         this.messageField.value = message;
-                        this.messageRow.hidden = false;
                     }
+                    this.messageRow.hidden = add;
                 ]]></body>
             </method>
 
@@ -303,6 +317,19 @@
                 ]]></body>
             </method>
         </implementation>
+
+        <handlers>
+            <handler event="HB_TagChange"
+                     action="this.tagSelector.update(this.inputHandler.inputLine.tags);"/>
+            <handler event="HB_TagSelected"><![CDATA[
+                this.inputHandler.inputLine.addTag(event.originalTarget.value);
+                this.inputHandler.updateValue();
+            ]]></handler>
+            <handler event="HB_TagUnselected"><![CDATA[
+                this.inputHandler.inputLine.deleteTag(event.originalTarget.value);
+                this.inputHandler.updateValue();
+            ]]></handler>
+        </handlers>
     </binding>
 
     <binding id="tag-complete" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
@@ -392,6 +419,79 @@
                      action="if (!this._isCompleting) this._setSearchParam();"/>
             <handler event="keypress" phase="capturing"
                      action="this._setSearchParam();"/>
+        </handlers>
+    </binding>
+
+    <binding id="tag-selector">
+        <implementation>
+            <method name="build">
+                <parameter name="count"/>
+                <body><![CDATA[
+                    let range = document.createRange();
+                    range.selectNodeContents(this);
+                    range.deleteContents();
+
+                    if (count < 0) count = 0;
+                    let tags = hBookmark.Model.Tag.findDistinctTags(count);
+                    let fragment = document.createDocumentFragment();
+                    tags.forEach(function (tag) {
+                        let label = this._createTagLabel(tag);
+                        fragment.appendChild(label);
+                    }, this);
+                    this.appendChild(fragment);
+                ]]></body>
+            </method>
+
+            <method name="_createTagLabel">
+                <parameter name="tag"/>
+                <body><![CDATA[
+                    let label = document.createElementNS(hBookmark.XUL_NS, "label");
+                    label.setAttribute("class", "hBookmarkTag");
+                    label.setAttribute("value", tag.name);
+                    return label;
+                ]]></body>
+            </method>
+
+            <method name="update">
+                <parameter name="tagNames"/>
+                <body><![CDATA[
+                    let tagSet = {};
+                    tagNames.forEach(function (t) tagSet[t] = true);
+                    let selected = this.getElementsByAttribute("class", "hBookmarkSelectedTag");
+                    Array.slice(selected).forEach(function (label) {
+                        if (!(label.value in tagSet))
+                            this._toggleLabel(label);
+                    }, this);
+                    tagNames.forEach(function (t) {
+                        let label = this.getElementsByAttribute("value", t)[0];
+                        if (label)
+                            this._toggleLabel(label, true);
+                    }, this);
+                ]]></body>
+            </method>
+
+            <method name="_toggleLabel">
+                <parameter name="label"/>
+                <parameter name="forceSelect"/>
+                <body><![CDATA[
+                    label.className =
+                        (label.className === "hBookmarkTag" || forceSelect)
+                        ? "hBookmarkSelectedTag" : "hBookmarkTag";
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="click"><![CDATA[
+                let label = event.originalTarget;
+                if (label.localName !== "label") return;
+                this._toggleLabel(label);
+                let tagEvent = document.createEvent("Event");
+                let type = (label.className === "hBookmarkSelectedTag")
+                           ? "HB_TagSelected" : "HB_TagUnselected";
+                tagEvent.initEvent(type, true, false);
+                label.dispatchEvent(tagEvent);
+            ]]></handler>
         </handlers>
     </binding>
 

@@ -22,7 +22,8 @@ pref("extensions.hatenabookmark.statusbar.addButton", true);
 
 // addPanel tagsuggest
 pref("extensions.hatenabookmark.addPanel.tagMaxResult", 20);
-
+pref("extensions.hatenabookmark.addPanel.initialTagCount", 30);
 
 // comment viewer
 pref("extensions.hatenabookmark.commentviwer.allShow", true);
+

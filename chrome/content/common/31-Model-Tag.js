@@ -8,7 +8,14 @@ let Tag = Model.Entity({
 });
 
 extend(Tag, {
-    findDistinctTags: function () this.find('select count(name) as `count`, name from tags group by name'),
+    findDistinctTags: function (count) {
+        let query = 'select count(name) as `count`, name from tags group by name';
+        if (count) query += ' order by count desc limit ' + +count;
+        let tags = this.find(query);
+        // count 順になったのを元に戻す
+        if (count) tags.sort(function (a, b) a.name > b.name ? 1 : -1);
+        return tags;
+    },
 
     findRelatedTags: function (tagNames) {
         if (!tagNames || !tagNames.length)

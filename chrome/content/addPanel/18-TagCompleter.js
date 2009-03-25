@@ -126,8 +126,10 @@ TagCompleter.InputHandler = function(input) {
     this.inputLine = new TagCompleter.InputLine('', []);
     delete this.inputLine['suggestTags'];
     this.inputLine.__defineGetter__('suggestTags', function() TagCompleter.tags);
+    this.prevValue = this.input.value;
     input.addEventListener('keyup', method(this, 'inputKeyupHandler'), false);
     input.addEventListener('keydown', method(this, 'inputKeydownHandler'), false);
+    input.addEventListener('input', method(this, 'inputInputHandler'), false);
     list.addEventListener('complete', method(this, 'listCompleteHandler'), false);
     if (XMigemoCore) {
         // XXX: 現在は XMigemoCore があったら即有効に
@@ -143,7 +145,7 @@ TagCompleter.InputHandler.prototype = {
     updateLineValue: function() 
         this.inputLine.value = this.input.value,
     updateValue: function() 
-        this.input.value = this.inputLine.value,
+        this.prevValue = this.input.value = this.inputLine.value,
     lastCaretPos: null,
     inputKeyupHandler: function(ev) {
         let caretPos = this.caretPos;
@@ -197,6 +199,16 @@ TagCompleter.InputHandler.prototype = {
             }
         }
     },
+    inputInputHandler: function(ev) {
+        this.updateLineValue();
+        let tagsRE = /^(?:\[[^?%\/\[\]]+\])*/;
+        let currentValue = this.input.value;
+        let prevTags = this.prevValue.match(tagsRE)[0];
+        let currentTags = currentValue.match(tagsRE)[0];
+        this.prevValue = currentValue;
+        if (prevTags != currentTags)
+            this.fireTagChangeEvent();
+    },
     listCompleteHandler: function(ev) {
         this.insert(true);
     },
@@ -207,9 +219,15 @@ TagCompleter.InputHandler.prototype = {
             let pos = line.insertionTag(tag, this.caretPos);
             this.updateValue();
             this.textbox.setSelectionRange(pos + 1, pos + 1);
+            this.fireTagChangeEvent();
         }
         TagCompleter.List.hide();
     },
+    fireTagChangeEvent: function() {
+        let ev = document.createEvent('UIEvent');
+        ev.initUIEvent('HB_TagChange', true, false, window, 0);
+        this.input.dispatchEvent(ev);
+    }
 }
 
 TagCompleter.InputLine = function(value, tags) {
@@ -231,6 +249,7 @@ TagCompleter.InputLine.prototype = {
     set value(val) {
         this._text = val;
     },
+    get tags() this.cutoffComment(this.value)[1],
     addTag: function(tagName) {
         let val = this.value;
         let lastIndex = val.lastIndexOf(']');
