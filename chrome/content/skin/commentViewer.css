@@ -7,7 +7,7 @@ body,h1,h2,h3,h4,h5,h5,ul,ol,li,dl,dt,dd,form,textarea,input,select,blockquote {
 }
 
 body {
-  background: #edf1fd;
+  background: #fff;
 }
 
 img { 
@@ -17,24 +17,25 @@ img {
 
 h1 {
     padding: 7px;
-    margin-bottom: 0.5em;
-    border: 1px solid #2c6ebd;
-    border-bottom: #16375e solid 1px;
     font-weight: bold;
-    color: #fff;
-    background: #2c6ebd url("chrome://hatenabookmark/content/skin/images/title_bg.png") left center;
-    -moz-border-radius: 1px;
     position: fixed;
     width: 100%;
     margin: 0px;
+    top: 0;
+    margin-top: 0;
+    border-bottom: 1px solid #bbb;
+    background: #f3f3f3;
 }
 
-img#favicon {
+#comment-list {
+}
+
+#favicon {
     vertical-align: middle;
     margin-bottom: 2px;
 }
 
-span#title {
+#title {
   /*
   background: url(chrome://hatenabookmark/content/skin/images/favicon.ico) left 2px no-repeat;
   padding-left: 20px;
@@ -59,12 +60,13 @@ input {
   padding:0;
 }
 
-ul#list {
-  padding: 45px 0 2em 7px;
+#list {
+  margin: 10px;
+  margin-top: 45px;
   color: #222;
 }
 
-ul#list li {
+#list li {
   text-indent: 0px;
   display: list-item;
   padding: 3px 20px 3px 5px;
@@ -74,13 +76,13 @@ ul#list li {
   line-height: 1.4;
 }
 
-ul#list li a.username {
+#list li a.username {
   font-weight: normal;
   padding: 0 3px 0 3px;
   color: #00d;
 }
 
-ul#list li.mine a.username {
+#list li.mine a.username {
   font-weight: bold;
 } 
 
@@ -98,8 +100,10 @@ a.tag {
   color: #66c;
 }
 
-a#close-button {
+#close-button {
   position: absolute;
-  right: 20px;
-  top: 8px;
+  right: 15px;
+  top: 0;
+  display: inline-block;
+  padding: 10px;
 }
