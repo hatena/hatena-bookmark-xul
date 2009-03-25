@@ -57,7 +57,7 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton {
 
 #hBookmark-status-count {
   cursor: pointer;
-  background-image: url("chrome://hatenabookmark/content/skin/images/nbookmarks.png");
+  /*background-image: url("chrome://hatenabookmark/content/skin/images/nbookmarks.png");*/
   width: 30px;
   height: 16px;
   padding-right: 4px;
@@ -92,6 +92,11 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton {
     color: #333;
     */
 }
+
+.hBookmark-status-separator {
+  height: 16px;
+  margin-right: 0;
+}
     
 #hBookmark-status-comment {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/comment.png");
@@ -110,7 +115,7 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton {
 
 #hBookmark-status-comment[loading="true"] {
   cursor: pointer;
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment_loading.gif");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment_loading.png");
 }
 
 #hBookmark-panel-comment {
