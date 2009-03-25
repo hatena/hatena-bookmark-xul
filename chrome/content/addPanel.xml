@@ -207,8 +207,6 @@
                     this.userNameField.value = user.name;
                     this.userNameField.href  = user.bookmarkHomepage;
 
-                    this.messageRow.hidden = true;
-
                     this.titleIcon.src = hBookmark.favicon(bookmark.url);
                     this.titleLabel.value       = bookmark.title;
                     this.titleField.value       = bookmark.title;
@@ -272,8 +270,8 @@
                         let message = this.strings.get("alreadyBookmarked",
                                                        [date]);
                         this.messageField.value = message;
-                        this.messageRow.hidden = false;
                     }
+                    this.messageRow.hidden = add;
                 ]]></body>
             </method>
 
