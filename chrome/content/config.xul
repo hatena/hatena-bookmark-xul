@@ -64,7 +64,7 @@
 </prefpane>
 
 
-<prefpane id="prefpane-addPanel" label="編集パネル" flex="1" onpaneload="updateUI();">
+<prefpane id="prefpane-addPanel" label="編集パネル" flex="1" onpaneload="hBookmark.Config.updateUI();">
     <preferences>
         <preference 
             id="extensions.hatenabookmark.addPanel.tagCompleteEnabled"
@@ -127,32 +127,18 @@
             </hbox>
         </groupbox>
 
-
-        <script type="application/x-javascript"><![CDATA[
-            let expname = 'extensions.hatenabookmark.addPanel.backgroundImage';
-            function updateUI() {
-                var file = document.getElementById(expname).value;
-                if (file) {
-                    var fileField = document.getElementById("myFileField");
-                    fileField.file = file;
-                    fileField.label = file.path;
-                }
-            }
-            function selectDir() {
-                var filePicker = Components.classes["@mozilla.org/filepicker;1"]
-                                 .createInstance(Components.interfaces.nsIFilePicker);
-                filePicker.init(window, "Choose a folder.", filePicker.modeOpen);
-                filePicker.appendFilters(Components.interfaces.nsIFilePicker.filterIamges);
-                if (filePicker.show() == filePicker.returnOK) {
-                    document.getElementById(expname).value = filePicker.file;
-                    updateUI();
-                }
-            }
-        ]]></script>
-        <hbox align="center">
-            <filefield id="myFileField" flex="1" />
-            <button label="Browse..." oncommand="selectDir();" />
-        </hbox>
+        <groupbox orient="vertical">
+            <caption label="背景画像" />
+            <hbox align="center" flex="1">
+                <vbox flex="1">
+                <filefield id="addPanel.backgroundImage" flex="1" />
+                    <hbox align="center">
+                        <button label="画像の選択" oncommand="hBookmark.Config.selectImageFile();" />
+                        <button label="選択を解除" oncommand="hBookmark.Config.clearImageFile();" />
+                    </hbox>
+                </vbox>
+            </hbox>
+        </groupbox>
     </vbox>
 </prefpane>
 

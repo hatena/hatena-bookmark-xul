@@ -82,11 +82,13 @@
         <implementation>
             <constructor><![CDATA[
                 let backgroundImage = Application.prefs.get('extensions.hatenabookmark.addPanel.backgroundImage').value;
+                let w = document.getElementById('hBookmarkAddPanelWindow');
+                w.style.backgroundColor = '#FFF';
                 if (backgroundImage) {
-                    // let w = document.getElementById('hBookmarkAddPanelWindow');
-                    // // w.style.backgroundImage = backgroundImage;
-                    // let s = w.getAttribute('style');
-                    // w.style = "background-image: url(' + backgroundImage + ');'";
+                    backgroundImage = 'file:///' + encodeURIComponent(backgroundImage);
+                    w.style.backgroundImage = "url('" + backgroundImage + "')";
+                    w.style.backgroundRepeat = 'no-repeat';
+                    w.style.backgroundPosition = 'left bottom';
                 }
                 this.inputHandler = new hBookmark.TagCompleter.InputHandler(this.commentField.inputField);
             ]]></constructor>
@@ -231,18 +233,6 @@
 
                     this.commentField.value = bookmark.comment;
                     this.inputHandler.updateLineValue(); // タグを認識させる
-                    // XXX Prefs#getは"."が入るとうまくいかない?
-                    //let count = hBookmark.Prefs.bookmark.get("addPanel.initialTagCount");
-                    let shown = Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value;
-                    if (!shown) {
-                        this.tagSelectorGroup.setAttribute('hidden', true);
-                        return;
-                    }
-                    this.tagSelectorGroup.removeAttribute('hidden');
-                    let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
-                    this.tagSelector.build(count);
-                    let tags = this.inputHandler.inputLine.tags;
-                    this.tagSelector.update(tags);
 
                     setTimeout(function (self) {
                         let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
@@ -262,10 +252,22 @@
                             let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
                             if (m) {
                                 self.titleLabel.value = m[1];
-                                self.titleField.value = m[1];
                             }
                         }
                     }, 0, this);
+
+                    // XXX Prefs#getは"."が入るとうまくいかない?
+                    //let count = hBookmark.Prefs.bookmark.get("addPanel.initialTagCount");
+                    let shown = Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value;
+                    if (!shown) {
+                        this.tagSelectorGroup.setAttribute('hidden', true);
+                        return;
+                    }
+                    this.tagSelectorGroup.removeAttribute('hidden');
+                    let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
+                    this.tagSelector.build(count);
+                    let tags = this.inputHandler.inputLine.tags;
+                    this.tagSelector.update(tags);
                 ]]></body>
             </method>
 

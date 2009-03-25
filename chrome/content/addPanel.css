@@ -8,7 +8,6 @@ row.username-line {
 }
 
 dialog#hBookmarkAddPanelWindow {
-    background-color: #FFF !important;
     border: 5px solid #E9F0F8 !important;
 }
 
@@ -49,7 +48,15 @@ textbox {
    border: 1px inset #559be6;
 }
 
+caption {
+   background-color: #FFF; 
+}
 
+groupbox {
+    -moz-appearance: none;
+    border: 2px solid #555;
+    -moz-border-radius: 7px;
+}
 
 
 .hBookmarkAddPanel {

@@ -126,6 +126,7 @@ TagCompleter.InputHandler = function(input) {
     this.inputLine = new TagCompleter.InputLine('', []);
     delete this.inputLine['suggestTags'];
     this.inputLine.__defineGetter__('suggestTags', function() TagCompleter.tags);
+    this.tagCompleteEnabled = Application.prefs.get('extensions.hatenabookmark.addPanel.tagCompleteEnabled').value;
     this.prevValue = this.input.value;
     input.addEventListener('keyup', method(this, 'inputKeyupHandler'), false);
     input.addEventListener('keydown', method(this, 'inputKeydownHandler'), false);
@@ -234,7 +235,6 @@ TagCompleter.InputHandler.prototype = {
 TagCompleter.InputLine = function(value, tags) {
     this.suggestTags = tags;
     this.value = value;
-    this.tagCompleteEnabled = Application.prefs.get('extensions.hatenabookmark.addPanel.tagCompleteEnabled').value;
     this.maxSuggest = Application.prefs.get('extensions.hatenabookmark.addPanel.tagMaxResult').value;
 }
 

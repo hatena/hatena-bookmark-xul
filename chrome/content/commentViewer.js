@@ -41,6 +41,16 @@ window.addEventListener('DOMContentLoaded', function() {
 var toggle = function() {
     Application.prefs.get(SHOW_PREFS_NAME).value = !Application.prefs.get(SHOW_PREFS_NAME).value;
     setCommentView();
+    posCalc();
+}
+
+var posCalc = function() {
+    let rect = document.body.getBoundingClientRect();
+    let height = parseInt(rect.bottom) - parseInt(rect.top) + 100; // うーん
+    window.scrollTo(0, 0);
+    throwEvent('rendered', {
+        height: parseInt(height),
+    });
 }
 
 var setCommentView = function() {
@@ -116,14 +126,7 @@ var dispatchMethods = {
         /*
          * 即座に取得すると高さ0が返るので…
          */
-        setTimeout(function() {
-            let rect = document.body.getBoundingClientRect();
-            let height = parseInt(rect.bottom) - parseInt(rect.top) + 100; // うーん
-            window.scrollTo(0, 0);
-            throwEvent('rendered', {
-                height: parseInt(height),
-            });
-        }, 10);
+        setTimeout(posCalc, 10);
     }
 };
 
