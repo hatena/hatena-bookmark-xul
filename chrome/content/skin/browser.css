@@ -1,5 +1,9 @@
 
 /* toolbar */
+#hBookmarkToolbar {
+  min-height: 26px;
+}
+
 #hBookmark-toolbar-add-button {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/add_bookmark.png");
 }
@@ -16,11 +20,11 @@ toolbar[iconsize="small"] #hBookmark-toolbar-home-button {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/bookmark_home_small.png");
 }
 
-#hBookmarkDropdown toolbarbutton {
+#hBookmarkDropdownButton {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/recent_bookmarks.png");
 }
 
-toolbar[iconsize="small"] #hBookmarkDropdown toolbarbutton {
+toolbar[iconsize="small"] #hBookmarkDropdownButton {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/recent_bookmarks_small.png");
 }
 
@@ -43,18 +47,24 @@ toolbar[iconsize="small"] #hBookmarkDropdown toolbarbutton {
 
 #hBookmarkAddButton[added="false"] {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/b_plus.png");
+  cursor: pointer;
 }
 
 #hBookmarkAddButton[added="true"] {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/b_plus_on.png");
+  cursor: pointer;
 }
 
 #hBookmark-status-count {
+  cursor: pointer;
   background-image: url("chrome://hatenabookmark/content/skin/images/nbookmarks.png");
   width: 30px;
   height: 16px;
+  padding-right: 4px;
+  /*
   padding:2px 3px 0 0;
   margin:0px;
+  */
   text-align: right;
   font-size: 10px;
 
@@ -85,13 +95,21 @@ toolbar[iconsize="small"] #hBookmarkDropdown toolbarbutton {
     
 #hBookmark-status-comment {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/comment.png");
+  cursor: normal;
 }
 
 #hBookmark-status-comment[comment="true"] {
+  cursor: pointer;
   list-style-image: url("chrome://hatenabookmark/content/skin/images/comment_on.png");
 }
 
+#hBookmark-status-comment[comment="false"] {
+  cursor: normal;
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment.png");
+}
+
 #hBookmark-status-comment[loading="true"] {
+  cursor: pointer;
   list-style-image: url("chrome://hatenabookmark/content/skin/images/comment_loading.gif");
 }
 
@@ -100,7 +118,9 @@ toolbar[iconsize="small"] #hBookmarkDropdown toolbarbutton {
 }
 
 iframe#hBookmark-comment-viewer {
-    width: 700px;
+  /*
+width: 800px;
+*/
 }
 
 /*
@@ -144,7 +164,9 @@ iframe#hBookmark-comment-viewer {
 
 #hBookmark-urlbar-listbox > scrollbox {
     /* 横スクロールバー消す */
+  /*
     overflow-x: hidden !important;
+    */
 }
 
 .hBookmark-urlbar-listitem {

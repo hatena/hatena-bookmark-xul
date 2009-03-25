@@ -28,7 +28,7 @@ let createWhereLike = function (word) {
         </>.toString(), arg];
     }
     for (var i = 0;  i < words.length; i++) {
-        var w = words[i];
+       var w = words[i];
         if (w.length) {
             var [sq, arg] = likeGenerateor(w);
             sql.push('(' + sq + ')');
@@ -46,18 +46,21 @@ extend(Bookmark, {
         return tags;
     },
     parse: function(str) {
-        /*
-         * XXX: [hoge][huga] foo [baz] の baz もまっちしてしまう
-         */
-        let regex = new RegExp('\\[([^\:\\[\\]]+)\\]', 'g');
+        let re = /\[([^\[\]]+)\]/g;
         let match;
         let tags = [];
         let lastIndex = 0;
-        while (( match = regex.exec(str) )) {
-            tags.push(match[1]);
-            lastIndex = regex.lastIndex;
+        while ((match = re.exec(str))) {
+            lastIndex += match[0].length; 
+            if (lastIndex == re.lastIndex) {
+                let tag = match[1];
+                if (!tags.some(function(t) tag == t))
+                    tags.push(match[1]);
+            }
         }
-        return [tags, str.substring(lastIndex)];
+        let comment = str.substring(lastIndex) || '';
+
+        return [tags, comment];
     },
     findByTags: function(tags) {
         tags = [].concat(tags);
@@ -138,6 +141,12 @@ extend(Bookmark.prototype, {
     get dateYMD() {
         let d = this.date.toString();
         return [d.substr(0,4), d.substr(4,2), d.substr(6,2)].join('/');
+    },
+    get dateObject() {
+        let d = this.date.toString();
+        return new Date(d.substring(0, 4), d.substring(4, 6),
+                        d.substring(6, 8), d.substring(8, 10),
+                        d.substring(10, 12), d.substring(12, 14));
     },
     get searchData() {
         let res = this.db.execute(<>

@@ -12,6 +12,7 @@ let iframe = null;
 
 elementGetter(this, 'panelComment', 'hBookmark-panel-comment', document);
 elementGetter(this, 'commentButton', 'hBookmark-status-comment', document);
+elementGetter(this, 'statusbar', 'status-bar', document);
 
 const CMD_EVENT_NAME = 'hBookmark-view-comments';
 
@@ -29,9 +30,15 @@ let throwEvent = function(method, data) {
 }
 
 var CommentViewer = {
-    show: function CommentViewer_show(target) {
-        if (!isHttp) return;
-
+    showClick: function CommentViewer_show() {
+        if (panelComment.state == 'closed')
+            CommentViewer.show();
+    },
+    show: function CommentViewer_show(url) {
+        if (!url) {
+            if (!isHttp) return;
+            url = aDoc.location.href;
+        }
         if (!iframe) {
             iframe = document.createElement('iframe');
             iframe.setAttribute('src', 'chrome://hatenabookmark/content/comment.html') 
@@ -39,22 +46,27 @@ var CommentViewer = {
 
             panelComment.appendChild(iframe);
         }
-
-        let url = aDoc.location.href;
         commentButton.setAttribute('loading', 'true'); 
         let data = HTTPCache.comment.get(url);
-        this.updateComment(data);
+        if (data)
+            data.favicon = favicon(url);
+        setTimeout(function(self) {
+            self.updateComment(data);
+        }, 10, this);
     },
     updateComment: function CommentViewer_updateComment(data) {
-        if (data) {
+        if (data && data.title) {
             panelComment.openPopup(commentButton, 'before_end', 0, 0,false,false);
             // 非表示ユーザをフィルター
             let regex = User.user.ignores;
             if (regex) {
-                p('filter!' + regex);
                 data.bookmarks = data.bookmarks.filter(function(b) !regex.test(b.user));
             }
-            throwEvent('load-json', data);
+            //if (data.bookmarks && data.bookmarks.length) {
+                throwEvent('load-json', data);
+            //} else {
+            //    CommentViewer.hide();
+            //}
         }
         commentButton.setAttribute('loading', 'false'); 
     },
@@ -70,13 +82,19 @@ CommentViewer.dispatchMethods = {
         CommentViewer.hide();
     },
     rendered: function(o) {
-        if (o.height < 400) {
+        // let doc = window.content.document;
+        // let maxHeight = (doc.compatMode == 'CSS1Compat' ? doc.documentElement.clientHeight : doc.body.clientHeight) - 40;
+        let maxHeight = window.content.innerHeight - 80;
+        let maxWidth = window.content.innerWidth - 80;
+        if (o.height < maxHeight) {
             panelComment.setAttribute('height', '' + o.height + 'px');
             iframe.setAttribute('height', '' + o.height + 'px');
         } else {
-            panelComment.setAttribute('height', '400px');
-            iframe.setAttribute('height', '400px');
+            panelComment.setAttribute('height', '' + maxHeight + 'px');
+            iframe.setAttribute('height',  '' + maxHeight + 'px');
         }
+        panelComment.setAttribute('width', '' + maxWidth + 'px');
+        iframe.setAttribute('width', '' + maxWidth + 'px');
     }
 }
 

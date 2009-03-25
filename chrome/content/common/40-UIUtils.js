@@ -1,11 +1,14 @@
 const EXPORT = ["UIUtils"];
 
+Cu.import("resource://gre/modules/PluralForm.jsm", this);
+
 let PS = Cc["@mozilla.org/embedcomp/prompt-service;1"].
          getService(Ci.nsIPromptService);
 
 var UIUtils = {
     popupStrings: new Strings("chrome://hatenabookmark/locale/popups.properties"),
     errorStrings: new Strings("chrome://hatenabookmark/locale/errors.properties"),
+    addPanelStrings: new Strings("chrome://hatenabookmark/locale/addPanel.properties"),
 
     encourageLogin: function UIU_encourageLogin() {
         let win = getTopWin();
@@ -13,8 +16,16 @@ var UIUtils = {
             win, this.popupStrings.get("prompt.title"),
             this.popupStrings.get("prompt.encourageLogin"),
             PS.STD_YES_NO_BUTTONS, null, null, null, null, {});
-        if (pressed !== 0) return;
-        openUILinkIn("http://www.hatena.ne.jp/login", "current");
+        if (pressed === 0)
+            this.openLogin(null);
+    },
+
+    openLogin: function UIU_openLogin(event) {
+        openUILink("https://www.hatena.ne.jp/login", event);
+    },
+
+    openAddBookmark: function UIU_openAddBookmark(event) {
+        openUILink("http://b.hatena.ne.jp/" + User.user.name + "/add", event);
     },
 
     confirmDeleteBookmarks: function UIU_confirmDeleteBookmarks(bookmarks) {
@@ -89,5 +100,17 @@ var UIUtils = {
         let loadInBackground = (where === "tabshifted");
         let replaceCurrentTab = (where !== "tab");
         win.getBrowser().loadTabs(uris, loadInBackground, replaceCurrentTab);
+    },
+
+    isSafeLink: function UIU_isSafeLink(uri) {
+        return /^(?:https?|ftp):\/\//.test(uri);
+    },
+
+    getUsersText: function UIU_getUsersText(count) {
+        let ruleNum = +this.addPanelStrings.get("usersPluralRuleNum");
+        let get = PluralForm.makeGetter(ruleNum)[0];
+        let text = get(count, this.addPanelStrings.get("usersLabel"));
+        return text.replace(/#1/g, count);
+        return count + " users";
     }
 };

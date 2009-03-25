@@ -42,25 +42,31 @@ var dispatchMethods = {
                 clear();
             }
         }
+        $('favicon').src = data.favicon;
         $('title').appendChild(T(data.title));
         p.b(function() {
-            if (data.bookmarks) data.bookmarks.forEach(function(b) {
-                let li = E('li');
-                let userlink = B_URL + b.user + '/';
-                let ymd = b.timestamp.split(' ')[0];
-                let permalink = userlink + ymd.replace(/\//g, '') + '#' + data.eid;
-                let icon = userIcon(b.user);
-                li.appendChild(E('a', {href: permalink, className: 'user-permalink'}, icon));
-                li.appendChild(E('a', {href: permalink, className: 'username'}, b.user));
-                if (b.tags) b.tags.forEach(function(tag, index) {
-                    let userlinkTag = userlink + '/t/' + encodeURIComponent(tag);
-                    if (index) li.appendChild(T(', '));
-                    li.appendChild(E('a', {href: userlinkTag, className:'tag'}, tag));
+            if (data.bookmarks && data.bookmarks.length) {
+                data.bookmarks.forEach(function(b) {
+                    let li = E('li');
+                    let userlink = B_URL + b.user + '/';
+                    let ymd = b.timestamp.split(' ')[0];
+                    let permalink = userlink + ymd.replace(/\//g, '') + '#' + data.eid;
+                    let icon = userIcon(b.user);
+                    li.appendChild(E('a', {href: permalink, className: 'user-permalink'}, icon));
+                    li.appendChild(E('a', {href: permalink, className: 'username'}, b.user));
+                    if (b.tags) b.tags.forEach(function(tag, index) {
+                        let userlinkTag = userlink + '/t/' + encodeURIComponent(tag);
+                        if (index) li.appendChild(T(', '));
+                        li.appendChild(E('a', {href: userlinkTag, className:'tag'}, tag));
+                    });
+                    li.appendChild(E('span', {className: 'comment'}, b.comment));
+                    li.appendChild(E('span', {className: 'timestamp'}, ymd));
+                    $('list').appendChild(li);
                 });
-                li.appendChild(E('span', {className: 'comment'}, b.comment));
-                li.appendChild(E('span', {className: 'timestamp'}, ymd));
+            } else {
+                let li = E('li', {}, '表示できるブックマークコメントはありません。');
                 $('list').appendChild(li);
-            });
+            }
         }, 'comment rendered');
 
         /*
@@ -108,7 +114,7 @@ let close = function() {
 
 let userIcon = function(username) {
     return E('img', {
-        src: 'http://www.hatena.ne.jp/users/' + username.substring(0, 2) + '/' + username + '/profile_s.gif',
+        src: 'https://www.hatena.ne.jp/users/' + username.substring(0, 2) + '/' + username + '/profile_s.gif',
         className: 'usericon',
         alt: username,
     });

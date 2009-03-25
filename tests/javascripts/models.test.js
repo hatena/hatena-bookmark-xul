@@ -16,7 +16,7 @@ function setUp()
 
 function testParseTags() {
     var B = model('Bookmark');
-    assert.equals(B.parseTags('[hoge][huga]mycomment').length, 2);
+    assert.equals(B.parseTags('[hoge][huga]mycomment[foo]').length, 2);
 }
 
 function testBookmark() {

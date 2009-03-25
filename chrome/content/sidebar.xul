@@ -59,7 +59,7 @@
                          persist="width sortDirection sortActive"/>
                 <splitter class="tree-splitter"/>
                 <treecol id="hBookmarkTagTree_count"
-                         label="{{Count}}"
+                         label="&hBookmark.sidebar.tagCountLabel;"
                          persist="width sortDirection sortActive"/>
             </treecols>
             <treechildren/>

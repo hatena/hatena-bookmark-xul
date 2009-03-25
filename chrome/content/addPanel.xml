@@ -7,11 +7,6 @@
     <binding id="add-panel"
              extends="chrome://global/content/bindings/popup.xml#panel">
         <content>
-            <xul:hbox>
-                <xul:image anonid="userIcon"/>
-                <xul:label anonid="userNameField"
-                           class="text-link hBookmarkLink"/>
-            </xul:hbox>
             <xul:label anonid="errorField" hidden="true"/>
             <xul:grid>
                 <xul:columns>
@@ -19,23 +14,54 @@
                     <xul:column flex="1"/>
                 </xul:columns>
                 <xul:rows>
+                    <xul:row align="center" class="username-line">
+                        <xul:hbox align="right">
+                        <!--
+                        <xul:image src="chrome://hatenabookmark/content/skin/images/favicon.ico" height="16px" width="16px" />
+                        -->
+                        <xul:label value="ようこそ" />
+                        </xul:hbox>
+                        <xul:hbox align="center">
+                            <xul:image anonid="userIcon"/>
+                            <xul:label anonid="userNameField"
+                                       class="text-link hBookmarkLink"/>
+                            <xul:label value="さん" />
+                        </xul:hbox>
+                    </xul:row>
+                    <xul:row anonid="messageRow">
+                        <xul:spacer/>
+                        <xul:label anonid="messageField"/>
+                    </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.titleLabel;"/>
-                        <xul:hbox align="center">
-                            <xul:textbox anonid="titleField" flex="1"/>
-                            <xul:button anonid="editTitleButton"
-                                        label="&hBookmark.addPanel.editTitleLabel;"
-                                        oncommand="var panel = document.getBindingParent(this); panel.isTitleEditable = true; panel.titleField.focus();"/>
-                            <xul:button anonid="cancelEditTitleButton"
-                                        label="&hBookmark.addPanel.cancelEditTitleLabel;"
-                                        oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
-                        </xul:hbox>
+                        <xul:vbox>
+                            <xul:hbox anonid="titleContainer"
+                                      align="center">
+                                <xul:image anonid="titleIcon"/>
+                                <xul:label crop="end" flex="1" anonid="titleLabel"/>
+                                <xul:button anonid="editTitleButton"
+                                            label="&hBookmark.addPanel.editTitleLabel;"
+                                            oncommand="document.getBindingParent(this).isTitleEditable = true;"/>
+                            </xul:hbox>
+                            <xul:hbox anonid="editableTitleContainer"
+                                      align="center">
+                                <xul:textbox anonid="titleField" flex="1"/>
+                                <xul:button anonid="cancelEditTitleButton"
+                                            label="&hBookmark.addPanel.cancelEditTitleLabel;"
+                                            oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
+                            </xul:hbox>
+                        </xul:vbox>
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.urlLabel;"/>
                         <xul:label anonid="urlField"
                                    class="text-link hBookmarkLink"
                                    crop="end"/>
+                    </xul:row>
+                    <xul:row anonid="usersRow" align="center">
+                        <xul:spacer/>
+                        <xul:label anonid="usersField"
+                                   class="text-link hBookmarkLink"/>
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.commentLabel;"/>
@@ -59,6 +85,24 @@
             <field name="userNameField">
                 document.getAnonymousElementByAttribute(this, "anonid", "userNameField")
             </field>
+            <field name="messageRow">
+                document.getAnonymousElementByAttribute(this, "anonid", "messageRow")
+            </field>
+            <field name="messageField">
+                document.getAnonymousElementByAttribute(this, "anonid", "messageField")
+            </field>
+            <field name="titleContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleContainer")
+            </field>
+            <field name="editableTitleContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "editableTitleContainer")
+            </field>
+            <field name="titleIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleIcon")
+            </field>
+            <field name="titleLabel">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleLabel")
+            </field>
             <field name="titleField">
                 document.getAnonymousElementByAttribute(this, "anonid", "titleField")
             </field>
@@ -70,6 +114,12 @@
             </field>
             <field name="urlField">
                 document.getAnonymousElementByAttribute(this, "anonid", "urlField")
+            </field>
+            <field name="usersRow">
+                document.getAnonymousElementByAttribute(this, "anonid", "usersRow")
+            </field>
+            <field name="usersField">
+                document.getAnonymousElementByAttribute(this, "anonid", "usersField")
             </field>
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
@@ -87,8 +137,6 @@
             </field>
 
             <field name="_bookmark">({ title: "", url: "", comment: "" })</field>
-            <field name="_originalTitle">""</field>
-
             <property name="bookmark">
                 <getter><![CDATA[
                     return hBookmark.extend(this._bookmark, {
@@ -107,23 +155,24 @@
             <property name="isTitleEditable"
                       onget="return !this.titleField.readOnly;">
                 <setter><![CDATA[
-                    this.titleField.readOnly = !val;
-                    this.editTitleButton.hidden = val;
-                    this.cancelEditTitleButton.hidden = !val;
-                    if (!val)
-                        this.titleField.value = this._originalTitle;
+                    this.titleContainer.hidden = val;
+                    this.editableTitleContainer.hidden = !val;
+                    if (val)
+                        this.titleField.focus();
+                    else
+                        this.titleField.value = this.titleLabel.value;
                     return val;
                 ]]></setter>
             </property>
 
             <property name="isTitleChanged" readonly="true"
-                      onget="return this.titleField.value !== this._originalTitle;"/>
+                      onget="return this.titleField.value !== this.titleLabel.value;"/>
 
             <method name="show">
                 <parameter name="bookmark"/>
                 <body><![CDATA[
                     this.bookmark = bookmark;
-                    this.setAddOrEdit(!!bookmark.temporary);
+                    this.setAddOrEdit(!!bookmark.temporary, bookmark);
                     this.clearError();
                     // 遅延しないとうまく focus があたらない？
                     // これでもタイミング次第では focus あわないので:w
@@ -143,35 +192,47 @@
             <method name="updateFields">
                 <parameter name="bookmark"/>
                 <body><![CDATA[
-                    this._originalTitle     = bookmark.title;
-                    this.titleField.value   = bookmark.title;
-                    this.isTitleEditable    = false;
-                    this.urlField.value     = bookmark.url;
-                    this.urlField.href      = bookmark.url;
-                    this.commentField.value = bookmark.comment;
                     let user = hBookmark.User.user;
+
+                    this.userIcon.src        = user.getProfileIcon(false);
                     this.userNameField.value = user.name;
-                    this.userNameField.href = user.bookmarkHomepage;
-                    let iconURL = user.getProfileIcon(false);
-                    new hBookmark.IconLoader(iconURL, function (dataURL) {
-                        this.userIcon.src = dataURL;
-                    }, this);
+                    this.userNameField.href  = user.bookmarkHomepage;
+
+                    this.messageRow.hidden = true;
+
+                    this.titleIcon.src = hBookmark.favicon(bookmark.url);
+                    this.titleLabel.value       = bookmark.title;
+                    this.titleField.value       = bookmark.title;
+                    this.editTitleButton.hidden = user.private;
+                    this.isTitleEditable        = false;
+
+                    this.urlField.value = bookmark.url;
+                    this.urlField.href =
+                        hBookmark.UIUtils.isSafeLink(bookmark.url)
+                        ? bookmark.url : "";
+                    this.usersRow.hidden = true;
+
+                    this.commentField.value = bookmark.comment;
+
                     setTimeout(function (self) {
                         let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
-                        if (!res) {
+                        if (res) {
+                            self.usersField.value =
+                                hBookmark.UIUtils.getUsersText(res.count);
+                            self.usersField.href = res.entry_url;
+                            self.usersRow.hidden = false;
+
+                            if (res.title === bookmark.title) return;
+                            self.titleLabel.value = res.title;
+                            self.titleField.value = res.title;
+                        } else if (!bookmark.title) {
                             let xhr = hBookmark.net.get(bookmark.url);
                             // とりあえずやっつけ
                             // loading icon だしたほうがよさそう
                             let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
                             if (m) {
-                                self._originalTitle   = m[1];
+                                self.titleLabel.value = m[1];
                                 self.titleField.value = m[1];
-                            }
-                        } else {
-                            if (res.title === bookmark.title) return;
-                            if (res) {
-                                self._originalTitle   = res.title;
-                                self.titleField.value = res.title;
                             }
                         }
                     }, 0, this);
@@ -180,12 +241,23 @@
 
             <method name="setAddOrEdit">
                 <parameter name="add"/>
+                <parameter name="bookmark"/>
                 <body><![CDATA[
                     let type = add ? ".add" : ".edit";
                     document.title =
                         this.strings.get("title" + type);
                     this.dialog.getButton("accept").label =
                         this.strings.get("saveLabel" + type);
+                    this.dialog.buttons =
+                        add ? "accept,cancel" : "accept,cancel,extra2";
+                    if (!add) {
+                        let format = this.strings.get("dateFormat");
+                        let date = bookmark.dateObject.toLocaleFormat(format);
+                        let message = this.strings.get("alreadyBookmarked",
+                                                       [date]);
+                        this.messageField.value = message;
+                        this.messageRow.hidden = false;
+                    }
                 ]]></body>
             </method>
 
@@ -218,6 +290,16 @@
                         }
                     });
                     command.execute();
+                ]]></body>
+            </method>
+
+            <method name="deleteBookmark">
+                <body><![CDATA[
+                    let command = new hBookmark.RemoteCommand("delete", {
+                        bookmark: this.bookmark,
+                    });
+                    command.execute();
+                    this.hide();
                 ]]></body>
             </method>
         </implementation>

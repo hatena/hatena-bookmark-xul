@@ -9,6 +9,8 @@
 
 <!ENTITY hBookmark.statusbar.now_syncing "データを同期しています...">
 <!ENTITY hBookmark.statusbar.tooltip.addButton "はてなブックマークに追加・編集">
+<!ENTITY hBookmark.statusbar.tooltip.counter "エントリーページを開く">
+<!ENTITY hBookmark.statusbar.tooltip.comment "ブックマークコメントを表示">
 
 <!ENTITY hBookmark.menu.add "このページをはてなブックマークに追加">
 <!ENTITY hBookmark.menu.addlink "このリンクをはてなブックマークに追加">

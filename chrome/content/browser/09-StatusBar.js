@@ -27,11 +27,12 @@ var StatusBar = {
         // XXX: 別タブで開きたい
         aWin.open(newURI('chrome://hatenabookmark/content/index.html'));
     },
-    goEntry: function StatusBar_goEntry() {
+    goEntry: function StatusBar_goEntry(event) {
         if (isHttp) {
             let url = locationURL;
 
-            aWin.open(newURI('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23')));
+            //openUILink(newURI('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23')));
+            openUILink('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23'), event);
         }
     },
     checkBookmarked: function StatusBar_checkBookmarked() {
@@ -58,8 +59,23 @@ var StatusBar = {
         }
         return StatusBar._prefs;
     },
+    lastCountValue: null,
     checkCount: function StatusBar_checkCount() {
         statusCount.value = (isHttp ? HTTPCache.counter.get(locationURL) : '0') || '0';
+        if (StatusBar.lastCountValue == statusCount.value) return;
+        StatusBar.lastCountValue = statusCount.value;
+        while (statusCount.firstChild) statusCount.removeChild(statusCount.firstChild);
+        let counts = statusCount.value.toString().split('');
+        counts.forEach(function(i) {
+            let image = document.createElement('image');
+            image.setAttribute('width', '6px');
+            image.setAttribute('height', '7px');
+            image.width = '6px';
+            image.height = '7px';
+            image.setAttribute('src', 'chrome://hatenabookmark/content/skin/images/counter_' + i + '.png');
+            statusCount.appendChild(image);
+        });
+
         if (statusCount.value >= 5) {
             statusCount.setAttribute('users', 'many');
             statusComment.setAttribute('comment', true);

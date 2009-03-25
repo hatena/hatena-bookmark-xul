@@ -1,4 +1,5 @@
 <!ENTITY hBookmark.sidebar.title "Hatena Bookmark Sidebar">
 <!ENTITY hBookmark.sidebar.searchLabel "Search:">
 <!ENTITY hBookmark.sidebar.tagsLabel "Tags">
+<!ENTITY hBookmark.sidebar.tagCountLabel "Count">
 <!ENTITY hBookmark.sidebar.bookmarksLabel "Bookmarks">

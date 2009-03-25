@@ -3,3 +3,5 @@
 <!ENTITY hBookmark.addPanel.cancelEditTitleLabel "キャンセル">
 <!ENTITY hBookmark.addPanel.urlLabel "URL:">
 <!ENTITY hBookmark.addPanel.commentLabel "コメント:">
+
+<!ENTITY hBookmark.addPanel.deleteLabel "削除">
