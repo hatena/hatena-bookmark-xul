@@ -35,6 +35,12 @@ h1 {
     margin-bottom: 2px;
 }
 
+img.usericon {
+  width: 16px;
+  height: 16px;
+}
+
+
 #title {
   /*
   background: url(chrome://hatenabookmark/content/skin/images/favicon.ico) left 2px no-repeat;
