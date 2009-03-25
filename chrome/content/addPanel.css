@@ -38,6 +38,17 @@ label[anonid="usersField"] {
 textbox {
 }
 
+.hBookmarkTag, .hBookmarkSelectedTag {
+   border: 1px solid transparent;
+   cursor: pointer;
+}
+
+.hBookmarkSelectedTag {
+   background-color: #559be6;
+   color: #ffffff;
+   border: 1px inset #559be6;
+}
+
 
 
 
@@ -76,6 +87,10 @@ textbox {
 
 .hBookmarkTagComplete {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#tag-complete");
+}
+.hBookmarkTagSelector {
+   display: block;
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#tag-selector");
 }
 .hBookmarkLink {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#link");
