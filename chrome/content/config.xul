@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://mozapps/content/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
+
+<prefwindow id="hBookmark-config"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    width="400px"
+    >
+
+<!--
+<preference 
+    id="extensions.hatenabookmark."
+    name="extensions.hatenabookmark."
+    type="bool"/>
+-->
+
+<prefpane id="prefpane-locationbar" label="ロケーションバー" flex="1">
+    <preferences>
+        <preference 
+            id="extensions.hatenabookmark.locationbar.searchToggle"
+            name="extensions.hatenabookmark.locationbar.searchToggle"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.locationbar.search"
+            name="extensions.hatenabookmark.locationbar.search"
+            type="bool"/>
+    </preferences>
+
+    <vbox>
+        <checkbox id="extensions.hatenabookmark.locationbar.search-check" flex="1"
+            label="ロケーションバーの検索を有効にする"
+            preference="extensions.hatenabookmark.locationbar.search"/>
+        <checkbox id="extensions.hatenabookmark.locationbar.searchToggle-check" flex="1"
+            label="Ctrl キー連打による、検索有効を有効にする"
+            preference="extensions.hatenabookmark.locationbar.searchToggle"/>
+    </vbox>
+</prefpane>
+
+<prefpane id="prefpane-statusbar" label="ステータスバー" flex="1">
+    <preferences>
+        <preference 
+            id="extensions.hatenabookmark.statusbar.addButton"
+            name="extensions.hatenabookmark.statusbar.addButton"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.statusbar.counter"
+            name="extensions.hatenabookmark.statusbar.counter"
+            type="bool"/>
+    </preferences>
+
+    <vbox>
+        <checkbox id="extensions.hatenabookmark.statusbar.addButton-check" flex="1"
+            label="追加ボタンの表示"
+            src="chrome://hatenabookmark/content/skin/images/b_plus.png"
+            preference="extensions.hatenabookmark.statusbar.addButton"/>
+        <checkbox id="extensions.hatenabookmark.statusbar.counter-check" flex="1"
+            label="ユーザー数カウンターの表示"
+            src="chrome://hatenabookmark/content/skin/images/nbookmarks.png"
+            preference="extensions.hatenabookmark.statusbar.counter"/>
+    </vbox>
+</prefpane>
+
+<prefpane id="prefpane-shortcut" label="ショートカット" flex="1">
+</prefpane>
+
+
+<script type="application/javascript; version=1.8" charset="utf-8" src="chrome://hatenabookmark/content/autoloader.js" />
+<script type="application/javascript; version=1.8" charset="utf-8" src="chrome://hatenabookmark/content/config.js" />
+</prefwindow>
+

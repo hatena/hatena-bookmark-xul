@@ -12,11 +12,11 @@
     </script>
 
     <keyset>
-        <key id="hBookmark-key"
+        <key id="hBookmark-key-add"
             modifiers="accel,alt" 
             key="b"
             oncommand="hBookmark.AddPanelManager.toggle();" />
-        <key id="hBookmark-key"
+        <key id="hBookmark-key-show"
             modifiers="accel,alt" 
             key="c"
             oncommand="hBookmark.CommentViewer.show();" />
@@ -184,6 +184,11 @@
             window.addEventListener('unload', function(e) {
                 EventService.dispatch('unload', window);
             }, false);
+
+            // setTimeout(function() {
+            // var features = "chrome,titlebar,toolbar,centerscreen,modal";
+            // window.openDialog('chrome://hatenabookmark/content/config.xul', "Preferences", features);
+            // }, 100);
         }
     })();
     // ]]>

@@ -147,10 +147,12 @@ let ProgressListenr = {
 // XXX: うーん
 // getBrowser().addProgressListener(ProgressListenr, Ci.nsIWebProgress.NOTIFY_ALL);
 
+/*
 Application.activeWindow.events.addListener('TabOpen', function() {
     //getBrowser().addProgressListener(ProgressListenr, Ci.nsIWebProgress.NOTIFY_ALL);
     getBrowser().addEventListener('DOMContentLoaded', StatusBar.update, false);
 });
+*/
 
 EventService.createListener('UserChange', function() {
     StatusBar.update();

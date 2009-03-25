@@ -2,6 +2,7 @@ const EXPORT = ["Database", "Entity", "Model"];
 
 /*
  * original code by tombloo
+ * http://github.com/to/tombloo
  */
 
 var Database = null;
