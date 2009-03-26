@@ -72,10 +72,14 @@
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.commentLabel;"/>
-                        <xul:textbox
-                            anonid="commentField"
-                            class="hBookmarkMyTagComplete"
-                        />
+                        <xul:hbox align="center">
+                            <xul:textbox
+                                anonid="commentField"
+                                class="hBookmarkMyTagComplete"
+                                flex="1"
+                            />
+                            <xul:label anonid="commentCounterField"/>
+                        </xul:hbox>
                     </xul:row>
                 </xul:rows>
             </xul:grid>
@@ -167,6 +171,9 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
+            <field name="commentCounterField">
+                document.getAnonymousElementByAttribute(this, "anonid", "commentCounterField")
+            </field>
             <field name="recommendedTagSelectorGroup">
                 document.getAnonymousElementByAttribute(this, "anonid", "recommendedTagSelectorGroup")
             </field>
@@ -196,6 +203,7 @@
             <field name="strings">
                 new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
             </field>
+            <field name="maxCommentLength">100</field>
 
             <field name="_tagSelectors">
                 [this.tagSelector, this.recommendedTagSelector]
@@ -237,6 +245,8 @@
             <!-- XXX Prefs#getは"."が入るとうまくいかない? -->
             <property name="showsTagList" readonly="true"
                       onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value"/>
+            <property name="showsRecommendedTagList" readonly="true"
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.recommendedTagListShow').value"/>
 
             <method name="show">
                 <parameter name="bookmark"/>
@@ -282,6 +292,7 @@
 
                     this.commentField.value = bookmark.comment;
                     this.inputHandler.updateLineValue(); // タグを認識させる
+                    this.updateCommentCounter();
                     this.recommendedTagSelectorGroup.hidden = true;
 
                     setTimeout(function (self) {
@@ -345,7 +356,9 @@
             <method name="updateRecommendedTags">
                 <parameter name="tagNames"/>
                 <body><![CDATA[
-                    if (!tagNames || !tagNames.length) return;
+                    if (!this.showsRecommendedTagList ||
+                        !tagNames || !tagNames.length)
+                        return;
                     let tags = tagNames.map(function (t) ({ name: t, count: 0 }));
                     this.recommendedTagSelector.build(tags);
                     let selectedTags = this.inputHandler.inputLine.tags;
@@ -373,6 +386,21 @@
                         this.messageField.value = message;
                     }
                     this.messageRow.hidden = add;
+                ]]></body>
+            </method>
+
+            <method name="updateCommentCounter">
+                <body><![CDATA[
+                    let body = this.inputHandler.inputLine.body;
+                    // UTF-8のバイト数ではない?
+                    body = body.replace(/[\u0100-\uffff]/g, "foo");
+                    let length = Math.ceil(body.length / 3);
+                    let maxLength = this.maxCommentLength;
+                    let label = this.strings.get("commentCounterLabel",
+                                                 [length, maxLength]);
+                    this.commentCounterField.value = label;
+                    this.commentCounterField.className =
+                        (length > maxLength) ? "hBookmarkCommentOver" : "";
                 ]]></body>
             </method>
 
@@ -448,6 +476,10 @@
         </implementation>
 
         <handlers>
+            <handler event="input"><![CDATA[
+                if (event.originalTarget === this.commentField.inputField)
+                    this.updateCommentCounter();
+            ]]></handler>
             <handler event="HB_TagChange"
                      action="this._updateTagSelectorsExcept(null);"/>
             <handler event="HB_TagSelected"><![CDATA[

@@ -6,6 +6,9 @@
 
     <binding id="toolbar" extends="#toolbar-item-base">
         <content>
+            <xul:toolbarbutton anonid="sidebarToggleButton"
+                               tooltiptext="&hBookmark.toolbar.toggleSidebarLabel;"
+                               observes="viewHBookmarkSidebar"/>
             <xul:toolbarbutton anonid="loginButton"
                                label="&hBookmark.toolbar.loginLabel;"
                                oncommand="hBookmark.UIUtils.openLogin(event);"
@@ -93,6 +96,9 @@
 
             <method name="redraw">
                 <body><![CDATA[
+                    // XXX 表示→非表示→リサイズ→再度表示のときに
+                    // 配置が更新されない。
+                    if (this.collapsed) return;
                     hBookmark.p('toolbar redraw');
                     Array.forEach(this.body.childNodes,
                                   function (button) button.hidden = false);

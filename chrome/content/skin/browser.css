@@ -28,6 +28,10 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton {
   list-style-image: url("chrome://hatenabookmark/content/skin/images/recent_bookmarks_small.png");
 }
 
+#hBookmarkToolbar > [anonid="sidebarToggleButton"] {
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/bookmark_home_small.png");
+}
+
 /* context menu*/
 
 #hBookmark-menu-addlink,

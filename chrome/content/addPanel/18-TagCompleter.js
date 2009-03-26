@@ -252,6 +252,7 @@ TagCompleter.InputLine.prototype = {
         this._text = val;
     },
     get tags() this.cutoffComment(this.value)[1],
+    get body() this.cutoffComment(this.value)[0],
     addTag: function(tagName) {
         let val = this.value;
         let lastIndex = val.lastIndexOf(']');
