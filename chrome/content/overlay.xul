@@ -59,6 +59,14 @@
              accesskey="B"
              oncommand="hBookmark.AddPanelManager.showPanel(gContextMenu.linkURL);"
          />
+         <menuitem
+             class="menuitem-iconic"
+             insertafter="context-searchselect"
+             label="&hBookmark.menu.searchtext;"
+             id="hBookmark-menu-searchtext"
+             accesskey="B"
+             oncommand="hBookmark.UIUtils.selectedTextOpenHatenaWebSearch();"
+         />
     </popup>
 
 

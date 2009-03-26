@@ -28,6 +28,14 @@ var UIUtils = {
         }
     },
 
+    selectedTextOpenHatenaWebSearch: function UIU_selectedTextOpenHatenaWebSearch(event) {
+        UIUtils.openHatenaWebSearch(document.commandDispatcher.focusedWindow.getSelection().toString());
+    },
+
+    openHatenaWebSearch: function UIU_openHatenaWebSearch(text, event) {
+        openUILink("http://b.hatena.ne.jp/search?q=" + encodeURIComponent(text), event);
+    },
+
     openLogin: function UIU_openLogin(event) {
         openUILink("https://www.hatena.ne.jp/login", event);
     },

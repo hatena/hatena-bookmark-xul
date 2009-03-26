@@ -16,3 +16,4 @@
 <!ENTITY hBookmark.menu.addlink "このリンクをはてなブックマークに追加">
 <!ENTITY hBookmark.menu.showentry "このページをはてなブックマークで表示">
 <!ENTITY hBookmark.menu.showlink "このリンクをはてなブックマークで表示">
+<!ENTITY hBookmark.menu.searchtext "はてなウェブ検索から検索: ">
