@@ -5,6 +5,8 @@
 <!ENTITY hBookmark.addPanel.cancelEditTitleLabel "Cancel">
 <!ENTITY hBookmark.addPanel.urlLabel "URL:">
 <!ENTITY hBookmark.addPanel.commentLabel "Comment:">
-<!ENTITY hBookmark.addPanel.frequentTagsLabel "Tags">
+<!ENTITY hBookmark.addPanel.tagsLabel "Tags">
+<!ENTITY hBookmark.addPanel.showAllTagsLabel "Show all tags">
+<!ENTITY hBookmark.addPanel.showFrequentTagsLabel "Show frequently used tags">
 
 <!ENTITY hBookmark.addPanel.deleteLabel "Delete">

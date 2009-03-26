@@ -73,7 +73,17 @@
                 </xul:rows>
             </xul:grid>
             <xul:groupbox anonid="tagSelectorGroup">
-                <xul:caption label="&hBookmark.addPanel.frequentTagsLabel;"/>
+                <xul:caption>
+                    <xul:label value="&hBookmark.addPanel.tagsLabel;"/>
+                    <xul:label anonid="allTagsLabel"
+                               class="hBookmarkCommandLabel"
+                               value="&hBookmark.addPanel.showAllTagsLabel;"
+                               onclick="document.getBindingParent(this).switchTagSelectorView(true);"/>
+                    <xul:label anonid="frequentTagsLabel"
+                               class="hBookmarkCommandLabel"
+                               value="&hBookmark.addPanel.showFrequentTagsLabel;"
+                               onclick="document.getBindingParent(this).switchTagSelectorView(false);"/>
+                </xul:caption>
                 <xul:hbox anonid="tagSelector"
                           class="hBookmarkTagSelector"/>
             </xul:groupbox>
@@ -138,11 +148,17 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
-            <field name="tagSelector">
-                document.getAnonymousElementByAttribute(this, "anonid", "tagSelector")
-            </field>
             <field name="tagSelectorGroup">
                 document.getAnonymousElementByAttribute(this, "anonid", "tagSelectorGroup")
+            </field>
+            <field name="allTagsLabel">
+                document.getAnonymousElementByAttribute(this, "anonid", "allTagsLabel")
+            </field>
+            <field name="frequentTagsLabel">
+                document.getAnonymousElementByAttribute(this, "anonid", "frequentTagsLabel")
+            </field>
+            <field name="tagSelector">
+                document.getAnonymousElementByAttribute(this, "anonid", "tagSelector")
             </field>
             <field name="errorField">
                 document.getAnonymousElementByAttribute(this, "anonid", "errorField")
@@ -264,12 +280,13 @@
                         return;
                     }
                     this.tagSelectorGroup.removeAttribute('hidden');
-                    let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
-                    this.tagSelector.visibleTagCount = count;
+                    //let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
+                    //this.tagSelector.visibleTagCount = count;
                     let tags = hBookmark.Model.Tag.findDistinctTags();
                     this.tagSelector.build(tags);
                     let selectedTags = this.inputHandler.inputLine.tags;
                     this.tagSelector.update(selectedTags);
+                    this.switchTagSelectorView(false);
                 ]]></body>
             </method>
 
@@ -292,6 +309,23 @@
                         this.messageField.value = message;
                     }
                     this.messageRow.hidden = add;
+                ]]></body>
+            </method>
+
+            <method name="switchTagSelectorView">
+                <parameter name="showAll"/>
+                <body><![CDATA[
+                    if (showAll) {
+                        this.allTagsLabel.hidden = true;
+                        this.frequentTagsLabel.hidden = false;
+                        this.tagSelector.visibleTagCount = 0;
+                    } else {
+                        let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
+                        this.allTagsLabel.hidden =
+                            (count >= this.tagSelector.tagCount);
+                        this.frequentTagsLabel.hidden = true;
+                        this.tagSelector.visibleTagCount = count;
+                    }
                 ]]></body>
             </method>
 
