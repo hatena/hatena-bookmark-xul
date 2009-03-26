@@ -96,11 +96,11 @@ if (shared.has('User')) {
             let pd = DirectoryService.get("ProfD", Ci.nsIFile);
             pd.append('hatenabookmark');
             if (!pd.exists() || !pd.isDirectory()) {
-                pd.create(Ci.nsIFile.DIRECTORY_TYPE, 0664);
+                pd.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
             }
             pd.append(this.name);
             if (!pd.exists() || !pd.isDirectory()) {
-                pd.create(Ci.nsIFile.DIRECTORY_TYPE, 0664);
+                pd.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
             }
             return pd;
         }

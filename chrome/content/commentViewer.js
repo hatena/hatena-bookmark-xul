@@ -45,8 +45,10 @@ var toggle = function() {
 }
 
 var posCalc = function() {
-    let rect = document.body.getBoundingClientRect();
+    // let rect = document.body.getBoundingClientRect();
+    let rect = $('list').getBoundingClientRect();
     let height = parseInt(rect.bottom) - parseInt(rect.top) + 100; // うーん
+    p('height: ' + height);
     window.scrollTo(0, 0);
     throwEvent('rendered', {
         height: parseInt(height),
