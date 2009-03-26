@@ -8,8 +8,8 @@
         buttonlabelextra2="&hBookmark.addPanel.deleteLabel;"
         buttons="accept,cancel"
         defaultButton="accept"
-        width="550"
-        height="250"
+        width="500"
+        height="300"
         persist="screenX screenY width height"
         onload="var bookmark = window.arguments[0] &amp;&amp; window.arguments[0].bookmark;
                 if (bookmark)
