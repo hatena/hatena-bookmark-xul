@@ -145,18 +145,21 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton:active {
 }
     
 #hBookmark-status-comment {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(62px 130px 78px 114px);
   cursor: normal;
 }
 
 #hBookmark-status-comment[comment="true"] {
   cursor: pointer;
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment_on.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(78px 130px 94px 114px);
 }
 
 #hBookmark-status-comment[comment="false"] {
   cursor: normal;
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/comment.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(62px 130px 78px 114px);
 }
 
 #hBookmark-status-comment[loading="true"] {
