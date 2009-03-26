@@ -30,15 +30,33 @@
          <menuitem
              class="menuitem-iconic"
              insertafter="context-bookmarkpage"
+             label="&hBookmark.menu.showentry;"
+             id="hBookmark-menu-showentry"
+             oncommand="openUILink(hBookmark.entryURL(window.content.location.href));"
+             accesskey="E"
+         />
+         <menuitem
+             class="menuitem-iconic"
+             insertafter="context-bookmarkpage"
              label="&hBookmark.menu.add;"
              id="hBookmark-menu-addentry"
              oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);"
+             accesskey="B"
+         />
+         <menuitem
+             class="menuitem-iconic"
+             insertafter="context-bookmarklink"
+             label="&hBookmark.menu.showlink;"
+             id="hBookmark-menu-showlink"
+             oncommand="openUILink(hBookmark.entryURL(gContextMenu.linkURL));"
+             accesskey="E"
          />
          <menuitem
              class="menuitem-iconic"
              insertafter="context-bookmarklink"
              label="&hBookmark.menu.addlink;"
              id="hBookmark-menu-addlink"
+             accesskey="B"
              oncommand="hBookmark.AddPanelManager.showPanel(gContextMenu.linkURL);"
          />
     </popup>

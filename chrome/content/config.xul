@@ -6,7 +6,8 @@
 
 <prefwindow id="hBookmark-config"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-    width="400px"
+    width="700px"
+    height="550px"
     title="はてなブックマーク拡張の設定"
     >
 
@@ -83,6 +84,10 @@
             name="extensions.hatenabookmark.addPanel.tagListShow"
             type="bool"/>
         <preference 
+            id="extensions.hatenabookmark.addPanel.recommendedTagListShow"
+            name="extensions.hatenabookmark.addPanel.recommendedTagListShow"
+            type="bool"/>
+        <preference 
             id="extensions.hatenabookmark.addPanel.backgroundImage"
             name="extensions.hatenabookmark.addPanel.backgroundImage"
             type="file"/>
@@ -112,11 +117,16 @@
             <caption label="タグ表示" />
             <hbox flex="1" align="center">
                 <checkbox id="addPanel.tagListShow" flex="1"
-                    label="タグ一覧の表示"
+                    label="おすすめタグ一覧の表示"
                     preference="extensions.hatenabookmark.addPanel.tagListShow" />
             </hbox>
             <hbox flex="1" align="center">
-                <label value="タグ表示件数"
+                <checkbox id="addPanel.tagListShow" flex="1"
+                    label="自分のタグ一覧の表示"
+                    preference="extensions.hatenabookmark.addPanel.tagListShow" />
+            </hbox>
+            <hbox flex="1" align="center">
+                <label value="初期のタグ表示件数"
                     control="addPanel.initialTagCount"/>
                 <textbox id="addPanel.initialTagCount"
                     preference="extensions.hatenabookmark.addPanel.initialTagCount"
