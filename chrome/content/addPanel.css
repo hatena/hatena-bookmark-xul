@@ -58,6 +58,16 @@ groupbox {
     -moz-border-radius: 7px;
 }
 
+.hBookmarkCommandLabel {
+   color: #808080;
+   text-decoration: underline;
+   cursor: pointer;
+}
+
+[anonid="tagSelector"] {
+   overflow: auto;
+}
+
 
 .hBookmarkAddPanel {
     -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#add-panel");

@@ -6,7 +6,7 @@
 
     <binding id="add-panel"
              extends="chrome://global/content/bindings/popup.xml#panel">
-        <content>
+        <content flex="1">
             <xul:label anonid="errorField" hidden="true"/>
             <xul:grid>
                 <xul:columns>
@@ -75,7 +75,7 @@
                     </xul:row>
                 </xul:rows>
             </xul:grid>
-            <xul:groupbox anonid="tagSelectorGroup">
+            <xul:groupbox anonid="tagSelectorGroup" flex="1">
                 <xul:caption>
                     <xul:label value="&hBookmark.addPanel.tagsLabel;"/>
                     <xul:label anonid="allTagsLabel"
@@ -88,7 +88,8 @@
                                onclick="document.getBindingParent(this).switchTagSelectorView(false);"/>
                 </xul:caption>
                 <xul:hbox anonid="tagSelector"
-                          class="hBookmarkTagSelector"/>
+                          class="hBookmarkTagSelector"
+                          flex="1"/>
             </xul:groupbox>
         </content>
 
