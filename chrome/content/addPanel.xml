@@ -235,8 +235,8 @@
                     this.inputHandler.updateLineValue(); // タグを認識させる
 
                     setTimeout(function (self) {
-                        let res = hBookmark.HTTPCache.entry.get(bookmark.url, true);
-                        if (res) {
+                        let res = hBookmark.HTTPCache.entry.get(bookmark.url);
+                        if (res && typeof res.title != 'undefined') {
                             self.usersField.value =
                                 hBookmark.UIUtils.getUsersText(res.count);
                             self.usersField.href = res.entry_url;
