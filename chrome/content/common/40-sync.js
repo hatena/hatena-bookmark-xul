@@ -131,6 +131,13 @@ EventService.createListener('UserChange', function() {
         Sync.init();
 }, User);
 
+Sync.SyncTimer = new Timer(1000 * 60 * 30); // 30分に一度 Sync
+Sync.SyncTimer.createListener('timer', function() {
+    if (User.user)
+        Sync.init();
+});
+Sync.SyncTimer.start();
+
 
 shared.set('Sync', Sync);
 }

@@ -17,15 +17,20 @@ if (shared.has('User')) {
 
     extend(User, {
         login: function User_loginCheck () {
-            let xhr = net.get(MY_NAME_URL, null, null, false);
-            let res = decodeJSON(xhr.responseText);
+            net.post(MY_NAME_URL, User._login, User.loginErrorHandler, true);
+        },
+        _login: function User__login(res) {
+            res = decodeJSON(res.responseText);
             if (res.login) {
-                this.setUser(res);
-                return this.user;
+                User.setUser(res);
+                return User.user;
             } else {
-                this.clearUser();
+                User.clearUser();
                 return false;
             }
+        },
+        loginErrorHandler: function User_loginErrorHandler(res) {
+            p('login errro...');
         },
         logout: function User_clearUser () {
             this.clearUser();
@@ -92,6 +97,7 @@ if (shared.has('User')) {
                 this._db.connection.close();
             }
         },
+
         get configDir() {
             let pd = DirectoryService.get("ProfD", Ci.nsIFile);
             pd.append('hatenabookmark');
@@ -135,10 +141,30 @@ if (shared.has('User')) {
         },
         QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
     }
-    EventService.createListener('firstPreload', function() {
-        User.login();
-    }, null, 100);
     ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
+
+    User.LoginChecker = new Timer(1000 * 60 * 15); // 15 分
+    User.LoginChecker.createListener('timer', function() {
+        if (!User.user) {
+            p('Login Check');
+            User.login();
+        }
+    });
+    User.LoginChecker.start();
+
+    EventService.createListener('firstPreload', function() {
+        // 初回時はログインチェックする
+        User.login();
+        let preloadTimer = new Timer(5000, 5);
+        preloadTimer.createListener('timer', function() {
+            if (User.user) {
+                preloadTimer.stop();
+            } else {
+                User.login();
+            }
+        });
+        preloadTimer.stop();
+    }, null, 10);
 
     shared.set('User', User);
 };
