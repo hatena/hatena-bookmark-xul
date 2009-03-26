@@ -16,8 +16,16 @@ var UIUtils = {
             win, this.popupStrings.get("prompt.title"),
             this.popupStrings.get("prompt.encourageLogin"),
             PS.STD_YES_NO_BUTTONS, null, null, null, null, {});
-        if (pressed === 0)
-            this.openLogin(null);
+        if (pressed === 0) {
+            // Open in new tab
+            this.openLogin({
+                ctrlKey:  true,
+                shiftKey: false,
+                altKey:   false,
+                metaKey:  false,
+                button:   0
+            });
+        }
     },
 
     openLogin: function UIU_openLogin(event) {

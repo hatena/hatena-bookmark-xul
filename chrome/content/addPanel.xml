@@ -6,7 +6,7 @@
 
     <binding id="add-panel"
              extends="chrome://global/content/bindings/popup.xml#panel">
-        <content>
+        <content flex="1">
             <xul:label anonid="errorField" hidden="true"/>
             <xul:grid>
                 <xul:columns>
@@ -58,12 +58,15 @@
                                    class="text-link hBookmarkLink"
                                    crop="end"/>
                     </xul:row>
-                    <xul:row anonid="usersRow" align="center">
+                    <xul:row anonid="usersRow" align="center"
+                             style="visibility: hidden;">
                         <xul:spacer/>
                         <xul:hbox align="center">
                             <xul:label anonid="usersField"
                                        class="text-link hBookmarkLink"/>
-                            <xul:spacer flex="1"/>
+                            <xul:hbox anonid="favoritesContainer"
+                                      align="center" flex="1"
+                                      style="overflow-x: hidden;"/>
                         </xul:hbox>
                     </xul:row>
                     <xul:row align="center">
@@ -75,7 +78,7 @@
                     </xul:row>
                 </xul:rows>
             </xul:grid>
-            <xul:groupbox anonid="tagSelectorGroup">
+            <xul:groupbox anonid="tagSelectorGroup" flex="1">
                 <xul:caption>
                     <xul:label value="&hBookmark.addPanel.tagsLabel;"/>
                     <xul:label anonid="allTagsLabel"
@@ -88,7 +91,8 @@
                                onclick="document.getBindingParent(this).switchTagSelectorView(false);"/>
                 </xul:caption>
                 <xul:hbox anonid="tagSelector"
-                          class="hBookmarkTagSelector"/>
+                          class="hBookmarkTagSelector"
+                          flex="1"/>
             </xul:groupbox>
         </content>
 
@@ -147,6 +151,9 @@
             </field>
             <field name="usersField">
                 document.getAnonymousElementByAttribute(this, "anonid", "usersField")
+            </field>
+            <field name="favoritesContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "favoritesContainer")
             </field>
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
@@ -248,7 +255,7 @@
                     this.urlField.href =
                         hBookmark.UIUtils.isSafeLink(bookmark.url)
                         ? bookmark.url : "";
-                    this.usersRow.hidden = true;
+                    this.usersRow.style.visibility = "hidden";
 
                     this.commentField.value = bookmark.comment;
                     this.inputHandler.updateLineValue(); // タグを認識させる
@@ -259,7 +266,8 @@
                             self.usersField.value =
                                 hBookmark.UIUtils.getUsersText(res.count);
                             self.usersField.href = res.entry_url;
-                            self.usersRow.hidden = false;
+                            self.updateFavorites(res.favorites);
+                            self.usersRow.style.visibility = "visible";
 
                             if (res.title === bookmark.title) return;
                             self.titleLabel.value = res.title;
@@ -294,6 +302,22 @@
                     let selectedTags = this.inputHandler.inputLine.tags;
                     this.tagSelector.update(selectedTags);
                     this.switchTagSelectorView(false);
+                ]]></body>
+            </method>
+
+            <method name="updateFavorites">
+                <parameter name="favorites"/>
+                <body><![CDATA[
+                    let range = document.createRange();
+                    range.selectNodeContents(this.favoritesContainer);
+                    range.deleteContents();
+
+                    let fragment = document.createDocumentFragment();
+                    favorites.forEach(function (f) {
+                        let fav = new hBookmark.FavoriteBookmark(f);
+                        fragment.appendChild(fav.createImage());
+                    }, this);
+                    this.favoritesContainer.appendChild(fragment);
                 ]]></body>
             </method>
 

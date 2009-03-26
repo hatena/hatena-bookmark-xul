@@ -50,11 +50,14 @@ function testBookmark() {
     b.url = 'http://b.hatena.ne.jp/2';
     b.comment = '[hoge]mycomment2';
     b.title = 'bookmark2';
-    b.date = 0;
+    b.date = 20090401123456;
     b.save();
 
     var b3 = BOOKMARK.findByUrl(b.url);
     assert.equals(b.comment, b3[0].comment);
+    assert.equals('2009/04/01', b3[0].dateYMD);
+    assert.equals('2009-04-01 12:34:56',
+                  b3[0].dateObject.toLocaleFormat('%Y-%m-%d %H:%M:%S'))
 
     res = BOOKMARK.findByTags('hoge');
     assert.isTrue(res.length == 2);

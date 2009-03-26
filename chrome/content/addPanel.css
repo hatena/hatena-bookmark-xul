@@ -25,6 +25,10 @@ row[anonid="messageRow"] {
     color: #555;
 }
 
+[anonid="usersRow"] {
+  min-height: 18px;
+}
+
 label[anonid="usersField"] {
   background: url(chrome://hatenabookmark/content/skin/images/page.gif) left 0px no-repeat;
   color: #FF6e6e !important;
@@ -56,6 +60,16 @@ groupbox {
     -moz-appearance: none;
     border: 2px solid #555;
     -moz-border-radius: 7px;
+}
+
+.hBookmarkCommandLabel {
+   color: #808080;
+   text-decoration: underline;
+   cursor: pointer;
+}
+
+[anonid="tagSelector"] {
+   overflow: auto;
 }
 
 
