@@ -60,8 +60,11 @@
                     </xul:row>
                     <xul:row anonid="usersRow" align="center">
                         <xul:spacer/>
-                        <xul:label anonid="usersField"
-                                   class="text-link hBookmarkLink"/>
+                        <xul:hbox align="center">
+                            <xul:label anonid="usersField"
+                                       class="text-link hBookmarkLink"/>
+                            <xul:spacer flex="1"/>
+                        </xul:hbox>
                     </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.commentLabel;"/>
