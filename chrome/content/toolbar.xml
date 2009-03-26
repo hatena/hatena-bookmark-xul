@@ -6,6 +6,9 @@
 
     <binding id="toolbar" extends="#toolbar-item-base">
         <content>
+            <xul:toolbarbutton anonid="sidebarToggleButton"
+                               tooltiptext="&hBookmark.toolbar.toggleSidebarLabel;"
+                               observes="viewHBookmarkSidebar"/>
             <xul:toolbarbutton anonid="loginButton"
                                label="&hBookmark.toolbar.loginLabel;"
                                oncommand="hBookmark.UIUtils.openLogin(event);"
