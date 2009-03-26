@@ -65,6 +65,7 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton {
   padding:2px 3px 0 0;
   margin:0px;
   */
+  -moz-opacity: 0.6;
   text-align: right;
   font-size: 10px;
 

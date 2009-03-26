@@ -8,6 +8,8 @@ body,h1,h2,h3,h4,h5,h5,ul,ol,li,dl,dt,dd,form,textarea,input,select,blockquote {
 
 body {
   background: #fff;
+  overflow: hidden;
+  padding-bottom: 40px;
 }
 
 img { 
@@ -21,13 +23,16 @@ h1 {
     position: fixed;
     width: 100%;
     margin: 0px;
-    top: 0;
+    bottom: 0;
     margin-top: 0;
+    border-top: 1px solid #bbb;
     border-bottom: 1px solid #bbb;
     background: #f3f3f3;
 }
 
-#comment-list {
+#comment-container {
+  height: 100%;
+  overflow: auto;
 }
 
 #favicon {
@@ -68,7 +73,6 @@ input {
 
 #list {
   margin: 10px;
-  margin-top: 45px;
   color: #222;
 }
 

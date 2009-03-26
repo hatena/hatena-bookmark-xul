@@ -45,8 +45,10 @@ var toggle = function() {
 }
 
 var posCalc = function() {
-    let rect = document.body.getBoundingClientRect();
+    // let rect = document.body.getBoundingClientRect();
+    let rect = $('list').getBoundingClientRect();
     let height = parseInt(rect.bottom) - parseInt(rect.top) + 100; // うーん
+    p('height: ' + height);
     window.scrollTo(0, 0);
     throwEvent('rendered', {
         height: parseInt(height),
@@ -56,10 +58,10 @@ var posCalc = function() {
 var setCommentView = function() {
     let src;
     if (Application.prefs.get(SHOW_PREFS_NAME).value) {
-         src = "chrome://hatenabookmark/content/skin/images/comment-viewer-toggle-on.gif";
+         src = "chrome://hatenabookmark/content/skin/images/comment-viewer-toggle-on.png";
          $('list').className = '';
     } else {
-         src = "chrome://hatenabookmark/content/skin/images/comment-viewer-toggle-off.gif";
+         src = "chrome://hatenabookmark/content/skin/images/comment-viewer-toggle-off.png";
          $('list').className = 'nocommentall';
     }
     $('toggle-button-img').src = src;
