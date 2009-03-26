@@ -86,18 +86,14 @@ Timer.prototype = {
     },
     get running() this._running,
     loop: function() {
-        p('loop');
         if (!this.running) return;
-        p('loop2');
         this.currentCount++;
         if (this.repeatCount && this.currentCount >= this.repeatCount) {
-        p('loop3');
             this.stop();
             this.dispatch('timer');
             this.dispatch('timerComplete');
             return;
         }
-        p('dis timer');
         this.dispatch('timer');
         setTimeout(function(self) {
             self.loop();

@@ -2,14 +2,18 @@
 /*
  * 有効期限付きキャッシュ
  * 現在はブラウザを閉じるとすべて消える
- * 本当は storage.jsm を利用して、適宜キャッシュを削除すべき
  */
 const EXPORT = ['ExpireCache', 'HTTPCache'];
 
-var ExpireCache = function(key, defaultExpire, seriarizer) {
+var ExpireCache = function(key, defaultExpire, seriarizer, sweeperDelay) {
     this.key = key;
     this.defaultExpire = 60 * 30; // 30分
     this.seriarizer = ExpireCache.Seriarizer[seriarizer];
+    if (!sweeperDelay)
+        sweeperDelay = 60 * 60 * 4; // 四時間
+    this.sweeper = new Timer(1000 * sweeperDelay);
+    this.sweeper.createListener('timer', method(this, 'sweepHandler'));
+    this.sweeper.start();
 }
 
 this.__defineGetter__('now', function() (new Date-0));
@@ -22,6 +26,11 @@ ExpireCache.Seriarizer.uneval = {
 }
 
 ExpireCache.prototype = {
+    sweepHandler: function() {
+        for (key in this.cache) {
+            this._update(key);
+        }
+    },
     get key() this._key,
     set key(value) {
         this._key = value || 'global';
