@@ -5,27 +5,57 @@
 }
 
 #hBookmark-toolbar-add-button {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/add_bookmark.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(0px 25px 23px 0px);
+}
+
+#hBookmark-toolbar-add-button:active {
+  -moz-image-region: rect(23px 25px 46px 0px);
 }
 
 toolbar[iconsize="small"] #hBookmark-toolbar-add-button {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/add_bookmark_small.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(46px 16px 62px 0px);
+}
+
+toolbar[iconsize="small"] #hBookmark-toolbar-add-button:active {
+  -moz-image-region: rect(62px 16px 78px 0px);
 }
 
 #hBookmark-toolbar-home-button {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/bookmark_home.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(0px 50px 23px 25px);
+}
+
+#hBookmark-toolbar-home-button:active {
+  -moz-image-region: rect(23px 50px 46px 25px);
 }
 
 toolbar[iconsize="small"] #hBookmark-toolbar-home-button {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/bookmark_home_small.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(46px 32px 62px 16px);
+}
+
+toolbar[iconsize="small"] #hBookmark-toolbar-home-button:active {
+  -moz-image-region: rect(62px 32px 78px 16px);
 }
 
 #hBookmarkDropdownButton {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/recent_bookmarks.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(0px 75px 23px 50px);
+}
+
+#hBookmarkDropdownButton:active {
+  -moz-image-region: rect(23px 75px 46px 50px);
 }
 
 toolbar[iconsize="small"] #hBookmarkDropdownButton {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/recent_bookmarks_small.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(46px 48px 62px 32px);
+}
+
+toolbar[iconsize="small"] #hBookmarkDropdownButton:active {
+  -moz-image-region: rect(62px 48px 78px 32px);
 }
 
 #hBookmarkToolbar > [anonid="sidebarToggleButton"] {
@@ -36,7 +66,8 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton {
 
 #hBookmark-menu-addlink,
 #hBookmark-menu-addentry {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/add_bookmark_small.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(46px 16px 62px 0px);
 }
 
 /* StatusBar */
@@ -50,13 +81,23 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton {
 }
 
 #hBookmarkAddButton[added="false"] {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_plus.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(46px 16px 62px 0px);
   cursor: pointer;
 }
 
+#hBookmarkAddButton[added="false"]:active {
+  -moz-image-region: rect(62px 16px 78px 0px);
+}
+
 #hBookmarkAddButton[added="true"] {
-  list-style-image: url("chrome://hatenabookmark/content/skin/images/b_plus_on.png");
+  list-style-image: url("chrome://hatenabookmark/content/skin/images/buttons.png");
+  -moz-image-region: rect(46px 64px 62px 48px);
   cursor: pointer;
+}
+
+#hBookmarkAddButton[added="true"]:active {
+  -moz-image-region: rect(62px 64px 78px 48px);
 }
 
 #hBookmark-status-count {
