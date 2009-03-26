@@ -1,0 +1,145 @@
+/* BASIC {{{ */
+body,h1,h2,h3,h4,h5,h5,ul,ol,li,dl,dt,dd,form,textarea,input,select,blockquote {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 90%/1.4 "Arial", "Helvetica", sans-serif;
+}
+
+body {
+  background: #fff;
+  overflow: hidden;
+  padding-bottom: 40px;
+}
+
+img { 
+  border: none;
+  vertical-align: middle;
+}
+
+h1 {
+    padding: 7px;
+    font-weight: bold;
+    position: fixed;
+    width: 100%;
+    margin: 0px;
+    bottom: 0;
+    margin-top: 0;
+    border-top: 1px solid #bbb;
+    border-bottom: 1px solid #bbb;
+    background: #f3f3f3;
+}
+
+#comment-container {
+  height: 100%;
+  overflow: auto;
+}
+
+#favicon {
+    vertical-align: middle;
+    margin-bottom: 2px;
+}
+
+img.usericon {
+  width: 16px;
+  height: 16px;
+}
+
+
+#title {
+  /*
+  background: url(chrome://hatenabookmark/skin/images/favicon.ico) left 2px no-repeat;
+  padding-left: 20px;
+  */
+  display: inline-block;
+}
+
+fieldset {
+  border: 0;
+}
+
+input {
+  *margin: -1px 0;
+}
+
+.note {
+    font-size: 90%;
+}
+
+*{
+  margin:0;
+  padding:0;
+}
+
+#list {
+  margin: 10px;
+  color: #222;
+}
+
+#list li {
+  display: list-item;
+  padding: 3px 20px 3px 5px;
+  margin: 0 0 3px 0;
+  color: #000;
+  word-wrap: break-word;
+  line-height: 1.4;
+  border-bottom: 1px dotted #ddd;
+}
+
+#list li a.username {
+  font-weight: normal;
+  padding: 0 3px 0 3px;
+  color: #00d;
+}
+
+#list li.mine a.username {
+  font-weight: bold;
+} 
+
+span.comment {
+  padding: 0 3px 0 3px;
+}
+
+span.timestamp {
+  color: #888;
+  font-size: 90%;
+} 
+
+a.tag {
+  text-decoration: none;
+  color: #66c;
+}
+
+a.users {
+  text-decoration: underline;
+  color: #FF6e6e;
+  font-weight: bold;
+  padding-left: 14px;
+  font-size: 10px;
+  font-family: verdana;
+}
+
+#toggle-button-img {
+  cursor:pointer;
+  position: absolute;
+  right: 40px;
+  top: 0;
+  display: inline-block;
+  padding: 10px;
+}
+
+
+#close-button-img {
+  cursor:pointer;
+  position: absolute;
+  right: 15px;
+  top: 0;
+  display: inline-block;
+  padding: 10px;
+}
+
+ul.nocommentall li.nocomment {
+    display: none !important;
+}
+
+
