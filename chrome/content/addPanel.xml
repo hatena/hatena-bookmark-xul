@@ -79,6 +79,11 @@
                     </xul:row>
                 </xul:rows>
             </xul:grid>
+            <xul:groupbox anonid="recommendedTagSelectorGroup">
+                <xul:caption label="&hBookmark.addPanel.recommendedTagsLabel;"/>
+                <xul:hbox anonid="recommendedTagSelector"
+                          class="hBookmarkTagSelector"/>
+            </xul:groupbox>
             <xul:groupbox anonid="tagSelectorGroup" flex="1">
                 <xul:caption>
                     <xul:label value="&hBookmark.addPanel.tagsLabel;"/>
@@ -162,6 +167,12 @@
             <field name="commentField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentField")
             </field>
+            <field name="recommendedTagSelectorGroup">
+                document.getAnonymousElementByAttribute(this, "anonid", "recommendedTagSelectorGroup")
+            </field>
+            <field name="recommendedTagSelector">
+                document.getAnonymousElementByAttribute(this, "anonid", "recommendedTagSelector")
+            </field>
             <field name="tagSelectorGroup">
                 document.getAnonymousElementByAttribute(this, "anonid", "tagSelectorGroup")
             </field>
@@ -184,6 +195,10 @@
 
             <field name="strings">
                 new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
+            </field>
+
+            <field name="_tagSelectors">
+                [this.tagSelector, this.recommendedTagSelector]
             </field>
 
             <field name="_tags">[]</field>
@@ -218,6 +233,10 @@
 
             <property name="isTitleChanged" readonly="true"
                       onget="return this.titleField.value !== this.titleLabel.value;"/>
+
+            <!-- XXX Prefs#getは"."が入るとうまくいかない? -->
+            <property name="showsTagList" readonly="true"
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value"/>
 
             <method name="show">
                 <parameter name="bookmark"/>
@@ -263,6 +282,7 @@
 
                     this.commentField.value = bookmark.comment;
                     this.inputHandler.updateLineValue(); // タグを認識させる
+                    this.recommendedTagSelectorGroup.hidden = true;
 
                     setTimeout(function (self) {
                         let res = hBookmark.HTTPCache.entry.get(bookmark.url);
@@ -272,6 +292,8 @@
                             self.usersField.href = res.entry_url;
                             self.updateFavorites(res.favorites);
                             self.usersRow.style.visibility = "visible";
+
+                            self.updateRecommendedTags(res.recommend_tags);
 
                             if (res.title === bookmark.title) return;
                             self.titleLabel.value = res.title;
@@ -287,16 +309,11 @@
                         }
                     }, 0, this);
 
-                    // XXX Prefs#getは"."が入るとうまくいかない?
-                    //let count = hBookmark.Prefs.bookmark.get("addPanel.initialTagCount");
-                    let shown = Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value;
-                    if (!shown) {
+                    if (!this.showsTagList) {
                         this.tagSelectorGroup.setAttribute('hidden', true);
                         return;
                     }
                     this.tagSelectorGroup.removeAttribute('hidden');
-                    //let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
-                    //this.tagSelector.visibleTagCount = count;
                     let tags = hBookmark.Model.Tag.findDistinctTags();
                     this.tagSelector.build(tags);
                     let selectedTags = this.inputHandler.inputLine.tags;
@@ -318,6 +335,18 @@
                         fragment.appendChild(fav.createImage());
                     }, this);
                     this.favoritesContainer.appendChild(fragment);
+                ]]></body>
+            </method>
+
+            <method name="updateRecommendedTags">
+                <parameter name="tagNames"/>
+                <body><![CDATA[
+                    if (!tagNames || !tagNames.length) return;
+                    let tags = tagNames.map(function (t) ({ name: t, count: 0 }));
+                    this.recommendedTagSelector.build(tags);
+                    let selectedTags = this.inputHandler.inputLine.tags;
+                    this.recommendedTagSelector.update(selectedTags);
+                    this.recommendedTagSelectorGroup.hidden = false;
                 ]]></body>
             </method>
 
@@ -360,6 +389,17 @@
                 ]]></body>
             </method>
 
+            <method name="_updateTagSelectorsExcept">
+                <parameter name="tagSelectorExcepted"/>
+                <body><![CDATA[
+                    let tagNames = this.inputHandler.inputLine.tags;
+                    this._tagSelectors.forEach(function (selector) {
+                        if (selector !== tagSelectorExcepted)
+                            selector.update(tagNames);
+                    });
+                ]]></body>
+            </method>
+
             <method name="setError">
                 <parameter name="message"/>
                 <body><![CDATA[
@@ -395,7 +435,7 @@
             <method name="deleteBookmark">
                 <body><![CDATA[
                     let command = new hBookmark.RemoteCommand("delete", {
-                        bookmark: this.bookmark,
+                        bookmark: this.bookmark
                     });
                     command.execute();
                     this.hide();
@@ -405,14 +445,16 @@
 
         <handlers>
             <handler event="HB_TagChange"
-                     action="this.tagSelector.update(this.inputHandler.inputLine.tags);"/>
+                     action="this._updateTagSelectorsExcept(null);"/>
             <handler event="HB_TagSelected"><![CDATA[
                 this.inputHandler.inputLine.addTag(event.command);
                 this.inputHandler.updateValue();
+                this._updateTagSelectorsExcept(event.target);
             ]]></handler>
             <handler event="HB_TagUnselected"><![CDATA[
                 this.inputHandler.inputLine.deleteTag(event.command);
                 this.inputHandler.updateValue();
+                this._updateTagSelectorsExcept(event.target);
             ]]></handler>
         </handlers>
     </binding>
