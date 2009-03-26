@@ -265,9 +265,11 @@
                     }
                     this.tagSelectorGroup.removeAttribute('hidden');
                     let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
-                    this.tagSelector.build(count);
-                    let tags = this.inputHandler.inputLine.tags;
-                    this.tagSelector.update(tags);
+                    this.tagSelector.visibleTagCount = count;
+                    let tags = hBookmark.Model.Tag.findDistinctTags();
+                    this.tagSelector.build(tags);
+                    let selectedTags = this.inputHandler.inputLine.tags;
+                    this.tagSelector.update(selectedTags);
                 ]]></body>
             </method>
 
@@ -340,11 +342,11 @@
             <handler event="HB_TagChange"
                      action="this.tagSelector.update(this.inputHandler.inputLine.tags);"/>
             <handler event="HB_TagSelected"><![CDATA[
-                this.inputHandler.inputLine.addTag(event.originalTarget.value);
+                this.inputHandler.inputLine.addTag(event.command);
                 this.inputHandler.updateValue();
             ]]></handler>
             <handler event="HB_TagUnselected"><![CDATA[
-                this.inputHandler.inputLine.deleteTag(event.originalTarget.value);
+                this.inputHandler.inputLine.deleteTag(event.command);
                 this.inputHandler.updateValue();
             ]]></handler>
         </handlers>
@@ -442,20 +444,54 @@
 
     <binding id="tag-selector">
         <implementation>
+            <field name="_labelByName">({})</field>
+            <field name="_rankedLabels">[]</field>
+
+            <property name="tagCount" readonly="true"
+                      onget="return this._rankedLabels.length;"/>
+
+            <field name="_visibleTagCount">0</field>
+            <property name="visibleTagCount"
+                      onget="return this._visibleTagCount;">
+                <setter><![CDATA[
+                    let maxCount = this.tagCount;
+                    let prevCount = +this._visibleTagCount || maxCount;
+                    let count = +val || maxCount;
+                    if (prevCount > maxCount) prevCount = maxCount;
+                    if (count > maxCount) count = maxCount;
+                    for (let i = prevCount; i < count; i++)
+                        this._rankedLabels[i].hidden = false;
+                    for (let i = count; i < prevCount; i++)
+                        this._rankedLabels[i].hidden = true;
+                    return this._visibleTagCount = val;
+                ]]></setter>
+            </property>
+
+            <property name="selectedLabels" readonly="true"
+                      onget="return Array.slice(this.getElementsByAttribute('class', 'hBookmarkSelectedTag'));"/>
+
             <method name="build">
-                <parameter name="count"/>
+                <parameter name="tags"/>
                 <body><![CDATA[
                     let range = document.createRange();
                     range.selectNodeContents(this);
                     range.deleteContents();
 
-                    if (count < 0) count = 0;
-                    let tags = hBookmark.Model.Tag.findDistinctTags(count);
                     let fragment = document.createDocumentFragment();
+                    let labelByName = {};
+                    let rankedLabels = [];
                     tags.forEach(function (tag) {
                         let label = this._createTagLabel(tag);
+                        labelByName[tag.name.toLowerCase()] = label;
+                        rankedLabels.push(label);
                         fragment.appendChild(label);
                     }, this);
+                    this._labelByName = labelByName;
+                    rankedLabels.sort(function (a, b) b.tag.count - a.tag.count);
+                    this._rankedLabels = rankedLabels;
+                    let maxVisible = this.visibleTagCount || tags.length;
+                    for (let i = maxVisible; i < tags.length; i++)
+                        rankedLabels[i].hidden = true;
                     this.appendChild(fragment);
                 ]]></body>
             </method>
@@ -466,6 +502,7 @@
                     let label = document.createElementNS(hBookmark.XUL_NS, "label");
                     label.setAttribute("class", "hBookmarkTag");
                     label.setAttribute("value", tag.name);
+                    label.tag = tag;
                     return label;
                 ]]></body>
             </method>
@@ -473,15 +510,13 @@
             <method name="update">
                 <parameter name="tagNames"/>
                 <body><![CDATA[
-                    let tagSet = {};
-                    tagNames.forEach(function (t) tagSet[t] = true);
-                    let selected = this.getElementsByAttribute("class", "hBookmarkSelectedTag");
-                    Array.slice(selected).forEach(function (label) {
-                        if (!(label.value in tagSet))
+                    tagNames = tagNames.map(String.toLowerCase);
+                    this.selectedLabels.forEach(function (label) {
+                        if (tagNames.indexOf(label.value.toLowerCase()) === -1)
                             this._toggleLabel(label);
                     }, this);
-                    tagNames.forEach(function (t) {
-                        let label = this.getElementsByAttribute("value", t)[0];
+                    tagNames.forEach(function (tagName) {
+                        let label = this._labelByName[tagName];
                         if (label)
                             this._toggleLabel(label, true);
                     }, this);
@@ -504,11 +539,11 @@
                 let label = event.originalTarget;
                 if (label.localName !== "label") return;
                 this._toggleLabel(label);
-                let tagEvent = document.createEvent("Event");
+                let tagEvent = document.createEvent("CommandEvent");
                 let type = (label.className === "hBookmarkSelectedTag")
                            ? "HB_TagSelected" : "HB_TagUnselected";
-                tagEvent.initEvent(type, true, false);
-                label.dispatchEvent(tagEvent);
+                tagEvent.initCommandEvent(type, true, false, label.tag.name);
+                this.dispatchEvent(tagEvent);
             ]]></handler>
         </handlers>
     </binding>
