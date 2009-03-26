@@ -113,6 +113,9 @@ groupbox {
    display: block;
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#tag-selector");
 }
+#hBookmarkFavoriteBookmarkTooltip {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#favorite-bookmark-tooltip");
+}
 .hBookmarkLink {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#link");
 }

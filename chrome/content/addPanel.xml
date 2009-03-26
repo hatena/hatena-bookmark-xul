@@ -66,6 +66,7 @@
                                        class="text-link hBookmarkLink"/>
                             <xul:hbox anonid="favoritesContainer"
                                       align="center" flex="1"
+                                      tooltip="hBookmarkFavoriteBookmarkTooltip"
                                       style="overflow-x: hidden;"/>
                         </xul:hbox>
                     </xul:row>
@@ -94,6 +95,9 @@
                           class="hBookmarkTagSelector"
                           flex="1"/>
             </xul:groupbox>
+            <xul:popupset>
+                <xul:tooltip id="hBookmarkFavoriteBookmarkTooltip"/>
+            </xul:popupset>
         </content>
 
         <implementation>
@@ -606,6 +610,38 @@
                 tagEvent.initCommandEvent(type, true, false, label.tag.name);
                 this.dispatchEvent(tagEvent);
             ]]></handler>
+        </handlers>
+    </binding>
+
+    <binding id="favorite-bookmark-tooltip"
+             extends="chrome://global/content/bindings/popup.xml#tooltip">
+        <content>
+            <xul:label anonid="nameField"/>
+            <xul:description anonid="commentField"/>
+        </content>
+
+        <implementation>
+            <field name="nameField">
+                document.getAnonymousElementByAttribute(this, "anonid", "nameField");
+            </field>
+            <field name="commentField">
+                document.getAnonymousElementByAttribute(this, "anonid", "commentField");
+            </field>
+
+            <method name="build">
+                <parameter name="target"/>
+                <body><![CDATA[
+                    let fav = target.favorite;
+                    if (!fav) return false;
+                    this.nameField.value = fav.name;
+                    this.commentField.textContent = fav.comment;
+                    return true;
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="popupshowing" action="return this.build(document.tooltipNode);"/>
         </handlers>
     </binding>
 
