@@ -53,6 +53,17 @@ ExpireCache.prototype = {
         this._update(key);
         return !!this.cache[key];
     },
+    clear: function ExpireCache_clear(key) {
+        if (this.cache[key]) {
+            delete this.cache[key];
+            return true;
+        } else {
+            return false;
+        }
+    },
+    clearAll: function ExpireCache_clearAll() {
+        this.cache = {};
+    },
     set: function ExpireCache_set(key, value, expire) {
         if (!expire) expire = this.defaultExpire;
         let e = now + (expire * 1000);
@@ -115,9 +126,13 @@ HTTPCache.comment = new HTTPCache('commentCache', {
     encoder: encodeURIComponent,
 });
 
-HTTPCache.entry = HTTPCache.comment;
-
-
+HTTPCache.entry = new HTTPCache('entryCache', {
+    expire: 60 * 4,
+    baseURL: 'http://b.hatena.ne.jp/my.entry?url=',
+    seriarizer: 'uneval',
+    json: true,
+    encoder: encodeURIComponent,
+});
 
 
 
