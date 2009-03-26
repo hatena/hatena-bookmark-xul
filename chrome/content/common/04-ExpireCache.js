@@ -92,7 +92,11 @@ HTTPCache.prototype = {
             p('http using cache: ' + url);
             return cache.get(url);
         }
-        let res = net.get(this.createURL(url));
+        let res = net.sync_get(this.createURL(url));
+        if (res.status != 200) {
+            cache.set(url, null);
+            return null;
+        }
         let val = res.responseText;
         if (this.options.json) {
             // ({foo: 'bar'}) な JSON 対策

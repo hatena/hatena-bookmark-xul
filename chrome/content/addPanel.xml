@@ -265,14 +265,17 @@
                             self.titleLabel.value = res.title;
                             self.titleField.value = res.title;
                         } else if (!bookmark.title) {
-                            hBookmark.net.get(bookmark.url, function(xhr) {
+                            let xhr = hBookmark.net.sync_get(bookmark.url);
                                 // とりあえずやっつけ
                                 // loading icon だしたほうがよさそう
                                 let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
                                 if (m) {
                                     self.titleField.value = self.titleLabel.value = m[1];
                                 }
+                        /*
+                            hBookmark.net.get(bookmark.url, function(xhr) {
                             }, null, true);
+                        */
                         }
                     }, 1, this);
 

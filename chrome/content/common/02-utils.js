@@ -176,6 +176,37 @@ net.makeQuery =  function net_makeQuery (data) {
     return pairs.join('&');
 }
 
+net.sync_get = function net__sync_get(url, query, method) {
+    if (!method) method == 'GET';
+    if (method == 'GET' && query) {
+        let q = this.makeQuery(query);
+        if (q) {
+            url += '?' + q;
+        }
+    }
+    let Y = function(func) {
+        let g = func(function(t) {
+            try { g.send(t) } catch (e) {};
+        });
+        return g;
+    };
+    let xhr;
+    let gen = Y(function(next) {
+        xhr = new XMLHttpRequest();
+        xhr.mozBackgroundRequest = true;
+        xhr.open('GET', url, false);
+        if (method == 'POST') {
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(this.makeQuery(query));
+        } else {
+            xhr.send(null);
+        }
+        yield xhr;
+    });
+
+    return gen.next();
+}
+
 net._http = function net__http (url, callback, errorback, async, query, method) {
     let xhr = new XMLHttpRequest();
     xhr.mozBackgroundRequest = true;
@@ -216,7 +247,7 @@ net._http = function net__http (url, callback, errorback, async, query, method) 
 net.get = function net_get (url, callback, errorback, async, query)
                 this._http(url, callback, errorback, async, query, 'GET');
 
-net.post = function net_get (url, callback, errorback, async, query)
+net.post = function net_post (url, callback, errorback, async, query)
                 this._http(url, callback, errorback, async, query, 'POST');
 
 var EXPORT = [m for (m in new Iterator(this, true))
