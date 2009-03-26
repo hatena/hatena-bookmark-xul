@@ -28,6 +28,7 @@ pref("extensions.hatenabookmark.addPanel.tagCompleteEnabled", true);
 pref("extensions.hatenabookmark.addPanel.tagMaxResult", 12);
 pref("extensions.hatenabookmark.addPanel.initialTagCount", 30);
 pref("extensions.hatenabookmark.addPanel.tagListShow", true);
+pref("extensions.hatenabookmark.addPanel.recommendedTagListShow", true);
 
 // comment viewer
 pref("extensions.hatenabookmark.commentviwer.allShow", true);

@@ -41,6 +41,13 @@ label[anonid="usersField"] {
 textbox {
 }
 
+[anonid="commentCounterField"] {
+   color: #808080;
+}
+[anonid="commentCounterField"].hBookmarkCommentOver {
+   color: #ff0000;
+}
+
 .hBookmarkTag, .hBookmarkSelectedTag {
    border: 1px solid transparent;
    cursor: pointer;
