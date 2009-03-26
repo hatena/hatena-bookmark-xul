@@ -124,21 +124,22 @@ var LocationBar = {
         if (LocationBar.searchEnabled)
             setTimeout(function() LocationBar.search() , 0);
     },
-    keyUpFlag: true,
+    ctrlDownFlag: false,
     barKeyDownHandler: function(ev) {
         /* ここで stop すると、選択の List の挙動を変更できる
         p('keydown' + ev.keyCode);
         */
         let keyCode = ev.keyCode;
         if (ev.ctrlKey && keyCode == ev.DOM_VK_CONTROL && LocationBar.prefs.get('searchToggle')) {
-            if (!LocationBar.ctrlTimer && this.keyUpFlag) {
-                this.keyUpFlag = false;
-                LocationBar.ctrlTimer = setTimeout(
-                function() { 
+            p('ctrl');
+            if (LocationBar.ctrlDownFlag) {
+            } else {
+                if (LocationBar.ctrlDblPressTimer) {
                     LocationBar.toggle();
-                    LocationBar.clearTimer();
-                }, LocationBar.prefs.get('searchToggleWait'));
-                ev.preventDefault();
+                    LocationBar.ctrlDblPressTimer = null;
+                } else {
+                    LocationBar.ctrlDownFlag = true;
+                }
             }
             ev.stopPropagation();
         } else if (LocationBar.searchEnabled) {
@@ -161,8 +162,20 @@ var LocationBar = {
             }, 10);
         }
     },
+    ctrlDblPressTimer: null,
+    ctrlDblPressObserve: function() {
+        LocationBar.ctrlDblPressTimer = new Timer(LocationBar.prefs.get('searchToggleWait'), 1);
+        LocationBar.ctrlDblPressTimer.createListener('timerComplete', function() {
+            p('timer complete');
+            LocationBar.ctrlDblPressTimer = null;
+        });
+        LocationBar.ctrlDblPressTimer.start();
+    },
     barKeyUpHandler: function(ev) {
-        this.keyUpFlag = true;
+        if (LocationBar.ctrlDownFlag) {
+            LocationBar.ctrlDownFlag = false;
+            LocationBar.ctrlDblPressObserve();
+        }
         if (LocationBar.ctrlTimer) {
             LocationBar.clearTimer();
         }
@@ -186,7 +199,7 @@ var LocationBar = {
         LocationBar.searchLastWord = word;
         p('LocationBarSearch: ' + word);
         let res = Bookmark.search(word, 10);
-        this.clear();
+        LocationBar.clear();
         if (res.length > 0) {
             LocationBar.resultRender(res);
         } else {
@@ -200,7 +213,8 @@ var LocationBar = {
         res.forEach(function(b) {
             let tags;
             let comment;
-            let item = E('richlistitem', {'class': 'hBookmark-urlbar-listitem', value:b.url},
+            // XXX: context 指定してもうまくいかない
+            let item = E('richlistitem', {'class': 'hBookmark-urlbar-listitem', value:b.url, context: 'hBookmarkEntryContext'},
                 E('hbox', {flex: '1'}, 
                     E('vbox', null,
                         E('image', {src: b.favicon, width:'16px', height:'16px'}),
