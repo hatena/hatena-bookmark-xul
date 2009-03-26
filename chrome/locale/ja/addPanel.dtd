@@ -5,6 +5,7 @@
 <!ENTITY hBookmark.addPanel.cancelEditTitleLabel "キャンセル">
 <!ENTITY hBookmark.addPanel.urlLabel "URL:">
 <!ENTITY hBookmark.addPanel.commentLabel "コメント:">
+<!ENTITY hBookmark.addPanel.recommendedTagsLabel "おすすめタグ">
 <!ENTITY hBookmark.addPanel.tagsLabel "タグ">
 <!ENTITY hBookmark.addPanel.showAllTagsLabel "すべてのタグを表示">
 <!ENTITY hBookmark.addPanel.showFrequentTagsLabel "一部タグのみ表示">
