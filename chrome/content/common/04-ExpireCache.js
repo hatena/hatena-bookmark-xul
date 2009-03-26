@@ -95,13 +95,34 @@ HTTPCache.prototype = {
             url = this.options.encoder(url);
         return (this.options.baseURL || '') + url;
     },
-    get: function HTTPCache_get (url, force) {
+    async_get: function HTTPCache_async_get(url, callback) {
+        let cache = this.cache;
+        if (cache.has(url)) {
+            let val = cache.get(url);
+            setTimeout(function() {
+                callback(val);
+            }, 0);
+        } else {
+            let self = this;
+            net.get(this.createURL(url), function(res) {
+                callback(self.setResCache(url, res));
+            }, function() {
+                cache.set(url, null);
+                callback(null);
+            }, true);
+        }
+    },
+    get: function HTTPCache_get (url, force, async) {
         let cache = this.cache;
         if (!force && cache.has(url)) {
             p('http using cache: ' + url);
             return cache.get(url);
         }
         let res = net.sync_get(this.createURL(url));
+        return this.setResCache(url, res);
+    },
+    setResCache: function HTTPCache_setResCache(url, res) {
+        let cache = this.cache;
         if (res.status != 200) {
             cache.set(url, null);
             return null;

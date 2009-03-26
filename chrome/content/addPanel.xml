@@ -295,8 +295,8 @@
                     this.updateCommentCounter();
                     this.recommendedTagSelectorGroup.hidden = true;
 
-                    setTimeout(function (self) {
-                        let res = hBookmark.HTTPCache.entry.get(bookmark.url);
+                    let self = this;
+                    hBookmark.HTTPCache.entry.async_get(bookmark.url, function(res) {
                         if (res && typeof res.title != 'undefined') {
                             self.usersField.value =
                                 hBookmark.UIUtils.getUsersText(res.count);
@@ -322,7 +322,7 @@
                             }, null, true);
                         */
                         }
-                    }, 1, this);
+                    });
 
                     if (!this.showsTagList) {
                         this.tagSelectorGroup.setAttribute('hidden', true);
