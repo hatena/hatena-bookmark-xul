@@ -61,6 +61,51 @@ var getHistoryNodeByURL = function getHistoryNodeByURL(url) {
     return;
 }
 
+// Timer
+
+var Timer = function(interval, repeatCount) {
+    EventService.implement(this);
+    this.currentCount = 0;
+    this.interval = interval || 60; // ms
+    this.repeatCount = repeatCount || 0;
+}
+
+Timer.prototype = {
+    start: function() {
+        this._running = true;
+        setTimeout(function(self) {
+            self.loop();
+        }, this.interval, this);
+    },
+    reset: function() {
+        this.stop();
+        this.currentCount = 0;
+    },
+    stop: function() {
+        this._runnning = false;
+    },
+    get running() this._running,
+    loop: function() {
+        p('loop');
+        if (!this.running) return;
+        p('loop2');
+        this.currentCount++;
+        if (this.repeatCount && this.currentCount >= this.repeatCount) {
+        p('loop3');
+            this.stop();
+            this.dispatch('timer');
+            this.dispatch('timerComplete');
+            return;
+        }
+        p('dis timer');
+        this.dispatch('timer');
+        setTimeout(function(self) {
+            self.loop();
+        }, this.interval, this);
+    },
+}
+
+
 var async = {};
 
 /*

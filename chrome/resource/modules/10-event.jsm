@@ -56,6 +56,7 @@ extend(EventDispatcher.prototype, {
 
     dispatch: function ED_dispatch(type, data) {
         var event = new Event(type, data);
+        event.target = this;
         return this.dispatchEvent(event);
     },
 
