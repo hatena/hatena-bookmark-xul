@@ -15,7 +15,12 @@ var ContextMenu = {
         // contextMenu.removeEventListenr('popupshowing', ContextMenu.contextMenuHandler, false);
     },
     contextMenuHandler: function(ev) {
-        if (gContextMenu.onTextInput || gContextMenu.onMailtoLink || gContextMenu.onMathML || gContextMenu.isTextSelected) {
+        if (gContextMenu.onTextInput || 
+            gContextMenu.onMailtoLink || 
+            gContextMenu.onMathML || 
+            gContextMenu.isTextSelected || 
+            (gContextMenu.onImage && !gContextMenu.onLink) 
+        ) {
             addentry.setAttribute('hidden', true);
             addlink.setAttribute('hidden', true);
             showentry.setAttribute('hidden', true);

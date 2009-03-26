@@ -43,7 +43,7 @@ if (shared.has('User')) {
             let current = this.user;
             if (current) {
                 if (current.name == res.name) {
-                    current.rks = res.rks;
+                    current.options.rks = res.rks;
                     return current;
                 }
             }
