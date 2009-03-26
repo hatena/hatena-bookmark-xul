@@ -178,6 +178,7 @@ net.makeQuery =  function net_makeQuery (data) {
 
 net._http = function net__http (url, callback, errorback, async, query, method) {
     let xhr = new XMLHttpRequest();
+    xhr.mozBackgroundRequest = true;
     if (async) {
        xhr.onreadystatechange = function() {
            if (xhr.readyState == 4) {
@@ -191,7 +192,6 @@ net._http = function net__http (url, callback, errorback, async, query, method) 
            }
        }
     }
-    xhr.mozBackgroundRequest = true;
     if (method == 'GET') {
         let q = this.makeQuery(query);
         if (q) {

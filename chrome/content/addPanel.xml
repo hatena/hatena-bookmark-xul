@@ -216,7 +216,7 @@
                     // panel の表示にあわせて focus したほうがよいかも
                     setTimeout(function(self) {
                     self.commentField.focus();
-                    }, 10, this);
+                    }, 0, this);
                 ]]></body>
             </method>
 
@@ -262,15 +262,16 @@
                             self.titleLabel.value = res.title;
                             self.titleField.value = res.title;
                         } else if (!bookmark.title) {
-                            let xhr = hBookmark.net.get(bookmark.url);
-                            // とりあえずやっつけ
-                            // loading icon だしたほうがよさそう
-                            let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
-                            if (m) {
-                                self.titleLabel.value = m[1];
-                            }
+                            hBookmark.net.get(bookmark.url, function(xhr) {
+                                // とりあえずやっつけ
+                                // loading icon だしたほうがよさそう
+                                let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
+                                if (m) {
+                                    self.titleField.value = self.titleLabel.value = m[1];
+                                }
+                            }, null, true);
                         }
-                    }, 0, this);
+                    }, 1, this);
 
                     // XXX Prefs#getは"."が入るとうまくいかない?
                     //let count = hBookmark.Prefs.bookmark.get("addPanel.initialTagCount");
