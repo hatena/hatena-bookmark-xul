@@ -93,6 +93,9 @@
 
             <method name="redraw">
                 <body><![CDATA[
+                    // XXX 表示→非表示→リサイズ→再度表示のときに
+                    // 配置が更新されない。
+                    if (this.collapsed) return;
                     hBookmark.p('toolbar redraw');
                     Array.forEach(this.body.childNodes,
                                   function (button) button.hidden = false);
