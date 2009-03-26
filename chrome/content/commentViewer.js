@@ -58,10 +58,10 @@ var posCalc = function() {
 var setCommentView = function() {
     let src;
     if (Application.prefs.get(SHOW_PREFS_NAME).value) {
-         src = "chrome://hatenabookmark/content/skin/images/comment-viewer-toggle-on.png";
+         src = "chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png";
          $('list').className = '';
     } else {
-         src = "chrome://hatenabookmark/content/skin/images/comment-viewer-toggle-off.png";
+         src = "chrome://hatenabookmark/skin/images/comment-viewer-toggle-off.png";
          $('list').className = 'nocommentall';
     }
     $('toggle-button-img').src = src;

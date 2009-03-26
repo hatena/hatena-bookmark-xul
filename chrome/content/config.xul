@@ -54,11 +54,11 @@
     <vbox>
         <checkbox id="extensions.hatenabookmark.statusbar.addButton-check" flex="1"
             label="追加ボタンの表示"
-            src="chrome://hatenabookmark/content/skin/images/b_plus.png"
+            src="chrome://hatenabookmark/skin/images/b_plus.png"
             preference="extensions.hatenabookmark.statusbar.addButton"/>
         <checkbox id="extensions.hatenabookmark.statusbar.counter-check" flex="1"
             label="ユーザー数カウンターの表示"
-            src="chrome://hatenabookmark/content/skin/images/nbookmarks.png"
+            src="chrome://hatenabookmark/skin/images/nbookmarks.png"
             preference="extensions.hatenabookmark.statusbar.counter"/>
     </vbox>
 </prefpane>
@@ -163,6 +163,7 @@
     </vbox>
 </prefpane>
 
+<script type="application/x-javascript" src="chrome://browser/content/utilityOverlay.js"></script>
 <script type="application/javascript; version=1.8" charset="utf-8" src="chrome://hatenabookmark/content/autoloader.js" />
 </prefwindow>
 

@@ -17,7 +17,7 @@
                     <xul:row align="center" class="username-line">
                         <xul:hbox pack="end">
                         <!--
-                        <xul:image src="chrome://hatenabookmark/content/skin/images/favicon.ico" height="16px" width="16px" />
+                        <xul:image src="chrome://hatenabookmark/skin/images/favicon.ico" height="16px" width="16px" />
                         -->
                         <xul:label value="&hBookmark.addPanel.welcomeUserLabel.before;" />
                         </xul:hbox>
