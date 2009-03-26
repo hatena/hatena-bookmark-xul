@@ -38,15 +38,11 @@ var CommentViewer = {
             url = aDoc.location.href;
         }
         commentButton.setAttribute('loading', 'true'); 
-        let data = HTTPCache.comment.get(url);
-        if (data)
-            data.favicon = favicon(url);
-        setTimeout(function(self) {
-            self.updateComment(data);
-        }, 10, this);
+        HTTPCache.comment.async_get(url, method(this, 'updateComment'));
     },
     updateComment: function CommentViewer_updateComment(data) {
         if (data && data.title) {
+            data.favicon = favicon(data.url);
             CommentViewer.iframe.setAttribute('height', '0px');
             panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
             // 非表示ユーザをフィルター
@@ -102,7 +98,7 @@ CommentViewer.dispatchMethods = {
 }
 
 window.addEventListener('load', function() {
-    p('create');
+    p('init create commentViewer iframe');
     CommentViewer.createIFrame();
 }, false);
 
