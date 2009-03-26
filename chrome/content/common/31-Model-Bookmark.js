@@ -144,7 +144,7 @@ extend(Bookmark.prototype, {
     },
     get dateObject() {
         let d = this.date.toString();
-        return new Date(d.substring(0, 4), d.substring(4, 6),
+        return new Date(d.substring(0, 4), d.substring(4, 6) - 1,
                         d.substring(6, 8), d.substring(8, 10),
                         d.substring(10, 12), d.substring(12, 14));
     },
