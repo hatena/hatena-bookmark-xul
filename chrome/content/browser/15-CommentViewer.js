@@ -48,7 +48,7 @@ var CommentViewer = {
     updateComment: function CommentViewer_updateComment(data) {
         if (data && data.title) {
             CommentViewer.iframe.setAttribute('height', '0px');
-            panelComment.openPopup(statusbar, 'before_end', -20, -5,false,false);
+            panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
             // 非表示ユーザをフィルター
             let regex = User.user.ignores;
             if (regex) {
@@ -65,7 +65,7 @@ var CommentViewer = {
     createIFrame: function() {
         if (!CommentViewer.iframe) {
             CommentViewer.iframe = document.createElement('iframe');
-            CommentViewer.iframe.setAttribute('src', 'chrome://hatenabookmark/content/comment.html') 
+            CommentViewer.iframe.setAttribute('src', 'chrome://hatenabookmark/content/commentViewer.html') 
             CommentViewer.iframe.setAttribute('id', 'hBookmark-comment-viewer');
 
             panelComment.appendChild(CommentViewer.iframe);

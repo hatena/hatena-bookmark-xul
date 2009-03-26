@@ -72,7 +72,7 @@ var StatusBar = {
             image.setAttribute('height', '7px');
             image.width = '6px';
             image.height = '7px';
-            image.setAttribute('src', 'chrome://hatenabookmark/content/skin/images/counter_' + i + '.png');
+            image.setAttribute('src', 'chrome://hatenabookmark/skin/images/counter_' + i + '.png');
             statusCount.appendChild(image);
         });
 

@@ -17,7 +17,7 @@
                     <xul:row align="center" class="username-line">
                         <xul:hbox pack="end">
                         <!--
-                        <xul:image src="chrome://hatenabookmark/content/skin/images/favicon.ico" height="16px" width="16px" />
+                        <xul:image src="chrome://hatenabookmark/skin/images/favicon.ico" height="16px" width="16px" />
                         -->
                         <xul:label value="&hBookmark.addPanel.welcomeUserLabel.before;" />
                         </xul:hbox>
@@ -295,8 +295,8 @@
                     this.updateCommentCounter();
                     this.recommendedTagSelectorGroup.hidden = true;
 
-                    setTimeout(function (self) {
-                        let res = hBookmark.HTTPCache.entry.get(bookmark.url);
+                    let self = this;
+                    hBookmark.HTTPCache.entry.async_get(bookmark.url, function(res) {
                         if (res && typeof res.title != 'undefined') {
                             self.usersField.value =
                                 hBookmark.UIUtils.getUsersText(res.count);
@@ -322,7 +322,7 @@
                             }, null, true);
                         */
                         }
-                    }, 1, this);
+                    });
 
                     if (!this.showsTagList) {
                         this.tagSelectorGroup.setAttribute('hidden', true);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
 <?xml-stylesheet type="text/css" href="addPanel.css"?>
-<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/skin/browser.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/browser.css"?>
 <!DOCTYPE dialog SYSTEM "chrome://hatenabookmark/locale/addPanel.dtd">
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         id="hBookmarkAddPanelWindow"
