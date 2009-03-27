@@ -24,18 +24,20 @@
         </implementation>
 
         <handlers>
-            <handler event="popupshowing">
-                let target = document.tooltipNode;
-                let bookmark = ("hoveredBookmark" in target)
-                    ? target.hoveredBookmark : target.bookmark;
-                if (!bookmark) return false;
+            <handler event="popupshowing"><![CDATA[
+                let target = hBookmark.UIUtils.getBookmarkElement(
+                                 document.tooltipNode);
+                if (!target || ("hoveredBookmark" in target &&
+                                !target.hoveredBookmark))
+                    return false;
+                let bookmark = target.hoveredBookmark || target.bookmark;
                 this.titleField.value = bookmark.title;
                 this.urlField.value = bookmark.url;
                 this.urlField.hidden = (bookmark.title === bookmark.url);
                 this.commentField.value = bookmark.comment;
                 this.commentField.hidden = !/\S/.test(bookmark.comment);
                 return true;
-            </handler>
+            ]]></handler>
         </handlers>
     </binding>
 

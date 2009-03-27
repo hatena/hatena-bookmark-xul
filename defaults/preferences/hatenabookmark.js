@@ -22,6 +22,8 @@ pref("extensions.hatenabookmark.statusbar.addButton", true);
 
 // addPanel 
 pref("extensions.hatenabookmark.addPanel.backgroundImage", '');
+pref("extensions.hatenabookmark.addPanel.confirmEntry", false);
+pref("extensions.hatenabookmark.addPanel.addCollection", true);
 
 // addPanel tagsuggest
 pref("extensions.hatenabookmark.addPanel.tagCompleteEnabled", true);
