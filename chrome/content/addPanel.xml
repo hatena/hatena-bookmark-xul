@@ -235,6 +235,7 @@
                 new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
             </field>
             <field name="maxCommentLength">100</field>
+            <field name="asin">""</field>
 
             <field name="_tagSelectors">
                 [this.tagSelector, this.recommendedTagSelector]
@@ -331,24 +332,32 @@
                     this.inputHandler.updateLineValue(); // タグを認識させる
                     this.updateCommentCounter();
 
-                    this.addCollectionCheck.hidden = !bookmark.asin;
+                    this.addCollectionCheck.hidden = true;
                     this.recommendedTagSelectorGroup.hidden = true;
 
                     let self = this;
                     hBookmark.HTTPCache.entry.async_get(bookmark.url, function(res) {
-                        if (res && typeof res.title != 'undefined') {
-                            self.usersField.value =
-                                hBookmark.UIUtils.getUsersText(res.count);
-                            self.usersField.href = res.entry_url;
-                            self.updateFavorites(res.favorites);
-                            self.usersRow.style.visibility = "visible";
+                        if (res) {
+                            if (res.count) {
+                                self.usersField.value =
+                                    hBookmark.UIUtils.getUsersText(res.count);
+                                self.usersField.href = res.entry_url;
+                                self.updateFavorites(res.favorites);
+                                self.usersRow.style.visibility = "visible";
+                            }
 
+                            self.urlField.value = res.url;
+                            self.urlField.href = res.url;
+                            self.addCollectionCheck.hidden = !res.has_asin;
+                            self.asin = res.asin;
                             self.updateRecommendedTags(res.recommend_tags);
 
-                            if (res.title === bookmark.title) return;
-                            self.titleLabel.value = res.title;
-                            self.titleField.value = res.title;
-                        } else if (!bookmark.title) {
+                            if (res.title && res.title !== bookmark.title) {
+                                self.titleLabel.value = res.title;
+                                self.titleField.value = res.title;
+                            }
+                        }
+                        if (!self.titleLabel.value) {
                             let xhr = hBookmark.net.sync_get(bookmark.url);
                                 // とりあえずやっつけ
                                 // loading icon だしたほうがよさそう
@@ -497,6 +506,7 @@
                         bookmark: bookmark,
                         changeTitle: this.isTitleChanged,
                         addCollection: this.addCollectionCheck.checked,
+                        asin: this.asin,
                         onComplete: confirm && function () {
                             let browser = win.gBrowser;
                             browser.selectedTab =

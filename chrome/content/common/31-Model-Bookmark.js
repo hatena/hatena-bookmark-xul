@@ -125,13 +125,6 @@ extend(Bookmark.prototype, {
     get imageURL() {
         return 'http://b.hatena.ne.jp/entry/image/' + this.url.replace('#', '%23');
     },
-    get asin() {
-        
-        if (!/^\w+:\/\/(?:[\w.-]+\.)?(?:amazon\.co\.jp|hatena\.ne\.jp)(?:\/|$)/.test(this.url))
-            return null;
-        let match = this.url.match(/(?:\/(?:asin|dp|product)\/|[?&;]asins=)(\w{10})/i);
-        return match && match[1];
-    },
     get tags() {
         return Bookmark.parseTags(this.comment);
     },
