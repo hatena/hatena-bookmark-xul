@@ -65,7 +65,7 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton:active {
 
 #hBookmarkToolbar > [anonid="sidebarToggleButton"][checked="true"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(46px 183px 62px 164px);
+  -moz-image-region: rect(62px 183px 78px 164px);
   cursor: pointer;
 }
 
