@@ -19,6 +19,7 @@ let Config = {
         if (!User.user) {
             // むむ
             alert(UIEncodeText('この操作には、はてなへのログインが必要です'));
+            // pref window がでてると、dialog 表示で addons window がおかしくなる
             // UIUtils.encourageLogin();
             return true;
         }
@@ -43,7 +44,7 @@ let Config = {
             fileField.file = null;
             fileField.label = '';
             try {
-            document.getElementById(PrefsBackgroundImage).reset();
+                document.getElementById(PrefsBackgroundImage).reset();
             } catch(e) {};
         }
         // let fileField = document.getElementById('addPanel.backgroundImage');
