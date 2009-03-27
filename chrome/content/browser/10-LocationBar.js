@@ -214,7 +214,9 @@ var LocationBar = {
             let tags;
             let comment;
             // XXX: context 指定してもうまくいかない
-            let item = E('richlistitem', {'class': 'hBookmark-urlbar-listitem', value:b.url, context: 'hBookmarkEntryContext'},
+            let label;
+            let item = E('richlistitem', {
+                'class': 'hBookmark-urlbar-listitem', value:b.url},
                 E('hbox', {flex: '1'}, 
                     E('vbox', null,
                         E('image', {src: b.favicon, width:'16px', height:'16px'}),
@@ -222,7 +224,8 @@ var LocationBar = {
                         E('image', {'class': 'hBookmark-urlbar-entryedit'})
                     ),
                     E('vbox', {flex: '1'}, 
-                        E('label', {'class': 'hBookmark-urlbar-title', crop: 'end', flex: '1', value: b.title, tooltiptext: b.title}),
+                        E('label', {
+                            class: 'hBookmark-urlbar-title', crop: 'end', flex: '1', value: b.title, tooltiptext: b.title}),
                         E('hbox', {tooltiptext: b.comment},
                             tags = E('label', {'class': 'hBookmark-urlbar-tags', value: b.tags.join(', ')}),
                             comment = E('label', {'class': 'hBookmark-urlbar-commentbody',flex: '1',  crop: 'end',  value: b.body})
@@ -235,6 +238,7 @@ var LocationBar = {
                     )
                 )
             );
+            item.bookmark = b;
             if (b.tags.length == 0) {
                 tags.parentNode.removeChild(tags);
                 if (b.body.length == 0) {
@@ -327,6 +331,7 @@ var LocationBar = {
         LocationBar.searchEnabled = false;
     },
     goLink: function LocationBar_goLink(ev) {
+        return;
         ev.stopPropagation();
         ev.preventDefault();
         let item = ev.target.selectedItem;

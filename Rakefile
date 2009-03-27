@@ -32,7 +32,7 @@ end
 task :create_install_rdf => ["#{BUILD_DIR}/install.rdf"]
 
 task :create_extra_directories => []
-%w(defaults components modules).each do |dir|
+%w(defaults components modules skin).each do |dir|
   if File.directory?(dir)
     dst_dir = "#{BUILD_DIR}/#{dir}"
 
