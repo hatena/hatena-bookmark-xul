@@ -196,9 +196,10 @@ TagCompleter.InputHandler.prototype = {
             // submit
             // 本来はここではすべきでない
 
-            if (keyCode == ev.DOM_VK_ENTER || keyCode == ev.DOM_VK_RETURN) {
-                this.addPanel.saveBookmark();
-            }
+            // EnterキーのハンドリングはFirefox側が行う
+            //if (keyCode == ev.DOM_VK_ENTER || keyCode == ev.DOM_VK_RETURN) {
+            //    this.addPanel.saveBookmark();
+            //}
         }
     },
     inputInputHandler: function(ev) {

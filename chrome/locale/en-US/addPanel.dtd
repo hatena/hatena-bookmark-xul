@@ -10,6 +10,8 @@
 
 <!ENTITY hBookmark.addPanel.urlLabel "URL:">
 <!ENTITY hBookmark.addPanel.commentLabel "Comment:">
+<!ENTITY hBookmark.addPanel.confirmEntryLabel "Confirm Bookmark">
+<!ENTITY hBookmark.addPanel.addCollectionLabel "Add to Collection">
 
 <!ENTITY hBookmark.addPanel.recommendedTagsLabel "Recommended Tags">
 <!ENTITY hBookmark.addPanel.tagsLabel "Tags">
