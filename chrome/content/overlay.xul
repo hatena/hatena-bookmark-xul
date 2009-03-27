@@ -30,16 +30,42 @@
          <menuitem
              class="menuitem-iconic"
              insertafter="context-bookmarkpage"
+             label="&hBookmark.menu.showentry;"
+             id="hBookmark-menu-showentry"
+             oncommand="openUILink(hBookmark.entryURL(window.content.location.href));"
+             accesskey="E"
+         />
+         <menuitem
+             class="menuitem-iconic"
+             insertafter="context-bookmarkpage"
              label="&hBookmark.menu.add;"
              id="hBookmark-menu-addentry"
              oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);"
+             accesskey="B"
+         />
+         <menuitem
+             class="menuitem-iconic"
+             insertafter="context-bookmarklink"
+             label="&hBookmark.menu.showlink;"
+             id="hBookmark-menu-showlink"
+             oncommand="openUILink(hBookmark.entryURL(gContextMenu.linkURL));"
+             accesskey="E"
          />
          <menuitem
              class="menuitem-iconic"
              insertafter="context-bookmarklink"
              label="&hBookmark.menu.addlink;"
              id="hBookmark-menu-addlink"
+             accesskey="B"
              oncommand="hBookmark.AddPanelManager.showPanel(gContextMenu.linkURL);"
+         />
+         <menuitem
+             class="menuitem-iconic"
+             insertafter="context-searchselect"
+             label="&hBookmark.menu.searchtext;"
+             id="hBookmark-menu-searchtext"
+             accesskey="B"
+             oncommand="hBookmark.UIUtils.selectedTextOpenHatenaWebSearch();"
          />
     </popup>
 
@@ -143,6 +169,7 @@
             <richlistbox 
             disableKeyNavigation="true"
             rows="6"
+            context="hBookmarkEntryContext"
             id="hBookmark-urlbar-listbox" flex="1" />
         </panel>
     </popupset>

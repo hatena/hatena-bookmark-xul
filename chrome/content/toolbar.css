@@ -58,7 +58,13 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton:active {
 }
 
 #hBookmarkToolbar > [anonid="sidebarToggleButton"] {
-  list-style-image: url("chrome://hatenabookmark/skin/images/bookmark_home_small.png");
+  list-style-image: url("chrome://hatenabookmark/skin/images/favicon.ico");
+  cursor: pointer;
+}
+
+/* XXX */
+#hBookmarkToolbar > [anonid="sidebarToggleButton"] > label {
+    display: none;
 }
 
 #hBookmarkToolbar {
