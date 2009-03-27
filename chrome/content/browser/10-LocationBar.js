@@ -124,25 +124,22 @@ var LocationBar = {
         if (LocationBar.searchEnabled)
             setTimeout(function() LocationBar.search() , 0);
     },
-    ctrlDownFlag: false,
+    toggleFlag: false,
     barKeyDownHandler: function(ev) {
         /* ここで stop すると、選択の List の挙動を変更できる
         p('keydown' + ev.keyCode);
         */
         let keyCode = ev.keyCode;
-        if (ev.ctrlKey && keyCode == ev.DOM_VK_CONTROL && LocationBar.prefs.get('searchToggle')) {
-            p('ctrl');
-            if (LocationBar.ctrlDownFlag) {
-            } else {
-                if (LocationBar.ctrlDblPressTimer) {
-                    LocationBar.toggle();
-                    LocationBar.ctrlDblPressTimer = null;
-                } else {
-                    LocationBar.ctrlDownFlag = true;
-                }
-            }
+        if (ev.ctrlKey && ev.shiftKey &&
+            (keyCode == ev.DOM_VK_SHIFT) &&
+            LocationBar.prefs.get('searchToggle')
+            ) {
+            LocationBar.toggleFlag = true;
             ev.stopPropagation();
-        } else if (LocationBar.searchEnabled) {
+            return;
+        }
+
+        if (LocationBar.searchEnabled) {
             ev.stopPropagation();
             if (keyCode == ev.DOM_VK_TAB)
                 ev.preventDefault();
@@ -162,22 +159,13 @@ var LocationBar = {
             }, 10);
         }
     },
-    ctrlDblPressTimer: null,
-    ctrlDblPressObserve: function() {
-        LocationBar.ctrlDblPressTimer = new Timer(LocationBar.prefs.get('searchToggleWait'), 1);
-        LocationBar.ctrlDblPressTimer.createListener('timerComplete', function() {
-            p('timer complete');
-            LocationBar.ctrlDblPressTimer = null;
-        });
-        LocationBar.ctrlDblPressTimer.start();
-    },
     barKeyUpHandler: function(ev) {
-        if (LocationBar.ctrlDownFlag) {
-            LocationBar.ctrlDownFlag = false;
-            LocationBar.ctrlDblPressObserve();
-        }
-        if (LocationBar.ctrlTimer) {
-            LocationBar.clearTimer();
+        if (LocationBar.toggleFlag) {
+            LocationBar.toggleFlag = false;
+            LocationBar.toggle();
+            if (LocationBar.searchEnabled) {
+                LocationBar.search();
+            }
         }
     },
     clearTimer: function() {
