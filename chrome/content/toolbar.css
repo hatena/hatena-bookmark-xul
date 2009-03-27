@@ -67,3 +67,4 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton:active {
 #hBookmark-toolbar-dropdown {
    -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#dropdown");
 }
+
