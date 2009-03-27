@@ -58,7 +58,8 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton:active {
 }
 
 #hBookmarkToolbar > [anonid="sidebarToggleButton"] {
-  list-style-image: url("chrome://hatenabookmark/skin/images/favicon.ico");
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(46px 183px 62px 164px);
   cursor: pointer;
 }
 
@@ -73,3 +74,4 @@ toolbar[iconsize="small"] #hBookmarkDropdownButton:active {
 #hBookmark-toolbar-dropdown {
    -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#dropdown");
 }
+

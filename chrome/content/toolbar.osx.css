@@ -1,69 +1,52 @@
-/* toolbar */
-#hBookmarkToolbar {
-  min-height: 26px;
-}
-
 #hBookmark-toolbar-add-button {
-  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(0px 25px 23px 0px);
+  -moz-image-region: rect(0px 111px 23px 75px);
 }
 
 #hBookmark-toolbar-add-button:active {
-  -moz-image-region: rect(23px 25px 46px 0px);
+  -moz-image-region: rect(23px 111px 46px 75px);
 }
 
 toolbar[iconsize="small"] #hBookmark-toolbar-add-button {
-  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(46px 16px 62px 0px);
+  -moz-image-region: rect(0px 111px 23px 75px);
 }
 
 toolbar[iconsize="small"] #hBookmark-toolbar-add-button:active {
-  -moz-image-region: rect(62px 16px 78px 0px);
+  -moz-image-region: rect(23px 111px 46px 75px);
 }
 
 #hBookmark-toolbar-home-button {
-  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(0px 50px 23px 25px);
+  -moz-image-region: rect(0px 147px 23px 111px);
 }
 
 #hBookmark-toolbar-home-button:active {
-  -moz-image-region: rect(23px 50px 46px 25px);
+  -moz-image-region: rect(23px 147px 46px 111px);
 }
 
 toolbar[iconsize="small"] #hBookmark-toolbar-home-button {
-  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(46px 32px 62px 16px);
+  -moz-image-region: rect(0px 147px 23px 111px);
 }
 
 toolbar[iconsize="small"] #hBookmark-toolbar-home-button:active {
-  -moz-image-region: rect(62px 32px 78px 16px);
+  -moz-image-region: rect(23px 147px 46px 111px);
 }
 
 #hBookmarkDropdownButton {
-  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(0px 75px 23px 50px);
+  -moz-image-region: rect(0px 183px 23px 147px);
 }
 
 #hBookmarkDropdownButton:active {
-  -moz-image-region: rect(23px 75px 46px 50px);
+  -moz-image-region: rect(23px 183px 46px 147px);
 }
 
 toolbar[iconsize="small"] #hBookmarkDropdownButton {
-  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(46px 48px 62px 32px);
+  -moz-image-region: rect(0px 183px 23px 147px);
 }
 
 toolbar[iconsize="small"] #hBookmarkDropdownButton:active {
-  -moz-image-region: rect(62px 48px 78px 32px);
+  -moz-image-region: rect(23px 183px 46px 147px);
 }
 
 #hBookmarkToolbar > [anonid="sidebarToggleButton"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/favicon.ico");
 }
 
-#hBookmarkToolbar {
-   -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#toolbar");
-}
-#hBookmark-toolbar-dropdown {
-   -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#dropdown");
-}

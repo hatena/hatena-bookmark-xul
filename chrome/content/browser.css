@@ -82,18 +82,21 @@
 }
     
 #hBookmark-status-comment {
-  list-style-image: url("chrome://hatenabookmark/skin/images/comment.png");
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(62px 130px 78px 114px);
   cursor: normal;
 }
 
 #hBookmark-status-comment[comment="true"] {
   cursor: pointer;
-  list-style-image: url("chrome://hatenabookmark/skin/images/comment_on.png");
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(46px 130px 62px 114px);
 }
 
 #hBookmark-status-comment[comment="false"] {
   cursor: normal;
-  list-style-image: url("chrome://hatenabookmark/skin/images/comment.png");
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(62px 130px 78px 114px);
 }
 
 #hBookmark-status-comment[loading="true"] {
