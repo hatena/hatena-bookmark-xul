@@ -113,6 +113,10 @@ extend(RemoteCommand.prototype, {
         };
         if (this.options.changeTitle && User.user.public)
             query.title = bookmark.title;
+        if (this.options.addCollection && bookmark.asin) {
+            query.add_asin = 1;
+            query.asin = bookmark.asin;
+        }
         this.options.query = query;
     },
 

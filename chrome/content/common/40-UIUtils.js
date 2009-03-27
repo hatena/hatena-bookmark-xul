@@ -122,6 +122,14 @@ var UIUtils = {
         return /^(?:https?|ftp):\/\//.test(uri);
     },
 
+    getBookmarkElement: function UIU_getBookmarkElement(element) {
+        while (element && !("bookmark" in element ||
+                            "bookmarks" in element ||
+                            "hoveredBookmark" in element))
+            element = element.parentNode;
+        return element;
+    },
+
     getUsersText: function UIU_getUsersText(count) {
         let ruleNum = +this.addPanelStrings.get("usersPluralRuleNum");
         let get = PluralForm.makeGetter(ruleNum)[0];

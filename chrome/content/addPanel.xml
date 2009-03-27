@@ -52,6 +52,17 @@
                             </xul:hbox>
                         </xul:vbox>
                     </xul:row>
+                    <xul:row anonid="editTitleNotification" hidden="true">
+                        <xul:spacer/>
+                        <xul:vbox>
+                            <xul:description>
+                                &hBookmark.addPanel.titleDescription;
+                            </xul:description>
+                            <xul:label value="&hBookmark.addPanel.titleGuidelineLabel;"
+                                       href="&hBookmark.addPanel.titleGuidelineURI;"
+                                       class="text-link hBookmarkLink"/>
+                        </xul:vbox>
+                    </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.urlLabel;"/>
                         <xul:label anonid="urlField"
@@ -79,6 +90,17 @@
                                 flex="1"
                             />
                             <xul:label anonid="commentCounterField"/>
+                        </xul:hbox>
+                    </xul:row>
+                    <xul:row align="center">
+                        <xul:spacer/>
+                        <xul:hbox align="center">
+                            <xul:checkbox anonid="confirmEntryCheck"
+                                          label="&hBookmark.addPanel.confirmEntryLabel;"
+                                          preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
+                            <xul:checkbox anonid="addCollectionCheck"
+                                          label="&hBookmark.addPanel.addCollectionLabel;"
+                                          preference="extensions.hatenabookmark.addPanel.addCollection"/>
                         </xul:hbox>
                     </xul:row>
                 </xul:rows>
@@ -156,6 +178,9 @@
             <field name="cancelEditTitleButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "cancelEditTitleButton")
             </field>
+            <field name="editTitleNotification">
+                document.getAnonymousElementByAttribute(this, "anonid", "editTitleNotification")
+            </field>
             <field name="urlField">
                 document.getAnonymousElementByAttribute(this, "anonid", "urlField")
             </field>
@@ -173,6 +198,12 @@
             </field>
             <field name="commentCounterField">
                 document.getAnonymousElementByAttribute(this, "anonid", "commentCounterField")
+            </field>
+            <field name="confirmEntryCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "confirmEntryCheck")
+            </field>
+            <field name="addCollectionCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "addCollectionCheck")
             </field>
             <field name="recommendedTagSelectorGroup">
                 document.getAnonymousElementByAttribute(this, "anonid", "recommendedTagSelectorGroup")
@@ -231,6 +262,7 @@
                 <setter><![CDATA[
                     this.titleContainer.hidden = val;
                     this.editableTitleContainer.hidden = !val;
+                    this.editTitleNotification.hidden = !val;
                     if (val)
                         this.titleField.focus();
                     else
@@ -293,6 +325,8 @@
                     this.commentField.value = bookmark.comment;
                     this.inputHandler.updateLineValue(); // タグを認識させる
                     this.updateCommentCounter();
+
+                    this.addCollectionCheck.hidden = !bookmark.asin;
                     this.recommendedTagSelectorGroup.hidden = true;
 
                     let self = this;
@@ -449,11 +483,22 @@
 
             <method name="saveBookmark">
                 <body><![CDATA[
+                    let bookmark = this.bookmark;
+                    // コールバック関数中では getTopWin 関数が使えない。
+                    let win = getTopWin();
+                    let confirm = this.confirmEntryCheck.checked;
                     let command = new hBookmark.RemoteCommand("edit", {
-                        bookmark: this.bookmark,
+                        bookmark: bookmark,
                         changeTitle: this.isTitleChanged,
+                        addCollection: this.addCollectionCheck.checked,
+                        onComplete: confirm && function () {
+                            let browser = win.gBrowser;
+                            browser.selectedTab =
+                                browser.addTab(bookmark.entryURL,
+                                               null, null, null,
+                                               browser.selectedTab);
+                        },
                         onError: let (self = this) function () {
-                            let win = getTopWin();
                             //self.setError('error');
                             //self.show(bookmark);
                             //win.alert('error');
@@ -720,6 +765,26 @@
 
         <handlers>
             <handler event="popupshowing" action="return this.build(document.tooltipNode);"/>
+        </handlers>
+    </binding>
+
+    <binding id="preference-checkbox"
+             extends="chrome://global/content/bindings/checkbox.xml#checkbox">
+        <implementation>
+            <constructor><![CDATA[
+                this.checked = this.pref.value;
+            ]]></constructor>
+
+            <property name="preference"
+                      onget="return this.getAttribute('preference');"
+                      onset="this.setAttribute('preference', val); return val;"/>
+            <property name="pref" readonly="true"
+                      onget="return Application.prefs.get(this.preference);"/>
+        </implementation>
+
+        <handlers>
+            <handler event="command"
+                     action="this.pref.value = this.checked;"/>
         </handlers>
     </binding>
 

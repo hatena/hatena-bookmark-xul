@@ -1,10 +1,18 @@
 <!ENTITY hBookmark.addPanel.welcomeUserLabel.before "Welcome">
 <!ENTITY hBookmark.addPanel.welcomeUserLabel.after "">
+
 <!ENTITY hBookmark.addPanel.titleLabel "Title:">
 <!ENTITY hBookmark.addPanel.editTitleLabel "Edit Title…">
 <!ENTITY hBookmark.addPanel.cancelEditTitleLabel "Cancel">
+<!ENTITY hBookmark.addPanel.titleDescription "This title is shared with all users">
+<!ENTITY hBookmark.addPanel.titleGuidelineLabel "Guideline to change title (in Japanese)">
+<!ENTITY hBookmark.addPanel.titleGuidelineURI "http://b.hatena.ne.jp/help/guideline_title">
+
 <!ENTITY hBookmark.addPanel.urlLabel "URL:">
 <!ENTITY hBookmark.addPanel.commentLabel "Comment:">
+<!ENTITY hBookmark.addPanel.confirmEntryLabel "Confirm Bookmark">
+<!ENTITY hBookmark.addPanel.addCollectionLabel "Add to Collection">
+
 <!ENTITY hBookmark.addPanel.recommendedTagsLabel "Recommended Tags">
 <!ENTITY hBookmark.addPanel.tagsLabel "Tags">
 <!ENTITY hBookmark.addPanel.showAllTagsLabel "Show all tags">
