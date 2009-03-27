@@ -3,7 +3,7 @@ body,h1,h2,h3,h4,h5,h5,ul,ol,li,dl,dt,dd,form,textarea,input,select,blockquote {
   margin: 0;
   padding: 0;
   list-style: none;
-  font: 0.94em/1.4 "Arial", "Helvetica", sans-serif;
+  font: 0.90em/1.5 sans-serif;
 }
 
 body {
@@ -18,8 +18,8 @@ img {
 }
 
 h1 {
-    padding: 7px;
-    font-weight: bold;
+    padding: 5px;
+    font-weight: normal;
     position: fixed;
     width: 100%;
     margin: 0px;
@@ -78,11 +78,11 @@ input {
 
 #list li {
   display: list-item;
-  padding: 5px 20px 5px 5px;
+  text-indent: -20px;
+  padding: 5px 20px 5px 20px;
   margin: 0 0 3px 0;
   color: #000;
   word-wrap: break-word;
-  line-height: 1.4;
   border-bottom: 1px dotted #ddd;
 }
 
@@ -122,10 +122,10 @@ a.users {
 #toggle-button-img {
   cursor:pointer;
   position: absolute;
-  right: 40px;
+  right: 20px;
   top: 0;
   display: inline-block;
-  padding: 10px;
+  padding: 7px;
 }
 
 
