@@ -40,9 +40,9 @@
 #hBookmark-status-count {
   cursor: pointer;
   /*background-image: url("chrome://hatenabookmark/skin/images/nbookmarks.png");*/
-  width: 30px;
+  width: 35px;
   height: 16px;
-  padding-right: 4px;
+  padding-right: 2px;
   /*
   padding:2px 3px 0 0;
   margin:0px;

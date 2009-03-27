@@ -62,10 +62,10 @@ var StatusBar = {
     lastCountValue: null,
     appendCountImage: function StatusBar_appendCountImage(url) {
         let image = document.createElement('image');
-        image.setAttribute('width', '6px');
-        image.setAttribute('height', '7px');
-        image.width = '6px';
-        image.height = '7px';
+        image.setAttribute('width', '7px');
+        image.setAttribute('height', '9px');
+        image.width = '7px';
+        image.height = '9px';
         image.setAttribute('src', url);
         statusCount.appendChild(image);
     },
