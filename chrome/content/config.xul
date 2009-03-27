@@ -3,11 +3,10 @@
 <?xml-stylesheet href="chrome://global/skin" type="text/css"?>
 <?xml-stylesheet href="chrome://mozapps/content/preferences/preferences.css"?>
 <?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://hatenabookmark/skin/config.css"?>
 
 <prefwindow id="hBookmark-config"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-    width="700px"
-    height="550px"
     title="はてなブックマーク拡張の設定"
     >
 
@@ -18,7 +17,9 @@
     type="bool"/>
 -->
 
-<prefpane id="prefpane-locationbar" label="ロケーションバー" flex="1">
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    id="prefpane-locationbar" label="ロケーションバー" flex="1">
     <preferences>
         <preference 
             id="extensions.hatenabookmark.locationbar.searchToggle"
@@ -40,7 +41,9 @@
     </vbox>
 </prefpane>
 
-<prefpane id="prefpane-statusbar" label="ステータスバー" flex="1">
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    id="prefpane-statusbar" label="ステータスバー" flex="1">
     <preferences>
         <preference 
             id="extensions.hatenabookmark.statusbar.addButton"
@@ -65,7 +68,9 @@
 </prefpane>
 
 
-<prefpane id="prefpane-addPanel" label="編集パネル" flex="1" onpaneload="hBookmark.Config.updateUI();">
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    id="prefpane-addPanel" label="編集パネル" flex="1" onpaneload="hBookmark.Config.updateUI();">
     <preferences>
         <preference 
             id="extensions.hatenabookmark.addPanel.tagCompleteEnabled"
@@ -152,10 +157,14 @@
     </vbox>
 </prefpane>
 
-<prefpane id="prefpane-shortcut" label="ショートカット" flex="1">
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    id="prefpane-shortcut" label="ショートカット" flex="1">
 </prefpane>
 
-<prefpane id="prefpane-sync" label="データ" flex="1">
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    id="prefpane-sync" label="データ" flex="1">
     <vbox>
         <groupbox orient="vertical">
             <caption label="同期" />

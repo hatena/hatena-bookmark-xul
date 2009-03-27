@@ -1,0 +1,11 @@
+
+
+#BrowserPreferences radio[pane] {
+  list-style-image: none;
+}
+
+.windowDialog,
+.windowDialog prefpane {
+  padding: 1000px;
+}
+
