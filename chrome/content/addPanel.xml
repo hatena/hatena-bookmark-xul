@@ -276,9 +276,14 @@
 
             <!-- XXX Prefs#getは"."が入るとうまくいかない? -->
             <property name="showsTagList" readonly="true"
-                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value"/>
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value;"/>
             <property name="showsRecommendedTagList" readonly="true"
-                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.recommendedTagListShow').value"/>
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.recommendedTagListShow').value;"/>
+            <property name="frequentTagCount" readonly="true"
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.frequentTagCount').value;"/>
+            <field name="showAllTagsPref">
+                Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShowAll');
+            </field>
 
             <method name="show">
                 <parameter name="bookmark"/>
@@ -367,7 +372,7 @@
                     this.tagSelector.build(tags);
                     let selectedTags = this.inputHandler.inputLine.tags;
                     this.tagSelector.update(selectedTags);
-                    this.switchTagSelectorView(false);
+                    this.switchTagSelectorView(this.showAllTagsPref.value);
                 ]]></body>
             </method>
 
@@ -441,17 +446,18 @@
             <method name="switchTagSelectorView">
                 <parameter name="showAll"/>
                 <body><![CDATA[
+                    let count = this.frequentTagCount;
+                    let switcherHidden = (this.tagSelector.tagCount < count);
                     if (showAll) {
                         this.allTagsLabel.hidden = true;
-                        this.frequentTagsLabel.hidden = false;
+                        this.frequentTagsLabel.hidden = switcherHidden;
                         this.tagSelector.visibleTagCount = 0;
                     } else {
-                        let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
-                        this.allTagsLabel.hidden =
-                            (count >= this.tagSelector.tagCount);
+                        this.allTagsLabel.hidden = switcherHidden;
                         this.frequentTagsLabel.hidden = true;
                         this.tagSelector.visibleTagCount = count;
                     }
+                    this.showAllTagsPref.value = showAll;
                 ]]></body>
             </method>
 

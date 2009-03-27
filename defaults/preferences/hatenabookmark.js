@@ -28,9 +28,10 @@ pref("extensions.hatenabookmark.addPanel.addCollection", true);
 // addPanel tagsuggest
 pref("extensions.hatenabookmark.addPanel.tagCompleteEnabled", true);
 pref("extensions.hatenabookmark.addPanel.tagMaxResult", 12);
-pref("extensions.hatenabookmark.addPanel.initialTagCount", 30);
-pref("extensions.hatenabookmark.addPanel.tagListShow", true);
 pref("extensions.hatenabookmark.addPanel.recommendedTagListShow", true);
+pref("extensions.hatenabookmark.addPanel.tagListShow", true);
+pref("extensions.hatenabookmark.addPanel.tagListShowAll", false);
+pref("extensions.hatenabookmark.addPanel.frequentTagCount", 30);
 
 // comment viewer
 pref("extensions.hatenabookmark.commentviwer.allShow", true);
