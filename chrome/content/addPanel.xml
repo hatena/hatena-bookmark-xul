@@ -52,6 +52,17 @@
                             </xul:hbox>
                         </xul:vbox>
                     </xul:row>
+                    <xul:row anonid="editTitleNotification" hidden="true">
+                        <xul:spacer/>
+                        <xul:vbox>
+                            <xul:description>
+                                &hBookmark.addPanel.titleDescription;
+                            </xul:description>
+                            <xul:label value="&hBookmark.addPanel.titleGuidelineLabel;"
+                                       href="&hBookmark.addPanel.titleGuidelineURI;"
+                                       class="text-link hBookmarkLink"/>
+                        </xul:vbox>
+                    </xul:row>
                     <xul:row align="center">
                         <xul:label value="&hBookmark.addPanel.urlLabel;"/>
                         <xul:label anonid="urlField"
@@ -156,6 +167,9 @@
             <field name="cancelEditTitleButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "cancelEditTitleButton")
             </field>
+            <field name="editTitleNotification">
+                document.getAnonymousElementByAttribute(this, "anonid", "editTitleNotification")
+            </field>
             <field name="urlField">
                 document.getAnonymousElementByAttribute(this, "anonid", "urlField")
             </field>
@@ -231,6 +245,7 @@
                 <setter><![CDATA[
                     this.titleContainer.hidden = val;
                     this.editableTitleContainer.hidden = !val;
+                    this.editTitleNotification.hidden = !val;
                     if (val)
                         this.titleField.focus();
                     else
