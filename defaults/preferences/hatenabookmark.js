@@ -39,3 +39,7 @@ pref("extensions.hatenabookmark.commentviwer.allShow", true);
 pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);
 pref("extensions.hatenabookmark.sync.syncWait", 1000);
 
+// Shurtcut
+pref("extensions.hatenabookmark.shortcut.add", "Accel+Shift+B");
+pref("extensions.hatenabookmark.shortcut.commentViewer", "Accel+Shift+C");
+
