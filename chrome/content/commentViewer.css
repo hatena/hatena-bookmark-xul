@@ -3,7 +3,7 @@ body,h1,h2,h3,h4,h5,h5,ul,ol,li,dl,dt,dd,form,textarea,input,select,blockquote {
   margin: 0;
   padding: 0;
   list-style: none;
-  font: 90%/1.4 "Arial", "Helvetica", sans-serif;
+  font: 0.94em/1.4 "Arial", "Helvetica", sans-serif;
 }
 
 body {
@@ -78,7 +78,7 @@ input {
 
 #list li {
   display: list-item;
-  padding: 3px 20px 3px 5px;
+  padding: 5px 20px 5px 5px;
   margin: 0 0 3px 0;
   color: #000;
   word-wrap: break-word;
