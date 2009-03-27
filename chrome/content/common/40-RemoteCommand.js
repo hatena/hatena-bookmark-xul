@@ -126,7 +126,9 @@ extend(RemoteCommand.prototype, {
         let bookmarks = options.bookmarks || [options.bookmark];
         let onComplete = this.options.onComplete
         this.options.onComplete = function (result) {
-            if (!result || !result.success) {
+            //if (!result || !result.success) {
+            // サーバの success = 0 のときはすでにエントリーがないので、ローカル DB はけしとく
+            if (!result) {
                 this.onError();
                 return;
             }
