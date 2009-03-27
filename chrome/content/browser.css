@@ -56,6 +56,10 @@
   color: #FFF;
 }
 
+#hBookmark-status-count label {
+    display: none;
+}
+
 #hBookmark-status-count[users="none"] {
   color: #DDD;
     /*
@@ -108,7 +112,7 @@
   border: 1px solid #eee;
 }
 
-iframe#hBookmark-comment-viewer {
+#hBookmark-comment-viewer {
   /*
 width: 800px;
 */
@@ -165,13 +169,13 @@ width: 800px;
     padding: 2px;
 }
 
-image.hBookmark-urlbar-entrylink {
+.hBookmark-urlbar-entrylink {
   list-style-image: url("chrome://hatenabookmark/skin/images/b_link.gif");
   cursor: pointer;
   display: none;
 }
 
-image.hBookmark-urlbar-entryedit {
+.hBookmark-urlbar-entryedit {
   list-style-image: url("chrome://hatenabookmark/skin/images/edit.gif");
   cursor: pointer;
   margin-top: 3px;

@@ -73,6 +73,7 @@ var StatusBar = {
         statusCount.value = (isHttp ? HTTPCache.counter.get(locationURL) : '0') || '0';
         if (StatusBar.lastCountValue == statusCount.value) return;
         StatusBar.lastCountValue = statusCount.value;
+        statusCount.setAttribute('label', statusCount.value);
         while (statusCount.firstChild) statusCount.removeChild(statusCount.firstChild);
         if (statusCount.value > 0) {
             let counts = statusCount.value.toString().split('');

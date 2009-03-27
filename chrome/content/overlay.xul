@@ -215,6 +215,19 @@
                 EventService.dispatch('unload', window);
             }, false);
 
+            var keyData = {};
+            window.openDialog(
+                'chrome://hatenabookmark/content/keyDetecter.xul',
+                '_blank',
+                'chrome,modal,resizable=no,titlebar=no,centerscreen',
+                keyData,
+                'hoge', 
+                'huga'
+            );
+            if (keyData.modified) {
+                p(keyData.string);
+                p(uneval(keyData.string));
+            }
             // setTimeout(function() {
             // var features = "chrome,titlebar,toolbar,centerscreen,modal";
             // window.openDialog('chrome://hatenabookmark/content/config.xul', "Preferences", features);
