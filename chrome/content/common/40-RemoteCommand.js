@@ -130,10 +130,6 @@ extend(RemoteCommand.prototype, {
         let bookmarks = options.bookmarks || [options.bookmark];
         let onComplete = this.options.onComplete
         this.options.onComplete = function (result) {
-            if (!result || !result.success) {
-                this.onError();
-                return;
-            }
             if (onComplete)
                 onComplete.apply(this, arguments);
             p('remove bookmarks', bookmarks.map(function (b) b.url).join("\n"));
