@@ -3,7 +3,7 @@ body,h1,h2,h3,h4,h5,h5,ul,ol,li,dl,dt,dd,form,textarea,input,select,blockquote {
   margin: 0;
   padding: 0;
   list-style: none;
-  font: 0.90em/1.5 sans-serif;
+  font: 0.92em/1.5 sans-serif;
 }
 
 body {
@@ -18,7 +18,7 @@ img {
 }
 
 h1 {
-    padding: 5px;
+    padding: 5px 5px 5px 10px;
     font-weight: normal;
     position: fixed;
     width: 100%;
@@ -28,6 +28,7 @@ h1 {
     border-top: 1px solid #bbb;
     border-bottom: 1px solid #bbb;
     background: #f3f3f3;
+    font-size: 90%;
 }
 
 #comment-container {
@@ -54,18 +55,6 @@ img.usericon {
   display: inline-block;
 }
 
-fieldset {
-  border: 0;
-}
-
-input {
-  *margin: -1px 0;
-}
-
-.note {
-    font-size: 90%;
-}
-
 *{
   margin:0;
   padding:0;
@@ -79,7 +68,7 @@ input {
 #list li {
   display: list-item;
   text-indent: -20px;
-  padding: 5px 20px 5px 20px;
+  padding: 4px 20px 4px 20px;
   margin: 0 0 3px 0;
   color: #000;
   word-wrap: break-word;
@@ -102,7 +91,6 @@ span.comment {
 
 span.timestamp {
   color: #888;
-  font-size: 90%;
 } 
 
 a.tag {
@@ -115,8 +103,6 @@ a.users {
   color: #FF6e6e;
   font-weight: bold;
   padding-left: 14px;
-  font-size: 10px;
-  font-family: verdana;
 }
 
 #toggle-button-img {
@@ -127,7 +113,6 @@ a.users {
   display: inline-block;
   padding: 7px;
 }
-
 
 #close-button-img {
   cursor:pointer;
@@ -141,5 +126,4 @@ a.users {
 ul.nocommentall li.nocomment {
     display: none !important;
 }
-
 
