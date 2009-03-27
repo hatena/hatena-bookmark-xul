@@ -235,6 +235,7 @@
                 new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
             </field>
             <field name="maxCommentLength">100</field>
+            <field name="asin">""</field>
 
             <field name="_tagSelectors">
                 [this.tagSelector, this.recommendedTagSelector]
@@ -276,9 +277,14 @@
 
             <!-- XXX Prefs#getは"."が入るとうまくいかない? -->
             <property name="showsTagList" readonly="true"
-                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value"/>
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value;"/>
             <property name="showsRecommendedTagList" readonly="true"
-                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.recommendedTagListShow').value"/>
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.recommendedTagListShow').value;"/>
+            <property name="frequentTagCount" readonly="true"
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.frequentTagCount').value;"/>
+            <field name="showAllTagsPref">
+                Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShowAll');
+            </field>
 
             <method name="show">
                 <parameter name="bookmark"/>
@@ -326,24 +332,32 @@
                     this.inputHandler.updateLineValue(); // タグを認識させる
                     this.updateCommentCounter();
 
-                    this.addCollectionCheck.hidden = !bookmark.asin;
+                    this.addCollectionCheck.hidden = true;
                     this.recommendedTagSelectorGroup.hidden = true;
 
                     let self = this;
                     hBookmark.HTTPCache.entry.async_get(bookmark.url, function(res) {
-                        if (res && typeof res.title != 'undefined') {
-                            self.usersField.value =
-                                hBookmark.UIUtils.getUsersText(res.count);
-                            self.usersField.href = res.entry_url;
-                            self.updateFavorites(res.favorites);
-                            self.usersRow.style.visibility = "visible";
+                        if (res) {
+                            if (res.count) {
+                                self.usersField.value =
+                                    hBookmark.UIUtils.getUsersText(res.count);
+                                self.usersField.href = res.entry_url;
+                                self.updateFavorites(res.favorites);
+                                self.usersRow.style.visibility = "visible";
+                            }
 
+                            self.urlField.value = res.url;
+                            self.urlField.href = res.url;
+                            self.addCollectionCheck.hidden = !res.has_asin;
+                            self.asin = res.asin;
                             self.updateRecommendedTags(res.recommend_tags);
 
-                            if (res.title === bookmark.title) return;
-                            self.titleLabel.value = res.title;
-                            self.titleField.value = res.title;
-                        } else if (!bookmark.title) {
+                            if (res.title && res.title !== bookmark.title) {
+                                self.titleLabel.value = res.title;
+                                self.titleField.value = res.title;
+                            }
+                        }
+                        if (!self.titleLabel.value) {
                             let xhr = hBookmark.net.sync_get(bookmark.url);
                                 // とりあえずやっつけ
                                 // loading icon だしたほうがよさそう
@@ -367,7 +381,7 @@
                     this.tagSelector.build(tags);
                     let selectedTags = this.inputHandler.inputLine.tags;
                     this.tagSelector.update(selectedTags);
-                    this.switchTagSelectorView(false);
+                    this.switchTagSelectorView(this.showAllTagsPref.value);
                 ]]></body>
             </method>
 
@@ -441,17 +455,18 @@
             <method name="switchTagSelectorView">
                 <parameter name="showAll"/>
                 <body><![CDATA[
+                    let count = this.frequentTagCount;
+                    let switcherHidden = (this.tagSelector.tagCount < count);
                     if (showAll) {
                         this.allTagsLabel.hidden = true;
-                        this.frequentTagsLabel.hidden = false;
+                        this.frequentTagsLabel.hidden = switcherHidden;
                         this.tagSelector.visibleTagCount = 0;
                     } else {
-                        let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
-                        this.allTagsLabel.hidden =
-                            (count >= this.tagSelector.tagCount);
+                        this.allTagsLabel.hidden = switcherHidden;
                         this.frequentTagsLabel.hidden = true;
                         this.tagSelector.visibleTagCount = count;
                     }
+                    this.showAllTagsPref.value = showAll;
                 ]]></body>
             </method>
 
@@ -491,6 +506,7 @@
                         bookmark: bookmark,
                         changeTitle: this.isTitleChanged,
                         addCollection: this.addCollectionCheck.checked,
+                        asin: this.asin,
                         onComplete: confirm && function () {
                             let browser = win.gBrowser;
                             browser.selectedTab =
