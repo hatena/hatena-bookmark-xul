@@ -10,7 +10,8 @@ extend(EntryContext.prototype, {
     strings: new Strings("chrome://hatenabookmark/locale/popups.properties"),
 
     build: function EC_build(target) {
-        if (!target.bookmark) return false;
+        target = UIUtils.getBookmarkElement(target);
+        if (!target || !target.bookmark) return false;
         this.bookmark  = target.bookmark;
         this.bookmarks = target.bookmarks || null;
         this._getItem("deleteAll").hidden = !this.bookmarks;
