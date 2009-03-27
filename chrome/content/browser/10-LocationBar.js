@@ -219,9 +219,7 @@ var LocationBar = {
                 'class': 'hBookmark-urlbar-listitem', value:b.url},
                 E('hbox', {flex: '1'}, 
                     E('vbox', null,
-                        E('image', {src: b.favicon, width:'16px', height:'16px'}),
-                        E('image', {'class': 'hBookmark-urlbar-entrylink'}),
-                        E('image', {'class': 'hBookmark-urlbar-entryedit'})
+                        E('image', {src: b.favicon, width:'16px', height:'16px'})
                     ),
                     E('vbox', {flex: '1'}, 
                         E('label', {
@@ -331,7 +329,8 @@ var LocationBar = {
         LocationBar.searchEnabled = false;
     },
     goLink: function LocationBar_goLink(ev) {
-        return;
+        if (ev.button == 2)
+            return;
         ev.stopPropagation();
         ev.preventDefault();
         let item = ev.target.selectedItem;

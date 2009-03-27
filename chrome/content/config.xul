@@ -159,7 +159,45 @@
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/favicon.ico"
+    onpaneload="hBookmark.Config.ShortCut.initPane();"
     id="prefpane-shortcut" label="ショートカット" flex="1">
+
+    <preferences>
+        <preference 
+            id="extensions.hatenabookmark.shortcut.add"
+            name="extensions.hatenabookmark.shortcut.add"
+            type="string"/>
+    </preferences>
+
+    <!--
+      base code by XUL/Migemo config.xul
+      thx Piro!
+    -->
+    <hbox>
+        <spacer flex="1"/>
+        <grid>
+            <columns>
+                <column/>
+            </columns>
+            <rows>
+                <row align="center">
+                    <label value="はてなブックマークに追加"/>
+                    <textbox id="extensions.hatenabookmark.shortcut.add-input"
+                        readonly="true"
+                        style="width: 10em;"
+                        preference="extensions.hatenabookmark.shortcut.add"
+                        />
+                    <button label="設定"
+                        style="min-width: 0;"
+                        oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.add);"/>
+                    <button label="解除"
+                        style="min-width: 0;"
+                        oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.add);"/>
+                </row>
+            </rows>
+        </grid>
+        <spacer flex="1"/>
+    </hbox>
 </prefpane>
 
 <prefpane 

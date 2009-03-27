@@ -63,3 +63,48 @@ let Config = {
     }
 };
 
+/*
+ * base code by XUL/Migemo config.js.
+ * thx Piro!
+ */
+Config.ShortCut = {
+    initPane: function() {
+        let add = document.getElementById('extensions.hatenabookmark.shortcut.add-input');
+        add.keyData = parseShortcut(add.value);
+        this.add = add;
+    },
+    set: function(aNode) {
+        window.openDialog(
+            'chrome://hatenabookmark/content/keyDetecter.xul',
+            '_blank',
+            'chrome,modal,resizable=no,titlebar=no,centerscreen',
+            aNode.keyData,
+            'キーボードを押して、ショートカットを設定します',
+            'キャンセル'
+        );
+        if (aNode.keyData.modified) {
+            aNode.value = aNode.keyData.string;
+            var event = document.createEvent('UIEvents');
+            event.initUIEvent('input', true, false, window, 0);
+            aNode.dispatchEvent(event);
+        }
+    },
+    clear: function(aNode) {
+        aNode.value = '';
+        aNode.keyData = parseShortcut(aNode.value);
+        aNode.keyData.modified = true;
+
+        fireInputEvent(aNode);
+    },
+}
+
+function fireInputEvent(aNode)
+{
+    var event = document.createEvent('UIEvents');
+    event.initUIEvent('input', true, false, window, 0);
+    aNode.dispatchEvent(event);
+}
+
+
+
+

@@ -291,6 +291,34 @@ net.get = function net_get (url, callback, errorback, async, query)
 net.post = function net_post (url, callback, errorback, async, query)
                 this._http(url, callback, errorback, async, query, 'POST');
 
+/*
+ * parseShortcut function copy from XUL/Migemo
+ */
+var parseShortcut = function parseShortcut(aShortcut) {
+    var accelKey = navigator.platform.toLowerCase().indexOf('mac') == 0 ? 'meta' : 'ctrl' ;
+    aShortcut = aShortcut.replace(/accel/gi, accelKey);
+
+    var keys = aShortcut.split('+');
+
+    var keyCode = keys[keys.length-1].replace(/ /g, '_').toUpperCase();
+    var key     = keyCode;
+
+    sotredKeyCode = (keyCode.length == 1 || keyCode == 'SPACE' || !keyCode) ? '' : 'VK_'+keyCode ;
+    key = sotredKeyCode ? '' : keyCode ;
+
+    return {
+        key      : key,
+        charCode : (key ? key.charCodeAt(0) : '' ),
+        keyCode  : sotredKeyCode,
+        altKey   : /alt/i.test(aShortcut),
+        ctrlKey  : /ctrl|control/i.test(aShortcut),
+        metaKey  : /meta/i.test(aShortcut),
+        shiftKey : /shift/i.test(aShortcut),
+        string   : aShortcut,
+        modified : false
+    };
+}
+
 var EXPORT = [m for (m in new Iterator(this, true))
                           if (m[0] !== "_" && m !== "EXPORT")];
 
