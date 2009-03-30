@@ -1,5 +1,5 @@
-<!ENTITY hBookmark.addPanel.initialWidth "500">
-<!ENTITY hBookmark.addPanel.initialHeight "400">
+<!ENTITY hBookmark.addPanel.initialWidth "640">
+<!ENTITY hBookmark.addPanel.initialHeight "480">
 
 <!ENTITY hBookmark.addPanel.welcomeUserLabel.before "Welcome">
 <!ENTITY hBookmark.addPanel.welcomeUserLabel.after "">
