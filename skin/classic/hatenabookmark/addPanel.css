@@ -137,4 +137,13 @@ groupbox {
    overflow: auto;
 }
 
+[anonid="showCommentsButton"] {
+   margin-right: 5px;
+   list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+   -moz-image-region: rect(46px 130px 62px 114px);
+   cursor: pointer;
+}
+
+
+
 
