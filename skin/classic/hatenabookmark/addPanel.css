@@ -89,7 +89,8 @@ button[anonid="cancelEditTitleButton"] {
 .hBookmarkTag, .hBookmarkSelectedTag {
    border: 1px solid transparent;
    cursor: pointer;
-   padding:2px 3px;
+   padding:2px 2px;
+   margin: 5px 3px 5px 0;
 }
 
 .hBookmarkSelectedTag {
