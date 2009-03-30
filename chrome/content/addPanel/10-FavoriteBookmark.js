@@ -16,9 +16,7 @@ extend(FavoriteBookmark.prototype, {
     },
 
     getProfileIcon: function FB_getProfileIcon(isLarge) {
-        let name = this._favorite.name;
-        return sprintf("http://www.hatena.ne.jp/users/%s/%s/profile%s.gif",
-                       name.substring(0, 2), name, isLarge ? '' : '_s');
+        return UserUtils.getProfileIcon(this._favorite.name, isLarge);
     },
 
     createImage: function FB_createImage() {

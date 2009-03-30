@@ -85,11 +85,9 @@ if (shared.has('User')) {
             return this._db;
         },
         get dataURL() sprintf('http://b.hatena.ne.jp/%s/search.data', this.name),
-        get bookmarkHomepage() sprintf('http://b.hatena.ne.jp/%s/', this.name),
+        get bookmarkHomepage() UserUtils.getHomepage(this.name, 'b'),
         getProfileIcon: function user_getProfileIcon(isLarge) {
-            let name = this.name;
-            return sprintf('http://www.hatena.ne.jp/users/%s/%s/profile%s.gif',
-                           name.substring(0, 2), name, isLarge ? '' : '_s');
+            return UserUtils.getProfileIcon(this.name, isLarge);
         },
 
         clear: function user_clear() {
