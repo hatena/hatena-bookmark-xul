@@ -19,6 +19,21 @@
         <menuitem observes="viewHBookmarkSidebar" />
     </menupopup>
 
+    <menupopup id="menu_ToolsPopup">
+        <menu id="hBookmark-menuToolsPopup"
+            insertbefore="devToolsSeparator"
+            label="&hBookmark.menu.main;">
+            <menupopup>
+                <menuitem id="hBookmark-menuitem-sync"
+                    label="&hBookmark.menu.sync;"
+                    oncommand="hBookmark.Sync.sync();"/>
+                <menuitem id="hBookmark-menuitem-config"
+                    label="&hBookmark.menu.config;"
+                    oncommand="window.openDialog('chrome://hatenabookmark/content/config.xul', 'Preferences', 'chrome,titlebar,toolbar,centerscreen,modal');"/>
+            </menupopup>
+        </menu>
+    </menupopup>
+
     <popup id="contentAreaContextMenu"> 
          <menuitem
              class="menuitem-iconic"
@@ -208,7 +223,7 @@
             /*
             setTimeout(function() {
             var features = "chrome,titlebar,toolbar,centerscreen,modal";
-            window.openDialog('chrome://hatenabookmark/content/config.xul', "Preferences", features);
+            window.openDialog('chrome://hatenabookmark/content/config.xul', "Preferences", "chrome,titlebar,toolbar,centerscreen,modal");
             }, 100);
             //*/
         }
