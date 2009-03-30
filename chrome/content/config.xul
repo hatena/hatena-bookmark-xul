@@ -42,6 +42,10 @@
             id="extensions.hatenabookmark.recentItemCount"
             name="extensions.hatenabookmark.recentItemCount"
             type="int"/>
+        <preference 
+            id="extensions.hatenabookmark.contextmenu.enabled"
+            name="extensions.hatenabookmark.contextmenu.enabled"
+            type="bool"/>
     </preferences>
 
     <vbox>
@@ -84,6 +88,13 @@
                 />
                 </hbox>
             </vbox>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="右クリック(コンテキスト)メニュー" />
+            <checkbox id="extensions.hatenabookmark.contextmenu.enabled-check" flex="1"
+                label="右クリックメニューを拡張する"
+                preference="extensions.hatenabookmark.contextmenu.enabled"/>
         </groupbox>
     </vbox>
 </prefpane>

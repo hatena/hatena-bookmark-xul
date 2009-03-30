@@ -16,6 +16,9 @@ pref("extensions.hatenabookmark.locationbar.searchToggle", true);
 pref("extensions.hatenabookmark.locationbar.searchToggleWait", 500);
 pref("extensions.hatenabookmark.locationbar.resultRows", 6);
 
+// contextmenu
+pref("extensions.hatenabookmark.contextmenu.enabled", true);
+
 // status bar
 pref("extensions.hatenabookmark.statusbar.counter", true);
 pref("extensions.hatenabookmark.statusbar.httpsIgnore", true);
