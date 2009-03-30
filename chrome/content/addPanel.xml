@@ -360,7 +360,7 @@
                     let self = this;
                     hBookmark.HTTPCache.entry.async_get(bookmark.url, function(res) {
                         if (res) {
-                            if (res.count) {
+                            if (+res.count) {
                                 self.usersField.value =
                                     hBookmark.UIUtils.getUsersText(res.count);
                                 self.usersField.href = res.entry_url;
