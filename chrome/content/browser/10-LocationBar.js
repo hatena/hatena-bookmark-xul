@@ -11,14 +11,14 @@ let Bookmark = model('Bookmark');
 
 var LocationBar = {
     registerEventListeners: function() {
-        p('reg');
+        p('locationbar register');
         LocationBar.bar.addEventListener('keypress', LocationBar.barKeyPressTabHandler, true);
         LocationBar.bar.inputField.addEventListener('keydown', LocationBar.barKeyDownHandler, true);
         LocationBar.bar.inputField.addEventListener('keypress', LocationBar.barKeyPressHandler, false);
         LocationBar.bar.inputField.addEventListener('keyup', LocationBar.barKeyUpHandler, true);
     },
     unregisterEventListeners: function() {
-        p('unreg');
+        p('locationbar unregister');
         LocationBar.searchEnabled = false;
         LocationBar.bar.removeEventListener('keypress', LocationBar.barKeyPressTabHandler, true);
         LocationBar.bar.inputField.removeEventListener('keydown', LocationBar.barKeyDownHandler, true);

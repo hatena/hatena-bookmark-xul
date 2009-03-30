@@ -1,4 +1,4 @@
-// ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã—ãŸããªã„ãƒ¡ãƒ³ãƒã®åå‰ã¯ã‚¢ãƒ³ãƒ€ãƒ¼ã‚¹ã‚³ã‚¢(_)ã‹ã‚‰ã¯ã˜ã‚ã‚‹ã“ã¨ã€‚
+// ¥¨¥¯¥¹¥İ¡¼¥È¤·¤¿¤¯¤Ê¤¤¥á¥ó¥Ğ¤ÎÌ¾Á°¤Ï¥¢¥ó¥À¡¼¥¹¥³¥¢(_)¤«¤é¤Ï¤¸¤á¤ë¤³¤È¡£
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
@@ -72,15 +72,20 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 var nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
 
 /*
- * p ã¯ä¸€æ™‚ãƒ‡ãƒãƒƒã‚°ç”¨
+ * p ¤Ï°ì»ş¥Ç¥Ğ¥Ã¥°ÍÑ
  */
 var p = function (value) {
     log.info(''+value);
     return value;
 }
 
+p.e = function(value) {
+    log.info(uneval(value));
+    return value;
+}
+
 /*
- * ç°¡æ˜“ãƒ™ãƒ³ãƒãƒãƒ¼ã‚¯
+ * ´Ê°×¥Ù¥ó¥Á¥Ş¡¼¥¯
  */
 p.b = function (func, name) {
     name = 'Benchmark ' + (name || '') + ': ';
@@ -91,9 +96,6 @@ p.b = function (func, name) {
     return t;
 }
 
-/*
- * log ã¯ã€å®Ÿéš›ã«ã‚¨ãƒ©ãƒ¼ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ã«é€šçŸ¥ç”¨
- */
 var log = {
     error: function (msg) {
         if (msg instanceof Error) {
@@ -164,12 +166,12 @@ var isInclude = function(val, ary) {
 
 // copy from Tombloo
 /**
- * ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ã‚³ãƒ”ãƒ¼ã™ã‚‹ã€‚
- * ã‚²ãƒƒã‚¿ãƒ¼/ã‚»ãƒƒã‚¿ãƒ¼ã®é–¢æ•°ã‚‚å¯¾è±¡ã«å«ã¾ã‚Œã‚‹ã€‚
+ * ¥ª¥Ö¥¸¥§¥¯¥È¤Î¥×¥í¥Ñ¥Æ¥£¤ò¥³¥Ô¡¼¤¹¤ë¡£
+ * ¥²¥Ã¥¿¡¼/¥»¥Ã¥¿¡¼¤Î´Ø¿ô¤âÂĞ¾İ¤Ë´Ş¤Ş¤ì¤ë¡£
  * 
- * @param {Object} target ã‚³ãƒ”ãƒ¼å…ˆã€‚
- * @param {Object} source ã‚³ãƒ”ãƒ¼å…ƒã€‚
- * @return {Object} ã‚³ãƒ”ãƒ¼å…ˆã€‚
+ * @param {Object} target ¥³¥Ô¡¼Àè¡£
+ * @param {Object} source ¥³¥Ô¡¼¸µ¡£
+ * @return {Object} ¥³¥Ô¡¼Àè¡£
  */
 var extend = function extend(target, source, overwrite){
     overwrite = overwrite == null ? true : overwrite;
@@ -189,13 +191,13 @@ var extend = function extend(target, source, overwrite){
 }
 
 /**
- * ãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã°ã‚Œã‚‹å‰ã«å‡¦ç†ã‚’è¿½åŠ ã™ã‚‹ã€‚
- * ã‚ˆã‚Šè©³ç´°ãªã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãŒå¿…è¦ãªå ´åˆã¯addAroundã‚’ä½¿ã†ã“ã¨ã€‚
+ * ¥á¥½¥Ã¥É¤¬¸Æ¤Ğ¤ì¤ëÁ°¤Ë½èÍı¤òÄÉ²Ã¤¹¤ë¡£
+ * ¤è¤ê¾ÜºÙ¤Ê¥³¥ó¥È¥í¡¼¥ë¤¬É¬Í×¤Ê¾ì¹ç¤ÏaddAround¤ò»È¤¦¤³¤È¡£
  * 
- * @param {Object} target å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
- * @param {String} name ãƒ¡ã‚½ãƒƒãƒ‰åã€‚
- * @param {Function} before å‰å‡¦ç†ã€‚
- *        å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’thisã¨ã—ã¦ã€ã‚ªãƒªã‚¸ãƒŠãƒ«ã®å¼•æ•°ãŒå…¨ã¦æ¸¡ã•ã‚Œã¦å‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
+ * @param {Object} target ÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È¡£
+ * @param {String} name ¥á¥½¥Ã¥ÉÌ¾¡£
+ * @param {Function} before Á°½èÍı¡£
+ *        ÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È¤òthis¤È¤·¤Æ¡¢¥ª¥ê¥¸¥Ê¥ë¤Î°ú¿ô¤¬Á´¤ÆÅÏ¤µ¤ì¤Æ¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
  */
 function addBefore(target, name, before) {
     var original = target[name];
@@ -206,21 +208,21 @@ function addBefore(target, name, before) {
 }
 
 /**
- * ãƒ¡ã‚½ãƒƒãƒ‰ã¸ã‚¢ãƒ©ã‚¦ãƒ³ãƒ‰ã‚¢ãƒ‰ãƒã‚¤ã‚¹ã‚’è¿½åŠ ã™ã‚‹ã€‚
- * å‡¦ç†ã‚’ç½®ãã‹ãˆã€å¼•æ•°ã®å¤‰å½¢ã‚„ã€è¿”ã‚Šå€¤ã®åŠ å·¥ã‚’ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ã€‚
+ * ¥á¥½¥Ã¥É¤Ø¥¢¥é¥¦¥ó¥É¥¢¥É¥Ğ¥¤¥¹¤òÄÉ²Ã¤¹¤ë¡£
+ * ½èÍı¤òÃÖ¤­¤«¤¨¡¢°ú¿ô¤ÎÊÑ·Á¤ä¡¢ÊÖ¤êÃÍ¤Î²Ã¹©¤ò¤Ç¤­¤ë¤è¤¦¤Ë¤¹¤ë¡£
  * 
- * @param {Object} target å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€‚
+ * @param {Object} target ÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È¡£
  * @param {String || Array} methodNames 
- *        ãƒ¡ã‚½ãƒƒãƒ‰åã€‚è¤‡æ•°æŒ‡å®šã™ã‚‹ã“ã¨ã‚‚ã§ãã‚‹ã€‚
- *        set*ã®ã‚ˆã†ã«ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒˆã‚’ä½¿ã£ã¦ã‚‚ã‚ˆã„ã€‚
+ *        ¥á¥½¥Ã¥ÉÌ¾¡£Ê£¿ô»ØÄê¤¹¤ë¤³¤È¤â¤Ç¤­¤ë¡£
+ *        set*¤Î¤è¤¦¤Ë¥ï¥¤¥ë¥É¥«¡¼¥È¤ò»È¤Ã¤Æ¤â¤è¤¤¡£
  * @param {Function} advice 
- *        ã‚¢ãƒ‰ãƒã‚¤ã‚¹ã€‚proceedã€argsã€targetã€methodNameã®4ã¤ã®å¼•æ•°ãŒæ¸¡ã•ã‚Œã‚‹ã€‚
- *        proceedã¯å¯¾è±¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ãƒã‚¤ãƒ³ãƒ‰æ¸ˆã¿ã®ã‚ªãƒªã‚¸ãƒŠãƒ«ã®ãƒ¡ã‚½ãƒƒãƒ‰ã€‚
+ *        ¥¢¥É¥Ğ¥¤¥¹¡£proceed¡¢args¡¢target¡¢methodName¤Î4¤Ä¤Î°ú¿ô¤¬ÅÏ¤µ¤ì¤ë¡£
+ *        proceed¤ÏÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È¤Ë¥Ğ¥¤¥ó¥ÉºÑ¤ß¤Î¥ª¥ê¥¸¥Ê¥ë¤Î¥á¥½¥Ã¥É¡£
  */
 function addAround(target, methodNames, advice){
     methodNames = [].concat(methodNames);
     
-    // ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ã®å±•é–‹
+    // ¥ï¥¤¥ë¥É¥«¡¼¥É¤ÎÅ¸³«
     for(var i=0 ; i<methodNames.length ; i++){
         if(methodNames[i].indexOf('*')==-1) continue;
         
@@ -264,7 +266,7 @@ var update = function (self, obj/*, ... */) {
 var bind = function bind(func, self) function () func.apply(self, Array.slice(arguments));
 var method = function method(self, methodName) function () self[methodName].apply(self, Array.slice(arguments));
 
-// XXX modelé–¢æ•°ã¯model.jsmã«ç½®ã‹ãªã„ã¨ã‚¹ã‚³ãƒ¼ãƒ—çš„ã«ã¾ãšã„?
+// XXX model´Ø¿ô¤Ïmodel.jsm¤ËÃÖ¤«¤Ê¤¤¤È¥¹¥³¡¼¥×Åª¤Ë¤Ş¤º¤¤?
 var model = function(name) {
     var m = this.Model[name];
     if (!m) { throw 'model not found' };
@@ -272,7 +274,7 @@ var model = function(name) {
 }
 
 /*
- * å…±ç”¨ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°
+ * ¶¦ÍÑ¥°¥í¡¼¥Ğ¥ëÊÑ¿ô
  */
 let _shared = {};
 var shared = {
@@ -288,13 +290,13 @@ var shared = {
 };
 
 /*
- * æ–‡å­—åˆ—å¤‰æ›
+ * Ê¸»úÎóÊÑ´¹
  */
 function unEscapeURIForUI(charset, string) 
     Cc['@mozilla.org/intl/texttosuburi;1'].getService(Ci.nsITextToSubURI).unEscapeURIForUI(charset, string);
 
 /*
- * JSON ãƒ‡ã‚³ãƒ¼ãƒ‰/ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰
+ * JSON ¥Ç¥³¡¼¥É/¥¨¥ó¥³¡¼¥É
  */
 function decodeJSON(json) {
     try {
@@ -319,7 +321,7 @@ function encodeJSON(object) {
 }
 
 /*
- * favicon å–å¾—
+ * favicon ¼èÆÀ
  */
 
 function getFaviconURI (url) {

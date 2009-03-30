@@ -92,17 +92,23 @@ extend(Bookmark, {
         });
     },
     search: function(str, limit) {
-        if (!str) return Bookmark.findRecent(limit);
-        Bookmark.db.connection.executeSimpleSQL('PRAGMA case_sensitive_like = 1');
-        var [sql, args] = createWhereLike(str);
-        extend(args, {
-            limit: limit || 10,
-            order: 'date desc',
-        });
-        var res = Bookmark.find(<>
-             select * from bookmarks
-             where {sql}
-        </>.toString(), args);
+        var res;
+        p.b(function() {
+        if (!str) {
+            res = Bookmark.findRecent(limit);
+        } else {
+            Bookmark.db.connection.executeSimpleSQL('PRAGMA case_sensitive_like = 1');
+            var [sql, args] = createWhereLike(str);
+            extend(args, {
+                limit: limit || 10,
+                order: 'date desc',
+            });
+            res = Bookmark.find(<>
+                 select * from bookmarks
+                 where {sql}
+            </>.toString(), args);
+        }
+        }, 'Bookmark search [' + [str, limit].join(' ') + ']');
         return res;
     },
     deleteBookmarks: function(bookmarks) {
