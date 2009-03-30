@@ -6,6 +6,7 @@ var ToolbarInstaller = {
         var toolbar = document.getElementById('nav-bar');
 
         try {
+
             // Fx 3.0 unified-back-forward-button,reload-button,stop-button,home-button,
             // hBookmark-toolbar-home,quickrestart-button,urlbar-container,search-container
             let bars = toolbar.currentSet.split(',');
@@ -46,6 +47,10 @@ var ToolbarInstaller = {
 
 EventService.createListener('Install', function() {
     ToolbarInstaller.install();
+    // BrowserSearch.addEngine({
+    //     title: 'はてなウェブ検索',
+    //     link: 'http://b.hatena.ne.jp/opensearch.xml'
+    // }, gBrowser.document);
 });
 
 
