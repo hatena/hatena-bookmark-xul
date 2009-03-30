@@ -10,17 +10,21 @@
    display: block;
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#tag-selector");
 }
+
 .hBookmarkImageSelector {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#image-selector");
 }
 .hBookmarkImageSelector > popupset > panel {
-   max-width: 500px;
+   max-width: 550px;
 }
-.hBookmarkImageSelector > vbox > image,
-.hBookmarkImageSelector > popupset > panel > hbox > image {
-   max-width: 100px;
-   max-height: 100px;
+.hBookmarkImageSelectorItem {
+   margin: 5px;
+   vertical-align: middle;
 }
+.hBookmarkImageSelectorItem[selected="true"] {
+   outline: 3px solid #00f;
+}
+
 #hBookmarkFavoriteBookmarkTooltip {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#favorite-bookmark-tooltip");
 }

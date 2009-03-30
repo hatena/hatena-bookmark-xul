@@ -796,8 +796,7 @@
 
     <binding id="image-selector">
         <content>
-            <!-- XXX ToDo: width/heightはskinもしくはprefsへ移動する。 -->
-            <xul:vbox width="100" height="100" align="center" pack="center">
+            <xul:vbox anonid="iconContainer" align="center" pack="center">
                 <xul:image anonid="icon"
                            src="http://b.hatena.ne.jp/images/noimages.gif"/>
             </xul:vbox>
@@ -807,6 +806,7 @@
                               align="center" pack="start"
                               style="display: block;">
                         <xul:image anonid="noImage"
+                                   class="hBookmarkImageSelectorItem"
                                    src="http://b.hatena.ne.jp/images/noimages.gif"/>
                     </xul:hbox>
                 </xul:panel>
@@ -814,6 +814,14 @@
         </content>
 
         <implementation>
+            <constructor><![CDATA[
+                this.iconContainer.setAttribute("width", this.maxImageWidth);
+                this.iconContainer.setAttribute("height", this.maxImageHeight);
+            ]]></constructor>
+
+            <field name="iconContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "iconContainer")
+            </field>
             <field name="icon">
                 document.getAnonymousElementByAttribute(this, "anonid", "icon")
             </field>
@@ -828,6 +836,10 @@
             </field>
 
             <field name="_images">({})</field>
+
+            <!-- XXX ToDo: width/heightはskinもしくはprefsへ移動する。 -->
+            <field name="maxImageWidth">100</field>
+            <field name="maxImageHeight">100</field>
 
             <field name="_defaultImage">this.noImage</field>
             <property name="defaultImage"
@@ -850,6 +862,8 @@
                     this._selectedImage.removeAttribute("selected");
                     image.setAttribute("selected", "true");
                     this.icon.setAttribute("src", image.getAttribute("src"));
+                    this.icon.setAttribute("width", image.getAttribute("width"));
+                    this.icon.setAttribute("height", image.getAttribute("height"));
                     this._selectedImage = image;
                     return val;
                 ]]></setter>
@@ -886,7 +900,24 @@
                 <body><![CDATA[
                     if (image.src in this._images) return;
                     let xulImage = document.createElementNS(hBookmark.XUL_NS, "image");
+                    xulImage.setAttribute("class", "hBookmarkImageSelectorItem");
                     xulImage.setAttribute("src", image.src);
+
+                    let maxWidth = this.maxImageWidth;
+                    let maxHeight = this.maxImageHeight;
+                    let width = image.naturalWidth;
+                    let height = image.naturalHeight;
+                    if (width > maxWidth || height > maxHeight) {
+                        if (width / height > maxWidth / maxHeight) {
+                            height = Math.round(height * maxWidth / width);
+                            width = maxWidth;
+                        } else {
+                            width = Math.round(width * maxHeight / height);
+                            height = maxHeight;
+                        }
+                    }
+                    xulImage.setAttribute("width", width);
+                    xulImage.setAttribute("height", height);
                     this.container.appendChild(xulImage);
                     this._images[image.src] = xulImage;
                 ]]></body>
@@ -929,7 +960,7 @@
 
             <method name="showPopup">
                 <body><![CDATA[
-                    this.popup.openPopup(this.icon, "after_start",
+                    this.popup.openPopup(this.iconContainer, "after_start",
                                          0, 0, false, false);
                 ]]></body>
             </method>
@@ -938,7 +969,8 @@
         <handlers>
             <handler event="click" button="0"><![CDATA[
                 let target = event.originalTarget;
-                if (target === this.icon) {
+                if (target === this.icon ||
+                    target === this.iconContainer) {
                     this.showPopup();
                 } else if (target.localName === "image" &&
                            target.parentNode === this.container) {
