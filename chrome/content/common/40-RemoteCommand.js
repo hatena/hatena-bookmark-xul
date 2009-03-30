@@ -117,6 +117,8 @@ extend(RemoteCommand.prototype, {
             query.add_asin = 1;
             query.asin = this.options.asin;
         }
+        if (this.options.changeImage && User.user.public)
+            query.image = this.options.image;
         this.options.query = query;
     },
 
