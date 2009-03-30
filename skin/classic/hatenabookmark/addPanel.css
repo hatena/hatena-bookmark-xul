@@ -86,6 +86,10 @@ button[anonid="cancelEditTitleButton"] {
    color: #ff0000;
 }
 
+[anonid="favoritesContainer"] image {
+  margin-right: 3px;
+}
+
 .hBookmarkTag, .hBookmarkSelectedTag {
    border: 1px solid transparent;
    cursor: pointer;
