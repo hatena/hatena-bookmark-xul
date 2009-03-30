@@ -7,6 +7,7 @@
 <!ENTITY hBookmark.addPanel.titleDescription "エントリーのタイトルは全ユーザ共通です">
 <!ENTITY hBookmark.addPanel.titleGuidelineLabel "タイトル変更のガイドライン">
 <!ENTITY hBookmark.addPanel.titleGuidelineURI "http://b.hatena.ne.jp/help/guideline_title">
+<!ENTITY hBookmark.addPanel.lastTitleEditorLabel "最終変更:">
 
 <!ENTITY hBookmark.addPanel.urlLabel "URL:">
 <!ENTITY hBookmark.addPanel.commentLabel "コメント:">

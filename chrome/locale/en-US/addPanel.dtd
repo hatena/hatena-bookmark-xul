@@ -7,6 +7,7 @@
 <!ENTITY hBookmark.addPanel.titleDescription "This title is shared with all users">
 <!ENTITY hBookmark.addPanel.titleGuidelineLabel "Guideline to change title (in Japanese)">
 <!ENTITY hBookmark.addPanel.titleGuidelineURI "http://b.hatena.ne.jp/help/guideline_title">
+<!ENTITY hBookmark.addPanel.lastTitleEditorLabel "Last modified by">
 
 <!ENTITY hBookmark.addPanel.urlLabel "URL:">
 <!ENTITY hBookmark.addPanel.commentLabel "Comment:">

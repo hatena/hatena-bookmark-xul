@@ -61,6 +61,13 @@
                             <xul:label value="&hBookmark.addPanel.titleGuidelineLabel;"
                                        href="&hBookmark.addPanel.titleGuidelineURI;"
                                        class="text-link hBookmarkLink"/>
+                            <xul:hbox anonid="lastTitleEditorContainer"
+                                      align="center">
+                                <xul:label value="&hBookmark.addPanel.lastTitleEditorLabel;"/>
+                                <xul:image anonid="lastTitleEditorIcon"/>
+                                <xul:label anonid="lastTitleEditorField"
+                                           class="text-link hBookmarkLink"/>
+                            </xul:hbox>
                         </xul:vbox>
                     </xul:row>
                     <xul:row align="center">
@@ -180,6 +187,15 @@
             </field>
             <field name="editTitleNotification">
                 document.getAnonymousElementByAttribute(this, "anonid", "editTitleNotification")
+            </field>
+            <field name="lastTitleEditorContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastTitleEditorContainer")
+            </field>
+            <field name="lastTitleEditorIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastTitleEditorIcon")
+            </field>
+            <field name="lastTitleEditorField">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastTitleEditorField")
             </field>
             <field name="urlField">
                 document.getAnonymousElementByAttribute(this, "anonid", "urlField")
@@ -321,6 +337,7 @@
                     this.titleField.value       = bookmark.title;
                     this.editTitleButton.hidden = user.private;
                     this.isTitleEditable        = false;
+                    this.lastTitleEditorContainer.hidden = true;
 
                     this.urlField.value = bookmark.url;
                     this.urlField.href =
@@ -344,6 +361,17 @@
                                 self.usersField.href = res.entry_url;
                                 self.updateFavorites(res.favorites);
                                 self.usersRow.style.visibility = "visible";
+                            }
+
+                            let lastEditor = res.title_last_editor;
+                            if (lastEditor) {
+                                let UU = hBookmark.UserUtils;
+                                self.lastTitleEditorIcon.src =
+                                    UU.getProfileIcon(lastEditor, false);
+                                self.lastTitleEditorField.value = lastEditor;
+                                self.lastTitleEditorField.href =
+                                    UU.getHomepage(lastEditor, "b");
+                                self.lastTitleEditorContainer.hidden = false;
                             }
 
                             self.urlField.value = res.url;
