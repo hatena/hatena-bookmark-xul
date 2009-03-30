@@ -541,11 +541,7 @@
                         addCollection: this.addCollectionCheck.checked,
                         asin: this.asin,
                         onComplete: confirm && function () {
-                            let browser = win.gBrowser;
-                            browser.selectedTab =
-                                browser.addTab(bookmark.entryURL,
-                                               null, null, null,
-                                               browser.selectedTab);
+                            win.gBrowser.addTab(bookmark.entryURL);
                         },
                         onError: let (self = this) function () {
                             //self.setError('error');
