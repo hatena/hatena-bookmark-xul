@@ -18,7 +18,7 @@
 -->
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    image="chrome://hatenabookmark/skin/images/favicon32.png"
     id="prefpane-locationbar" label="ロケーションバー" flex="1">
     <preferences>
         <preference 
@@ -42,7 +42,7 @@
 </prefpane>
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    image="chrome://hatenabookmark/skin/images/favicon32.png"
     id="prefpane-statusbar" label="ステータスバー" flex="1">
     <preferences>
         <preference 
@@ -69,7 +69,7 @@
 
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    image="chrome://hatenabookmark/skin/images/favicon32.png"
     id="prefpane-addPanel" label="編集パネル" flex="1" onpaneload="hBookmark.Config.updateUI();">
     <preferences>
         <preference 
@@ -158,7 +158,7 @@
 </prefpane>
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    image="chrome://hatenabookmark/skin/images/favicon32.png"
     onpaneload="hBookmark.Config.ShortCut.initPane();"
     id="prefpane-shortcut" label="ショートカット" flex="1">
 
@@ -201,7 +201,7 @@
 </prefpane>
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    image="chrome://hatenabookmark/skin/images/favicon32.png"
     id="prefpane-sync" label="データ" flex="1">
     <vbox>
         <groupbox orient="vertical">

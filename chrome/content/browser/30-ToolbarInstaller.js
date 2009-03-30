@@ -26,7 +26,7 @@ var ToolbarInstaller = {
                     // -button という ID が無くなった直後に追加
                     newSet.push('hBookmark-toolbar-add-button');
                     newSet.push('hBookmark-toolbar-home-button');
-                    newSet.push('hBookmark-toolbar-dropdown');
+                    // newSet.push('hBookmark-toolbar-dropdown');
                     flag = true;
                 }
                 newSet.push(name);

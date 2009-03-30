@@ -10,7 +10,7 @@
         <em:creator>Hatena</em:creator>
         <em:homepageURL>http://b.hatena.ne.jp/help/addons</em:homepageURL>
         <em:optionsURL>chrome://hatenabookmark/content/config.xul</em:optionsURL>
-        <em:iconURL>chrome://hatenabookmark/skin/images/favicon.ico</em:iconURL>
+        <em:iconURL>chrome://hatenabookmark/skin/images/favicon32.png</em:iconURL>
         <em:targetApplication>
             <Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
