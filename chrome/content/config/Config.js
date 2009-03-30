@@ -15,6 +15,16 @@ let Config = {
         if (Config.syncCheck()) return;
         Sync.sync();
     },
+    RemoveData: function() {
+        let res = window.confirm(UIEncodeText('はてなブックマーク拡張のすべてのデータを削除します。よろしいですか？'));
+        if (res) {
+            let pd = DirectoryService.get("ProfD", Ci.nsIFile);
+            pd.append('hatenabookmark');
+            if (pd.exists() && pd.isDirectory()) {
+                pd.remove(true);
+            }
+        }
+    },
     syncCheck: function() {
         if (!User.user) {
             // むむ
