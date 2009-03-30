@@ -7,6 +7,7 @@
 
 <prefwindow id="hBookmark-config"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
     title="はてなブックマーク拡張の設定"
     >
 
@@ -19,7 +20,7 @@
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/favicon32.png"
-    id="prefpane-locationbar" label="ロケーションバー" flex="1">
+    id="prefpane-locationbar" label="全般" flex="1">
     <preferences>
         <preference 
             id="extensions.hatenabookmark.locationbar.searchToggle"
@@ -29,22 +30,6 @@
             id="extensions.hatenabookmark.locationbar.search"
             name="extensions.hatenabookmark.locationbar.search"
             type="bool"/>
-    </preferences>
-
-    <vbox>
-        <checkbox id="extensions.hatenabookmark.locationbar.search-check" flex="1"
-            label="ロケーションバーの検索を有効にする"
-            preference="extensions.hatenabookmark.locationbar.search"/>
-        <checkbox id="extensions.hatenabookmark.locationbar.searchToggle-check" flex="1"
-            label="Ctrl + Shift キーによる検索ショートカットを使う"
-            preference="extensions.hatenabookmark.locationbar.searchToggle"/>
-    </vbox>
-</prefpane>
-
-<prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon32.png"
-    id="prefpane-statusbar" label="ステータスバー" flex="1">
-    <preferences>
         <preference 
             id="extensions.hatenabookmark.statusbar.addButton"
             name="extensions.hatenabookmark.statusbar.addButton"
@@ -56,9 +41,17 @@
     </preferences>
 
     <vbox>
+        <checkbox id="extensions.hatenabookmark.locationbar.search-check" flex="1"
+            label="ロケーションバーの検索を有効にする"
+            preference="extensions.hatenabookmark.locationbar.search"/>
+        <checkbox id="extensions.hatenabookmark.locationbar.searchToggle-check" flex="1"
+            label="Ctrl + Shift キーによる検索ショートカットを使う"
+            preference="extensions.hatenabookmark.locationbar.searchToggle"/>
+    </vbox>
+
+    <vbox>
         <checkbox id="extensions.hatenabookmark.statusbar.addButton-check" flex="1"
             label="追加ボタンの表示"
-            src="chrome://hatenabookmark/skin/images/b_plus.png"
             preference="extensions.hatenabookmark.statusbar.addButton"/>
         <checkbox id="extensions.hatenabookmark.statusbar.counter-check" flex="1"
             label="ユーザー数カウンターの表示"
@@ -212,20 +205,41 @@
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/favicon32.png"
-    id="prefpane-sync" label="データ" flex="1">
+    id="prefpane-sync" label="データ" flex="1"
+    onpaneload="hBookmark.Config.initDataPane();"
+    >
     <vbox>
+            <vbox align="center">
+                <hbox id="pref-loginbox">
+                    <label id="pref-login" valeu="" />
+                </hbox>
+                <label id="pref-nologin" valeu="ログインしていません。"/>
+            </vbox>
+
         <groupbox orient="vertical">
             <caption label="同期" />
-                <button label="データの同期"
-                    oncommand="hBookmark.Config.sync();"
-                />
-                <button label="すべてのデータ同期しなおす"
-                    oncommand="hBookmark.Config.syncALL();"
-                />
+            <vbox align="center">
+                <label value="はてなブックマークのデータから、手元のデータへと同期します。" />
+                <hbox>
+                    <button label="データの同期"
+                        oncommand="hBookmark.Config.sync();"
+                    />
+                </hbox>
+                <hbox>
+                    <button label="すべてのデータの再同期"
+                        oncommand="hBookmark.Config.syncALL();"
+                    />
+                </hbox>
+            </vbox>
         </groupbox>
         <groupbox orient="vertical">
             <caption label="データの削除" />
-            <label value="未実装" />
+            <vbox align="center">
+                <description>お手元のはてなブックマーク拡張のデータを削除します。<html:br />リモートのデータは削除されません。</description>
+                <button label="データをすべて削除"
+                    oncommand="hBookmark.Config.deleteAll();"
+                />
+            </vbox>
         </groupbox>
     </vbox>
 </prefpane>
