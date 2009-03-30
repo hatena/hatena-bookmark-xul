@@ -1,0 +1,88 @@
+
+* {
+    font-family:"Arial","Helvetica",sans-serif;
+}
+
+row.username-line {
+    margin-bottom: 5px;
+}
+
+dialog#hBookmarkAddPanelWindow {
+    border: 5px solid #E9F0F8 !important;
+}
+
+label[anonid="titleLabel"] {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+row[anonid="messageRow"] {
+    padding: 4px;
+    margin: 5px 3px 5px 3px;
+    background-color: #FFDDDD;
+    -moz-border-radius: 7px;
+    font-weight: bold;
+    color: #555;
+}
+
+[anonid="usersRow"] {
+  min-height: 18px;
+}
+
+label[anonid="usersField"] {
+  background: url(chrome://hatenabookmark/skin/images/page.gif) left 0px no-repeat;
+  color: #FF6e6e !important;
+  font-weight: bold;
+  padding-left: 14px;
+  font-size: 10px;
+  font-family: verdana;
+}
+
+textbox {
+}
+
+[anonid="commentCounterField"] {
+   color: #808080;
+}
+[anonid="commentCounterField"].hBookmarkCommentOver {
+   color: #ff0000;
+}
+
+[anonid="showCommentsButton"] {
+   margin-right: 5px;
+   list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+   -moz-image-region: rect(46px 130px 62px 114px);
+   cursor: pointer;
+}
+
+.hBookmarkTag, .hBookmarkSelectedTag {
+   border: 1px solid transparent;
+   cursor: pointer;
+}
+
+.hBookmarkSelectedTag {
+   background-color: #559be6;
+   color: #ffffff;
+   border: 1px inset #559be6;
+}
+
+caption {
+   background-color: #FFF; 
+}
+
+groupbox {
+    -moz-appearance: none;
+    border: 2px solid #555;
+    -moz-border-radius: 7px;
+}
+
+.hBookmarkCommandLabel {
+   color: #808080;
+   text-decoration: underline;
+   cursor: pointer;
+}
+
+[anonid="tagSelector"] {
+   overflow: auto;
+}
+
