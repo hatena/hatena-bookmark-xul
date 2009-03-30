@@ -10,6 +10,7 @@
 <!ENTITY hBookmark.addPanel.lastTitleEditorLabel "最終変更:">
 
 <!ENTITY hBookmark.addPanel.urlLabel "URL:">
+<!ENTITY hBookmark.addPanel.showCommentsLabel "ブックマークコメントを表示">
 <!ENTITY hBookmark.addPanel.commentLabel "コメント:">
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "ブックマークを確認">
 <!ENTITY hBookmark.addPanel.addCollectionLabel "コレクションに追加">

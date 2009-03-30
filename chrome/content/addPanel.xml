@@ -82,6 +82,9 @@
                         <xul:hbox align="center">
                             <xul:label anonid="usersField"
                                        class="text-link hBookmarkLink"/>
+                            <xul:image anonid="showCommentsButton"
+                                       tooltiptext="&hBookmark.addPanel.showCommentsLabel;"
+                                       onclick="getTopWin().hBookmark.CommentViewer.show(document.getBindingParent(this).bookmark.url);"/>
                             <xul:hbox anonid="favoritesContainer"
                                       align="center" flex="1"
                                       tooltip="hBookmarkFavoriteBookmarkTooltip"
