@@ -28,6 +28,7 @@ Prefs.prototype = {
     get: function Prefs_get(name) {
         let prefs = this.prefs;
         let type = prefs.getPrefType(name);
+
         try {
             switch (type)
             {
@@ -99,6 +100,6 @@ Prefs.prototype = {
 };
 
 Prefs.global = new Prefs('');
-Prefs.bookmark = new Prefs('extentions.hatenabookmark.');
+Prefs.bookmark = new Prefs('extensions.hatenabookmark.');
 
 

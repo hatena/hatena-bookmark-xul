@@ -69,6 +69,7 @@ const XMLNS_NS = "http://www.w3.org/2000/xmlns/";
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 
 /* utility functions */
+var nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
 
 /*
  * p は一時デバッグ用
@@ -109,9 +110,15 @@ var log = {
     }
 }
 
-this.__defineGetter__('nowDebug', function() {
-    return !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
-});
+p.observe = function Prefs_observe (aSubject, aTopic, aData) {
+     if (aTopic != "nsPref:changed") return;
+
+     if (aData == 'extensions.hatenabookmark.debug.log') {
+         nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
+     }
+}
+
+PrefService.addObserver('', p, false);
 
 var createElementBindDocument = function(doc) {
     return function(name, attr) {

@@ -18,6 +18,7 @@ pref("extensions.hatenabookmark.locationbar.resultRows", 6);
 
 // status bar
 pref("extensions.hatenabookmark.statusbar.counter", true);
+pref("extensions.hatenabookmark.statusbar.httpsIgnore", true);
 pref("extensions.hatenabookmark.statusbar.addButton", true);
 
 // addPanel 
@@ -28,8 +29,9 @@ pref("extensions.hatenabookmark.addPanel.addCollection", true);
 // addPanel tagsuggest
 pref("extensions.hatenabookmark.addPanel.tagCompleteEnabled", true);
 pref("extensions.hatenabookmark.addPanel.tagMaxResult", 12);
-pref("extensions.hatenabookmark.addPanel.recommendedTagListShow", true);
+pref("extensions.hatenabookmark.addPanel.initialTagCount", 30);
 pref("extensions.hatenabookmark.addPanel.tagListShow", true);
+pref("extensions.hatenabookmark.addPanel.recommendedTagListShow", true);
 pref("extensions.hatenabookmark.addPanel.tagListShowAll", false);
 pref("extensions.hatenabookmark.addPanel.frequentTagCount", 30);
 
@@ -41,6 +43,7 @@ pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);
 pref("extensions.hatenabookmark.sync.syncWait", 1000);
 
 // Shurtcut
-pref("extensions.hatenabookmark.shortcut.add", "Accel+Shift+B");
-pref("extensions.hatenabookmark.shortcut.commentViewer", "Accel+Shift+C");
+pref("extensions.hatenabookmark.shortcut.keys.add", "Accel+Shift+B");
+pref("extensions.hatenabookmark.shortcut.keys.commentViewer", "Accel+Shift+C");
+
 
