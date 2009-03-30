@@ -139,12 +139,19 @@ if (shared.has('User')) {
         },
         QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
     }
+    User.OfflineObserver = {
+        observe: function(aSubject, aTopic, aData) {
+            if (aTopic == "network:offline-status-changed" && aState != "offline")
+                User.login();
+        },
+        QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
+    }
     ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
+    ObserverService.addObserver(User.OfflineObserver, 'network:offline-status-changed', false);
 
     User.LoginChecker = new Timer(1000 * 60 * 15); // 15 分
     User.LoginChecker.createListener('timer', function() {
         if (!User.user) {
-            p('Login Check');
             User.login();
         }
     });

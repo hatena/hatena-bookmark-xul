@@ -2,7 +2,7 @@
 // set prefs
 // pref("extensions.hatenabookmark.config.foobar", "foobar");
 
-pref("extensions.hatenabookmark.install", false);
+pref("extensions.hatenabookmark.migration.version", 0);
 
 // Item count in "Hatena Bookmarks" folder in Bookmarks toolbar.
 pref("extensions.hatenabookmark.recentItemCount", 10);

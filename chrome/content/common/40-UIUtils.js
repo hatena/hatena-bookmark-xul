@@ -11,6 +11,7 @@ var UIUtils = {
     addPanelStrings: new Strings("chrome://hatenabookmark/locale/addPanel.properties"),
 
     encourageLogin: function UIU_encourageLogin() {
+        User.login(); // 透過的にログインできるかチェックしておく
         let win = getTopWin();
         let pressed = PS.confirmEx(
             win, this.popupStrings.get("prompt.title"),

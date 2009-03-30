@@ -190,14 +190,11 @@
             EventService.dispatch('preload', window);
 
             window.addEventListener('load', function(e) {
+                EventService.dispatch('Migration', window); // タイミングはここで
+
                 EventService.dispatch('load', window);
 
                 if (!shared.get('firstPreload')) {
-                    if (!Application.prefs.get('extensions.hatenabookmark.install').value) {
-                        Application.prefs.get('extensions.hatenabookmark.install').value = true;
-                        EventService.dispatch('Install');
-                        toggleSidebar('viewHBookmarkSidebar'); // 初回はサイドバーを表示
-                    }
 
                     EventService.dispatch('firstPreload', window);
                     shared.set('firstPreload', true);
