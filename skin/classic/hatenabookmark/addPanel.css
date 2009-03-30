@@ -127,6 +127,12 @@ groupbox {
   margin: 0;
 }
 
+[anonid="allTagsLabel"],
+[anonid="frequentTagsLabel"] {
+  font-weight: normal;
+  font-size: 90%;
+}
+
 [anonid="tagSelector"] {
    overflow: auto;
 }
