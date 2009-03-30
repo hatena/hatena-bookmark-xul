@@ -38,25 +38,53 @@
             id="extensions.hatenabookmark.statusbar.counter"
             name="extensions.hatenabookmark.statusbar.counter"
             type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.recentItemCount"
+            name="extensions.hatenabookmark.recentItemCount"
+            type="int"/>
     </preferences>
 
     <vbox>
-        <checkbox id="extensions.hatenabookmark.locationbar.search-check" flex="1"
-            label="ロケーションバーの検索を有効にする"
-            preference="extensions.hatenabookmark.locationbar.search"/>
-        <checkbox id="extensions.hatenabookmark.locationbar.searchToggle-check" flex="1"
-            label="Ctrl + Shift キーによる検索ショートカットを使う"
-            preference="extensions.hatenabookmark.locationbar.searchToggle"/>
-    </vbox>
+        <groupbox orient="vertical">
+            <caption label="ロケーションバー(アドレスバー)" />
+            <vbox flex="1">
+            <checkbox id="extensions.hatenabookmark.locationbar.search-check" flex="1"
+                label="検索機能を有効にする"
+                preference="extensions.hatenabookmark.locationbar.search"/>
+            <hbox>
+                <spacer style="width: 1em;" />
+                <checkbox id="extensions.hatenabookmark.locationbar.searchToggle-check" flex="1"
+                    label="Ctrl + Shift キーによる検索ショートカットを使う"
+                    preference="extensions.hatenabookmark.locationbar.searchToggle"/>
+            </hbox>
+            </vbox>
+        </groupbox>
 
-    <vbox>
-        <checkbox id="extensions.hatenabookmark.statusbar.addButton-check" flex="1"
-            label="追加ボタンの表示"
-            preference="extensions.hatenabookmark.statusbar.addButton"/>
-        <checkbox id="extensions.hatenabookmark.statusbar.counter-check" flex="1"
-            label="ユーザー数カウンターの表示"
-            src="chrome://hatenabookmark/skin/images/nbookmarks.png"
-            preference="extensions.hatenabookmark.statusbar.counter"/>
+        <groupbox orient="vertical">
+            <caption label="ステータスバー" />
+            <checkbox id="extensions.hatenabookmark.statusbar.addButton-check" flex="1"
+                label="追加ボタンの表示"
+                preference="extensions.hatenabookmark.statusbar.addButton"/>
+            <checkbox id="extensions.hatenabookmark.statusbar.counter-check" flex="1"
+                label="ユーザー数カウンターの表示"
+                src="chrome://hatenabookmark/skin/images/nbookmarks.png"
+                preference="extensions.hatenabookmark.statusbar.counter"/>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="ブックマークツールバー" />
+            <vbox flex="1">
+                <hbox flex="1" align="center">
+                <label value="ブックマークの表示上限数"
+                    control="recentItemCount"/>
+                <textbox id="recentItemCount"
+                    preference="extensions.hatenabookmark.recentItemCount"
+                    type="number" min="1" increment="1"
+                    style="width: 5em;"
+                />
+                </hbox>
+            </vbox>
+        </groupbox>
     </vbox>
 </prefpane>
 
@@ -86,6 +114,10 @@
             name="extensions.hatenabookmark.addPanel.recommendedTagListShow"
             type="bool"/>
         <preference 
+            id="extensions.hatenabookmark.addPanel.xulMigemo"
+            name="extensions.hatenabookmark.addPanel.xulMigemo"
+            type="bool"/>
+        <preference 
             id="extensions.hatenabookmark.addPanel.backgroundImage"
             name="extensions.hatenabookmark.addPanel.backgroundImage"
             type="file"/>
@@ -100,6 +132,7 @@
                     preference="extensions.hatenabookmark.addPanel.tagCompleteEnabled" />
             </hbox>
             <hbox flex="1" align="center">
+                <spacer style="width: 2em;" />
                 <label value="タグ補完候補の最大件数"
                     control="addPanel.tagMaxResult"/>
                 <textbox id="addPanel.tagMaxResult"
@@ -109,14 +142,20 @@
                 />
                 <spacer flex="1" />
             </hbox>
+            <hbox flex="1" align="center">
+                <checkbox id="addPanel.xulMigemo" flex="1"
+                    label="XUL/Migemo があれば、Migemo を利用する"
+                    preference="extensions.hatenabookmark.addPanel.xulMigemo" />
+                <spacer flex="1" />
+            </hbox>
         </groupbox>
 
         <groupbox orient="vertical">
             <caption label="タグ表示" />
             <hbox flex="1" align="center">
-                <checkbox id="addPanel.tagListShow" flex="1"
+                <checkbox id="addPanel.recommendedTagListShow" flex="1"
                     label="おすすめタグ一覧の表示"
-                    preference="extensions.hatenabookmark.addPanel.tagListShow" />
+                    preference="extensions.hatenabookmark.addPanel.recommendedTagListShow" />
             </hbox>
             <hbox flex="1" align="center">
                 <checkbox id="addPanel.tagListShow" flex="1"
@@ -124,6 +163,7 @@
                     preference="extensions.hatenabookmark.addPanel.tagListShow" />
             </hbox>
             <hbox flex="1" align="center">
+                <spacer style="width: 2em;" />
                 <label value="初期のタグ表示件数"
                     control="addPanel.initialTagCount"/>
                 <textbox id="addPanel.initialTagCount"

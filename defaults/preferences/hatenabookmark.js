@@ -30,10 +30,11 @@ pref("extensions.hatenabookmark.addPanel.addCollection", true);
 pref("extensions.hatenabookmark.addPanel.tagCompleteEnabled", true);
 pref("extensions.hatenabookmark.addPanel.tagMaxResult", 12);
 pref("extensions.hatenabookmark.addPanel.initialTagCount", 30);
-pref("extensions.hatenabookmark.addPanel.tagListShow", true);
 pref("extensions.hatenabookmark.addPanel.recommendedTagListShow", true);
+pref("extensions.hatenabookmark.addPanel.tagListShow", false);
 pref("extensions.hatenabookmark.addPanel.tagListShowAll", false);
 pref("extensions.hatenabookmark.addPanel.frequentTagCount", 30);
+pref("extensions.hatenabookmark.addPanel.xulMigemo", true);
 
 // comment viewer
 pref("extensions.hatenabookmark.commentviwer.allShow", true);
@@ -43,7 +44,7 @@ pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);
 pref("extensions.hatenabookmark.sync.syncWait", 1000);
 
 // Shurtcut
-pref("extensions.hatenabookmark.shortcut.keys.add", "Accel+Shift+B");
+pref("extensions.hatenabookmark.shortcut.keys.add", "Accel+Shift+D");
 pref("extensions.hatenabookmark.shortcut.keys.comment", "Accel+Shift+C");
 
 
