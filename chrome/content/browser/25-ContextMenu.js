@@ -16,6 +16,15 @@ var ContextMenu = {
         // contextMenu.removeEventListenr('popupshowing', ContextMenu.contextMenuHandler, false);
     },
     contextMenuHandler: function(ev) {
+        if (!Application.prefs.get('extensions.hatenabookmark.contextmenu.enabled').value) {
+            addentry.setAttribute('hidden', true);
+            showentry.setAttribute('hidden', true);
+            addlink.setAttribute('hidden', true);
+            showlink.setAttribute('hidden', true);
+            searchtext.setAttribute('hidden', true);
+            return;
+        }
+
         if (gContextMenu.onTextInput || 
             gContextMenu.onMailtoLink || 
             gContextMenu.onMathML || 
@@ -28,7 +37,8 @@ var ContextMenu = {
             showlink.setAttribute('hidden', true);
             if (gContextMenu.isTextSelected) {
                 let str = searchtext.getAttribute('label').split(':')[0] + ':';
-                str += ' "' + document.commandDispatcher.focusedWindow.getSelection().toString() + '" ';
+                let sel = document.commandDispatcher.focusedWindow.getSelection().toString();
+                str += ' "' + sel.substr(0, 16) + '" ';
                 searchtext.setAttribute('label', str);
                 searchtext.removeAttribute('hidden');
             } else {

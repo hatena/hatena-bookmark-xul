@@ -133,8 +133,7 @@ TagCompleter.InputHandler = function(input) {
     input.addEventListener('input', method(this, 'inputInputHandler'), false);
     list.addEventListener('complete', method(this, 'listCompleteHandler'), false);
     if (XMigemoCore) {
-        // XXX: 現在は XMigemoCore があったら即有効に
-        this.inputLine.useMigemo = true;
+        this.inputLine.useMigemo = Application.prefs.get('extensions.hatenabookmark.addPanel.xulMigemo').value;
     }
 }
 

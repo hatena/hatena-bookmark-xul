@@ -3,6 +3,19 @@ const EXPORT = ['Config'];
 const PrefsBackgroundImage = 'extensions.hatenabookmark.addPanel.backgroundImage';
 
 let Config = {
+    initDataPane: function() {
+        let login = document.getElementById('pref-login');
+        let nologin = document.getElementById('pref-nologin');
+        let loginbox = document.getElementById('pref-loginbox');
+        if (User.user) {
+            nologin.setAttribute('hidden', true);
+            login.setAttribute('value', UIEncodeText(User.user.name + ' で現在ログイン中です'));
+            loginbox.removeAttribute('hidden');
+        } else {
+            loginbox.setAttribute('hidden', true);
+            nologin.removeAttribute('hidden');
+        }
+    },
     syncALL: function() {
         if (Config.syncCheck()) return;
         let res = window.confirm(UIEncodeText('すべて同期し直すにはしばらく時間がかかります。よろしいですか？'));
@@ -14,6 +27,17 @@ let Config = {
     sync: function() {
         if (Config.syncCheck()) return;
         Sync.sync();
+    },
+    deleteAll: function() {
+        let res = window.confirm(UIEncodeText('はてなブックマーク拡張のすべてのデータを削除します。よろしいですか？'));
+        if (res) {
+            User.logout();
+            let pd = DirectoryService.get("ProfD", Ci.nsIFile);
+            pd.append('hatenabookmark');
+            if (pd.exists() && pd.isDirectory()) {
+                pd.remove(true);
+            }
+        }
     },
     syncCheck: function() {
         if (!User.user) {
