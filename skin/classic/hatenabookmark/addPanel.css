@@ -3,7 +3,7 @@
 }
 
 .username-line {
-    background: #eee url("chrome://hatenabookmark/skin/images/logo-text.png") no-repeat 5px center;
+    background: #eee url("chrome://hatenabookmark/skin/images/logo-text.png") no-repeat 10px center;
     padding: 5px 0;
     border-bottom: 1px solid #ddd;
     margin-bottom: 5px;
@@ -35,7 +35,7 @@
 }
 
 grid.mainGrid {
-  margin: 10px;
+  margin: 5px;
 }
 
 label[anonid="titleLabel"] {
@@ -71,6 +71,12 @@ textbox {
 button[anonid="editTitleButton"],
 button[anonid="cancelEditTitleButton"] {
   font-size: 11px;
+  list-style-image: url(chrome://hatenabookmark/skin/images/buttons.png);
+  -moz-image-region: rect(46px 147px 62px 131px);
+}
+
+button[anonid="cancelEditTitleButton"] {
+  -moz-image-region: rect(62px 147px 78px 131px);
 }
 
 [anonid="commentCounterField"] {
@@ -97,7 +103,7 @@ button[anonid="cancelEditTitleButton"] {
 }
 
 caption {
-   background-color: rgba(255, 255, 255, 1) !important; 
+   background-color: transparent !important; 
    font-weight: bold;
    color: #222;
    margin: 0 0 5px 0;
@@ -114,7 +120,7 @@ groupbox {
 
 .groupbox-body {
   background: rgba(221, 234, 250, 0.7);
-  -moz-border-radius: 5px;
+  -moz-border-radius: 3px;
 }
 
 .hBookmarkCommandLabel {
