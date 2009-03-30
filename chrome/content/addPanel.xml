@@ -363,7 +363,8 @@
                     this.addCollectionCheck.hidden = true;
                     this.recommendedTagSelectorGroup.hidden = true;
                     this.imageSelector.build(bookmark.url);
-                    this.imageSelector.hidden = !this.imageSelector.hasImages;
+                    this.imageSelector.hidden = !this.imageSelector.hasImages ||
+                                                user.private;
 
                     let self = this;
                     hBookmark.HTTPCache.entry.async_get(bookmark.url, function(res) {
@@ -553,6 +554,8 @@
                         changeTitle: this.isTitleChanged,
                         addCollection: this.addCollectionCheck.checked,
                         asin: this.asin,
+                        changeImage: this.imageSelector.isImageChanged,
+                        image: this.imageSelector.selectedImageURI,
                         onComplete: confirm && function () {
                             win.gBrowser.addTab(bookmark.entryURL);
                         },
@@ -801,7 +804,8 @@
                            src="http://b.hatena.ne.jp/images/noimages.gif"/>
             </xul:vbox>
             <xul:popupset>
-                <xul:panel anonid="popup">
+                <xul:panel anonid="popup"
+                           class="hBookmarkImageSelectorPopup">
                     <xul:hbox anonid="container" flex="1"
                               align="center" pack="start"
                               style="display: block;">
@@ -869,7 +873,10 @@
                 ]]></setter>
             </property>
 
-            <property name="imageChanged" readonly="true"
+            <property name="selectedImageURI" readonly="true"
+                      onget="return this.selectedImage.getAttribute('src');"/>
+
+            <property name="isImageChanged" readonly="true"
                       onget="return this.selectedImage !== this.defaultImage;"/>
 
             <property name="hasImages" readonly="true"
