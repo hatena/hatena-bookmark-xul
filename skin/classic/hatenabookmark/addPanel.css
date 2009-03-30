@@ -155,6 +155,11 @@ groupbox {
    cursor: pointer;
 }
 
+.hBookmarkImageSelector {
+    /* XXX: 明日はずす */
+    display:none;
+}
+
 
 
 
