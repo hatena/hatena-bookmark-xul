@@ -8,32 +8,23 @@
              extends="chrome://global/content/bindings/popup.xml#panel">
         <content flex="1">
             <xul:label anonid="errorField" hidden="true"/>
-            <xul:grid>
+            <xul:hbox class="username-line" align="right">
+                    <xul:label value="&hBookmark.addPanel.welcomeUserLabel.before;" />
+                    <xul:image anonid="userIcon"/>
+                    <xul:label anonid="userNameField" class="text-link hBookmarkLink"/>
+                    <xul:label value="&hBookmark.addPanel.welcomeUserLabel.after;" />
+            </xul:hbox>
+            <xul:hbox pack="center" anonid="messageRow">
+                <xul:label anonid="messageField"/>
+            </xul:hbox>
+            <xul:grid class="mainGrid">
                 <xul:columns>
                     <xul:column/>
                     <xul:column flex="1"/>
                 </xul:columns>
                 <xul:rows>
-                    <xul:row align="center" class="username-line">
-                        <xul:hbox pack="end">
-                        <!--
-                        <xul:image src="chrome://hatenabookmark/skin/images/favicon.ico" height="16px" width="16px" />
-                        -->
-                        <xul:label value="&hBookmark.addPanel.welcomeUserLabel.before;" />
-                        </xul:hbox>
-                        <xul:hbox align="center">
-                            <xul:image anonid="userIcon"/>
-                            <xul:label anonid="userNameField"
-                                       class="text-link hBookmarkLink"/>
-                            <xul:label value="&hBookmark.addPanel.welcomeUserLabel.after;" />
-                        </xul:hbox>
-                    </xul:row>
-                    <xul:row anonid="messageRow">
-                        <xul:spacer/>
-                        <xul:label anonid="messageField"/>
-                    </xul:row>
                     <xul:row align="center">
-                        <xul:label value="&hBookmark.addPanel.titleLabel;"/>
+                        <xul:label value="&hBookmark.addPanel.titleLabel;" class="labelHeader"/>
                         <xul:vbox>
                             <xul:hbox anonid="titleContainer"
                                       align="center">
@@ -64,7 +55,7 @@
                         </xul:vbox>
                     </xul:row>
                     <xul:row align="center">
-                        <xul:label value="&hBookmark.addPanel.urlLabel;"/>
+                        <xul:label value="&hBookmark.addPanel.urlLabel;" class="labelHeader"/>
                         <xul:label anonid="urlField"
                                    class="text-link hBookmarkLink"
                                    crop="end"/>
@@ -82,7 +73,7 @@
                         </xul:hbox>
                     </xul:row>
                     <xul:row align="center">
-                        <xul:label value="&hBookmark.addPanel.commentLabel;"/>
+                        <xul:label value="&hBookmark.addPanel.commentLabel;" class="labelHeader"/>
                         <xul:hbox align="center">
                             <xul:textbox
                                 anonid="commentField"

@@ -3,12 +3,35 @@
     font-family:"Arial","Helvetica",sans-serif;
 }
 
-row.username-line {
+.username-line {
+    background: #eee url("chrome://hatenabookmark/skin/images/logo-text.png") no-repeat 5px center;
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
     margin-bottom: 5px;
 }
 
+.username-line label {
+  margin: 0;
+}
+
+.labelHeader {
+  font-weight: bold;
+  margin-right: 1em;
+}
+
 dialog#hBookmarkAddPanelWindow {
-    border: 5px solid #E9F0F8 !important;
+  padding: 0;
+}
+
+#hBookmarkAddPanelContent {
+}
+
+#logo-text {
+  margin-left: 5px;
+}
+
+grid.mainGrid {
+  margin: 10px;
 }
 
 label[anonid="titleLabel"] {
@@ -16,13 +39,18 @@ label[anonid="titleLabel"] {
   font-weight: bold;
 }
 
-row[anonid="messageRow"] {
+hbox[anonid="messageRow"] {
     padding: 4px;
     margin: 5px 3px 5px 3px;
     background-color: #FFDDDD;
-    -moz-border-radius: 7px;
+    -moz-border-radius: 3px;
     font-weight: bold;
     color: #555;
+}
+
+#logo-image {
+  -moz-image-region: rect(0px, 14px, 14px, 0px);
+  clip: rect(0px, 14px, 14px, 0px);
 }
 
 [anonid="usersRow"] {
@@ -41,6 +69,11 @@ label[anonid="usersField"] {
 textbox {
 }
 
+button[anonid="editTitleButton"],
+button[anonid="cancelEditTitleButton"] {
+  font-size: 11px;
+}
+
 [anonid="commentCounterField"] {
    color: #808080;
 }
@@ -51,6 +84,8 @@ textbox {
 .hBookmarkTag, .hBookmarkSelectedTag {
    border: 1px solid transparent;
    cursor: pointer;
+   padding:2px 3px;
+   -moz-border-radius: 2px;
 }
 
 .hBookmarkSelectedTag {
@@ -59,14 +94,18 @@ textbox {
    border: 1px inset #559be6;
 }
 
+.dialog-button-box {
+  margin: 10px;
+}
+
 caption {
-   background-color: #FFF; 
+   background-color: rgba(255, 255, 255, 1) !important; 
 }
 
 groupbox {
     -moz-appearance: none;
-    border: 2px solid #555;
-    -moz-border-radius: 7px;
+    border: 2px solid #eee !important;
+    -moz-border-radius: 5px !important;
 }
 
 .hBookmarkCommandLabel {
