@@ -29,7 +29,9 @@
                             <xul:hbox anonid="titleContainer"
                                       align="center">
                                 <xul:image anonid="titleIcon"/>
-                                <xul:label crop="end" flex="1" anonid="titleLabel"/>
+                                <xul:label anonid="titleLabel"
+                                           emptytext="&hBookmark.addPanel.loadingTitleLabel;"
+                                           crop="end" flex="1"/>
                                 <xul:button anonid="editTitleButton"
                                             label="&hBookmark.addPanel.editTitleLabel;"
                                             oncommand="document.getBindingParent(this).isTitleEditable = true;"/>
@@ -52,6 +54,13 @@
                             <xul:label value="&hBookmark.addPanel.titleGuidelineLabel;"
                                        href="&hBookmark.addPanel.titleGuidelineURI;"
                                        class="text-link hBookmarkLink"/>
+                            <xul:hbox anonid="lastTitleEditorContainer"
+                                      align="center">
+                                <xul:label value="&hBookmark.addPanel.lastTitleEditorLabel;"/>
+                                <xul:image anonid="lastTitleEditorIcon"/>
+                                <xul:label anonid="lastTitleEditorField"
+                                           class="text-link hBookmarkLink"/>
+                            </xul:hbox>
                         </xul:vbox>
                     </xul:row>
                     <xul:row align="center">
@@ -66,6 +75,9 @@
                         <xul:hbox align="center">
                             <xul:label anonid="usersField"
                                        class="text-link hBookmarkLink"/>
+                            <xul:image anonid="showCommentsButton"
+                                       tooltiptext="&hBookmark.addPanel.showCommentsLabel;"
+                                       onclick="getTopWin().hBookmark.CommentViewer.show(document.getBindingParent(this).bookmark.url);"/>
                             <xul:hbox anonid="favoritesContainer"
                                       align="center" flex="1"
                                       tooltip="hBookmarkFavoriteBookmarkTooltip"
@@ -172,6 +184,15 @@
             <field name="editTitleNotification">
                 document.getAnonymousElementByAttribute(this, "anonid", "editTitleNotification")
             </field>
+            <field name="lastTitleEditorContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastTitleEditorContainer")
+            </field>
+            <field name="lastTitleEditorIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastTitleEditorIcon")
+            </field>
+            <field name="lastTitleEditorField">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastTitleEditorField")
+            </field>
             <field name="urlField">
                 document.getAnonymousElementByAttribute(this, "anonid", "urlField")
             </field>
@@ -226,6 +247,7 @@
                 new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
             </field>
             <field name="maxCommentLength">100</field>
+            <field name="asin">""</field>
 
             <field name="_tagSelectors">
                 [this.tagSelector, this.recommendedTagSelector]
@@ -267,9 +289,14 @@
 
             <!-- XXX Prefs#getは"."が入るとうまくいかない? -->
             <property name="showsTagList" readonly="true"
-                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value"/>
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value;"/>
             <property name="showsRecommendedTagList" readonly="true"
-                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.recommendedTagListShow').value"/>
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.recommendedTagListShow').value;"/>
+            <property name="frequentTagCount" readonly="true"
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.frequentTagCount').value;"/>
+            <field name="showAllTagsPref">
+                Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShowAll');
+            </field>
 
             <method name="show">
                 <parameter name="bookmark"/>
@@ -306,6 +333,7 @@
                     this.titleField.value       = bookmark.title;
                     this.editTitleButton.hidden = user.private;
                     this.isTitleEditable        = false;
+                    this.lastTitleEditorContainer.hidden = true;
 
                     this.urlField.value = bookmark.url;
                     this.urlField.href =
@@ -317,24 +345,43 @@
                     this.inputHandler.updateLineValue(); // タグを認識させる
                     this.updateCommentCounter();
 
-                    this.addCollectionCheck.hidden = !bookmark.asin;
+                    this.addCollectionCheck.hidden = true;
                     this.recommendedTagSelectorGroup.hidden = true;
 
                     let self = this;
                     hBookmark.HTTPCache.entry.async_get(bookmark.url, function(res) {
-                        if (res && typeof res.title != 'undefined') {
-                            self.usersField.value =
-                                hBookmark.UIUtils.getUsersText(res.count);
-                            self.usersField.href = res.entry_url;
-                            self.updateFavorites(res.favorites);
-                            self.usersRow.style.visibility = "visible";
+                        if (res) {
+                            if (+res.count) {
+                                self.usersField.value =
+                                    hBookmark.UIUtils.getUsersText(res.count);
+                                self.usersField.href = res.entry_url;
+                                self.updateFavorites(res.favorites);
+                                self.usersRow.style.visibility = "visible";
+                            }
 
+                            let lastEditor = res.title_last_editor;
+                            if (lastEditor) {
+                                let UU = hBookmark.UserUtils;
+                                self.lastTitleEditorIcon.src =
+                                    UU.getProfileIcon(lastEditor, false);
+                                self.lastTitleEditorField.value = lastEditor;
+                                self.lastTitleEditorField.href =
+                                    UU.getHomepage(lastEditor, "b");
+                                self.lastTitleEditorContainer.hidden = false;
+                            }
+
+                            self.urlField.value = res.url;
+                            self.urlField.href = res.url;
+                            self.addCollectionCheck.hidden = !res.has_asin;
+                            self.asin = res.asin;
                             self.updateRecommendedTags(res.recommend_tags);
 
-                            if (res.title === bookmark.title) return;
-                            self.titleLabel.value = res.title;
-                            self.titleField.value = res.title;
-                        } else if (!bookmark.title) {
+                            if (res.title && res.title !== bookmark.title) {
+                                self.titleLabel.value = res.title;
+                                self.titleField.value = res.title;
+                            }
+                        }
+                        if (!self.titleLabel.value) {
                             let xhr = hBookmark.net.sync_get(bookmark.url);
                                 // とりあえずやっつけ
                                 // loading icon だしたほうがよさそう
@@ -358,7 +405,7 @@
                     this.tagSelector.build(tags);
                     let selectedTags = this.inputHandler.inputLine.tags;
                     this.tagSelector.update(selectedTags);
-                    this.switchTagSelectorView(false);
+                    this.switchTagSelectorView(this.showAllTagsPref.value);
                 ]]></body>
             </method>
 
@@ -432,17 +479,18 @@
             <method name="switchTagSelectorView">
                 <parameter name="showAll"/>
                 <body><![CDATA[
+                    let count = this.frequentTagCount;
+                    let switcherHidden = (this.tagSelector.tagCount < count);
                     if (showAll) {
                         this.allTagsLabel.hidden = true;
-                        this.frequentTagsLabel.hidden = false;
+                        this.frequentTagsLabel.hidden = switcherHidden;
                         this.tagSelector.visibleTagCount = 0;
                     } else {
-                        let count = Application.prefs.get('extensions.hatenabookmark.addPanel.initialTagCount').value;
-                        this.allTagsLabel.hidden =
-                            (count >= this.tagSelector.tagCount);
+                        this.allTagsLabel.hidden = switcherHidden;
                         this.frequentTagsLabel.hidden = true;
                         this.tagSelector.visibleTagCount = count;
                     }
+                    this.showAllTagsPref.value = showAll;
                 ]]></body>
             </method>
 
@@ -482,12 +530,9 @@
                         bookmark: bookmark,
                         changeTitle: this.isTitleChanged,
                         addCollection: this.addCollectionCheck.checked,
+                        asin: this.asin,
                         onComplete: confirm && function () {
-                            let browser = win.gBrowser;
-                            browser.selectedTab =
-                                browser.addTab(bookmark.entryURL,
-                                               null, null, null,
-                                               browser.selectedTab);
+                            win.gBrowser.addTab(bookmark.entryURL);
                         },
                         onError: let (self = this) function () {
                             //self.setError('error');
@@ -757,6 +802,33 @@
         <handlers>
             <handler event="popupshowing" action="return this.build(document.tooltipNode);"/>
         </handlers>
+    </binding>
+
+    <binding id="placeholder-label"
+             extends="chrome://global/content/bindings/text.xml#label-control">
+        <implementation>
+            <property name="empty" readonly="true"
+                      onget="return this.getAttribute('empty') === 'true';"/>
+
+            <property name="emptyText"
+                      onget="return this.getAttribute('emptytext');"
+                      onset="this.setAttribute('emptytext', val); return val;"/>
+
+            <property name="value"
+                      onget="return this.empty ? '' : this.getAttribute('value') || '';">
+                <setter><![CDATA[
+                    let value = String(val);
+                    if (value) {
+                        this.setAttribute("value", value);
+                        this.removeAttribute("empty");
+                    } else {
+                        this.setAttribute("value", this.emptyText);
+                        this.setAttribute("empty", "true");
+                    }
+                    return val;
+                ]]></setter>
+            </property>
+        </implementation>
     </binding>
 
     <binding id="preference-checkbox"

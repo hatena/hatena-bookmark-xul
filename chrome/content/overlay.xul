@@ -11,16 +11,9 @@
     // ]]>
     </script>
 
-    <keyset>
-        <key id="hBookmark-key-add"
-            modifiers="accel,alt" 
-            key="b"
-            oncommand="hBookmark.AddPanelManager.toggle();" />
-        <key id="hBookmark-key-show"
-            modifiers="accel,alt" 
-            key="c"
-            oncommand="hBookmark.CommentViewer.show();" />
-    </keyset>
+    <window id="main-window">
+        <keyset id='hBookmark-keyset' />
+    </window>
 
     <menupopup id="viewSidebarMenu">
         <menuitem observes="viewHBookmarkSidebar" />
@@ -197,14 +190,11 @@
             EventService.dispatch('preload', window);
 
             window.addEventListener('load', function(e) {
+                EventService.dispatch('Migration', window); // タイミングはここで
+
                 EventService.dispatch('load', window);
 
                 if (!shared.get('firstPreload')) {
-                    if (!Application.prefs.get('extensions.hatenabookmark.install').value) {
-                        Application.prefs.get('extensions.hatenabookmark.install').value = true;
-                        EventService.dispatch('Install');
-                        toggleSidebar('viewHBookmarkSidebar'); // 初回はサイドバーを表示
-                    }
 
                     EventService.dispatch('firstPreload', window);
                     shared.set('firstPreload', true);

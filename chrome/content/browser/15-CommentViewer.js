@@ -1,4 +1,8 @@
 
+/*
+ * ToDo: iframe ではなく XUL で描画する
+ */
+
 const EXPORT = ['CommentViewer'];
 
 let commentCache = new ExpireCache('uComment', 60 * 60, 'uneval'); // 一時間キャッシュ

@@ -1,14 +1,20 @@
+<!ENTITY hBookmark.addPanel.initialWidth "500">
+<!ENTITY hBookmark.addPanel.initialHeight "400">
+
 <!ENTITY hBookmark.addPanel.welcomeUserLabel.before "ようこそ">
 <!ENTITY hBookmark.addPanel.welcomeUserLabel.after "さん">
 
 <!ENTITY hBookmark.addPanel.titleLabel "タイトル:">
+<!ENTITY hBookmark.addPanel.loadingTitleLabel "タイトルを取得しています...">
 <!ENTITY hBookmark.addPanel.editTitleLabel "タイトルを変更...">
 <!ENTITY hBookmark.addPanel.cancelEditTitleLabel "キャンセル">
 <!ENTITY hBookmark.addPanel.titleDescription "エントリーのタイトルは全ユーザ共通です">
 <!ENTITY hBookmark.addPanel.titleGuidelineLabel "タイトル変更のガイドライン">
 <!ENTITY hBookmark.addPanel.titleGuidelineURI "http://b.hatena.ne.jp/help/guideline_title">
+<!ENTITY hBookmark.addPanel.lastTitleEditorLabel "最終変更:">
 
 <!ENTITY hBookmark.addPanel.urlLabel "URL:">
+<!ENTITY hBookmark.addPanel.showCommentsLabel "ブックマークコメントを表示">
 <!ENTITY hBookmark.addPanel.commentLabel "コメント:">
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "ブックマークを確認">
 <!ENTITY hBookmark.addPanel.addCollectionLabel "コレクションに追加">

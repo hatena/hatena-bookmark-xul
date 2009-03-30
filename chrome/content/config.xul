@@ -18,7 +18,7 @@
 -->
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    image="chrome://hatenabookmark/skin/images/favicon32.png"
     id="prefpane-locationbar" label="ロケーションバー" flex="1">
     <preferences>
         <preference 
@@ -36,13 +36,13 @@
             label="ロケーションバーの検索を有効にする"
             preference="extensions.hatenabookmark.locationbar.search"/>
         <checkbox id="extensions.hatenabookmark.locationbar.searchToggle-check" flex="1"
-            label="Ctrl キー連打による、検索有効を有効にする"
+            label="Ctrl + Shift キーによる検索ショートカットを使う"
             preference="extensions.hatenabookmark.locationbar.searchToggle"/>
     </vbox>
 </prefpane>
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    image="chrome://hatenabookmark/skin/images/favicon32.png"
     id="prefpane-statusbar" label="ステータスバー" flex="1">
     <preferences>
         <preference 
@@ -69,7 +69,7 @@
 
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    image="chrome://hatenabookmark/skin/images/favicon32.png"
     id="prefpane-addPanel" label="編集パネル" flex="1" onpaneload="hBookmark.Config.updateUI();">
     <preferences>
         <preference 
@@ -158,14 +158,18 @@
 </prefpane>
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    image="chrome://hatenabookmark/skin/images/favicon32.png"
     onpaneload="hBookmark.Config.ShortCut.initPane();"
     id="prefpane-shortcut" label="ショートカット" flex="1">
 
     <preferences>
         <preference 
-            id="extensions.hatenabookmark.shortcut.add"
-            name="extensions.hatenabookmark.shortcut.add"
+            id="extensions.hatenabookmark.shortcut.keys.add"
+            name="extensions.hatenabookmark.shortcut.keys.add"
+            type="string"/>
+        <preference 
+            id="extensions.hatenabookmark.shortcut.keys.comment"
+            name="extensions.hatenabookmark.shortcut.keys.comment"
             type="string"/>
     </preferences>
 
@@ -173,35 +177,41 @@
       base code by XUL/Migemo config.xul
       thx Piro!
     -->
-    <hbox>
-        <spacer flex="1"/>
-        <grid>
-            <columns>
-                <column/>
-            </columns>
-            <rows>
-                <row align="center">
-                    <label value="はてなブックマークに追加"/>
-                    <textbox id="extensions.hatenabookmark.shortcut.add-input"
+    <vbox>
+        <groupbox orient="vertical">
+            <caption label="はてなブックマークに追加" />
+            <hbox>
+                    <textbox id="extensions.hatenabookmark.shortcut.keys.add-input"
                         readonly="true"
-                        style="width: 10em;"
-                        preference="extensions.hatenabookmark.shortcut.add"
+                        preference="extensions.hatenabookmark.shortcut.keys.add"
+                        flex="1"
                         />
                     <button label="設定"
-                        style="min-width: 0;"
-                        oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.add);"/>
+                        oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.add);"/>
                     <button label="解除"
-                        style="min-width: 0;"
-                        oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.add);"/>
-                </row>
-            </rows>
-        </grid>
-        <spacer flex="1"/>
-    </hbox>
+                        oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.keys.add);"/>
+            </hbox>
+        </groupbox>
+        <groupbox orient="vertical">
+            <caption label="コメント表示" />
+            <hbox>
+                    <textbox id="extensions.hatenabookmark.shortcut.keys.comment-input"
+                        readonly="true"
+                        preference="extensions.hatenabookmark.shortcut.keys.comment"
+                        flex="1"
+                        />
+                    <button label="設定"
+                        oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.comment);"/>
+                    <button label="解除"
+                        oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.keys.comment);"/>
+            </hbox>
+        </groupbox>
+        <label value="ショートカットの反映に、ブラウザの再起動が必要な場合があります" />
+    </vbox>
 </prefpane>
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon.ico"
+    image="chrome://hatenabookmark/skin/images/favicon32.png"
     id="prefpane-sync" label="データ" flex="1">
     <vbox>
         <groupbox orient="vertical">

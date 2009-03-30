@@ -113,9 +113,9 @@ extend(RemoteCommand.prototype, {
         };
         if (this.options.changeTitle && User.user.public)
             query.title = bookmark.title;
-        if (this.options.addCollection && bookmark.asin) {
+        if (this.options.addCollection && this.options.asin) {
             query.add_asin = 1;
-            query.asin = bookmark.asin;
+            query.asin = this.options.asin;
         }
         this.options.query = query;
     },
@@ -130,14 +130,14 @@ extend(RemoteCommand.prototype, {
         let bookmarks = options.bookmarks || [options.bookmark];
         let onComplete = this.options.onComplete
         this.options.onComplete = function (result) {
+            if (onComplete)
+                onComplete.apply(this, arguments);
             //if (!result || !result.success) {
             // サーバの success = 0 のときはすでにエントリーがないので、ローカル DB はけしとく
             if (!result) {
                 this.onError();
                 return;
             }
-            if (onComplete)
-                onComplete.apply(this, arguments);
             p('remove bookmarks', bookmarks.map(function (b) b.url).join("\n"));
             Model.Bookmark.deleteBookmarks(bookmarks);
         };

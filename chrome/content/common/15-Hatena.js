@@ -85,11 +85,9 @@ if (shared.has('User')) {
             return this._db;
         },
         get dataURL() sprintf('http://b.hatena.ne.jp/%s/search.data', this.name),
-        get bookmarkHomepage() sprintf('http://b.hatena.ne.jp/%s/', this.name),
+        get bookmarkHomepage() UserUtils.getHomepage(this.name, 'b'),
         getProfileIcon: function user_getProfileIcon(isLarge) {
-            let name = this.name;
-            return sprintf('http://www.hatena.ne.jp/users/%s/%s/profile%s.gif',
-                           name.substring(0, 2), name, isLarge ? '' : '_s');
+            return UserUtils.getProfileIcon(this.name, isLarge);
         },
 
         clear: function user_clear() {
@@ -141,12 +139,19 @@ if (shared.has('User')) {
         },
         QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
     }
+    User.OfflineObserver = {
+        observe: function(aSubject, aTopic, aData) {
+            if (aTopic == "network:offline-status-changed" && aState != "offline")
+                User.login();
+        },
+        QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
+    }
     ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
+    ObserverService.addObserver(User.OfflineObserver, 'network:offline-status-changed', false);
 
     User.LoginChecker = new Timer(1000 * 60 * 15); // 15 分
     User.LoginChecker.createListener('timer', function() {
         if (!User.user) {
-            p('Login Check');
             User.login();
         }
     });

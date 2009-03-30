@@ -63,27 +63,38 @@ let Config = {
     }
 };
 
+
 /*
  * base code by XUL/Migemo config.js.
  * thx Piro!
  */
 Config.ShortCut = {
+    prefPrefix: 'extensions.hatenabookmark.shortcut.keys.',
+    KEYS: ['add'],
+    keys: {},
     initPane: function() {
-        let add = document.getElementById('extensions.hatenabookmark.shortcut.add-input');
-        add.keyData = parseShortcut(add.value);
-        this.add = add;
+        var self = this;
+        this.KEYS.forEach(function(key) {
+            let k = document.getElementById(self.prefPrefix + key + '-input');
+            k.keyData = parseShortcut(k.value);
+            self.keys[key] = k;
+        });
+        // let add = document.getElementById('add-input');
+        // add.keyData = parseShortcut(add.value);
+        // this.add = add;
     },
     set: function(aNode) {
+        let keyData = {};
         window.openDialog(
             'chrome://hatenabookmark/content/keyDetecter.xul',
             '_blank',
             'chrome,modal,resizable=no,titlebar=no,centerscreen',
-            aNode.keyData,
-            'キーボードを押して、ショートカットを設定します',
-            'キャンセル'
+            keyData,
+            UIEncodeText('キーボードを押して、ショートカットを設定します'),
+            UIEncodeText('キャンセル')
         );
-        if (aNode.keyData.modified) {
-            aNode.value = aNode.keyData.string;
+        if (keyData.modified) {
+            aNode.value = keyData.string;
             var event = document.createEvent('UIEvents');
             event.initUIEvent('input', true, false, window, 0);
             aNode.dispatchEvent(event);

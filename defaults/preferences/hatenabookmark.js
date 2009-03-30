@@ -2,7 +2,7 @@
 // set prefs
 // pref("extensions.hatenabookmark.config.foobar", "foobar");
 
-pref("extensions.hatenabookmark.install", false);
+pref("extensions.hatenabookmark.migration.version", 0);
 
 // Item count in "Hatena Bookmarks" folder in Bookmarks toolbar.
 pref("extensions.hatenabookmark.recentItemCount", 10);
@@ -18,6 +18,7 @@ pref("extensions.hatenabookmark.locationbar.resultRows", 6);
 
 // status bar
 pref("extensions.hatenabookmark.statusbar.counter", true);
+pref("extensions.hatenabookmark.statusbar.httpsIgnore", true);
 pref("extensions.hatenabookmark.statusbar.addButton", true);
 
 // addPanel 
@@ -31,6 +32,8 @@ pref("extensions.hatenabookmark.addPanel.tagMaxResult", 12);
 pref("extensions.hatenabookmark.addPanel.initialTagCount", 30);
 pref("extensions.hatenabookmark.addPanel.tagListShow", true);
 pref("extensions.hatenabookmark.addPanel.recommendedTagListShow", true);
+pref("extensions.hatenabookmark.addPanel.tagListShowAll", false);
+pref("extensions.hatenabookmark.addPanel.frequentTagCount", 30);
 
 // comment viewer
 pref("extensions.hatenabookmark.commentviwer.allShow", true);
@@ -40,6 +43,7 @@ pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);
 pref("extensions.hatenabookmark.sync.syncWait", 1000);
 
 // Shurtcut
-pref("extensions.hatenabookmark.shortcut.add", "Accel+Shift+B");
-pref("extensions.hatenabookmark.shortcut.commentViewer", "Accel+Shift+C");
+pref("extensions.hatenabookmark.shortcut.keys.add", "Accel+Shift+B");
+pref("extensions.hatenabookmark.shortcut.keys.comment", "Accel+Shift+C");
+
 

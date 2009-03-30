@@ -74,17 +74,6 @@ function testBookmark() {
 
 }
 
-function testBookmarkASIN() {
-    let Bookmark = model('Bookmark');
-    let b = new Bookmark();
-    b.url = 'http://amazon.co.jp/dp/4592882857';
-    assert.equals('4592882857', b.asin);
-    b.url = 'http://b.hatena.ne.jp/?foo=bar&asins=helloworld&baz=qux';
-    assert.equals('helloworld', b.asin);
-    b.url = 'http://example.org/asin/0123456789/';
-    assert.equals(null, b.asin);
-}
-
 function testTag() {
     let Tag = model("Tag");
     prepareDatabase(hBookmark);
