@@ -9,8 +9,8 @@
         buttonlabelextra2="&hBookmark.addPanel.deleteLabel;"
         buttons="accept,cancel"
         defaultButton="accept"
-        width="500"
-        height="400"
+        width="&hBookmark.addPanel.initialWidth;"
+        height="&hBookmark.addPanel.initialHeight;"
         persist="screenX screenY width height"
         onload="var bookmark = window.arguments[0] &amp;&amp; window.arguments[0].bookmark;
                 if (bookmark)
