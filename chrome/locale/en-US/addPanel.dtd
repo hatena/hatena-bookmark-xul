@@ -2,6 +2,7 @@
 <!ENTITY hBookmark.addPanel.welcomeUserLabel.after "">
 
 <!ENTITY hBookmark.addPanel.titleLabel "Title:">
+<!ENTITY hBookmark.addPanel.loadingTitleLabel "Loading Title…">
 <!ENTITY hBookmark.addPanel.editTitleLabel "Edit Title…">
 <!ENTITY hBookmark.addPanel.cancelEditTitleLabel "Cancel">
 <!ENTITY hBookmark.addPanel.titleDescription "This title is shared with all users">

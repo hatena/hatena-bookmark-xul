@@ -38,7 +38,9 @@
                             <xul:hbox anonid="titleContainer"
                                       align="center">
                                 <xul:image anonid="titleIcon"/>
-                                <xul:label crop="end" flex="1" anonid="titleLabel"/>
+                                <xul:label anonid="titleLabel"
+                                           emptytext="&hBookmark.addPanel.loadingTitleLabel;"
+                                           crop="end" flex="1"/>
                                 <xul:button anonid="editTitleButton"
                                             label="&hBookmark.addPanel.editTitleLabel;"
                                             oncommand="document.getBindingParent(this).isTitleEditable = true;"/>
@@ -813,6 +815,33 @@
         <handlers>
             <handler event="popupshowing" action="return this.build(document.tooltipNode);"/>
         </handlers>
+    </binding>
+
+    <binding id="placeholder-label"
+             extends="chrome://global/content/bindings/text.xml#label-control">
+        <implementation>
+            <property name="empty" readonly="true"
+                      onget="return this.getAttribute('empty') === 'true';"/>
+
+            <property name="emptyText"
+                      onget="return this.getAttribute('emptytext');"
+                      onset="this.setAttribute('emptytext', val); return val;"/>
+
+            <property name="value"
+                      onget="return this.empty ? '' : this.getAttribute('value') || '';">
+                <setter><![CDATA[
+                    let value = String(val);
+                    if (value) {
+                        this.setAttribute("value", value);
+                        this.removeAttribute("empty");
+                    } else {
+                        this.setAttribute("value", this.emptyText);
+                        this.setAttribute("empty", "true");
+                    }
+                    return val;
+                ]]></setter>
+            </property>
+        </implementation>
     </binding>
 
     <binding id="preference-checkbox"

@@ -13,6 +13,9 @@
 #hBookmarkFavoriteBookmarkTooltip {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#favorite-bookmark-tooltip");
 }
+label[emptytext] {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#placeholder-label");
+}
 checkbox[preference] {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#preference-checkbox");
 }
