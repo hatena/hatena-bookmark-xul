@@ -39,6 +39,10 @@
             name="extensions.hatenabookmark.statusbar.counter"
             type="bool"/>
         <preference 
+            id="extensions.hatenabookmark.statusbar.httpsIgnore"
+            name="extensions.hatenabookmark.statusbar.httpsIgnore"
+            type="bool"/>
+        <preference 
             id="extensions.hatenabookmark.recentItemCount"
             name="extensions.hatenabookmark.recentItemCount"
             type="int"/>
@@ -73,6 +77,12 @@
                 label="ユーザー数カウンターの表示"
                 src="chrome://hatenabookmark/skin/images/nbookmarks.png"
                 preference="extensions.hatenabookmark.statusbar.counter"/>
+            <hbox>
+            <spacer style="width: 1em;" />
+            <checkbox id="extensions.hatenabookmark.statusbar.httpsIgnore-check" flex="1"
+                label="URL が https の場合はカウントしない"
+                preference="extensions.hatenabookmark.statusbar.httpsIgnore"/>
+            </hbox>
         </groupbox>
 
         <groupbox orient="vertical">

@@ -95,7 +95,15 @@ HTTPCache.prototype = {
             url = this.options.encoder(url);
         return (this.options.baseURL || '') + url;
     },
+    isValid: function(url) {
+        if (url.indexOf('https://') == 0 && Application.prefs.get('extensions.hatenabookmark.statusbar.httpsIgnore').value) {
+            return false;
+        } else {
+            return true;
+        }
+    },
     async_get: function HTTPCache_async_get(url, callback) {
+        if (!this.isValid(url)) return callback(null);
         let cache = this.cache;
         if (cache.has(url)) {
             let val = cache.get(url);
@@ -113,6 +121,7 @@ HTTPCache.prototype = {
         }
     },
     get: function HTTPCache_get (url, force, async) {
+        if (!this.isValid(url)) return null;
         let cache = this.cache;
         if (!force && cache.has(url)) {
             p('http using cache: ' + url);
