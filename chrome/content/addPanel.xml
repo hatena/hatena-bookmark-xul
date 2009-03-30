@@ -117,6 +117,9 @@
                     </xul:row>
                 </xul:rows>
             </xul:grid>
+            <xul:hbox anonid="imageSelector"
+                      class="hBookmarkImageSelector"
+                      hidden="true"/>
             <xul:groupbox anonid="recommendedTagSelectorGroup">
                 <xul:caption label="&hBookmark.addPanel.recommendedTagsLabel;"/>
                 <xul:hbox anonid="recommendedTagSelector"
@@ -225,6 +228,9 @@
             </field>
             <field name="addCollectionCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "addCollectionCheck")
+            </field>
+            <field name="imageSelector">
+                document.getAnonymousElementByAttribute(this, "anonid", "imageSelector")
             </field>
             <field name="recommendedTagSelectorGroup">
                 document.getAnonymousElementByAttribute(this, "anonid", "recommendedTagSelectorGroup")
@@ -356,6 +362,8 @@
 
                     this.addCollectionCheck.hidden = true;
                     this.recommendedTagSelectorGroup.hidden = true;
+                    this.imageSelector.build(bookmark.url);
+                    this.imageSelector.hidden = !this.imageSelector.hasImages;
 
                     let self = this;
                     hBookmark.HTTPCache.entry.async_get(bookmark.url, function(res) {
@@ -377,6 +385,11 @@
                                 self.lastTitleEditorField.href =
                                     UU.getHomepage(lastEditor, "b");
                                 self.lastTitleEditorContainer.hidden = false;
+                            }
+
+                            let imageURL = res.image_url;
+                            if (imageURL) {
+                                self.imageSelector.defaultImage = imageURL;
                             }
 
                             self.urlField.value = res.url;
@@ -777,6 +790,161 @@
                            ? "HB_TagSelected" : "HB_TagUnselected";
                 tagEvent.initCommandEvent(type, true, false, label.tag.name);
                 this.dispatchEvent(tagEvent);
+            ]]></handler>
+        </handlers>
+    </binding>
+
+    <binding id="image-selector">
+        <content>
+            <!-- XXX ToDo: width/heightはskinもしくはprefsへ移動する。 -->
+            <xul:vbox width="100" height="100" align="center" pack="center">
+                <xul:image anonid="icon"
+                           src="http://b.hatena.ne.jp/images/noimages.gif"/>
+            </xul:vbox>
+            <xul:popupset>
+                <xul:panel anonid="popup">
+                    <xul:hbox anonid="container" flex="1"
+                              align="center" pack="start"
+                              style="display: block;">
+                        <xul:image anonid="noImage"
+                                   src="http://b.hatena.ne.jp/images/noimages.gif"/>
+                    </xul:hbox>
+                </xul:panel>
+            </xul:popupset>
+        </content>
+
+        <implementation>
+            <field name="icon">
+                document.getAnonymousElementByAttribute(this, "anonid", "icon")
+            </field>
+            <field name="popup">
+                document.getAnonymousElementByAttribute(this, "anonid", "popup")
+            </field>
+            <field name="container">
+                document.getAnonymousElementByAttribute(this, "anonid", "container")
+            </field>
+            <field name="noImage">
+                document.getAnonymousElementByAttribute(this, "anonid", "noImage")
+            </field>
+
+            <field name="_images">({})</field>
+
+            <field name="_defaultImage">this.noImage</field>
+            <property name="defaultImage"
+                      onget="return this._defaultImage;">
+                <setter><![CDATA[
+                    let image = this._getImage(val);
+                    if (!image) return val;
+                    this.selectedImage = image;
+                    this._defaultImage = image;
+                    return val;
+                ]]></setter>
+            </property>
+
+            <field name="_selectedImage">this.noImage</field>
+            <property name="selectedImage"
+                      onget="return this._selectedImage;">
+                <setter><![CDATA[
+                    let image = this._getImage(val);
+                    if (!image) return val;
+                    this._selectedImage.removeAttribute("selected");
+                    image.setAttribute("selected", "true");
+                    this.icon.setAttribute("src", image.getAttribute("src"));
+                    this._selectedImage = image;
+                    return val;
+                ]]></setter>
+            </property>
+
+            <property name="imageChanged" readonly="true"
+                      onget="return this.selectedImage !== this.defaultImage;"/>
+
+            <property name="hasImages" readonly="true"
+                      onget="return !!this.noImage.nextSibling;"/>
+
+            <method name="_getImage">
+                <parameter name="image"/>
+                <body><![CDATA[
+                    return image.nodeType ? image : this._images[image] || null;
+                ]]></body>
+            </method>
+
+            <method name="build">
+                <parameter name="uri"/>
+                <body><![CDATA[
+                    this.clearImage();
+                    let doc = this._getDocumentForURI(uri);
+                    if (!doc) return;
+                    let images = this._getImagesForDocument(doc);
+                    images.forEach(function (image) {
+                        this.addImage(image);
+                    }, this);
+                ]]></body>
+            </method>
+
+            <method name="addImage">
+                <parameter name="image"/>
+                <body><![CDATA[
+                    if (image.src in this._images) return;
+                    let xulImage = document.createElementNS(hBookmark.XUL_NS, "image");
+                    xulImage.setAttribute("src", image.src);
+                    this.container.appendChild(xulImage);
+                    this._images[image.src] = xulImage;
+                ]]></body>
+            </method>
+
+            <method name="clearImage">
+                <body><![CDATA[
+                    let noImage = this.noImage;
+                    this.selctedImage = noImage;
+                    let range = document.createRange();
+                    range.selectNodeContents(this.container);
+                    range.setStartAfter(noImage);
+                    range.deleteContents();
+                    this._images = {};
+                    this._images[noImage.getAttribute("src")] = noImage;
+                ]]></body>
+            </method>
+
+            <method name="_getDocumentForURI">
+                <parameter name="uri"/>
+                <body><![CDATA[
+                    let win = getTopWin().gBrowser.contentWindow;
+                    return (win && win.location && win.location.href === uri)
+                        ? win.document : null;
+                ]]></body>
+            </method>
+
+            <method name="_getImagesForDocument">
+                <parameter name="doc"/>
+                <body><![CDATA[
+                    let images = Array.filter(doc.getElementsByTagName("img"),
+                        function (img) img instanceof HTMLImageElement);
+                    images = images.filter(function (image) {
+                        return !(image.naturalWidth < 60 ||
+                                 image.naturalHeight < 60);
+                    });
+                    return images;
+                ]]></body>
+            </method>
+
+            <method name="showPopup">
+                <body><![CDATA[
+                    this.popup.openPopup(this.icon, "after_start",
+                                         0, 0, false, false);
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="click" button="0"><![CDATA[
+                let target = event.originalTarget;
+                if (target === this.icon) {
+                    this.showPopup();
+                } else if (target.localName === "image" &&
+                           target.parentNode === this.container) {
+                    this.selectedImage = target;
+                    this.popup.hidePopup();
+                }
             ]]></handler>
         </handlers>
     </binding>
