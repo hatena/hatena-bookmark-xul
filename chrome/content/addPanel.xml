@@ -34,14 +34,14 @@
                                              emptytext="&hBookmark.addPanel.loadingTitleLabel;"
                                              crop="end" flex="1"/>
                                   <xul:button anonid="editTitleButton"
-                                              label="&hBookmark.addPanel.editTitleLabel;"
+                                              tooltiptext="&hBookmark.addPanel.editTitleLabel;"
                                               oncommand="document.getBindingParent(this).isTitleEditable = true;"/>
                               </xul:hbox>
                               <xul:hbox anonid="editableTitleContainer"
                                         align="center">
                                   <xul:textbox anonid="titleField" flex="1"/>
                                   <xul:button anonid="cancelEditTitleButton"
-                                              label="&hBookmark.addPanel.cancelEditTitleLabel;"
+                                              tooltiptext="&hBookmark.addPanel.cancelEditTitleLabel;"
                                               oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
                               </xul:hbox>
                           </xul:vbox>
@@ -834,8 +834,8 @@
 
         <implementation>
             <constructor><![CDATA[
-                this.iconContainer.setAttribute("width", this.maxImageWidth);
-                this.iconContainer.setAttribute("height", this.maxImageHeight);
+                this.iconContainer.setAttribute("maxwidth", this.maxImageWidth);
+                this.iconContainer.setAttribute("maxheight", this.maxImageHeight);
             ]]></constructor>
 
             <field name="iconContainer">

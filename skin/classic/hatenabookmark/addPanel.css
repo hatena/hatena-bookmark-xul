@@ -56,6 +56,10 @@ hbox[anonid="messageRow"] {
   min-height: 18px;
 }
 
+[anonid="titleContainer"] {
+  margin-left: 10px;
+}
+
 label[anonid="usersField"] {
   background: url(chrome://hatenabookmark/skin/images/page.gif) left 0px no-repeat;
   color: #FF6e6e !important;
@@ -68,20 +72,21 @@ label[anonid="usersField"] {
 textbox {
 }
 
-[anonid="editTitleButton"],
-[anonid="cancelEditTitleButton"] {
+button[anonid="editTitleButton"],
+button[anonid="cancelEditTitleButton"] {
   font-size: 11px;
   list-style-image: url(chrome://hatenabookmark/skin/images/buttons.png);
   -moz-image-region: rect(46px 147px 62px 131px);
-  text-decoration: underline;
-  color: #00d;
-  cursor: pointer;
+  -moz-appearance: none !important;
   border: none !important;
   background: transparent !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  margin:0 !important;
 }
 
-[anonid="cancelEditTitleButton"] {
-  -moz-image-region: rect(62px 147px 78px 131px);
+button[anonid="cancelEditTitleButton"] {
+  -moz-image-region: rect(62px 147px 78px 131px) !important;
 }
 
 [anonid="imageSelector"] {
@@ -90,6 +95,23 @@ textbox {
   padding: 2px;
   margin: 5px;
   cursor: pointer;
+  float: left;
+}
+
+panel[anonid="popup"] {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #fff !important;
+}
+
+[anonid="editImageNotification"] {
+  padding: 5px;
+  background: #eee;
+  border-top: 1px solid #ddd;
+}
+
+[anonid="editImageNotification"] label {
+  margin: 0;
 }
 
 [anonid="commentCounterField"] {
