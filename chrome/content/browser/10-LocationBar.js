@@ -90,6 +90,7 @@ var LocationBar = {
             // LocationBar.search();
         } else {
             LocationBar._isSearch = false;
+            LocationBar.searchTimer.stop();
             LocationBar.bar.mController = LocationBar.fakeController.controller;
             document.getElementById('PopupAutoCompleteRichResult').removeAttribute('hiddenByHBookmark');
             icon.setAttribute('searchdisabled', true);
@@ -122,9 +123,24 @@ var LocationBar = {
             ev.stopPropagation();
         }
     },
+    get searchTimer() {
+        if (!LocationBar._searchTimer) {
+            let t = new Timer(250, 1);
+            t.createListener('timerComplete', LocationBar.searchTimerComplateHandler);
+            LocationBar._searchTimer = t;
+        }
+        return LocationBar._searchTimer;
+    },
+    searchTimerComplateHandler: function(ev) {
+        LocationBar.search();
+        LocationBar.show();
+    },
     barKeyPressHandler: function(ev) {
-        if (LocationBar.searchEnabled)
-            setTimeout(function() LocationBar.search() , 0);
+        if (LocationBar.searchEnabled) {
+            LocationBar.searchTimer.reset();
+            LocationBar.searchTimer.start();
+            // setTimeout(function() LocationBar.search() , 0);
+        }
     },
     toggleFlag: false,
     barKeyDownHandler: function(ev) {
