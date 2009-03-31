@@ -382,6 +382,8 @@
                             let imageURL = res.image_url;
                             if (imageURL) {
                                 self.imageSelector.defaultImage = imageURL;
+                                self.imageSelector.setLastImageEditor(
+                                    res.image_last_editor);
                             }
 
                             self.urlField.value = res.url;
@@ -804,6 +806,16 @@
                                    class="hBookmarkImageSelectorItem"
                                    src="http://b.hatena.ne.jp/images/noimages.gif"/>
                     </xul:hbox>
+                    <xul:hbox anonid="lastImageEditorContainer">
+                        <xul:label value="&hBookmark.addPanel.imageDescription;"/>
+                        <xul:label class="text-link hBookmarkLink"
+                                   value="&hBookmark.addPanel.imageGuidelineLabel;"
+                                   href="&hBookmark.addPanel.imageGuidelineURI;"/>
+                        <xul:spacer flex="1"/>
+                        <xul:image anonid="lastImageEditorIcon"/>
+                        <xul:label anonid="lastImageEditorField"
+                                   class="text-link hBookmarkLink"/>
+                    </xul:hbox>
                 </xul:panel>
             </xul:popupset>
         </content>
@@ -828,6 +840,15 @@
             </field>
             <field name="noImage">
                 document.getAnonymousElementByAttribute(this, "anonid", "noImage")
+            </field>
+            <field name="lastImageEditorContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastImageEditorContainer")
+            </field>
+            <field name="lastImageEditorIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastImageEditorIcon")
+            </field>
+            <field name="lastImageEditorField">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastImageEditorField")
             </field>
 
             <field name="_images">({})</field>
@@ -890,6 +911,20 @@
                     images.forEach(function (image) {
                         this.addImage(image);
                     }, this);
+                    this.lastImageEditorContainer.hidden = true;
+                ]]></body>
+            </method>
+
+            <method name="setLastImageEditor">
+                <parameter name="lastEditor"/>
+                <body><![CDATA[
+                    let UU = hBookmark.UserUtils;
+                    this.lastImageEditorIcon.src =
+                        UU.getProfileIcon(lastEditor, false);
+                    this.lastImageEditorField.value = lastEditor;
+                    this.lastImageEditorField.href =
+                        UU.getHomepage(lastEditor, "b");
+                    this.lastImageEditorContainer.hidden = false;
                 ]]></body>
             </method>
 
@@ -924,7 +959,7 @@
             <method name="clearImage">
                 <body><![CDATA[
                     let noImage = this.noImage;
-                    this.selctedImage = noImage;
+                    this.defaultImage = noImage;
                     let range = document.createRange();
                     range.selectNodeContents(this.container);
                     range.setStartAfter(noImage);

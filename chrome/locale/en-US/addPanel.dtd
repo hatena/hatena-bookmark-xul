@@ -19,6 +19,11 @@
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "Confirm Bookmark">
 <!ENTITY hBookmark.addPanel.addCollectionLabel "Add to Collection">
 
+<!ENTITY hBookmark.addPanel.imageDescription "The selected image is shared with all users">
+<!ENTITY hBookmark.addPanel.imageGuidelineLabel "Guideline (in Japanese)">
+<!ENTITY hBookmark.addPanel.imageGuidelineURI "http://b.hatena.ne.jp/help/guideline_image">
+<!ENTITY hBookmark.addPanel.lastImageEditorLabel "Last modified by">
+
 <!ENTITY hBookmark.addPanel.recommendedTagsLabel "Recommended Tags">
 <!ENTITY hBookmark.addPanel.tagsLabel "Tags">
 <!ENTITY hBookmark.addPanel.showAllTagsLabel "Show all tags">
