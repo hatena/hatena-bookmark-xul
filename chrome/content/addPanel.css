@@ -9,21 +9,9 @@
    display: block;
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#tag-selector");
 }
-
 .hBookmarkImageSelector {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#image-selector");
 }
-.hBookmarkImageSelectorPopup {
-   max-width: 550px;
-}
-.hBookmarkImageSelectorItem {
-   margin: 5px;
-   vertical-align: middle;
-}
-.hBookmarkImageSelectorItem[selected="true"] {
-   outline: 3px solid #00f;
-}
-
 #hBookmarkFavoriteBookmarkTooltip {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#favorite-bookmark-tooltip");
 }

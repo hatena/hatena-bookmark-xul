@@ -160,6 +160,16 @@ groupbox {
     /*display:none;*/
 }
 
+.hBookmarkImageSelectorPopup {
+   max-width: 550px;
+}
+.hBookmarkImageSelectorItem {
+   margin: 5px;
+   vertical-align: middle;
+}
+.hBookmarkImageSelectorItem[selected="true"] {
+   outline: 3px solid #00f;
+}
 
 
 
