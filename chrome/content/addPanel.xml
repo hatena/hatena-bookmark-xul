@@ -853,10 +853,15 @@
 
             <field name="_images">({})</field>
 
-            <!-- XXX ToDo: width/heightはskinもしくはprefsへ移動する。 -->
-            <field name="maxImageWidth">100</field>
-            <field name="maxImageHeight">100</field>
-            <field name="maxCount">20</field>
+            <field name="maxImageWidth">
+                hBookmark.Prefs.bookmark.get("addPanel.maxImageWidth")
+            </field>
+            <field name="maxImageHeight">
+                hBookmark.Prefs.bookmark.get("addPanel.maxImageHeight")
+            </field>
+            <field name="maxCount">
+                hBookmark.Prefs.bookmark.get("addPanel.maxImageCount")
+            </field>
 
             <field name="_defaultImage">this.noImage</field>
             <property name="defaultImage"
