@@ -1113,19 +1113,4 @@
         </handlers>
     </binding>
 
-    <binding id="link"
-             extends="chrome://global/content/bindings/text.xml#text-link">
-        <implementation>
-            <method name="open">
-                <parameter name="event"/>
-                <body><![CDATA[
-                    let href = this.href;
-                    if (!href || this.disabled || event.getPreventDefault())
-                        return;
-                    openUILink(href, event);
-                ]]></body>
-            </method>
-        </implementation>
-    </binding>
-
 </bindings>
