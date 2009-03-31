@@ -44,8 +44,20 @@ var CommentViewer = {
         commentButton.setAttribute('loading', 'true'); 
         HTTPCache.comment.async_get(url, method(this, 'updateComment'));
     },
+    toggle: function CommentViewer_toggle(url) {
+        if (!url && isHttp) {
+            url = aDoc.location.href;
+        }
+        if (panelComment.state != 'close' && url != CommentViewer.currentURL) {
+            CommentViewer.show(url);
+        } else {
+            CommentViewer.hide();
+        }
+    },
+    currentURL: null,
     updateComment: function CommentViewer_updateComment(data) {
         if (data && data.title) {
+            CommentViewer.currentURL = data.url;
             data.favicon = favicon(data.url);
             CommentViewer.iframe.setAttribute('height', '0px');
             panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
@@ -59,6 +71,8 @@ var CommentViewer = {
             //} else {
             //    CommentViewer.hide();
             //}
+        } else {
+            CommentViewer.currentURL = null;
         }
         commentButton.setAttribute('loading', 'false'); 
     },
@@ -75,6 +89,7 @@ var CommentViewer = {
         if (panelComment.state != 'closed') {
             panelComment.hidePopup();
         }
+        CommentViewer.currentURL = null;
     }
 }
 

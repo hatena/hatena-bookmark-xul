@@ -95,7 +95,7 @@ ShortCut.commands = {
         ev.preventDefault();
     },
     comment: function(ev) {
-        hBookmark.CommentViewer.show();
+        hBookmark.CommentViewer.toggle();
         ev.stopPropagation();
         ev.preventDefault();
     }
