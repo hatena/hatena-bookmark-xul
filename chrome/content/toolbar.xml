@@ -50,6 +50,8 @@
                     method(this, "onBookmarksUpdated"));
                 hBookmark.EventService.createListener("UserChange",
                     method(this, "onBookmarksUpdated"));
+                hBookmark.Prefs.bookmark.createListener("recentItemCount",
+                    method(this, "onBookmarksUpdated"));
                 window.addEventListener("resize",
                     method(this, "onResize"), false);
                 this.recentContainer.addEventListener("command",
