@@ -357,60 +357,9 @@
                     this.imageSelector.hidden = !this.imageSelector.hasImages ||
                                                 user.private;
 
-                    let self = this;
-                    hBookmark.HTTPCache.entry.async_get(bookmark.url, function(res) {
-                        if (res) {
-                            if (+res.count) {
-                                self.usersField.value =
-                                    hBookmark.UIUtils.getUsersText(res.count);
-                                self.usersField.href = res.entry_url;
-                                self.updateFavorites(res.favorites);
-                                self.usersRow.style.visibility = "visible";
-                            }
-
-                            let lastEditor = res.title_last_editor;
-                            if (lastEditor) {
-                                let UU = hBookmark.UserUtils;
-                                self.lastTitleEditorIcon.src =
-                                    UU.getProfileIcon(lastEditor, false);
-                                self.lastTitleEditorField.value = lastEditor;
-                                self.lastTitleEditorField.href =
-                                    UU.getHomepage(lastEditor, "b");
-                                self.lastTitleEditorContainer.hidden = false;
-                            }
-
-                            let imageURL = res.image_url;
-                            if (imageURL) {
-                                self.imageSelector.defaultImage = imageURL;
-                                self.imageSelector.setLastImageEditor(
-                                    res.image_last_editor);
-                            }
-
-                            self.urlField.value = res.url;
-                            self.urlField.href = res.url;
-                            self.addCollectionCheck.hidden = !res.has_asin;
-                            self.asin = res.asin;
-                            self.updateRecommendedTags(res.recommend_tags);
-
-                            if (res.title && res.title !== bookmark.title) {
-                                self.titleLabel.value = res.title;
-                                self.titleField.value = res.title;
-                            }
-                        }
-                        if (!self.titleLabel.value) {
-                            let xhr = hBookmark.net.sync_get(bookmark.url);
-                                // とりあえずやっつけ
-                                // loading icon だしたほうがよさそう
-                                let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
-                                if (m) {
-                                    self.titleField.value = self.titleLabel.value = m[1];
-                                }
-                        /*
-                            hBookmark.net.get(bookmark.url, function(xhr) {
-                            }, null, true);
-                        */
-                        }
-                    });
+                    hBookmark.HTTPCache.entry.async_get(bookmark.url, hBookmark.bind(function(res) {
+                        this._delayedUpdateFields(bookmark, res);
+                    }, this));
 
                     if (!this.showsTagList) {
                         this.tagSelectorGroup.setAttribute('hidden', true);
@@ -422,6 +371,64 @@
                     let selectedTags = this.inputHandler.inputLine.tags;
                     this.tagSelector.update(selectedTags);
                     this.switchTagSelectorView(this.showAllTagsPref.value);
+                ]]></body>
+            </method>
+
+            <method name="_delayedUpdateFields">
+                <parameter name="bookmark"/>
+                <parameter name="res"/>
+                <body><![CDATA[
+                    if (res) {
+                        if (+res.count) {
+                            this.usersField.value =
+                                hBookmark.UIUtils.getUsersText(res.count);
+                            this.usersField.href = res.entry_url;
+                            this.updateFavorites(res.favorites);
+                            this.usersRow.style.visibility = "visible";
+                        }
+
+                        let lastEditor = res.title_last_editor;
+                        if (lastEditor) {
+                            let UU = hBookmark.UserUtils;
+                            this.lastTitleEditorIcon.src =
+                                UU.getProfileIcon(lastEditor, false);
+                            this.lastTitleEditorField.value = lastEditor;
+                            this.lastTitleEditorField.href =
+                                UU.getHomepage(lastEditor, "b");
+                            this.lastTitleEditorContainer.hidden = false;
+                        }
+
+                        let imageURL = res.image_url;
+                        if (imageURL) {
+                            this.imageSelector.defaultImage = imageURL;
+                            this.imageSelector.setLastImageEditor(
+                                res.image_last_editor);
+                        }
+
+                        this.urlField.value = res.url;
+                        this.urlField.href = res.url;
+                        this.addCollectionCheck.hidden = !res.has_asin;
+                        this.asin = res.asin;
+                        this.updateRecommendedTags(res.recommend_tags);
+
+                        if (res.title && res.title !== bookmark.title) {
+                            this.titleLabel.value = res.title;
+                            this.titleField.value = res.title;
+                        }
+                    }
+                    if (!this.titleLabel.value) {
+                        let xhr = hBookmark.net.sync_get(bookmark.url);
+                            // とりあえずやっつけ
+                            // loading icon だしたほうがよさそう
+                            let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
+                            if (m) {
+                                this.titleField.value = this.titleLabel.value = m[1];
+                            }
+                    /*
+                        hBookmark.net.get(bookmark.url, function(xhr) {
+                        }, null, true);
+                    */
+                    }
                 ]]></body>
             </method>
 
