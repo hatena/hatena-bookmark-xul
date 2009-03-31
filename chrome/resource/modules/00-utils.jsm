@@ -4,6 +4,7 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
 const Cu = Components.utils;
+const EXT_ID = 'bookmark@hatena.ne.jp';
 
 const INTERFACES = [key for (key in Ci)];
 

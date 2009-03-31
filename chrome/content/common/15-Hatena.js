@@ -148,6 +148,14 @@ if (shared.has('User')) {
         },
         QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
     }
+    User.ApplicationObserver = {
+        observe: function(aSubject, aTopic, aData) {
+            if (aTopic == "quit-application-granted")
+                User.logout();
+        },
+        QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
+    }
+    ObserverService.addObserver(User.ApplicationObserver, 'quit-application-granted', false);
     ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
     ObserverService.addObserver(User.OfflineObserver, 'network:offline-status-changed', false);
 

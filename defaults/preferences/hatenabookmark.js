@@ -1,4 +1,5 @@
 
+pref("extensions.hatenabookmark.testtesttest", 'test');
 // set prefs
 // pref("extensions.hatenabookmark.config.foobar", "foobar");
 
