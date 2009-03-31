@@ -49,6 +49,12 @@ function initializeSidebar() {
     EventService.createListener("UserChange", showSidebarContent);
     showSidebarContent();
     searchBox.focus();
+
+    // 開いた直後はデータを取得できないことがあるので遅延させる。
+    setTimeout(function () {
+        if (!tagTreeView.rowCount)
+            tagTreeView.build();
+    }, 500);
 }
 
 function mayFireInputEvent(event) {

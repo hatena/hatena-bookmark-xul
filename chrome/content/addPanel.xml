@@ -423,8 +423,16 @@
                             // とりあえずやっつけ
                             // loading icon だしたほうがよさそう
                             let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
-                            if (m) {
-                                this.titleField.value = this.titleLabel.value = m[1];
+                            if (m && !/\ufffd/.test(m[1])) {
+                                this.titleField.value = m[1];
+                                this.titleLabel.value = m[1];
+                            } else {
+                                let self = this;
+                                new hBookmark.TitleGuesser(bookmark.url, function (title) {
+                                    title = title || bookmark.url;
+                                    self.titleField.value = title;
+                                    self.titleLabel.value = title;
+                                });
                             }
                     /*
                         hBookmark.net.get(bookmark.url, function(xhr) {
@@ -814,7 +822,8 @@
                               style="display: block;">
                         <xul:image anonid="noImage"
                                    class="hBookmarkImageSelectorItem"
-                                   src="chrome://hatenabookmark/skin/images/noimages.png"/>
+                                   src="chrome://hatenabookmark/skin/images/noimages.png"
+                                   originalsrc="http://b.hatena.ne.jp/images/noimages.gif"/>
                     </xul:hbox>
                     <xul:hbox anonid="editImageNotification" align="center">
                         <xul:label value="&hBookmark.addPanel.imageDescription;"/>
@@ -905,7 +914,7 @@
             </property>
 
             <property name="selectedImageURI" readonly="true"
-                      onget="return this.selectedImage.getAttribute('src');"/>
+                      onget="return this.selectedImage.getAttribute('originalsrc');"/>
 
             <property name="isImageChanged" readonly="true"
                       onget="return this.selectedImage !== this.defaultImage;"/>
@@ -954,6 +963,7 @@
                     let xulImage = document.createElementNS(hBookmark.XUL_NS, "image");
                     xulImage.setAttribute("class", "hBookmarkImageSelectorItem");
                     xulImage.setAttribute("src", image.src);
+                    xulImage.setAttribute("originalsrc", image.src);
 
                     let maxWidth = this.maxImageWidth;
                     let maxHeight = this.maxImageHeight;
