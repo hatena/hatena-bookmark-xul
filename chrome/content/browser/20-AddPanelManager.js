@@ -45,6 +45,7 @@ var AddPanelManager = {
             return;
         }
         let bookmark = this.getBookmarkFor(item);
+        if (!/^https?:\/\//.test(bookmark.url)) return;
         if (!bookmark.title && options && options.title)
             bookmark.title = options.title;
 
