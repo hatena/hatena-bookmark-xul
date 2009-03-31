@@ -125,6 +125,10 @@ panel[anonid="popup"] {
   margin-right: 3px;
 }
 
+label[empty="true"] {
+  color: #ddd;
+}
+
 .hBookmarkTag, .hBookmarkSelectedTag {
    border: 1px solid transparent;
    cursor: pointer;
