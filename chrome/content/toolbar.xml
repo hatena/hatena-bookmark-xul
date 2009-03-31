@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd">
+<!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd" [
+    <!ENTITY % browser SYSTEM "chrome://hatenabookmark/locale/browser.dtd">
+    %browser;
+]>
 <bindings xmlns="http://www.mozilla.org/xbl"
           xmlns:xbl="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <binding id="toolbar" extends="#toolbar-item-base">
         <content>
-            <xul:toolbarbutton anonid="sidebarToggleButton"
+            <xul:toolbarbutton class="hBookmark-toolbar-sidebar-button"
                                tooltiptext="&hBookmark.toolbar.toggleSidebarLabel;"
                                observes="viewHBookmarkSidebar"/>
+            <xul:toolbarbutton class="hBookmark-toolbar-add-button" 
+                               label="&hBookmark.toolbar.add;"
+                               tooltiptext="&hBookmark.toolbar.add;"
+                               oncommand="hBookmark.AddPanelManager.showPanel(window.content);" />
+            <xul:toolbarbutton class="hBookmark-toolbar-home-button" 
+                               label="&hBookmark.toolbar.home;"
+                               tooltiptext="&hBookmark.toolbar.home;"
+                               oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
+                               onclick="checkForMiddleClick(this, event);" />
+            <xul:toolbarseparator/>
             <xul:toolbarbutton anonid="loginButton"
                                label="&hBookmark.toolbar.loginLabel;"
                                oncommand="hBookmark.UIUtils.openLogin(event);"
@@ -165,6 +178,7 @@
 
         <implementation>
             <constructor><![CDATA[
+                if (typeof hBookmark === "undefined") return;
                 let method = hBookmark.method;
                 this.addEventListener("popupshowing",
                     method(this, "onPopupShowing"), false);
