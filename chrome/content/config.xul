@@ -286,6 +286,7 @@
                         oncommand="hBookmark.Config.sync();"
                     />
                 </hbox>
+                <label value="すべてのデータを再度同期します。サーバ上のデータと差異が出てきた場合、実行すると正常なデータを取得し直すことができます。" />
                 <hbox>
                     <button label="すべてのデータの再同期"
                         oncommand="hBookmark.Config.syncALL();"
