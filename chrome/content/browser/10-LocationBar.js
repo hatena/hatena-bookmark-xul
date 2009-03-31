@@ -85,6 +85,7 @@ var LocationBar = {
             LocationBar.bar.mController = LocationBar.fakeController;
             document.getElementById('PopupAutoCompleteRichResult').setAttribute('hiddenByHBookmark', true);
             document.getElementById('PopupAutoCompleteRichResult').hidePopup();
+            LocationBar.bar.setAttribute('searchenabled', true);
             icon.removeAttribute('searchdisabled');
             // LocationBar.search();
         } else {
@@ -92,6 +93,7 @@ var LocationBar = {
             LocationBar.bar.mController = LocationBar.fakeController.controller;
             document.getElementById('PopupAutoCompleteRichResult').removeAttribute('hiddenByHBookmark');
             icon.setAttribute('searchdisabled', true);
+            LocationBar.bar.removeAttribute('searchenabled');
             LocationBar.searchLastWord = null;
             LocationBar.hide();
         }
