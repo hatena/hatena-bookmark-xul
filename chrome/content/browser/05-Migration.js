@@ -29,6 +29,8 @@ EventService.createListener('Migration', function() {
 Migration.Migrations = [
     // デバッグログに、Migration の無名関数の名前を表示するので、つけておく
     function M_1_toolbarMenuInstall() {
+        // やっぱり標準ではインストールしない
+        return;
         var toolbar = document.getElementById('nav-bar');
         try {
             // Fx 3.0 unified-back-forward-button,reload-button,stop-button,home-button,

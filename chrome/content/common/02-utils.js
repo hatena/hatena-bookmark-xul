@@ -73,7 +73,7 @@ var Timer = function(interval, repeatCount) {
 Timer.prototype = {
     start: function() {
         this._running = true;
-        setTimeout(function(self) {
+        this.loopTimer = setTimeout(function(self) {
             self.loop();
         }, this.interval, this);
     },
@@ -82,7 +82,14 @@ Timer.prototype = {
         this.currentCount = 0;
     },
     stop: function() {
+        this.clearTimer();
         this._runnning = false;
+    },
+    clearTimer: function() {
+        if (this.loopTimer) {
+            clearTimeout(this.loopTimer);
+            delete this.loopTimer;
+        }
     },
     get running() this._running,
     loop: function() {
@@ -95,7 +102,7 @@ Timer.prototype = {
             return;
         }
         this.dispatch('timer');
-        setTimeout(function(self) {
+        this.loopTimer = setTimeout(function(self) {
             self.loop();
         }, this.interval, this);
     },

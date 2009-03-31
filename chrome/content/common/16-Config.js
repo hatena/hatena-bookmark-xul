@@ -1,5 +1,6 @@
 
 const EXPORT = ['Config'];
+
 const PrefsBackgroundImage = 'extensions.hatenabookmark.addPanel.backgroundImage';
 
 let Config = {
@@ -31,12 +32,15 @@ let Config = {
     deleteAll: function() {
         let res = window.confirm(UIEncodeText('はてなブックマーク拡張のすべてのデータを削除します。よろしいですか？'));
         if (res) {
-            User.logout();
-            let pd = DirectoryService.get("ProfD", Ci.nsIFile);
-            pd.append('hatenabookmark');
-            if (pd.exists() && pd.isDirectory()) {
-                pd.remove(true);
-            }
+            Config._deleteAll();
+        }
+    },
+    _deleteAll: function() {
+        User.logout(); // logout しないと、DB のコネクションが残り、SQLite ファイルが削除できない
+        let pd = DirectoryService.get("ProfD", Ci.nsIFile);
+        pd.append('hatenabookmark');
+        if (pd.exists() && pd.isDirectory()) {
+            pd.remove(true);
         }
     },
     syncCheck: function() {

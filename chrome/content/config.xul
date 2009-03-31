@@ -279,14 +279,19 @@
 
         <groupbox orient="vertical">
             <caption label="同期" />
-            <vbox align="center">
                 <label value="はてなブックマークのデータから、手元のデータへと同期します。" />
+            <vbox align="center">
                 <hbox>
                     <button label="データの同期"
                         oncommand="hBookmark.Config.sync();"
                     />
                 </hbox>
-                <label value="すべてのデータを再度同期します。サーバ上のデータと差異が出てきた場合、実行すると正常なデータを取得し直すことができます。" />
+            </vbox>
+        </groupbox>
+        <groupbox orient="vertical">
+            <caption label="すべてのデータの再同期" />
+            <vbox align="center">
+                <description>すべてのデータを再度同期します。<html:br />サーバ上のデータと差異が出た場合、実行すると正常なデータを取得し直すことができます。</description>
                 <hbox>
                     <button label="すべてのデータの再同期"
                         oncommand="hBookmark.Config.syncALL();"
@@ -296,8 +301,8 @@
         </groupbox>
         <groupbox orient="vertical">
             <caption label="データの削除" />
-            <vbox align="center">
                 <description>お手元のはてなブックマーク拡張のデータを削除します。<html:br />リモートのデータは削除されません。</description>
+            <vbox align="center">
                 <button label="データをすべて削除"
                     oncommand="hBookmark.Config.deleteAll();"
                 />

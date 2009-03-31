@@ -67,7 +67,7 @@ TagCompleter.List = {
 
                     E('label', {'class': 'hBookmark-tagcomplete-tagname', value: tag}),
                     E('spacer', {flex: 1}),
-                    E('label', {'class': 'hBookmark-tagcomplete-tagcount', value: tagsCount[tag]})
+                    E('label', {'class': 'hBookmark-tagcomplete-tagcount', value: tagsCount[tag] || 0})
                 )
             );
             item.addEventListener('click', method(self, 'listClickHandler'), false);
@@ -125,7 +125,8 @@ TagCompleter.InputHandler = function(input) {
     this.input = input;
     this.inputLine = new TagCompleter.InputLine('', []);
     delete this.inputLine['suggestTags'];
-    this.inputLine.__defineGetter__('suggestTags', function() TagCompleter.tags);
+    // this.inputLine.__defineGetter__('suggestTags', function() TagCompleter.tags);
+    this.inputLine.__defineGetter__('suggestTags', method(this, 'suggestTags'));
     this.tagCompleteEnabled = Application.prefs.get('extensions.hatenabookmark.addPanel.tagCompleteEnabled').value;
     this.prevValue = this.input.value;
     input.addEventListener('keyup', method(this, 'inputKeyupHandler'), false);
@@ -142,6 +143,21 @@ TagCompleter.InputHandler.prototype = {
         document.getBindingParent(this.input),
     get addPanel() 
         document.getBindingParent(this.textbox),
+    updateRecommendedTags: function(tags) {
+        delete this._suggestTags;
+        this.recommendTags = tags;
+    },
+    suggestTags: function() {
+        if (!this._suggestTags) {
+            if (this.recommendTags && this.recommendTags.length) {
+                let t = Array.slice(this.recommendTags).concat(TagCompleter.tags).sort();
+                this._suggestTags = t;
+            } else {
+                return TagCompleter.tags;
+            }
+        }
+        return this._suggestTags;
+    },
     updateLineValue: function() 
         this.inputLine.value = this.input.value,
     updateValue: function() 
@@ -296,8 +312,10 @@ TagCompleter.InputLine.prototype = {
         let limit = this.maxSuggest;
         for (let i = 0, len = suggestTags.length;  i < len; i++) {
             let tKey = suggestTags[i];
-            if (regex.test(tKey))
-                words.push(tKey);
+            if (regex.test(tKey)) {
+                if (!words.some(function(w) w == tKey))
+                    words.push(tKey);
+            }
             if (words.length >= limit) break;
         }
         return words;
@@ -333,7 +351,8 @@ TagCompleter.InputLine.prototype = {
 
             let tKey = suggestTags[i];
             if (spaceMatched(tKey.toUpperCase(), 0, Array.prototype.slice.apply(ws), true)) {
-                words.push(tKey);
+                if (!words.some(function(w) w == tKey))
+                    words.push(tKey);
             }
             if (words.length >= limit) break;
         }

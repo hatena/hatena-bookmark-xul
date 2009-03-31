@@ -17,100 +17,102 @@
             <xul:hbox pack="center" anonid="messageRow">
                 <xul:label anonid="messageField"/>
             </xul:hbox>
-            <xul:grid class="mainGrid">
-                <xul:columns>
-                    <xul:column/>
-                    <xul:column flex="1"/>
-                </xul:columns>
-                <xul:rows>
-                    <xul:row align="center">
-                        <xul:label value="&hBookmark.addPanel.titleLabel;" class="labelHeader"/>
-                        <xul:vbox>
-                            <xul:hbox anonid="titleContainer"
-                                      align="center">
-                                <xul:image anonid="titleIcon"/>
-                                <xul:label anonid="titleLabel"
-                                           emptytext="&hBookmark.addPanel.loadingTitleLabel;"
-                                           crop="end" flex="1"/>
-                                <xul:button anonid="editTitleButton"
-                                            label="&hBookmark.addPanel.editTitleLabel;"
-                                            oncommand="document.getBindingParent(this).isTitleEditable = true;"/>
-                            </xul:hbox>
-                            <xul:hbox anonid="editableTitleContainer"
-                                      align="center">
-                                <xul:textbox anonid="titleField" flex="1"/>
-                                <xul:button anonid="cancelEditTitleButton"
-                                            label="&hBookmark.addPanel.cancelEditTitleLabel;"
-                                            oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
-                            </xul:hbox>
-                        </xul:vbox>
-                    </xul:row>
-                    <xul:row anonid="editTitleNotification" hidden="true">
-                        <xul:spacer/>
-                        <xul:vbox>
-                            <xul:description>
-                                &hBookmark.addPanel.titleDescription;
-                            </xul:description>
-                            <xul:label value="&hBookmark.addPanel.titleGuidelineLabel;"
-                                       href="&hBookmark.addPanel.titleGuidelineURI;"
-                                       class="text-link hBookmarkLink"/>
-                            <xul:hbox anonid="lastTitleEditorContainer"
-                                      align="center">
-                                <xul:label value="&hBookmark.addPanel.lastTitleEditorLabel;"/>
-                                <xul:image anonid="lastTitleEditorIcon"/>
-                                <xul:label anonid="lastTitleEditorField"
-                                           class="text-link hBookmarkLink"/>
-                            </xul:hbox>
-                        </xul:vbox>
-                    </xul:row>
-                    <xul:row align="center">
-                        <xul:label value="&hBookmark.addPanel.urlLabel;" class="labelHeader"/>
-                        <xul:label anonid="urlField"
-                                   class="text-link hBookmarkLink"
-                                   crop="end"/>
-                    </xul:row>
-                    <xul:row anonid="usersRow" align="center"
-                             style="visibility: hidden;">
-                        <xul:spacer/>
-                        <xul:hbox align="center">
-                            <xul:label anonid="usersField"
-                                       class="text-link hBookmarkLink"/>
-                            <xul:image anonid="showCommentsButton"
-                                       tooltiptext="&hBookmark.addPanel.showCommentsLabel;"
-                                       onclick="getTopWin().hBookmark.CommentViewer.show(document.getBindingParent(this).bookmark.url);"/>
-                            <xul:hbox anonid="favoritesContainer"
-                                      align="center" flex="1"
-                                      tooltip="hBookmarkFavoriteBookmarkTooltip"
-                                      style="overflow-x: hidden;"/>
-                        </xul:hbox>
-                    </xul:row>
-                    <xul:row align="center">
-                        <xul:label value="&hBookmark.addPanel.commentLabel;" class="labelHeader"/>
-                        <xul:hbox align="center">
-                            <xul:textbox
-                                anonid="commentField"
-                                class="hBookmarkMyTagComplete"
-                                flex="1"
-                            />
-                            <xul:label anonid="commentCounterField"/>
-                        </xul:hbox>
-                    </xul:row>
-                    <xul:row align="center">
-                        <xul:spacer/>
-                        <xul:hbox align="center">
-                            <xul:checkbox anonid="confirmEntryCheck"
-                                          label="&hBookmark.addPanel.confirmEntryLabel;"
-                                          preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
-                            <xul:checkbox anonid="addCollectionCheck"
-                                          label="&hBookmark.addPanel.addCollectionLabel;"
-                                          preference="extensions.hatenabookmark.addPanel.addCollection"/>
-                        </xul:hbox>
-                    </xul:row>
-                </xul:rows>
-            </xul:grid>
+            <xul:hbox align="start">
+              <xul:grid class="mainGrid" flex="1">
+                  <xul:columns>
+                      <xul:column/>
+                      <xul:column flex="1"/>
+                  </xul:columns>
+                  <xul:rows>
+                      <xul:row align="center">
+                          <xul:label value="&hBookmark.addPanel.titleLabel;" class="labelHeader"/>
+                          <xul:vbox>
+                              <xul:hbox anonid="titleContainer"
+                                        align="center">
+                                  <xul:image anonid="titleIcon"/>
+                                  <xul:label anonid="titleLabel"
+                                             emptytext="&hBookmark.addPanel.loadingTitleLabel;"
+                                             crop="end" flex="1"/>
+                                  <xul:button anonid="editTitleButton"
+                                              tooltiptext="&hBookmark.addPanel.editTitleLabel;"
+                                              oncommand="document.getBindingParent(this).isTitleEditable = true;"/>
+                              </xul:hbox>
+                              <xul:hbox anonid="editableTitleContainer"
+                                        align="center">
+                                  <xul:textbox anonid="titleField" flex="1"/>
+                                  <xul:button anonid="cancelEditTitleButton"
+                                              tooltiptext="&hBookmark.addPanel.cancelEditTitleLabel;"
+                                              oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
+                              </xul:hbox>
+                          </xul:vbox>
+                      </xul:row>
+                      <xul:row anonid="editTitleNotification" hidden="true">
+                          <xul:spacer/>
+                          <xul:vbox align="start">
+                              <xul:description>
+                                  &hBookmark.addPanel.titleDescription;
+                              </xul:description>
+                              <xul:label value="&hBookmark.addPanel.titleGuidelineLabel;"
+                                         href="&hBookmark.addPanel.titleGuidelineURI;"
+                                         class="text-link hBookmarkLink"/>
+                              <xul:hbox anonid="lastTitleEditorContainer"
+                                        align="center">
+                                  <xul:label value="&hBookmark.addPanel.lastTitleEditorLabel;"/>
+                                  <xul:image anonid="lastTitleEditorIcon"/>
+                                  <xul:label anonid="lastTitleEditorField"
+                                             class="text-link hBookmarkLink"/>
+                              </xul:hbox>
+                          </xul:vbox>
+                      </xul:row>
+                      <xul:row align="center">
+                          <xul:label value="&hBookmark.addPanel.urlLabel;" class="labelHeader"/>
+                          <xul:label anonid="urlField"
+                                     class="text-link hBookmarkLink"
+                                     crop="end"/>
+                      </xul:row>
+                      <xul:row anonid="usersRow" align="center"
+                               style="visibility: hidden;">
+                          <xul:spacer/>
+                          <xul:hbox align="center">
+                              <xul:label anonid="usersField"
+                                         class="text-link hBookmarkLink"/>
+                              <xul:image anonid="showCommentsButton"
+                                         tooltiptext="&hBookmark.addPanel.showCommentsLabel;"
+                                         onclick="getTopWin().hBookmark.CommentViewer.show(document.getBindingParent(this).bookmark.url);"/>
+                              <xul:hbox anonid="favoritesContainer"
+                                        align="center" flex="1"
+                                        tooltip="hBookmarkFavoriteBookmarkTooltip"
+                                        style="overflow-x: hidden;"/>
+                          </xul:hbox>
+                      </xul:row>
+                      <xul:row align="center">
+                          <xul:label value="&hBookmark.addPanel.commentLabel;" class="labelHeader"/>
+                          <xul:hbox align="center">
+                              <xul:textbox
+                                  anonid="commentField"
+                                  class="hBookmarkMyTagComplete"
+                                  flex="1"
+                              />
+                              <xul:label anonid="commentCounterField"/>
+                          </xul:hbox>
+                      </xul:row>
+                      <xul:row align="center">
+                          <xul:spacer/>
+                          <xul:hbox align="center">
+                              <xul:checkbox anonid="confirmEntryCheck"
+                                            label="&hBookmark.addPanel.confirmEntryLabel;"
+                                            preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
+                              <xul:checkbox anonid="addCollectionCheck"
+                                            label="&hBookmark.addPanel.addCollectionLabel;"
+                                            preference="extensions.hatenabookmark.addPanel.addCollection"/>
+                          </xul:hbox>
+                      </xul:row>
+                  </xul:rows>
+              </xul:grid>
             <xul:hbox anonid="imageSelector"
                       class="hBookmarkImageSelector"
                       hidden="true"/>
+            </xul:hbox>
             <xul:groupbox anonid="recommendedTagSelectorGroup">
                 <xul:caption label="&hBookmark.addPanel.recommendedTagsLabel;"/>
                 <xul:hbox anonid="recommendedTagSelector"
@@ -462,6 +464,7 @@
                     if (!this.showsRecommendedTagList ||
                         !tagNames || !tagNames.length)
                         return;
+                    this.inputHandler.updateRecommendedTags(tagNames);
                     let tags = tagNames.map(function (t) ({ name: t, count: 0 }));
                     this.recommendedTagSelector.build(tags);
                     let selectedTags = this.inputHandler.inputLine.tags;
@@ -809,7 +812,7 @@
         <content>
             <xul:vbox anonid="iconContainer" align="center" pack="center">
                 <xul:image anonid="icon"
-                           src="http://b.hatena.ne.jp/images/noimages.gif"/>
+                           src="chrome://hatenabookmark/skin/images/noimages.png"/>
             </xul:vbox>
             <xul:popupset>
                 <xul:panel anonid="popup"
@@ -819,7 +822,7 @@
                               style="display: block;">
                         <xul:image anonid="noImage"
                                    class="hBookmarkImageSelectorItem"
-                                   src="http://b.hatena.ne.jp/images/noimages.gif"/>
+                                   src="chrome://hatenabookmark/skin/images/noimages.png"/>
                     </xul:hbox>
                     <xul:hbox anonid="editImageNotification" align="center">
                         <xul:label value="&hBookmark.addPanel.imageDescription;"/>
@@ -840,8 +843,8 @@
 
         <implementation>
             <constructor><![CDATA[
-                this.iconContainer.setAttribute("width", this.maxImageWidth);
-                this.iconContainer.setAttribute("height", this.maxImageHeight);
+                this.iconContainer.setAttribute("maxwidth", this.maxImageWidth);
+                this.iconContainer.setAttribute("maxheight", this.maxImageHeight);
             ]]></constructor>
 
             <field name="iconContainer">
@@ -1023,7 +1026,7 @@
 
             <method name="showPopup">
                 <body><![CDATA[
-                    this.popup.openPopup(this.iconContainer, "after_start",
+                    this.popup.openPopup(this.iconContainer, "after_end",
                                          0, 0, false, false);
                 ]]></body>
             </method>

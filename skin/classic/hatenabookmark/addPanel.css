@@ -4,7 +4,7 @@
 
 .username-line {
     background: #eee url("chrome://hatenabookmark/skin/images/logo-text.png") no-repeat 10px center;
-    padding: 5px 0;
+    padding: 5px;
     border-bottom: 1px solid #ddd;
     margin-bottom: 5px;
 }
@@ -56,6 +56,10 @@ hbox[anonid="messageRow"] {
   min-height: 18px;
 }
 
+[anonid="titleContainer"] {
+  margin-left: 10px;
+}
+
 label[anonid="usersField"] {
   background: url(chrome://hatenabookmark/skin/images/page.gif) left 0px no-repeat;
   color: #FF6e6e !important;
@@ -73,10 +77,41 @@ button[anonid="cancelEditTitleButton"] {
   font-size: 11px;
   list-style-image: url(chrome://hatenabookmark/skin/images/buttons.png);
   -moz-image-region: rect(46px 147px 62px 131px);
+  -moz-appearance: none !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  margin:0 !important;
 }
 
 button[anonid="cancelEditTitleButton"] {
-  -moz-image-region: rect(62px 147px 78px 131px);
+  -moz-image-region: rect(62px 147px 78px 131px) !important;
+}
+
+[anonid="imageSelector"] {
+  border: 1px solid #ddd;
+  background: #eee;
+  padding: 2px;
+  margin: 5px;
+  cursor: pointer;
+  float: left;
+}
+
+panel[anonid="popup"] {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: #fff !important;
+}
+
+[anonid="editImageNotification"] {
+  padding: 5px;
+  background: #eee;
+  border-top: 1px solid #ddd;
+}
+
+[anonid="editImageNotification"] label {
+  margin: 0;
 }
 
 [anonid="commentCounterField"] {
@@ -90,11 +125,15 @@ button[anonid="cancelEditTitleButton"] {
   margin-right: 3px;
 }
 
+label[empty="true"] {
+  color: #ddd;
+}
+
 .hBookmarkTag, .hBookmarkSelectedTag {
    border: 1px solid transparent;
    cursor: pointer;
    padding:2px 2px;
-   margin: 5px 3px 5px 0;
+   margin: 2px 3px 2px 0;
 }
 
 .hBookmarkSelectedTag {
@@ -155,9 +194,10 @@ groupbox {
    cursor: pointer;
 }
 
-.hBookmarkImageSelector {
-    /* XXX: 明日はずす */
-    /*display:none;*/
+
+[anonid="popup"] {
+  background: #fff;
+  border: 1px solid #ddd;
 }
 
 .hBookmarkImageSelectorPopup {
@@ -170,6 +210,5 @@ groupbox {
 .hBookmarkImageSelectorItem[selected="true"] {
    outline: 3px solid #00f;
 }
-
 
 
