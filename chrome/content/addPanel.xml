@@ -423,8 +423,16 @@
                             // とりあえずやっつけ
                             // loading icon だしたほうがよさそう
                             let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
-                            if (m) {
-                                this.titleField.value = this.titleLabel.value = m[1];
+                            if (m && !/\ufffd/.test(m[1])) {
+                                this.titleField.value = m[1];
+                                this.titleLabel.value = m[1];
+                            } else {
+                                let self = this;
+                                new hBookmark.TitleGuesser(bookmark.url, function (title) {
+                                    title = title || bookmark.url;
+                                    self.titleField.value = title;
+                                    self.titleLabel.value = title;
+                                });
                             }
                     /*
                         hBookmark.net.get(bookmark.url, function(xhr) {
