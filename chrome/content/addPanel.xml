@@ -856,6 +856,7 @@
             <!-- XXX ToDo: width/heightはskinもしくはprefsへ移動する。 -->
             <field name="maxImageWidth">100</field>
             <field name="maxImageHeight">100</field>
+            <field name="maxCount">20</field>
 
             <field name="_defaultImage">this.noImage</field>
             <property name="defaultImage"
@@ -983,10 +984,16 @@
                 <body><![CDATA[
                     let images = Array.filter(doc.getElementsByTagName("img"),
                         function (img) img instanceof HTMLImageElement);
-                    images = images.filter(function (image) {
-                        return !(image.naturalWidth < 60 ||
-                                 image.naturalHeight < 60);
-                    });
+                    if (images.length > this.maxCount) {
+                        images = images.map(function (image, index) {
+                            let size = Math.min(image.naturalWidth,
+                                                image.naturalHeight);
+                            return { image: image, size: size, index: index };
+                        }).sort(function (a, b) b.size - a.size)
+                          .slice(0, this.maxCount)
+                          .sort(function(a, b) a.index - b.index)
+                          .map(function (item) item.image);
+                    }
                     return images;
                 ]]></body>
             </method>
