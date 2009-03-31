@@ -36,8 +36,10 @@ if (shared.has('User')) {
             this.clearUser();
         },
         clearUser: function() {
-            this.user.clear();
-            delete this.user;
+            if (this.user) {
+                this.user.clear();
+                delete this.user;
+            }
         },
         setUser: function User_setCurrentUser (res) {
             let current = this.user;
