@@ -50,11 +50,13 @@
         </menupopup>
     </popupset>
 
-    <vbox id="login-notification">
+    <vbox id="login-notification" collapsed="true">
         <description>&hBookmark.sidebar.loginDescription;</description>
-        <label class="text-link hBookmarkLink"
-               value="&hBookmark.sidebar.loginLabel;"
-               href="&hBookmark.sidebar.loginURI;"/>
+        <hbox pack="start">
+            <label class="text-link hBookmarkLink"
+                   value="&hBookmark.sidebar.loginLabel;"
+                   href="&hBookmark.sidebar.loginURI;"/>
+        </hbox>
     </vbox>
     <vbox id="main-content" flex="1">
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
