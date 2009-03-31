@@ -94,7 +94,6 @@ button[anonid="cancelEditTitleButton"] {
   background: #eee;
   padding: 2px;
   margin: 5px;
-  cursor: pointer;
   float: left;
 }
 
@@ -194,7 +193,6 @@ groupbox {
    cursor: pointer;
 }
 
-
 [anonid="popup"] {
   background: #fff;
   border: 1px solid #ddd;
@@ -206,9 +204,26 @@ groupbox {
 .hBookmarkImageSelectorItem {
    margin: 5px;
    vertical-align: middle;
+   outline: 3px solid #fff;
+   cursor: pointer;
+}
+.hBookmarkImageSelectorItem:hover {
+  outline: 2px solid #66f;
 }
 .hBookmarkImageSelectorItem[selected="true"] {
    outline: 3px solid #00f;
 }
 
+hbox[anonid="container"] {
+  padding: 10px;
+}
 
+image[anonid="noImage"] {
+  border: 1px solid #ddd;
+  padding: 8px;
+  background: #eee;
+}
+
+image[anonid="icon"] {
+  cursor: pointer;
+}
