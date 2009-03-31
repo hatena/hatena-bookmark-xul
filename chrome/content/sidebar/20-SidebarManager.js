@@ -15,6 +15,8 @@ __defineGetter__("sidebarBundle", function get_sidebarBundle() {
 window.addEventListener("load", initializeSidebar, false);
 
 function initializeSidebar() {
+    User.login();
+
     var tagTree = document.getElementById("tag-tree");
     var tagTreeView = new TagTreeView();
     tagTree.view = tagTreeView;
@@ -42,8 +44,10 @@ function initializeSidebar() {
     bookmarkTree.body.addEventListener("mouseover", bookmarkTreeView, false);
     bookmarkTree.body.addEventListener("mousemove", bookmarkTreeView, false);
     EventService.createListener("BookmarksUpdated", bookmarkTreeView, false);
-    EventService.createListener("UserChange", bookmarkTreeView, false);
+    //EventService.createListener("UserChange", bookmarkTreeView, false);
 
+    EventService.createListener("UserChange", showSidebarContent);
+    showSidebarContent();
     searchBox.focus();
 }
 
@@ -52,4 +56,14 @@ function mayFireInputEvent(event) {
     let ev = document.createEvent("UIEvent");
     ev.initUIEvent("input", true, false, window, 0);
     event.target.dispatchEvent(ev);
+}
+
+function showSidebarContent() {
+    let isLoggedIn = !!User.user;
+    document.getElementById("login-notification").collapsed = isLoggedIn;
+    document.getElementById("main-content").collapsed = !isLoggedIn;
+    // ボックスの位置情報が確実に利用できるよう遅延させる。
+    setTimeout(function () {
+        document.getElementById("bookmark-tree").view.wrappedJSObject.update();
+    }, 0);
 }
