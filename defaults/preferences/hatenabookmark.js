@@ -5,8 +5,10 @@ pref("extensions.hatenabookmark.testtesttest", 'test');
 
 pref("extensions.hatenabookmark.migration.version", 0);
 
+// toolbar
 // Item count in "Hatena Bookmarks" folder in Bookmarks toolbar.
 pref("extensions.hatenabookmark.recentItemCount", 20);
+pref("extensions.hatenabookmark.toolbar.maxItemWidth", 156);
 
 // for debuge
 pref("extensions.hatenabookmark.debug.log", false);

@@ -85,6 +85,7 @@ var HttpWatcher = {
         let listener = Sync.createListener("complete", function onSync() {
             p('Sync completed');
             listener.unlisten();
+            HTTPCache.entry.cache.clear(task.url);
             if (!Model.Bookmark.findByUrl(task.url).length) {
                 p(task.url + ' is not registered.  Retry sync.');
                 // 同期が間に合わなかったら少し待ってもう一度だけ同期する。
