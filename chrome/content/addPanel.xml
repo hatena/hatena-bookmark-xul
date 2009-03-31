@@ -456,6 +456,7 @@
                     if (!this.showsRecommendedTagList ||
                         !tagNames || !tagNames.length)
                         return;
+                    this.inputHandler.updateRecommendedTags(tagNames);
                     let tags = tagNames.map(function (t) ({ name: t, count: 0 }));
                     this.recommendedTagSelector.build(tags);
                     let selectedTags = this.inputHandler.inputLine.tags;

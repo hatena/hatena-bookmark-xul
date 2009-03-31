@@ -1,0 +1,70 @@
+/* toolbar */
+#hBookmarkToolbar {
+  min-height: 26px;
+}
+
+.hBookmark-toolbar-add-button {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(0px 25px 23px 0px);
+}
+
+.hBookmark-toolbar-add-button:active {
+  -moz-image-region: rect(23px 25px 46px 0px);
+}
+
+toolbar[iconsize="small"] .hBookmark-toolbar-add-button {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(46px 16px 62px 0px);
+}
+
+toolbar[iconsize="small"] .hBookmark-toolbar-add-button:active {
+  -moz-image-region: rect(62px 16px 78px 0px);
+}
+
+.hBookmark-toolbar-home-button {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(0px 50px 23px 25px);
+}
+
+.hBookmark-toolbar-home-button:active {
+  -moz-image-region: rect(23px 50px 46px 25px);
+}
+
+toolbar[iconsize="small"] .hBookmark-toolbar-home-button {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(46px 32px 62px 16px);
+}
+
+toolbar[iconsize="small"] .hBookmark-toolbar-home-button:active {
+  -moz-image-region: rect(62px 32px 78px 16px);
+}
+
+.hBookmark-toolbar-recent-button {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(0px 75px 23px 50px);
+}
+
+.hBookmark-toolbar-recent-button:active {
+  -moz-image-region: rect(23px 75px 46px 50px);
+}
+
+toolbar[iconsize="small"] .hBookmark-toolbar-recent-button {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(46px 48px 62px 32px);
+}
+
+toolbar[iconsize="small"] .hBookmark-toolbar-recent-button:active {
+  -moz-image-region: rect(62px 48px 78px 32px);
+}
+
+.hBookmark-toolbar-sidebar-button {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(46px 180px 62px 161px);
+  cursor: pointer;
+}
+
+.hBookmark-toolbar-sidebar-button[checked="true"] {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(62px 180px 78px 161px);
+  cursor: pointer;
+}

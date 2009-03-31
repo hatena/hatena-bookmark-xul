@@ -1,52 +1,52 @@
-#hBookmark-toolbar-add-button {
+.hBookmark-toolbar-add-button {
   -moz-image-region: rect(0px 111px 23px 75px);
 }
 
-#hBookmark-toolbar-add-button:active {
+.hBookmark-toolbar-add-button:active {
   -moz-image-region: rect(23px 111px 46px 75px);
 }
 
-toolbar[iconsize="small"] #hBookmark-toolbar-add-button {
+toolbar[iconsize="small"] .hBookmark-toolbar-add-button {
   -moz-image-region: rect(0px 111px 23px 75px);
 }
 
-toolbar[iconsize="small"] #hBookmark-toolbar-add-button:active {
+toolbar[iconsize="small"] .hBookmark-toolbar-add-button:active {
   -moz-image-region: rect(23px 111px 46px 75px);
 }
 
-#hBookmark-toolbar-home-button {
+.hBookmark-toolbar-home-button {
   -moz-image-region: rect(0px 147px 23px 111px);
 }
 
-#hBookmark-toolbar-home-button:active {
+.hBookmark-toolbar-home-button:active {
   -moz-image-region: rect(23px 147px 46px 111px);
 }
 
-toolbar[iconsize="small"] #hBookmark-toolbar-home-button {
+toolbar[iconsize="small"] .hBookmark-toolbar-home-button {
   -moz-image-region: rect(0px 147px 23px 111px);
 }
 
-toolbar[iconsize="small"] #hBookmark-toolbar-home-button:active {
+toolbar[iconsize="small"] .hBookmark-toolbar-home-button:active {
   -moz-image-region: rect(23px 147px 46px 111px);
 }
 
-#hBookmarkDropdownButton {
+.hBookmark-toolbar-recent-button {
   -moz-image-region: rect(0px 183px 23px 147px);
 }
 
-#hBookmarkDropdownButton:active {
+.hBookmark-toolbar-recent-button:active {
   -moz-image-region: rect(23px 183px 46px 147px);
 }
 
-toolbar[iconsize="small"] #hBookmarkDropdownButton {
+toolbar[iconsize="small"] .hBookmark-toolbar-recent-button {
   -moz-image-region: rect(0px 183px 23px 147px);
 }
 
-toolbar[iconsize="small"] #hBookmarkDropdownButton:active {
+toolbar[iconsize="small"] .hBookmark-toolbar-recent-button:active {
   -moz-image-region: rect(23px 183px 46px 147px);
 }
 
-#hBookmarkToolbar > [anonid="sidebarToggleButton"] {
+.hBookmark-toolbar-sidebar-button {
   list-style-image: url("chrome://hatenabookmark/skin/images/favicon.ico");
 }
 

@@ -1,11 +1,14 @@
 
+pref("extensions.hatenabookmark.testtesttest", 'test');
 // set prefs
 // pref("extensions.hatenabookmark.config.foobar", "foobar");
 
 pref("extensions.hatenabookmark.migration.version", 0);
 
+// toolbar
 // Item count in "Hatena Bookmarks" folder in Bookmarks toolbar.
 pref("extensions.hatenabookmark.recentItemCount", 20);
+pref("extensions.hatenabookmark.toolbar.maxItemWidth", 156);
 
 // for debuge
 pref("extensions.hatenabookmark.debug.log", false);
@@ -50,7 +53,7 @@ pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);
 pref("extensions.hatenabookmark.sync.syncWait", 1000);
 
 // Shurtcut
-pref("extensions.hatenabookmark.shortcut.keys.add", "Ctrl(Controle)+Shift+B");
-pref("extensions.hatenabookmark.shortcut.keys.comment", "Ctrl(Controle)+Shift+C");
+pref("extensions.hatenabookmark.shortcut.keys.add", "Ctrl(Control)+Shift+B");
+pref("extensions.hatenabookmark.shortcut.keys.comment", "Ctrl(Control)+Shift+C");
 
 

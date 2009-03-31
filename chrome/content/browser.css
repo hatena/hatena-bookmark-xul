@@ -135,6 +135,11 @@ width: 800px;
     */
 }
 
+#urlbar[searchenabled="true"] {
+    -moz-appearance: none !important;
+    background-color: #DCEEFF !important;
+}
+
 #hBookmark-search-icon {
   list-style-image: url("chrome://hatenabookmark/skin/images/search_on.png");
   visibility: inherit !important;
@@ -255,8 +260,6 @@ width: 800px;
     font-weight: bold;
 }
 */
-
-
 
 
 

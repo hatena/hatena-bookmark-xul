@@ -96,11 +96,7 @@ HTTPCache.prototype = {
         return (this.options.baseURL || '') + url;
     },
     isValid: function(url) {
-        if (url.indexOf('https://') == 0 && Application.prefs.get('extensions.hatenabookmark.statusbar.httpsIgnore').value) {
-            return false;
-        } else {
-            return true;
-        }
+        return true;
     },
     async_get: function HTTPCache_async_get(url, callback) {
         if (!this.isValid(url)) return callback(null);
@@ -165,8 +161,16 @@ HTTPCache.counter = new HTTPCache('counterCache', {
     encoder: encodeURIComponent,
 });
 
+HTTPCache.counter.isValid = function(url) {
+    if (url.indexOf('https://') == 0 && Application.prefs.get('extensions.hatenabookmark.statusbar.httpsIgnore').value) {
+        return false;
+    } else {
+        return true;
+    }
+};
+
 HTTPCache.comment = new HTTPCache('commentCache', {
-    expire: 60 * 30,
+    expire: 60 * 60,
     baseURL: 'http://b.hatena.ne.jp/entry/json/?url=',
     seriarizer: 'uneval',
     json: true,

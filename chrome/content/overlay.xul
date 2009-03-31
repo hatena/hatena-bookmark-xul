@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/toolbar.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/toolbar.css"?>
 <?xml-stylesheet href="chrome://hatenabookmark/content/browser.css" type="text/css"?>
 <?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
 <!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/browser.dtd">
@@ -83,21 +84,21 @@
             id="hBookmark-toolbar-add-button" 
             label="&hBookmark.toolbar.add;"
             tooltiptext="&hBookmark.toolbar.add;"
-            class="toolbarbutton-1 chromeclass-toolbar-additional"
+            class="hBookmark-toolbar-add-button toolbarbutton-1 chromeclass-toolbar-additional"
             oncommand="hBookmark.AddPanelManager.showPanel(window.content);" />
 
         <toolbarbutton 
             id="hBookmark-toolbar-home-button" 
             label="&hBookmark.toolbar.home;"
             tooltiptext="&hBookmark.toolbar.home;"
-            class="toolbarbutton-1 chromeclass-toolbar-additional"
+            class="hBookmark-toolbar-home-button toolbarbutton-1 chromeclass-toolbar-additional"
             oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
             onclick="checkForMiddleClick(this, event);" />
 
         <toolbaritem id="hBookmark-toolbar-dropdown">
             <toolbarbutton
                 id="hBookmarkDropdownButton"
-                class="chromeclass-toolbar-additional"
+                class="hBookmark-toolbar-recent-button chromeclass-toolbar-additional"
                 type="menu"
                 label="&hBookmark.toolbar.recentLabel;"
                 tooltiptext="&hBookmark.toolbar.recentLabel;">
@@ -117,6 +118,8 @@
     <toolbox id="navigator-toolbox">
         <toolbar id="hBookmarkToolbar"
                  class="chromeclass-toolbar"
+                 mode="icons"
+                 iconsize="small"
                  toolbarname="&hBookmark.toolbar.title;"
                  accesskey="&hBookmark.toolbar.titleKey;"/>
     </toolbox>
