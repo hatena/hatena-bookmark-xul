@@ -23,10 +23,12 @@
                                onclick="checkForMiddleClick(this, event);" />
             <xul:toolbarseparator/>
             <xul:toolbarbutton anonid="loginButton"
+                               class="bookmark-item"
                                label="&hBookmark.toolbar.loginLabel;"
                                oncommand="hBookmark.UIUtils.openLogin(event);"
                                onclick="checkForMiddleClick(this, event);"/>
             <xul:toolbarbutton anonid="addBookmarkButton"
+                               class="bookmark-item"
                                label="&hBookmark.toolbar.addBookmarkLabel;"
                                oncommand="hBookmark.UIUtils.openAddBookmark(event);"
                                onclick="checkForMiddleClick(this, event);"/>
