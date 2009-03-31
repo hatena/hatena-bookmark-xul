@@ -4,6 +4,15 @@ const EXPORT = ['Config'];
 const PrefsBackgroundImage = 'extensions.hatenabookmark.addPanel.backgroundImage';
 
 let Config = {
+    openDialog: function() {
+        let features;
+        if (Application.prefs.get('browser.preferences.instantApply').value) {
+            features = 'chrome,titlebar,toolbar,centerscreen,dialog=no';
+        } else {
+            features = 'chrome,titlebar,toolbar,centerscreen,modal';
+        }
+        window.openDialog('chrome://hatenabookmark/content/config.xul', 'Preferences', features);
+    },
     initDataPane: function() {
         let login = document.getElementById('pref-login');
         let nologin = document.getElementById('pref-nologin');

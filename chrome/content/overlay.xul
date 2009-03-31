@@ -30,7 +30,7 @@
                     oncommand="hBookmark.Sync.sync();"/>
                 <menuitem id="hBookmark-menuitem-config"
                     label="&hBookmark.menu.config;"
-                    oncommand="window.openDialog('chrome://hatenabookmark/content/config.xul', 'Preferences', 'chrome,titlebar,toolbar,centerscreen,modal');"/>
+                    oncommand="hBookmark.Config.openDialog();"/>
             </menupopup>
         </menu>
     </menupopup>
