@@ -28,6 +28,7 @@ function initializeSidebar() {
 
     tagTree.addEventListener("select", tagTreeView, false);
     tagTree.addEventListener("click", tagTreeView, false);
+    EventService.createListener("UserChange", tagTreeView, false);
 
     let searchBox = document.getElementById("searchBox");
     searchBox.addEventListener("keypress", mayFireInputEvent, false);

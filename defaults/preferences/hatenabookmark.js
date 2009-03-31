@@ -28,6 +28,9 @@ pref("extensions.hatenabookmark.statusbar.addButton", true);
 pref("extensions.hatenabookmark.addPanel.backgroundImage", '');
 pref("extensions.hatenabookmark.addPanel.confirmEntry", false);
 pref("extensions.hatenabookmark.addPanel.addCollection", true);
+pref("extensions.hatenabookmark.addPanel.maxImageWidth", 100);
+pref("extensions.hatenabookmark.addPanel.maxImageHeight", 100);
+pref("extensions.hatenabookmark.addPanel.maxImageCount", 20);
 
 // addPanel tagsuggest
 pref("extensions.hatenabookmark.addPanel.tagCompleteEnabled", true);
@@ -47,7 +50,7 @@ pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);
 pref("extensions.hatenabookmark.sync.syncWait", 1000);
 
 // Shurtcut
-pref("extensions.hatenabookmark.shortcut.keys.add", "Accel+Shift+B");
-pref("extensions.hatenabookmark.shortcut.keys.comment", "Accel+Shift+C");
+pref("extensions.hatenabookmark.shortcut.keys.add", "Ctrl(Controle)+Shift+B");
+pref("extensions.hatenabookmark.shortcut.keys.comment", "Ctrl(Controle)+Shift+C");
 
 

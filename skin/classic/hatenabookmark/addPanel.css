@@ -168,12 +168,21 @@ groupbox {
    cursor: pointer;
 }
 
-.hBookmarkImageSelector {
-    /* XXX: 明日はずす */
-}
 
 [anonid="popup"] {
   background: #fff;
   border: 1px solid #ddd;
 }
+
+.hBookmarkImageSelectorPopup {
+   max-width: 550px;
+}
+.hBookmarkImageSelectorItem {
+   margin: 5px;
+   vertical-align: middle;
+}
+.hBookmarkImageSelectorItem[selected="true"] {
+   outline: 3px solid #00f;
+}
+
 

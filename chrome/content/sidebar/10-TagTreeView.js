@@ -158,7 +158,20 @@ extend(TagTreeView.prototype, {
         case "click":
             this.handleClick(event);
             break;
+
+        case "UserChange":
+            this.build();
+            break;
         }
+    },
+
+    build: function TTV_build() {
+        let prevRowCount = this.rowCount;
+        this._visibleItems = [];
+        this._openRelatedTags(this._rootItem);
+        this._visibleItems.forEach(function (item, i) item.index = i);
+        this._treeBox.rowCountChanged(0, -prevRowCount);
+        this._treeBox.rowCountChanged(0, this.rowCount);
     },
 
     setTags: function TTV_setTags() {

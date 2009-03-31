@@ -19,6 +19,11 @@
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "ブックマークを確認">
 <!ENTITY hBookmark.addPanel.addCollectionLabel "コレクションに追加">
 
+<!ENTITY hBookmark.addPanel.imageDescription "エントリーの画像は全ユーザ共通です">
+<!ENTITY hBookmark.addPanel.imageGuidelineLabel "ガイドライン">
+<!ENTITY hBookmark.addPanel.imageGuidelineURI "http://b.hatena.ne.jp/help/guideline_image">
+<!ENTITY hBookmark.addPanel.lastImageEditorLabel "最終変更:">
+
 <!ENTITY hBookmark.addPanel.recommendedTagsLabel "おすすめタグ">
 <!ENTITY hBookmark.addPanel.tagsLabel "タグ">
 <!ENTITY hBookmark.addPanel.showAllTagsLabel "すべてのタグを表示">
