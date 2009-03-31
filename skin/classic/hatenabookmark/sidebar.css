@@ -1,0 +1,4 @@
+#bookmark-tree > treechildren::-moz-tree-image {
+   width: 16px;
+   height: 16px;
+}

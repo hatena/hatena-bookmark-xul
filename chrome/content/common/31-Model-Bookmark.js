@@ -198,6 +198,13 @@ addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
     target.updateTags();
 });
 
+addAround(Bookmark, 'rowToObject', function (proceed, args) {
+    let obj = proceed(args);
+    obj.title = obj.title.replace(/&#(\d+);/g,
+                                  function (m, n) String.fromCharCode(n));
+    return obj;
+});
+
 Model.Bookmark = Bookmark;
 Model.MODELS.push("Bookmark");
 
