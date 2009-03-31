@@ -421,9 +421,11 @@
                             // とりあえずやっつけ
                             // loading icon だしたほうがよさそう
                             let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
-                            if (m) {
-                                this.titleField.value = this.titleLabel.value = m[1];
-                            }
+                            let title = m ? m[1] : bookmark.url;
+                            this.titleField.value = this.titleLabel.value = title;
+                            //if (m) {
+                            //    this.titleField.value = this.titleLabel.value = m[1];
+                            //}
                     /*
                         hBookmark.net.get(bookmark.url, function(xhr) {
                         }, null, true);
