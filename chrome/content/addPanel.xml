@@ -806,12 +806,13 @@
                                    class="hBookmarkImageSelectorItem"
                                    src="http://b.hatena.ne.jp/images/noimages.gif"/>
                     </xul:hbox>
-                    <xul:hbox anonid="lastImageEditorContainer">
+                    <xul:hbox anonid="lastImageEditorContainer" align="center">
                         <xul:label value="&hBookmark.addPanel.imageDescription;"/>
                         <xul:label class="text-link hBookmarkLink"
                                    value="&hBookmark.addPanel.imageGuidelineLabel;"
                                    href="&hBookmark.addPanel.imageGuidelineURI;"/>
                         <xul:spacer flex="1"/>
+                        <xul:label value="&hBookmark.addPanel.lastImageEditorLabel;"/>
                         <xul:image anonid="lastImageEditorIcon"/>
                         <xul:label anonid="lastImageEditorField"
                                    class="text-link hBookmarkLink"/>
