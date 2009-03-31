@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
 <?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
+<?xml-stylesheet href="chrome://hatenabookmark/content/widgets.css" type="text/css" ?>
 <?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
 <!DOCTYPE page SYSTEM "chrome://hatenabookmark/locale/sidebar.dtd" [
     <!ENTITY % hBookmark.popups SYSTEM "chrome://hatenabookmark/locale/popups.dtd">
@@ -49,7 +50,13 @@
         </menupopup>
     </popupset>
 
-    <vbox flex="1">
+    <vbox id="login-notification">
+        <description>&hBookmark.sidebar.loginDescription;</description>
+        <label class="text-link hBookmarkLink"
+               value="&hBookmark.sidebar.loginLabel;"
+               href="&hBookmark.sidebar.loginURI;"/>
+    </vbox>
+    <vbox id="main-content" flex="1">
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
               contextmenu="hBookmarkTagContext" flex="1" persist="height">
             <treecols>

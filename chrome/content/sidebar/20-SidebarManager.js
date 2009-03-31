@@ -44,6 +44,7 @@ function initializeSidebar() {
     EventService.createListener("BookmarksUpdated", bookmarkTreeView, false);
     EventService.createListener("UserChange", bookmarkTreeView, false);
 
+    showSidebarContent();
     searchBox.focus();
 }
 
@@ -52,4 +53,10 @@ function mayFireInputEvent(event) {
     let ev = document.createEvent("UIEvent");
     ev.initUIEvent("input", true, false, window, 0);
     event.target.dispatchEvent(ev);
+}
+
+function showSidebarContent() {
+    let isLoggedIn = !!User.user;
+    document.getElementById("login-notification").collapsed = isLoggedIn;
+    document.getElementById("main-content").collapsed = !isLoggedIn;
 }
