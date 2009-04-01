@@ -1,11 +1,7 @@
-<!ENTITY hBookmark.tagContext.openBookmarksLabel "Open Related Bookmarks">
-<!ENTITY hBookmark.tagContext.openBookmarksKey "B">
 <!ENTITY hBookmark.tagContext.openLabel "Open Tag Page">
 <!ENTITY hBookmark.tagContext.openKey "O">
 <!ENTITY hBookmark.tagContext.openInNewTabLabel "Open Tag Page in New Tab">
 <!ENTITY hBookmark.tagContext.openInNewTabKey "T">
-<!ENTITY hBookmark.tagContext.deleteBookmarksLabel "Delete Related Bookmarks">
-<!ENTITY hBookmark.tagContext.deleteBookmarksKey "D">
 
 <!ENTITY hBookmark.entryContext.openLabel "Open">
 <!ENTITY hBookmark.entryContext.openKey "O">
