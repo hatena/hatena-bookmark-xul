@@ -9,6 +9,7 @@
             <menuitem id="hBookmarkEntryContext_open"
                       label="&hBookmark.entryContext.openLabel;"
                       accesskey="&hBookmark.entryContext.openKey;"
+                      default="true"
                       oncommand="this.parentNode._context.openIn('current');"/>
             <menuitem id="hBookmarkEntryContext_openInNewTab"
                       label="&hBookmark.entryContext.openInNewTabLabel;"
