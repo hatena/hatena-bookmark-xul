@@ -6,8 +6,6 @@ const Cr = Components.results;
 const Cu = Components.utils;
 const EXT_ID = 'bookmark@hatena.ne.jp';
 
-const INTERFACES = [key for (key in Ci)];
-
 let getService = function getService(name, i) {
     let interfaces = Array.concat(i);
     let service = Cc[name].getService(interfaces.shift());
@@ -165,105 +163,6 @@ var isInclude = function(val, ary) {
     return false;
 }
 
-// copy from Tombloo
-/**
- * オブジェクトのプロパティをコピーする。
- * ゲッター/セッターの関数も対象に含まれる。
- * 
- * @param {Object} target コピー先。
- * @param {Object} source コピー元。
- * @return {Object} コピー先。
- */
-var extend = function extend(target, source, overwrite){
-    overwrite = overwrite == null ? true : overwrite;
-    for(var p in source){
-        var getter = source.__lookupGetter__(p);
-        if(getter)
-            target.__defineGetter__(p, getter);
-        
-        var setter = source.__lookupSetter__(p);
-        if(setter)
-            target.__defineSetter__(p, setter);
-        
-        if(!getter && !setter && (overwrite || !(p in target)))
-            target[p] = source[p];
-    }
-    return target;
-}
-
-/**
- * メソッドが呼ばれる前に処理を追加する。
- * より詳細なコントロールが必要な場合はaddAroundを使うこと。
- * 
- * @param {Object} target 対象オブジェクト。
- * @param {String} name メソッド名。
- * @param {Function} before 前処理。
- *        対象オブジェクトをthisとして、オリジナルの引数が全て渡されて呼び出される。
- */
-function addBefore(target, name, before) {
-    var original = target[name];
-    target[name] = function() {
-        before.apply(target, arguments);
-        return original.apply(target, arguments);
-    }
-}
-
-/**
- * メソッドへアラウンドアドバイスを追加する。
- * 処理を置きかえ、引数の変形や、返り値の加工をできるようにする。
- * 
- * @param {Object} target 対象オブジェクト。
- * @param {String || Array} methodNames 
- *        メソッド名。複数指定することもできる。
- *        set*のようにワイルドカートを使ってもよい。
- * @param {Function} advice 
- *        アドバイス。proceed、args、target、methodNameの4つの引数が渡される。
- *        proceedは対象オブジェクトにバインド済みのオリジナルのメソッド。
- */
-function addAround(target, methodNames, advice){
-    methodNames = [].concat(methodNames);
-    
-    // ワイルドカードの展開
-    for(var i=0 ; i<methodNames.length ; i++){
-        if(methodNames[i].indexOf('*')==-1) continue;
-        
-        var hint = methodNames.splice(i, 1)[0];
-        hint = new RegExp('^' + hint.replace(/\*/g, '.*'));
-        for(var prop in target) {
-            if(hint.test(prop) && typeof(target[prop]) == 'function')
-                methodNames.push(prop);
-        }
-    }
-    
-    methodNames.forEach(function(methodName){
-        var method = target[methodName];
-        target[methodName] = function() {
-            var self = this;
-            return advice(
-                function(args){
-                    return method.apply(self, args);
-                }, 
-                arguments, self, methodName);
-        };
-        target[methodName].overwrite = (method.overwrite || 0) + 1;
-    });
-}
-
-var update = function (self, obj/*, ... */) {
-    if (self === null) {
-        self = {};
-    }
-    for (var i = 1; i < arguments.length; i++) {
-        var o = arguments[i];
-        if (typeof(o) != 'undefined' && o !== null) {
-            for (var k in o) {
-                self[k] = o[k];
-            }
-        }
-    }
-    return self;
-};
-
 var bind = function bind(func, self) function () func.apply(self, Array.slice(arguments));
 var method = function method(self, methodName) function () self[methodName].apply(self, Array.slice(arguments));
 
@@ -366,6 +265,109 @@ function _getModuleURIs() {
     return uris.sort();
 }
 
+/*
+ * original code by tombloo
+ * http://github.com/to/tombloo
+ * 以下のコードのライセンスは Tombloo のライセンスに従います
+ */
+
+/**
+ * オブジェクトのプロパティをコピーする。
+ * ゲッター/セッターの関数も対象に含まれる。
+ * 
+ * @param {Object} target コピー先。
+ * @param {Object} source コピー元。
+ * @return {Object} コピー先。
+ */
+var extend = function extend(target, source, overwrite){
+    overwrite = overwrite == null ? true : overwrite;
+    for(var p in source){
+        var getter = source.__lookupGetter__(p);
+        if(getter)
+            target.__defineGetter__(p, getter);
+        
+        var setter = source.__lookupSetter__(p);
+        if(setter)
+            target.__defineSetter__(p, setter);
+        
+        if(!getter && !setter && (overwrite || !(p in target)))
+            target[p] = source[p];
+    }
+    return target;
+}
+
+/**
+ * メソッドが呼ばれる前に処理を追加する。
+ * より詳細なコントロールが必要な場合はaddAroundを使うこと。
+ * 
+ * @param {Object} target 対象オブジェクト。
+ * @param {String} name メソッド名。
+ * @param {Function} before 前処理。
+ *        対象オブジェクトをthisとして、オリジナルの引数が全て渡されて呼び出される。
+ */
+function addBefore(target, name, before) {
+    var original = target[name];
+    target[name] = function() {
+        before.apply(target, arguments);
+        return original.apply(target, arguments);
+    }
+}
+
+/**
+ * メソッドへアラウンドアドバイスを追加する。
+ * 処理を置きかえ、引数の変形や、返り値の加工をできるようにする。
+ * 
+ * @param {Object} target 対象オブジェクト。
+ * @param {String || Array} methodNames 
+ *        メソッド名。複数指定することもできる。
+ *        set*のようにワイルドカートを使ってもよい。
+ * @param {Function} advice 
+ *        アドバイス。proceed、args、target、methodNameの4つの引数が渡される。
+ *        proceedは対象オブジェクトにバインド済みのオリジナルのメソッド。
+ */
+function addAround(target, methodNames, advice){
+    methodNames = [].concat(methodNames);
+    
+    // ワイルドカードの展開
+    for(var i=0 ; i<methodNames.length ; i++){
+        if(methodNames[i].indexOf('*')==-1) continue;
+        
+        var hint = methodNames.splice(i, 1)[0];
+        hint = new RegExp('^' + hint.replace(/\*/g, '.*'));
+        for(var prop in target) {
+            if(hint.test(prop) && typeof(target[prop]) == 'function')
+                methodNames.push(prop);
+        }
+    }
+    
+    methodNames.forEach(function(methodName){
+        var method = target[methodName];
+        target[methodName] = function() {
+            var self = this;
+            return advice(
+                function(args){
+                    return method.apply(self, args);
+                }, 
+                arguments, self, methodName);
+        };
+        target[methodName].overwrite = (method.overwrite || 0) + 1;
+    });
+}
+
+var update = function (self, obj/*, ... */) {
+    if (self === null) {
+        self = {};
+    }
+    for (var i = 1; i < arguments.length; i++) {
+        var o = arguments[i];
+        if (typeof(o) != 'undefined' && o !== null) {
+            for (var k in o) {
+                self[k] = o[k];
+            }
+        }
+    }
+    return self;
+};
 var EXPORTED_SYMBOLS = [m for (m in new Iterator(this, true))
                           if (m[0] !== "_" && m !== "EXPORTED_SYMBOLS")];
 
