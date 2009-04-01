@@ -144,9 +144,6 @@ var LocationBar = {
     },
     toggleFlag: false,
     barKeyDownHandler: function(ev) {
-        /* ここで stop すると、選択の List の挙動を変更できる
-        p('keydown' + ev.keyCode);
-        */
         let keyCode = ev.keyCode;
         if (ev.ctrlKey && ev.shiftKey &&
             (keyCode == ev.DOM_VK_SHIFT) &&
@@ -286,12 +283,15 @@ var LocationBar = {
             // next
             if (ev.shiftKey) {
                 if (list.selectedIndex == 0) {
+                    // LocationBar.bar.inputField.focus();
                     LocationBar.listControler.last();
                 } else {
                     list.selectedIndex = list.selectedIndex - 1;
                 }
             } else {
                 if (list.selectedIndex == list.getRowCount() - 1) {
+                    // list.selectedIndex = 0;
+                    // LocationBar.bar.inputField.focus();
                     LocationBar.listControler.first();
                 } else {
                     list.selectedIndex = list.selectedIndex + 1;
