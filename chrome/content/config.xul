@@ -19,7 +19,7 @@
 -->
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon32.png"
+    image="chrome://hatenabookmark/skin/images/transparent.png"
     id="prefpane-locationbar" label="全般" flex="1">
     <preferences>
         <preference 
@@ -75,8 +75,8 @@
                 preference="extensions.hatenabookmark.statusbar.addButton"/>
             <checkbox id="extensions.hatenabookmark.statusbar.counter-check" flex="1"
                 label="ユーザー数カウンターの表示"
-                src="chrome://hatenabookmark/skin/images/nbookmarks.png"
                 preference="extensions.hatenabookmark.statusbar.counter"/>
+                <!-- src="chrome://hatenabookmark/skin/images/nbookmarks.png" -->
             <hbox>
             <spacer style="width: 1em;" />
             <checkbox id="extensions.hatenabookmark.statusbar.httpsIgnore-check" flex="1"
@@ -111,7 +111,7 @@
 
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon32.png"
+    image="chrome://hatenabookmark/skin/images/transparent.png"
     id="prefpane-addPanel" label="編集パネル" flex="1" onpaneload="hBookmark.Config.updateUI();">
     <preferences>
         <preference 
@@ -212,7 +212,7 @@
 </prefpane>
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon32.png"
+    image="chrome://hatenabookmark/skin/images/transparent.png"
     onpaneload="hBookmark.Config.ShortCut.initPane();"
     id="prefpane-shortcut" label="ショートカット" flex="1">
 
@@ -265,7 +265,7 @@
 </prefpane>
 
 <prefpane 
-    image="chrome://hatenabookmark/skin/images/favicon32.png"
+    image="chrome://hatenabookmark/skin/images/transparent.png"
     id="prefpane-sync" label="データ" flex="1"
     onpaneload="hBookmark.Config.initDataPane();"
     >

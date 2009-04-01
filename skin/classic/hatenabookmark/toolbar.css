@@ -3,6 +3,14 @@
   min-height: 26px;
 }
 
+#hBookmarkToolbar .hBookmark-toolbar-add-button {
+  cursor: pointer;
+}
+
+#hBookmarkToolbar .hBookmark-toolbar-home-button {
+  cursor: pointer;
+}
+
 .hBookmark-toolbar-add-button {
   list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
   -moz-image-region: rect(0px 25px 23px 0px);
@@ -21,7 +29,6 @@ toolbar[iconsize="small"] .hBookmark-toolbar-add-button:active {
   -moz-image-region: rect(62px 16px 78px 0px);
 }
 
-.hBookmark-toolbar-home-button {
   list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
   -moz-image-region: rect(0px 50px 23px 25px);
 }
