@@ -1,9 +1,11 @@
 var hBookmark;
 var view;
 var treeBox = {
+    treeBody: {},
     rowCountChanged: function () {},
     invalidateRow: function () {},
-    invalidate: function () {}
+    invalidate: function () {},
+    getPageLength: function () 10
 };
 
 function warmUp() {
@@ -20,8 +22,11 @@ function setUp() {
 }
 
 function testBookmarkTreeView() {
-    assert.equals(view.rowCount, 0);
+    assert.equals(view.rowCount, 3);
 
     view.showByTags(["Perl"]);
     assert.equals(view.rowCount, 2);
+
+    view.showBySearchString("js");
+    assert.equals(view.rowCount, 1);
 }

@@ -2,7 +2,9 @@
 <!ENTITY hBookmark.toolbar.titleKey "A">
 <!ENTITY hBookmark.toolbar.recentLabel "最近のはてなブックマーク">
 <!ENTITY hBookmark.toolbar.add "はてなブックマークに追加">
-<!ENTITY hBookmark.toolbar.home "My はてなブックマーク">
+<!ENTITY hBookmark.toolbar.home "自分のはてなブックマークページ">
+<!ENTITY hBookmark.toolbar.top "はてなブックマークのトップページ">
+<!ENTITY hBookmark.toolbar.favorite "自分のお気に入りページ">
 
 <!ENTITY hBookmark.sidebar.label "はてなブックマークサイドバー">
 <!ENTITY hBookmark.sidebar.key "A">

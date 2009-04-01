@@ -3,6 +3,8 @@
 <!ENTITY hBookmark.toolbar.recentLabel "Recent Hatena Bookmarks">
 <!ENTITY hBookmark.toolbar.add "Add to HatenaBookmark">
 <!ENTITY hBookmark.toolbar.home "Open self HatenaBookmark page">
+<!ENTITY hBookmark.toolbar.top "Open HatenaBookmark Top Page">
+<!ENTITY hBookmark.toolbar.favorite "Open My Favorites Page">
 
 <!ENTITY hBookmark.sidebar.label "Hatena Bookmark">
 <!ENTITY hBookmark.sidebar.key "A">

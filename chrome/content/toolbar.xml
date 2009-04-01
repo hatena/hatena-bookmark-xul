@@ -16,9 +16,11 @@
                                label="&hBookmark.toolbar.add;"
                                tooltiptext="&hBookmark.toolbar.add;"
                                oncommand="hBookmark.AddPanelManager.showPanel(window.content);" />
-            <xul:toolbarbutton class="hBookmark-toolbar-home-button" 
+            <xul:toolbarbutton anonid="homeButton"
+                               class="hBookmark-toolbar-home-button" 
                                label="&hBookmark.toolbar.home;"
                                tooltiptext="&hBookmark.toolbar.home;"
+                               type="menu-button"
                                oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
                                onclick="checkForMiddleClick(this, event);" />
             <xul:toolbarseparator/>
@@ -45,6 +47,10 @@
 
         <implementation>
             <constructor><![CDATA[
+                let homePopup = document.getElementById("hBookmark-toolbar-home-button")
+                                        .getElementsByTagName("menupopup")[0];
+                this.homeButton.appendChild(homePopup.cloneNode(true));
+
                 let method = hBookmark.method;
                 hBookmark.EventService.createListener("BookmarksUpdated",
                     method(this, "onBookmarksUpdated"));
@@ -63,6 +69,9 @@
                 setTimeout(method(this, "build"), 500);
             ]]></constructor>
 
+            <field name="homeButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "homeButton")
+            </field>
             <field name="loginButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "loginButton")
             </field>

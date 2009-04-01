@@ -26,13 +26,22 @@ extend(TagContext.prototype, {
         if (!tags || !tags.length) return false;
         this.tags = tags.concat();
         this.tag = tags[tags.length - 1];
-        let editTagItem =
-            document.getElementById("hBookmarkTagContext_editTag");
-        editTagItem.label =
-            this.strings.get("tagContext.editTagLabel", [this.tag]);
-        editTagItem.accessKey = this.strings.get("tagContext.editTagKey");
+        let tagsLabel = this._formatTags(this.tags);
+        this._setLabel("openBookmarks", [tagsLabel]);
+        this._setLabel("deleteBookmarks", [tagsLabel]);
+        this._setLabel("editTag", [this.tag]);
         return true;
     },
+
+    _setLabel: function TC_setLabel(key, args) {
+        let item = document.getElementById("hBookmarkTagContext_" + key);
+        let label = this.strings.get("tagContext." + key + "Label", args);
+        item.setAttribute("label", label);
+        let accessKey = this.strings.get("tagContext." + key + "Key");
+        item.setAttribute("accesskey", accessKey);
+    },
+
+    _formatTags: function TC__formatTags(tags) "[" + tags.join("][") + "]",
 
     get bookmarks TC_get_bookmarks() Model.Bookmark.findByTags(this.tags),
 

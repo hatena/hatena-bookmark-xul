@@ -876,6 +876,7 @@
             </field>
 
             <field name="_images">({})</field>
+            <field name="_shouldShow">true</field>
 
             <field name="maxImageWidth">
                 hBookmark.Prefs.bookmark.get("addPanel.maxImageWidth")
@@ -1041,12 +1042,20 @@
                 let target = event.originalTarget;
                 if (target === this.icon ||
                     target === this.iconContainer) {
-                    this.showPopup();
+                    if (this._shouldShow)
+                        this.showPopup();
                 } else if (target.localName === "image" &&
                            target.parentNode === this.container) {
                     this.selectedImage = target;
                     this.popup.hidePopup();
                 }
+            ]]></handler>
+
+            <handler event="popuphidden"><![CDATA[
+                // XXX iconContainer クリック時にポップアップ表示をトグルする
+                // mousedown 時にはすでにポップアップが閉じているので苦肉の策
+                this._shouldShow = false;
+                setTimeout(function (self) self._shouldShow = true, 150, this);
             ]]></handler>
         </handlers>
     </binding>

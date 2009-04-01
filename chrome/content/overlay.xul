@@ -49,7 +49,7 @@
              insertafter="context-bookmarkpage"
              label="&hBookmark.menu.add;"
              id="hBookmark-menu-addentry"
-             oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);"
+             oncommand="hBookmark.AddPanelManager.showPanel(document.commandDispatcher.focusedWindow);"
              accesskey="B"
          />
          <menuitem
@@ -92,8 +92,22 @@
             label="&hBookmark.toolbar.home;"
             tooltiptext="&hBookmark.toolbar.home;"
             class="hBookmark-toolbar-home-button toolbarbutton-1 chromeclass-toolbar-additional"
+            type="menu-button"
             oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
-            onclick="checkForMiddleClick(this, event);" />
+            onclick="checkForMiddleClick(this, event);">
+            <menupopup>
+                <menuitem label="&hBookmark.toolbar.top;"
+                          oncommand="openUILink('http://b.hatena.ne.jp/', event); event.stopPropagation();"
+                          onclick="checkForMiddleClick(this, event);"/>
+                <menuitem label="&hBookmark.toolbar.home;"
+                          default="true"
+                          oncommand="openUILink('http://b.hatena.ne.jp/my', event); event.stopPropagation();"
+                          onclick="checkForMiddleClick(this, event);"/>
+                <menuitem label="&hBookmark.toolbar.favorite;"
+                          oncommand="openUILink('http://b.hatena.ne.jp/my/favorite', event); event.stopPropagation();"
+                          onclick="checkForMiddleClick(this, event);"/>
+            </menupopup>
+        </toolbarbutton>
 
         <toolbaritem id="hBookmark-toolbar-dropdown">
             <toolbarbutton
