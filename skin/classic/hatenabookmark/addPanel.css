@@ -94,13 +94,12 @@ button[anonid="cancelEditTitleButton"] {
   background: #eee;
   padding: 2px;
   margin: 5px;
-  float: left;
 }
 
 panel[anonid="popup"] {
   padding: 0 !important;
   margin: 0 !important;
-  background: #fff !important;
+  background: rgba(255,255,255,1) !important;
 }
 
 [anonid="editImageNotification"] {
