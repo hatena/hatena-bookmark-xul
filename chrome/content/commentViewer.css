@@ -65,6 +65,12 @@ img.usericon {
   color: #222;
 }
 
+li.notice {
+    color: #555 !important;
+    margin-left: 2em;
+    border-bottom: 0px dotted #ddd !important;
+}
+
 #list li {
   display: list-item;
   text-indent: -20px;
@@ -126,4 +132,10 @@ a.users {
 ul.nocommentall li.nocomment {
     display: none !important;
 }
+
+
+
+
+
+
 

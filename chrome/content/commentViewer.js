@@ -60,9 +60,15 @@ var setCommentView = function() {
     if (Application.prefs.get(SHOW_PREFS_NAME).value) {
          src = "chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png";
          $('list').className = '';
+         if ($('nocomment-message')) {
+             $('nocomment-message').style.display = 'none';
+         }
     } else {
          src = "chrome://hatenabookmark/skin/images/comment-viewer-toggle-off.png";
          $('list').className = 'nocommentall';
+         if ($('nocomment-message')) {
+             $('nocomment-message').style.display = 'block';
+         }
     }
     $('toggle-button-img').src = src;
 }
@@ -76,18 +82,19 @@ var dispatchMethods = {
             return;
         } else {
             // 同じ eid なら描画し直さない
-            if (data.eid == lastEID) {
+            if (data.url && data.url == lastEID) {
                 return;
             } else {
-                lastEID = data.eid;
+                lastEID = data.url;
                 clear();
             }
         }
         $('favicon').src = data.favicon;
-        $('title').appendChild(T(data.title));
+        $('title').appendChild(T(data.title || data.url));
         let cEL = $('count');
         setCommentView();
 
+        p('hoge');
         if (data.count) {
             let c = data.count;
             cEL.innerHTML = '' + c + ' user' + ((c > 1) ? 's' : '');
@@ -97,9 +104,13 @@ var dispatchMethods = {
             cEL.href = '';
             cEL.className = '';
         }
+        p('huga');
         p.b(function() {
             if (data.bookmarks && data.bookmarks.length) {
-                data.bookmarks.forEach(function(b) {
+                let commentFlag = false;
+                let len = data.bookmarks.length;
+                for (let i = 0;  i < len; i++) {
+                    let b = data.bookmarks[i];
                     let li = E('li');
                     let userlink = B_URL + b.user + '/';
                     let ymd = b.timestamp.split(' ')[0];
@@ -114,13 +125,20 @@ var dispatchMethods = {
                     });
                     li.appendChild(E('span', {className: 'comment'}, b.comment));
                     li.appendChild(E('span', {className: 'timestamp'}, ymd));
-                    if (!b.comment) {
+                    if (b.comment) {
+                        commentFlag = true;
+                    } else {
                         li.className = 'nocomment';
                     }
                     $('list').appendChild(li);
-                });
+                }
+                if (!commentFlag) {
+                    let li = E('li', {id: 'nocomment-message', className: 'notice'}, 'コメントがあるブックマークはありません');
+                    $('list').appendChild(li);
+                    setCommentView();
+                }
             } else {
-                let li = E('li', {}, '表示できるブックマークコメントはありません。');
+                let li = E('li', {className: 'notice'}, '表示できるブックマークコメントはありません。');
                 $('list').appendChild(li);
             }
         }, 'comment rendered');

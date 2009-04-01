@@ -42,7 +42,16 @@ var CommentViewer = {
             url = aDoc.location.href;
         }
         commentButton.setAttribute('loading', 'true'); 
-        HTTPCache.comment.async_get(url, method(this, 'updateComment'));
+        var self = this;
+        HTTPCache.comment.async_get(url, function(data) {
+            if (!data || !data.title) {
+                data = {};
+                data.url = data.title = url;
+                data.bookmarks = [];
+            }
+            data.favicon = favicon(data.url);
+            self.updateComment(data);
+        });
     },
     toggle: function CommentViewer_toggle(url) {
         if (!url && isHttp) {
@@ -56,24 +65,19 @@ var CommentViewer = {
     },
     currentURL: null,
     updateComment: function CommentViewer_updateComment(data) {
-        if (data && data.title) {
-            CommentViewer.currentURL = data.url;
-            data.favicon = favicon(data.url);
-            CommentViewer.iframe.setAttribute('height', '0px');
-            panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
-            // 非表示ユーザをフィルター
-            let regex = User.user.ignores;
-            if (regex) {
-                data.bookmarks = data.bookmarks.filter(function(b) !regex.test(b.user));
-            }
-            //if (data.bookmarks && data.bookmarks.length) {
-                throwEvent('load-json', data);
-            //} else {
-            //    CommentViewer.hide();
-            //}
-        } else {
-            CommentViewer.currentURL = null;
+        CommentViewer.currentURL = data.url;
+        CommentViewer.iframe.setAttribute('height', '0px');
+        panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
+        // 非表示ユーザをフィルター
+        let regex = User.user.ignores;
+        if (regex) {
+            data.bookmarks = data.bookmarks.filter(function(b) !regex.test(b.user));
         }
+        //if (data.bookmarks && data.bookmarks.length) {
+            throwEvent('load-json', data);
+        //} else {
+        //    CommentViewer.hide();
+        //}
         commentButton.setAttribute('loading', 'false'); 
     },
     createIFrame: function() {
