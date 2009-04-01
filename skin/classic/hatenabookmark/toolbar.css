@@ -29,6 +29,7 @@ toolbar[iconsize="small"] .hBookmark-toolbar-add-button:active {
   -moz-image-region: rect(62px 16px 78px 0px);
 }
 
+.hBookmark-toolbar-home-button {
   list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
   -moz-image-region: rect(0px 50px 23px 25px);
 }
