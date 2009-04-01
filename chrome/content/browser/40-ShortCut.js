@@ -85,6 +85,7 @@ var ShortCut = {
     init: function() {
         this.updateShortcut('add');
         this.updateShortcut('comment');
+        this.updateShortcut('sidebar');
     }
 }
 
@@ -98,7 +99,12 @@ ShortCut.commands = {
         hBookmark.CommentViewer.toggle();
         ev.stopPropagation();
         ev.preventDefault();
-    }
+    },
+    sidebar: function(ev) {
+        document.getElementById('viewHBookmarkSidebar').doCommand();
+        ev.stopPropagation();
+        ev.preventDefault();
+    },
 }
 
 ShortCut.keys = {

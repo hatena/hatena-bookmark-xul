@@ -227,6 +227,10 @@
             id="extensions.hatenabookmark.shortcut.keys.comment"
             name="extensions.hatenabookmark.shortcut.keys.comment"
             type="string"/>
+        <preference 
+            id="extensions.hatenabookmark.shortcut.keys.sidebar"
+            name="extensions.hatenabookmark.shortcut.keys.sidebar"
+            type="string"/>
     </preferences>
 
     <!--
@@ -260,6 +264,20 @@
                         oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.comment);"/>
                     <button label="解除"
                         oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.keys.comment);"/>
+            </hbox>
+        </groupbox>
+        <groupbox orient="vertical">
+            <caption label="サイドバー表示の切り替え" />
+            <hbox>
+                    <textbox id="extensions.hatenabookmark.shortcut.keys.sidebar-input"
+                        readonly="true"
+                        preference="extensions.hatenabookmark.shortcut.keys.sidebar"
+                        flex="1"
+                        />
+                    <button label="設定"
+                        oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.sidebar);"/>
+                    <button label="解除"
+                        oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.keys.sidebar);"/>
             </hbox>
         </groupbox>
         <label value="ショートカットの反映に、ブラウザの再起動が必要な場合があります" />

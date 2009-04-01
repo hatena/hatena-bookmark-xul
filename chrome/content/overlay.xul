@@ -193,6 +193,7 @@
                      group="sidebar"
                      sidebarurl="chrome://hatenabookmark/content/sidebar.xul"
                      sidebartitle="&hBookmark.sidebar.label;"
+                     key="hBookmark-key-sidebar"
                      oncommand="toggleSidebar('viewHBookmarkSidebar');"/>
     </broadcasterset>
 

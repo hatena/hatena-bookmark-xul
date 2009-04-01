@@ -108,7 +108,7 @@ let Config = {
  */
 Config.ShortCut = {
     prefPrefix: 'extensions.hatenabookmark.shortcut.keys.',
-    KEYS: ['add', 'comment'],
+    KEYS: ['add', 'comment', 'sidebar'],
     keys: {},
     initPane: function() {
         var self = this;

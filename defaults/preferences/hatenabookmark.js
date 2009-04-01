@@ -55,5 +55,6 @@ pref("extensions.hatenabookmark.sync.syncWait", 1000);
 // Shurtcut
 pref("extensions.hatenabookmark.shortcut.keys.add", "Ctrl(Control)+Shift+B");
 pref("extensions.hatenabookmark.shortcut.keys.comment", "Ctrl(Control)+Shift+C");
+pref("extensions.hatenabookmark.shortcut.keys.sidebar", "");
 
 
