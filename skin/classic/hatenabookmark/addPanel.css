@@ -7,6 +7,15 @@
     padding: 5px;
     border-bottom: 1px solid #ddd;
     margin-bottom: 5px;
+    vertical-align: bottom;
+}
+
+label[anonid="userNameField"] {
+  margin-right: 3px !important;
+}
+
+label[anonid="userIcon"] {
+  margin-left: 3px !important;
 }
 
 .username-line label {

@@ -49,12 +49,14 @@
                       <xul:row anonid="editTitleNotification" hidden="true">
                           <xul:spacer/>
                           <xul:vbox align="start">
-                              <xul:description>
-                                  &hBookmark.addPanel.titleDescription;
-                              </xul:description>
-                              <xul:label value="&hBookmark.addPanel.titleGuidelineLabel;"
-                                         href="&hBookmark.addPanel.titleGuidelineURI;"
-                                         class="text-link hBookmarkLink"/>
+                              <xul:hbox align="center">
+                                <xul:description>
+                                    &hBookmark.addPanel.titleDescription;
+                                </xul:description>
+                                <xul:label value="&hBookmark.addPanel.titleGuidelineLabel;"
+                                           href="&hBookmark.addPanel.titleGuidelineURI;"
+                                           class="text-link hBookmarkLink"/>
+                              </xul:hbox>
                               <xul:hbox anonid="lastTitleEditorContainer"
                                         align="center">
                                   <xul:label value="&hBookmark.addPanel.lastTitleEditorLabel;"/>
