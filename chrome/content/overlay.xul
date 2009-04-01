@@ -188,7 +188,6 @@
     <broadcasterset id="mainBroadcasterSet">
         <broadcaster id="viewHBookmarkSidebar"
                      label="&hBookmark.sidebar.label;"
-                     accesskey="&hBookmark.sidebar.key;"
                      autoCheck="false"
                      type="checkbox"
                      group="sidebar"

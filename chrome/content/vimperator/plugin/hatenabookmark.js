@@ -155,7 +155,7 @@ liberator.plugins.hBookmark = (function() {
                 context.completions = res.map(function(b) new plugin.command.adapter(b));
             },
             literal: 0,
-            argCount: '+',
+            argCount: '*',
             bang: true,
         }
     };

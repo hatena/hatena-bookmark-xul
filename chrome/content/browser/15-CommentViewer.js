@@ -1,6 +1,6 @@
 
 /*
- * ToDo: iframe ではなく XUL で描画する
+ * ToDo: iframe ではなく XUL で描画するが、XUL の時の複数要素の折り返しをどうするか…
  */
 
 const EXPORT = ['CommentViewer'];

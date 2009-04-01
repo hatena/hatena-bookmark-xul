@@ -112,7 +112,7 @@
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/transparent.png"
-    id="prefpane-addPanel" label="編集パネル" flex="1" onpaneload="hBookmark.Config.updateUI();">
+    id="prefpane-addPanel" label="編集画面" flex="1" onpaneload="hBookmark.Config.updateUI();">
     <preferences>
         <preference 
             id="extensions.hatenabookmark.addPanel.tagCompleteEnabled"

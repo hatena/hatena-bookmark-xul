@@ -71,7 +71,8 @@ let Config = {
         let file = document.getElementById(PrefsBackgroundImage).value;
         if (file) {
             let fileField = document.getElementById('addPanel.backgroundImage');
-            fileField.file = file;
+            if (fileField)
+                fileField.file = file;
         }
     },
     clearImageFile: function() {
