@@ -49,7 +49,7 @@
              insertafter="context-bookmarkpage"
              label="&hBookmark.menu.add;"
              id="hBookmark-menu-addentry"
-             oncommand="hBookmark.AddPanelManager.showPanel(window.content.location.href);"
+             oncommand="hBookmark.AddPanelManager.showPanel(document.commandDispatcher.focusedWindow);"
              accesskey="B"
          />
          <menuitem
