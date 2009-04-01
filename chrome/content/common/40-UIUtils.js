@@ -38,6 +38,7 @@ var UIUtils = {
     },
 
     openLogin: function UIU_openLogin(event) {
+        User.login(); // 透過的にログインできるかチェックしておく
         openUILink("https://www.hatena.ne.jp/login", event);
     },
 

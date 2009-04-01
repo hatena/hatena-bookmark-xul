@@ -196,6 +196,7 @@
             </hbox>
         </groupbox>
 
+        <!--
         <groupbox orient="vertical">
             <caption label="背景画像" />
             <hbox align="center" flex="1">
@@ -208,6 +209,7 @@
                 </vbox>
             </hbox>
         </groupbox>
+        -->
     </vbox>
 </prefpane>
 
