@@ -8,7 +8,7 @@
              extends="chrome://global/content/bindings/popup.xml#panel">
         <content flex="1">
             <xul:label anonid="errorField" hidden="true"/>
-            <xul:hbox class="username-line" align="right">
+            <xul:hbox class="username-line" align="start" pack="end">
                     <xul:label value="&hBookmark.addPanel.welcomeUserLabel.before;" />
                     <xul:image anonid="userIcon"/>
                     <xul:label anonid="userNameField" class="text-link hBookmarkLink"/>
@@ -48,8 +48,8 @@
                       </xul:row>
                       <xul:row anonid="editTitleNotification" hidden="true">
                           <xul:spacer/>
-                          <xul:vbox align="start">
-                              <xul:hbox align="center">
+                          <xul:vbox align="start" class="notice">
+                              <xul:hbox align="start">
                                 <xul:description>
                                     &hBookmark.addPanel.titleDescription;
                                 </xul:description>
