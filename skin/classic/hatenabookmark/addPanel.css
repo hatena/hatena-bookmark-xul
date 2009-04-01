@@ -36,6 +36,12 @@ label[anonid="userIcon"] {
   -moz-appearance: none;
 }
 
+.notice {
+  background: #eee;
+  -moz-border-radius: 5px;
+  padding: 5px 0;
+}
+
 #hBookmarkAddPanelContent {
 }
 
@@ -98,6 +104,24 @@ button[anonid="cancelEditTitleButton"] {
   -moz-image-region: rect(62px 147px 78px 131px) !important;
 }
 
+[anonid="editTitleNotification"]  {
+  padding-bottom: 10px;
+}
+
+[anonid="editTitleNotification"] label  {
+  margin:0;
+  padding:0;
+}
+
+[anonid="editTitleNotification"] description {
+  background: url(chrome://hatenabookmark/skin/images/caution.png) left center no-repeat;
+  padding-left: 20px;
+}
+
+[anonid="lastTitleEditorContainer"] {
+  padding-left: 25px;
+}
+
 [anonid="imageSelector"] {
   border: 1px solid #ddd;
   background: #eee;
@@ -112,8 +136,8 @@ panel[anonid="popup"] {
 }
 
 [anonid="editImageNotification"] {
-  padding: 5px;
-  background: #eee;
+  padding: 5px 5px 5px 25px;
+  background: #eee url(chrome://hatenabookmark/skin/images/caution.png) 5px center no-repeat;
   border-top: 1px solid #ddd;
 }
 
