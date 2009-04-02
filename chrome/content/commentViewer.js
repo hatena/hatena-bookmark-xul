@@ -11,6 +11,7 @@ const SHOW_PREFS_NAME = 'extensions.hatenabookmark.commentviwer.allShow';
  * comment.html から、外部 html リンクが開けてしまうと、セキュリティ的にまずいので注意
  */
 
+
 window.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -90,11 +91,12 @@ var dispatchMethods = {
             }
         }
         $('favicon').src = data.favicon;
-        $('title').appendChild(T(data.title || data.url));
+        let titleStr = data.title || data.url || '';
+        if (titleStr.length > 60) titleStr = titleStr.substring(0, 58) + '...';
+        $('title').appendChild(T(titleStr));
         let cEL = $('count');
         setCommentView();
 
-        p('hoge');
         if (data.count) {
             let c = data.count;
             cEL.innerHTML = '' + c + ' user' + ((c > 1) ? 's' : '');
@@ -104,7 +106,6 @@ var dispatchMethods = {
             cEL.href = '';
             cEL.className = '';
         }
-        p('huga');
         p.b(function() {
             if (data.bookmarks && data.bookmarks.length) {
                 let commentFlag = false;
