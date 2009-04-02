@@ -1,7 +1,7 @@
 /*
  * append to your ~/.vimperatorc
  * =====
- * javascript if (typeof hBookmark) liberator.loadScript('chrome://hatenabookmark/content/vimperator/plugin/hatenabookmark.js', {__proto__: this});
+ * javascript if (typeof hBookmark != 'undefined') liberator.loadScript('chrome://hatenabookmark/content/vimperator/plugin/hatenabookmark.js', {__proto__: this});
  * =====
  */
 
