@@ -108,7 +108,7 @@ HTTPCache.prototype = {
             }, 0);
         } else {
             let self = this;
-            net.post(this.createURL(url), function(res) {
+            net.get(this.createURL(url), function(res) {
                 callback(self.setResCache(url, res));
             }, function() {
                 cache.set(url, null);
@@ -123,7 +123,7 @@ HTTPCache.prototype = {
             p('http using cache: ' + url);
             return cache.get(url);
         }
-        let res = net.post(this.createURL(url));
+        let res = net.sync_get(this.createURL(url));
         return this.setResCache(url, res);
     },
     setResCache: function HTTPCache_setResCache(url, res) {
