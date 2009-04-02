@@ -164,7 +164,7 @@
                  onclick="hBookmark.StatusBar.goEntry(event);"
                  tooltiptext="&hBookmark.statusbar.tooltip.counter;"
                  value=""
-            />
+            ><label id="hBookmark-status-count-label" /></hbox>
 
 
           <toolbarseparator class="hBookmark-status-separator" />

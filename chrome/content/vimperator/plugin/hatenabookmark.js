@@ -10,6 +10,8 @@ liberator.plugins.hBookmark = (function() {
         Application.console.log('mes: ' + msg);
     }
 
+    styles.registerSheet("chrome://hatenabookmark/skin/vimperator.css");
+
     let HatenaBookmark = window.hBookmark;
 
     const DEFAULT_SHORTCUTS = {

@@ -17,6 +17,7 @@ this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexO
 
 elementGetter(this, 'addButton', 'hBookmarkAddButton', document);
 elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
+elementGetter(this, 'statusCountLabel', 'hBookmark-status-count-label', document);
 elementGetter(this, 'statusComment', 'hBookmark-status-comment', document);
 
 let countCache = new ExpireCache('uCount', 60 * 60); // 一時間キャッシュ
@@ -73,8 +74,9 @@ var StatusBar = {
         statusCount.value = (isHttp ? HTTPCache.counter.get(locationURL) : '0') || '0';
         if (StatusBar.lastCountValue == statusCount.value) return;
         StatusBar.lastCountValue = statusCount.value;
-        statusCount.setAttribute('label', statusCount.value);
+        statusCountLabel.setAttribute('value', statusCount.value);
         while (statusCount.firstChild) statusCount.removeChild(statusCount.firstChild);
+        statusCount.appendChild(statusCountLabel);
         if (statusCount.value > 0) {
             let counts = statusCount.value.toString().split('');
             counts.forEach(function(i) {

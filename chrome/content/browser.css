@@ -57,7 +57,6 @@
 
   font-family: verdana;
   font-weight: bold;
-  color: #FFF;
 }
 
 #hBookmark-status-count label {
@@ -65,7 +64,6 @@
 }
 
 #hBookmark-status-count[users="none"] {
-  color: #DDD;
     /*
     display:none;
     padding-left:0px;
