@@ -47,9 +47,16 @@
 
         <implementation>
             <constructor><![CDATA[
-                let homePopup = document.getElementById("hBookmark-toolbar-home-button")
-                                        .getElementsByTagName("menupopup")[0];
-                this.homeButton.appendChild(homePopup.cloneNode(true));
+                let homeButtonMenu = document.getElementById("hBookmark-toolbar-home-button");
+                if (homeButtonMenu) {
+                    // XXX: ID から Element がとれない場合がある。暫定的対処
+                    try {
+                        let homePopup = homeButtonMenu.getElementsByTagName("menupopup")[0];
+                        this.homeButton.appendChild(homePopup.cloneNode(true));
+                    } catch(e) {
+                        hBookmark.p(e);
+                    }
+                }
 
                 let method = hBookmark.method;
                 hBookmark.EventService.createListener("BookmarksUpdated",
