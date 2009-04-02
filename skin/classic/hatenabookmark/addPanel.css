@@ -240,10 +240,10 @@ groupbox {
    cursor: pointer;
 }
 .hBookmarkImageSelectorItem:hover {
-  outline: 2px solid #66f;
+  outline: 2px solid #95b6be;
 }
 .hBookmarkImageSelectorItem[selected="true"] {
-   outline: 3px solid #00f;
+   outline: 3px solid #2c63bd;
 }
 
 hbox[anonid="container"] {
