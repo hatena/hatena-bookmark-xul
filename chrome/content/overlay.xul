@@ -99,16 +99,13 @@
             <menupopup class="hBookmark-links-popup"/>
         </toolbarbutton>
 
-        <toolbaritem id="hBookmark-toolbar-dropdown">
-            <toolbarbutton
-                id="hBookmarkDropdownButton"
-                class="hBookmark-toolbar-recent-button chromeclass-toolbar-additional"
-                type="menu"
-                label="&hBookmark.toolbar.recentLabel;"
-                tooltiptext="&hBookmark.toolbar.recentLabel;">
-                <menupopup context="hBookmarkEntryContext"/>
-            </toolbarbutton>
-        </toolbaritem>
+        <toolbarbutton id="hBookmark-toolbar-recent-button"
+                       class="hBookmark-toolbar-recent-button chromeclass-toolbar-additional"
+                       type="menu"
+                       label="&hBookmark.toolbar.recentLabel;"
+                       tooltiptext="&hBookmark.toolbar.recentLabel;">
+            <menupopup class="hBookmark-toolbar-recent-popup"/>
+        </toolbarbutton>
 
         <toolbaritem id="urlbar-container">
                <textbox id="urlbar">
