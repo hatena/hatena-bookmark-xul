@@ -4,7 +4,10 @@
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
 <?xml-stylesheet href="chrome://hatenabookmark/content/browser.css" type="text/css"?>
 <?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
-<!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/browser.dtd">
+<!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/browser.dtd" [
+    <!ENTITY % toolbar SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd">
+    %toolbar;
+]>
 <overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     <script type="application/javascript" src="autoloader.js"></script>
     <script type="text/javascript; version=1.8" charset="utf-8">
@@ -122,7 +125,28 @@
                  mode="icons"
                  iconsize="small"
                  toolbarname="&hBookmark.toolbar.title;"
-                 accesskey="&hBookmark.toolbar.titleKey;"/>
+                 accesskey="&hBookmark.toolbar.titleKey;">
+            <toolbarbutton class="hBookmark-toolbar-sidebar-button"
+                           tooltiptext="&hBookmark.toolbar.toggleSidebarLabel;"
+                           observes="viewHBookmarkSidebar"/>
+            <toolbarbutton class="hBookmark-toolbar-add-button" 
+                           label="&hBookmark.toolbar.add;"
+                           tooltiptext="&hBookmark.toolbar.add;"
+                           oncommand="hBookmark.AddPanelManager.showPanel(window.content);" />
+            <toolbarbutton class="hBookmark-toolbar-home-button" 
+                           label="&hBookmark.toolbar.home;"
+                           tooltiptext="&hBookmark.toolbar.home;"
+                           type="menu-button"
+                           oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
+                           onclick="checkForMiddleClick(this, event);">
+                <menupopup class="hBookmark-links-popup"/>
+            </toolbarbutton>
+            <toolbarseparator/>
+            <toolbaritem id="hBookmark-toolbar-recent-line">
+                <toobarbutton class="bookmark-item bookmarks-toolbar-customize"
+                              label="&hBookmark.toolbar.recentLabel;"/>
+            </toolbaritem>
+        </toolbar>
     </toolbox>
 
 
