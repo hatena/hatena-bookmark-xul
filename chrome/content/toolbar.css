@@ -6,3 +6,9 @@
    -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#dropdown");
 }
 
+#hBookmark-toolbar-recent-line {
+   -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#recent-line");
+}
+.hBookmark-toolbar-recent-popup {
+   -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#recent-popup");
+}

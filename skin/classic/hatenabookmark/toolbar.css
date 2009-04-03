@@ -7,6 +7,10 @@
   padding: 0 !important;
 }
 
+toolbarpaletteitem[place="toolbar"] .hBookmark-toolbar-dynamic-items {
+  display: none;
+}
+
 #hBookmarkToolbar .hBookmark-toolbar-add-button {
   cursor: pointer;
 }

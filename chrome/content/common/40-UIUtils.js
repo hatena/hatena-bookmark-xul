@@ -132,11 +132,30 @@ var UIUtils = {
         return element;
     },
 
+    onBookmarkCommand: function UIU_onBookmarkCommand(event) {
+        let bookmark = event.originalTarget.bookmark;
+        if (!bookmark) return;
+        openUILink(bookmark.url, event);
+        event.stopPropagation();
+    },
+
+    onBookmarkClick: function UIU_onBookmarkClick(event) {
+        if (event.button !== 1) return;
+        this.onBookmarkCommand(event);
+        closeMenus(event.originalTarget);
+    },
+
     getUsersText: function UIU_getUsersText(count) {
         let ruleNum = +this.addPanelStrings.get("usersPluralRuleNum");
         let get = PluralForm.makeGetter(ruleNum)[0];
         let text = get(count, this.addPanelStrings.get("usersLabel"));
         return text.replace(/#1/g, count);
         return count + " users";
+    },
+
+    deleteContents: function UIU_deleteContents(element) {
+        let range = document.createRange();
+        range.selectNodeContents(element);
+        range.deleteContents();
     }
 };
