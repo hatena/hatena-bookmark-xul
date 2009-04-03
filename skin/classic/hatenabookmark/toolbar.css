@@ -1,6 +1,10 @@
 /* toolbar */
 #hBookmarkToolbar {
-  min-height: 26px;
+  min-height: 0 !important;
+}
+
+.toolbarbutton-menubutton-button {
+  padding: 0 !important;
 }
 
 #hBookmarkToolbar .hBookmark-toolbar-add-button {
