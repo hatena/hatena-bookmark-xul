@@ -376,6 +376,10 @@ TagCompleter.InputLine.prototype = {
         let lPos = prefix.lastIndexOf('[');
         if (lPos == -1) return false;
         prefix = prefix.substring(0, lPos + 1) + tagName + ']';
+        if (suffix.indexOf(']') == 0) {
+            // '[tag]]examle' とならないように
+            suffix = suffix.substring(1);
+        }
         this.value = prefix + suffix;
         return prefix.length;
     },
