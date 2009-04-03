@@ -239,13 +239,13 @@ TagCompleter.InputHandler.prototype = {
                 setTimeout(function(self) {
                     let pos = line.insertionTag(tag, self.caretPos);
                     self.updateValue();
-                    self.textbox.setSelectionRange(pos + 1, pos + 1);
+                    self.textbox.setSelectionRange(pos + 0, pos + 0);
                     self.fireTagChangeEvent();
                 }, 0, this);
             } else {
                 let pos = line.insertionTag(tag, this.caretPos);
                 this.updateValue();
-                this.textbox.setSelectionRange(pos + 1, pos + 1);
+                this.textbox.setSelectionRange(pos + 0, pos + 0);
                 this.fireTagChangeEvent();
             }
         }
