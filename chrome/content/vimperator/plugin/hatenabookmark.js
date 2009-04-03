@@ -200,6 +200,8 @@ liberator.plugins.hBookmark = (function() {
         true
     );
 
+    config.guioptions['H'] = ['HatenaBookmark Toolbar','hBookmarkToolbar'];
+
     return plugin;
 })();
 
