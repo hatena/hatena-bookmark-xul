@@ -33,47 +33,6 @@
         </content>
     </binding>
 
-    <binding id="dropdown" extends="#toolbar-item-base">
-        <content>
-            <children/>
-        </content>
-
-        <implementation>
-            <constructor><![CDATA[
-                if (typeof hBookmark === "undefined") return;
-                let method = hBookmark.method;
-                this.addEventListener("popupshowing",
-                    method(this, "onPopupShowing"), false);
-                this.popup.addEventListener("command",
-                    method(this, "onBookmarkCommand"), false);
-                this.popup.addEventListener("click",
-                    method(this, "onBookmarkClick"), false);
-            ]]></constructor>
-
-            <field name="button">
-                this.getElementsByTagName("toolbarbutton")[0]
-            </field>
-            <field name="popup">
-                this.button.getElementsByTagName("menupopup")[0]
-            </field>
-
-            <method name="onPopupShowing">
-                <parameter name="event"/>
-                <body><![CDATA[
-                    let range = document.createRange();
-                    range.selectNodeContents(this.popup);
-                    range.deleteContents();
-
-                    let bookmarks = this.getRecentBookmarks();
-                    bookmarks.forEach(function (bookmark) {
-                        let item = this._createMenuItem(bookmark);
-                        this.popup.appendChild(item);
-                    }, this);
-                ]]></body>
-            </method>
-        </implementation>
-    </binding>
-
     <binding id="toolbar-item-base">
         <implementation>
             <method name="getRecentBookmarks">
