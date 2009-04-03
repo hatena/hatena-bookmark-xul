@@ -84,18 +84,23 @@
 
 
     <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton id="hBookmark-toolbar-sidebar-button"
+                       class="hBookmark-toolbar-sidebar-button chromeclass-toolbar-additional"
+                       tooltiptext="&hBookmark.toolbar.toggleSidebarLabel;"
+                       observes="viewHBookmarkSidebar"/>
+
         <toolbarbutton 
             id="hBookmark-toolbar-add-button" 
             label="&hBookmark.toolbar.add;"
             tooltiptext="&hBookmark.toolbar.add;"
-            class="hBookmark-toolbar-add-button toolbarbutton-1 chromeclass-toolbar-additional"
+            class="hBookmark-toolbar-add-button chromeclass-toolbar-additional"
             oncommand="hBookmark.AddPanelManager.showPanel(window.content);" />
 
         <toolbarbutton 
             id="hBookmark-toolbar-home-button" 
             label="&hBookmark.toolbar.home;"
             tooltiptext="&hBookmark.toolbar.home;"
-            class="hBookmark-toolbar-home-button toolbarbutton-1 chromeclass-toolbar-additional"
+            class="hBookmark-toolbar-home-button chromeclass-toolbar-additional"
             type="menu-button"
             oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
             onclick="checkForMiddleClick(this, event);">
@@ -109,6 +114,12 @@
                        tooltiptext="&hBookmark.toolbar.recentLabel;">
             <menupopup class="hBookmark-toolbar-recent-popup"/>
         </toolbarbutton>
+
+        <toolbaritem id="hBookmark-toolbar-recent-line"
+                     class="chromeclass-toolbar-additional">
+            <toolbarbutton class="bookmark-item bookmarks-toolbar-customize"
+                           label="&hBookmark.toolbar.recentLabel;"/>
+        </toolbaritem>
 
         <toolbaritem id="urlbar-container">
                <textbox id="urlbar">
@@ -124,29 +135,10 @@
                  class="chromeclass-toolbar"
                  mode="icons"
                  iconsize="small"
+                 customizable="true"
+                 defaultset="hBookmark-toolbar-sidebar-button,hBookmark-toolbar-add-button,hBookmark-toolbar-home-button,separator,hBookmark-toolbar-recent-line"
                  toolbarname="&hBookmark.toolbar.title;"
-                 accesskey="&hBookmark.toolbar.titleKey;">
-            <toolbarbutton class="hBookmark-toolbar-sidebar-button"
-                           tooltiptext="&hBookmark.toolbar.toggleSidebarLabel;"
-                           observes="viewHBookmarkSidebar"/>
-            <toolbarbutton class="hBookmark-toolbar-add-button" 
-                           label="&hBookmark.toolbar.add;"
-                           tooltiptext="&hBookmark.toolbar.add;"
-                           oncommand="hBookmark.AddPanelManager.showPanel(window.content);" />
-            <toolbarbutton class="hBookmark-toolbar-home-button" 
-                           label="&hBookmark.toolbar.home;"
-                           tooltiptext="&hBookmark.toolbar.home;"
-                           type="menu-button"
-                           oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
-                           onclick="checkForMiddleClick(this, event);">
-                <menupopup class="hBookmark-links-popup"/>
-            </toolbarbutton>
-            <toolbarseparator/>
-            <toolbaritem id="hBookmark-toolbar-recent-line">
-                <toobarbutton class="bookmark-item bookmarks-toolbar-customize"
-                              label="&hBookmark.toolbar.recentLabel;"/>
-            </toolbaritem>
-        </toolbar>
+                 accesskey="&hBookmark.toolbar.titleKey;"/>
     </toolbox>
 
 
