@@ -1,7 +1,3 @@
-
-#hBookmarkToolbar {
-   -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#toolbar");
-}
 #hBookmark-toolbar-recent-line {
    -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#recent-line");
 }
