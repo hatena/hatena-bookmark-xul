@@ -1,3 +1,6 @@
+.hBookmark-links-popup {
+   -moz-binding: url("chrome://hatenabookmark/content/widgets.xml#links-popup");
+}
 .hBookmark-link, .hBookmarkLink {
    -moz-binding: url("chrome://hatenabookmark/content/widgets.xml#link");
 }

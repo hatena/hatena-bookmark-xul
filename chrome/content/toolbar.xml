@@ -22,7 +22,9 @@
                                tooltiptext="&hBookmark.toolbar.home;"
                                type="menu-button"
                                oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
-                               onclick="checkForMiddleClick(this, event);" />
+                               onclick="checkForMiddleClick(this, event);">
+                <xul:menupopup class="hBookmark-links-popup"/>
+            </xul:toolbarbutton>
             <xul:toolbarseparator/>
             <xul:toolbarbutton anonid="loginButton"
                                class="bookmark-item"
@@ -47,17 +49,6 @@
 
         <implementation>
             <constructor><![CDATA[
-                let homeButtonMenu = document.getElementById("hBookmark-toolbar-home-button");
-                if (homeButtonMenu) {
-                    // XXX: ID から Element がとれない場合がある。暫定的対処
-                    try {
-                        let homePopup = homeButtonMenu.getElementsByTagName("menupopup")[0];
-                        this.homeButton.appendChild(homePopup.cloneNode(true));
-                    } catch(e) {
-                        hBookmark.p(e);
-                    }
-                }
-
                 let method = hBookmark.method;
                 hBookmark.EventService.createListener("BookmarksUpdated",
                     method(this, "onBookmarksUpdated"));

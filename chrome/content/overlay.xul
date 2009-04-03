@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/toolbar.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/toolbar.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
 <?xml-stylesheet href="chrome://hatenabookmark/content/browser.css" type="text/css"?>
 <?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
 <!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/browser.dtd">
@@ -95,18 +96,7 @@
             type="menu-button"
             oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
             onclick="checkForMiddleClick(this, event);">
-            <menupopup>
-                <menuitem label="&hBookmark.toolbar.top;"
-                          oncommand="openUILink('http://b.hatena.ne.jp/', event); event.stopPropagation();"
-                          onclick="checkForMiddleClick(this, event);"/>
-                <menuitem label="&hBookmark.toolbar.home;"
-                          default="true"
-                          oncommand="openUILink('http://b.hatena.ne.jp/my', event); event.stopPropagation();"
-                          onclick="checkForMiddleClick(this, event);"/>
-                <menuitem label="&hBookmark.toolbar.favorite;"
-                          oncommand="openUILink('http://b.hatena.ne.jp/my/favorite', event); event.stopPropagation();"
-                          onclick="checkForMiddleClick(this, event);"/>
-            </menupopup>
+            <menupopup class="hBookmark-links-popup"/>
         </toolbarbutton>
 
         <toolbaritem id="hBookmark-toolbar-dropdown">
