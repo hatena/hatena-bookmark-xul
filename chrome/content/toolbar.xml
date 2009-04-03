@@ -26,160 +26,11 @@
                 <xul:menupopup class="hBookmark-links-popup"/>
             </xul:toolbarbutton>
             <xul:toolbarseparator/>
-            <xul:toolbarbutton anonid="loginButton"
-                               class="bookmark-item"
-                               label="&hBookmark.toolbar.loginLabel;"
-                               oncommand="hBookmark.UIUtils.openLogin(event);"
-                               onclick="checkForMiddleClick(this, event);"/>
-            <xul:toolbarbutton anonid="addBookmarkButton"
-                               class="bookmark-item"
-                               label="&hBookmark.toolbar.addBookmarkLabel;"
-                               oncommand="hBookmark.UIUtils.openAddBookmark(event);"
-                               onclick="checkForMiddleClick(this, event);"/>
-            <xul:hbox anonid="recent-container" flex="1"
-                      context="hBookmarkEntryContext"
-                      tooltip="hBookmarkItemTooltip">
-                <xul:hbox anonid="body" flex="1"/>
-                <xul:toolbarbutton anonid="chevron" class="chevron" type="menu">
-                    <xul:menupopup anonid="popup"
-                                   context="hBookmarkEntryContext"/>
-                </xul:toolbarbutton>
-            </xul:hbox>
+            <xul:toolbaritem id="hBookmark-toolbar-recent-line">
+                <xul:toobarbutton class="bookmark-item bookmarks-toolbar-customize"
+                                  label="&hBookmark.toolbar.recentLabel;"/>
+            </xul:toolbaritem>
         </content>
-
-        <implementation>
-            <constructor><![CDATA[
-                let method = hBookmark.method;
-                hBookmark.EventService.createListener("BookmarksUpdated",
-                    method(this, "onBookmarksUpdated"));
-                hBookmark.EventService.createListener("UserChange",
-                    method(this, "onBookmarksUpdated"));
-                hBookmark.Prefs.bookmark.createListener("recentItemCount",
-                    method(this, "onBookmarksUpdated"));
-                window.addEventListener("resize",
-                    method(this, "onResize"), false);
-                this.recentContainer.addEventListener("command",
-                    method(this, "onBookmarkCommand"), false);
-                this.recentContainer.addEventListener("click",
-                    method(this, "onBookmarkClick"), false);
-                // XXX コンストラクタ呼び出し時にはデータを取得できない……。
-                //this.build();
-                setTimeout(method(this, "build"), 500);
-            ]]></constructor>
-
-            <field name="homeButton">
-                document.getAnonymousElementByAttribute(this, "anonid", "homeButton")
-            </field>
-            <field name="loginButton">
-                document.getAnonymousElementByAttribute(this, "anonid", "loginButton")
-            </field>
-            <field name="addBookmarkButton">
-                document.getAnonymousElementByAttribute(this, "anonid", "addBookmarkButton")
-            </field>
-            <field name="recentContainer">
-                document.getAnonymousElementByAttribute(this, "anonid", "recent-container")
-            </field>
-            <field name="body">
-                document.getAnonymousElementByAttribute(this, "anonid", "body")
-            </field>
-            <field name="chevron">
-                document.getAnonymousElementByAttribute(this, "anonid", "chevron")
-            </field>
-            <field name="popup">
-                document.getAnonymousElementByAttribute(this, "anonid", "popup")
-            </field>
-
-            <method name="build">
-                <body><![CDATA[
-                    let range = document.createRange();
-                    range.selectNodeContents(this.body);
-                    range.deleteContents();
-                    range.selectNodeContents(this.popup);
-                    range.deleteContents();
-
-                    let bookmarks;
-                    try {
-                        bookmarks = this.getRecentBookmarks();
-                    } catch (ex) {
-                        bookmarks = [];
-                    }
-                    bookmarks.forEach(function (bookmark) {
-                        let button = this._createToolbarButton(bookmark);
-                        this.body.appendChild(button);
-                        let item = this._createMenuItem(bookmark);
-                        this.popup.appendChild(item);
-                    }, this);
-
-                    let loggedin = !!hBookmark.User.user;
-                    this.loginButton.hidden = loggedin;
-                    this.addBookmarkButton.hidden = !loggedin ||
-                                                    !!bookmarks.length;
-                    this.redraw();
-                ]]></body>
-            </method>
-
-            <method name="redraw">
-                <body><![CDATA[
-                    // XXX 表示→非表示→リサイズ→再度表示のときに
-                    // 配置が更新されない。
-                    if (this.collapsed) return;
-                    hBookmark.p('toolbar redraw');
-                    Array.forEach(this.body.childNodes,
-                                  function (button) button.hidden = false);
-                    this.chevron.hidden = false;
-
-                    let leftSize = this.boxObject.width;
-                    for (let child = this.boxObject.firstChild;
-                         child;
-                         child = child.boxObject.nextSibling) {
-                        if (child !== this.recentContainer)
-                            leftSize -= this._getMarginBoxWidth(child);
-                    }
-                    let chevronSize = this._getMarginBoxWidth(this.chevron);
-                    let visibleCount = 0;
-                    let button = this.body.firstChild;
-                    while (button) {
-                        let nextButton = button.nextSibling;
-                        leftSize -= this._getMarginBoxWidth(button);
-                        if (leftSize < (nextButton ? chevronSize : 0)) break;
-                        visibleCount++;
-                        button = nextButton;
-                    }
-                    this.chevron.hidden = !button;
-                    Array.forEach(this.body.childNodes, function (button, i) {
-                        button.hidden = (i >= visibleCount);
-                    });
-                    Array.forEach(this.popup.childNodes, function (item, i) {
-                        item.hidden = (i < visibleCount);
-                    });
-                ]]></body>
-            </method>
-
-            <method name="_getMarginBoxWidth">
-                <parameter name="element"/>
-                <body><![CDATA[
-                    let style = getComputedStyle(element, null);
-                    return element.boxObject.width +
-                        parseInt(style.marginLeft) +
-                        parseInt(style.marginRight);
-                ]]></body>
-            </method>
-
-            <method name="onResize">
-                <parameter name="event"/>
-                <body><![CDATA[
-                    if (event.target !== window) return;
-                    this.redraw();
-                ]]></body>
-            </method>
-
-            <method name="onBookmarksUpdated">
-                <parameter name="event"/>
-                <body><![CDATA[
-                    this.build();
-                ]]></body>
-            </method>
-        </implementation>
     </binding>
 
     <binding id="dropdown" extends="#toolbar-item-base">
@@ -277,6 +128,213 @@
                 ]]></body>
             </method>
         </implementation>
+    </binding>
+
+    <binding id="recent-line">
+        <content flex="1">
+            <xul:hbox class="hBookmark-toolbar-dynamic-items" flex="1">
+                <xul:toolbarbutton anonid="loginButton"
+                                   class="bookmark-item"
+                                   label="&hBookmark.toolbar.loginLabel;"
+                                   hidden="true"
+                                   oncommand="hBookmark.UIUtils.openLogin(event);"
+                                   onclick="checkForMiddleClick(this, event);"/>
+                <xul:toolbarbutton anonid="addPageButton"
+                                   class="bookmark-item"
+                                   label="&hBookmark.toolbar.addBookmarkLabel;"
+                                   hidden="true"
+                                   oncommand="hBookmark.UIUtils.openAddBookmark(event);"
+                                   onclick="checkForMiddleClick(this, event);"/>
+                <xul:hbox anonid="body" flex="1"
+                          tooltip="hBookmarkItemTooltip"
+                          context="hBookmarkEntryContext"/>
+                <xul:toolbarbutton anonid="chevron" class="chevron" type="menu">
+                    <xul:menupopup anonid="popup"
+                                   class="hBookmark-toolbar-recent-popup"/>
+                </xul:toolbarbutton>
+            </xul:hbox>
+            <children/>
+        </content>
+
+        <implementation>
+            <constructor><![CDATA[
+                let method = hBookmark.method;
+                hBookmark.EventService.createListener("BookmarksUpdated",
+                    method(this, "build"));
+                hBookmark.EventService.createListener("UserChange",
+                    method(this, "build"));
+                hBookmark.Prefs.bookmark.createListener("recentItemCount",
+                    method(this, "build"));
+                window.addEventListener("resize",
+                    method(this, "onResize"), false);
+                // XXX コンストラクタ呼び出し時にはデータを取得できない……。
+                //this.build();
+                setTimeout(method(this, "build"), 500);
+            ]]></constructor>
+
+            <field name="loginButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "loginButton")
+            </field>
+            <field name="addPageButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "addPageButton")
+            </field>
+            <field name="body">
+                document.getAnonymousElementByAttribute(this, "anonid", "body")
+            </field>
+            <field name="chevron">
+                document.getAnonymousElementByAttribute(this, "anonid", "chevron")
+            </field>
+            <field name="popup">
+                document.getAnonymousElementByAttribute(this, "anonid", "popup")
+            </field>
+
+            <method name="build">
+                <body><![CDATA[
+                    hBookmark.UIUtils.deleteContents(this.body);
+                    let bookmarks;
+                    try {
+                        bookmarks = hBookmark.Model.Bookmark.findRecent();
+                    } catch (ex) {
+                        bookmarks = [];
+                    }
+                    bookmarks.forEach(function (bookmark) {
+                        let button = this._createToolbarButton(bookmark);
+                        this.body.appendChild(button);
+                    }, this);
+
+                    let loggedin = !!hBookmark.User.user;
+                    this.loginButton.hidden = loggedin;
+                    this.addPageButton.hidden = !loggedin || !!bookmarks.length;
+                    this.chevron.hidden = !bookmarks.length;
+                    this.redraw();
+                ]]></body>
+            </method>
+
+            <method name="_createToolbarButton">
+                <parameter name="bookmark"/>
+                <body><![CDATA[
+                    let button = document.createElementNS(hBookmark.XUL_NS,
+                                                          "toolbarbutton");
+                    button.setAttribute("class", "bookmark-item");
+                    button.setAttribute("label", bookmark.title);
+                    button.setAttribute("image", hBookmark.favicon(bookmark.url));
+                    button.bookmark = bookmark;
+                    return button;
+                ]]></body>
+            </method>
+
+            <method name="redraw">
+                <body><![CDATA[
+                    hBookmark.p('toolbar redraw');
+                    Array.forEach(this.body.childNodes,
+                                  function (button) button.hidden = true);
+                    this.chevron.hidden = false;
+
+                    let availableWidth = this.boxObject.width;
+                    let chevronWidth = this._getMarginBoxWidth(this.chevron);
+                    let buttonsWidth = 0;
+                    let visibleCount = 0;
+                    let button = this.body.firstChild;
+                    while (button) {
+                        button.hidden = false;
+                        buttonsWidth += this._getMarginBoxWidth(button);
+                        let nextButton = button.nextSibling;
+                        if (buttonsWidth + (nextButton ? chevronWidth : 0)
+                                > availableWidth) {
+                            button.hidden = true;
+                            break;
+                        }
+                        visibleCount++;
+                        button = nextButton;
+                    }
+                    this.chevron.hidden = !button;
+                    this.popup.hiddenCount = visibleCount;
+                ]]></body>
+            </method>
+
+            <method name="_getMarginBoxWidth">
+                <parameter name="element"/>
+                <body><![CDATA[
+                    let style = getComputedStyle(element, null);
+                    return element.boxObject.width +
+                        parseInt(style.marginLeft) +
+                        parseInt(style.marginRight);
+                ]]></body>
+            </method>
+
+            <method name="onResize">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    // XXX 表示→非表示→リサイズ→再度表示のときに
+                    // 配置が更新されない。
+                    if (event.target === window && this._isVisible())
+                        this.redraw();
+                ]]></body>
+            </method>
+
+            <method name="_isVisible">
+                <body><![CDATA[
+                    let toolbar = this.parentNode;
+                    while (toolbar &&
+                           !(toolbar.namespaceURI === hBookmark.XUL_NS &&
+                             toolbar.localName === "toolbar"))
+                        toolbar = toolbar.parentNode;
+                    return !!toolbar && !toolbar.collapsed;
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="command"
+                     action="hBookmark.UIUtils.onBookmarkCommand(event);"/>
+            <handler event="click"
+                     action="hBookmark.UIUtils.onBookmarkClick(event);"/>
+        </handlers>
+    </binding>
+
+    <binding id="recent-popup"
+             extends="chrome://global/content/bindings/popup.xml#popup">
+        <content context="hBookmarkEntryContext"
+                 tooltip="hBookmarkItemTooltip">
+        </content>
+
+        <implementation>
+            <field name="hiddenCount">0</field>
+
+            <method name="build">
+                <body><![CDATA[
+                    hBookmark.UIUtils.deleteContents(this);
+                    let bookmarks;
+                    try {
+                        bookmarks = hBookmark.Model.Bookmark.findRecent();
+                    } catch (ex) {
+                        return;
+                    }
+                    bookmarks = bookmarks.slice(this.hiddenCount);
+                    bookmarks.forEach(function (bookmark, i) {
+                        let menuItem = this._createMenuItem(bookmark);
+                        this.appendChild(menuItem);
+                    }, this);
+                ]]></body>
+            </method>
+
+            <method name="_createMenuItem">
+                <parameter name="bookmark"/>
+                <body><![CDATA[
+                    let item = document.createElementNS(hBookmark.XUL_NS,
+                                                        "menuitem");
+                    item.setAttribute("class", "bookmark-item menuitem-iconic");
+                    item.setAttribute("label", bookmark.title);
+                    item.setAttribute("image", hBookmark.favicon(bookmark.url));
+                    item.bookmark = bookmark;
+                    return item;
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="popupshowing" action="this.build();"/>
+        </handlers>
     </binding>
 
 </bindings>

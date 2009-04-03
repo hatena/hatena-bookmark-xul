@@ -86,8 +86,9 @@ extend(Bookmark, {
         return res;
     },
     findRecent: function MB_findRecent(count) {
+        count = count || Prefs.bookmark.get('recentItemCount');
         return Bookmark.find({
-            limit: count || 10,
+            limit: count,
             order: 'date desc'
         });
     },
