@@ -234,10 +234,20 @@ TagCompleter.InputHandler.prototype = {
         let tag = TagCompleter.List.getCurrentTag(force);
         let line = this.inputLine;
         if (tag) {
-            let pos = line.insertionTag(tag, this.caretPos);
-            this.updateValue();
-            this.textbox.setSelectionRange(pos + 1, pos + 1);
-            this.fireTagChangeEvent();
+            if (IS_OSX) {
+                // OSX では、タイミングをずらさないと IME 入力時 input.value 代入が空になる
+                setTimeout(function(self) {
+                    let pos = line.insertionTag(tag, self.caretPos);
+                    self.updateValue();
+                    self.textbox.setSelectionRange(pos + 0, pos + 0);
+                    self.fireTagChangeEvent();
+                }, 0, this);
+            } else {
+                let pos = line.insertionTag(tag, this.caretPos);
+                this.updateValue();
+                this.textbox.setSelectionRange(pos + 0, pos + 0);
+                this.fireTagChangeEvent();
+            }
         }
         TagCompleter.List.hide();
     },
@@ -366,6 +376,10 @@ TagCompleter.InputLine.prototype = {
         let lPos = prefix.lastIndexOf('[');
         if (lPos == -1) return false;
         prefix = prefix.substring(0, lPos + 1) + tagName + ']';
+        if (suffix.indexOf(']') == 0) {
+            // '[tag]]examle' とならないように
+            suffix = suffix.substring(1);
+        }
         this.value = prefix + suffix;
         return prefix.length;
     },

@@ -157,6 +157,11 @@ function testInsertion() {
     assert.equals(9, line.insertionTag('afoobar', 2));
     assert.equals(line.suggest(9), []);
     assert.equals(line.value, '[afoobar][foo]komment');
+
+    line = new TagCompleter.InputLine('[a][foo]komment', TestTags);
+    assert.equals(9, line.insertionTag('afoobar', 2));
+    assert.equals(line.suggest(9), []);
+    assert.equals(line.value, '[afoobar][foo]komment');
 }
 
 
