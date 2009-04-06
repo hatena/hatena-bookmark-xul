@@ -188,8 +188,24 @@
         <panel id="hBookmark-panel-comment" 
              orient="vertical"
              noautofocus="true"
-             noautohide="false"
+             noautohide="true"
         >
+
+        <vbox 
+           flex="1"
+           id="hBookmark-comment-container"
+        >
+            <!--
+            <hbox flex="1">
+            <vbox flex="1" />
+            <splitter resizebefore="flex" resizeafter="flex"/>
+            </hbox>
+            -->
+            <vbox
+                flex="1"
+                id="hBookmark-comment-list"
+            />
+        </vbox>
         </panel>
         <panel 
             id="hBookmark-panel-urlbar" 

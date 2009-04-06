@@ -12,10 +12,15 @@ this.__defineGetter__('aWin', function() Application.activeWindow);
 this.__defineGetter__('aDoc', function() Application.activeWindow.activeTab.document);
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
 
+let E = createElementBindDocument(document);
+
 elementGetter(this, 'panelComment', 'hBookmark-panel-comment', document);
 elementGetter(this, 'commentButton', 'hBookmark-status-comment', document);
+elementGetter(this, 'commentContainer', 'hBookmark-comment-container', document);
+elementGetter(this, 'list', 'hBookmark-comment-list', document);
 elementGetter(this, 'statusbar', 'status-bar', document);
 
+/*
 const CMD_EVENT_NAME = 'hBookmark-view-comments';
 
 window.addEventListener(CMD_EVENT_NAME, function(ev) {
@@ -30,6 +35,7 @@ let throwEvent = function(method, data) {
      ev.setData('data', data);
      window.dispatchEvent(ev);
 }
+*/
 
 var CommentViewer = {
     showClick: function CommentViewer_show() {
@@ -57,6 +63,7 @@ var CommentViewer = {
         if (!url && isHttp) {
             url = aDoc.location.href;
         }
+
         if (panelComment.state != 'close' && url != CommentViewer.currentURL) {
             CommentViewer.show(url);
         } else {
@@ -66,20 +73,34 @@ var CommentViewer = {
     currentURL: null,
     updateComment: function CommentViewer_updateComment(data) {
         CommentViewer.currentURL = data.url;
-        CommentViewer.iframe.setAttribute('height', '0px');
         panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
         // 非表示ユーザをフィルター
         let regex = User.user.ignores;
         if (regex) {
             data.bookmarks = data.bookmarks.filter(function(b) !regex.test(b.user));
         }
-        //if (data.bookmarks && data.bookmarks.length) {
-            throwEvent('load-json', data);
-        //} else {
-        //    CommentViewer.hide();
-        //}
+        CommentViewer.updateViewer(data);
         commentButton.setAttribute('loading', 'false'); 
     },
+    updateViewer: function (data) {
+        while(list.firstChild) list.removeChild(list.firstChild);
+        let len = data.bookmarks.length;
+        let B_URL = 'http://b.hatena.ne.jp/';
+        for (let i = 0;  i < len; i++) {
+            let b = data.bookmarks[i];
+            if (b.comment.length) {
+                let li = E('hbox', {flex: 1});
+                let userlink = B_URL + b.user + '/';
+                let ymd = b.timestamp.split(' ')[0];
+                let permalink = userlink + ymd.replace(/\//g, '') + '#bookmark-' + data.eid;
+                // let icon = userIcon(b.user);
+                li.appendChild(E('label', {href: permalink, class: 'username'}, b.user));
+                li.appendChild(E('description', {class: 'comment', flex: 1}, b.comment));
+                list.appendChild(li);
+            }
+        }
+    },
+    /*
     createIFrame: function() {
         if (!CommentViewer.iframe) {
             CommentViewer.iframe = document.createElement('iframe');
@@ -89,6 +110,7 @@ var CommentViewer = {
             panelComment.appendChild(CommentViewer.iframe);
         }
     },
+    */
     hide: function CommentViewer_hide() {
         if (panelComment.state != 'closed') {
             panelComment.hidePopup();
@@ -97,6 +119,7 @@ var CommentViewer = {
     }
 }
 
+/*
 CommentViewer.dispatchMethods = {
     close: function() {
         CommentViewer.hide();
@@ -119,9 +142,11 @@ CommentViewer.dispatchMethods = {
         CommentViewer.iframe.setAttribute('width', '' + maxWidth + 'px');
     }
 }
+*/
 
-window.addEventListener('load', function() {
-    p('init create commentViewer iframe');
-    CommentViewer.createIFrame();
-}, false);
+// window.addEventListener('load', function() {
+//     p('init create commentViewer iframe');
+//     CommentViewer.createIFrame();
+// }, false);
+
 

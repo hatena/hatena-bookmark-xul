@@ -120,6 +120,28 @@ width: 800px;
 */
 }
 
+#hBookmark-panel-comment {
+    -moz-appearance: none;
+    background-color: transparent !important;
+    border: none;
+    -moz-opacity: 0.95;
+}
+
+#hBookmark-comment-container {
+    color: #FFF;
+    background-color: #000;
+    -moz-border-radius: 7px;
+}
+
+/* vbox */
+#hBookmark-comment-list {
+}
+
+#hBookmark-comment-list hbox {
+    max-width: 300px;
+}
+
+
 /*
  * url bar ovarlay
  */
