@@ -116,7 +116,8 @@
         </toolbarbutton>
 
         <toolbaritem id="hBookmark-toolbar-recent-line"
-                     class="chromeclass-toolbar-additional">
+                     class="chromeclass-toolbar-additional"
+                     title="&hBookmark.toolbar.recentLabel;">
             <toolbarbutton class="bookmark-item bookmarks-toolbar-customize"
                            label="&hBookmark.toolbar.recentLabel;"/>
         </toolbaritem>
