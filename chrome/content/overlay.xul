@@ -104,7 +104,18 @@
             type="menu-button"
             oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
             onclick="checkForMiddleClick(this, event);">
-            <menupopup class="hBookmark-links-popup"/>
+            <menupopup oncommand="event.stopPropagation();">
+                <menuitem label="&hBookmark.toolbar.top;"
+                          oncommand="openUILink('http://b.hatena.ne.jp/', event);"
+                          onclick="checkForMiddleClick(this, event);"/>
+                <menuitem label="&hBookmark.toolbar.home;"
+                          default="true"
+                          oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
+                          onclick="checkForMiddleClick(this, event);"/>
+                <menuitem label="&hBookmark.toolbar.favorite;"
+                          oncommand="openUILink('http://b.hatena.ne.jp/my/favorite', event);"
+                          onclick="checkForMiddleClick(this, event);"/>
+            </menupopup>
         </toolbarbutton>
 
         <toolbarbutton id="hBookmark-toolbar-recent-button"
