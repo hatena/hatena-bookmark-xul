@@ -7,6 +7,28 @@ toolbarpaletteitem[place="toolbar"] .hBookmark-toolbar-dynamic-items {
   display: none;
 }
 
+#hBookmark-toolbar-sidebar-button {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(0px 208px 23px 183px);
+  cursor: pointer;
+}
+
+#hBookmark-toolbar-sidebar-button[checked="true"] {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(23px 208px 46px 183px);
+  cursor: pointer;
+}
+
+#hBookmarkToolbar #hBookmark-toolbar-sidebar-button,
+toolbar[iconsize="small"] #hBookmark-toolbar-sidebar-button {
+  -moz-image-region: rect(46px 180px 62px 161px);
+}
+
+#hBookmarkToolbar #hBookmark-toolbar-sidebar-button[checked="true"],
+toolbar[iconsize="small"] #hBookmark-toolbar-sidebar-button[checked="true"] {
+  -moz-image-region: rect(62px 180px 78px 161px);
+}
+
 #hBookmarkToolbar #hBookmark-toolbar-add-button {
   cursor: pointer;
 }
@@ -79,16 +101,3 @@ toolbar[iconsize="small"] #hBookmark-toolbar-recent-button {
 toolbar[iconsize="small"] #hBookmark-toolbar-recent-button:active {
   -moz-image-region: rect(62px 48px 78px 32px);
 }
-
-#hBookmark-toolbar-sidebar-button {
-  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(46px 180px 62px 161px);
-  cursor: pointer;
-}
-
-#hBookmark-toolbar-sidebar-button[checked="true"] {
-  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(62px 180px 78px 161px);
-  cursor: pointer;
-}
-

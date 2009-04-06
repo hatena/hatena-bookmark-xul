@@ -2,6 +2,14 @@
   min-height: 0 !important;
 }
 
+#nav-bar #hBookmark-toolbar-sidebar-button {
+  -moz-image-region: rect(0px 244px 23px 208px);
+}
+
+#nav-bar #hBookmark-toolbar-sidebar-button[checked="true"] {
+  -moz-image-region: rect(23px 244 46 208px);
+}
+
 #nav-bar #hBookmark-toolbar-add-button {
   -moz-image-region: rect(0px 111px 23px 75px);
 }
