@@ -32,7 +32,7 @@ end
 task :create_install_rdf => ["#{BUILD_DIR}/install.rdf"]
 
 task :create_extra_directories => []
-%w(defaults components modules skin).each do |dir|
+%w(defaults components modules skin searchplugins).each do |dir|
   if File.directory?(dir)
     dst_dir = "#{BUILD_DIR}/#{dir}"
 
@@ -64,6 +64,7 @@ task :create_extension_xpi => [
     version_number = element.text
   end
 
+  sh "[ -d xpi ] || mkdir xpi"
   sh "cd #{BUILD_DIR} && zip -qr -9 ../../xpi/#{EXTENSION_NAME}-#{version_number}-#{Time.now.strftime('%Y%m%d')}-fx.xpi *"
   rm_rf "build"
 end

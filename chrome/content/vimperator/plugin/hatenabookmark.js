@@ -141,10 +141,16 @@ liberator.plugins.hBookmark = (function() {
            </>
         },
         options: {
-            completer: function(context) {
+            completer: null,
+            literal: 0,
+            argCount: '*',
+            bang: true,
+        },
+        createCompleter: function(titles) {
+            return function(context) {
                 context.format = {
                     anchored: true,
-                    title: ['URL', 'Comment'],
+                    title: titles,
                     keys: { text: "url", description: "url", icon: "icon", extra: "extra"},
                     process: [
                         plugin.command.templateTitleIcon,
@@ -155,12 +161,10 @@ liberator.plugins.hBookmark = (function() {
                 let res = plugin.search(word);
                 context.filters = [];
                 context.completions = res.map(function(b) new plugin.command.adapter(b));
-            },
-            literal: 0,
-            argCount: '*',
-            bang: true,
+            }
         }
     };
+	plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment']);
 
     plugin.toggleComment = function(url) {
         HatenaBookmark.CommentViewer.toggle(url);
@@ -199,6 +203,9 @@ liberator.plugins.hBookmark = (function() {
         plugin.command.options,
         true
     );
+
+    completion.addUrlCompleter("H", "Hatena Bookmarks", plugin.command.createCompleter(['Hatena Bookmark']));
+    config.guioptions['H'] = ['HatenaBookmark Toolbar',['hBookmarkToolbar']];
 
     return plugin;
 })();
