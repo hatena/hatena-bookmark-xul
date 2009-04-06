@@ -86,8 +86,10 @@ extend(BookmarkTreeView.prototype, {
     },
 
     update: function BTV_update() {
-        if (this._update)
-            this._update();
+        if (!this._update) return;
+        let row = this._treeBox.getFirstVisibleRow();
+        this._update();
+        this._treeBox.scrollToRow(row);
     },
 
     handleMouseOver: function BTV_handleMouseOver(event) {
