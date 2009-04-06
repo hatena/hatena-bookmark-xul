@@ -1,6 +1,7 @@
 # based on: http://gravelog.blogspot.com/2007/03/using-rake-to-build-firefox-extensions_04.html
 require 'rexml/document'
 require 'digest/sha1'
+require 'pathname'
 
 include REXML
 include FileUtils::Verbose
@@ -64,7 +65,8 @@ task :create_extension_xpi => [
     version_number = element.text
   end
 
-  sh "[ -d xpi ] || mkdir xpi"
+  xpi = Pathname.new 'xpi'
+  xpi.mkdir unless xpi.exist? 
   sh "cd #{BUILD_DIR} && zip -qr -9 ../../xpi/#{EXTENSION_NAME}-#{version_number}-#{Time.now.strftime('%Y%m%d')}-fx.xpi *"
   rm_rf "build"
 end
