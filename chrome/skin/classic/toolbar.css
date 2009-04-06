@@ -3,6 +3,12 @@
   min-height: 26px;
 }
 
+#hBookmark-toolbar-add-button, 
+#hBookmark-toolbar-home-button, 
+#hBookmark-toolbar-sidebar-button  {
+  padding: 0 4px;
+}
+
 #hBookmark-toolbar-add-button .toolbarbutton-icon,
 #hBookmark-toolbar-home-button .toolbarbutton-icon,
 #hBookmark-toolbar-sidebar-button .toolbarbutton-icon {
