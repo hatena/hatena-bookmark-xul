@@ -107,7 +107,7 @@ var CommentViewer = {
             }
         }
         CommentViewer.updateViewer(data);
-        panelComment.openPopup(statusbar, 'before_end', -20, 1,false,false);
+        panelComment.openPopup(statusbar, 'before_end', -20, -1,false,false);
         commentButton.setAttribute('loading', 'false'); 
     },
     updateViewer: function (data) {
@@ -201,8 +201,19 @@ var CommentViewer = {
         }
     },
     popupHiddenHandler: function(ev) {
+        panelComment.removeEventListener('mouseover', CommentViewer.browserOverHandler, false);
+        gBrowser.removeEventListener('mouseover', CommentViewer.popupOverHandler, false);
+        CommentViewer.hideTimer.stop();
         CommentViewer.currentURL = null;
         CommentViewer.lastData = null;
+    },
+    popupShownHandler: function(ev) {
+        CommentViewer.hideTimer.stop();
+        panelComment.addEventListener('mouseover', CommentViewer.popupOverHandler, false);
+        gBrowser.addEventListener('mouseover', CommentViewer.browserOverHandler, false);
+    },
+    popupOverHandler: function(ev) {
+        CommentViewer.hideTimer.stop();
     },
     get hideTimer() {
         if (!CommentViewer._hideTimer) {
@@ -231,9 +242,17 @@ var CommentViewer = {
             hideTimer.start();
         }
     },
+    browserOverHandler: function(ev) {
+        if (CommentViewer.prefs.get('autoHoverShow')) {
+            let hideTimer = CommentViewer.hideTimer;
+            hideTimer.reset();
+            hideTimer.start();
+        }
+    },
     loadHandler: function CommentViewer_loadHandler() {
         panelComment.addEventListener('popuphidden', CommentViewer.popupHiddenHandler, false);
-        panelComment.addEventListener('mouseout', CommentViewer.popupMouseoutHandler, false);
+        panelComment.addEventListener('popupshown', CommentViewer.popupShownHandler, false);
+        // panelComment.addEventListener('mouseout', CommentViewer.popupMouseoutHandler, false);
         listDiv.addEventListener('click', CommentViewer.listClickHandler, true);
         CommentViewer.updateToggle();
     },
