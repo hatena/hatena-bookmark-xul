@@ -46,10 +46,11 @@ pref("extensions.hatenabookmark.addPanel.frequentTagCount", 30);
 pref("extensions.hatenabookmark.addPanel.xulMigemo", true);
 
 // comment viewer
-pref("extensions.hatenabookmark.commentviewer.allShow", true);
+pref("extensions.hatenabookmark.commentviewer.allShow", false);
 pref("extensions.hatenabookmark.commentviewer.width", 500);
 pref("extensions.hatenabookmark.commentviewer.height", 500);
 pref("extensions.hatenabookmark.commentviewer.autoHoverShow", true);
+pref("extensions.hatenabookmark.commentviewer.autoResize", true);
 
 // Sync
 pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);

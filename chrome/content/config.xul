@@ -31,25 +31,13 @@
             name="extensions.hatenabookmark.locationbar.search"
             type="bool"/>
         <preference 
-            id="extensions.hatenabookmark.statusbar.addButton"
-            name="extensions.hatenabookmark.statusbar.addButton"
-            type="bool"/>
-        <preference 
-            id="extensions.hatenabookmark.statusbar.counter"
-            name="extensions.hatenabookmark.statusbar.counter"
-            type="bool"/>
-        <preference 
-            id="extensions.hatenabookmark.statusbar.httpsIgnore"
-            name="extensions.hatenabookmark.statusbar.httpsIgnore"
+            id="extensions.hatenabookmark.contextmenu.enabled"
+            name="extensions.hatenabookmark.contextmenu.enabled"
             type="bool"/>
         <preference 
             id="extensions.hatenabookmark.recentItemCount"
             name="extensions.hatenabookmark.recentItemCount"
             type="int"/>
-        <preference 
-            id="extensions.hatenabookmark.contextmenu.enabled"
-            name="extensions.hatenabookmark.contextmenu.enabled"
-            type="bool"/>
     </preferences>
 
     <vbox>
@@ -69,7 +57,67 @@
         </groupbox>
 
         <groupbox orient="vertical">
-            <caption label="ステータスバー" />
+            <caption label="ブックマークツールバー" />
+            <vbox flex="1">
+                <hbox flex="1" align="center">
+                <label value="ブックマークの表示上限数"
+                    control="recentItemCount"/>
+                <textbox id="recentItemCount"
+                    preference="extensions.hatenabookmark.recentItemCount"
+                    type="number" min="1" increment="1" max="200"
+                    style="width: 5em;"
+                />
+                </hbox>
+            </vbox>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="右クリック(コンテキスト)メニュー" />
+            <checkbox id="extensions.hatenabookmark.contextmenu.enabled-check" flex="1"
+                label="右クリックメニューを拡張する"
+                preference="extensions.hatenabookmark.contextmenu.enabled"/>
+        </groupbox>
+    </vbox>
+</prefpane>
+
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/transparent.png"
+    id="prefpane-statusbar" label="ステータスバー" flex="1" onpaneload="hBookmark.Config.updateStatus();">
+
+    <preferences>
+        <preference 
+            id="extensions.hatenabookmark.statusbar.addButton"
+            name="extensions.hatenabookmark.statusbar.addButton"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.statusbar.counter"
+            name="extensions.hatenabookmark.statusbar.counter"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.statusbar.httpsIgnore"
+            name="extensions.hatenabookmark.statusbar.httpsIgnore"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.autoHoverShow"
+            name="extensions.hatenabookmark.commentviewer.autoHoverShow"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.autoResize"
+            name="extensions.hatenabookmark.commentviewer.autoResize"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.width"
+            name="extensions.hatenabookmark.commentviewer.width"
+            type="int"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.height"
+            name="extensions.hatenabookmark.commentviewer.height"
+            type="int"/>
+    </preferences>
+
+    <vbox>
+        <groupbox orient="vertical">
+            <caption label="表示アイコン" />
             <checkbox id="extensions.hatenabookmark.statusbar.addButton-check" flex="1"
                 label="追加ボタンの表示"
                 preference="extensions.hatenabookmark.statusbar.addButton"/>
@@ -86,29 +134,35 @@
         </groupbox>
 
         <groupbox orient="vertical">
-            <caption label="ブックマークツールバー" />
-            <vbox flex="1">
-                <hbox flex="1" align="center">
-                <label value="ブックマークの表示上限数"
-                    control="recentItemCount"/>
-                <textbox id="recentItemCount"
-                    preference="extensions.hatenabookmark.recentItemCount"
-                    type="number" min="1" increment="1"
-                    style="width: 5em;"
-                />
-                </hbox>
-            </vbox>
-        </groupbox>
+            <caption label="コメントビュワー" />
+            <checkbox id="extensions.hatenabookmark.commentviewer.autoHoverShow-check" flex="1"
+                label="マウスオーバーで、自動でコメントビュワーを表示"
+                preference="extensions.hatenabookmark.commentviewer.autoHoverShow"/>
 
-        <groupbox orient="vertical">
-            <caption label="右クリック(コンテキスト)メニュー" />
-            <checkbox id="extensions.hatenabookmark.contextmenu.enabled-check" flex="1"
-                label="右クリックメニューを拡張する"
-                preference="extensions.hatenabookmark.contextmenu.enabled"/>
+            <checkbox id="extensions.hatenabookmark.commentviewer.autoResize-check" flex="1"
+                label="自動サイズ調整"
+                onmouseup="setTimeout(hBookmark.Config.updateStatus, 10);"
+                preference="extensions.hatenabookmark.commentviewer.autoResize"/>
+
+            <hbox flex="1" align="center">
+            <label value="サイズ指定・横幅(px)"
+                control="commentviewer.width"/>
+            <textbox id="commentviewer.width"
+                preference="extensions.hatenabookmark.commentviewer.width"
+                type="number" min="200" increment="10" max="9999"
+                style="width: 5em;"
+            />
+            <label value="縦幅(px)"
+                control="commentviewer.height"/>
+            <textbox id="commentviewer.height"
+                preference="extensions.hatenabookmark.commentviewer.height"
+                type="number" min="100" increment="10" max="9999"
+                style="width: 5em;"
+            />
+            </hbox>
         </groupbox>
     </vbox>
 </prefpane>
-
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/transparent.png"

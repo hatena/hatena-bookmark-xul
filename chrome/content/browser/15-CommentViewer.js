@@ -1,11 +1,5 @@
 
-/*
- * ToDo: iframe ではなく XUL で描画するが、XUL の時の複数要素の折り返しをどうするか…
- */
-
 const EXPORT = ['CommentViewer'];
-
-let commentCache = new ExpireCache('uComment', 60 * 60, 'uneval'); // 一時間キャッシュ
 
 // local utility 
 this.__defineGetter__('aWin', function() Application.activeWindow);
@@ -105,7 +99,6 @@ var CommentViewer = {
     updateComment: function CommentViewer_updateComment(data) {
         CommentViewer.updatePosition();
         CommentViewer.currentURL = data.url;
-        panelComment.openPopup(statusbar, 'before_end', -20, 1,false,false);
         // 非表示ユーザをフィルター
         if (User.user) {
             let regex = User.user.ignores;
@@ -114,6 +107,7 @@ var CommentViewer = {
             }
         }
         CommentViewer.updateViewer(data);
+        panelComment.openPopup(statusbar, 'before_end', -20, 1,false,false);
         commentButton.setAttribute('loading', 'false'); 
     },
     updateViewer: function (data) {
@@ -183,8 +177,15 @@ var CommentViewer = {
     lastRenderData: [],
     updatePosition: function() {
         let height = list.offsetHeight + 30;
-        let h = Math.min(CommentViewer.viewerMaxHeight, height);
-        let w = Math.min(CommentViewer.width, window.content.innerWidth - 10);
+        let h, w;
+        if (CommentViewer.prefs.get('autoResize')) {
+            let size = Math.max(300, Math.min(window.content.innerWidth - 30, window.content.innerHeight - 30));
+            h = w = parseInt(size);
+            h = Math.min(h, height);
+        } else {
+            h = Math.min(CommentViewer.viewerMaxHeight, height);
+            w = Math.min(CommentViewer.viewerWidth, window.content.innerWidth - 10);
+        }
         listContainer.style.height = '' + h + 'px';
         listContainer.style.width = '' + w + 'px';
     },
@@ -263,36 +264,6 @@ var CommentViewer = {
     },
 }
 
-/*
-CommentViewer.dispatchMethods = {
-    close: function() {
-        CommentViewer.hide();
-    },
-    rendered: function(o) {
-        // let doc = window.content.document;
-        // let maxHeight = (doc.compatMode == 'CSS1Compat' ? doc.documentElement.clientHeight : doc.body.clientHeight) - 40;
-        let maxHeight = window.content.innerHeight - 40;
-        let maxWidth = window.content.innerWidth - 40;
-        if (o.height < 100)
-            o.height = 100;
-        if (o.height < maxHeight) {
-            panelComment.setAttribute('height', '' + o.height + 'px');
-            CommentViewer.iframe.setAttribute('height', '' + o.height + 'px');
-        } else {
-            panelComment.setAttribute('height', '' + maxHeight + 'px');
-            CommentViewer.iframe.setAttribute('height',  '' + maxHeight + 'px');
-        }
-        panelComment.setAttribute('width', '' + maxWidth + 'px');
-        CommentViewer.iframe.setAttribute('width', '' + maxWidth + 'px');
-    }
-}
-*/
-
 EventService.createListener('load', CommentViewer.loadHandler);
-
-// window.addEventListener('load', function() {
-//     p('init create commentViewer iframe');
-//     CommentViewer.createIFrame();
-// }, false);
 
 

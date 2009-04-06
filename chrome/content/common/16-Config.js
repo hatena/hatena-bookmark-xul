@@ -75,6 +75,19 @@ let Config = {
                 fileField.file = file;
         }
     },
+    updateStatus: function() {
+        let checked = document.getElementById('extensions.hatenabookmark.commentviewer.autoResize-check').checked;
+
+        let w = document.getElementById('commentviewer.width');
+        let h = document.getElementById('commentviewer.height');
+        if (checked) {
+            w.setAttribute('disabled', true);
+            h.setAttribute('disabled', true);
+        } else {
+            w.removeAttribute('disabled');
+            h.removeAttribute('disabled');
+        }
+    },
     clearImageFile: function() {
         let file = document.getElementById(PrefsBackgroundImage).value;
         if (file) {
