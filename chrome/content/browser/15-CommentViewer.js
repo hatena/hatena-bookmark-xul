@@ -5,7 +5,7 @@
 
 const EXPORT = ['CommentViewer'];
 
-const SHOW_PREFS_NAME = 'extensions.hatenabookmark.commentviwer.allShow';
+const SHOW_PREFS_NAME = 'extensions.hatenabookmark.commentviewer.allShow';
 
 let commentCache = new ExpireCache('uComment', 60 * 60, 'uneval'); // 一時間キャッシュ
 
@@ -152,12 +152,18 @@ var CommentViewer = {
             }, 'rendering comment (' + len + ') items ');
         } else {
              let li = E('li', {} , UIEncodeText('表示できるブックマークコメントはありません。'));
+             li.className = 'notice';
              fragment.appendChild(li);
         }
         list.appendChild(fragment);
         faviconImage.src = data.favicon;
         titleLabel.value = data.title || data.url;
-        usersLabel.value = data.count;
+        let c = data.count;
+        if (c) {
+            usersLabel.value = parseInt(data.count) == 0 ? (data.count + ' user') :  data.count + ' users';
+        } else {
+            usersLabel.value = '';
+        }
         setTimeout(function() {
              CommentViewer.updatePosition();
         }, 0);
@@ -167,10 +173,15 @@ var CommentViewer = {
     updatePosition: function() {
         let height = list.offsetHeight + 30;
         let h = Math.min(CommentViewer.viewerMaxHeight, height);
+        let w = Math.min(CommentViewer.width, window.content.innerWidth - 10);
         listContainer.style.height = '' + h + 'px';
+        listContainer.style.width = '' + w + 'px';
     },
     get viewerMaxHeight() {
-        return 500;
+        return Application.prefs.get('extensions.hatenabookmark.commentviewer.height').value;
+    },
+    get viewerWidth() {
+        return Application.prefs.get('extensions.hatenabookmark.commentviewer.width').value;
     },
     hide: function CommentViewer_hide() {
         if (panelComment.state != 'closed') {
@@ -197,6 +208,10 @@ var CommentViewer = {
         if (link) {
             openUILink(link, ev);
         }
+    },
+    goEntry: function(ev) {
+        let url = CommentViewer.currentURL || CommentViewer.lastRenderData[0];
+        openUILink(entryURL(url), ev);
     },
     getHref: function (el) {
         if (typeof el.href != 'undefined') {

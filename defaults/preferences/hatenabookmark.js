@@ -46,7 +46,9 @@ pref("extensions.hatenabookmark.addPanel.frequentTagCount", 30);
 pref("extensions.hatenabookmark.addPanel.xulMigemo", true);
 
 // comment viewer
-pref("extensions.hatenabookmark.commentviwer.allShow", true);
+pref("extensions.hatenabookmark.commentviewer.allShow", true);
+pref("extensions.hatenabookmark.commentviewer.width", 500);
+pref("extensions.hatenabookmark.commentviewer.height", 500);
 
 // Sync
 pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);

@@ -129,7 +129,7 @@ width: 800px;
     -moz-border-right-colors: #4F91E1 !important;
     -moz-border-bottom-colors: #4F91E1 !important;
     -moz-border-left-colors: #4F91E1 !important;
-    border-width: 3px;
+    border-width: 4px;
 }
 
 #hBookmark-comment-toggle {
@@ -151,6 +151,14 @@ width: 800px;
     display: block;
     overflow-y: auto;
     margin: 2px;
+}
+
+#hBookmark-comment-users {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #FF6e6e;
+    font-weight: bold;
+    padding-left: 14px;
 }
 
 /* vbox */
