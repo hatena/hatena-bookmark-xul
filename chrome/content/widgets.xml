@@ -16,10 +16,17 @@
                     let href = this.href;
                     if (!href || this.disabled || event.getPreventDefault())
                         return;
+                    if (hBookmark.Prefs.bookmark.get("link.openInNewTab"))
+                        event = { ctrlKey: !event.ctrlKey, __proto__: event };
                     openUILink(href, event);
                 ]]></body>
             </method>
         </implementation>
+
+        <handlers>
+            <handler event="click" phase="capturing" button="1"
+                     action="this.open(event);"/>
+        </handlers>
     </binding>
 
 </bindings>
