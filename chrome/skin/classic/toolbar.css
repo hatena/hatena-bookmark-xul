@@ -3,6 +3,12 @@
   min-height: 26px;
 }
 
+#hBookmark-toolbar-add-button .toolbarbutton-icon,
+#hBookmark-toolbar-home-button .toolbarbutton-icon,
+#hBookmark-toolbar-sidebar-button .toolbarbutton-icon {
+  margin: 0px !important;
+}
+
 toolbarpaletteitem[place="toolbar"] .hBookmark-toolbar-dynamic-items {
   display: none;
 }
@@ -18,12 +24,12 @@ toolbarpaletteitem[place="toolbar"] .hBookmark-toolbar-dynamic-items {
 
 #hBookmarkToolbar #hBookmark-toolbar-sidebar-button,
 toolbar[iconsize="small"] #hBookmark-toolbar-sidebar-button {
-  -moz-image-region: rect(46px 180px 62px 161px);
+  -moz-image-region: rect(46px 180px 62px 164px);
 }
 
 #hBookmarkToolbar #hBookmark-toolbar-sidebar-button[checked="true"],
 toolbar[iconsize="small"] #hBookmark-toolbar-sidebar-button[checked="true"] {
-  -moz-image-region: rect(62px 180px 78px 161px);
+  -moz-image-region: rect(62px 180px 78px 16:px);
 }
 
 #hBookmark-toolbar-add-button {
@@ -66,7 +72,7 @@ toolbar[iconsize="small"] #hBookmark-toolbar-home-button:active {
 
 #hBookmarkToolbar #hBookmark-toolbar-home-button > .toolbarbutton-menubutton-button,
 toolbar[iconsize="small"] #hBookmark-toolbar-home-button > .toolbarbutton-menubutton-button {
-  padding: 0 0 0 3px !important;
+  padding: 3px !important;
 }
 
 #hBookmark-toolbar-recent-button {
