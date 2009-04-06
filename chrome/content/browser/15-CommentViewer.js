@@ -5,8 +5,6 @@
 
 const EXPORT = ['CommentViewer'];
 
-const SHOW_PREFS_NAME = 'extensions.hatenabookmark.commentviewer.allShow';
-
 let commentCache = new ExpireCache('uComment', 60 * 60, 'uneval'); // 一時間キャッシュ
 
 // local utility 
@@ -42,9 +40,15 @@ let userIcon = function(username) {
 
 var CommentViewer = {
     filterToggle: function() {
-        Application.prefs.get(SHOW_PREFS_NAME).value = !Application.prefs.get(SHOW_PREFS_NAME).value;
+        CommentViewer.prefs.set('showAll', !CommentViewer.prefs.get('showAll'));
         CommentViewer.updateToggle();
         CommentViewer.updateViewer();
+    },
+    get prefs() {
+        if (!CommentViewer._prefs) {
+            CommentViewer._prefs = new Prefs('extensions.hatenabookmark.commentviewer.');
+        }
+        return CommentViewer._prefs;
     },
     updateToggle: function() {
         let src;
@@ -56,7 +60,7 @@ var CommentViewer = {
         toggleImage.src = src;
     },
     get isFilter() {
-        return !Application.prefs.get(SHOW_PREFS_NAME).value;
+        return !CommentViewer.prefs.get('showAll');
     },
     showClick: function CommentViewer_show() {
         if (panelComment.state == 'closed')
@@ -90,11 +94,18 @@ var CommentViewer = {
             CommentViewer.hide();
         }
     },
+    autoHoverShow: function() {
+        let url;
+        if (!url && isHttp) 
+            url = aDoc.location.href;
+        if (panelComment.state != 'close' && url != CommentViewer.currentURL)
+            CommentViewer.show(url);
+    },
     currentURL: null,
     updateComment: function CommentViewer_updateComment(data) {
         CommentViewer.updatePosition();
         CommentViewer.currentURL = data.url;
-        panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
+        panelComment.openPopup(statusbar, 'before_end', -20, 1,false,false);
         // 非表示ユーザをフィルター
         if (User.user) {
             let regex = User.user.ignores;
@@ -178,10 +189,10 @@ var CommentViewer = {
         listContainer.style.width = '' + w + 'px';
     },
     get viewerMaxHeight() {
-        return Application.prefs.get('extensions.hatenabookmark.commentviewer.height').value;
+        return CommentViewer.prefs.get('height');
     },
     get viewerWidth() {
-        return Application.prefs.get('extensions.hatenabookmark.commentviewer.width').value;
+        return CommentViewer.prefs.get('width');
     },
     hide: function CommentViewer_hide() {
         if (panelComment.state != 'closed') {
@@ -192,8 +203,36 @@ var CommentViewer = {
         CommentViewer.currentURL = null;
         CommentViewer.lastData = null;
     },
+    get hideTimer() {
+        if (!CommentViewer._hideTimer) {
+            let hideTimer = new Timer(500, 1);
+            hideTimer.createListener('timerComplete', CommentViewer.hideTimerCompleteHandler);
+            CommentViewer._hideTimer = hideTimer;
+        }
+        return CommentViewer._hideTimer;
+    },
+    hideTimerCompleteHandler: function(ev) {
+        CommentViewer.hide();
+    },
+    popupMouseoutHandler: function(ev) {
+        if (CommentViewer.prefs.get('autoHoverShow')) {
+            let hideTimer = CommentViewer.hideTimer;
+            let t = ev.currentTarget;
+            let rel = ev.relatedTarget;
+            while( rel ) {
+                if (rel == t) {
+                    hideTimer.stop();
+                    return;
+                }
+                rel = rel.parentNode;
+            }
+            hideTimer.reset();
+            hideTimer.start();
+        }
+    },
     loadHandler: function CommentViewer_loadHandler() {
         panelComment.addEventListener('popuphidden', CommentViewer.popupHiddenHandler, false);
+        panelComment.addEventListener('mouseout', CommentViewer.popupMouseoutHandler, false);
         listDiv.addEventListener('click', CommentViewer.listClickHandler, true);
         CommentViewer.updateToggle();
     },

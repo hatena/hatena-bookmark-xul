@@ -49,6 +49,7 @@ pref("extensions.hatenabookmark.addPanel.xulMigemo", true);
 pref("extensions.hatenabookmark.commentviewer.allShow", true);
 pref("extensions.hatenabookmark.commentviewer.width", 500);
 pref("extensions.hatenabookmark.commentviewer.height", 500);
+pref("extensions.hatenabookmark.commentviewer.autoHoverShow", true);
 
 // Sync
 pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);
