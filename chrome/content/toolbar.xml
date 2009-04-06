@@ -26,7 +26,8 @@
                           tooltip="hBookmarkItemTooltip"
                           context="hBookmarkEntryContext"/>
                 <xul:toolbarspring/>
-                <xul:toolbarbutton anonid="chevron" class="chevron" type="menu">
+                <xul:toolbarbutton anonid="chevron" class="chevron"
+                                   type="menu" hidden="true">
                     <xul:menupopup anonid="popup"
                                    class="hBookmark-toolbar-recent-popup"/>
                 </xul:toolbarbutton>
@@ -92,7 +93,6 @@
                     let loggedin = !!hBookmark.User.user;
                     this.loginButton.hidden = loggedin;
                     this.addPageButton.hidden = !loggedin || !!bookmarks.length;
-                    this.chevron.hidden = !bookmarks.length;
                     this.redraw();
                 ]]></body>
             </method>
@@ -112,6 +112,10 @@
 
             <method name="redraw">
                 <body><![CDATA[
+                    if (!this.body.hasChildNodes()) {
+                        this.chevron.hidden = true;
+                        return;
+                    }
                     hBookmark.p('toolbar redraw');
                     this.chevron.hidden = false;
                     let availableWidth = this.boxObject.width;
@@ -159,12 +163,13 @@
 
             <method name="_isVisible">
                 <body><![CDATA[
-                    let toolbar = this.parentNode;
-                    while (toolbar &&
-                           !(toolbar.namespaceURI === hBookmark.XUL_NS &&
-                             toolbar.localName === "toolbar"))
-                        toolbar = toolbar.parentNode;
-                    return !!toolbar && !toolbar.collapsed;
+                    for (let ancestor = this;
+                         ancestor;
+                         ancestor = ancestor.parentNode) {
+                         if (ancestor.collapsed || ancestor.hidden)
+                             return false;
+                    }
+                    return true;
                 ]]></body>
             </method>
         </implementation>
