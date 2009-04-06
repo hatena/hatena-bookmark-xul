@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/toolbar.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/toolbar.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/commentViewer.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
 <?xml-stylesheet href="chrome://hatenabookmark/content/browser.css" type="text/css"?>
 <?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
@@ -8,7 +9,9 @@
     <!ENTITY % toolbar SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd">
     %toolbar;
 ]>
-<overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+>
     <script type="application/javascript" src="autoloader.js"></script>
     <script type="text/javascript; version=1.8" charset="utf-8">
     // <![CDATA[
@@ -201,10 +204,12 @@
             <splitter resizebefore="flex" resizeafter="flex"/>
             </hbox>
             -->
-            <vbox
-                flex="1"
+
+            <description>
+            <html:ul
                 id="hBookmark-comment-list"
             />
+            </description>
         </vbox>
         </panel>
         <panel 

@@ -12,7 +12,7 @@ this.__defineGetter__('aWin', function() Application.activeWindow);
 this.__defineGetter__('aDoc', function() Application.activeWindow.activeTab.document);
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
 
-let E = createElementBindDocument(document);
+let E = createElementBindDocument(document, XHTML_NS);
 
 elementGetter(this, 'panelComment', 'hBookmark-panel-comment', document);
 elementGetter(this, 'commentButton', 'hBookmark-status-comment', document);
@@ -89,13 +89,13 @@ var CommentViewer = {
         for (let i = 0;  i < len; i++) {
             let b = data.bookmarks[i];
             if (b.comment.length) {
-                let li = E('hbox', {flex: 1});
+                let li = E('li');
                 let userlink = B_URL + b.user + '/';
                 let ymd = b.timestamp.split(' ')[0];
                 let permalink = userlink + ymd.replace(/\//g, '') + '#bookmark-' + data.eid;
                 // let icon = userIcon(b.user);
-                li.appendChild(E('label', {href: permalink, class: 'username'}, b.user));
-                li.appendChild(E('description', {class: 'comment', flex: 1}, b.comment));
+                li.appendChild(E('a', {href: permalink, className: 'username'}, b.user));
+                li.appendChild(E('span', {className: 'comment'}, b.comment));
                 list.appendChild(li);
             }
         }

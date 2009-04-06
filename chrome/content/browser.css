@@ -131,6 +131,7 @@ width: 800px;
     color: #FFF;
     background-color: #000;
     -moz-border-radius: 7px;
+    width: 500px;
 }
 
 /* vbox */
@@ -138,7 +139,9 @@ width: 800px;
 }
 
 #hBookmark-comment-list hbox {
+    /*
     max-width: 300px;
+    */
 }
 
 
@@ -280,10 +283,4 @@ width: 800px;
     font-weight: bold;
 }
 */
-
-
-
-
-
-
 
