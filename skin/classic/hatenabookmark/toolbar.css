@@ -1,6 +1,6 @@
 /* toolbar */
 #hBookmarkToolbar {
-  min-height: 0 !important;
+  min-height: 26px;
 }
 
 toolbarpaletteitem[place="toolbar"] .hBookmark-toolbar-dynamic-items {
@@ -57,7 +57,7 @@ toolbar[iconsize="small"] #hBookmark-toolbar-home-button:active {
 
 #hBookmarkToolbar #hBookmark-toolbar-home-button > .toolbarbutton-menubutton-button,
 toolbar[iconsize="small"] #hBookmark-toolbar-home-button > .toolbarbutton-menubutton-button {
-  padding: 0 !important;
+  padding: 0 0 0 3px !important;
 }
 
 #hBookmark-toolbar-recent-button {
