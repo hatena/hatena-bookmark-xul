@@ -122,20 +122,42 @@ width: 800px;
 
 #hBookmark-panel-comment {
     -moz-appearance: none;
-    background-color: transparent !important;
-    border: none;
-    -moz-opacity: 0.95;
+    background-color: #F5F9FE !important;
+    color: #000;
+    -moz-border-radius: 7px;
+    -moz-border-top-colors: #4F91E1 !important;
+    -moz-border-right-colors: #4F91E1 !important;
+    -moz-border-bottom-colors: #4F91E1 !important;
+    -moz-border-left-colors: #4F91E1 !important;
+    border-width: 3px;
+}
+
+#hBookmark-comment-toggle {
+    cursor: pointer;
 }
 
 #hBookmark-comment-container {
-    color: #FFF;
-    background-color: #000;
-    -moz-border-radius: 7px;
     width: 500px;
+}
+
+#hBookmark-comment-footer {
+    border-top: 1px #4F91E1 solid;
+    background-color: #FFF;
+    font-size: 1.2em;
+    padding: 5px;
+}
+
+#hBookmark-comment-list-container {
+    display: block;
+    overflow-y: auto;
+    margin: 2px;
 }
 
 /* vbox */
 #hBookmark-comment-list {
+}
+
+#hBookmark-comment-description {
 }
 
 #hBookmark-comment-list hbox {
