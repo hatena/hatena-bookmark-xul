@@ -101,3 +101,11 @@ toolbar[iconsize="small"] #hBookmark-toolbar-recent-button {
 toolbar[iconsize="small"] #hBookmark-toolbar-recent-button:active {
   -moz-image-region: rect(62px 48px 78px 32px);
 }
+
+.paletteRow > #wrapper-hBookmark-toolbar-recent-line > .toolbarpaletteitem-box {
+  width: 25px;
+  height: 23px;
+  background: url("chrome://hatenabookmark/skin/images/buttons.png") -244px 0px no-repeat;
+  /* -moz-image-region doesn't work for background images */
+  /* -moz-image-region: rect(0px 269px 23px 244px); */
+}
