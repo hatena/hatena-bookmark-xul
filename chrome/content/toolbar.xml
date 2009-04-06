@@ -22,9 +22,10 @@
                                    hidden="true"
                                    oncommand="hBookmark.UIUtils.openAddBookmark(event);"
                                    onclick="checkForMiddleClick(this, event);"/>
-                <xul:hbox anonid="body" flex="1"
+                <xul:hbox anonid="body"
                           tooltip="hBookmarkItemTooltip"
                           context="hBookmarkEntryContext"/>
+                <xul:toolbarspring/>
                 <xul:toolbarbutton anonid="chevron" class="chevron" type="menu">
                     <xul:menupopup anonid="popup"
                                    class="hBookmark-toolbar-recent-popup"/>
@@ -112,10 +113,7 @@
             <method name="redraw">
                 <body><![CDATA[
                     hBookmark.p('toolbar redraw');
-                    Array.forEach(this.body.childNodes,
-                                  function (button) button.hidden = true);
                     this.chevron.hidden = false;
-
                     let availableWidth = this.boxObject.width;
                     let chevronWidth = this._getMarginBoxWidth(this.chevron);
                     let buttonsWidth = 0;
@@ -126,13 +124,13 @@
                         buttonsWidth += this._getMarginBoxWidth(button);
                         let nextButton = button.nextSibling;
                         if (buttonsWidth + (nextButton ? chevronWidth : 0)
-                                > availableWidth) {
-                            button.hidden = true;
+                                > availableWidth)
                             break;
-                        }
                         visibleCount++;
                         button = nextButton;
                     }
+                    Array.slice(this.body.childNodes, visibleCount)
+                         .forEach(function (button) button.hidden = true);
                     this.chevron.hidden = !button;
                     this.popup.hiddenCount = visibleCount;
                 ]]></body>
