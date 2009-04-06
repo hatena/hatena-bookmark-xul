@@ -106,8 +106,8 @@ var CommentViewer = {
                 data.bookmarks = data.bookmarks.filter(function(b) !regex.test(b.user));
             }
         }
-        CommentViewer.updateViewer(data);
         panelComment.openPopup(statusbar, 'before_end', -20, -1,false,false);
+        CommentViewer.updateViewer(data);
         commentButton.setAttribute('loading', 'false'); 
     },
     updateViewer: function (data) {
@@ -152,6 +152,10 @@ var CommentViewer = {
                 });
                 li.appendChild(a = E('span', {}, b.comment)); 
                 a.className = 'comment'
+                if (!isFilter)  {
+                    li.appendChild(a = E('span', {}, ymd));
+                    a.className = 'timestamp';
+                }
                 fragment.appendChild(li);
             }
             }, 'rendering comment (' + len + ') items ');
@@ -179,13 +183,14 @@ var CommentViewer = {
         let height = list.offsetHeight + 30;
         let h, w;
         if (CommentViewer.prefs.get('autoResize')) {
-            let size = Math.max(300, Math.min(window.content.innerWidth - 30, window.content.innerHeight - 30));
+            let size = Math.max(300, Math.min(window.content.innerWidth - 50, window.content.innerHeight - 50));
             h = w = parseInt(size);
             h = Math.min(h, height);
         } else {
             h = Math.min(CommentViewer.viewerMaxHeight, height);
             w = Math.min(CommentViewer.viewerWidth, window.content.innerWidth - 10);
         }
+        p('comment viewer pos:' + h + ', ' + w);
         listContainer.style.height = '' + h + 'px';
         listContainer.style.width = '' + w + 'px';
     },
