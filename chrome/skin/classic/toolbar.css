@@ -3,16 +3,29 @@
   min-height: 26px;
 }
 
-#hBookmark-toolbar-add-button, 
-#hBookmark-toolbar-home-button, 
-#hBookmark-toolbar-sidebar-button  {
-  padding: 0 4px;
+#hBookmark-toolbar-add-button,
+#hBookmark-toolbar-home-button,
+#hBookmark-toolbar-sidebar-button {
+  padding: 0 !important;
 }
 
-#hBookmark-toolbar-add-button .toolbarbutton-icon,
-#hBookmark-toolbar-home-button .toolbarbutton-icon,
-#hBookmark-toolbar-sidebar-button .toolbarbutton-icon {
-  margin: 0px !important;
+#hBookmark-toolbar-add-button     > .toolbarbutton-icon,
+#hBookmark-toolbar-sidebar-button > .toolbarbutton-icon,
+#hBookmark-toolbar-home-button > .toolbarbutton-menubutton-button > .toolbarbutton-icon {
+  margin: 0px 6px !important;
+}
+
+#hBookmark-toolbar-home-button > .toolbarbutton-menubutton-button {
+  padding: 0px !important;
+}
+
+#hBookmark-toolbar-home-button > .toolbarbutton-menubutton-button > .toolbarbutton-icon {
+  -moz-margin-end: 3px !important;
+}
+
+#hBookmark-toolbar-recent-button > .toolbarbutton-icon,
+#hBookmark-toolbar-recent-button > hbox > vbox > .toolbarbutton-icon {
+  margin: 0px 3px !important;
 }
 
 toolbarpaletteitem[place="toolbar"] .hBookmark-toolbar-dynamic-items {
@@ -35,7 +48,7 @@ toolbar[iconsize="small"] #hBookmark-toolbar-sidebar-button {
 
 #hBookmarkToolbar #hBookmark-toolbar-sidebar-button[checked="true"],
 toolbar[iconsize="small"] #hBookmark-toolbar-sidebar-button[checked="true"] {
-  -moz-image-region: rect(62px 180px 78px 16:px);
+  -moz-image-region: rect(62px 180px 78px 164px);
 }
 
 #hBookmark-toolbar-add-button {
@@ -74,11 +87,6 @@ toolbar[iconsize="small"] #hBookmark-toolbar-home-button {
 #hBookmarkToolbar #hBookmark-toolbar-home-button:active,
 toolbar[iconsize="small"] #hBookmark-toolbar-home-button:active {
   -moz-image-region: rect(62px 32px 78px 16px);
-}
-
-#hBookmarkToolbar #hBookmark-toolbar-home-button > .toolbarbutton-menubutton-button,
-toolbar[iconsize="small"] #hBookmark-toolbar-home-button > .toolbarbutton-menubutton-button {
-  padding: 3px !important;
 }
 
 #hBookmark-toolbar-recent-button {
