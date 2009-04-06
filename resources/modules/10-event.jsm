@@ -22,8 +22,6 @@ EventService.implement = function ES_implement(target) {
     return target;
 };
 
-// XXX ToDo: unlisten/resetメソッドとdisposableなリスナの関係を整理する。
-
 function EventDispatcher() {
     this._listenersSet = {};
 }
@@ -33,12 +31,10 @@ extend(EventDispatcher.prototype, {
                                                priority, disposable) {
         if (typeof handler.handleEvent === "function")
             handler = method(handler, "handleEvent");
-        let listener =
-            new Listener(this, type, handler, lockKey || "", priority || 0);
-        let scope;
-        if ((arguments.length < 5 || disposable) &&
-            (scope = arguments.callee.caller))
-            addDisposableListener(listener, scope);
+        let window = (arguments.length < 5 || disposable)
+                     ? getCallerWindow() : null;
+        let listener = new Listener(this, type, handler,
+                                    lockKey || "", priority || 0, window);
         listener.listen();
         return listener;
     },
@@ -65,44 +61,58 @@ extend(EventDispatcher.prototype, {
     }
 });
 
-let disposableEntries = [];
-
-function addDisposableListener(listener, scope) {
-    while (scope.__proto__)
-        scope = scope.__proto__;
-    let window = scope.__parent__ || scope;
-    if (!window.addEventListener) return;
-    let listeners = null;
-    disposableEntries.some(function (entry) {
-        if (entry.window !== window) return false;
-        listeners = entry.listeners;
-        return true;
-    });
-    if (!listeners)
-        addDisposer(window, listeners = []);
-    listeners.push(listener);
+function getCallerWindow() {
+    let object = arguments.callee.caller.caller;
+    if (!object) return null;
+    while (object.__proto__)
+        object = object.__proto__;
+    let window = object.__parent__;
+    return (window && window.addEventListener) ? window : null;
 }
 
-function addDisposer(window, listeners) {
-    let entry = { window: window, listeners: listeners };
-    disposableEntries.push(entry);
-    window.addEventListener("unload", function ES_dispose() {
-        listeners.forEach(function (l) l.unlisten());
-        let i = disposableEntries.indexOf(entry);
-        if (i !== -1) disposableEntries.splice(i, 1);
-        window.removeEventListener("unload", arguments.callee, false);
-        p("unlistened " + listeners.length + " listeners");
-    }, false);
+let disposableEntries = [];
+
+function addDisposableListener(listener, window) {
+    let entry = getDisposableEntry(window);
+    if (!entry) {
+        entry = { window: window, listeners: [] };
+        disposableEntries.push(entry);
+        window.addEventListener("unload", function ES_dispose() {
+            p("unlisten " + entry.listeners.length + " listeners");
+            entry.listeners.concat().forEach(function (l) l.unlisten());
+            disposableEntries.splice(disposableEntries.indexOf(entry), 1);
+            window.removeEventListener("unload", ES_dispose, false);
+        }, false);
+    }
+    entry.listeners.push(listener);
+}
+
+function removeDisposableListener(listener, window) {
+    let entry = getDisposableEntry(window);
+    if (!entry) return;
+    let index = entry.listeners.indexOf(listener);
+    if (index === -1) return;
+    entry.listeners.splice(index, 1);
+}
+
+function getDisposableEntry(window) {
+    for (let i = 0; i < disposableEntries.length; i++) {
+        let entry = disposableEntries[i];
+        if (entry.window === window)
+            return entry;
+    }
+    return null;
 }
 
 let locked = {};
 
-function Listener(dispatcher, type, handler, lockKey, priority) {
+function Listener(dispatcher, type, handler, lockKey, priority, window) {
     this.dispatcher = dispatcher;
     this.type = type;
     this.handler = handler;
     this.lockKey = lockKey;
     this.priority = priority;
+    this.window = window;
     this.isListening = false;
 }
 
@@ -121,6 +131,8 @@ extend(Listener.prototype, {
         } else {
             listeners.push(this);
         }
+        if (this.window)
+            addDisposableListener(this, this.window);
     },
 
     unlisten: function Listener_unlisten() {
@@ -131,6 +143,8 @@ extend(Listener.prototype, {
         var i;
         if (listeners && (i = listeners.indexOf(this)) !== -1)
             listeners.splice(i, 1);
+        if (this.window)
+            removeDisposableListener(this, this.window);
     }
 });
 
