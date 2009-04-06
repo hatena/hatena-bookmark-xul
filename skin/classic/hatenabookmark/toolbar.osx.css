@@ -2,50 +2,50 @@
   min-height: 0 !important;
 }
 
-#nav-bar .hBookmark-toolbar-add-button {
+#nav-bar #hBookmark-toolbar-add-button {
   -moz-image-region: rect(0px 111px 23px 75px);
 }
 
-#nav-bar .hBookmark-toolbar-add-button:active {
+#nav-bar #hBookmark-toolbar-add-button:active {
   -moz-image-region: rect(23px 111px 46px 75px);
 }
 
-#nav-bar toolbar[iconsize="small"] .hBookmark-toolbar-add-button {
+#nav-bar toolbar[iconsize="small"] #hBookmark-toolbar-add-button {
   -moz-image-region: rect(0px 111px 23px 75px);
 }
 
-#nav-bar toolbar[iconsize="small"] .hBookmark-toolbar-add-button:active {
+#nav-bar toolbar[iconsize="small"] #hBookmark-toolbar-add-button:active {
   -moz-image-region: rect(23px 111px 46px 75px);
 }
 
-#nav-bar .hBookmark-toolbar-home-button {
+#nav-bar #hBookmark-toolbar-home-button {
   -moz-image-region: rect(0px 147px 23px 111px);
 }
 
-#nav-bar .hBookmark-toolbar-home-button:active {
+#nav-bar #hBookmark-toolbar-home-button:active {
   -moz-image-region: rect(23px 147px 46px 111px);
 }
 
-#nav-bar toolbar[iconsize="small"] .hBookmark-toolbar-home-button {
+#nav-bar toolbar[iconsize="small"] #hBookmark-toolbar-home-button {
   -moz-image-region: rect(0px 147px 23px 111px);
 }
 
-#nav-bar toolbar[iconsize="small"] .hBookmark-toolbar-home-button:active {
+#nav-bar toolbar[iconsize="small"] #hBookmark-toolbar-home-button:active {
   -moz-image-region: rect(23px 147px 46px 111px);
 }
 
-#nav-bar .hBookmark-toolbar-recent-button {
+#nav-bar #hBookmark-toolbar-recent-button {
   -moz-image-region: rect(0px 183px 23px 147px);
 }
 
-#nav-bar .hBookmark-toolbar-recent-button:active {
+#nav-bar #hBookmark-toolbar-recent-button:active {
   -moz-image-region: rect(23px 183px 46px 147px);
 }
 
-toolbar[iconsize="small"] .hBookmark-toolbar-recent-button {
+toolbar[iconsize="small"] #hBookmark-toolbar-recent-button {
   -moz-image-region: rect(0px 183px 23px 147px);
 }
 
-toolbar[iconsize="small"] .hBookmark-toolbar-recent-button:active {
+toolbar[iconsize="small"] #hBookmark-toolbar-recent-button:active {
   -moz-image-region: rect(23px 183px 46px 147px);
 }

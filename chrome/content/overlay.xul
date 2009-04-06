@@ -85,7 +85,7 @@
 
     <toolbarpalette id="BrowserToolbarPalette">
         <toolbarbutton id="hBookmark-toolbar-sidebar-button"
-                       class="hBookmark-toolbar-sidebar-button chromeclass-toolbar-additional"
+                       class="chromeclass-toolbar-additional"
                        tooltiptext="&hBookmark.toolbar.toggleSidebarLabel;"
                        observes="viewHBookmarkSidebar"/>
 
@@ -93,14 +93,14 @@
             id="hBookmark-toolbar-add-button" 
             label="&hBookmark.toolbar.add;"
             tooltiptext="&hBookmark.toolbar.add;"
-            class="hBookmark-toolbar-add-button chromeclass-toolbar-additional"
+            class="chromeclass-toolbar-additional"
             oncommand="hBookmark.AddPanelManager.showPanel(window.content);" />
 
         <toolbarbutton 
             id="hBookmark-toolbar-home-button" 
             label="&hBookmark.toolbar.home;"
             tooltiptext="&hBookmark.toolbar.home;"
-            class="hBookmark-toolbar-home-button chromeclass-toolbar-additional"
+            class="chromeclass-toolbar-additional"
             type="menu-button"
             oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
             onclick="checkForMiddleClick(this, event);">
@@ -108,7 +108,7 @@
         </toolbarbutton>
 
         <toolbarbutton id="hBookmark-toolbar-recent-button"
-                       class="hBookmark-toolbar-recent-button chromeclass-toolbar-additional"
+                       class="chromeclass-toolbar-additional"
                        type="menu"
                        label="&hBookmark.toolbar.recentLabel;"
                        tooltiptext="&hBookmark.toolbar.recentLabel;">
