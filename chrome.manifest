@@ -1,7 +1,7 @@
 content	hatenabookmark	chrome/content/
 overlay	chrome://browser/content/browser.xul	chrome://hatenabookmark/content/overlay.xul
-resource	hatenabookmark	chrome/resource/
-skin	hatenabookmark	classic/1.0	skin/classic/hatenabookmark/
+resource	hatenabookmark	resources/
+skin	hatenabookmark	classic/1.0	chrome/skin/classic/
 style	chrome://browser/content/browser.xul chrome://hatenabookmark/skin/browser.osx.css os=Darwin
 style	chrome://browser/content/browser.xul chrome://hatenabookmark/skin/toolbar.osx.css os=Darwin
 style	chrome://global/content/customizeToolbar.xul chrome://hatenabookmark/skin/toolbar.css
