@@ -1,5 +1,5 @@
 
-pref("extensions.hatenabookmark.testtesttest", 'test');
+// pref("extensions.hatenabookmark.testtesttest", 'test');
 // set prefs
 // pref("extensions.hatenabookmark.config.foobar", "foobar");
 
@@ -61,4 +61,5 @@ pref("extensions.hatenabookmark.shortcut.keys.add", "Ctrl(Control)+Shift+B");
 pref("extensions.hatenabookmark.shortcut.keys.comment", "Ctrl(Control)+Shift+C");
 pref("extensions.hatenabookmark.shortcut.keys.sidebar", "");
 
-
+// Link texts
+pref("extensions.hatenabookmark.link.openInNewTab", false);
