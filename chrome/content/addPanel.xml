@@ -422,7 +422,7 @@
                     }
                     if (!this.titleLabel.value) {
                         let xhr = hBookmark.net.sync_get(bookmark.url);
-                        let m = (xhr.responseText || '').match(new RegExp('<title>(.+)</title>', 'i'));
+                        let m = (xhr.responseText || '').match(new RegExp('<title>(.*?)</title>', 'i'));
                         if (m && !/\ufffd/.test(m[1])) {
                             this.titleField.value = m[1];
                             this.titleLabel.value = m[1];

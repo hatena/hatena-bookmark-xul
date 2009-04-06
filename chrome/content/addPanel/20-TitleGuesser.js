@@ -30,7 +30,7 @@ extend(TitleGuesser.prototype, {
                 html = converter.ConvertToUnicode(html);
             } catch (ex) {}
         }
-        let match = html.match(/<title>(.+?)<\/title>/i);
+        let match = html.match(/<title>(.*?)<\/title>/i);
         return match && match[1];
     },
     getEncoding: function TG_getEncoding(source) {
