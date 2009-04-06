@@ -23,11 +23,6 @@ elementGetter(this, 'statusComment', 'hBookmark-status-comment', document);
 let countCache = new ExpireCache('uCount', 60 * 60); // 一時間キャッシュ
 
 var StatusBar = {
-    goHome: function StatusBar_goHome() {
-        // browser.loadURIWithFlags(url, Ci.nsIWebNavigation.LOAD_FLAGS_NONE, null, null, null);
-        // XXX: 別タブで開きたい
-        aWin.open(newURI('chrome://hatenabookmark/content/index.html'));
-    },
     goEntry: function StatusBar_goEntry(event) {
         if (isHttp) {
             let url = locationURL;
@@ -98,12 +93,14 @@ var StatusBar = {
         }
     },
     registerPrefsListeners: function () {
-        StatusBar.prefs.createListener('addButton', StatusBar.prefsAddButtonHandler);
-        StatusBar.prefs.createListener('counter', StatusBar.prefsCounterHandler);
+        p('register prefs listerners');
         StatusBar.prefsAddButtonHandler();
         StatusBar.prefsCounterHandler();
+        StatusBar.prefs.createListener('addButton', StatusBar.prefsAddButtonHandler);
+        StatusBar.prefs.createListener('counter', StatusBar.prefsCounterHandler);
     },
     prefsAddButtonHandler: function(e) {
+        p('prefs add button check');
         if (StatusBar.prefs.get('addButton')) {
             addButton.removeAttribute('hidden');
         } else {
@@ -119,16 +116,21 @@ var StatusBar = {
             statusComment.setAttribute('hidden', true);
         }
     },
-    loadHandler: function() {
+    loadHandler: function(ev) {
+        p('statusbar load handler');
         StatusBar.registerPrefsListeners();
         StatusBar.update();
         getBrowser().addEventListener('DOMContentLoaded', StatusBar.update, false);
-    }
+    },
+    updateHandler: function(ev) {
+        StatusBar.update;
+    },
 }
 
-window.addEventListener('load', StatusBar.loadHandler, false);
+EventService.createListener('load', StatusBar.loadHandler);
 
 Application.activeWindow.events.addListener('TabSelect', function() {
+    // p('tab select!!');
     StatusBar.update();
 });
 
