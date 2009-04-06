@@ -33,21 +33,30 @@
             <children/>
         </content>
 
-        <implementation>
+        <implementation implements="nsIDOMEventListener">
             <constructor><![CDATA[
                 let method = hBookmark.method;
-                hBookmark.EventService.createListener("BookmarksUpdated",
-                    method(this, "build"));
-                hBookmark.EventService.createListener("UserChange",
-                    method(this, "build"));
-                hBookmark.Prefs.bookmark.createListener("recentItemCount",
-                    method(this, "build"));
-                window.addEventListener("resize",
-                    method(this, "onResize"), false);
+                this._listeners = [
+                    hBookmark.EventService.createListener("BookmarksUpdated",
+                        method(this, "build")),
+                    hBookmark.EventService.createListener("UserChange",
+                        method(this, "build")),
+                    hBookmark.Prefs.bookmark.createListener("recentItemCount",
+                        method(this, "build")),
+                ];
+                window.addEventListener("resize", this, false);
                 // XXX コンストラクタ呼び出し時にはデータを取得できない……。
                 //this.build();
                 setTimeout(method(this, "build"), 500);
             ]]></constructor>
+
+            <destructor><![CDATA[
+                this._listeners.forEach(function (l) l.unlisten());
+                this._listeners = null;
+                window.removeEventListener("resize", this, false);
+            ]]></destructor>
+
+            <field name="_listeners">null</field>
 
             <field name="loginButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "loginButton")
@@ -139,12 +148,13 @@
                 ]]></body>
             </method>
 
-            <method name="onResize">
+            <method name="handleEvent">
                 <parameter name="event"/>
                 <body><![CDATA[
                     // XXX 表示→非表示→リサイズ→再度表示のときに
                     // 配置が更新されない。
-                    if (event.target === window && this._isVisible())
+                    if (event.type === "resize" &&
+                        event.target === window && this._isVisible())
                         this.redraw();
                 ]]></body>
             </method>
