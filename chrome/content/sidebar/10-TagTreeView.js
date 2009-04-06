@@ -121,11 +121,17 @@ extend(TagTreeView.prototype, {
         var tags = Tag.findRelatedTags(parentItem.tags);
         if (!tags.length) return 0;
         var items = tags.map(function (t) new TagTreeItem(t, parentItem));
+        let sortDir = this._sortDir;
+        if (sortDir && sortDir !== "natural") {
+            if (this._sortBy === "count") {
+                items.sort((sortDir === "ascending")
+                           ? function (a, b) a.count - b.count
+                           : function (a, b) b.count - a.count);
+            } else if (sortDir === "descending") {
+                items.reverse();
+            }
+        }
         items[items.length - 1].hasNext = false;
-        if (this._sortBy === "count" && this._sortDir !== "natural")
-            items.sort(function (a, b) a.count - b.count);
-        if (this._sortDir === "descending")
-            items.reverse();
         var visibleItems = this._visibleItems;
         var spliceArgs = [parentItem.index + 1, 0].concat(items);
         visibleItems.splice.apply(visibleItems, spliceArgs);
