@@ -2,6 +2,11 @@
 @namespace url(http://www.w3.org/1999/xhtml);
 /* XHTML_NS CSS */
 
+#hBookmark-comment-div {
+    -moz-user-focus: normal !important;
+    -moz-user-select: text !important;
+}
+
 #hBookmark-comment-list {
   margin: 0px;
   padding: 0px;

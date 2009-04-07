@@ -193,6 +193,9 @@ var CommentViewer = {
         p('comment viewer pos:' + h + ', ' + w);
         listContainer.style.height = '' + h + 'px';
         listContainer.style.width = '' + w + 'px';
+        setTimeout(function() {
+            listDiv.focus()
+        }, 10);
     },
     get viewerMaxHeight() {
         return CommentViewer.prefs.get('height');
