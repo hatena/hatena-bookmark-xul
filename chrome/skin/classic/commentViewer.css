@@ -54,7 +54,7 @@ li.notice {
 } 
 
 span.comment {
-  padding: 0 3px 0 3px;
+  padding: 0 3px 0 5px;
 }
 
 span.timestamp {
@@ -65,7 +65,7 @@ span.timestamp {
 a.tag {
   text-decoration: none;
   color: #66c;
-  color: #ccf;
+  color: #aaf;
 }
 
 a.users {
