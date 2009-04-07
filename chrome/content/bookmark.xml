@@ -7,8 +7,8 @@
              extends="chrome://global/content/bindings/popup.xml#tooltip">
         <content>
             <xul:label anonid="titleField"/>
-            <xul:label anonid="urlField"/>
-            <xul:label anonid="commentField"/>
+            <xul:description anonid="urlField"/>
+            <xul:description anonid="commentField"/>
         </content>
 
         <implementation>
@@ -32,9 +32,9 @@
                     return false;
                 let bookmark = target.hoveredBookmark || target.bookmark;
                 this.titleField.value = bookmark.title;
-                this.urlField.value = bookmark.url;
+                this.urlField.textContent = bookmark.url;
                 this.urlField.hidden = (bookmark.title === bookmark.url);
-                this.commentField.value = bookmark.comment;
+                this.commentField.textContent = bookmark.comment;
                 this.commentField.hidden = !/\S/.test(bookmark.comment);
                 return true;
             ]]></handler>
