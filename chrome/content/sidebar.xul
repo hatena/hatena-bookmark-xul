@@ -55,7 +55,7 @@
                    href="&hBookmark.sidebar.loginURI;"/>
         </hbox>
     </vbox>
-    <vbox id="main-content" flex="1">
+    <vbox id="main-content" flex="1" persist="dir">
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
               contextmenu="hBookmarkTagContext" flex="1" persist="height">
             <treecols>
