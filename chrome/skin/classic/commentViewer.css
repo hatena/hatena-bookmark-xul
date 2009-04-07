@@ -5,6 +5,7 @@
 #hBookmark-comment-div {
     -moz-user-focus: normal !important;
     -moz-user-select: text !important;
+    color: #fff !important;
 }
 
 #hBookmark-comment-list {
@@ -13,16 +14,8 @@
 }
 
 #hBookmark-comment-close {
-    cursor: pointer;
-    float:right;
-    padding: 3px;
-    margin-right: 3px;
-}
-
-#hBookmark-comment-list li {
-  font-size: 1.2em; /* XXX */
-  display: block;
-  padding: 1px 5px 1px 5px;
+  cursor: pointer;
+  padding: 6px 25px;
 }
 
 #hBookmark-comment-list li img {
@@ -31,7 +24,6 @@
 
 #hBookmark-comment-list {
   margin: 10px;
-  color: #222;
 }
 
 li.notice {
@@ -41,17 +33,20 @@ li.notice {
 
 #hBookmark-comment-list li {
   text-indent: -20px;
-  padding: 4px 20px 4px 20px;
-  margin: 0 0 3px 0;
-  color: #000;
+  padding: 0px 20px 8px 20px;
+  margin: 0 0 8px 0;
   word-wrap: break-word;
   border-bottom: 1px dotted #BBD8FF;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: block;
 }
 
 #hBookmark-comment-list li a.username {
   font-weight: normal;
-  padding: 0 3px 0 3px;
+  padding: 0 3px;
   color: #4F91E1;
+  color: #6a8af1 !important;
+  color: #1793ea !important;
 }
 
 #hBookmark-comment-list li.mine a.username {
@@ -63,14 +58,14 @@ span.comment {
 }
 
 span.timestamp {
-  font-size: 0.8em;
-  color: #888;
+  color: #aaa;
+  font-size: 90%;
 } 
 
 a.tag {
   text-decoration: none;
   color: #66c;
-  font-size: 0.9em;
+  color: #ccf;
 }
 
 a.users {
