@@ -37,6 +37,14 @@
             id="extensions.hatenabookmark.recentItemCount"
             name="extensions.hatenabookmark.recentItemCount"
             type="int"/>
+        <preference 
+            id="extensions.hatenabookmark.link.openInNewTab"
+            name="extensions.hatenabookmark.link.openInNewTab"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.link.linkOverlay"
+            name="extensions.hatenabookmark.link.linkOverlay"
+            type="bool"/>
     </preferences>
 
     <vbox>
@@ -82,6 +90,26 @@
             <checkbox id="sidebar.reverseDirection" flex="1"
                 label="&hBookmark.config.sidebarReverseDirection;"
                 preference="extensions.hatenabookmark.sidebar.reverseDirection"/>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.link;" />
+            <vbox flex="1">
+                <hbox flex="1" align="center">
+                    <checkbox id="link.openInNewTab" flex="1"
+                        label="&hBookmark.config.link.openInNewTab;"
+                        preference="extensions.hatenabookmark.link.openInNewTab" />
+                </hbox>
+                <hbox flex="1" align="center">
+                    <spacer style="width:1em;" />
+                    <label value="&hBookmark.config.link.openInNewTabNotice;" />
+                </hbox>
+                <hbox flex="1" align="center">
+                    <checkbox id="link.linkOverlay" flex="1"
+                        label="&hBookmark.config.link.linkOverlay;"
+                        preference="extensions.hatenabookmark.link.linkOverlay" />
+                </hbox>
+            </vbox>
         </groupbox>
     </vbox>
 </prefpane>
@@ -201,10 +229,6 @@
             name="extensions.hatenabookmark.addPanel.xulMigemo"
             type="bool"/>
         <preference 
-            id="extensions.hatenabookmark.link.openInNewTab"
-            name="extensions.hatenabookmark.link.openInNewTab"
-            type="bool"/>
-        <preference 
             id="extensions.hatenabookmark.addPanel.backgroundImage"
             name="extensions.hatenabookmark.addPanel.backgroundImage"
             type="file"/>
@@ -264,20 +288,6 @@
             </hbox>
         </groupbox>
 
-        <groupbox orient="vertical">
-            <caption label="&hBookmark.config.link;" />
-            <vbox flex="1">
-                <hbox flex="1" align="center">
-                    <checkbox id="link.openInNewTab" flex="1"
-                        label="&hBookmark.config.link.openInNewTab;"
-                        preference="extensions.hatenabookmark.link.openInNewTab" />
-                </hbox>
-                <hbox flex="1" align="center">
-                    <spacer style="width:1em;" />
-                    <label value="&hBookmark.config.link.openInNewTabNotice;" />
-                </hbox>
-            </vbox>
-        </groupbox>
         <!--
         <groupbox orient="vertical">
             <caption label="&hBookmark.config.addPanelBackgroundImage;" />
