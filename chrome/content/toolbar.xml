@@ -344,14 +344,27 @@
 
             <method name="getRecentTags">
                 <body><![CDATA[
-                    return [];
+                    let tagNamesString =
+                        hBookmark.Prefs.bookmark.get("tagFilter.recentTags");
+                    return tagNamesString ? tagNamesString.split("[]") : [];
                 ]]></body>
             </method>
 
             <method name="setTag">
                 <parameter name="tagName"/>
                 <body><![CDATA[
-                    // memo tag
+                    if (tagName) {
+                        let pref = hBookmark.Prefs.bookmark;
+                        let tagNames = this.getRecentTags();
+                        let index = tagNames.indexOf(tagName);
+                        if (index !== -1)
+                            tagNames.splice(index, 1);
+                        tagNames.unshift(tagName);
+                        let maxCount = pref.get("tagFilter.recentTagCount");
+                        if (tagNames.length > maxCount)
+                            tagNames.length = maxCount;
+                        pref.set("tagFilter.recentTags", tagNames.join("[]"));
+                    }
                     this.control.tag = tagName;
                 ]]></body>
             </method>

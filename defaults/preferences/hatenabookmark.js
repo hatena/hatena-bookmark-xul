@@ -10,6 +10,9 @@ pref("extensions.hatenabookmark.migration.version", 0);
 pref("extensions.hatenabookmark.recentItemCount", 20);
 pref("extensions.hatenabookmark.toolbar.maxItemWidth", 156);
 
+pref("extensions.hatenabookmark.tagFilter.recentTagCount", 5);
+pref("extensions.hatenabookmark.tagFilter.recentTags", "");
+
 // for debuge
 pref("extensions.hatenabookmark.debug.log", false);
 
