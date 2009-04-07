@@ -122,7 +122,7 @@ function keyboardShortcutToString(keyData)
 
 ]]></script>
 
-<vbox width="200px" height="70px">
+<vbox style="margin: 10px;">
 <box orient="horizontal">
 	<spacer flex="1"/>
 	<description id="description"/>

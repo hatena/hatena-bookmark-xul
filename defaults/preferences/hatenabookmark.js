@@ -52,7 +52,11 @@ pref("extensions.hatenabookmark.addPanel.xulMigemo", true);
 pref("extensions.hatenabookmark.sidebar.reverseDirection", false);
 
 // comment viewer
-pref("extensions.hatenabookmark.commentviwer.allShow", true);
+pref("extensions.hatenabookmark.commentviewer.allShow", false);
+pref("extensions.hatenabookmark.commentviewer.width", 500);
+pref("extensions.hatenabookmark.commentviewer.height", 500);
+pref("extensions.hatenabookmark.commentviewer.autoHoverShow", false);
+pref("extensions.hatenabookmark.commentviewer.autoResize", true);
 
 // Sync
 pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);
@@ -64,4 +68,8 @@ pref("extensions.hatenabookmark.shortcut.keys.comment", "Ctrl(Control)+Shift+C")
 pref("extensions.hatenabookmark.shortcut.keys.sidebar", "");
 
 // Link texts
-pref("extensions.hatenabookmark.link.openInNewTab", false);
+pref("extensions.hatenabookmark.link.openInNewTab", true);
+pref("extensions.hatenabookmark.link.linkOverlay", true);
+
+
+

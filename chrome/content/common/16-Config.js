@@ -4,6 +4,12 @@ const EXPORT = ['Config'];
 const PrefsBackgroundImage = 'extensions.hatenabookmark.addPanel.backgroundImage';
 
 let Config = {
+    get strings() {
+        if (!Config._strings) {
+            Config._strings = new Strings("chrome://hatenabookmark/locale/config.properties"); 
+        } 
+        return Config._strings;
+    },
     openDialog: function() {
         let features;
         if (Application.prefs.get('browser.preferences.instantApply').value) {
@@ -19,7 +25,7 @@ let Config = {
         let loginbox = document.getElementById('pref-loginbox');
         if (User.user) {
             nologin.setAttribute('hidden', true);
-            login.setAttribute('value', UIEncodeText(User.user.name + ' で現在ログイン中です'));
+            login.setAttribute('value', Config.strings.get('nowLogin', [User.user.name]));
             loginbox.removeAttribute('hidden');
         } else {
             loginbox.setAttribute('hidden', true);
@@ -28,7 +34,7 @@ let Config = {
     },
     syncALL: function() {
         if (Config.syncCheck()) return;
-        let res = window.confirm(UIEncodeText('すべて同期し直すにはしばらく時間がかかります。よろしいですか？'));
+        let res = window.confirm(UIEncodeText(''));
         if (res) {
             hBookmark.Model.resetAll();
             Sync.sync();
@@ -39,7 +45,7 @@ let Config = {
         Sync.sync();
     },
     deleteAll: function() {
-        let res = window.confirm(UIEncodeText('はてなブックマーク拡張のすべてのデータを削除します。よろしいですか？'));
+        let res = window.confirm(Config.strings.get('reSyncNotice'));
         if (res) {
             Config._deleteAll();
         }
@@ -55,14 +61,14 @@ let Config = {
     syncCheck: function() {
         if (!User.user) {
             // むむ
-            alert(UIEncodeText('この操作には、はてなへのログインが必要です'));
+            alert(Config.strings.get('loginToHatena'));
             // pref window がでてると、dialog 表示で addons window がおかしくなる
             // UIUtils.encourageLogin();
             return true;
         }
         if (Sync.nowSyncing) {
             // むむ
-            alert(UIEncodeText('現在同期中です'));
+            alert(Config.strings.get('nowSyncing'));
             return true;
         }
         return false;
@@ -73,6 +79,26 @@ let Config = {
             let fileField = document.getElementById('addPanel.backgroundImage');
             if (fileField)
                 fileField.file = file;
+        }
+        let migemo = document.getElementById('addPanel.xulMigemo');
+        if (!XMigemoCore) {
+            migemo.removeAttribute('preference');
+            migemo.preference = null;
+            migemo.setAttribute('checked', false);
+            migemo.setAttribute('disabled', true);
+        }
+    },
+    updateStatus: function() {
+        let checked = document.getElementById('extensions.hatenabookmark.commentviewer.autoResize-check').checked;
+
+        let w = document.getElementById('commentviewer.width');
+        let h = document.getElementById('commentviewer.height');
+        if (checked) {
+            w.setAttribute('disabled', true);
+            h.setAttribute('disabled', true);
+        } else {
+            w.removeAttribute('disabled');
+            h.removeAttribute('disabled');
         }
     },
     clearImageFile: function() {
@@ -128,8 +154,8 @@ Config.ShortCut = {
             '_blank',
             'chrome,modal,resizable=no,titlebar=no,centerscreen',
             keyData,
-            UIEncodeText('キーボードを押して、ショートカットを設定します'),
-            UIEncodeText('キャンセル')
+            Config.strings.get('setShortcut'),
+            Config.strings.get('cancel')
         );
         if (keyData.modified) {
             aNode.value = keyData.string;
