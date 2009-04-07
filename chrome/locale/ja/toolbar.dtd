@@ -1,3 +1,11 @@
+<!-- XXX toggleSidebarLabel should be in browser.dtd? -->
 <!ENTITY hBookmark.toolbar.toggleSidebarLabel "はてなブックマークサイドバー">
+
 <!ENTITY hBookmark.toolbar.loginLabel "はてなにログイン">
 <!ENTITY hBookmark.toolbar.addBookmarkLabel "ブックマークを追加">
+<!ENTITY hBookmark.toolbar.tagFilterLabel "絞り込み">
+
+<!ENTITY hBookmark.toolbar.noFilterLabel "絞込みをしない">
+<!ENTITY hBookmark.toolbar.noFilterKey "N">
+<!ENTITY hBookmark.toolbar.selectTagLabel "タグにより絞り込む...">
+<!ENTITY hBookmark.toolbar.selectTagKey "S">
