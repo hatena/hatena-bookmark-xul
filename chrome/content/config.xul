@@ -4,6 +4,7 @@
 <?xml-stylesheet href="chrome://mozapps/content/preferences/preferences.css"?>
 <?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
 <?xml-stylesheet href="chrome://hatenabookmark/skin/config.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
 
 <prefwindow id="hBookmark-config"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -145,7 +146,9 @@
                 preference="extensions.hatenabookmark.commentviewer.autoResize"/>
 
             <hbox flex="1" align="center">
-            <label value="サイズ指定・横幅(px)"
+            <spacer style="width: 1em;" />
+            <label value="サイズ指定" />
+            <label value="横幅(px)"
                 control="commentviewer.width"/>
             <textbox id="commentviewer.width"
                 preference="extensions.hatenabookmark.commentviewer.width"
@@ -218,9 +221,11 @@
                 <spacer flex="1" />
             </hbox>
             <hbox flex="1" align="center">
-                <checkbox id="addPanel.xulMigemo" flex="1"
-                    label="XUL/Migemo があれば、Migemo を利用する"
+                <checkbox id="addPanel.xulMigemo"
+                    label="XUL/Migemo を補完に利用する"
                     preference="extensions.hatenabookmark.addPanel.xulMigemo" />
+                <label class="text-link hBookmarkLink" value="XUL/Migemo" href="https://addons.mozilla.org/firefox/addon/5239" />
+                <label value="が必要です" />
                 <spacer flex="1" />
             </hbox>
         </groupbox>

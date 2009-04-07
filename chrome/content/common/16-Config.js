@@ -74,6 +74,13 @@ let Config = {
             if (fileField)
                 fileField.file = file;
         }
+        let migemo = document.getElementById('addPanel.xulMigemo');
+        if (!XMigemoCore) {
+            migemo.removeAttribute('preference');
+            migemo.preference = null;
+            migemo.setAttribute('checked', false);
+            migemo.setAttribute('disabled', true);
+        }
     },
     updateStatus: function() {
         let checked = document.getElementById('extensions.hatenabookmark.commentviewer.autoResize-check').checked;
