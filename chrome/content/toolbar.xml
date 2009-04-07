@@ -2,8 +2,6 @@
 <!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd" [
     <!ENTITY % browser SYSTEM "chrome://hatenabookmark/locale/browser.dtd">
     %browser;
-    <!ENTITY % popups SYSTEM "chrome://hatenabookmark/locale/popups.dtd">
-    %popups;
 ]>
 <bindings xmlns="http://www.mozilla.org/xbl"
           xmlns:xbl="http://www.mozilla.org/xbl"
@@ -281,13 +279,13 @@
              extends="chrome://global/content/bindings/popup.xml#popup">
         <content>
             <xul:menuitem anonid="noFilter"
-                          label="&hBookmark.tagFilter.noFilterLabel;"
-                          accesskey="&hBookmark.tagFilter.noFilterKey;"
+                          label="&hBookmark.toolbar.noFilterLabel;"
+                          accesskey="&hBookmark.toolbar.noFilterKey;"
                           type="radio"
                           name="filteredBy"
                           tag=""/>
-            <xul:menuitem label="&hBookmark.tagFilter.selectTagLabel;"
-                          accesskey="&hBookmark.tagFilter.selectTagKey;"/>
+            <xul:menuitem label="&hBookmark.toolbar.selectTagLabel;"
+                          accesskey="&hBookmark.toolbar.selectTagKey;"/>
             <xul:menuseparator anonid="separator"/>
             <children/>
         </content>
@@ -305,7 +303,7 @@
             </field>
 
             <field name="strings">
-                new hBookmark.Strings("chrome://hatenabookmark/locale/popups.properties")
+                new hBookmark.Strings("chrome://hatenabookmark/locale/toolbar.properties")
             </field>
             <field name="control">null</field>
 
@@ -345,7 +343,7 @@
             <method name="getRecentTags">
                 <body><![CDATA[
                     let tagNamesString =
-                        hBookmark.Prefs.bookmark.get("tagFilter.recentTags");
+                        hBookmark.Prefs.bookmark.get("toolbar.recentTags");
                     return tagNamesString ? tagNamesString.split("[]") : [];
                 ]]></body>
             </method>
@@ -360,10 +358,10 @@
                         if (index !== -1)
                             tagNames.splice(index, 1);
                         tagNames.unshift(tagName);
-                        let maxCount = pref.get("tagFilter.recentTagCount");
+                        let maxCount = pref.get("toolbar.recentTagCount");
                         if (tagNames.length > maxCount)
                             tagNames.length = maxCount;
-                        pref.set("tagFilter.recentTags", tagNames.join("[]"));
+                        pref.set("toolbar.recentTags", tagNames.join("[]"));
                     }
                     this.control.tag = tagName;
                 ]]></body>
@@ -374,8 +372,8 @@
                     let PS = hBookmark.PromptService;
                     let tags = hBookmark.Model.Tag.findDistinctTags();
                     if (!tags.length) {
-                        PS.alert(window, this.strings.get("prompt.title"),
-                                 this.strings.get("tagFilter.noTag"));
+                        PS.alert(window, this.strings.get("prompt.noTagTitle"),
+                                 this.strings.get("tagFilter.noTagDescription"));
                         return;
                     }
                     let tagNames = tags.map(function (t) t.name);

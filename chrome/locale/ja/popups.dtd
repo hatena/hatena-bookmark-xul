@@ -15,8 +15,3 @@
 <!ENTITY hBookmark.entryContext.deleteKey "D">
 <!ENTITY hBookmark.entryContext.deleteAllLabel "すべて削除">
 <!ENTITY hBookmark.entryContext.deleteAllKey "L">
-
-<!ENTITY hBookmark.tagFilter.noFilterLabel "絞込みをしない">
-<!ENTITY hBookmark.tagFilter.noFilterKey "N">
-<!ENTITY hBookmark.tagFilter.selectTagLabel "タグにより絞り込む...">
-<!ENTITY hBookmark.tagFilter.selectTagKey "S">
