@@ -27,7 +27,7 @@
 }
 
 li.notice {
-    color: #555 !important;
+    color: #aaa !important;
     border-bottom: 0px dotted #ddd !important;
 }
 
@@ -46,7 +46,7 @@ li.notice {
   padding: 0 3px;
   color: #4F91E1;
   color: #6a8af1 !important;
-  color: #1793ea !important;
+  color: #0099ff !important;
 }
 
 #hBookmark-comment-list li.mine a.username {
