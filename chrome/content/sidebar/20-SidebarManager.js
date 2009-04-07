@@ -46,6 +46,9 @@ function initializeSidebar() {
     EventService.createListener("BookmarksUpdated", bookmarkTreeView, false);
     //EventService.createListener("UserChange", bookmarkTreeView, false);
 
+    setBoxDirection();
+    Prefs.bookmark.createListener("sidebar.reverseDirection", setBoxDirection);
+
     EventService.createListener("UserChange", showSidebarContent);
     showSidebarContent();
     searchBox.focus();
@@ -72,4 +75,10 @@ function showSidebarContent() {
     setTimeout(function () {
         document.getElementById("bookmark-tree").view.wrappedJSObject.update();
     }, 0);
+}
+
+function setBoxDirection() {
+    let dir = Prefs.bookmark.get("sidebar.reverseDirection")
+              ? "reverse" : "normal";
+    document.getElementById("main-content").setAttribute("dir", dir);
 }

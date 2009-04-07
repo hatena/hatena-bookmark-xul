@@ -45,6 +45,9 @@ pref("extensions.hatenabookmark.addPanel.tagListShowAll", false);
 pref("extensions.hatenabookmark.addPanel.frequentTagCount", 30);
 pref("extensions.hatenabookmark.addPanel.xulMigemo", true);
 
+// sidebar
+pref("extensions.hatenabookmark.sidebar.reverseDirection", false);
+
 // comment viewer
 pref("extensions.hatenabookmark.commentviewer.allShow", false);
 pref("extensions.hatenabookmark.commentviewer.width", 500);

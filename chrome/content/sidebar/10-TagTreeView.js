@@ -26,6 +26,8 @@ function TagTreeView() {
     this.selection = null;
 }
 
+var $count = 0, $start;
+
 TagTreeView.prototype.__proto__ = TreeView.prototype;
 extend(TagTreeView.prototype, {
     get rowCount () this._visibleItems.length,
@@ -53,9 +55,12 @@ extend(TagTreeView.prototype, {
     isContainer: function (index) true,
     isContainerOpen: function (index) this._visibleItems[index].isOpen,
     isContainerEmpty: function (index) {
+        //if ($count === 0) $start = new Date();
         var item = this._visibleItems[index];
         if (item.isEmpty === null)
-            item.isEmpty = !Tag.findRelatedTags(item.tags).length;
+            item.isEmpty = !Tag.hasRelatedTags(item.tags);
+        //if (++$count === 28)
+        //    p("Benchmark isContainerEmpty: " + (new Date() - $start));
         return item.isEmpty;
     },
 
