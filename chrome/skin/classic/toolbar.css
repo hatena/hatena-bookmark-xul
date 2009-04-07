@@ -115,3 +115,17 @@ toolbar[iconsize="small"] #hBookmark-toolbar-recent-button:active {
   /* -moz-image-region doesn't work for background images */
   /* -moz-image-region: rect(0px 269px 23px 244px); */
 }
+
+.hBookmark-tag-filter-button {
+  /* XXX 適切なアイコンをあてる */
+  list-style-image: url("chrome://hatenabookmark/skin/images/b.gif");
+}
+
+.hBookmark-tag-filter-button > .toolbarbutton-icon {
+  margin: 0 2px !important;
+}
+
+.hBookmark-tag-filter-button > .toolbarbutton-text {
+  display: -moz-box !important;
+  margin: 0 2px !important;
+}

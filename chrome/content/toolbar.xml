@@ -23,11 +23,10 @@
                                    oncommand="hBookmark.UIUtils.openAddBookmark(event);"
                                    onclick="checkForMiddleClick(this, event);"/>
                 <xul:toolbarbutton anonid="tagFilterButton"
-                                   label="&hBookmark.toolbar.tagFilterLabel;"
+                                   class="hBookmark-tag-filter-button"
                                    tooltiptext="&hBookmark.toolbar.tagFilterLabel;"
                                    type="menu"
-                                   hidden="true"
-                                   image="chrome://hatenabookmark/skin/images/b.gif">
+                                   hidden="true">
                     <xul:menupopup class="hBookmark-tag-filter-popup"
                                    onpopupshowing="return this.build(document.getBindingParent(this));"/>
                 </xul:toolbarbutton>
@@ -101,6 +100,7 @@
                       onget="return this.getAttribute('tag') || '';">
                 <setter><![CDATA[
                     this.setAttribute("tag", val);
+                    this.tagFilterButton.label = val;
                     this.popup.tag = val;
                     this.build();
                     return val;
