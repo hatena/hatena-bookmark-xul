@@ -1,4 +1,21 @@
+/*
+#tag-tree > treechildren::-moz-tree-image(tag) {
+   list-style-image: url("chrome://hatenabookmark/skin/images/b.gif") !important;
+   -moz-image-region: auto;
+}
+*/
+
+#hBookmarkTagTree_count {
+   text-align: right;
+   padding-right: 5px;
+}
+
+#tag-tree > treechildren::-moz-tree-cell(count) {
+   padding-right: 5px;
+}
+
 #bookmark-tree > treechildren::-moz-tree-image {
    width: 16px;
    height: 16px;
+   -moz-margin-end: 5px;
 }
