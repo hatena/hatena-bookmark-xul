@@ -95,6 +95,9 @@ var CommentViewer = {
         if (!url && isHttp) 
             url = aDoc.location.href;
 
+        // ignore https
+        if (url.indexOf('https://') == 0 && Application.prefs.get('extensions.hatenabookmark.statusbar.httpsIgnore').value) return;
+
         if (isHttp && HTTPCache.counter.has(url)) {
             let count = HTTPCache.counter.get(url);
             if (!(count > 0)) {
