@@ -89,9 +89,20 @@ var CommentViewer = {
         }
     },
     autoHoverShow: function() {
+        if (!CommentViewer.prefs.get('autoHoverShow')) return;
+
         let url;
         if (!url && isHttp) 
             url = aDoc.location.href;
+
+        if (isHttp && HTTPCache.counter.has(url)) {
+            let count = HTTPCache.counter.get(url);
+            if (!(count > 0)) {
+                // カウントキャッシュがあった場合、チェックして、ある場合のみ表示
+                return;
+            }
+        }
+
         if (panelComment.state != 'close' && url != CommentViewer.currentURL)
             CommentViewer.show(url);
     },
@@ -227,7 +238,7 @@ var CommentViewer = {
     },
     get hideTimer() {
         if (!CommentViewer._hideTimer) {
-            let hideTimer = new Timer(500, 1);
+            let hideTimer = new Timer(300, 1);
             hideTimer.createListener('timerComplete', CommentViewer.hideTimerCompleteHandler);
             CommentViewer._hideTimer = hideTimer;
         }

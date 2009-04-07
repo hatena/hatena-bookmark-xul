@@ -145,7 +145,7 @@ HTTPCache.prototype = {
         p('http not using cache: ' + url);
         return cache.get(url);
     },
-    has: function HTTPCache_clear (url) {
+    clear: function HTTPCache_clear (url) {
         let cache = this.cache;
         return cache.clear(url);
     },

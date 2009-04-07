@@ -20,8 +20,6 @@ elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
 elementGetter(this, 'statusCountLabel', 'hBookmark-status-count-label', document);
 elementGetter(this, 'statusComment', 'hBookmark-status-comment', document);
 
-let countCache = new ExpireCache('uCount', 60 * 60); // 一時間キャッシュ
-
 var StatusBar = {
     goEntry: function StatusBar_goEntry(event) {
         if (isHttp) {
@@ -120,7 +118,7 @@ var StatusBar = {
         p('statusbar load handler');
         StatusBar.registerPrefsListeners();
         StatusBar.update();
-        getBrowser().addEventListener('DOMContentLoaded', StatusBar.update, false);
+        gBrowser.addEventListener('DOMContentLoaded', StatusBar.update, false);
         statusComment.addEventListener('mouseover', StatusBar.commentViewerOverHandler, false);
     },
     commentViewerOverHandler: function(ev) {
