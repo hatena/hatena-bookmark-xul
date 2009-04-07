@@ -30,6 +30,10 @@
             name="extensions.hatenabookmark.contextmenu.enabled"
             type="bool"/>
         <preference 
+            id="extensions.hatenabookmark.sidebar.reverseDirection"
+            name="extensions.hatenabookmark.sidebar.reverseDirection"
+            type="bool"/>
+        <preference 
             id="extensions.hatenabookmark.recentItemCount"
             name="extensions.hatenabookmark.recentItemCount"
             type="int"/>
@@ -71,6 +75,13 @@
             <checkbox id="extensions.hatenabookmark.contextmenu.enabled-check" flex="1"
                 label="&hBookmark.config.contextmenuEnabled;"
                 preference="extensions.hatenabookmark.contextmenu.enabled"/>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.sidebar;" />
+            <checkbox id="sidebar.reverseDirection" flex="1"
+                label="&hBookmark.config.sidebarReverseDirection;"
+                preference="extensions.hatenabookmark.sidebar.reverseDirection"/>
         </groupbox>
     </vbox>
 </prefpane>
