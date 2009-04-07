@@ -1,5 +1,5 @@
 
-pref("extensions.hatenabookmark.testtesttest", 'test');
+// pref("extensions.hatenabookmark.testtesttest", 'test');
 // set prefs
 // pref("extensions.hatenabookmark.config.foobar", "foobar");
 
@@ -46,7 +46,11 @@ pref("extensions.hatenabookmark.addPanel.frequentTagCount", 30);
 pref("extensions.hatenabookmark.addPanel.xulMigemo", true);
 
 // comment viewer
-pref("extensions.hatenabookmark.commentviwer.allShow", true);
+pref("extensions.hatenabookmark.commentviewer.allShow", false);
+pref("extensions.hatenabookmark.commentviewer.width", 500);
+pref("extensions.hatenabookmark.commentviewer.height", 500);
+pref("extensions.hatenabookmark.commentviewer.autoHoverShow", false);
+pref("extensions.hatenabookmark.commentviewer.autoResize", true);
 
 // Sync
 pref("extensions.hatenabookmark.sync.oneTimeItmes", 200);
@@ -56,5 +60,9 @@ pref("extensions.hatenabookmark.sync.syncWait", 1000);
 pref("extensions.hatenabookmark.shortcut.keys.add", "Ctrl(Control)+Shift+B");
 pref("extensions.hatenabookmark.shortcut.keys.comment", "Ctrl(Control)+Shift+C");
 pref("extensions.hatenabookmark.shortcut.keys.sidebar", "");
+
+// Link texts
+pref("extensions.hatenabookmark.link.openInNewTab", true);
+
 
 

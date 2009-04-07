@@ -6,10 +6,7 @@ function BookmarkTreeView() {
     this.selection = null;
     this._items = [];
     this._treeBox = null;
-    this._shownBy = "search";
-    this._searchString = "";
-    this._tags = null;
-
+    this._update = null;
 }
 
 BookmarkTreeView.prototype.__proto__ = TreeView.prototype;
@@ -19,7 +16,7 @@ extend(BookmarkTreeView.prototype, {
     setTree: function (treeBox) {
         this._treeBox = treeBox;
         if (!treeBox) return;
-        this.update();
+        this.showBySearchString("");
     },
 
     getImageSrc: function BTV_getImageSrc(row, col) {
@@ -27,20 +24,22 @@ extend(BookmarkTreeView.prototype, {
     },
 
     showByTags: function (tags) {
-        this._shownBy = "tags";
-        this._tags = tags;
-        let bookmarks = Bookmark.findByTags(tags);
-        this.setBookmarks(bookmarks);
+        this._update = function BTV_doUpdateByTags() {
+            let bookmarks = Bookmark.findByTags(tags);
+            this.setBookmarks(bookmarks);
+        };
+        this._update();
     },
 
     showBySearchString: function BTV_showBySearchString(string) {
-        let visibleRowCount = this._treeBox.getPageLength();
-        this._shownBy = "search";
-        this._searchString = string;
-        let bookmarks = string
-            ? Bookmark.search(string, visibleRowCount)
-            : Bookmark.findRecent(visibleRowCount);
-        this.setBookmarks(bookmarks);
+        this._update = function BTV_doUpdateBySearchString() {
+            let visibleRowCount = this._treeBox.getPageLength();
+            let bookmarks = string
+                ? Bookmark.search(string, visibleRowCount)
+                : Bookmark.findRecent(visibleRowCount);
+            this.setBookmarks(bookmarks);
+        };
+        this._update();
     },
 
     setBookmarks: function BTV_setBookmarks(bookmarks) {
@@ -87,10 +86,10 @@ extend(BookmarkTreeView.prototype, {
     },
 
     update: function BTV_update() {
-        switch (this._shownBy) {
-        case "search": this.showBySearchString(this._searchString); break;
-        case "tags":   this.showByTags(this._tags);                 break;
-        }
+        if (!this._update) return;
+        let row = this._treeBox.getFirstVisibleRow();
+        this._update();
+        this._treeBox.scrollToRow(row);
     },
 
     handleMouseOver: function BTV_handleMouseOver(event) {

@@ -81,7 +81,8 @@ extend(Bookmark, {
             bids = res.map(function(t) t.bookmark_id);
         }
         res = Bookmark.find({
-            where: 'id IN (' + bids.join(',') + ')'
+            where: 'id IN (' + bids.join(',') + ')',
+            order: 'date DESC'
         });
         return res;
     },

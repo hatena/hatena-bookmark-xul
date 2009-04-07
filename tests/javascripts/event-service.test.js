@@ -114,59 +114,59 @@ function testMultipleListenerMethodCall() {
     assert.equals(result, [1]);
 }
 
-// XXX getTestWindow()の返り値がnullになる。
-testDisposable.priority = "never";
-function testDisposable() {
-    const EXTENSION_ID = "bookmark@hatena.ne.jp";
-    const em = Cc["@mozilla.org/extensions/manager;1"]
-               .getService(Ci.nsIExtensionManager);
-    let location = em.getInstallLocation(EXTENSION_ID);
-    let srcFile = location.getItemFile(EXTENSION_ID, "tests/javascripts/event-service-test.xul");
-    let destDir = location.getItemFile(EXTENSION_ID, "chrome/content");
-    let copiedFile = utils.cosmeticClone(srcFile, destDir, srcFile.leafName);
-    yield 200;
-
-    let result, win;
-
-    yield utils.setUpTestWindow(function () {}, {
-        uri: "chrome://hatenabookmark/content/event-service-test.xul"
-    });
-    result = false;
-    win = utils.getTestWindow();
-    win.callback = function () result = true;
-    win.createDisposableListener();
-    EventService.dispatch("AnEvent");
-    assert.equals(result, true);
-
-    utils.closeTestWindow();
-    result = false;
-    EventService.dispatch("AnEvent");
-    assert.equals(result, false);
-
-    let listener;
-
-    yield utils.setUpTestWindow(function () {}, {
-        uri: "chrome://hatenabookmark/content/event-service-test.xul"
-    });
-    result = false;
-    win = utils.getTestWindow();
-    win.callback = function () result = true;
-    listener = win.createNonDisposableListener();
-    EventService.dispatch("AnEvent");
-    assert.equals(result, true);
-
-    utils.closeTestWindow();
-    result = false;
-    EventService.dispatch("AnEvent");
-    assert.equals(result, true);
-
-    listener.unlisten();
-    result = false;
-    EventService.dispatch("AnEvent");
-    assert.equals(result, false);
-
-    utils.scheduleToRemove(copiedFile);
-}
+//// XXX getTestWindow()の返り値がnullになる。
+//testDisposable.priority = "never";
+//function testDisposable() {
+//    const EXTENSION_ID = "bookmark@hatena.ne.jp";
+//    const em = Cc["@mozilla.org/extensions/manager;1"]
+//               .getService(Ci.nsIExtensionManager);
+//    let location = em.getInstallLocation(EXTENSION_ID);
+//    let srcFile = location.getItemFile(EXTENSION_ID, "tests/javascripts/event-service-test.xul");
+//    let destDir = location.getItemFile(EXTENSION_ID, "chrome/content");
+//    let copiedFile = utils.cosmeticClone(srcFile, destDir, srcFile.leafName);
+//    yield 200;
+//
+//    let result, win;
+//
+//    yield utils.setUpTestWindow(function () {}, {
+//        uri: "chrome://hatenabookmark/content/event-service-test.xul"
+//    });
+//    result = false;
+//    win = utils.getTestWindow();
+//    win.callback = function () result = true;
+//    win.createDisposableListener();
+//    EventService.dispatch("AnEvent");
+//    assert.equals(result, true);
+//
+//    utils.closeTestWindow();
+//    result = false;
+//    EventService.dispatch("AnEvent");
+//    assert.equals(result, false);
+//
+//    let listener;
+//
+//    yield utils.setUpTestWindow(function () {}, {
+//        uri: "chrome://hatenabookmark/content/event-service-test.xul"
+//    });
+//    result = false;
+//    win = utils.getTestWindow();
+//    win.callback = function () result = true;
+//    listener = win.createNonDisposableListener();
+//    EventService.dispatch("AnEvent");
+//    assert.equals(result, true);
+//
+//    utils.closeTestWindow();
+//    result = false;
+//    EventService.dispatch("AnEvent");
+//    assert.equals(result, true);
+//
+//    listener.unlisten();
+//    result = false;
+//    EventService.dispatch("AnEvent");
+//    assert.equals(result, false);
+//
+//    utils.scheduleToRemove(copiedFile);
+//}
 
 function testImplement() {
     var dispatcher = {};

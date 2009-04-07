@@ -1,0 +1,82 @@
+
+@namespace url(http://www.w3.org/1999/xhtml);
+/* XHTML_NS CSS */
+
+#hBookmark-comment-div {
+    -moz-user-focus: normal !important;
+    -moz-user-select: text !important;
+}
+
+#hBookmark-comment-list {
+  margin: 0px;
+  padding: 0px;
+}
+
+#hBookmark-comment-close {
+    cursor: pointer;
+    float:right;
+    padding: 3px;
+    margin-right: 3px;
+}
+
+#hBookmark-comment-list li {
+  font-size: 1.2em; /* XXX */
+  display: block;
+  padding: 1px 5px 1px 5px;
+}
+
+#hBookmark-comment-list li img {
+ vertical-align: middle;
+}
+
+#hBookmark-comment-list {
+  margin: 10px;
+  color: #222;
+}
+
+li.notice {
+    color: #555 !important;
+    border-bottom: 0px dotted #ddd !important;
+}
+
+#hBookmark-comment-list li {
+  text-indent: -20px;
+  padding: 4px 20px 4px 20px;
+  margin: 0 0 3px 0;
+  color: #000;
+  word-wrap: break-word;
+  border-bottom: 1px dotted #BBD8FF;
+}
+
+#hBookmark-comment-list li a.username {
+  font-weight: normal;
+  padding: 0 3px 0 3px;
+  color: #4F91E1;
+}
+
+#hBookmark-comment-list li.mine a.username {
+  font-weight: bold;
+} 
+
+span.comment {
+  padding: 0 3px 0 3px;
+}
+
+span.timestamp {
+  font-size: 0.8em;
+  color: #888;
+} 
+
+a.tag {
+  text-decoration: none;
+  color: #66c;
+  font-size: 0.9em;
+}
+
+a.users {
+  text-decoration: underline;
+  color: #FF6e6e;
+  font-weight: bold;
+  padding-left: 14px;
+}
+

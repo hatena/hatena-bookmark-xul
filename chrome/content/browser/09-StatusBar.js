@@ -121,6 +121,10 @@ var StatusBar = {
         StatusBar.registerPrefsListeners();
         StatusBar.update();
         getBrowser().addEventListener('DOMContentLoaded', StatusBar.update, false);
+        statusComment.addEventListener('mouseover', StatusBar.commentViewerOverHandler, false);
+    },
+    commentViewerOverHandler: function(ev) {
+        CommentViewer.autoHoverShow();
     },
     updateHandler: function(ev) {
         StatusBar.update;

@@ -19,7 +19,8 @@ var ToolbarItemSize = {
 
     update: function TIS_update() {
         this._sheet.cssRules[0].style.maxWidth = this.maxWidth + "px";
-        document.getElementById("hBookmarkToolbar").redraw();
+        let item = document.getElementById("hBookmark-toolbar-recent-line");
+        if (item) item.redraw();
     }
 };
 

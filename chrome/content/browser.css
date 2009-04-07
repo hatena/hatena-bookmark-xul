@@ -120,6 +120,60 @@ width: 800px;
 */
 }
 
+#hBookmark-panel-comment {
+    -moz-appearance: none;
+    background-color: #F5F9FE !important;
+    color: #000;
+    -moz-border-radius: 7px;
+    -moz-border-top-colors: #4F91E1 !important;
+    -moz-border-right-colors: #4F91E1 !important;
+    -moz-border-bottom-colors: #4F91E1 !important;
+    -moz-border-left-colors: #4F91E1 !important;
+    border-width: 4px;
+}
+
+#hBookmark-comment-toggle {
+    cursor: pointer;
+}
+
+#hBookmark-comment-container {
+}
+
+#hBookmark-comment-footer {
+    border-top: 1px #4F91E1 solid;
+    background-color: #FFF;
+    font-size: 1.2em;
+    padding: 5px;
+}
+
+#hBookmark-comment-list-container {
+    display: block;
+    overflow-y: auto;
+    margin: 2px;
+}
+
+#hBookmark-comment-users {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #FF6e6e;
+    font-weight: bold;
+    padding-left: 14px;
+}
+
+/* vbox */
+#hBookmark-comment-list {
+}
+
+#hBookmark-comment-description {
+}
+
+#hBookmark-comment-list hbox {
+    /*
+    max-width: 300px;
+    */
+}
+
+
 /*
  * url bar ovarlay
  */
@@ -258,10 +312,4 @@ width: 800px;
     font-weight: bold;
 }
 */
-
-
-
-
-
-
 
