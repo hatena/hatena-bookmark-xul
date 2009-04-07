@@ -15,7 +15,8 @@
 
 #hBookmark-comment-close {
   cursor: pointer;
-  padding: 6px 25px;
+  padding:0 6px;
+  float: right;
 }
 
 #hBookmark-comment-list li img {

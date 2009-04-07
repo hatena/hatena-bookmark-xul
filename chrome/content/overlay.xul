@@ -204,7 +204,6 @@
              noautofocus="true"
              noautohide="false"
         >
-        <stack>
         <vbox 
            flex="1"
            id="hBookmark-comment-container"
@@ -220,6 +219,7 @@
                id="hBookmark-comment-list-container"
             >
                 <html:div id="hBookmark-comment-div">
+                    <html:img alt="close" title="close" src="chrome://hatenabookmark/skin/images/close-comment.png" id="hBookmark-comment-close" mousethrough="never" />
                     <html:ul
                         id="hBookmark-comment-list"
                     />
@@ -236,10 +236,6 @@
                 <image onclick="hBookmark.CommentViewer.filterToggle(event);" src="chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png" id="hBookmark-comment-toggle" />
             </hbox>
         </vbox>
-        <hbox align="start" pack="end" mousethrough="always" id="hBookmark-comment-close-container">
-          <html:img alt="close" title="close" src="chrome://hatenabookmark/skin/images/close-comment.png" id="hBookmark-comment-close" mousethrough="never" />
-        </hbox>
-        </stack>
         </panel>
         <panel 
             id="hBookmark-panel-urlbar" 
