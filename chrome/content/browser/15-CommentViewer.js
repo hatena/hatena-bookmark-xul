@@ -117,7 +117,7 @@ var CommentViewer = {
                 data.bookmarks = data.bookmarks.filter(function(b) !regex.test(b.user));
             }
         }
-        panelComment.openPopup(statusbar, 'before_end', -20, -1,false,false);
+        panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
         CommentViewer.updateViewer(data);
         commentButton.setAttribute('loading', 'false'); 
     },
