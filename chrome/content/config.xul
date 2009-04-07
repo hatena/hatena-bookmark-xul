@@ -6,22 +6,16 @@
 <?xml-stylesheet href="chrome://hatenabookmark/skin/config.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
 
+<!DOCTYPE dialog SYSTEM "chrome://hatenabookmark/locale/config.dtd">
 <prefwindow id="hBookmark-config"
     xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     xmlns:html="http://www.w3.org/1999/xhtml"
-    title="はてなブックマーク拡張の設定"
+    title="&hBookmark.config.title;"
     >
-
-<!--
-<preference 
-    id="extensions.hatenabookmark."
-    name="extensions.hatenabookmark."
-    type="bool"/>
--->
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/transparent.png"
-    id="prefpane-locationbar" label="全般" flex="1">
+    id="prefpane-locationbar" label="&hBookmark.config.general;" flex="1">
     <preferences>
         <preference 
             id="extensions.hatenabookmark.locationbar.searchToggle"
@@ -43,25 +37,25 @@
 
     <vbox>
         <groupbox orient="vertical">
-            <caption label="ロケーションバー(アドレスバー)" />
+            <caption label="&hBookmark.config.locationbar;" />
             <vbox flex="1">
             <checkbox id="extensions.hatenabookmark.locationbar.search-check" flex="1"
-                label="検索機能を有効にする"
+                label="&hBookmark.config.searchEnabled;"
                 preference="extensions.hatenabookmark.locationbar.search"/>
             <hbox>
                 <spacer style="width: 1em;" />
                 <checkbox id="extensions.hatenabookmark.locationbar.searchToggle-check" flex="1"
-                    label="Ctrl + Shift キーによる検索ショートカットを使う"
+                    label="&hBookmark.config.searchShortcut;"
                     preference="extensions.hatenabookmark.locationbar.searchToggle"/>
             </hbox>
             </vbox>
         </groupbox>
 
         <groupbox orient="vertical">
-            <caption label="ブックマークツールバー" />
+            <caption label="&hBookmark.config.toolbar;" />
             <vbox flex="1">
                 <hbox flex="1" align="center">
-                <label value="ブックマークの表示上限数"
+                <label value="&hBookmark.config.toolbarMaxItem;"
                     control="recentItemCount"/>
                 <textbox id="recentItemCount"
                     preference="extensions.hatenabookmark.recentItemCount"
@@ -73,9 +67,9 @@
         </groupbox>
 
         <groupbox orient="vertical">
-            <caption label="右クリック(コンテキスト)メニュー" />
+            <caption label="&hBookmark.config.contextmenu;" />
             <checkbox id="extensions.hatenabookmark.contextmenu.enabled-check" flex="1"
-                label="右クリックメニューを拡張する"
+                label="&hBookmark.config.contextmenuEnabled;"
                 preference="extensions.hatenabookmark.contextmenu.enabled"/>
         </groupbox>
     </vbox>
@@ -83,7 +77,7 @@
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/transparent.png"
-    id="prefpane-statusbar" label="ステータスバー" flex="1" onpaneload="hBookmark.Config.updateStatus();">
+    id="prefpane-statusbar" label="&hBookmark.config.statusbar;" flex="1" onpaneload="hBookmark.Config.updateStatus();">
 
     <preferences>
         <preference 
@@ -118,44 +112,44 @@
 
     <vbox>
         <groupbox orient="vertical">
-            <caption label="表示アイコン" />
+            <caption label="&hBookmark.config.statusbarIcon;" />
             <checkbox id="extensions.hatenabookmark.statusbar.addButton-check" flex="1"
-                label="追加ボタンの表示"
+                label="&hBookmark.config.statusbarAddButton;"
                 preference="extensions.hatenabookmark.statusbar.addButton"/>
             <checkbox id="extensions.hatenabookmark.statusbar.counter-check" flex="1"
-                label="ユーザー数カウンターの表示"
+                label="&hBookmark.config.statusbarCounter;"
                 preference="extensions.hatenabookmark.statusbar.counter"/>
                 <!-- src="chrome://hatenabookmark/skin/images/nbookmarks.png" -->
             <hbox>
             <spacer style="width: 1em;" />
             <checkbox id="extensions.hatenabookmark.statusbar.httpsIgnore-check" flex="1"
-                label="URL が https の場合はカウントしない"
+                label="&hBookmark.config.statusbarHttpsIngore;"
                 preference="extensions.hatenabookmark.statusbar.httpsIgnore"/>
             </hbox>
         </groupbox>
 
         <groupbox orient="vertical">
-            <caption label="コメントビュワー" />
+            <caption label="&hBookmark.config.commentviewer;" />
             <checkbox id="extensions.hatenabookmark.commentviewer.autoHoverShow-check" flex="1"
-                label="マウスオーバーで、自動でコメントビュワーを表示"
+                label="&hBookmark.config.commentviewerAutoShown;"
                 preference="extensions.hatenabookmark.commentviewer.autoHoverShow"/>
 
             <checkbox id="extensions.hatenabookmark.commentviewer.autoResize-check" flex="1"
-                label="自動サイズ調整"
+                label="&hBookmark.config.commentviewerAutoResize;"
                 onmouseup="setTimeout(hBookmark.Config.updateStatus, 10);"
                 preference="extensions.hatenabookmark.commentviewer.autoResize"/>
 
             <hbox flex="1" align="center">
             <spacer style="width: 1em;" />
-            <label value="サイズ指定" />
-            <label value="横幅(px)"
+            <label value="&hBookmark.config.commentviewerSizeSetting;" />
+            <label value="&hBookmark.config.commentviewerWidth;"
                 control="commentviewer.width"/>
             <textbox id="commentviewer.width"
                 preference="extensions.hatenabookmark.commentviewer.width"
                 type="number" min="200" increment="10" max="9999"
                 style="width: 5em;"
             />
-            <label value="縦幅(px)"
+            <label value="&hBookmark.config.commentviewerHeight;"
                 control="commentviewer.height"/>
             <textbox id="commentviewer.height"
                 preference="extensions.hatenabookmark.commentviewer.height"
@@ -169,7 +163,7 @@
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/transparent.png"
-    id="prefpane-addPanel" label="編集画面" flex="1" onpaneload="hBookmark.Config.updateUI();">
+    id="prefpane-addPanel" label="&hBookmark.config.addPanel;" flex="1" onpaneload="hBookmark.Config.updateUI();">
     <preferences>
         <preference 
             id="extensions.hatenabookmark.addPanel.tagCompleteEnabled"
@@ -203,15 +197,15 @@
 
     <vbox>
         <groupbox orient="vertical">
-            <caption label="タグ補完" />
+            <caption label="&hBookmark.config.addPanelTagComplete;" />
             <hbox flex="1" align="center">
                 <checkbox id="addPanel.tagCompleteEnabled" flex="1"
-                    label="タグ補完を有効に"
+                    label="&hBookmark.config.addPanelTagCompleteEnabled;"
                     preference="extensions.hatenabookmark.addPanel.tagCompleteEnabled" />
             </hbox>
             <hbox flex="1" align="center">
                 <spacer style="width: 2em;" />
-                <label value="タグ補完候補の最大件数"
+                <label value="&hBookmark.config.addPanelTagCompleteMaxItem;"
                     control="addPanel.tagMaxResult"/>
                 <textbox id="addPanel.tagMaxResult"
                     preference="extensions.hatenabookmark.addPanel.tagMaxResult"
@@ -222,29 +216,29 @@
             </hbox>
             <hbox flex="1" align="center">
                 <checkbox id="addPanel.xulMigemo"
-                    label="XUL/Migemo を補完に利用する"
+                    label="&hBookmark.config.addPanelTagCompleteXulMigemoEnabled;"
                     preference="extensions.hatenabookmark.addPanel.xulMigemo" />
                 <label class="text-link hBookmarkLink" value="XUL/Migemo" href="https://addons.mozilla.org/firefox/addon/5239" />
-                <label value="が必要です" />
+                <label value="&hBookmark.config.addPanelTagCompleteXulMigemoSuffix;" />
                 <spacer flex="1" />
             </hbox>
         </groupbox>
 
         <groupbox orient="vertical">
-            <caption label="タグ表示" />
+            <caption label="&hBookmark.config.addPanelTag;" />
             <hbox flex="1" align="center">
                 <checkbox id="addPanel.recommendedTagListShow" flex="1"
-                    label="おすすめタグ一覧の表示"
+                    label="&hBookmark.config.addPanelTagRecent;"
                     preference="extensions.hatenabookmark.addPanel.recommendedTagListShow" />
             </hbox>
             <hbox flex="1" align="center">
                 <checkbox id="addPanel.tagListShow" flex="1"
-                    label="自分のタグ一覧の表示"
+                    label="&hBookmark.config.addPanelTagMine;"
                     preference="extensions.hatenabookmark.addPanel.tagListShow" />
             </hbox>
             <hbox flex="1" align="center">
                 <spacer style="width: 2em;" />
-                <label value="初期のタグ表示件数"
+                <label value="&hBookmark.config.addPanelTagItem;"
                     control="addPanel.initialTagCount"/>
                 <textbox id="addPanel.initialTagCount"
                     preference="extensions.hatenabookmark.addPanel.initialTagCount"
@@ -257,13 +251,13 @@
 
         <!--
         <groupbox orient="vertical">
-            <caption label="背景画像" />
+            <caption label="&hBookmark.config.addPanelBackgroundImage;" />
             <hbox align="center" flex="1">
                 <vbox flex="1">
                 <filefield id="addPanel.backgroundImage" flex="1" />
                     <hbox align="center">
-                        <button label="画像の選択" oncommand="hBookmark.Config.selectImageFile();" />
-                        <button label="選択を解除" oncommand="hBookmark.Config.clearImageFile();" />
+                        <button label="&hBookmark.config.addPanelBackgroundImageSelect;" oncommand="hBookmark.Config.selectImageFile();" />
+                        <button label="&hBookmark.config.addPanelBackgroundImageCancel;" oncommand="hBookmark.Config.clearImageFile();" />
                     </hbox>
                 </vbox>
             </hbox>
@@ -275,7 +269,7 @@
 <prefpane 
     image="chrome://hatenabookmark/skin/images/transparent.png"
     onpaneload="hBookmark.Config.ShortCut.initPane();"
-    id="prefpane-shortcut" label="ショートカット" flex="1">
+    id="prefpane-shortcut" label="&hBookmark.config.shortcut;" flex="1">
 
     <preferences>
         <preference 
@@ -298,95 +292,108 @@
     -->
     <vbox>
         <groupbox orient="vertical">
-            <caption label="はてなブックマークに追加" />
+            <caption label="&hBookmark.config.shortcutAdd;" />
             <hbox>
                     <textbox id="extensions.hatenabookmark.shortcut.keys.add-input"
+                        onclick="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.add);"
                         readonly="true"
                         preference="extensions.hatenabookmark.shortcut.keys.add"
                         flex="1"
                         />
-                    <button label="設定"
+                    <button label="&hBookmark.config.shortcutSet;"
                         oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.add);"/>
-                    <button label="解除"
+                    <button label="&hBookmark.config.shortcutClear;"
                         oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.keys.add);"/>
             </hbox>
         </groupbox>
         <groupbox orient="vertical">
-            <caption label="コメント表示" />
+            <caption label="&hBookmark.config.shortcutComment;" />
             <hbox>
                     <textbox id="extensions.hatenabookmark.shortcut.keys.comment-input"
+                        onclick="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.comment);"
                         readonly="true"
                         preference="extensions.hatenabookmark.shortcut.keys.comment"
                         flex="1"
                         />
-                    <button label="設定"
+                    <button label="&hBookmark.config.shortcutSet;"
                         oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.comment);"/>
-                    <button label="解除"
+                    <button label="&hBookmark.config.shortcutClear;"
                         oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.keys.comment);"/>
             </hbox>
         </groupbox>
         <groupbox orient="vertical">
-            <caption label="サイドバー表示の切り替え" />
+            <caption label="&hBookmark.config.shortcutSidebar;" />
             <hbox>
                     <textbox id="extensions.hatenabookmark.shortcut.keys.sidebar-input"
+                        onclick="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.sidebar);"
                         readonly="true"
                         preference="extensions.hatenabookmark.shortcut.keys.sidebar"
                         flex="1"
                         />
-                    <button label="設定"
+                    <button label="&hBookmark.config.shortcutSet;"
                         oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.sidebar);"/>
-                    <button label="解除"
+                    <button label="&hBookmark.config.shortcutClear;"
                         oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.keys.sidebar);"/>
             </hbox>
         </groupbox>
-        <label value="ショートカットの反映に、ブラウザの再起動が必要な場合があります" />
+        <label value="&hBookmark.config.shortcutNotice;" />
     </vbox>
 </prefpane>
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/transparent.png"
-    id="prefpane-sync" label="データ" flex="1"
+    id="prefpane-sync" 
+    label="&hBookmark.config.data;" 
+    flex="1"
     onpaneload="hBookmark.Config.initDataPane();"
     >
-    <vbox>
+    <vbox flex="1">
             <vbox align="center">
                 <hbox id="pref-loginbox">
                     <label id="pref-login" valeu="" />
                 </hbox>
-                <label id="pref-nologin" valeu="ログインしていません。"/>
+                <label id="pref-nologin" valeu="&hBookmark.config.nologin;"/>
             </vbox>
 
         <groupbox orient="vertical">
-            <caption label="同期" />
-                <label value="はてなブックマークのデータから、手元のデータへと同期します。" />
-            <vbox align="center">
+            <caption label="&hBookmark.config.sync;" />
+                <label value="&hBookmark.config.syncNotice;" />
+            <vbox>
                 <hbox>
-                    <button label="データの同期"
+                <spacer style="width: 1em;" />
+                    <button label="&hBookmark.config.syncData;"
                         oncommand="hBookmark.Config.sync();"
                     />
                 </hbox>
             </vbox>
         </groupbox>
         <groupbox orient="vertical">
-            <caption label="すべてのデータの再同期" />
-            <vbox align="center">
-                <description>すべてのデータを再度同期します。<html:br />サーバ上のデータと差異が出た場合、実行すると正常なデータを取得し直すことができます。</description>
+            <caption label="&hBookmark.config.syncDataAll;" />
+            <vbox>
+                <label value="&hBookmark.config.syncDataAllNotice1;" />
+                <label value="&hBookmark.config.syncDataAllNotice2;" />
                 <hbox>
-                    <button label="すべてのデータの再同期"
+                <spacer style="width: 1em;" />
+                    <button label="&hBookmark.config.syncDataAll;"
                         oncommand="hBookmark.Config.syncALL();"
                     />
                 </hbox>
             </vbox>
         </groupbox>
         <groupbox orient="vertical">
-            <caption label="データの削除" />
-                <description>お手元のはてなブックマーク拡張のデータを削除します。<html:br />リモートのデータは削除されません。</description>
-            <vbox align="center">
-                <button label="データをすべて削除"
-                    oncommand="hBookmark.Config.deleteAll();"
-                />
+            <caption label="&hBookmark.config.deleteData;" />
+            <vbox>
+                <label value="&hBookmark.config.deleteDataNotice1;" />
+                <label value="&hBookmark.config.deleteDataNotice2;" />
+                <hbox>
+                <spacer style="width: 1em;" />
+                    <button label="&hBookmark.config.deleteDataAll;"
+                        oncommand="hBookmark.Config.deleteAll();"
+                    />
+                </hbox>
             </vbox>
         </groupbox>
+        <spacer height="50px" />
     </vbox>
 </prefpane>
 

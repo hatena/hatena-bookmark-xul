@@ -1,0 +1,64 @@
+
+<!ENTITY hBookmark.config.title "はてなブックマーク拡張の設定">
+
+<!ENTITY hBookmark.config.general "全般">
+<!ENTITY hBookmark.config.locationbar "ロケーションバー(アドレスバー)">
+
+<!ENTITY hBookmark.config.searchEnabled "検索機能を有効にする">
+<!ENTITY hBookmark.config.searchShortcut "Ctrl + Shift キーによる検索ショートカットを使う">
+<!ENTITY hBookmark.config.toolbar "ブックマークツールバー">
+<!ENTITY hBookmark.config.toolbarMaxItem "ブックマークの表示上限数">
+<!ENTITY hBookmark.config.contextmenu "右クリック(コンテキスト)メニュー">
+<!ENTITY hBookmark.config.contextmenuEnabled "右クリックメニューを拡張する">
+
+<!ENTITY hBookmark.config.statusbar "ステータスバー">
+<!ENTITY hBookmark.config.statusbarIcon "表示アイコン">
+<!ENTITY hBookmark.config.statusbarAddButton "追加ボタンの表示">
+<!ENTITY hBookmark.config.statusbarCounter "ユーザー数カウンターの表示">
+<!ENTITY hBookmark.config.statusbarHttpsIngore "URL が https の場合はカウントしない">
+
+<!ENTITY hBookmark.config.commentviewer "コメントビュワー">
+<!ENTITY hBookmark.config.commentviewerAutoShown "マウスオーバーで、自動でコメントビュワーを表示">
+<!ENTITY hBookmark.config.commentviewerAutoResize "自動サイズ調整">
+<!ENTITY hBookmark.config.commentviewerSizeSetting "サイズ指定">
+<!ENTITY hBookmark.config.commentviewerWidth "横幅(px)">
+<!ENTITY hBookmark.config.commentviewerHeight "縦幅(px)">
+
+<!ENTITY hBookmark.config.addPanel "編集画面">
+<!ENTITY hBookmark.config.addPanelTagComplete "タグ補完">
+<!ENTITY hBookmark.config.addPanelTagCompleteEnabled  "タグ補完を有効に">
+<!ENTITY hBookmark.config.addPanelTagCompleteMaxItem "タグ補完候補の最大件数">
+<!ENTITY hBookmark.config.addPanelTagCompleteXulMigemoEnabled "XUL/Migemo を補完に利用する">
+<!ENTITY hBookmark.config.addPanelTagCompleteXulMigemoSuffix "が必要です">
+<!ENTITY hBookmark.config.addPanelTag "タグ表示">
+<!ENTITY hBookmark.config.addPanelTagRecent "おすすめタグ一覧の表示">
+<!ENTITY hBookmark.config.addPanelTagMine "自分のタグ一覧の表示">
+<!ENTITY hBookmark.config.addPanelTagItem "初期のタグ表示件数">
+<!ENTITY hBookmark.config.addPanelBackgroundImage "背景画像">
+<!ENTITY hBookmark.config.addPanelBackgroundImageSelect "画像の選択">
+<!ENTITY hBookmark.config.addPanelBackgroundImageCancel "選択を解除">
+
+<!ENTITY hBookmark.config.shortcut "ショートカット">
+<!ENTITY hBookmark.config.shortcutAdd "はてなブックマークに追加">
+<!ENTITY hBookmark.config.shortcutSet "設定">
+<!ENTITY hBookmark.config.shortcutClear "解除">
+<!ENTITY hBookmark.config.shortcutComment "コメント表示">
+<!ENTITY hBookmark.config.shortcutSidebar "サイドバー表示の切り替え">
+<!ENTITY hBookmark.config.shortcutNotice "*ショートカットの反映に、ブラウザの再起動が必要な場合があります">
+
+
+<!ENTITY hBookmark.config.data "データ">
+<!ENTITY hBookmark.config.nologin "ログインしていません。">
+<!ENTITY hBookmark.config.sync "同期">
+<!ENTITY hBookmark.config.syncNotice "はてなブックマークのデータから、手元のデータへと同期します。">
+<!ENTITY hBookmark.config.syncData "データの同期">
+<!ENTITY hBookmark.config.syncDataAll "すべてのデータの再同期">
+<!ENTITY hBookmark.config.syncDataAllNotice1 "すべてのデータを再度同期します。">
+<!ENTITY hBookmark.config.syncDataAllNotice2 "サーバ上のデータと差異が出た場合、実行すると正常なデータを取得し直すことができます。">
+<!ENTITY hBookmark.config.deleteData "データの削除">
+<!ENTITY hBookmark.config.deleteDataNotice1 "お手元のはてなブックマーク拡張のデータを削除します。">
+<!ENTITY hBookmark.config.deleteDataNotice2 "リモートのデータは削除されません。">
+<!ENTITY hBookmark.config.deleteDataAll "データをすべて削除">
+
+
+
