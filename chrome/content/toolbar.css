@@ -1,5 +1,7 @@
 #hBookmark-toolbar-recent-line {
    -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#recent-line");
+}
+.hBookmark-toolbar-recent-line-container {
    overflow-x: hidden;
 }
 .hBookmark-toolbar-recent-popup {
