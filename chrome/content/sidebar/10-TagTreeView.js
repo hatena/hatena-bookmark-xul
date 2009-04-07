@@ -2,6 +2,9 @@ const EXPORT = ["TagTreeView"];
 
 const AtomService =
     Cc["@mozilla.org/atom-service;1"].getService(Ci.nsIAtomService);
+const NAME_ATOM = AtomService.getAtom("Name");
+const TAG_ATOM = AtomService.getAtom("tag");
+const COUNT_ATOM = AtomService.getAtom("count");
 
 var Tag = model("Tag");
 
@@ -65,8 +68,16 @@ extend(TagTreeView.prototype, {
     },
 
     getCellProperties: function (row, col, properties) {
-        if (col.id === "hBookmarkTagTree_currentTag")
-            properties.AppendElement(AtomService.getAtom("Name"));
+        switch (col.id) {
+        case "hBookmarkTagTree_currentTag":
+            properties.AppendElement(NAME_ATOM); // XXX To be removed
+            properties.AppendElement(TAG_ATOM);
+            break;
+
+        case "hBookmarkTagTree_count":
+            properties.AppendElement(COUNT_ATOM);
+            break;
+        }
     },
 
     cycleHeader: function TTV_cycleHeader(col) {
