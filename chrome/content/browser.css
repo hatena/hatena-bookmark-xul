@@ -118,7 +118,7 @@ width: 800px;
 
 #hBookmark-panel-comment {
     -moz-appearance: none;
-    background-color: #000000 !important;
+    background-color: #111 !important;
     /*
     background-color: #F5F9FE !important;
     background-color: rgba(252,249,237,1) !important;
@@ -132,6 +132,8 @@ width: 800px;
     */
     border: none !important;
     font-family: arial, helvetica, sans-serif !important;
+    font-size: 1.2em;
+    line-height: 1.3;
     color:#fff;
 }
 

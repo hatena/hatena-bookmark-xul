@@ -41,14 +41,11 @@ li.notice {
   display: block;
 }
 
-#hBookmark-comment-list li span.comment {
-    font-size: 1.2em;
-}
-
 #hBookmark-comment-list li a.username {
   font-weight: normal;
   padding: 0 3px;
   color: #EEE !important;
+  font-size: 80%;
 }
 
 #hBookmark-comment-list li.mine a.username {
@@ -61,13 +58,14 @@ span.comment {
 
 span.timestamp {
   color: #aaa;
-  font-size: 90%;
+  font-size: 80%;
 } 
 
 a.tag {
   text-decoration: none;
   color: #66c;
   color: #aaf;
+  font-size: 80%;
 }
 
 a.users {
