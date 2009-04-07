@@ -15,7 +15,7 @@
 <!ENTITY hBookmark.config.sidebarReverseDirection "検索画面を上部に移動する">
 
 <!ENTITY hBookmark.config.statusbar "ステータスバー">
-<!ENTITY hBookmark.config.statusbarIcon "表示アイコン">
+<!ENTITY hBookmark.config.statusbarIcon "表示">
 <!ENTITY hBookmark.config.statusbarAddButton "追加ボタンの表示">
 <!ENTITY hBookmark.config.statusbarCounter "ユーザー数カウンターの表示">
 <!ENTITY hBookmark.config.statusbarHttpsIngore "URL が https の場合はカウントしない">
@@ -26,6 +26,10 @@
 <!ENTITY hBookmark.config.commentviewerSizeSetting "サイズ指定">
 <!ENTITY hBookmark.config.commentviewerWidth "横幅(px)">
 <!ENTITY hBookmark.config.commentviewerHeight "縦幅(px)">
+
+<!ENTITY hBookmark.config.link "リンク">
+<!ENTITY hBookmark.config.link.openInNewTab "リンクを新しいタブで開く">
+<!ENTITY hBookmark.config.link.openInNewTabNotice "この設定は、コメントビュワー等でも有効です">
 
 <!ENTITY hBookmark.config.addPanel "編集画面">
 <!ENTITY hBookmark.config.addPanelTagComplete "タグ補完">
