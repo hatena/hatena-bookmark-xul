@@ -110,10 +110,6 @@
   -moz-image-region: auto;
 }
 
-#hBookmark-panel-comment {
-  border: 1px solid #eee;
-}
-
 #hBookmark-comment-viewer {
   /*
 width: 800px;
