@@ -122,6 +122,7 @@ var CommentViewer = {
             // data.url が同じ、かつ filter してない
             return;
         }
+        panelComment.setAttribute('hTransparent', true);
         while(list.firstChild) list.removeChild(list.firstChild);
 
         let B_URL = 'http://b.hatena.ne.jp/';
@@ -193,6 +194,7 @@ var CommentViewer = {
         p('comment viewer pos:' + h + ', ' + w);
         listContainer.style.height = '' + h + 'px';
         listContainer.style.width = '' + w + 'px';
+        panelComment.removeAttribute('hTransparent');
         setTimeout(function() {
             listDiv.focus()
         }, 10);
@@ -273,6 +275,8 @@ var CommentViewer = {
         }
         let link = CommentViewer.getHref(ev.target);
         if (link) {
+            if (Prefs.bookmark.get("link.openInNewTab"))
+                ev = { ctrlKey: !ev.ctrlKey, __proto__: ev };
             openUILink(link, ev);
         }
     },
