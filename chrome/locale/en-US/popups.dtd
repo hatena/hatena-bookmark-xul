@@ -15,3 +15,8 @@
 <!ENTITY hBookmark.entryContext.deleteKey "D">
 <!ENTITY hBookmark.entryContext.deleteAllLabel "Delete All">
 <!ENTITY hBookmark.entryContext.deleteAllKey "L">
+
+<!ENTITY hBookmark.tagFilter.noFilterLabel "No Filter">
+<!ENTITY hBookmark.tagFilter.noFilterKey "N">
+<!ENTITY hBookmark.tagFilter.selectTagLabel "Select Tag…">
+<!ENTITY hBookmark.tagFilter.selectTagKey "S">

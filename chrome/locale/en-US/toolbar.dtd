@@ -1,3 +1,6 @@
+<!-- XXX toggleSidebarLabel should be in browser.dtd? -->
 <!ENTITY hBookmark.toolbar.toggleSidebarLabel "Hatena Bookmark Sidebar">
+
 <!ENTITY hBookmark.toolbar.loginLabel "Login to Hatena">
 <!ENTITY hBookmark.toolbar.addBookmarkLabel "Add Bookmark">
+<!ENTITY hBookmark.toolbar.tagFilterLabel "Filter">
