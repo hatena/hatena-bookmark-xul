@@ -17,7 +17,7 @@ extend(Tag, {
         return tags;
     },
 
-    findRelatedTags: function (tagNames) {
+    findRelatedTags: function (tagNames, limit) {
         if (!tagNames || !tagNames.length)
             return this.findDistinctTags();
         var bmIds = null;
@@ -37,7 +37,27 @@ extend(Tag, {
                     ") and bookmark_id in (" +
                     bmIds.join() +
                     ") group by name";
+        if (limit) {
+            query += " limit ?";
+            tagNames = tagNames.concat(+limit);
+        }
         return this.find(query, tagNames);
+    },
+
+    hasRelatedTags: function Tag_hasRelatedTags(tagNames) {
+        if (!tagNames || !tagNames.length)
+            return !!this.countAll();
+        if (tagNames.length > 1)
+            return !!this.findRelatedTags(tagNames, 1).length;
+
+        let tagName = tagNames[0];
+        return !!this.find(<>
+            select * from tags
+            where bookmark_id in (select bookmark_id from tags where name = ?)
+            group by bookmark_id
+            having count(*) > 1
+            limit 1
+        </>, tagName).length;
     },
 
     findTagCandidates: function Tag_findTagCandidates(partialTag) {
