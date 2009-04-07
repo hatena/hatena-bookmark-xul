@@ -118,7 +118,8 @@ toolbar[iconsize="small"] #hBookmark-toolbar-recent-button:active {
 
 .hBookmark-tag-filter-button {
   /* XXX 適切なアイコンをあてる */
-  list-style-image: url("chrome://hatenabookmark/skin/images/b.gif");
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(46px 196px 62px 180px);
 }
 
 .hBookmark-tag-filter-button > .toolbarbutton-icon {
