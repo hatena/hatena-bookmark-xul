@@ -29,7 +29,8 @@
 
 <!ENTITY hBookmark.config.link "リンク">
 <!ENTITY hBookmark.config.link.openInNewTab "リンクを新しいタブで開く">
-<!ENTITY hBookmark.config.link.openInNewTabNotice "この設定は、コメントビュワー等でも有効です">
+<!ENTITY hBookmark.config.link.openInNewTabNotice "この設定は、編集画面・コメントビュワー等で有効です">
+<!ENTITY hBookmark.config.link.linkOverlay "はてなブックマーク追加リンククリック時に、拡張の編集画面を開く">
 
 <!ENTITY hBookmark.config.addPanel "編集画面">
 <!ENTITY hBookmark.config.addPanelTagComplete "タグ補完">
