@@ -23,10 +23,10 @@
                                    oncommand="hBookmark.UIUtils.openAddBookmark(event);"
                                    onclick="checkForMiddleClick(this, event);"/>
                 <xul:toolbarbutton anonid="tagFilterButton"
-                                   label="&hBookmark.toolbar.tagFilterLabel;"
+                                   class="hBookmark-tag-filter-button"
                                    tooltiptext="&hBookmark.toolbar.tagFilterLabel;"
-                                   image="chrome://hatenabookmark/skin/images/b.gif"
-                                   type="menu">
+                                   type="menu"
+                                   hidden="true">
                     <xul:menupopup class="hBookmark-tag-filter-popup"
                                    onpopupshowing="return this.build(document.getBindingParent(this));"/>
                 </xul:toolbarbutton>
@@ -60,9 +60,10 @@
                         method(this, "build")),
                 ];
                 window.addEventListener("resize", this, false);
-                // XXX コンストラクタ呼び出し時にはデータを取得できない……。
-                //this.build();
-                setTimeout(method(this, "build"), 500);
+                // XXX コンストラクタ呼び出し時にはデータを取得できない?
+                setTimeout(function (self, pref) {
+                    self.tag = pref.get("toolbar.filterTag");
+                }, 500, this, hBookmark.Prefs.bookmark);
             ]]></constructor>
 
             <destructor><![CDATA[
@@ -99,6 +100,7 @@
                       onget="return this.getAttribute('tag') || '';">
                 <setter><![CDATA[
                     this.setAttribute("tag", val);
+                    this.tagFilterButton.label = val;
                     this.popup.tag = val;
                     this.build();
                     return val;
@@ -351,8 +353,8 @@
             <method name="setTag">
                 <parameter name="tagName"/>
                 <body><![CDATA[
+                    let pref = hBookmark.Prefs.bookmark;
                     if (tagName) {
-                        let pref = hBookmark.Prefs.bookmark;
                         let tagNames = this.getRecentTags();
                         let index = tagNames.indexOf(tagName);
                         if (index !== -1)
@@ -363,6 +365,7 @@
                             tagNames.length = maxCount;
                         pref.set("toolbar.recentTags", tagNames.join("[]"));
                     }
+                    pref.set("toolbar.filterTag", tagName);
                     this.control.tag = tagName;
                 ]]></body>
             </method>
