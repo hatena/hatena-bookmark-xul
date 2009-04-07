@@ -4,7 +4,7 @@
     <Description about="urn:mozilla:install-manifest">
         <em:id>bookmark@hatena.ne.jp</em:id>
         <em:name>Hatena Bookmark</em:name>
-        <em:version>0.1.1</em:version>
+        <em:version>0.1.2</em:version>
         <em:type>2</em:type>
         <em:description>Hatena Bookmark Firefox Add-on</em:description>
         <em:creator>Hatena</em:creator>
