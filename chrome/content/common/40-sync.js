@@ -104,7 +104,10 @@ extend(Sync, {
             if (i % items == 0) {
                 this.dispatch('progress', { value: (len-i)/len*100|0 });
                 this.db.commitTransaction();
-                EventService.dispatch("BookmarksUpdated");
+                if (i % (items * 10) == 0) {
+                    // 大量に件数があるときに、しょっちゅう BookmarksUpdated を発行すると重くなるため
+                    EventService.dispatch("BookmarksUpdated");
+                }
                 async.wait(waitTime);
                 this.db.beginTransaction();
                 p('wait: ' + (Date.now() - now));
