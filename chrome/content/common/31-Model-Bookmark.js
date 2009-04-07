@@ -62,7 +62,7 @@ extend(Bookmark, {
 
         return [tags, comment];
     },
-    findByTags: function(tags) {
+    findByTags: function(tags, limit) {
         tags = [].concat(tags);
         if (!tags.length) return [];
         let bids = [];
@@ -80,18 +80,20 @@ extend(Bookmark, {
             if (!res.length) return [];
             bids = res.map(function(t) t.bookmark_id);
         }
-        res = Bookmark.find({
+        let query = {
             where: 'id IN (' + bids.join(',') + ')',
             order: 'date DESC'
-        });
+        };
+        if (limit)
+            query.limit = limit;
+        res = Bookmark.find(query);
         return res;
     },
-    findRecent: function MB_findRecent(count) {
-        count = count || Prefs.bookmark.get('recentItemCount');
-        return Bookmark.find({
-            limit: count,
-            order: 'date desc'
-        });
+    findRecent: function MB_findRecent(limit) {
+        let query = { order: 'date DESC' };
+        if (limit)
+            query.limit = limit;
+        return Bookmark.find(query);
     },
     search: function(str, limit) {
         var res;

@@ -9,19 +9,21 @@
 
     <binding id="recent-line">
         <content flex="1">
-            <xul:hbox class="hBookmark-toolbar-dynamic-items" flex="1">
-                <xul:toolbarbutton anonid="loginButton"
-                                   class="bookmark-item"
-                                   label="&hBookmark.toolbar.loginLabel;"
-                                   hidden="true"
-                                   oncommand="hBookmark.UIUtils.openLogin(event);"
-                                   onclick="checkForMiddleClick(this, event);"/>
-                <xul:toolbarbutton anonid="addPageButton"
-                                   class="bookmark-item"
-                                   label="&hBookmark.toolbar.addBookmarkLabel;"
-                                   hidden="true"
-                                   oncommand="hBookmark.UIUtils.openAddBookmark(event);"
-                                   onclick="checkForMiddleClick(this, event);"/>
+            <xul:toolbarbutton anonid="loginButton"
+                               class="bookmark-item hBookmark-toolbar-dynamic-item"
+                               label="&hBookmark.toolbar.loginLabel;"
+                               hidden="true"
+                               oncommand="hBookmark.UIUtils.openLogin(event);"
+                               onclick="checkForMiddleClick(this, event);"/>
+            <xul:toolbarbutton anonid="addPageButton"
+                               class="bookmark-item hBookmark-toolbar-dynamic-item"
+                               label="&hBookmark.toolbar.addBookmarkLabel;"
+                               hidden="true"
+                               oncommand="hBookmark.UIUtils.openAddBookmark(event);"
+                               onclick="checkForMiddleClick(this, event);"/>
+            <xul:hbox anonid="container"
+                      class="hBookmark-toolbar-recent-line-container hBookmark-toolbar-dynamic-item"
+                      flex="1">
                 <xul:hbox anonid="body"
                           tooltip="hBookmarkItemTooltip"
                           context="hBookmarkEntryContext"/>
@@ -37,6 +39,7 @@
 
         <implementation implements="nsIDOMEventListener">
             <constructor><![CDATA[
+                this.popup.tag = this.tag;
                 let method = hBookmark.method;
                 this._listeners = [
                     hBookmark.EventService.createListener("BookmarksUpdated",
@@ -66,6 +69,9 @@
             <field name="addPageButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "addPageButton")
             </field>
+            <field name="container">
+                document.getAnonymousElementByAttribute(this, "anonid", "container")
+            </field>
             <field name="body">
                 document.getAnonymousElementByAttribute(this, "anonid", "body")
             </field>
@@ -76,15 +82,20 @@
                 document.getAnonymousElementByAttribute(this, "anonid", "popup")
             </field>
 
+            <property name="tag"
+                      onget="return this.getAttribute('tag') || '';">
+                <setter><![CDATA[
+                    this.setAttribute("tag", val);
+                    this.popup.tag = val;
+                    this.build();
+                    return val;
+                ]]></setter>
+            </property>
+
             <method name="build">
                 <body><![CDATA[
                     hBookmark.UIUtils.deleteContents(this.body);
-                    let bookmarks;
-                    try {
-                        bookmarks = hBookmark.Model.Bookmark.findRecent();
-                    } catch (ex) {
-                        bookmarks = [];
-                    }
+                    let bookmarks = this.getBookmarks();
                     bookmarks.forEach(function (bookmark) {
                         let button = this._createToolbarButton(bookmark);
                         this.body.appendChild(button);
@@ -94,6 +105,12 @@
                     this.loginButton.hidden = loggedin;
                     this.addPageButton.hidden = !loggedin || !!bookmarks.length;
                     this.redraw();
+                ]]></body>
+            </method>
+
+            <method name="getBookmarks">
+                <body><![CDATA[
+                    return this.popup.getBookmarks();
                 ]]></body>
             </method>
 
@@ -118,7 +135,7 @@
                     }
                     hBookmark.p('toolbar redraw');
                     this.chevron.hidden = false;
-                    let availableWidth = this.boxObject.width;
+                    let availableWidth = this.container.boxObject.width;
                     let chevronWidth = this._getMarginBoxWidth(this.chevron);
                     let buttonsWidth = 0;
                     let visibleCount = 0;
@@ -191,20 +208,36 @@
         <implementation>
             <field name="hiddenCount">0</field>
 
+            <property name="count" readonly="true"
+                      onget="return hBookmark.Prefs.bookmark.get('recentItemCount');"/>
+
+            <property name="tag"
+                      onget="return this.getAttribute('tag') || '';"
+                      onset="this.setAttribute('tag', val); return val;"/>
+
             <method name="build">
                 <body><![CDATA[
                     hBookmark.UIUtils.deleteContents(this);
-                    let bookmarks;
-                    try {
-                        bookmarks = hBookmark.Model.Bookmark.findRecent();
-                    } catch (ex) {
-                        return;
-                    }
+                    let bookmarks = this.getBookmarks();
                     bookmarks = bookmarks.slice(this.hiddenCount);
                     bookmarks.forEach(function (bookmark, i) {
                         let menuItem = this._createMenuItem(bookmark);
                         this.appendChild(menuItem);
                     }, this);
+                ]]></body>
+            </method>
+
+            <method name="getBookmarks">
+                <body><![CDATA[
+                    let tag = this.tag;
+                    let count = this.count;
+                    try {
+                        return tag
+                            ? hBookmark.Model.Bookmark.findByTags([tag], count)
+                            : hBookmark.Model.Bookmark.findRecent(count);
+                    } catch (ex) {
+                        return [];
+                    }
                 ]]></body>
             </method>
 

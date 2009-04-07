@@ -28,7 +28,7 @@
   margin: 0px 3px !important;
 }
 
-toolbarpaletteitem[place="toolbar"] .hBookmark-toolbar-dynamic-items {
+toolbarpaletteitem[place="toolbar"] .hBookmark-toolbar-dynamic-item {
   display: none;
 }
 
