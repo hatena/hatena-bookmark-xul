@@ -122,11 +122,12 @@ width: 800px;
 
 #hBookmark-panel-comment {
     -moz-appearance: none;
+    background-color: #000000 !important;
+    /*
     background-color: #F5F9FE !important;
     background-color: rgba(252,249,237,1) !important;
     background-color: rgba(252,249,237,0.95) !important;
-    background-color: rgba(0,0,0,0.9) !important;
-    /*
+    background-color: rgba(0,0,0,1) !important;
     -moz-border-top-colors: #2c6ebd !important;
     -moz-border-right-colors: #2c6ebd !important;
     -moz-border-bottom-colors: #2c6ebd !important;
@@ -136,6 +137,10 @@ width: 800px;
     border: none !important;
     font-family: arial, helvetica, sans-serif !important;
     color:#fff;
+}
+
+#hBookmark-panel-comment[hTransparent="true"] {
+    -moz-opacity: 0.0 !important;
 }
 
 
