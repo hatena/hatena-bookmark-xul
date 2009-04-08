@@ -2,14 +2,14 @@
 <!ENTITY hBookmark.toolbar.titleKey "A">
 <!ENTITY hBookmark.toolbar.recentLabel "Recent Hatena Bookmarks">
 <!ENTITY hBookmark.toolbar.add "Add to HatenaBookmark">
-<!ENTITY hBookmark.toolbar.home "Open self HatenaBookmark page">
+<!ENTITY hBookmark.toolbar.home "Open my HatenaBookmark page">
 <!ENTITY hBookmark.toolbar.top "Open HatenaBookmark Top Page">
 <!ENTITY hBookmark.toolbar.favorite "Open My Favorites Page">
 
 <!ENTITY hBookmark.sidebar.label "Hatena Bookmark">
 <!ENTITY hBookmark.sidebar.key "A">
 
-<!ENTITY hBookmark.statusbar.now_syncing "Sync...">
+<!ENTITY hBookmark.statusbar.now_syncing "Sync with bookmarks...">
 <!ENTITY hBookmark.statusbar.tooltip.addButton "add to HatenaBookmark">
 <!ENTITY hBookmark.statusbar.tooltip.counter "open hatena bookmark entry page">
 <!ENTITY hBookmark.statusbar.tooltip.comment "show comment">
@@ -17,8 +17,8 @@
 <!ENTITY hBookmark.menu.main "HatenaBookmark">
 <!ENTITY hBookmark.menu.sync "Sync">
 <!ENTITY hBookmark.menu.config "Config">
-<!ENTITY hBookmark.menu.add "This page add to HatenaBookmark.">
-<!ENTITY hBookmark.menu.addlink "This link add to HatenaBookmark.">
-<!ENTITY hBookmark.menu.showentry "Thes page show HatenaBookmark.">
-<!ENTITY hBookmark.menu.showlink "Thes page showlink HatenaBookmark.">
+<!ENTITY hBookmark.menu.add "Add this page to HatenaBookmark.">
+<!ENTITY hBookmark.menu.addlink "Add this link to HatenaBookmark.">
+<!ENTITY hBookmark.menu.showentry "Show this page on HatenaBookmark.">
+<!ENTITY hBookmark.menu.showlink "Show this link on HatenaBookmark.">
 <!ENTITY hBookmark.menu.searchtext "Hatena WebSearch: ">
