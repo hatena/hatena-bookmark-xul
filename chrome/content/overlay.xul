@@ -208,12 +208,6 @@
            flex="1"
            id="hBookmark-comment-container"
         >
-            <!--
-            <hbox flex="1">
-            <vbox flex="1" />
-            <splitter resizeafter="flex"/>
-            </hbox>
-            -->
             <vbox 
                flex="1"
                id="hBookmark-comment-list-container"

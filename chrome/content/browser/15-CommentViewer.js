@@ -207,7 +207,7 @@ var CommentViewer = {
         }
         p('comment viewer pos:' + h + ', ' + w);
         listContainer.style.height = '' + h + 'px';
-        listContainer.style.width = '' + w + 'px';
+        commentContainer.style.width = '' + w + 'px';
         panelComment.removeAttribute('hTransparent');
         setTimeout(function() {
             listDiv.focus()
