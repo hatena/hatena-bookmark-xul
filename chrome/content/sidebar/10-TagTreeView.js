@@ -29,7 +29,7 @@ function TagTreeView() {
     this.selection = null;
 }
 
-var $count = 0, $start;
+let $maxCount = 28, $count, $start;
 
 TagTreeView.prototype.__proto__ = TreeView.prototype;
 extend(TagTreeView.prototype, {
@@ -41,6 +41,7 @@ extend(TagTreeView.prototype, {
     setTree: function (treeBox) {
         this._treeBox = treeBox;
         if (!treeBox) return;
+        $count = 0; $start = new Date();
         this._treeBox.treeBody.tags = [];
         this._setSortKey();
         this._openRelatedTags(this._rootItem);
@@ -58,12 +59,12 @@ extend(TagTreeView.prototype, {
     isContainer: function (index) true,
     isContainerOpen: function (index) this._visibleItems[index].isOpen,
     isContainerEmpty: function (index) {
-        //if ($count === 0) $start = new Date();
         var item = this._visibleItems[index];
+        if ($count === 0) $start = new Date();
         if (item.isEmpty === null)
             item.isEmpty = !Tag.hasRelatedTags(item.tags);
-        //if (++$count === 28)
-        //    p("Benchmark isContainerEmpty: " + (new Date() - $start));
+        if (++$count === $maxCount)
+            p("Benchmark isContainerEmpty: " + (new Date() - $start));
         return item.isEmpty;
     },
 
