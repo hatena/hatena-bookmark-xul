@@ -227,6 +227,7 @@ var CommentViewer = {
     popupHiddenHandler: function(ev) {
         panelComment.removeEventListener('mouseover', CommentViewer.browserOverHandler, false);
         gBrowser.removeEventListener('mouseover', CommentViewer.popupOverHandler, false);
+        window.removeEventListener('mouseout', CommentViewer.windowMouseOutHandler, false);
         CommentViewer.hideTimer.stop();
         CommentViewer.currentURL = null;
         CommentViewer.lastData = null;
@@ -235,6 +236,12 @@ var CommentViewer = {
         CommentViewer.hideTimer.stop();
         panelComment.addEventListener('mouseover', CommentViewer.popupOverHandler, false);
         gBrowser.addEventListener('mouseover', CommentViewer.browserOverHandler, false);
+        window.addEventListener('mouseout', CommentViewer.windowMouseOutHandler, false);
+    },
+    windowMouseOutHandler: function(ev) {
+        if (!ev.relatedTarget) {
+            CommentViewer.popupMouseoutHandler(ev);
+        }
     },
     popupOverHandler: function(ev) {
         CommentViewer.hideTimer.stop();
