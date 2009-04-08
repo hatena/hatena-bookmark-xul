@@ -289,14 +289,12 @@ var CommentViewer = {
         }
         let link = CommentViewer.getHref(ev.target);
         if (link) {
-            if (Prefs.bookmark.get("link.openInNewTab"))
-                ev = { ctrlKey: !ev.ctrlKey, __proto__: ev };
-            openUILink(link, ev);
+            hOpenUILink(link, ev);
         }
     },
     goEntry: function(ev) {
         let url = CommentViewer.currentURL || CommentViewer.lastRenderData[0];
-        openUILink(entryURL(url), ev);
+        hOpenUILink(entryURL(url), ev);
     },
     getHref: function (el) {
         if (typeof el.href != 'undefined') {

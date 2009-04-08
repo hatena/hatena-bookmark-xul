@@ -27,7 +27,7 @@ extend(EntryContext.prototype, {
     },
 
     openEntry: function EC_openEntry(event) {
-        openUILink(this.bookmark.entryURL, event);
+        hOpenUILink(this.bookmark.entryURL, event);
     },
 
     edit: function EC_edit() {

@@ -25,8 +25,8 @@ var StatusBar = {
         if (isHttp) {
             let url = locationURL;
 
-            //openUILink(newURI('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23')));
-            openUILink('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23'), event);
+            //hOpenUILink(newURI('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23')));
+            hOpenUILink('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23'), event);
         }
     },
     checkBookmarked: function StatusBar_checkBookmarked() {
