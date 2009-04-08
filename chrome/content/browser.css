@@ -119,22 +119,20 @@ width: 800px;
 #hBookmark-panel-comment {
     -moz-appearance: none;
     background-color: #111 !important;
-    /*
     background-color: #F5F9FE !important;
+    /*
     background-color: rgba(252,249,237,1) !important;
     background-color: rgba(252,249,237,0.95) !important;
     background-color: rgba(0,0,0,1) !important;
+    */
     -moz-border-top-colors: #2c6ebd !important;
     -moz-border-right-colors: #2c6ebd !important;
     -moz-border-bottom-colors: #2c6ebd !important;
     -moz-border-left-colors: #2c6ebd !important;
-    border-width: 5px;
-    */
-    border: none !important;
-    font-family: arial, helvetica, sans-serif !important;
+    -moz-border-color: #000 !important;
+    border-width: 4px !important;
     font-size: 1.2em;
     line-height: 1.3;
-    color:#fff;
 }
 
 #hBookmark-panel-comment[hTransparent="true"] {
@@ -147,8 +145,8 @@ width: 800px;
 }
 
 #hBookmark-comment-footer {
-    border-top: 1px #333 solid;
-    background: #000;
+    border-top: 1px #ddd solid;
+    background: #eee;
     padding: 10px;
 }
 
