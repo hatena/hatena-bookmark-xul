@@ -111,7 +111,6 @@ var CommentViewer = {
     },
     currentURL: null,
     updateComment: function CommentViewer_updateComment(data) {
-        CommentViewer.updatePosition();
         CommentViewer.currentURL = data.url;
         // 非表示ユーザをフィルター
         if (User.user) {
@@ -120,6 +119,7 @@ var CommentViewer = {
                 data.bookmarks = data.bookmarks.filter(function(b) !regex.test(b.user));
             }
         }
+        panelComment.setAttribute('hTransparent', true);
         panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
         CommentViewer.updateViewer(data);
         commentButton.setAttribute('loading', 'false'); 
@@ -134,9 +134,9 @@ var CommentViewer = {
         let isFilter = CommentViewer.isFilter;
         if (CommentViewer.lastRenderData[0] == data.url && CommentViewer.lastRenderData[1] == isFilter) {
             // data.url が同じ、かつ filter してない
+            panelComment.removeAttribute('hTransparent');
             return;
         }
-        panelComment.setAttribute('hTransparent', true);
         while(list.firstChild) list.removeChild(list.firstChild);
 
         let B_URL = 'http://b.hatena.ne.jp/';
