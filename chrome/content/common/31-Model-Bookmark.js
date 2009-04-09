@@ -95,7 +95,7 @@ extend(Bookmark, {
             query.limit = limit;
         return Bookmark.find(query);
     },
-    search: function(str, limit) {
+    search: function(str, limit, ascending) {
         var res;
         p.b(function() {
         if (!str) {
@@ -104,7 +104,7 @@ extend(Bookmark, {
             var [sql, args] = createWhereLike(str);
             extend(args, {
                 limit: limit || 10,
-                order: 'date desc',
+                order: ascending ? 'date asc' : 'date desc'
             });
             res = Bookmark.find(<>
                  select * from bookmarks

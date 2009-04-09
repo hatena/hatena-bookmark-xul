@@ -2,6 +2,11 @@ var hBookmark;
 var view;
 var treeBox = {
     treeBody: {},
+    columns: {
+        getFirstColumn: function () ({
+            element: { getAttribute: function () null }
+        })
+    },
     rowCountChanged: function () {},
     invalidateRow: function () {},
     invalidate: function () {},

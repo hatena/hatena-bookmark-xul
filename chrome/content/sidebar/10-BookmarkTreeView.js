@@ -7,6 +7,7 @@ function BookmarkTreeView() {
     this._items = [];
     this._treeBox = null;
     this._update = null;
+    this._isAscending = false;
 }
 
 BookmarkTreeView.prototype.__proto__ = TreeView.prototype;
@@ -16,6 +17,8 @@ extend(BookmarkTreeView.prototype, {
     setTree: function (treeBox) {
         this._treeBox = treeBox;
         if (!treeBox) return;
+        let col = this._treeBox.columns.getFirstColumn().element;
+        this._isAscending = (col.getAttribute("sortDirection") === "ascending");
         this.showBySearchString("");
     },
 
@@ -23,9 +26,19 @@ extend(BookmarkTreeView.prototype, {
         return favicon(this._items[row].url);
     },
 
+    cycleHeader: function BTV_cycleHeader(col) {
+        let sortDir = col.element.getAttribute("sortDirection");
+        sortDir = (sortDir === "ascending")  ? "descending" :
+                  (sortDir === "descending") ? "natural"    : "ascending";
+        col.element.setAttribute("sortDirection", sortDir);
+        this._isAscending = (sortDir === "ascending");
+        this._update();
+    },
+
     showByTags: function (tags) {
         this._update = function BTV_doUpdateByTags() {
             let bookmarks = Bookmark.findByTags(tags);
+            if (this._isAscending) bookmarks.reverse();
             this.setBookmarks(bookmarks);
         };
         this._update();
@@ -35,8 +48,11 @@ extend(BookmarkTreeView.prototype, {
         this._update = function BTV_doUpdateBySearchString() {
             let visibleRowCount = this._treeBox.getPageLength();
             let bookmarks = string
-                ? Bookmark.search(string, visibleRowCount)
-                : Bookmark.findRecent(visibleRowCount);
+                ? Bookmark.search(string, visibleRowCount, this._isAscending)
+                : Bookmark.find({
+                    order: this._isAscending ? "date ASC" : "date DESC",
+                    limit: visibleRowCount
+                });
             this.setBookmarks(bookmarks);
         };
         this._update();

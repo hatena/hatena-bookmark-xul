@@ -76,8 +76,10 @@
         <tree id="bookmark-tree" seltype="single"
               hidecolumnpicker="true" flex="1" persist="height">
             <treecols>
-                <treecol label="&hBookmark.sidebar.bookmarksLabel;"
-                         flex="1"/>
+                <treecol id="bookmark-tree-col-bookmark"
+                         label="&hBookmark.sidebar.bookmarksLabel;"
+                         flex="1"
+                         persist="sortDirection"/>
             </treecols>
             <treechildren context="hBookmarkEntryContext"
                           tooltip="hBookmarkItemTooltip"/>
