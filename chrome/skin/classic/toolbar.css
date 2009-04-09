@@ -41,12 +41,10 @@ toolbarpaletteitem[place="toolbar"] .hBookmark-toolbar-dynamic-item {
   -moz-image-region: rect(23px 208px 46px 183px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-sidebar-button,
 toolbar[iconsize="small"] #hBookmark-toolbar-sidebar-button {
   -moz-image-region: rect(46px 180px 62px 164px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-sidebar-button[checked="true"],
 toolbar[iconsize="small"] #hBookmark-toolbar-sidebar-button[checked="true"] {
   -moz-image-region: rect(62px 180px 78px 164px);
 }
@@ -60,12 +58,10 @@ toolbar[iconsize="small"] #hBookmark-toolbar-sidebar-button[checked="true"] {
   -moz-image-region: rect(23px 25px 46px 0px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-add-button,
 toolbar[iconsize="small"] #hBookmark-toolbar-add-button {
   -moz-image-region: rect(46px 16px 62px 0px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-add-button:active,
 toolbar[iconsize="small"] #hBookmark-toolbar-add-button:active {
   -moz-image-region: rect(62px 16px 78px 0px);
 }
@@ -79,12 +75,10 @@ toolbar[iconsize="small"] #hBookmark-toolbar-add-button:active {
   -moz-image-region: rect(23px 50px 46px 25px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-home-button,
 toolbar[iconsize="small"] #hBookmark-toolbar-home-button {
   -moz-image-region: rect(46px 32px 62px 16px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-home-button:active,
 toolbar[iconsize="small"] #hBookmark-toolbar-home-button:active {
   -moz-image-region: rect(62px 32px 78px 16px);
 }
@@ -98,12 +92,10 @@ toolbar[iconsize="small"] #hBookmark-toolbar-home-button:active {
   -moz-image-region: rect(23px 75px 46px 50px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-recent-button,
 toolbar[iconsize="small"] #hBookmark-toolbar-recent-button {
   -moz-image-region: rect(46px 48px 62px 32px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-recent-button:active,
 toolbar[iconsize="small"] #hBookmark-toolbar-recent-button:active {
   -moz-image-region: rect(62px 48px 78px 32px);
 }
