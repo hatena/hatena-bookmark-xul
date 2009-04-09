@@ -27,7 +27,8 @@
                                    tooltiptext="&hBookmark.toolbar.tagFilterLabel;"
                                    type="menu"
                                    hidden="true">
-                    <xul:menupopup class="hBookmark-tag-filter-popup"
+                    <xul:menupopup anonid="tagFilterPopup"
+                                   class="hBookmark-tag-filter-popup"
                                    onpopupshowing="return this.build(document.getBindingParent(this));"/>
                 </xul:toolbarbutton>
             </xul:hbox>
@@ -83,6 +84,9 @@
             <field name="tagFilterButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "tagFilterButton")
             </field>
+            <field name="tagFilterPopup">
+                document.getAnonymousElementByAttribute(this, "anonid", "tagFilterPopup")
+            </field>
             <field name="container">
                 document.getAnonymousElementByAttribute(this, "anonid", "container")
             </field>
@@ -111,6 +115,11 @@
                 <body><![CDATA[
                     hBookmark.UIUtils.deleteContents(this.body);
                     let bookmarks = this.getBookmarks();
+                    if (!bookmarks.length && this.tag) {
+                        this.tagFilterPopup.deleteTag(this.tag);
+                        this.tag = "";
+                        return;
+                    }
                     bookmarks.forEach(function (bookmark) {
                         let button = this._createToolbarButton(bookmark);
                         this.body.appendChild(button);
@@ -387,6 +396,16 @@
                         tagNames.length, tagNames, selected);
                     if (!ok) return;
                     this.setTag(tags[selected.value].name);
+                ]]></body>
+            </method>
+
+            <method name="deleteTag">
+                <parameter name="tagName"/>
+                <body><![CDATA[
+                    let pref = hBookmark.Prefs.bookmark;
+                    let tags = "[]" + pref.get("toolbar.recentTags") + "[]";
+                    tags = tags.replace("[]" + tagName + "[]", "[]").slice(2, -2);
+                    pref.set("toolbar.recentTags", tags);
                 ]]></body>
             </method>
         </implementation>
