@@ -154,6 +154,7 @@ panel[anonid="popup"] {
 
 [anonid="favoritesContainer"] image {
   margin-right: 3px;
+  cursor: pointer;
 }
 
 label[empty="true"] {
