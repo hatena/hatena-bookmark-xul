@@ -165,12 +165,11 @@ var CommentViewer = {
                     li.appendChild(a = E('a', {href: userlinkTag}, tag));
                     a.className = 'tag';
                 });
-                li.appendChild(a = E('span', {}, b.comment)); 
+                li.appendChild(a = E('span')); 
+                a.innerHTML = b.comment;
                 a.className = 'comment'
-                if (!isFilter)  {
-                    li.appendChild(a = E('span', {}, ymd));
-                    a.className = 'timestamp';
-                }
+                li.appendChild(a = E('span', {}, ymd));
+                a.className = 'timestamp';
                 fragment.appendChild(li);
             }
             }, 'rendering comment (' + len + ') items ');
