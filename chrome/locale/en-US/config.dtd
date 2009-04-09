@@ -1,73 +1,73 @@
 <!-- XXX: -->
 
-<!ENTITY hBookmark.config.title "はてなブックマーク拡張の設定">
+<!ENTITY hBookmark.config.title "Setting of Hatena Bookmark Extension">
 
-<!ENTITY hBookmark.config.general "全般">
-<!ENTITY hBookmark.config.locationbar "ロケーションバー(アドレスバー)">
+<!ENTITY hBookmark.config.general "General">
+<!ENTITY hBookmark.config.locationbar "Location Bar(Address Bar)">
 
-<!ENTITY hBookmark.config.searchEnabled "検索機能を有効にする">
-<!ENTITY hBookmark.config.searchShortcut "Ctrl + Shift キーによる検索ショートカットを使う">
-<!ENTITY hBookmark.config.toolbar "ブックマークツールバー">
-<!ENTITY hBookmark.config.toolbarMaxItem "ブックマークの表示上限数">
-<!ENTITY hBookmark.config.contextmenu "右クリック(コンテキスト)メニュー">
-<!ENTITY hBookmark.config.contextmenuEnabled "右クリックメニューを拡張する">
+<!ENTITY hBookmark.config.searchEnabled "Enable bookmark search">
+<!ENTITY hBookmark.config.searchShortcut "Use search shortcut by Ctrl+Shift key">
+<!ENTITY hBookmark.config.toolbar "Bookmark Toolbar">
+<!ENTITY hBookmark.config.toolbarMaxItem "Limit number of displayed bookmark">
+<!ENTITY hBookmark.config.contextmenu "Pop-up(Context) menu">
+<!ENTITY hBookmark.config.contextmenuEnabled "Extend the Pop-up menu">
 
-<!ENTITY hBookmark.config.sidebar "サイドバー">
-<!ENTITY hBookmark.config.sidebarReverseDirection "検索画面を上部に移動する">
+<!ENTITY hBookmark.config.sidebar "Sidebar">
+<!ENTITY hBookmark.config.sidebarReverseDirection "Move search screen to the top of the screen">
 
-<!ENTITY hBookmark.config.statusbar "ステータスバー">
-<!ENTITY hBookmark.config.statusbarIcon "表示">
-<!ENTITY hBookmark.config.statusbarAddButton "追加ボタンの表示">
-<!ENTITY hBookmark.config.statusbarCounter "ユーザー数カウンターの表示">
-<!ENTITY hBookmark.config.statusbarHttpsIngore "URL が https の場合はカウントしない">
+<!ENTITY hBookmark.config.statusbar "Statusbar">
+<!ENTITY hBookmark.config.statusbarIcon "Display">
+<!ENTITY hBookmark.config.statusbarAddButton "Display the Add button">
+<!ENTITY hBookmark.config.statusbarCounter "Display the user counter">
+<!ENTITY hBookmark.config.statusbarHttpsIngore "In case of https, it doesn't display">
 
-<!ENTITY hBookmark.config.commentviewer "コメントビュワー">
-<!ENTITY hBookmark.config.commentviewerAutoShown "マウスオーバーで、自動でコメントビュワーを表示">
-<!ENTITY hBookmark.config.commentviewerAutoResize "自動サイズ調整">
-<!ENTITY hBookmark.config.commentviewerSizeSetting "サイズ指定">
-<!ENTITY hBookmark.config.commentviewerWidth "横幅(px)">
-<!ENTITY hBookmark.config.commentviewerHeight "縦幅(px)">
+<!ENTITY hBookmark.config.commentviewer "Comment Viewer">
+<!ENTITY hBookmark.config.commentviewerAutoShown "Display automatically comment viewer on mouseover">
+<!ENTITY hBookmark.config.commentviewerAutoResize "Auto size">
+<!ENTITY hBookmark.config.commentviewerSizeSetting "Specify size">
+<!ENTITY hBookmark.config.commentviewerWidth "Width(px)">
+<!ENTITY hBookmark.config.commentviewerHeight "Height(px)">
 
-<!ENTITY hBookmark.config.link "リンク">
-<!ENTITY hBookmark.config.link.openInNewTab "リンクを新しいタブで開く">
-<!ENTITY hBookmark.config.link.openInNewTabNotice "この設定は、編集画面・コメントビュワー等で有効です">
-<!ENTITY hBookmark.config.link.linkOverlay "はてなブックマーク追加リンククリック時に、拡張の編集画面を開く">
+<!ENTITY hBookmark.config.link "Link">
+<!ENTITY hBookmark.config.link.openInNewTab "Open a link with new tab">
+<!ENTITY hBookmark.config.link.openInNewTabNotice "This setting is effective at edit screen, comment viewer, etc">
+<!ENTITY hBookmark.config.link.linkOverlay "Open extended edit screen when you add new links to the Hatena Bookmark">
 
-<!ENTITY hBookmark.config.addPanel "編集画面">
-<!ENTITY hBookmark.config.addPanelTagComplete "タグ補完">
-<!ENTITY hBookmark.config.addPanelTagCompleteEnabled  "タグ補完を有効に">
-<!ENTITY hBookmark.config.addPanelTagCompleteMaxItem "タグ補完候補の最大件数">
-<!ENTITY hBookmark.config.addPanelTagCompleteXulMigemoEnabled "XUL/Migemo を補完に利用する">
-<!ENTITY hBookmark.config.addPanelTagCompleteXulMigemoSuffix "が必要です">
-<!ENTITY hBookmark.config.addPanelTag "タグ表示">
-<!ENTITY hBookmark.config.addPanelTagRecent "おすすめタグ一覧の表示">
-<!ENTITY hBookmark.config.addPanelTagMine "自分のタグ一覧の表示">
-<!ENTITY hBookmark.config.addPanelTagItem "初期のタグ表示件数">
-<!ENTITY hBookmark.config.addPanelBackgroundImage "背景画像">
-<!ENTITY hBookmark.config.addPanelBackgroundImageSelect "画像の選択">
-<!ENTITY hBookmark.config.addPanelBackgroundImageCancel "選択を解除">
+<!ENTITY hBookmark.config.addPanel "Edit screen">
+<!ENTITY hBookmark.config.addPanelTagComplete "Tag Completion">
+<!ENTITY hBookmark.config.addPanelTagCompleteEnabled "Enable Tag Completion">
+<!ENTITY hBookmark.config.addPanelTagCompleteMaxItem "Limit number of candidate Tag Completion">
+<!ENTITY hBookmark.config.addPanelTagCompleteXulMigemoEnabled "Enable Tag Completion by XUL/Migemo">
+<!ENTITY hBookmark.config.addPanelTagCompleteXulMigemoSuffix "is in needed">
+<!ENTITY hBookmark.config.addPanelTag "Display Tags">
+<!ENTITY hBookmark.config.addPanelTagRecent "Display list of recommended tags">
+<!ENTITY hBookmark.config.addPanelTagMine "Display list of my tags">
+<!ENTITY hBookmark.config.addPanelTagItem "Number of initial displayed tags">
+<!ENTITY hBookmark.config.addPanelBackgroundImage "Background Image">
+<!ENTITY hBookmark.config.addPanelBackgroundImageSelect "Select an image">
+<!ENTITY hBookmark.config.addPanelBackgroundImageCancel "Clear selection">
 
-<!ENTITY hBookmark.config.shortcut "ショートカット">
-<!ENTITY hBookmark.config.shortcutAdd "はてなブックマークに追加">
-<!ENTITY hBookmark.config.shortcutSet "設定">
-<!ENTITY hBookmark.config.shortcutClear "解除">
-<!ENTITY hBookmark.config.shortcutComment "コメント表示">
-<!ENTITY hBookmark.config.shortcutSidebar "サイドバー表示の切り替え">
-<!ENTITY hBookmark.config.shortcutNotice "*ショートカットの反映に、ブラウザの再起動が必要な場合があります">
+<!ENTITY hBookmark.config.shortcut "Shortcut">
+<!ENTITY hBookmark.config.shortcutAdd "Add to HatenaBookmark">
+<!ENTITY hBookmark.config.shortcutSet "Setup">
+<!ENTITY hBookmark.config.shortcutClear "Clear">
+<!ENTITY hBookmark.config.shortcutComment "View comments">
+<!ENTITY hBookmark.config.shortcutSidebar "Switch sidebar display">
+<!ENTITY hBookmark.config.shortcutNotice "*You may need to restart your browser for shortcut key to be effective">
 
 
-<!ENTITY hBookmark.config.data "データ">
-<!ENTITY hBookmark.config.nologin "ログインしていません。">
-<!ENTITY hBookmark.config.sync "同期">
-<!ENTITY hBookmark.config.syncNotice "はてなブックマークのデータから、手元のデータへと同期します。">
-<!ENTITY hBookmark.config.syncData "データの同期">
-<!ENTITY hBookmark.config.syncDataAll "すべてのデータの再同期">
-<!ENTITY hBookmark.config.syncDataAllNotice1 "すべてのデータを再度同期します。">
-<!ENTITY hBookmark.config.syncDataAllNotice2 "サーバ上のデータと差異が出た場合、実行すると正常なデータを取得し直すことができます。">
-<!ENTITY hBookmark.config.deleteData "データの削除">
-<!ENTITY hBookmark.config.deleteDataNotice1 "お手元のはてなブックマーク拡張のデータを削除します。">
-<!ENTITY hBookmark.config.deleteDataNotice2 "リモートのデータは削除されません。">
-<!ENTITY hBookmark.config.deleteDataAll "データをすべて削除">
+<!ENTITY hBookmark.config.data "Data">
+<!ENTITY hBookmark.config.nologin "Not Logged in">
+<!ENTITY hBookmark.config.sync "Sync">
+<!ENTITY hBookmark.config.syncNotice "Sync with my local data from Hatena Bookmark data">
+<!ENTITY hBookmark.config.syncData "Sync the data">
+<!ENTITY hBookmark.config.syncDataAll "Resync the all data">
+<!ENTITY hBookmark.config.syncDataAllNotice1 "Resync the all data.">
+<!ENTITY hBookmark.config.syncDataAllNotice2 "You can get correct data if Hatena Bookmark data and local data were conflicted.">
+<!ENTITY hBookmark.config.deleteData "Delete data">
+<!ENTITY hBookmark.config.deleteDataNotice1 "Delete Hatena bookmark extension data at your local">
+<!ENTITY hBookmark.config.deleteDataNotice2 "Hatena Bookmark data will not be deleted">
+<!ENTITY hBookmark.config.deleteDataAll "Delete all data">
 
 
 
