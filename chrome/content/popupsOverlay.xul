@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/css" href="bookmark.css"?>
+<?xml-stylesheet type="text/css" href="popups.css"?>
 <!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/popups.dtd">
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
