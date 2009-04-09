@@ -28,8 +28,7 @@ extend(BookmarkTreeView.prototype, {
 
     cycleHeader: function BTV_cycleHeader(col) {
         let sortDir = col.element.getAttribute("sortDirection");
-        sortDir = (sortDir === "ascending")  ? "descending" :
-                  (sortDir === "descending") ? "natural"    : "ascending";
+        sortDir = (sortDir === "ascending")  ? "descending" : "ascending";
         col.element.setAttribute("sortDirection", sortDir);
         this._isAscending = (sortDir === "ascending");
         this._update();
