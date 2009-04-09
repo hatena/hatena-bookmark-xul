@@ -7,5 +7,5 @@
 
 <!ENTITY hBookmark.toolbar.noFilterLabel "No Filter">
 <!ENTITY hBookmark.toolbar.noFilterKey "N">
-<!ENTITY hBookmark.toolbar.selectTagLabel "Select Tag…">
+<!ENTITY hBookmark.toolbar.selectTagLabel "Filter with tag...">
 <!ENTITY hBookmark.toolbar.selectTagKey "S">
