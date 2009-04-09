@@ -36,7 +36,7 @@
                       class="hBookmark-toolbar-recent-line-container hBookmark-toolbar-dynamic-item"
                       flex="1">
                 <xul:hbox anonid="body"
-                          tooltip="hBookmarkItemTooltip"
+                          tooltip="hBookmark-bookmark-tooltip"
                           context="hBookmarkEntryContext"/>
                 <xul:toolbarspring/>
                 <xul:toolbarbutton anonid="chevron" class="chevron"
@@ -228,7 +228,7 @@
     <binding id="recent-popup"
              extends="chrome://global/content/bindings/popup.xml#popup">
         <content context="hBookmarkEntryContext"
-                 tooltip="hBookmarkItemTooltip">
+                 tooltip="hBookmark-bookmark-tooltip">
         </content>
 
         <implementation>
