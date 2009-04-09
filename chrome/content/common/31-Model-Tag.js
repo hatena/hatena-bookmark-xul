@@ -109,11 +109,7 @@ function clearCache() {
     Tag._relTagCache = null;
     shared.set("relatedTagCache", null);
 }
-
-addAround(Tag.prototype, 'save', function(proceed, args, target) {
-    clearCache();
-    proceed(args);
-});
+addBefore(Tag.prototype, "save", clearCache);
 EventService.createListener("UserChange", clearCache);
 
 Model.Tag = Tag;
