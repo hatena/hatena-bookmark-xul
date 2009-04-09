@@ -79,10 +79,11 @@
                 <treecol id="bookmark-tree-col-bookmark"
                          label="&hBookmark.sidebar.bookmarksLabel;"
                          flex="1"
+                         sortDirection="descending"
                          persist="sortDirection"/>
             </treecols>
             <treechildren context="hBookmarkEntryContext"
-                          tooltip="hBookmarkItemTooltip"/>
+                          tooltip="hBookmark-bookmark-tooltip"/>
         </tree>
 
         <hbox align="center">

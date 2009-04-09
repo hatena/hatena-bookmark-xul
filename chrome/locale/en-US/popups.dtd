@@ -1,11 +1,11 @@
 <!ENTITY hBookmark.tagContext.openLabel "Open Tag Page">
 <!ENTITY hBookmark.tagContext.openKey "O">
-<!ENTITY hBookmark.tagContext.openInNewTabLabel "Open Tag Page in New Tab">
+<!ENTITY hBookmark.tagContext.openInNewTabLabel "Open Tag Page in a New Tab">
 <!ENTITY hBookmark.tagContext.openInNewTabKey "T">
 
 <!ENTITY hBookmark.entryContext.openLabel "Open">
 <!ENTITY hBookmark.entryContext.openKey "O">
-<!ENTITY hBookmark.entryContext.openInNewTabLabel "Open in New Tab">
+<!ENTITY hBookmark.entryContext.openInNewTabLabel "Open in a New Tab">
 <!ENTITY hBookmark.entryContext.openInNewTabKey "W">
 <!ENTITY hBookmark.entryContext.openEntryLabel "Open Bookmark Entry">
 <!ENTITY hBookmark.entryContext.openInNewTabKey "B">
