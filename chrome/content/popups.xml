@@ -3,7 +3,7 @@
           xmlns:xbl="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-    <binding id="tooltip"
+    <binding id="bookmark-tooltip"
              extends="chrome://global/content/bindings/popup.xml#tooltip">
         <content>
             <xul:label anonid="titleField"/>

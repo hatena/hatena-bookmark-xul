@@ -35,7 +35,7 @@
                       oncommand="this.parentNode._context.deleteAll();"/>
         </menupopup>
 
-        <tooltip id="hBookmarkItemTooltip"/>
+        <tooltip id="hBookmark-bookmark-tooltip"/>
     </popupset>
 
 </overlay>
