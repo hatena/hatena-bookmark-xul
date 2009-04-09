@@ -45,7 +45,7 @@ let Config = {
         Sync.sync();
     },
     deleteAll: function() {
-        let res = UIUtils.confirm(Config.strings.get('reSyncNotice'));
+        let res = UIUtils.confirm(Config.strings.get('deleteAllNotice'));
         if (res) {
             Config._deleteAll();
         }
