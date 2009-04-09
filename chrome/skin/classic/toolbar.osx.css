@@ -46,17 +46,14 @@
   -moz-image-region: rect(0px 183px 23px 147px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-recent-button:active,
 #nav-bar #hBookmark-toolbar-recent-button:active {
   -moz-image-region: rect(23px 183px 46px 147px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-recent-button,
 toolbar[iconsize="small"] #hBookmark-toolbar-recent-button {
   -moz-image-region: rect(0px 183px 23px 147px);
 }
 
-#hBookmarkToolbar #hBookmark-toolbar-recent-button:active,
 toolbar[iconsize="small"] #hBookmark-toolbar-recent-button:active {
   -moz-image-region: rect(23px 183px 46px 147px);
 }

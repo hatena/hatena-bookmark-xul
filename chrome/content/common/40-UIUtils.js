@@ -10,6 +10,10 @@ var UIUtils = {
     errorStrings: new Strings("chrome://hatenabookmark/locale/errors.properties"),
     addPanelStrings: new Strings("chrome://hatenabookmark/locale/addPanel.properties"),
 
+    confirm: function UIU_confirm(message) {
+        return PS.confirm(window, this.popupStrings.get("prompt.title"), message);
+    },
+
     encourageLogin: function UIU_encourageLogin() {
         User.login(); // 透過的にログインできるかチェックしておく
         let win = getTopWin();

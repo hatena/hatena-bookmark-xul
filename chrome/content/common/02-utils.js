@@ -85,7 +85,7 @@ Timer.prototype = {
     },
     stop: function() {
         this.clearTimer();
-        this._runnning = false;
+        this._running = false;
     },
     clearTimer: function() {
         if (this.loopTimer) {

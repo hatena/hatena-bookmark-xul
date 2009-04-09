@@ -95,7 +95,7 @@ extend(Bookmark, {
             query.limit = limit;
         return Bookmark.find(query);
     },
-    search: function(str, limit) {
+    search: function(str, limit, ascending) {
         var res;
         p.b(function() {
         if (!str) {
@@ -104,7 +104,7 @@ extend(Bookmark, {
             var [sql, args] = createWhereLike(str);
             extend(args, {
                 limit: limit || 10,
-                order: 'date desc',
+                order: ascending ? 'date asc' : 'date desc'
             });
             res = Bookmark.find(<>
                  select * from bookmarks
@@ -201,10 +201,20 @@ addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
     target.updateTags();
 });
 
+function unescapeReference(match, number, name) {
+    if (number) return String.fromCharCode(number);
+    switch (name) {
+    case "amp":  return "&";
+    case "lt":   return "<";
+    case "gt":   return ">";
+    case "quot": return '"';
+    }
+    return match;
+}
+
 addAround(Bookmark, 'rowToObject', function (proceed, args) {
     let obj = proceed(args);
-    obj.title = obj.title.replace(/&#(\d+);/g,
-                                  function (m, n) String.fromCharCode(n));
+    obj.title = obj.title.replace(/&(?:#(\d+)|([\w-]+));/g, unescapeReference);
     return obj;
 });
 

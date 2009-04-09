@@ -4,7 +4,7 @@
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/commentViewer.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
 <?xml-stylesheet href="chrome://hatenabookmark/content/browser.css" type="text/css"?>
-<?xul-overlay href="chrome://hatenabookmark/content/commonOverlay.xul"?>
+<?xul-overlay href="chrome://hatenabookmark/content/popupsOverlay.xul"?>
 <!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/browser.dtd" [
     <!ENTITY % toolbar SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd">
     %toolbar;
@@ -149,7 +149,9 @@
         <toolbar id="hBookmarkToolbar"
                  class="chromeclass-toolbar-additional"
                  mode="icons"
+                 defaultmode="icons"
                  iconsize="small"
+                 defaulticonsize="small"
                  customizable="true"
                  defaultset="hBookmark-toolbar-sidebar-button,hBookmark-toolbar-add-button,hBookmark-toolbar-home-button,separator,hBookmark-toolbar-recent-line"
                  context="toolbar-context-menu"
@@ -191,7 +193,6 @@
             <image
                  id="hBookmark-status-comment"
                  tooltiptext="&hBookmark.statusbar.tooltip.comment;"
-                 onclick="hBookmark.CommentViewer.toggle();"
                  loading="false"
             />
 

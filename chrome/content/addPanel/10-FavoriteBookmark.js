@@ -19,9 +19,14 @@ extend(FavoriteBookmark.prototype, {
         return UserUtils.getProfileIcon(this._favorite.name, isLarge);
     },
 
+    getHomepage: function FB_getHomepage(service) {
+        return UserUtils.getHomepage(this._favorite.name, service);
+    },
+
     createImage: function FB_createImage() {
         let image = document.createElementNS(XUL_NS, "image");
         image.setAttribute("src", this.getProfileIcon(false));
+        image.setAttribute("onclick", "if (event.button < 2) hBookmark.hOpenUILink(this.favorite.getHomepage('b'), event);");
         image.favorite = this;
         return image;
     }
