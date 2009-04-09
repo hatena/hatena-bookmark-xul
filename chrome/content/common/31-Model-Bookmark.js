@@ -101,7 +101,6 @@ extend(Bookmark, {
         if (!str) {
             res = Bookmark.findRecent(limit);
         } else {
-            Bookmark.db.connection.executeSimpleSQL('PRAGMA case_sensitive_like = 1');
             var [sql, args] = createWhereLike(str);
             extend(args, {
                 limit: limit || 10,
