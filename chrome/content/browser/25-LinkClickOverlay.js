@@ -9,6 +9,8 @@ const ESCAPE_REGEX_CHECK = new RegExp('^https?%3A', 'i');
 var LinkClickOverlay = {
     linkClickHandler: function(ev) {
         let link;
+        if (ev.button != 0) return;
+
         if (link = (ev.target.href || (ev.target.parentNode ? ev.target.parentNode.href : null))) {
             if (link.indexOf(BOOKMARK_TOP) == 0) {
                 let index, url, subindex;

@@ -38,6 +38,7 @@ var StatusBar = {
     },
     lastURL: null,
     update: function StatsuBar_update() {
+        p('status bar update');
         let lURL = locationURL;
         if (StatusBar.lastURL == lURL) return;
 
@@ -132,7 +133,6 @@ var StatusBar = {
 EventService.createListener('load', StatusBar.loadHandler);
 
 Application.activeWindow.events.addListener('TabSelect', function() {
-    // p('tab select!!');
     StatusBar.update();
 });
 
