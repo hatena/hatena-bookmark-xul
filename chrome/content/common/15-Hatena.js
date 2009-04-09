@@ -83,6 +83,7 @@ if (shared.has('User')) {
                 let dir = this.configDir;
                 dir.append('bookmark.sqlite');
                 this._db = new Database(dir);
+                this._db.connection.executeSimpleSQL('PRAGMA case_sensitive_like = 1');
             }
             return this._db;
         },

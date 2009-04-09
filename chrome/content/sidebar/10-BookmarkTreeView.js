@@ -104,7 +104,7 @@ extend(BookmarkTreeView.prototype, {
     handleClick: function BTV_handleClick(event) {
         let bookmark = this._getBookmarkAtCurosr(event);
         if ((event.button === 0 || event.button === 1) && bookmark)
-            openUILink(bookmark.url, event);
+            hOpenUILink(bookmark.url, event);
     },
 
     _getBookmarkAtCurosr: function BTV__getBookmarkAtCurosr(event) {
@@ -117,6 +117,6 @@ extend(BookmarkTreeView.prototype, {
         let row = this.selection.currentIndex;
         if (event.keyCode !== KeyEvent.DOM_VK_RETURN || row === -1) return;
         let bookmark = this._items[row];
-        openUILink(bookmark.url, event);
+        hOpenUILink(bookmark.url, event);
     }
 });

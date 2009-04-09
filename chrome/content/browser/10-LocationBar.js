@@ -331,7 +331,7 @@ var LocationBar = {
             hBookmark.AddPanelManager.showPanel(url);
             return;
         } 
-        openUILink(url, ev);
+        hOpenUILink(url, ev);
         LocationBar.searchEnabled = false;
     },
     goLink: function LocationBar_goLink(ev) {

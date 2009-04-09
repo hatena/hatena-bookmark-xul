@@ -165,12 +165,11 @@ var CommentViewer = {
                     li.appendChild(a = E('a', {href: userlinkTag}, tag));
                     a.className = 'tag';
                 });
-                li.appendChild(a = E('span', {}, b.comment)); 
+                li.appendChild(a = E('span')); 
+                a.innerHTML = b.comment;
                 a.className = 'comment'
-                if (!isFilter)  {
-                    li.appendChild(a = E('span', {}, ymd));
-                    a.className = 'timestamp';
-                }
+                li.appendChild(a = E('span', {}, ymd));
+                a.className = 'timestamp';
                 fragment.appendChild(li);
             }
             }, 'rendering comment (' + len + ') items ');
@@ -207,7 +206,7 @@ var CommentViewer = {
         }
         p('comment viewer pos:' + h + ', ' + w);
         listContainer.style.height = '' + h + 'px';
-        listContainer.style.width = '' + w + 'px';
+        commentContainer.style.width = '' + w + 'px';
         panelComment.removeAttribute('hTransparent');
         setTimeout(function() {
             listDiv.focus()
@@ -227,6 +226,7 @@ var CommentViewer = {
     popupHiddenHandler: function(ev) {
         panelComment.removeEventListener('mouseover', CommentViewer.browserOverHandler, false);
         gBrowser.removeEventListener('mouseover', CommentViewer.popupOverHandler, false);
+        window.removeEventListener('mouseout', CommentViewer.windowMouseOutHandler, false);
         CommentViewer.hideTimer.stop();
         CommentViewer.currentURL = null;
         CommentViewer.lastData = null;
@@ -235,6 +235,12 @@ var CommentViewer = {
         CommentViewer.hideTimer.stop();
         panelComment.addEventListener('mouseover', CommentViewer.popupOverHandler, false);
         gBrowser.addEventListener('mouseover', CommentViewer.browserOverHandler, false);
+        window.addEventListener('mouseout', CommentViewer.windowMouseOutHandler, false);
+    },
+    windowMouseOutHandler: function(ev) {
+        if (!ev.relatedTarget) {
+            CommentViewer.popupMouseoutHandler(ev);
+        }
     },
     popupOverHandler: function(ev) {
         CommentViewer.hideTimer.stop();
@@ -289,14 +295,12 @@ var CommentViewer = {
         }
         let link = CommentViewer.getHref(ev.target);
         if (link) {
-            if (Prefs.bookmark.get("link.openInNewTab"))
-                ev = { ctrlKey: !ev.ctrlKey, __proto__: ev };
-            openUILink(link, ev);
+            hOpenUILink(link, ev);
         }
     },
     goEntry: function(ev) {
         let url = CommentViewer.currentURL || CommentViewer.lastRenderData[0];
-        openUILink(entryURL(url), ev);
+        hOpenUILink(entryURL(url), ev);
     },
     getHref: function (el) {
         if (typeof el.href != 'undefined') {

@@ -34,16 +34,16 @@ var UIUtils = {
     },
 
     openHatenaWebSearch: function UIU_openHatenaWebSearch(text, event) {
-        openUILink("http://b.hatena.ne.jp/search?q=" + encodeURIComponent(text), event);
+        hOpenUILink("http://b.hatena.ne.jp/search?q=" + encodeURIComponent(text), event);
     },
 
     openLogin: function UIU_openLogin(event) {
         User.login(); // 透過的にログインできるかチェックしておく
-        openUILink("https://www.hatena.ne.jp/login", event);
+        hOpenUILink("https://www.hatena.ne.jp/login", event);
     },
 
     openAddBookmark: function UIU_openAddBookmark(event) {
-        openUILink("http://b.hatena.ne.jp/" + User.user.name + "/add", event);
+        hOpenUILink("http://b.hatena.ne.jp/" + User.user.name + "/add", event);
     },
 
     confirmDeleteBookmarks: function UIU_confirmDeleteBookmarks(bookmarks) {
@@ -135,7 +135,7 @@ var UIUtils = {
     onBookmarkCommand: function UIU_onBookmarkCommand(event) {
         let bookmark = event.originalTarget.bookmark;
         if (!bookmark) return;
-        openUILink(bookmark.url, event);
+        hOpenUILink(bookmark.url, event);
         event.stopPropagation();
     },
 

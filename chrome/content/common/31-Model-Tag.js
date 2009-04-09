@@ -50,14 +50,23 @@ extend(Tag, {
         if (tagNames.length > 1)
             return !!this.findRelatedTags(tagNames, 1).length;
 
-        let tagName = tagNames[0];
-        return !!this.find(<>
-            select * from tags
-            where bookmark_id in (select bookmark_id from tags where name = ?)
-            group by bookmark_id
-            having count(*) > 1
-            limit 1
-        </>, tagName).length;
+        if (!this._relTagCache) {
+            p('create relatedTagCache')
+            let tags = this.find(<>
+                SELECT DISTINCT name
+                FROM tags
+                WHERE bookmark_id IN (SELECT bookmark_id
+                                      FROM tags
+                                      GROUP BY bookmark_id
+                                      HAVING count(*) > 1)
+            </>);
+            this._relTagCache = tags.reduce(function (cache, tag) {
+                cache[tag.name] = true;
+                return cache;
+            }, { __proto__: null });
+            shared.set("relatedTagCache", this._relTagCache);
+        }
+        return tagNames[0] in this._relTagCache;
     },
 
     findTagCandidates: function Tag_findTagCandidates(partialTag) {
@@ -93,6 +102,15 @@ extend(Tag, {
         EventService.dispatch("TagNameChanged", { from :oldName, to: newName });
     }
 });
+
+Tag._relTagCache = shared.get("relatedTagCache");
+p("relatedTagCache is " + (Tag._relTagCache ? "" : "NOT ") + "used");
+function clearCache() {
+    Tag._relTagCache = null;
+    shared.set("relatedTagCache", null);
+}
+addBefore(Tag.prototype, "save", clearCache);
+EventService.createListener("UserChange", clearCache);
 
 Model.Tag = Tag;
 Model.MODELS.push("Tag");

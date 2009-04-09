@@ -101,5 +101,6 @@ Prefs.prototype = {
 
 Prefs.global = new Prefs('');
 Prefs.bookmark = new Prefs('extensions.hatenabookmark.');
+Prefs.link = new Prefs('extensions.hatenabookmark.link.');
 
 

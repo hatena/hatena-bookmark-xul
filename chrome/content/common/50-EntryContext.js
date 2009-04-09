@@ -15,6 +15,13 @@ extend(EntryContext.prototype, {
         this.bookmark  = target.bookmark;
         this.bookmarks = target.bookmarks || null;
         this._getItem("deleteAll").hidden = !this.bookmarks;
+        if (Prefs.link.get("openInNewTab")) {
+            this._getItem("open").removeAttribute("default");
+            this._getItem("openInNewTab").setAttribute("default", "true");
+        } else {
+            this._getItem("open").setAttribute("default", "true");
+            this._getItem("openInNewTab").removeAttribute("default");
+        }
         return true;
     },
 
@@ -27,7 +34,7 @@ extend(EntryContext.prototype, {
     },
 
     openEntry: function EC_openEntry(event) {
-        openUILink(this.bookmark.entryURL, event);
+        hOpenUILink(this.bookmark.entryURL, event);
     },
 
     edit: function EC_edit() {

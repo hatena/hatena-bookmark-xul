@@ -48,7 +48,7 @@
              insertafter="context-bookmarkpage"
              label="&hBookmark.menu.showentry;"
              id="hBookmark-menu-showentry"
-             oncommand="openUILink(hBookmark.entryURL(window.content.location.href));"
+             oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(window.content.location.href));"
              accesskey="E"
          />
          <menuitem
@@ -64,7 +64,7 @@
              insertafter="context-bookmarklink"
              label="&hBookmark.menu.showlink;"
              id="hBookmark-menu-showlink"
-             oncommand="openUILink(hBookmark.entryURL(gContextMenu.linkURL));"
+             oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(gContextMenu.linkURL));"
              accesskey="E"
          />
          <menuitem
@@ -105,18 +105,18 @@
             tooltiptext="&hBookmark.toolbar.home;"
             class="chromeclass-toolbar-additional"
             type="menu-button"
-            oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
+            oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/my', event);"
             onclick="checkForMiddleClick(this, event);">
             <menupopup oncommand="event.stopPropagation();">
                 <menuitem label="&hBookmark.toolbar.top;"
-                          oncommand="openUILink('http://b.hatena.ne.jp/', event);"
+                          oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/', event);"
                           onclick="checkForMiddleClick(this, event);"/>
                 <menuitem label="&hBookmark.toolbar.home;"
                           default="true"
-                          oncommand="openUILink('http://b.hatena.ne.jp/my', event);"
+                          oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/my', event);"
                           onclick="checkForMiddleClick(this, event);"/>
                 <menuitem label="&hBookmark.toolbar.favorite;"
-                          oncommand="openUILink('http://b.hatena.ne.jp/my/favorite', event);"
+                          oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/my/favorite', event);"
                           onclick="checkForMiddleClick(this, event);"/>
             </menupopup>
         </toolbarbutton>
@@ -208,12 +208,6 @@
            flex="1"
            id="hBookmark-comment-container"
         >
-            <!--
-            <hbox flex="1">
-            <vbox flex="1" />
-            <splitter resizeafter="flex"/>
-            </hbox>
-            -->
             <vbox 
                flex="1"
                id="hBookmark-comment-list-container"

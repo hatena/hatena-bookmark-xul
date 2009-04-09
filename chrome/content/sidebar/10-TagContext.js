@@ -69,7 +69,7 @@ extend(TagContext.prototype, {
 
     editTag: function TC_editTag(event) {
         let url = getURIFor("editTag", this.tag);
-        openUILink(url, event);
+        hOpenUILink(url, event);
     },
 
     deleteBookmarks: function TC_deleteBookmarks() {
