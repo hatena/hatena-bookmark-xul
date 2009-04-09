@@ -191,7 +191,6 @@
             <image
                  id="hBookmark-status-comment"
                  tooltiptext="&hBookmark.statusbar.tooltip.comment;"
-                 onclick="hBookmark.CommentViewer.toggle();"
                  loading="false"
             />
 
