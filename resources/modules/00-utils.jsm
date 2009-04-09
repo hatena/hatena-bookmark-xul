@@ -312,8 +312,8 @@ var extend = function extend(target, source, overwrite){
 function addBefore(target, name, before) {
     var original = target[name];
     target[name] = function() {
-        before.apply(target, arguments);
-        return original.apply(target, arguments);
+        before.apply(this, arguments);
+        return original.apply(this, arguments);
     }
 }
 
