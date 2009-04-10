@@ -124,6 +124,40 @@ var CommentViewer = {
         CommentViewer.updateViewer(data);
         commentButton.setAttribute('loading', 'false'); 
     },
+    renderComment: function(bookmarks, limit, fragment) {
+        if (!fragment) 
+            fragment = document.createDocumentFragment();
+        let i = 0;
+        let len = bookmarks.length;
+        let B_URL = 'http://b.hatena.ne.jp/';
+        let isFilter = CommentViewer.isFilter;
+        let eid = bookmarks.eid;
+        while (i++ < Math.min(limit, len)) {
+            let b = bookmarks.shift();
+            let li = E('li');
+            let userlink = B_URL + b.user + '/';
+            let ymd = b.timestamp.split(' ')[0];
+            let permalink = userlink + ymd.replace(/\//g, '') + '#bookmark-' +  eid;
+            let icon = userIcon(b.user);
+            li.appendChild(icon);
+            let a;
+            li.appendChild(a = E('a', {href: permalink}, b.user));
+            a.className = 'username';
+            if (!isFilter && b.tags) b.tags.forEach(function(tag, index) {
+                let userlinkTag = userlink + encodeURIComponent(tag);
+                if (index) li.appendChild(document.createTextNode(', '));
+                li.appendChild(a = E('a', {href: userlinkTag}, tag));
+                a.className = 'tag';
+            });
+            li.appendChild(a = E('span')); 
+            a.innerHTML = b.comment;
+            a.className = 'comment'
+            li.appendChild(a = E('span', {}, ymd));
+            a.className = 'timestamp';
+            fragment.appendChild(li);
+        }
+        return fragment;
+    },
     updateViewer: function (data) {
         if (!data) {
             data = CommentViewer.lastData;
@@ -139,40 +173,20 @@ var CommentViewer = {
         }
         while(list.firstChild) list.removeChild(list.firstChild);
 
-        let B_URL = 'http://b.hatena.ne.jp/';
         let bookmarks = Array.slice(data.bookmarks);
+        bookmarks.eid = data.eid;
         if (isFilter) {
             bookmarks = bookmarks.filter(function(b) b.comment.length);
         }
-        let len = bookmarks.length;
         let fragment = document.createDocumentFragment();
-        if (len) {
-            p.b(function() {
-            for (let i = 0;  i < len; i++) {
-                let b = bookmarks[i];
-                let li = E('li');
-                let userlink = B_URL + b.user + '/';
-                let ymd = b.timestamp.split(' ')[0];
-                let permalink = userlink + ymd.replace(/\//g, '') + '#bookmark-' + data.eid;
-                let icon = userIcon(b.user);
-                li.appendChild(icon);
-                let a;
-                li.appendChild(a = E('a', {href: permalink}, b.user));
-                a.className = 'username';
-                if (!isFilter && b.tags) b.tags.forEach(function(tag, index) {
-                    let userlinkTag = userlink + 't/' + encodeURIComponent(tag);
-                    if (index) li.appendChild(document.createTextNode(', '));
-                    li.appendChild(a = E('a', {href: userlinkTag}, tag));
-                    a.className = 'tag';
-                });
-                li.appendChild(a = E('span')); 
-                a.innerHTML = b.comment;
-                a.className = 'comment'
-                li.appendChild(a = E('span', {}, ymd));
-                a.className = 'timestamp';
-                fragment.appendChild(li);
+        if (bookmarks.length) {
+            CommentViewer.renderComment(bookmarks, 30, fragment);
+            if (bookmarks.length) {
+                // まだレンダリングする項目があれば、非同期レンダリングをする
+                CommentViewer.lazyWriter.reset();
+                CommentViewer.lazyWriterBookmarks = bookmarks;
+                CommentViewer.lazyWriter.start();
             }
-            }, 'rendering comment (' + len + ') items ');
         } else {
              let li = E('li', {} , UIEncodeText('表示できるブックマークコメントはありません。'));
              li.className = 'notice';
@@ -234,6 +248,7 @@ var CommentViewer = {
         panelComment.removeEventListener('mouseover', CommentViewer.browserOverHandler, false);
         gBrowser.removeEventListener('mouseover', CommentViewer.popupOverHandler, false);
         window.removeEventListener('mouseout', CommentViewer.windowMouseOutHandler, false);
+        CommentViewer.lazyWriter.stop();
         CommentViewer.hideTimer.stop();
         CommentViewer.currentURL = null;
         CommentViewer.lastData = null;
@@ -245,6 +260,21 @@ var CommentViewer = {
         panelComment.addEventListener('mouseover', CommentViewer.popupOverHandler, false);
         gBrowser.addEventListener('mouseover', CommentViewer.browserOverHandler, false);
         window.addEventListener('mouseout', CommentViewer.windowMouseOutHandler, false);
+    },
+    get lazyWriter() {
+        if (!CommentViewer._lazyTimer) {
+            let lazyTimer = new Timer(50);
+            lazyTimer.createListener('timer', CommentViewer.lazyTimerHandler);
+            CommentViewer._lazyTimer = lazyTimer;
+        }
+        return CommentViewer._lazyTimer;
+    },
+    lazyTimerHandler: function(ev) {
+        let bs = CommentViewer.lazyWriterBookmarks;
+        if (bs && bs.length) {
+            let fragment = CommentViewer.renderComment(bs, 50, fragment);
+            list.appendChild(fragment);
+        }
     },
     windowMouseOutHandler: function(ev) {
         if (!ev.relatedTarget) {
