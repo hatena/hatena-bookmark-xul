@@ -36,7 +36,7 @@ var CommentViewer = {
     filterToggle: function() {
         CommentViewer.prefs.set('showAll', !CommentViewer.prefs.get('showAll'));
         CommentViewer.updateToggle();
-        CommentViewer.updateViewer();
+        CommentViewer.updateViewer(null, true);
     },
     get prefs() {
         if (!CommentViewer._prefs) {
@@ -45,8 +45,11 @@ var CommentViewer = {
         return CommentViewer._prefs;
     },
     updateToggle: function() {
+        CommentViewer.updateImage(CommentViewer.isFilter);
+    },
+    updateImage: function(filterd) {
         let src;
-        if (CommentViewer.isFilter) {
+        if (filterd) {
              src = "chrome://hatenabookmark/skin/images/comment-viewer-toggle-off.png";
         } else {
              src = "chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png";
@@ -130,16 +133,6 @@ var CommentViewer = {
         let i = 0;
         let len = bookmarks.length;
         let B_URL = 'http://b.hatena.ne.jp/';
-        let autoFilter = CommentViewer.autoFilter;
-        if (autoFilter) {
-            // 閾値以下なら、Filter しない
-            if (len < autoFilter) {
-                CommentViewer.prefs.set('showAll', true);
-            } else {
-                CommentViewer.prefs.set('showAll', false);
-            }
-            CommentViewer.updateToggle();
-        }
         let isFilter = CommentViewer.isFilter;
         let eid = bookmarks.eid;
         while (i++ < Math.min(limit, len)) {
@@ -168,11 +161,23 @@ var CommentViewer = {
         }
         return fragment;
     },
-    updateViewer: function (data) {
+    updateViewer: function (data, ignoreAutoFilter) {
         if (!data) {
             data = CommentViewer.lastData;
         } else {
             CommentViewer.lastData = data;
+        }
+
+        let autoFilter = CommentViewer.autoFilter;
+        if (autoFilter && !ignoreAutoFilter) {
+            // 閾値以下なら、Filter しない
+            if (data.bookmarks.length < autoFilter) {
+                CommentViewer.prefs.set('showAll', true);
+                CommentViewer.updateImage(false);
+            } else {
+                CommentViewer.prefs.set('showAll', false);
+                CommentViewer.updateImage(true);
+            }
         }
 
         let isFilter = CommentViewer.isFilter;
@@ -185,6 +190,7 @@ var CommentViewer = {
 
         let bookmarks = Array.slice(data.bookmarks);
         bookmarks.eid = data.eid;
+
         if (isFilter) {
             bookmarks = bookmarks.filter(function(b) b.comment.length);
         }
