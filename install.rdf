@@ -3,7 +3,7 @@
     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
     <Description about="urn:mozilla:install-manifest">
         <em:id>bookmark@hatena.ne.jp</em:id>
-        <em:version>0.1.3</em:version>
+        <em:version>0.1.4</em:version>
         <em:type>2</em:type>
         <em:homepageURL>https://addons.mozilla.org/ja/firefox/addon/11285</em:homepageURL>
         <em:optionsURL>chrome://hatenabookmark/content/config.xul</em:optionsURL>
