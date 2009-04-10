@@ -48,7 +48,7 @@
              insertafter="context-bookmarkpage"
              label="&hBookmark.menu.showentry;"
              id="hBookmark-menu-showentry"
-             oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(window.content.location.href));"
+             oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(window.content.location.href), event);"
              accesskey="E"
          />
          <menuitem
@@ -64,7 +64,7 @@
              insertafter="context-bookmarklink"
              label="&hBookmark.menu.showlink;"
              id="hBookmark-menu-showlink"
-             oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(gContextMenu.linkURL));"
+             oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(gContextMenu.linkURL), event);"
              accesskey="E"
          />
          <menuitem
