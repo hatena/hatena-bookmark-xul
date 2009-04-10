@@ -268,8 +268,9 @@ var CommentViewer = {
         }
     },
     popupHiddenHandler: function(ev) {
-        panelComment.removeEventListener('mouseover', CommentViewer.browserOverHandler, false);
-        gBrowser.removeEventListener('mouseover', CommentViewer.popupOverHandler, false);
+        panelComment.removeEventListener('mouseover', CommentViewer.popupOverHandlerFirst, false);
+        panelComment.removeEventListener('mouseover', CommentViewer.popupOverHandler, false);
+        gBrowser.removeEventListener('mouseover', CommentViewer.browserOverHandler, false);
         window.removeEventListener('mouseout', CommentViewer.windowMouseOutHandler, false);
         CommentViewer.lazyWriter.stop();
         CommentViewer.hideTimer.stop();
@@ -280,8 +281,8 @@ var CommentViewer = {
     },
     popupShownHandler: function(ev) {
         CommentViewer.hideTimer.stop();
+        panelComment.addEventListener('mouseover', CommentViewer.popupOverHandlerFirst, false);
         panelComment.addEventListener('mouseover', CommentViewer.popupOverHandler, false);
-        gBrowser.addEventListener('mouseover', CommentViewer.browserOverHandler, false);
         window.addEventListener('mouseout', CommentViewer.windowMouseOutHandler, false);
     },
     get lazyWriter() {
@@ -303,6 +304,15 @@ var CommentViewer = {
         if (!ev.relatedTarget) {
             CommentViewer.popupMouseoutHandler(ev);
         }
+    },
+    popupOverHandlerFirst: function(ev) {
+        /*
+         * first を作ってるのは、一度コメントビュワーのパネルにマウスオーバーしてから
+         * hidden を有効にするため。これをしないと、右クリック拡張からコメントビュワー表示時に
+         * マウスを少し動かすだけで消えるようになってしまう
+         */
+        panelComment.removeEventListener('mouseover', CommentViewer.popupOverHandlerFirst, false);
+        gBrowser.addEventListener('mouseover', CommentViewer.browserOverHandler, false);
     },
     popupOverHandler: function(ev) {
         CommentViewer.hideTimer.stop();
