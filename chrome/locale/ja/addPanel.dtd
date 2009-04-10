@@ -5,7 +5,7 @@
 <!ENTITY hBookmark.addPanel.welcomeUserLabel.after "さん">
 
 <!ENTITY hBookmark.addPanel.titleLabel "タイトル:">
-<!ENTITY hBookmark.addPanel.loadingTitleLabel "タイトルを取得しています...">
+<!ENTITY hBookmark.addPanel.loadingTitleLabel "現在、データを取得しています...">
 <!ENTITY hBookmark.addPanel.editTitleLabel "タイトルを変更...">
 <!ENTITY hBookmark.addPanel.cancelEditTitleLabel "キャンセル">
 <!ENTITY hBookmark.addPanel.titleDescription "エントリーのタイトルは全ユーザ共通です">
