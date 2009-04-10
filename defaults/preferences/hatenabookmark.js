@@ -55,6 +55,8 @@ pref("extensions.hatenabookmark.sidebar.reverseDirection", false);
 pref("extensions.hatenabookmark.commentviewer.allShow", false);
 pref("extensions.hatenabookmark.commentviewer.width", 500);
 pref("extensions.hatenabookmark.commentviewer.height", 500);
+pref("extensions.hatenabookmark.commentviewer.autoFilter", true);
+pref("extensions.hatenabookmark.commentviewer.autoFilterThreshold", 15);
 pref("extensions.hatenabookmark.commentviewer.autoHoverShow", false);
 pref("extensions.hatenabookmark.commentviewer.autoResize", true);
 

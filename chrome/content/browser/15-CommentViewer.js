@@ -130,6 +130,16 @@ var CommentViewer = {
         let i = 0;
         let len = bookmarks.length;
         let B_URL = 'http://b.hatena.ne.jp/';
+        let autoFilter = CommentViewer.autoFilter;
+        if (autoFilter) {
+            // 閾値以下なら、Filter しない
+            if (len < autoFilter) {
+                CommentViewer.prefs.set('showAll', true);
+            } else {
+                CommentViewer.prefs.set('showAll', false);
+            }
+            CommentViewer.updateToggle();
+        }
         let isFilter = CommentViewer.isFilter;
         let eid = bookmarks.eid;
         while (i++ < Math.min(limit, len)) {
@@ -231,6 +241,13 @@ var CommentViewer = {
     },
     get viewerWidth() {
         return CommentViewer.prefs.get('width');
+    },
+    get autoFilter() {
+        if (CommentViewer.prefs.get('autoFilter')) {
+            return CommentViewer.prefs.get('autoFilterThreshold');
+        } else {
+            return false;
+        }
     },
     get hideAfterTimer() {
         if (!CommentViewer._hideAfter) {
