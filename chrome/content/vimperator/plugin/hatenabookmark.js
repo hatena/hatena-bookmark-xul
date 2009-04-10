@@ -90,13 +90,29 @@ liberator.plugins.hBookmark = (function() {
     ].filter(function (item) item[1]));
 
     plugin.command = {
-        execute: function(args) {
-            let url = plugin.command.genURL(args);
-            liberator.open(url);
+        execute: function(args, openTag) {
+            if (args['-sync']) {
+                if (!plugin.user) {
+                    liberator.echoerr('You need to login to Hatena first.');
+                } else {
+                    HatenaBookmark.Sync.sync();
+                }
+                return;
+            }
+
+            if (args['-edit']) {
+                plugin.showPanel(args['-edit']);
+            } else {
+                let url = plugin.command.genURL(args);
+                if (openTag) {
+                    liberator.open(url, liberator.NEW_TAB);
+                } else {
+                    liberator.open(url);
+                }
+            }
         },
         executeTab: function(args) {
-            let url = plugin.command.genURL(args);
-            liberator.open(url, liberator.NEW_TAB);
+            plugin.command.execute(args, true);
         },
         genURL: function(args) {
             let url = (args.string || '').replace(/\s/g, '');
@@ -164,7 +180,13 @@ liberator.plugins.hBookmark = (function() {
             }
         }
     };
-	plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment']);
+
+    plugin.command.options.options = [
+        [['-edit', '-e'], commands.OPTION_STRING],
+        [['-sync'], commands.OPTION_NOARG],
+    ];
+
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment']);
 
     plugin.toggleComment = function(url) {
         HatenaBookmark.CommentViewer.toggle(url);
@@ -187,6 +209,8 @@ liberator.plugins.hBookmark = (function() {
             HatenaBookmark.AddPanelManager.toggle();
         }
     }
+
+    plugin.__defineGetter__('user', function() HatenaBookmark.User.user);
 
     commands.addUserCommand(
         ['hb[search]'],
