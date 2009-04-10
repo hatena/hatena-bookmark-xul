@@ -5,7 +5,7 @@
         <em:id>bookmark@hatena.ne.jp</em:id>
         <em:version>0.1.3</em:version>
         <em:type>2</em:type>
-        <em:homepageURL>http://b.hatena.ne.jp/</em:homepageURL>
+        <em:homepageURL>https://addons.mozilla.org/ja/firefox/addon/11285</em:homepageURL>
         <em:optionsURL>chrome://hatenabookmark/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://hatenabookmark/skin/images/favicon32.png</em:iconURL>
         <em:localized>
