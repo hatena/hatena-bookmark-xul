@@ -15,7 +15,7 @@
 <!ENTITY hBookmark.config.sidebarReverseDirection "検索画面を上部に移動する">
 <!ENTITY hBookmark.config.sidebarLayout "レイアウト">
 <!ENTITY hBookmark.config.sidebarNormal "通常">
-<!ENTITY hBookmark.config.sidebarReverse "反転">
+<!ENTITY hBookmark.config.sidebarReverse "上下反転">
 
 <!ENTITY hBookmark.config.statusbar "ステータスバー">
 <!ENTITY hBookmark.config.statusbarIcon "表示">
