@@ -14,6 +14,9 @@
 
 <!ENTITY hBookmark.config.sidebar "Sidebar">
 <!ENTITY hBookmark.config.sidebarReverseDirection "Move search screen to the top of the screen">
+<!ENTITY hBookmark.config.sidebarLayout "Layout">
+<!ENTITY hBookmark.config.sidebarNormal "normal">
+<!ENTITY hBookmark.config.sidebarReverse "reverse">
 
 <!ENTITY hBookmark.config.statusbar "Statusbar">
 <!ENTITY hBookmark.config.statusbarIcon "Display">

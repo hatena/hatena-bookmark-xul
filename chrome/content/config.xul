@@ -87,9 +87,22 @@
 
         <groupbox orient="vertical">
             <caption label="&hBookmark.config.sidebar;" />
-            <checkbox id="sidebar.reverseDirection" flex="1"
-                label="&hBookmark.config.sidebarReverseDirection;"
-                preference="extensions.hatenabookmark.sidebar.reverseDirection"/>
+            <hbox flex="1" align="center">
+            <label value="&hBookmark.config.sidebarLayout;" />
+                <radiogroup id="sidebar.reverse"
+                    flex="1"
+                    preference="extensions.hatenabookmark.sidebar.reverseDirection"
+                    orient="horizontal">
+                    <radio value="false" label="&hBookmark.config.sidebarNormal;"
+                        class="image" align="center"
+                        src="chrome://hatenabookmark/skin/images/config_search_bottom.png"
+                        />
+                    <radio value="true" label="&hBookmark.config.sidebarReverse;"
+                        src="chrome://hatenabookmark/skin/images/config_search_top.png"
+                        class="image" align="center"
+                        />
+                </radiogroup>
+            </hbox>
         </groupbox>
 
         <groupbox orient="vertical">
@@ -111,6 +124,8 @@
                 </hbox>
             </vbox>
         </groupbox>
+
+        <spacer height="50px" />
     </vbox>
 </prefpane>
 
