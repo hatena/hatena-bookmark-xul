@@ -155,6 +155,14 @@
             name="extensions.hatenabookmark.commentviewer.autoResize"
             type="bool"/>
         <preference 
+            id="extensions.hatenabookmark.commentviewer.autoFilter"
+            name="extensions.hatenabookmark.commentviewer.autoFilter"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.autoFilterThreshold"
+            name="extensions.hatenabookmark.commentviewer.autoFilterThreshold"
+            type="int"/>
+        <preference 
             id="extensions.hatenabookmark.commentviewer.width"
             name="extensions.hatenabookmark.commentviewer.width"
             type="int"/>
@@ -194,22 +202,38 @@
                 preference="extensions.hatenabookmark.commentviewer.autoResize"/>
 
             <hbox flex="1" align="center">
-            <spacer style="width: 1em;" />
-            <label value="&hBookmark.config.commentviewerSizeSetting;" />
-            <label value="&hBookmark.config.commentviewerWidth;"
-                control="commentviewer.width"/>
-            <textbox id="commentviewer.width"
-                preference="extensions.hatenabookmark.commentviewer.width"
-                type="number" min="200" increment="10" max="9999"
-                style="width: 5em;"
-            />
-            <label value="&hBookmark.config.commentviewerHeight;"
-                control="commentviewer.height"/>
-            <textbox id="commentviewer.height"
-                preference="extensions.hatenabookmark.commentviewer.height"
-                type="number" min="100" increment="10" max="9999"
-                style="width: 5em;"
-            />
+                <spacer style="width: 1em;" />
+                <label value="&hBookmark.config.commentviewerSizeSetting;" />
+                <label value="&hBookmark.config.commentviewerWidth;"
+                    control="commentviewer.width"/>
+                <textbox id="commentviewer.width"
+                    preference="extensions.hatenabookmark.commentviewer.width"
+                    type="number" min="200" increment="10" max="9999"
+                    style="width: 5em;"
+                />
+                <label value="&hBookmark.config.commentviewerHeight;"
+                    control="commentviewer.height"/>
+                <textbox id="commentviewer.height"
+                    preference="extensions.hatenabookmark.commentviewer.height"
+                    type="number" min="100" increment="10" max="9999"
+                    style="width: 5em;"
+                />
+            </hbox>
+
+            <checkbox id="extensions.hatenabookmark.commentviewer.autoFilter-check" flex="1"
+                label="&hBookmark.config.commentviewerAutoFilter;"
+                onmouseup="setTimeout(hBookmark.Config.updateStatus, 10);"
+                preference="extensions.hatenabookmark.commentviewer.autoFilter"/>
+
+            <hbox flex="1" align="center">
+                <spacer style="width: 1em;" />
+                <label value="&hBookmark.config.commentviewerAutoFilterThreshold;"
+                    control="commentviewer.autoFilterThreshold"/>
+                <textbox id="commentviewer.autoFilterThreshold"
+                    preference="extensions.hatenabookmark.commentviewer.autoFilterThreshold"
+                    type="number" min="1" increment="1" max="9999"
+                    style="width: 5em;"
+                />
             </hbox>
         </groupbox>
     </vbox>

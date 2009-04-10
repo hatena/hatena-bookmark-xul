@@ -100,6 +100,14 @@ let Config = {
             w.removeAttribute('disabled');
             h.removeAttribute('disabled');
         }
+
+        checked = document.getElementById('extensions.hatenabookmark.commentviewer.autoFilter-check').checked;
+        let th = document.getElementById('commentviewer.autoFilterThreshold');
+        if (checked) {
+            th.removeAttribute('disabled');
+        } else {
+            th.setAttribute('disabled', true);
+        }
     },
     clearImageFile: function() {
         let file = document.getElementById(PrefsBackgroundImage).value;

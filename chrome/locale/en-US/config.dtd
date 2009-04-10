@@ -30,6 +30,9 @@
 <!ENTITY hBookmark.config.commentviewerSizeSetting "Specify size">
 <!ENTITY hBookmark.config.commentviewerWidth "Width (pixels)">
 <!ENTITY hBookmark.config.commentviewerHeight "Height (pixels)">
+<!-- XXX: -->
+<!ENTITY hBookmark.config.commentviewerAutoFilter "Show all comments when under threadhold">
+<!ENTITY hBookmark.config.commentviewerAutoFilterThreshold "Threshold">
 
 <!ENTITY hBookmark.config.link "Link">
 <!ENTITY hBookmark.config.link.openInNewTab "Open links in a new tab">

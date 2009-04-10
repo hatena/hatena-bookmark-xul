@@ -29,6 +29,8 @@
 <!ENTITY hBookmark.config.commentviewerSizeSetting "サイズ指定">
 <!ENTITY hBookmark.config.commentviewerWidth "横幅(px)">
 <!ENTITY hBookmark.config.commentviewerHeight "縦幅(px)">
+<!ENTITY hBookmark.config.commentviewerAutoFilter "閾値以下なら、コメントをすべて表示する">
+<!ENTITY hBookmark.config.commentviewerAutoFilterThreshold "閾値">
 
 <!ENTITY hBookmark.config.link "リンク">
 <!ENTITY hBookmark.config.link.openInNewTab "リンクを新しいタブで開く">
