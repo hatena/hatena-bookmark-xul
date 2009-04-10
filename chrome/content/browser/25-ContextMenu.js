@@ -5,6 +5,7 @@ elementGetter(this, 'addentry', 'hBookmark-menu-addentry', document);
 elementGetter(this, 'addlink', 'hBookmark-menu-addlink', document);
 elementGetter(this, 'showentry', 'hBookmark-menu-showentry', document);
 elementGetter(this, 'showlink', 'hBookmark-menu-showlink', document);
+elementGetter(this, 'showcomment', 'hBookmark-menu-showcomment', document);
 elementGetter(this, 'searchtext', 'hBookmark-menu-searchtext', document);
 
 var ContextMenu = {
@@ -21,6 +22,7 @@ var ContextMenu = {
             showentry.setAttribute('hidden', true);
             addlink.setAttribute('hidden', true);
             showlink.setAttribute('hidden', true);
+            showcomment.setAttribute('hidden', true);
             searchtext.setAttribute('hidden', true);
             return;
         }
@@ -35,6 +37,7 @@ var ContextMenu = {
             addlink.setAttribute('hidden', true);
             showentry.setAttribute('hidden', true);
             showlink.setAttribute('hidden', true);
+            showcomment.setAttribute('hidden', true);
             if (gContextMenu.isTextSelected) {
                 let str = searchtext.getAttribute('label').split(':')[0] + ':';
                 let sel = document.commandDispatcher.focusedWindow.getSelection().toString();
@@ -51,12 +54,14 @@ var ContextMenu = {
             showentry.setAttribute('hidden', true);
             addlink.removeAttribute('hidden');
             showlink.removeAttribute('hidden');
+            showcomment.removeAttribute('hidden');
             searchtext.setAttribute('hidden', true);
         } else {
             addentry.removeAttribute('hidden');
             addlink.setAttribute('hidden', true);
             showentry.removeAttribute('hidden');
             showlink.setAttribute('hidden', true);
+            showcomment.setAttribute('hidden', true);
             searchtext.setAttribute('hidden', true);
         }
     },

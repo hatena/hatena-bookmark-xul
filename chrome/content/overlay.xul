@@ -44,7 +44,6 @@
 
     <popup id="contentAreaContextMenu"> 
          <menuitem
-             class="menuitem-iconic"
              insertafter="context-bookmarkpage"
              label="&hBookmark.menu.showentry;"
              id="hBookmark-menu-showentry"
@@ -52,7 +51,6 @@
              accesskey="E"
          />
          <menuitem
-             class="menuitem-iconic"
              insertafter="context-bookmarkpage"
              label="&hBookmark.menu.add;"
              id="hBookmark-menu-addentry"
@@ -60,7 +58,13 @@
              accesskey="B"
          />
          <menuitem
-             class="menuitem-iconic"
+             insertafter="context-bookmarklink"
+             label="&hBookmark.menu.showcomment;"
+             id="hBookmark-menu-showcomment"
+             oncommand="hBookmark.CommentViewer.show(gContextMenu.linkURL);"
+             accesskey="C"
+         />
+         <menuitem
              insertafter="context-bookmarklink"
              label="&hBookmark.menu.showlink;"
              id="hBookmark-menu-showlink"
@@ -76,7 +80,6 @@
              oncommand="hBookmark.AddPanelManager.showPanel(gContextMenu.linkURL);"
          />
          <menuitem
-             class="menuitem-iconic"
              insertafter="context-searchselect"
              label="&hBookmark.menu.searchtext;"
              id="hBookmark-menu-searchtext"
