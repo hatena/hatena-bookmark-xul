@@ -361,6 +361,8 @@ var CommentViewer = {
         }
     },
     buttonClickHandler: function(ev) {
+        p(['bclick', ev.button]);
+        if (ev.button == 2) return; // 右クリック
 
         if (CommentViewer.hideAfterTimer.running) {
             /*

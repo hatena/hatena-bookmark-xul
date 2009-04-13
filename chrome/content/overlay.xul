@@ -166,6 +166,7 @@
     <statusbar id="status-bar">
         <statusbarpanel id="hBookmark-statusBarPanel"
              collapsed="false"
+             context="hBookmarkStatusMenu"
         >
             <hbox align="center" id="hBookmark-syncProgressBox" hidden="true">
                 <label value="&hBookmark.statusbar.now_syncing;" />
@@ -179,7 +180,8 @@
 
             <image id="hBookmarkAddButton" added="false"
                    tooltiptext="&hBookmark.statusbar.tooltip.addButton;"
-                   onclick="hBookmark.AddPanelManager.toggle();"/>
+                   onclick="hBookmark.StatusBar.showPanelToggle(event);"
+            />
 
             <hbox
                  align="center"
@@ -193,13 +195,22 @@
 
           <toolbarseparator class="hBookmark-status-separator" />
 
-            <image
-                 id="hBookmark-status-comment"
-                 tooltiptext="&hBookmark.statusbar.tooltip.comment;"
-                 loading="false"
-            />
+          <image
+               id="hBookmark-status-comment"
+               tooltiptext="&hBookmark.statusbar.tooltip.comment;"
+               loading="false"
+          />
 
         </statusbarpanel>
+
+        <menupopup id="hBookmarkStatusMenu">
+            <menuitem id="hBookmark-menuitem-sync"
+                label="&hBookmark.menu.sync;"
+                oncommand="hBookmark.Sync.sync();"/>
+            <menuitem id="hBookmark-menuitem-config"
+                label="&hBookmark.menu.config;"
+                oncommand="hBookmark.Config.openDialog();"/>
+        </menupopup>
     </statusbar>
 
     <popupset id="mainPopupSet">
@@ -247,6 +258,7 @@
             context="hBookmarkEntryContext"
             id="hBookmark-urlbar-listbox" flex="1" />
         </panel>
+
     </popupset>
 
     <broadcasterset id="mainBroadcasterSet">

@@ -21,13 +21,18 @@ elementGetter(this, 'statusCountLabel', 'hBookmark-status-count-label', document
 elementGetter(this, 'statusComment', 'hBookmark-status-comment', document);
 
 var StatusBar = {
-    goEntry: function StatusBar_goEntry(event) {
+    goEntry: function StatusBar_goEntry(ev) {
+        if (ev.button == 2) return; // 右クリック
         if (isHttp) {
             let url = locationURL;
 
             //hOpenUILink(newURI('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23')));
             hOpenUILink('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23'), event);
         }
+    },
+    showPanelToggle: function StatusBar_showPanelToggle(ev) {
+        if (ev.button == 2) return; // 右クリック
+        AddPanelManager.toggle();
     },
     checkBookmarked: function StatusBar_checkBookmarked() {
         if (isHttp && User.user && User.user.hasBookmark(locationURL)) {
