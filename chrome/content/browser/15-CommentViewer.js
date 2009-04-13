@@ -19,6 +19,7 @@ elementGetter(this, 'statusbar', 'status-bar', document);
 elementGetter(this, 'faviconImage', 'hBookmark-comment-favicon', document);
 elementGetter(this, 'titleLabel', 'hBookmark-comment-title', document);
 elementGetter(this, 'usersLabel', 'hBookmark-comment-users', document);
+elementGetter(this, 'usersPubPriLabel', 'hBookmark-comment-pub-pri-users', document);
 elementGetter(this, 'toggleImage', 'hBookmark-comment-toggle', document);
 
 
@@ -115,6 +116,8 @@ var CommentViewer = {
     currentURL: null,
     updateComment: function CommentViewer_updateComment(data) {
         CommentViewer.currentURL = data.url;
+        data.publicCount = data.bookmarks.length;
+        data.privateCount = data.count - data.publicCount;
         // 非表示ユーザをフィルター
         if (User.user) {
             let regex = User.user.ignores;
@@ -214,8 +217,14 @@ var CommentViewer = {
         let c = data.count;
         if (c) {
             usersLabel.value = parseInt(data.count) == 0 ? (data.count + ' user') :  data.count + ' users';
+            if (data.privateCount) {
+                usersPubPriLabel.value = '(' + data.publicCount + ' + ' + data.privateCount + ')';
+            } else {
+                usersPubPriLabel.value = '';
+            }
         } else {
             usersLabel.value = '';
+            usersPubPriLabel.value = '';
         }
         setTimeout(function() {
              CommentViewer.updatePosition();

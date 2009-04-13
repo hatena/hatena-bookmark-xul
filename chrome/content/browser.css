@@ -162,6 +162,13 @@ width: 800px;
     color: #FF6e6e;
     font-weight: bold;
     padding-left: 14px;
+    font-size: 0.9em;
+}
+
+#hBookmark-comment-pub-pri-users {
+    font-size: 0.9em;
+    text-decoration: none;
+    color: #555;
 }
 
 /* vbox */
