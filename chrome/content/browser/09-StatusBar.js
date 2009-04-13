@@ -27,7 +27,7 @@ var StatusBar = {
             let url = locationURL;
 
             //hOpenUILink(newURI('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23')));
-            hOpenUILink('http://b.hatena.ne.jp/entry/' + url.replace('#', '%23'), event);
+            hOpenUILink(entryURL(url), ev);
         }
     },
     showPanelToggle: function StatusBar_showPanelToggle(ev) {
