@@ -278,7 +278,7 @@ li.bookmark img {
   margin-bottom: 10px ;
   padding: 4px ;
   padding-left: 28px;
-  background-color: #EEE;
+  background-color: rgba(238,238,238, 0.8);
   -moz-border-radius: 10px;
 }
 
@@ -305,10 +305,15 @@ li.bookmark img {
 }
 
 h2.date { 
-    border-bottom: 1px solid #CCC;
-    font-size: 200%;
+    font-size: 120%;
+    background-color: rgba(198,223,255, 0.9);
+    border: 0px solid #999;
+    -moz-border-radius: 10px;
     font-family: Verdana, Geneva, sans-serif;
+    padding: 5px;
     margin:0px;
+    margin-bottom: -10px;
+    width: 100px;
 }
 
 ul.bookmarked-list {

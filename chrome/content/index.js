@@ -96,7 +96,7 @@ with(hBookmark) { // XXX
                 bookmarkedContainer.style.display = 'none';
 
                 bookmarked = null;
-                BOOKMARK.search(word).forEach(function(bookmark) {
+                BOOKMARK.search(word, 10).forEach(function(bookmark) {
                     if (!bookmarked || lastDate != bookmark.date.toString().substr(0, 8)) {
                         bookmarked = E('ul', {className: 'bookmarked-list'});
                         lastDate = bookmark.date.toString().substr(0, 8);
