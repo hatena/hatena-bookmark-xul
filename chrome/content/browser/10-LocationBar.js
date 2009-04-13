@@ -234,6 +234,7 @@ var LocationBar = {
 
                         E('hbox', null,
                             E('label', {'class': 'hBookmark-urlbar-url', value: b.url, flex: '1', crop: 'end', tooltiptext: b.url}),
+                            // E('image', {'class': 'hBookmark-urlbar-user-count', src: 'http://b.hatena.ne.jp/entry/image/' + entryURL(b.url)}),
                             E('label', {'class': 'hBookmark-urlbar-date', value: b.dateYMD, tooltiptext: b.dateYMD})
                         )
                     )
