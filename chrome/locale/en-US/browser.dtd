@@ -9,7 +9,7 @@
 <!ENTITY hBookmark.sidebar.label "Hatena Bookmark">
 <!ENTITY hBookmark.sidebar.key "A">
 
-<!ENTITY hBookmark.statusbar.now_syncing "Sync with bookmarks...">
+<!ENTITY hBookmark.statusbar.now_syncing "Sync with bookmarks…">
 <!ENTITY hBookmark.statusbar.tooltip.addButton "Add to Hatena Bookmark">
 <!ENTITY hBookmark.statusbar.tooltip.counter "Open Hatena Bookmark entry page">
 <!ENTITY hBookmark.statusbar.tooltip.comment "Show comments">
