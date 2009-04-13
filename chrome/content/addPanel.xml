@@ -387,6 +387,7 @@
                             this.usersField.value =
                                 hBookmark.UIUtils.getUsersText(res.count);
                             this.usersField.href = res.entry_url;
+                            res.favorites.reverse();
                             this.updateFavorites(res.favorites);
                             this.usersRow.style.visibility = "visible";
                         }
