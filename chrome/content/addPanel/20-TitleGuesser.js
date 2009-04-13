@@ -31,7 +31,7 @@ extend(TitleGuesser.prototype, {
             } catch (ex) {}
         }
         let match = html.match(/<title>(.*?)<\/title>/i);
-        return match && match[1];
+        return match && decodeReferences(match[1]);
     },
     getEncoding: function TG_getEncoding(source) {
         let match = /\bcharset\s*=\s*([\w.-]+)/i.exec(source || "");

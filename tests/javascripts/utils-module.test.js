@@ -78,3 +78,8 @@ function testExtendBuiltIns() {
     assert.equals([24, 32, 17, 8, 33].find(function (n) n & 1), 17);
 }
 */
+
+function testDecodeReferences() {
+    assert.equals("\u00abHello &unknown; <world>\u00bb",
+                  decodeReferences("&laquo;H&#101;llo &unknown; &lt;&#x77;orld&gt;&raquo;"));
+}

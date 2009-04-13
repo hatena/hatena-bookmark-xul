@@ -199,6 +199,30 @@ var shared = {
 function unEscapeURIForUI(charset, string) 
     Cc['@mozilla.org/intl/texttosuburi;1'].getService(Ci.nsITextToSubURI).unEscapeURIForUI(charset, string);
 
+// これと同じことができる XPCOM コンポーネントはないの?
+function decodeReferences(string)
+    string.replace(/&(?:#([xX]?\d+)|([\w-]+));/g, _referenceReplacement);
+
+function _referenceReplacement(reference, number, name) {
+    return number ? String.fromCharCode("0" + number)
+                  : (_referenceMap[name] || reference);
+}
+
+let _referenceMap = {
+    amp:   "&",
+    lt:    "<",
+    gt:    ">",
+    quot:  '"',
+    apos:  "'",
+    nbsp:  "\u00a0",
+    copy:  "\u00a9",
+    reg:   "\u00ae",
+    trade: "\u2122",
+    laquo: "\u00ab",
+    raquo: "\u00bb",
+    __proto__: null
+};
+
 /*
  * JSON デコード/エンコード
  */
