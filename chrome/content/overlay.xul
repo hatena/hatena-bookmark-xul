@@ -32,12 +32,16 @@
             insertbefore="devToolsSeparator"
             label="&hBookmark.menu.main;">
             <menupopup>
-                <menuitem id="hBookmark-menuitem-sync"
+                <menuitem
                     label="&hBookmark.menu.sync;"
                     oncommand="hBookmark.Sync.sync();"/>
-                <menuitem id="hBookmark-menuitem-config"
+                <menuitem
                     label="&hBookmark.menu.config;"
                     oncommand="hBookmark.Config.openDialog();"/>
+                <menuseparator/>
+                <menuitem 
+                    label="&hBookmark.menu.help;"
+                    oncommand="hBookmark.Config.goHelp(event);"/>
             </menupopup>
         </menu>
     </menupopup>
@@ -204,12 +208,16 @@
         </statusbarpanel>
 
         <menupopup id="hBookmarkStatusMenu">
-            <menuitem id="hBookmark-menuitem-sync"
+            <menuitem
                 label="&hBookmark.menu.sync;"
                 oncommand="hBookmark.Sync.sync();"/>
-            <menuitem id="hBookmark-menuitem-config"
+            <menuitem
                 label="&hBookmark.menu.config;"
                 oncommand="hBookmark.Config.openDialog();"/>
+            <menuseparator/>
+            <menuitem 
+                label="&hBookmark.menu.help;"
+                oncommand="hBookmark.Config.goHelp(event);"/>
         </menupopup>
     </statusbar>
 

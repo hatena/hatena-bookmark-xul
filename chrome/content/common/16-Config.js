@@ -132,7 +132,10 @@ let Config = {
             document.getElementById(PrefsBackgroundImage).value = filePicker.file;
             Config.updateUI();
         }
-    }
+    },
+    goHelp: function(event) {
+        hOpenUILink('http://b.hatena.ne.jp/help/firefox_addon', event);
+    },
 };
 
 

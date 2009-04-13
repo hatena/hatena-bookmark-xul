@@ -16,6 +16,7 @@
 
 <!ENTITY hBookmark.menu.main "はてなブックマーク">
 <!ENTITY hBookmark.menu.sync "データの同期">
+<!ENTITY hBookmark.menu.help "ヘルプ">
 <!ENTITY hBookmark.menu.config "設定">
 <!ENTITY hBookmark.menu.add "このページをはてなブックマークに追加">
 <!ENTITY hBookmark.menu.addlink "このリンクをはてなブックマークに追加">

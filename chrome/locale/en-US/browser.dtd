@@ -16,6 +16,7 @@
 
 <!ENTITY hBookmark.menu.main "Hatena Bookmark">
 <!ENTITY hBookmark.menu.sync "Sync">
+<!ENTITY hBookmark.menu.help "Help">
 <!ENTITY hBookmark.menu.config "Config">
 <!ENTITY hBookmark.menu.add "Add this page to Hatena Bookmark">
 <!ENTITY hBookmark.menu.addlink "Add this link to Hatena Bookmark">
