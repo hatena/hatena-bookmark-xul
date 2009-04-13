@@ -244,7 +244,7 @@
             <richlistbox 
             disableKeyNavigation="true"
             rows="6"
-            context="hBookmarkEntryContext"
+            context="hBookmark-bookmark-context"
             id="hBookmark-urlbar-listbox" flex="1" />
         </panel>
     </popupset>

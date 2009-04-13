@@ -82,7 +82,7 @@
                          sortDirection="descending"
                          persist="sortDirection"/>
             </treecols>
-            <treechildren context="hBookmarkEntryContext"
+            <treechildren context="hBookmark-bookmark-context"
                           tooltip="hBookmark-bookmark-tooltip"/>
         </tree>
 

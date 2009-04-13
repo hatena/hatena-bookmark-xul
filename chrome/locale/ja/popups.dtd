@@ -3,15 +3,15 @@
 <!ENTITY hBookmark.tagContext.openInNewTabLabel "タグページを新しいタブで開く">
 <!ENTITY hBookmark.tagContext.openInNewTabKey "T">
 
-<!ENTITY hBookmark.entryContext.openLabel "開く">
-<!ENTITY hBookmark.entryContext.openKey "O">
-<!ENTITY hBookmark.entryContext.openInNewTabLabel "新しいタブで開く">
-<!ENTITY hBookmark.entryContext.openInNewTabKey "W">
-<!ENTITY hBookmark.entryContext.openEntryLabel "ブックマークエントリを開く">
-<!ENTITY hBookmark.entryContext.openEntryKey "B">
-<!ENTITY hBookmark.entryContext.editLabel "編集...">
-<!ENTITY hBookmark.entryContext.editKey "E">
-<!ENTITY hBookmark.entryContext.deleteLabel "削除">
-<!ENTITY hBookmark.entryContext.deleteKey "D">
-<!ENTITY hBookmark.entryContext.deleteAllLabel "すべて削除">
-<!ENTITY hBookmark.entryContext.deleteAllKey "L">
+<!ENTITY hBookmark.bookmarkContext.openLabel "開く">
+<!ENTITY hBookmark.bookmarkContext.openKey "O">
+<!ENTITY hBookmark.bookmarkContext.openInNewTabLabel "新しいタブで開く">
+<!ENTITY hBookmark.bookmarkContext.openInNewTabKey "W">
+<!ENTITY hBookmark.bookmarkContext.openEntryLabel "ブックマークエントリを開く">
+<!ENTITY hBookmark.bookmarkContext.openEntryKey "B">
+<!ENTITY hBookmark.bookmarkContext.editLabel "編集...">
+<!ENTITY hBookmark.bookmarkContext.editKey "E">
+<!ENTITY hBookmark.bookmarkContext.deleteLabel "削除">
+<!ENTITY hBookmark.bookmarkContext.deleteKey "D">
+<!ENTITY hBookmark.bookmarkContext.deleteAllLabel "すべて削除">
+<!ENTITY hBookmark.bookmarkContext.deleteAllKey "L">

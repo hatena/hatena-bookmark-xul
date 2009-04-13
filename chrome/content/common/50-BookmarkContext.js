@@ -1,12 +1,12 @@
-const EXPORT = ["EntryContext"];
+const EXPORT = ["BookmarkContext"];
 
-function EntryContext(popup) {
+function BookmarkContext(popup) {
     this.bookmark = null;
     this.bookmarks = null;
     popup._context = this;
 }
 
-extend(EntryContext.prototype, {
+extend(BookmarkContext.prototype, {
     strings: new Strings("chrome://hatenabookmark/locale/popups.properties"),
 
     build: function EC_build(target) {
@@ -26,7 +26,7 @@ extend(EntryContext.prototype, {
     },
 
     _getItem: function EC__getItem(key) {
-        return document.getElementById("hBookmarkEntryContext_" + key);
+        return document.getElementById("hBookmark-bookmark-context-" + key);
     },
 
     openIn: function EC_openIn(where) {
