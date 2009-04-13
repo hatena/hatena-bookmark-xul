@@ -42,7 +42,7 @@ EventService.implement(RemoteCommand.prototype);
 extend(RemoteCommand.prototype, {
     get url RC_get_url() {
         return "http://b.hatena.ne.jp/" + this.user.name + "/" +
-               RemoteCommand.API_ENDPOINT[this.type];
+               RemoteCommand.API_ENDPOINT[this.type] + '?editer=fxaddon';
     },
 
     get query RC_get_query() {
