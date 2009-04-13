@@ -47,26 +47,26 @@ extend(Tag, {
     hasRelatedTags: function Tag_hasRelatedTags(tagNames) {
         if (!tagNames || !tagNames.length)
             return !!this.countAll();
-        if (tagNames.length > 1)
-            return !!this.findRelatedTags(tagNames, 1).length;
 
-        if (!this._relTagCache) {
-            p('create relatedTagCache')
-            let tags = this.find(<>
-                SELECT DISTINCT name
-                FROM tags
-                WHERE bookmark_id IN (SELECT bookmark_id
-                                      FROM tags
-                                      GROUP BY bookmark_id
-                                      HAVING count(*) > 1)
-            </>);
-            this._relTagCache = tags.reduce(function (cache, tag) {
-                cache[tag.name] = true;
+        let keys = tagNames.map(function (t) t + "[]");
+        let leafKey = keys.pop();
+        let branchKey = keys.sort().join("");
+        if (!(branchKey in this._relTagCache)) {
+            p("create relatedTagCache for " + branchKey);
+            let query = "SELECT DISTINCT name FROM tags WHERE ";
+            let conditions = keys.map(function ()
+                "bookmark_id IN (SELECT bookmark_id FROM tags WHERE name = ?)");
+            conditions.push("bookmark_id IN (SELECT bookmark_id FROM tags " +
+                            "GROUP BY bookmark_id HAVING count(*) > " +
+                            tagNames.length + ")");
+            query += conditions.join(" AND ");
+            let tags = Tag.find(query, tagNames.slice(0, -1));
+            this._relTagCache[branchKey] = tags.reduce(function (cache, tag) {
+                cache[tag.name + "[]"] = true;
                 return cache;
-            }, { __proto__: null });
-            shared.set("relatedTagCache", this._relTagCache);
+            }, {});
         }
-        return tagNames[0] in this._relTagCache;
+        return leafKey in this._relTagCache[branchKey];
     },
 
     findTagCandidates: function Tag_findTagCandidates(partialTag) {
@@ -104,10 +104,11 @@ extend(Tag, {
 });
 
 Tag._relTagCache = shared.get("relatedTagCache");
-p("relatedTagCache is " + (Tag._relTagCache ? "" : "NOT ") + "used");
+if (!Tag._relTagCache) clearCache();
+
 function clearCache() {
-    Tag._relTagCache = null;
-    shared.set("relatedTagCache", null);
+    Tag._relTagCache = {};
+    shared.set("relatedTagCache", Tag._relTagCache);
 }
 addBefore(Tag.prototype, "save", clearCache);
 EventService.createListener("UserChange", clearCache);
