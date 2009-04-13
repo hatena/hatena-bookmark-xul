@@ -30,13 +30,16 @@
     <menupopup id="menu_ToolsPopup">
         <menu id="hBookmark-menuToolsPopup"
             insertbefore="devToolsSeparator"
-            label="&hBookmark.menu.main;">
+            label="&hBookmark.menu.main;"
+            accesskey="&hBookmark.menu.mainKey;">
             <menupopup>
                 <menuitem id="hBookmark-menuitem-sync"
                     label="&hBookmark.menu.sync;"
+                    accesskey="&hBookmark.menu.syncKey;"
                     oncommand="hBookmark.Sync.sync();"/>
                 <menuitem id="hBookmark-menuitem-config"
                     label="&hBookmark.menu.config;"
+                    accesskey="&hBookmark.menu.configKey;"
                     oncommand="hBookmark.Config.openDialog();"/>
             </menupopup>
         </menu>

@@ -15,8 +15,11 @@
 <!ENTITY hBookmark.statusbar.tooltip.comment "Show comments">
 
 <!ENTITY hBookmark.menu.main "Hatena Bookmark">
+<!ENTITY hBookmark.menu.mainKey "B">
 <!ENTITY hBookmark.menu.sync "Sync">
+<!ENTITY hBookmark.menu.syncKey "S">
 <!ENTITY hBookmark.menu.config "Config">
+<!ENTITY hBookmark.menu.configKey "C">
 <!ENTITY hBookmark.menu.add "Add this page to Hatena Bookmark">
 <!ENTITY hBookmark.menu.addlink "Add this link to Hatena Bookmark">
 <!ENTITY hBookmark.menu.showentry "Show this page on Hatena Bookmark">
