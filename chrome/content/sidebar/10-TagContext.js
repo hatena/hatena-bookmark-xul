@@ -22,19 +22,31 @@ extend(TagContext.prototype, {
     strings: new Strings("chrome://hatenabookmark/locale/popups.properties"),
 
     build: function TC_build(popup) {
-        let tags = document.popupNode.tags;
+        let target = document.popupNode;
+        let tags = target.tags;
         if (!tags || !tags.length) return false;
         this.tags = tags.concat();
         this.tag = tags[tags.length - 1];
+        this.tagItem = target.tagItem;
+        this.treeView = target.parentNode.view &&
+                        target.parentNode.view.wrappedJSObject;
         let tagsLabel = this._formatTags(this.tags);
         this._setLabel("openBookmarks", [tagsLabel]);
         this._setLabel("deleteBookmarks", [tagsLabel]);
         this._setLabel("editTag", [this.tag]);
+        this._setLabel("filterToolbar", [this.tag]);
+        let line = this._toolbarRecentLine;
+        this._getItem("filterToolbar").hidden =
+            !line || !UIUtils.isVisible(line);
         return true;
     },
 
-    _setLabel: function TC_setLabel(key, args) {
-        let item = document.getElementById("hBookmarkTagContext_" + key);
+    _getItem: function TC__getItem(key) {
+        return document.getElementById("hBookmark-tag-context-" + key);
+    },
+
+    _setLabel: function TC__setLabel(key, args) {
+        let item = this._getItem(key);
         let label = this.strings.get("tagContext." + key + "Label", args);
         item.setAttribute("label", label);
         let accessKey = this.strings.get("tagContext." + key + "Key");
@@ -42,6 +54,10 @@ extend(TagContext.prototype, {
     },
 
     _formatTags: function TC__formatTags(tags) "[" + tags.join("][") + "]",
+
+    destroy: function TC_destory() {
+        this.tags = this.tagItem = this.treeView = null;
+    },
 
     get bookmarks TC_get_bookmarks() Model.Bookmark.findByTags(this.tags),
 
@@ -67,16 +83,29 @@ extend(TagContext.prototype, {
     },
     */
 
+    filterToolbar: function TC_filterToolbar() {
+        this._toolbarRecentLine.tagFilterPopup.setTag(this.tag);
+    },
+
+    get _toolbarRecentLine TC_get__toolbarRecentLine() {
+        return getTopWin().document.getElementById("hBookmark-toolbar-recent-line");
+    },
+
     editTag: function TC_editTag(event) {
         let url = getURIFor("editTag", this.tag);
         hOpenUILink(url, event);
     },
 
     deleteBookmarks: function TC_deleteBookmarks() {
+        let tagItem = this.tagItem;
+        let treeView = this.treeView;
         let bookmarks = this.bookmarks;
         if (!UIUtils.confirmDeleteBookmarks(bookmarks)) return;
         let command = new RemoteCommand("delete", {
             bookmarks: bookmarks,
+            onComplete: function () {
+                tagItem.zeroCount(treeView);
+            },
             onError: function () {
                 UIUtils.alertBookmarkError("delete", bookmarks);
             }

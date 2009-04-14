@@ -61,6 +61,7 @@
                         method(this, "build")),
                 ];
                 window.addEventListener("resize", this, false);
+                this.tagFilterPopup.control = this;
                 // XXX コンストラクタ呼び出し時にはデータを取得できない?
                 setTimeout(function (self, pref) {
                     self.tag = pref.get("toolbar.filterTag");
@@ -71,6 +72,7 @@
                 this._listeners.forEach(function (l) l.unlisten());
                 this._listeners = null;
                 window.removeEventListener("resize", this, false);
+                this.tagFilterPopup.control = null;
             ]]></destructor>
 
             <field name="_listeners">null</field>
@@ -199,20 +201,9 @@
                     // XXX 表示→非表示→リサイズ→再度表示のときに
                     // 配置が更新されない。
                     if (event.type === "resize" &&
-                        event.target === window && this._isVisible())
+                        event.target === window &&
+                        hBookmark.UIUtils.isVisible(this))
                         this.redraw();
-                ]]></body>
-            </method>
-
-            <method name="_isVisible">
-                <body><![CDATA[
-                    for (let ancestor = this;
-                         ancestor;
-                         ancestor = ancestor.parentNode) {
-                         if (ancestor.collapsed || ancestor.hidden)
-                             return false;
-                    }
-                    return true;
                 ]]></body>
             </method>
         </implementation>
@@ -302,10 +293,6 @@
         </content>
 
         <implementation>
-            <destructor><![CDATA[
-                this.control = null;
-            ]]></destructor>
-
             <field name="noFilter">
                 document.getAnonymousElementByAttribute(this, "anonid", "noFilter")
             </field>
@@ -319,11 +306,9 @@
             <field name="control">null</field>
 
             <method name="build">
-                <parameter name="control"/>
                 <body><![CDATA[
-                    this.control = control;
                     hBookmark.UIUtils.deleteContents(this);
-                    let currentTagName = control.tag;
+                    let currentTagName = this.control.tag;
                     let tagNames = this.getRecentTags();
                     this.noFilter.setAttribute("checked", !currentTagName);
                     this.separator.hidden = !tagNames.length;

@@ -21,7 +21,7 @@ function initializeSidebar() {
     var tagTreeView = new TagTreeView();
     tagTree.view = tagTreeView;
 
-    let tagContext = document.getElementById("hBookmarkTagContext");
+    let tagContext = document.getElementById("hBookmark-tag-context");
     tagContext._context = new TagContext();
 
     var bookmarkTree = document.getElementById("bookmark-tree");
