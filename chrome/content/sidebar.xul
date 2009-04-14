@@ -17,33 +17,35 @@
     <script type="application/javascript" src="chrome://browser/content/utilityOverlay.js"/>
 
     <popupset id="mainPopupSet">
-        <menupopup id="hBookmarkTagContext"
+        <menupopup id="hBookmark-tag-context"
                    onpopupshowing="return this._context.build(this);">
-            <menuitem id="hBookmarkTagContext_openBookmarks"
+            <menuitem id="hBookmark-tag-context-openBookmarks"
                       oncommand="this.parentNode._context.openBookmarks(event);"/>
-            <menuseparator id="hBookmarkTagContext_openBookmarksSeparator"/>
-            <menuitem id="hBookmarkTagContext_open"
+            <menuseparator id="hBookmark-tag-context-openBookmarksSeparator"/>
+            <menuitem id="hBookmark-tag-context-open"
                       label="&hBookmark.tagContext.openLabel;"
                       accesskey="&hBookmark.tagContext.openKey;"
                       oncommand="this.parentNode._context.openIn('current');"/>
-            <menuitem id="hBookmarkTagContext_openInNewTab"
+            <menuitem id="hBookmark-tag-context-openInNewTab"
                       label="&hBookmark.tagContext.openInNewTabLabel;"
                       accesskey="&hBookmark.tagContext.openInNewTabKey;"
                       oncommand="this.parentNode._context.openIn('tab');"/>
-            <menuseparator id="hBookmarkTagContext_openSeparator"/>
-            <menuitem id="hBookmarkTagContext_editTag"
+            <menuseparator id="hBookmark-tag-context-openSeparator"/>
+            <menuitem id="hBookmark-tag-context-filterToolbar"
+                      oncommand="this.parentNode._context.filterToolbar();"/>
+            <menuitem id="hBookmark-tag-context-editTag"
                       oncommand="this.parentNode._context.editTag(event);"
                       onclick="checkForMiddleClick(this, event);"/>
             <!--
-            <menuitem id="hBookmarkTagContext_delete"
+            <menuitem id="hBookmark-tag-context-delete"
                       label="Remove Tag &quot;%S&quot;"
                       oncommand="this.parentNode._context.delete();"/>
-            <menuitem id="hBookmarkTagContext_rename"
+            <menuitem id="hBookmark-tag-context-rename"
                       label="Rename Tag &quot;%S&quot;"
                       oncommand="this.parentNode._context.rename();"/>
             -->
-            <menuseparator id="hBookmarkTagContext_editSeparator"/>
-            <menuitem id="hBookmarkTagContext_deleteBookmarks"
+            <menuseparator id="hBookmark-tag-context-editSeparator"/>
+            <menuitem id="hBookmark-tag-context-deleteBookmarks"
                       oncommand="this.parentNode._context.deleteBookmarks();"/>
         </menupopup>
     </popupset>
@@ -58,7 +60,7 @@
     </vbox>
     <vbox id="main-content" flex="1" persist="dir">
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
-              contextmenu="hBookmarkTagContext" flex="1" persist="height">
+              contextmenu="hBookmark-tag-context" flex="1" persist="height">
             <treecols>
                 <treecol id="hBookmarkTagTree_currentTag"
                          label="&hBookmark.sidebar.tagsLabel;"

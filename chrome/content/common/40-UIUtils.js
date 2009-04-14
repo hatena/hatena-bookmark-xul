@@ -161,5 +161,12 @@ var UIUtils = {
         let range = document.createRange();
         range.selectNodeContents(element);
         range.deleteContents();
+    },
+
+    isVisible: function UIU_isVisible(element) {
+        for (; element; element = element.parentNode)
+            if (element.collapsed || element.hidden)
+                return false;
+        return true;
     }
 };

@@ -30,11 +30,19 @@ extend(TagContext.prototype, {
         this._setLabel("openBookmarks", [tagsLabel]);
         this._setLabel("deleteBookmarks", [tagsLabel]);
         this._setLabel("editTag", [this.tag]);
+        this._setLabel("filterToolbar", [this.tag]);
+        let line = this._toolbarRecentLine;
+        this._getItem("filterToolbar").hidden =
+            !line || !UIUtils.isVisible(line);
         return true;
     },
 
-    _setLabel: function TC_setLabel(key, args) {
-        let item = document.getElementById("hBookmarkTagContext_" + key);
+    _getItem: function TC__getItem(key) {
+        return document.getElementById("hBookmark-tag-context-" + key);
+    },
+
+    _setLabel: function TC__setLabel(key, args) {
+        let item = this._getItem(key);
         let label = this.strings.get("tagContext." + key + "Label", args);
         item.setAttribute("label", label);
         let accessKey = this.strings.get("tagContext." + key + "Key");
@@ -66,6 +74,14 @@ extend(TagContext.prototype, {
         alert('Not implemented');
     },
     */
+
+    filterToolbar: function TC_filterToolbar() {
+        this._toolbarRecentLine.tagFilterPopup.setTag(this.tag);
+    },
+
+    get _toolbarRecentLine TC_get__toolbarRecentLine() {
+        return getTopWin().document.getElementById("hBookmark-toolbar-recent-line");
+    },
 
     editTag: function TC_editTag(event) {
         let url = getURIFor("editTag", this.tag);
