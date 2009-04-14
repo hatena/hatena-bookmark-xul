@@ -21,6 +21,21 @@ function TagTreeItem(tag, parentItem) {
     this.isEmpty = null;
 }
 
+// XXX タグ一覧の更新を実装した暁には削除する。
+TagTreeItem.prototype.zeroCount = function TTI_zeroCount(treeView) {
+    if (!treeView || !treeView._treeBox) return;
+    let items = treeView._visibleItems;
+    let item = items[this.index];
+    if (!item || item.tags.join("[]") !== this.tags.join("[]")) return;
+    let startIndex = item.index;
+    let endIndex = item.index;
+    do {
+        item.count = 0;
+        item = items[++endIndex];
+    } while (item && item.level > this.level);
+    treeView._treeBox.invalidateRange(startIndex, endIndex - 1);
+};
+
 function TagTreeView() {
     this._visibleItems = [];
     this._rootItem = new TagTreeItem();
@@ -43,7 +58,9 @@ extend(TagTreeView.prototype, {
         this._treeBox = treeBox;
         if (!treeBox) return;
         $count = 0; $start = new Date();
-        this._treeBox.treeBody.tags = [];
+        let treeChildren = this._treeBox.treeBody;
+        treeChildren.tags = [];
+        treeChildren.tagItem = null;
         this._setSortKey();
         this._openRelatedTags(this._rootItem);
         this._visibleItems.forEach(function (item, i) item.index = i);
@@ -204,9 +221,13 @@ extend(TagTreeView.prototype, {
     setTags: function TTV_setTags() {
         let treeChildren = this._treeBox.treeBody;
         let index = this.selection.currentIndex;
-        treeChildren.tags = (index === -1)
-            ? [] : this._visibleItems[index].tags.concat();
-
+        if (index === -1) {
+            treeChildren.tags = [];
+            treeChildren.tagItem = null;
+        } else {
+            treeChildren.tags = this._visibleItems[index].tags.concat();
+            treeChildren.tagItem = this._visibleItems[index];
+        }
         let event = document.createEvent("Event");
         event.initEvent("HB_TagsSelected", true, false);
         treeChildren.dispatchEvent(event);

@@ -18,7 +18,8 @@
 
     <popupset id="mainPopupSet">
         <menupopup id="hBookmark-tag-context"
-                   onpopupshowing="return this._context.build(this);">
+                   onpopupshowing="return this._context.build(this);"
+                   onpopuphiding="this._context.destroy();">
             <menuitem id="hBookmark-tag-context-openBookmarks"
                       oncommand="this.parentNode._context.openBookmarks(event);"/>
             <menuseparator id="hBookmark-tag-context-openBookmarksSeparator"/>
