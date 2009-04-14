@@ -56,42 +56,42 @@
              label="&hBookmark.menu.showentry;"
              id="hBookmark-menu-showentry"
              oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(window.content.location.href), event);"
-             accesskey="E"
+             accesskey="&hBookmark.menu.showentryKey;"
          />
          <menuitem
              insertafter="context-bookmarkpage"
              label="&hBookmark.menu.add;"
              id="hBookmark-menu-addentry"
              oncommand="hBookmark.AddPanelManager.showPanel(document.commandDispatcher.focusedWindow);"
-             accesskey="B"
+             accesskey="&hBookmark.menu.addKey;"
          />
          <menuitem
              insertafter="context-bookmarklink"
              label="&hBookmark.menu.showcomment;"
              id="hBookmark-menu-showcomment"
              oncommand="hBookmark.CommentViewer.show(gContextMenu.linkURL);"
-             accesskey="C"
+             accesskey="&hBookmark.menu.showcommentKey;"
          />
          <menuitem
              insertafter="context-bookmarklink"
              label="&hBookmark.menu.showlink;"
              id="hBookmark-menu-showlink"
              oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(gContextMenu.linkURL), event);"
-             accesskey="E"
+             accesskey="&hBookmark.menu.showlinkKey;"
          />
          <menuitem
              class="menuitem-iconic"
              insertafter="context-bookmarklink"
              label="&hBookmark.menu.addlink;"
              id="hBookmark-menu-addlink"
-             accesskey="B"
+             accesskey="&hBookmark.menu.addlinkKey;"
              oncommand="hBookmark.AddPanelManager.showPanel(gContextMenu.linkURL);"
          />
          <menuitem
              insertafter="context-searchselect"
              label="&hBookmark.menu.searchtext;"
              id="hBookmark-menu-searchtext"
-             accesskey="B"
+             accesskey="&hBookmark.menu.searchtextKey;"
              oncommand="hBookmark.UIUtils.selectedTextOpenHatenaWebSearch();"
          />
     </popup>
