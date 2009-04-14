@@ -8,7 +8,7 @@
 <!ENTITY hBookmark.bookmarkContext.openInNewTabLabel "Open in a New Tab">
 <!ENTITY hBookmark.bookmarkContext.openInNewTabKey "W">
 <!ENTITY hBookmark.bookmarkContext.openEntryLabel "Show on Hatena Bookmark">
-<!ENTITY hBookmark.bookmarkContext.openInNewTabKey "B">
+<!ENTITY hBookmark.bookmarkContext.openEntryKey "B">
 <!ENTITY hBookmark.bookmarkContext.editLabel "Edit…">
 <!ENTITY hBookmark.bookmarkContext.editTabKey "E">
 <!ENTITY hBookmark.bookmarkContext.deleteLabel "Delete">
