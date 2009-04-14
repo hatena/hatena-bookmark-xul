@@ -8,4 +8,4 @@
 <!ENTITY hBookmark.toolbar.noFilterLabel "絞り込まない">
 <!ENTITY hBookmark.toolbar.noFilterKey "N">
 <!ENTITY hBookmark.toolbar.selectTagLabel "タグで絞り込む...">
-<!ENTITY hBookmark.toolbar.selectTagKey "S">
+<!ENTITY hBookmark.toolbar.selectTagKey "F">
