@@ -44,6 +44,7 @@
                 <menuseparator/>
                 <menuitem 
                     label="&hBookmark.menu.help;"
+                    accesskey="&hBookmark.menu.helpKey;"
                     oncommand="hBookmark.Config.goHelp(event);"/>
             </menupopup>
         </menu>
@@ -213,13 +214,16 @@
         <menupopup id="hBookmarkStatusMenu">
             <menuitem
                 label="&hBookmark.menu.sync;"
+                accesskey="&hBookmark.menu.syncKey;"
                 oncommand="hBookmark.Sync.sync();"/>
             <menuitem
                 label="&hBookmark.menu.config;"
+                accesskey="&hBookmark.menu.configKey;"
                 oncommand="hBookmark.Config.openDialog();"/>
             <menuseparator/>
             <menuitem 
                 label="&hBookmark.menu.help;"
+                accesskey="&hBookmark.menu.helpKey;"
                 oncommand="hBookmark.Config.goHelp(event);"/>
         </menupopup>
     </statusbar>
