@@ -64,7 +64,7 @@ extend(Tag, {
             this._relTagCache[branchKey] = tags.reduce(function (cache, tag) {
                 cache[tag.name + "[]"] = true;
                 return cache;
-            }, {});
+            }, new DictionaryObject());
         }
         return leafKey in this._relTagCache[branchKey];
     },
@@ -107,7 +107,7 @@ Tag._relTagCache = shared.get("relatedTagCache");
 if (!Tag._relTagCache) clearCache();
 
 function clearCache() {
-    Tag._relTagCache = {};
+    Tag._relTagCache = new DictionaryObject();
     shared.set("relatedTagCache", Tag._relTagCache);
 }
 addBefore(Tag.prototype, "save", clearCache);
