@@ -120,13 +120,16 @@
             onclick="checkForMiddleClick(this, event);">
             <menupopup oncommand="event.stopPropagation();">
                 <menuitem label="&hBookmark.toolbar.top;"
+                          accesskey="&hBookmark.toolbar.topKey;"
                           oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/', event);"
                           onclick="checkForMiddleClick(this, event);"/>
                 <menuitem label="&hBookmark.toolbar.home;"
+                          accesskey="&hBookmark.toolbar.homeKey;"
                           default="true"
                           oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/my', event);"
                           onclick="checkForMiddleClick(this, event);"/>
                 <menuitem label="&hBookmark.toolbar.favorite;"
+                          accesskey="&hBookmark.toolbar.favoriteKey;"
                           oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/my/favorite', event);"
                           onclick="checkForMiddleClick(this, event);"/>
             </menupopup>
