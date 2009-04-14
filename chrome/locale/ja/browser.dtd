@@ -15,9 +15,13 @@
 <!ENTITY hBookmark.statusbar.tooltip.comment "ブックマークコメントを表示">
 
 <!ENTITY hBookmark.menu.main "はてなブックマーク">
+<!ENTITY hBookmark.menu.mainKey "B">
 <!ENTITY hBookmark.menu.sync "データの同期">
+<!ENTITY hBookmark.menu.syncKey "S">
 <!ENTITY hBookmark.menu.help "ヘルプ">
+
 <!ENTITY hBookmark.menu.config "設定">
+<!ENTITY hBookmark.menu.configKey "C">
 <!ENTITY hBookmark.menu.add "このページをはてなブックマークに追加">
 <!ENTITY hBookmark.menu.addlink "このリンクをはてなブックマークに追加">
 <!ENTITY hBookmark.menu.showentry "このページをはてなブックマークで表示">

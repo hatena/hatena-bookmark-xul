@@ -30,13 +30,16 @@
     <menupopup id="menu_ToolsPopup">
         <menu id="hBookmark-menuToolsPopup"
             insertbefore="devToolsSeparator"
-            label="&hBookmark.menu.main;">
+            label="&hBookmark.menu.main;"
+            accesskey="&hBookmark.menu.mainKey;">
             <menupopup>
                 <menuitem
                     label="&hBookmark.menu.sync;"
+                    accesskey="&hBookmark.menu.syncKey;"
                     oncommand="hBookmark.Sync.sync();"/>
                 <menuitem
                     label="&hBookmark.menu.config;"
+                    accesskey="&hBookmark.menu.configKey;"
                     oncommand="hBookmark.Config.openDialog();"/>
                 <menuseparator/>
                 <menuitem 
@@ -263,7 +266,7 @@
             <richlistbox 
             disableKeyNavigation="true"
             rows="6"
-            context="hBookmarkEntryContext"
+            context="hBookmark-bookmark-context"
             id="hBookmark-urlbar-listbox" flex="1" />
         </panel>
 

@@ -2,8 +2,9 @@ const EXPORT = ["TagTreeView"];
 
 const AtomService =
     Cc["@mozilla.org/atom-service;1"].getService(Ci.nsIAtomService);
-const NAME_ATOM = AtomService.getAtom("Name");
-const TAG_ATOM = AtomService.getAtom("tag");
+const NAME_ATOM  = AtomService.getAtom("Name");
+const TITLE_ATOM = AtomService.getAtom("title");
+const TAG_ATOM   = AtomService.getAtom("tag");
 const COUNT_ATOM = AtomService.getAtom("count");
 
 var Tag = model("Tag");
@@ -71,7 +72,10 @@ extend(TagTreeView.prototype, {
     getCellProperties: function (row, col, properties) {
         switch (col.id) {
         case "hBookmarkTagTree_currentTag":
-            properties.AppendElement(NAME_ATOM); // XXX To be removed
+            // デフォルトのフォルダアイコンではなく独自のアイコンを使うのなら
+            // 次の二つのアトムを追加する必要はない。
+            properties.AppendElement(NAME_ATOM);
+            properties.AppendElement(TITLE_ATOM);
             properties.AppendElement(TAG_ATOM);
             break;
 

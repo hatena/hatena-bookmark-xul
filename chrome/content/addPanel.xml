@@ -425,8 +425,9 @@
                         let xhr = hBookmark.net.sync_get(bookmark.url);
                         let m = (xhr.responseText || '').match(new RegExp('<title>(.*?)</title>', 'i'));
                         if (m && !/\ufffd/.test(m[1])) {
-                            this.titleField.value = m[1];
-                            this.titleLabel.value = m[1];
+                            let title = decodeReferences(m[1]);
+                            this.titleField.value = title;
+                            this.titleLabel.value = title;
                         } else {
                             let self = this;
                             new hBookmark.TitleGuesser(bookmark.url, function (title) {
