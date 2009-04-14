@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
+<!DOCTYPE dialog>
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="hBookmarkSelectTagDialog"
+        buttons="accept,cancel"
+        onload="new hBookmark.SelectTagDialogManager(this);"
+        onunload="this.manager.destroy();">
+    <script type="application/javascript"
+            src="chrome://hatenabookmark/content/autoloader.js"/>
+
+    <vbox flex="1">
+        <description>Hello, world!</description>
+
+        <tree id="tag-list"
+              seltype="single"
+              hidecolumnpicker="true"
+              flex="1">
+            <treecols>
+                <treecol id="tag-list-col-tag"
+                         label="Tag"
+                         sortActive="true"
+                         sortDirection="natural"
+                         flex="5"/>
+                <splitter class="tree-splitter"/>
+                <treecol id="tag-list-col-count"
+                         label="Count"
+                         flex="1"/>
+            </treecols>
+            <treechildren/>
+        </tree>
+    </vbox>
+</dialog>
