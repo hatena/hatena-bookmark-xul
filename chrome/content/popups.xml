@@ -6,7 +6,7 @@
     <binding id="bookmark-tooltip"
              extends="chrome://global/content/bindings/popup.xml#tooltip">
         <content>
-            <xul:label anonid="titleField"/>
+            <xul:description anonid="titleField"/>
             <xul:description anonid="urlField"/>
             <xul:description anonid="commentField"/>
         </content>
@@ -31,7 +31,7 @@
                                 !target.hoveredBookmark))
                     return false;
                 let bookmark = target.hoveredBookmark || target.bookmark;
-                this.titleField.value = bookmark.title;
+                this.titleField.textContent = bookmark.title;
                 this.urlField.textContent = bookmark.url;
                 this.urlField.hidden = (bookmark.title === bookmark.url);
                 this.commentField.textContent = bookmark.comment;
