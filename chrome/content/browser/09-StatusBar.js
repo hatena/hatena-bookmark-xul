@@ -60,7 +60,15 @@ var StatusBar = {
     },
     lastCountValue: null,
     appendCountImage: function StatusBar_appendCountImage(url) {
-        let image = document.createElement('image');
+        let doc = document;
+        if (!document) {
+            let win = getTopWin();
+            if (win) {
+                doc = win.document;
+            }
+        }
+        if (!doc) return;
+        let image = doc.createElement('image');
         image.setAttribute('width', '7px');
         image.setAttribute('height', '9px');
         image.width = '7px';
