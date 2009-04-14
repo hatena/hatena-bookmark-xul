@@ -2,9 +2,12 @@
 <!ENTITY hBookmark.toolbar.titleKey "A">
 <!ENTITY hBookmark.toolbar.recentLabel "Recent Hatena Bookmarks">
 <!ENTITY hBookmark.toolbar.add "Add to Hatena Bookmark">
-<!ENTITY hBookmark.toolbar.home "Open my Hatena Bookmark page">
+<!ENTITY hBookmark.toolbar.home "Open My Hatena Bookmark page">
+<!ENTITY hBookmark.toolbar.homeKey "H">
 <!ENTITY hBookmark.toolbar.top "Open Hatena Bookmark Top Page">
-<!ENTITY hBookmark.toolbar.favorite "Open my Favorites Page">
+<!ENTITY hBookmark.toolbar.topKey "T">
+<!ENTITY hBookmark.toolbar.favorite "Open My Favorites Page">
+<!ENTITY hBookmark.toolbar.favoriteKey "F">
 
 <!ENTITY hBookmark.sidebar.label "Hatena Bookmark">
 <!ENTITY hBookmark.sidebar.key "A">
