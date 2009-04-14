@@ -134,7 +134,7 @@ let Config = {
         }
     },
     goHelp: function(event) {
-        hOpenUILink('http://b.hatena.ne.jp/help/firefox_addon', event);
+        hOpenUILink('http://b.hatena.ne.jp/help/firefox_addon_view', event);
     },
 };
 
