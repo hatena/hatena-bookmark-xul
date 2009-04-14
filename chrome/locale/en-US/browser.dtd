@@ -24,8 +24,14 @@
 <!ENTITY hBookmark.menu.helpKey "H">
 
 <!ENTITY hBookmark.menu.add "Add this page to Hatena Bookmark">
+<!ENTITY hBookmark.menu.addKey "B">
 <!ENTITY hBookmark.menu.addlink "Add this link to Hatena Bookmark">
+<!ENTITY hBookmark.menu.addlinkKey "B">
 <!ENTITY hBookmark.menu.showentry "Show this page on Hatena Bookmark">
+<!ENTITY hBookmark.menu.showentryKey "E">
 <!ENTITY hBookmark.menu.showlink "Show this link on Hatena Bookmark">
+<!ENTITY hBookmark.menu.showlinkKey "E">
 <!ENTITY hBookmark.menu.showcomment "Show this link on CommentViewer">
+<!ENTITY hBookmark.menu.showcommentKey "C">
 <!ENTITY hBookmark.menu.searchtext "Hatena WebSearch: ">
+<!ENTITY hBookmark.menu.searchtextKey "B">
