@@ -267,6 +267,9 @@ function getFaviconURI (url) {
     return faviconURI;
 }
 
+// 特定のウィンドウに属さない辞書用オブジェクトの作成
+function DictionaryObject() ({ __proto__: null });
+
 const _MODULE_BASE_URI = "resource://hatenabookmark/modules/"
 
 function loadModules() {
