@@ -143,7 +143,7 @@
 
         <implementation>
             <constructor><![CDATA[
-                let backgroundImage = Application.prefs.get('extensions.hatenabookmark.addPanel.backgroundImage').value;
+                let backgroundImage = hBookmark.Prefs.bookmark.get('addPanel.backgroundImage');
                 let w = document.getElementById('hBookmarkAddPanelWindow');
                 w.style.backgroundColor = '#FFF';
                 if (backgroundImage) {
@@ -297,16 +297,15 @@
             <property name="isTitleChanged" readonly="true"
                       onget="return this.titleField.value !== this.titleLabel.value;"/>
 
-            <!-- XXX Prefs#getは"."が入るとうまくいかない? -->
             <property name="showsTagList" readonly="true"
-                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value;"/>
+                      onget="return hBookmark.Prefs.bookmark.get('addPanel.tagListShow');"/>
             <property name="showsRecommendedTagList" readonly="true"
-                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.recommendedTagListShow').value;"/>
+                      onget="return hBookmark.Prefs.bookmark.get('addPanel.recommendedTagListShow');"/>
             <property name="frequentTagCount" readonly="true"
-                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.frequentTagCount').value;"/>
-            <field name="showAllTagsPref">
-                Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShowAll');
-            </field>
+                      onget="return hBookmark.Prefs.bookmark.get('addPanel.frequentTagCount');"/>
+            <property name="showsAllTags"
+                      onget="return hBookmark.Prefs.bookmark.get('addPanel.tagListShowAll');"
+                      onset="hBookmark.Prefs.bookmark.set('addPanel.tagListShowAll', val); return val;"/>
 
             <method name="show">
                 <parameter name="bookmark"/>
@@ -374,7 +373,7 @@
                     this.tagSelector.build(tags);
                     let selectedTags = this.inputHandler.inputLine.tags;
                     this.tagSelector.update(selectedTags);
-                    this.switchTagSelectorView(this.showAllTagsPref.value);
+                    this.switchTagSelectorView(this.showsAllTags);
                 ]]></body>
             </method>
 
@@ -522,7 +521,7 @@
                         this.frequentTagsLabel.hidden = true;
                         this.tagSelector.visibleTagCount = count;
                     }
-                    this.showAllTagsPref.value = showAll;
+                    this.showsAllTags = showAll;
                 ]]></body>
             </method>
 
@@ -1119,19 +1118,17 @@
              extends="chrome://global/content/bindings/checkbox.xml#checkbox">
         <implementation>
             <constructor><![CDATA[
-                this.checked = this.pref.value;
+                this.checked = hBookmark.Prefs.global.get(this.preference);
             ]]></constructor>
 
             <property name="preference"
                       onget="return this.getAttribute('preference');"
                       onset="this.setAttribute('preference', val); return val;"/>
-            <property name="pref" readonly="true"
-                      onget="return Application.prefs.get(this.preference);"/>
         </implementation>
 
         <handlers>
             <handler event="command"
-                     action="this.pref.value = this.checked;"/>
+                     action="hBookmark.Prefs.global.set(this.preference, this.checked);"/>
         </handlers>
     </binding>
 

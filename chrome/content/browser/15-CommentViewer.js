@@ -2,8 +2,8 @@
 const EXPORT = ['CommentViewer'];
 
 // local utility 
-this.__defineGetter__('aWin', function() Application.activeWindow);
-this.__defineGetter__('aDoc', function() Application.activeWindow.activeTab.document);
+this.__defineGetter__('aWin', function() getTopWin());
+this.__defineGetter__('aDoc', function() getTopWin().gBrowser.contentDocument);
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
 
 let E = createElementBindDocument(document, XHTML_NS);
@@ -100,7 +100,7 @@ var CommentViewer = {
             url = aDoc.location.href;
 
         // ignore https
-        if (url.indexOf('https://') == 0 && Application.prefs.get('extensions.hatenabookmark.statusbar.httpsIgnore').value) return;
+        if (url.indexOf('https://') == 0 && Prefs.bookmarks.get('statusbar.httpsIgnore')) return;
 
         if (isHttp && HTTPCache.counter.has(url)) {
             let count = HTTPCache.counter.get(url);

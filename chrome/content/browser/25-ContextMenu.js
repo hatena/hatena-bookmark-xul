@@ -17,7 +17,7 @@ var ContextMenu = {
         // contextMenu.removeEventListenr('popupshowing', ContextMenu.contextMenuHandler, false);
     },
     contextMenuHandler: function(ev) {
-        if (!Application.prefs.get('extensions.hatenabookmark.contextmenu.enabled').value) {
+        if (!Prefs.bookmark.get('contextmenu.enabled')) {
             addentry.setAttribute('hidden', true);
             showentry.setAttribute('hidden', true);
             addlink.setAttribute('hidden', true);

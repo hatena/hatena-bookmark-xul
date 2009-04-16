@@ -47,10 +47,14 @@ var ShortCut = {
         if (node)
             this.keyset.removeChild(node);
 
-        let pref = Application.prefs.get('extensions.hatenabookmark.shortcut.keys.' + key);
+        let pref;
+        try {
+            // Prefs.bookmark.get('shortcut.keys.' + key) ではうまくいかない?
+            pref = PrefService.getBranch('extensions.hatenabookmark.shortcut.keys.').getCharPref(key);
+        } catch (ex) { p(ex); }
         let aInfo;
-        if (pref && pref.value) {
-            aInfo = parseShortcut(pref.value);
+        if (pref) {
+            aInfo = parseShortcut(pref);
         } 
         if (!aInfo) {
             p('key pref not found. :' + key);
