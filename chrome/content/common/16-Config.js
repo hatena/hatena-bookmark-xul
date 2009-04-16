@@ -12,7 +12,7 @@ let Config = {
     },
     openDialog: function() {
         let features;
-        if (Application.prefs.get('browser.preferences.instantApply').value) {
+        if (Prefs.global.get('browser.preferences.instantApply')) {
             features = 'chrome,titlebar,toolbar,centerscreen,dialog=no';
         } else {
             features = 'chrome,titlebar,toolbar,centerscreen,modal';

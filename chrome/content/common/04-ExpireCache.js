@@ -162,7 +162,7 @@ HTTPCache.counter = new HTTPCache('counterCache', {
 });
 
 HTTPCache.counter.isValid = function(url) {
-    if (url.indexOf('https://') == 0 && Application.prefs.get('extensions.hatenabookmark.statusbar.httpsIgnore').value) {
+    if (url.indexOf('https://') == 0 && PrefService.getBranch('extensions.hatenabookmark.statusbar.').getBoolPref('httpsIgnore')) {
         return false;
     } else {
         return true;

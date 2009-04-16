@@ -127,14 +127,14 @@ TagCompleter.InputHandler = function(input) {
     delete this.inputLine['suggestTags'];
     // this.inputLine.__defineGetter__('suggestTags', function() TagCompleter.tags);
     this.inputLine.__defineGetter__('suggestTags', method(this, 'suggestTags'));
-    this.tagCompleteEnabled = Application.prefs.get('extensions.hatenabookmark.addPanel.tagCompleteEnabled').value;
+    this.tagCompleteEnabled = Prefs.bookmark.get('addPanel.tagCompleteEnabled');
     this.prevValue = this.input.value;
     input.addEventListener('keyup', method(this, 'inputKeyupHandler'), false);
     input.addEventListener('keydown', method(this, 'inputKeydownHandler'), false);
     input.addEventListener('input', method(this, 'inputInputHandler'), false);
     list.addEventListener('complete', method(this, 'listCompleteHandler'), false);
     if (XMigemoCore) {
-        this.inputLine.useMigemo = Application.prefs.get('extensions.hatenabookmark.addPanel.xulMigemo').value;
+        this.inputLine.useMigemo = Prefs.bookmark.get('addPanel.xulMigemo');
     }
 }
 
@@ -261,7 +261,7 @@ TagCompleter.InputHandler.prototype = {
 TagCompleter.InputLine = function(value, tags) {
     this.suggestTags = tags;
     this.value = value;
-    this.maxSuggest = Application.prefs.get('extensions.hatenabookmark.addPanel.tagMaxResult').value;
+    this.maxSuggest = Prefs.bookmark.get('addPanel.tagMaxResult');
 }
 
 TagCompleter.InputLine.prototype = {

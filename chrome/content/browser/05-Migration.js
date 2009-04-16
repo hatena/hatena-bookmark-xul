@@ -9,14 +9,14 @@ var Migration = {
     CURRENT_VERSION: 1,
 
     migration: function() {
-        let currentVer = Application.prefs.get('extensions.hatenabookmark.migration.version').value || 0;
+        let currentVer = Prefs.bookmark.get('migration.version') || 0;
         let migrations = Migration.Migrations;
         for (let i = 0,len = migrations.length;  i < len; i++) {
             if (currentVer < i+1) {
                 let m = migrations[i];
                 p('execute migration: ' + m.name);
                 m();
-                Application.prefs.get('extensions.hatenabookmark.migration.version').value = (i + 1);
+                Prefs.bookmark.set('migration.version', i + 1);
             }
         }
     },

@@ -75,8 +75,8 @@ extend(Sync, {
             return;
         }
 
-        let items = Application.prefs.get("extensions.hatenabookmark.sync.oneTimeItmes").value || 200;
-        let waitTime = Application.prefs.get("extensions.hatenabookmark.sync.syncWait").value || 1000;
+        let items = Prefs.bookmark.get("sync.oneTimeItmes") || 200;
+        let waitTime = Prefs.bookmark.get("sync.syncWait") || 1000;
 
         let commentRe = new RegExp('\\s+$','');
         let [bookmarks, infos] = this.createDataStructure(text);

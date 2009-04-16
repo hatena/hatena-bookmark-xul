@@ -2,13 +2,8 @@
 const EXPORT = ['StatusBar'];
 
 // local utility 
-this.__defineGetter__('aWin', function() Application.activeWindow);
-this.__defineGetter__('aDoc', function() {
-    // chrome スキームなどで、 fuel がエラー
-    try {
-        return aWin.activeTab.document;
-    } catch(e) { return null; }
-});
+this.__defineGetter__('aWin', function() getTopWin());
+this.__defineGetter__('aDoc', function() getTopWin().gBrowser.contentDocument);
 this.__defineGetter__('locationURL', function() {
     return aDoc ? aDoc.location.href : null;
 });
@@ -144,9 +139,9 @@ var StatusBar = {
 
 EventService.createListener('load', StatusBar.loadHandler);
 
-Application.activeWindow.events.addListener('TabSelect', function() {
+document.addEventListener('TabSelect', function() {
     StatusBar.update();
-});
+}, false);
 
 /*
 let ProgressListenr = {
@@ -174,10 +169,10 @@ let ProgressListenr = {
 // getBrowser().addProgressListener(ProgressListenr, Ci.nsIWebProgress.NOTIFY_ALL);
 
 /*
-Application.activeWindow.events.addListener('TabOpen', function() {
+document.addEventListener('TabOpen', function() {
     //getBrowser().addProgressListener(ProgressListenr, Ci.nsIWebProgress.NOTIFY_ALL);
     getBrowser().addEventListener('DOMContentLoaded', StatusBar.update, false);
-});
+}, false);
 */
 
 EventService.createListener('UserChange', function() {
