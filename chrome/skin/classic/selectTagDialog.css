@@ -1,0 +1,11 @@
+#tag-list-col-count {
+   text-align: right;
+}
+
+#tag-list-col-count > .treecol-text {
+   text-align: left;
+}
+
+#tag-list > treechildren::-moz-tree-cell(count) {
+   padding-right: 5px;
+}

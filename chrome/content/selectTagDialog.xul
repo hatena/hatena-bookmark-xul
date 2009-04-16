@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/selectTagDialog.css"?>
 <!DOCTYPE dialog SYSTEM "chrome://hatenabookmark/locale/selectTagDialog.dtd">
 <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         id="hBookmarkSelectTagDialog"
