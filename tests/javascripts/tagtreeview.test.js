@@ -60,3 +60,5 @@ function testSelection() {
     view.selection.currentIndex = 2;
     assert.equals(view.selectedTags.join(), ["Perl", "JavaScript"].join());
 }
+
+

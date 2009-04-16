@@ -3,7 +3,7 @@ let Tag = Model.Entity({
     fields : {
         id           : 'INTEGER PRIMARY KEY',
         bookmark_id  : 'INTEGER NOT NULL',
-        name         : 'TEXT',
+        name         : 'TEXT COLLATE NOCASE',
     }
 });
 
@@ -48,7 +48,7 @@ extend(Tag, {
         if (!tagNames || !tagNames.length)
             return !!this.countAll();
 
-        let keys = tagNames.map(function (t) t + "[]");
+        let keys = tagNames.map(function (t) t.toLowerCase() + "[]");
         let leafKey = keys.pop();
         let branchKey = keys.sort().join("");
         if (!(branchKey in this._relTagCache)) {
@@ -62,22 +62,13 @@ extend(Tag, {
             query += conditions.join(" AND ");
             let tags = Tag.find(query, tagNames.slice(0, -1));
             this._relTagCache[branchKey] = tags.reduce(function (cache, tag) {
-                cache[tag.name + "[]"] = true;
+                cache[tag.name.toLowerCase() + "[]"] = true;
                 return cache;
             }, new DictionaryObject());
         }
         return leafKey in this._relTagCache[branchKey];
     },
 
-    findTagCandidates: function Tag_findTagCandidates(partialTag) {
-        if (!partialTag) return [];
-        return this.find({
-            where: "name LIKE :pattern ESCAPE '#'",
-            // XXX SQLインジェクションの可能性について要検証
-            pattern: partialTag.replace(/[#_%]/g, "#$&") + "%",
-            group: "name"
-        });
-    },
 
     deleteByName: function Tag_deleteByName(name) Tag.rename(name, null),
 
@@ -111,6 +102,12 @@ function clearCache() {
     shared.set("relatedTagCache", Tag._relTagCache);
 }
 addBefore(Tag.prototype, "save", clearCache);
+
+// addAround(Tag.prototype, "save", function(proceed, args, target) {
+//     target.lcname = target.name.toLowerCase();
+//     proceed(args);
+// });
+
 EventService.createListener("UserChange", clearCache);
 
 Model.Tag = Tag;
