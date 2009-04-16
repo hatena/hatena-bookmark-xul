@@ -366,21 +366,14 @@
 
             <method name="selectTag">
                 <body><![CDATA[
-                    let PS = hBookmark.PromptService;
-                    let tags = hBookmark.Model.Tag.findDistinctTags();
-                    if (!tags.length) {
-                        PS.alert(window, this.strings.get("prompt.noTagTitle"),
-                                 this.strings.get("tagFilter.noTagDescription"));
-                        return;
-                    }
-                    let tagNames = tags.map(function (t) t.name);
                     let selected = {};
-                    let ok = PS.select(window,
-                        this.strings.get("tagFilter.selectTagTitle"),
-                        this.strings.get("tagFilter.selectTagDescription"),
-                        tagNames.length, tagNames, selected);
-                    if (!ok) return;
-                    this.setTag(tags[selected.value].name);
+                    window.openDialog(
+                        "chrome://hatenabookmark/content/selectTagDialog.xul",
+                        "",
+                        "chrome, dialog, modal, resizable, centerscreen",
+                        selected).focus();
+                    if (selected.tag)
+                        this.setTag(selected.tag.name);
                 ]]></body>
             </method>
 

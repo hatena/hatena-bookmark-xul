@@ -1,0 +1,6 @@
+<!ENTITY hBookmark.selectTag.title "タグを選択">
+<!ENTITY hBookmark.selectTag.initialWidth "300">
+<!ENTITY hBookmark.selectTag.initialHeight "450">
+<!ENTITY hBookmark.selectTag.description "選択したタグの付いたブックマークがツールバーに表示されます">
+<!ENTITY hBookmark.selectTag.tagLabel "タグ">
+<!ENTITY hBookmark.selectTag.countLabel "件数">

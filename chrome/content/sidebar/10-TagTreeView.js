@@ -1,7 +1,5 @@
 const EXPORT = ["TagTreeView"];
 
-const AtomService =
-    Cc["@mozilla.org/atom-service;1"].getService(Ci.nsIAtomService);
 const NAME_ATOM  = AtomService.getAtom("Name");
 const TITLE_ATOM = AtomService.getAtom("title");
 const TAG_ATOM   = AtomService.getAtom("tag");

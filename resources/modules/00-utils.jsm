@@ -42,6 +42,8 @@ const CookieService=
      getService("@mozilla.org/cookieService;1", Ci.nsICookieService);
 const PromptService =
     getService("@mozilla.org/embedcomp/prompt-service;1", Ci.nsIPromptService);
+const AtomService =
+    getService("@mozilla.org/atom-service;1", Ci.nsIAtomService);
 
 const CryptoHash = 
     Cc["@mozilla.org/security/hash;1"].createInstance(Ci.nsICryptoHash);
