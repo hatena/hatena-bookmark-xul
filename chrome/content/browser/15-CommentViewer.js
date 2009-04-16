@@ -213,7 +213,7 @@ var CommentViewer = {
         }
         list.appendChild(fragment);
         faviconImage.src = data.favicon;
-        titleLabel.value = data.title || data.url;
+        titleLabel.value = decodeReferences(data.title) || data.url;
         let c = data.count;
         if (c) {
             usersLabel.value = parseInt(data.count) == 0 ? (data.count + ' user') :  data.count + ' users';
