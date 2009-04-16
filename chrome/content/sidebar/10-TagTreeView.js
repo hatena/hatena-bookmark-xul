@@ -1,7 +1,5 @@
 const EXPORT = ["TagTreeView"];
 
-const AtomService =
-    Cc["@mozilla.org/atom-service;1"].getService(Ci.nsIAtomService);
 const NAME_ATOM  = AtomService.getAtom("Name");
 const TITLE_ATOM = AtomService.getAtom("title");
 const TAG_ATOM   = AtomService.getAtom("tag");
@@ -108,13 +106,9 @@ extend(TagTreeView.prototype, {
                   (sortDir === "descending") ? "natural"    : "ascending";
         let cols = col.columns;
         for (let c = cols.getFirstColumn(); c; c = c.getNext()) {
-            if (c === col) {
-                c.element.setAttribute("sortDirection", sortDir);
-                c.element.setAttribute("sortActive", "true");
-            } else {
-                c.element.setAttribute("sortDirection", "natural");
-                c.element.removeAttribute("sortActive")
-            }
+            let isKey = (c === col);
+            c.element.setAttribute("sortDirection", isKey ? sortDir : "natural");
+            c.element.setAttribute("sortActive", isKey);
         }
         this._sortBy = col.element.id.substring("hBookmarkTagTree_".length);
         this._sortDir = sortDir;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/selectTagDialog.css"?>
+<!DOCTYPE dialog SYSTEM "chrome://hatenabookmark/locale/selectTagDialog.dtd">
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        id="hBookmarkSelectTagDialog"
+        title="&hBookmark.selectTag.title;"
+        buttons="accept,cancel"
+        width="&hBookmark.selectTag.initialWidth;"
+        height="&hBookmark.selectTag.initialHeight;"
+        persist="width height screenX screenY"
+        onload="new hBookmark.SelectTagDialogManager(document.documentElement);"
+        onunload="document.documentElement.manager.destroy();"
+        ondialogaccept="return document.documentElement.manager.onAccept(event);">
+    <script type="application/javascript"
+            src="chrome://hatenabookmark/content/autoloader.js"/>
+
+    <vbox flex="1">
+        <description>&hBookmark.selectTag.description;</description>
+
+        <tree id="tag-list"
+              seltype="single"
+              hidecolumnpicker="true"
+              flex="1">
+            <treecols>
+                <treecol id="tag-list-col-tag"
+                         label="&hBookmark.selectTag.tagLabel;"
+                         sortActive="true"
+                         sortDirection="natural"
+                         persist="width sortActive sortDirection"
+                         flex="5"/>
+                <splitter class="tree-splitter"/>
+                <treecol id="tag-list-col-count"
+                         label="&hBookmark.selectTag.countLabel;"
+                         persist="width sortActive sortDirection"
+                         flex="1"/>
+            </treecols>
+            <treechildren/>
+        </tree>
+    </vbox>
+</dialog>

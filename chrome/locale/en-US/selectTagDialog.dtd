@@ -1,0 +1,6 @@
+<!ENTITY hBookmark.selectTag.title "Select Tag">
+<!ENTITY hBookmark.selectTag.initialWidth "300">
+<!ENTITY hBookmark.selectTag.initialHeight "450">
+<!ENTITY hBookmark.selectTag.description "Bookmarks that you select which have a tag will be shown in the toolbar.">
+<!ENTITY hBookmark.selectTag.tagLabel "Tag">
+<!ENTITY hBookmark.selectTag.countLabel "Count">
