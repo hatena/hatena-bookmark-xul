@@ -22,6 +22,7 @@ extend(Model, {
     resetAll: function() {
         this.deleteAll();
         this.createAll();
+        this.db.version = 1;
     },
     deleteAll: function() {
         this.MODELS.forEach(function(m) {
@@ -34,6 +35,28 @@ extend(Model, {
     },
     createAll: function() {
         var models = this.MODELS.forEach(function(m) Model[m].initialize());
+    },
+    getSafeDB: function() {
+        let b = model('Bookmark');
+        if (b) {
+            return b.db;
+        } else {
+            return null;
+        }
+    },
+    migrate: function() {
+        let db = this.getSafeDB();
+        if (!db) {
+            p('migrate fail.DB not found');
+            return;
+        }
+        this.db = db;
+        let version = db.version || 0;
+        if (version == 0) {
+            // tag の nocase のため、作り直す・・・
+            p('DB migrate: ' + version);
+            this.resetAll();
+        }
     },
 });
 

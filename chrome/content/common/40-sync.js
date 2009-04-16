@@ -14,9 +14,12 @@ Sync = {};
 EventService.implement(Sync);
 extend(Sync, {
     init: function Sync_init () {
-        let db = model('Bookmark').db;
+        let b = model('Bookmark');
+        let db = b.db;
         if (!db.tableExists('bookmarks')) {
             hBookmark.Model.resetAll();
+        } else {
+            hBookmark.Model.migrate();
         }
         this.sync();
     },
