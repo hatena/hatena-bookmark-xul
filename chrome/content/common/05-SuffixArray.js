@@ -1,6 +1,7 @@
 
 /*
- * 試しにベタ実装
+ * SAIS algorithm [ http://yuta.256.googlepages.com/sais ]
+ * MIT/X11 license.
  */
 
 const EXPORT = ['SuffixArray'];
