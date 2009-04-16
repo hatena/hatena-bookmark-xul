@@ -1,0 +1,13 @@
+
+/* 
+ * XXX
+ */
+#hBookmark-status-count label {
+    display: inline !important;
+    -moz-opacity: 1 !important;
+    cursor: pointer !important;
+}
+
+#hBookmark-status-count image {
+    display: none !important;
+}

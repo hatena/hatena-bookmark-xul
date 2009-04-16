@@ -1,7 +1,7 @@
 
-EXPORT = ['Prefs'];
+const EXPORT = ['Prefs'];
 
-Prefs = function (branchName) {
+var Prefs = function (branchName) {
     if (branchName && branchName[branchName.length-1] != '.')
         throw 'branchName should be "foo.branchName." -> ' + branchName;
     this._branch = branchName;
@@ -28,12 +28,14 @@ Prefs.prototype = {
     get: function Prefs_get(name) {
         let prefs = this.prefs;
         let type = prefs.getPrefType(name);
+
         try {
             switch (type)
             {
                 case PrefService.PREF_STRING:
-                    // for multibyte
-                    return decodeURIComponent(escape(prefs.getCharPref(name)));
+                    // for multibyte and localized values
+                    return prefs.getComplexValue(name,
+                                                 Ci.nsIPrefLocalizedString).data;
                     break;
                 case PrefService.PREF_INT:
                     return prefs.getIntPref(name);
@@ -98,6 +100,7 @@ Prefs.prototype = {
 };
 
 Prefs.global = new Prefs('');
-Prefs.bookmark = new Prefs('extentions.hatenabookmark.');
+Prefs.bookmark = new Prefs('extensions.hatenabookmark.');
+Prefs.link = new Prefs('extensions.hatenabookmark.link.');
 
 

@@ -12,8 +12,8 @@ extend(Model, {
         if (!this._init) this.init();
         if (this._db) return this._db;
 
-        var db = new Database('hatena.bookmark.sqlite');
-        return this.db = db;
+        // var db = new Database('hatena.bookmark.sqlite');
+        // return this.db = db;
     },
     set db(db) {
         this._db = db;
@@ -39,7 +39,9 @@ extend(Model, {
 
 Model.Entity = function (def) {
     let model = extend(Entity(def), {
-        get db() Model.db,
+        get db() {
+            return User.user ? User.user.database : Model.db;
+        }
     });
     return model;
 };

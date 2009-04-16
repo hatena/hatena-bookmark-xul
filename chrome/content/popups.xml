@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="bookmark-tooltip"
+             extends="chrome://global/content/bindings/popup.xml#tooltip">
+        <content>
+            <xul:description anonid="titleField"/>
+            <xul:description anonid="urlField"/>
+            <xul:description anonid="commentField"/>
+        </content>
+
+        <implementation>
+            <field name="titleField">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleField")
+            </field>
+            <field name="urlField">
+                document.getAnonymousElementByAttribute(this, "anonid", "urlField")
+            </field>
+            <field name="commentField">
+                document.getAnonymousElementByAttribute(this, "anonid", "commentField")
+            </field>
+        </implementation>
+
+        <handlers>
+            <handler event="popupshowing"><![CDATA[
+                let target = hBookmark.UIUtils.getBookmarkElement(
+                                 document.tooltipNode);
+                if (!target || ("hoveredBookmark" in target &&
+                                !target.hoveredBookmark))
+                    return false;
+                let bookmark = target.hoveredBookmark || target.bookmark;
+                this.titleField.textContent = bookmark.title;
+                this.urlField.textContent = bookmark.url;
+                this.urlField.hidden = (bookmark.title === bookmark.url);
+                this.commentField.textContent = bookmark.comment;
+                this.commentField.hidden = !/\S/.test(bookmark.comment);
+                return true;
+            ]]></handler>
+        </handlers>
+    </binding>
+
+</bindings>

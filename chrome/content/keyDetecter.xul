@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ***** BEGIN LICENSE BLOCK *****
+   - Version: MPL 1.1/GPL 2.0/LGPL 2.1
+   -
+   - The contents of this file are subject to the Mozilla Public License Version
+   - 1.1 (the "License"); you may not use this file except in compliance with
+   - the License. You may obtain a copy of the License at
+   - http://www.mozilla.org/MPL/
+   -
+   - Software distributed under the License is distributed on an "AS IS" basis,
+   - WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+   - for the specific language governing rights and limitations under the
+   - License.
+   -
+   - The Original Code is the Key Detecter.
+   -
+   - The Initial Developer of the Original Code is SHIMODA Hiroshi.
+   - Portions created by the Initial Developer are Copyright (C) 2002-2004
+   - the Initial Developer. All Rights Reserved.
+   -
+   - Contributor(s): SHIMODA Hiroshi <piro@p.club.ne.jp>
+   -
+   - Alternatively, the contents of this file may be used under the terms of
+   - either the GNU General Public License Version 2 or later (the "GPL"), or
+   - the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+   - in which case the provisions of the GPL or the LGPL are applicable instead
+   - of those above. If you wish to allow use of your version of this file only
+   - under the terms of either the GPL or the LGPL, and not to allow others to
+   - use your version of this file under the terms of the MPL, indicate your
+   - decision by deleting the provisions above and replace them with the notice
+   - and other provisions required by the LGPL or the GPL. If you do not delete
+   - the provisions above, a recipient may use your version of this file under
+   - the terms of any one of the MPL, the GPL or the LGPL.
+   -
+   - ***** END LICENSE BLOCK ***** -->
+
+<!--
+
+	入力キー検出用ダイアログ
+
+	window.openDialog(
+		'chrome://***/content/keyDetecter.xul',
+		'',
+		'chrome,modal,resizable=no,titlebar=no,centerscreen',
+		keyData,
+		descriptionLabel,
+		cancelButtonLabel
+	);
+
+	という具合で、入力されたキーの情報を格納するオブジェクトと、表示するメッセージとを引数として渡す。
+
+-->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+		orient="vertical"
+		onkeypress="onKeyPress(event);">
+
+<script type="application/x-javascript"><![CDATA[
+
+function onKeyPress(event)
+{
+	var keyData  = window.arguments[0],
+		charCode = event.charCode || '',
+		keyCode  = getKeyCodeStrFromKeyCode(event);
+
+    if (keyData.altKey) {
+        keyData.altKey = true;
+        return; // XXX: alt でうまくキーコードを取得できない？
+    }
+	if (charCode || keyCode) {
+		keyData.key      = charCode ? String.fromCharCode(charCode) : '' ;
+		keyData.charCode = charCode;
+		keyData.keyCode  = keyCode;
+		keyData.altKey   = event.altKey;
+		keyData.ctrlKey  = event.ctrlKey;
+		keyData.metaKey  = event.metaKey;
+		keyData.shiftKey = event.shiftKey;
+		keyData.string   = keyboardShortcutToString(keyData);
+		keyData.modified = true;
+	}
+	window.close();
+}
+
+
+// キーコードをキーコード名に変換
+function getKeyCodeStrFromKeyCode(event)
+{
+	var codes = 'DOM_VK_CANCEL,DOM_VK_HELP,DOM_VK_BACK_SPACE,DOM_VK_TAB,DOM_VK_CLEAR,DOM_VK_RETURN,DOM_VK_ENTER,DOM_VK_SHIFT,DOM_VK_CONTROL,DOM_VK_ALT,DOM_VK_PAUSE,DOM_VK_CAPS_LOCK,DOM_VK_ESCAPE,DOM_VK_SPACE,DOM_VK_PAGE_UP,DOM_VK_PAGE_DOWN,DOM_VK_END,DOM_VK_HOME,DOM_VK_LEFT,DOM_VK_UP,DOM_VK_RIGHT,DOM_VK_DOWN,DOM_VK_PRINTSCREEN,DOM_VK_INSERT,DOM_VK_DELETE,DOM_VK_0,DOM_VK_1,DOM_VK_2,DOM_VK_3,DOM_VK_4,DOM_VK_5,DOM_VK_6,DOM_VK_7,DOM_VK_8,DOM_VK_9,DOM_VK_SEMICOLON,DOM_VK_EQUALS,DOM_VK_A,DOM_VK_B,DOM_VK_C,DOM_VK_D,DOM_VK_E,DOM_VK_F,DOM_VK_G,DOM_VK_H,DOM_VK_I,DOM_VK_J,DOM_VK_K,DOM_VK_L,DOM_VK_M,DOM_VK_N,DOM_VK_O,DOM_VK_P,DOM_VK_Q,DOM_VK_R,DOM_VK_S,DOM_VK_T,DOM_VK_U,DOM_VK_V,DOM_VK_W,DOM_VK_X,DOM_VK_Y,DOM_VK_Z,DOM_VK_NUMPAD0,DOM_VK_NUMPAD1,DOM_VK_NUMPAD2,DOM_VK_NUMPAD3,DOM_VK_NUMPAD4,DOM_VK_NUMPAD5,DOM_VK_NUMPAD6,DOM_VK_NUMPAD7,DOM_VK_NUMPAD8,DOM_VK_NUMPAD9,DOM_VK_MULTIPLY,DOM_VK_ADD,DOM_VK_SEPARATOR,DOM_VK_SUBTRACT,DOM_VK_DECIMAL,DOM_VK_DIVIDE,DOM_VK_F1,DOM_VK_F2,DOM_VK_F3,DOM_VK_F4,DOM_VK_F5,DOM_VK_F6,DOM_VK_F7,DOM_VK_F8,DOM_VK_F9,DOM_VK_F10,DOM_VK_F11,DOM_VK_F12,DOM_VK_F13,DOM_VK_F14,DOM_VK_F15,DOM_VK_F16,DOM_VK_F17,DOM_VK_F18,DOM_VK_F19,DOM_VK_F20,DOM_VK_F21,DOM_VK_F22,DOM_VK_F23,DOM_VK_F24,DOM_VK_NUM_LOCK,DOM_VK_SCROLL_LOCK,DOM_VK_COMMA,DOM_VK_PERIOD,DOM_VK_SLASH,DOM_VK_BACK_QUOTE,DOM_VK_OPEN_BRACKET,DOM_VK_BACK_SLASH,DOM_VK_CLOSE_BRACKET,DOM_VK_QUOTE,DOM_VK_META'.split(',');
+	for (var i in codes)
+		if (event.keyCode == event[codes[i]])
+			return codes[i].replace(/^DOM_/, '');
+
+	return '';
+}
+
+// キーボードショートカットの組み合わせを示す文字列を生成
+function keyboardShortcutToString(keyData)
+{
+	var keys = [];
+	if (keyData.altKey)   keys.push('Alt');
+	if (keyData.ctrlKey)  keys.push('Ctrl(Control)');
+	if (keyData.metaKey)  keys.push('Meta(Command)');
+	if (keyData.shiftKey) keys.push('Shift');
+	if (keyData.key == ' ')
+		keys.push('Space');
+	else if (keyData.key)
+		keys.push(keyData.key.toUpperCase());
+
+	if (keyData.keyCode) { // 「VK_XXX」のキーコード名をキー名に変換
+		var keyName = keyData.keyCode.replace(/^VK_/, '').replace(/_/g, ' ').toLowerCase();
+		keyName = keyName.split(' ');
+		for (var i in keyName)
+			keyName[i] = keyName[i].replace(/^(.)/g, keyName[i].charAt(0).toUpperCase());
+		keys.push(keyName.join(' '));
+	}
+
+	return keys.length == 1 ? keys[0] : keys.join('+') ;
+}
+
+]]></script>
+
+<vbox style="margin: 10px;">
+<box orient="horizontal">
+	<spacer flex="1"/>
+	<description id="description"/>
+	<script type="application/x-javascript"><![CDATA[
+		document.getElementById('description').setAttribute('value', window.arguments[1] || '');
+	]]></script>
+	<spacer flex="1"/>
+</box>
+<box orient="horizontal" height="26px">
+	<spacer flex="1"/>
+	<button id="cancelButton" oncommand="window.close();"/>
+	<script type="application/x-javascript"><![CDATA[
+		document.getElementById('cancelButton').setAttribute('label', window.arguments[2] || '');
+	]]></script>
+	<spacer flex="1"/>
+</box>
+</vbox>
+<spacer flex="1"/>
+
+</window>

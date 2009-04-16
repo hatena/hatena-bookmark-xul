@@ -1,0 +1,17 @@
+<!ENTITY hBookmark.tagContext.openLabel "タグページを開く">
+<!ENTITY hBookmark.tagContext.openKey "O">
+<!ENTITY hBookmark.tagContext.openInNewTabLabel "タグページを新しいタブで開く">
+<!ENTITY hBookmark.tagContext.openInNewTabKey "T">
+
+<!ENTITY hBookmark.bookmarkContext.openLabel "開く">
+<!ENTITY hBookmark.bookmarkContext.openKey "O">
+<!ENTITY hBookmark.bookmarkContext.openInNewTabLabel "新しいタブで開く">
+<!ENTITY hBookmark.bookmarkContext.openInNewTabKey "W">
+<!ENTITY hBookmark.bookmarkContext.openEntryLabel "はてなブックマークで表示">
+<!ENTITY hBookmark.bookmarkContext.openEntryKey "B">
+<!ENTITY hBookmark.bookmarkContext.editLabel "編集...">
+<!ENTITY hBookmark.bookmarkContext.editKey "E">
+<!ENTITY hBookmark.bookmarkContext.deleteLabel "削除">
+<!ENTITY hBookmark.bookmarkContext.deleteKey "D">
+<!ENTITY hBookmark.bookmarkContext.deleteAllLabel "すべて削除">
+<!ENTITY hBookmark.bookmarkContext.deleteAllKey "L">

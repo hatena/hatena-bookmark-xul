@@ -52,6 +52,13 @@ function testAsyncMethod()
     assert.equals(foo, 30);
 }
 
+function testNetsyncget()
+{
+    let res = net.sync_get('http://b.hatena.ne.jp');
+
+    assert.isTrue(res.responseText.length > 0);
+}
+
 function testAsyncExecute()
 {
     let asyncExecute = async.splitExecuter;

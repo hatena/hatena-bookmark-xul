@@ -2,6 +2,8 @@ const EXPORT = ["Database", "Entity", "Model"];
 
 /*
  * original code by tombloo
+ * http://github.com/to/tombloo
+ * このファイルのソースコードは Tombloo のライセンスに従います
  */
 
 var Database = null;

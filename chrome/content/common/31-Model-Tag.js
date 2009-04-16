@@ -8,9 +8,16 @@ let Tag = Model.Entity({
 });
 
 extend(Tag, {
-    findDistinctTags: function () this.find({ group: "name" }),
+    findDistinctTags: function (count) {
+        let query = 'select count(name) as `count`, name from tags group by name';
+        if (count) query += ' order by count desc limit ' + +count;
+        let tags = this.find(query);
+        // count 順になったのを元に戻す
+        if (count) tags.sort(function (a, b) a.name > b.name ? 1 : -1);
+        return tags;
+    },
 
-    findRelatedTags: function (tagNames) {
+    findRelatedTags: function (tagNames, limit) {
         if (!tagNames || !tagNames.length)
             return this.findDistinctTags();
         var bmIds = null;
@@ -23,14 +30,43 @@ extend(Tag, {
             bmIds = this.find(cond).map(function (tag) tag.bookmark_id);
             if (!bmIds.length) return bmIds;
         }
-        var condition = { group: "name" };
-        var where = "name NOT IN (" + tagNames.map(function (name, i) {
-            var paramName = "name" + i;
-            condition[paramName] = name;
-            return ":" + paramName;
-        }).join(",") + ") AND bookmark_id IN (" + bmIds.join(",") + ")";
-        condition.where = where;
-        return this.find(condition);
+        // XXX bmIdsをプレースホルダにするとブックマーク件数が多いとき落ちる
+        let query = "select count(name) as `count`, name from tags " +
+                    "where name not in (" +
+                    tagNames.map(function () "?").join() +
+                    ") and bookmark_id in (" +
+                    bmIds.join() +
+                    ") group by name";
+        if (limit) {
+            query += " limit ?";
+            tagNames = tagNames.concat(+limit);
+        }
+        return this.find(query, tagNames);
+    },
+
+    hasRelatedTags: function Tag_hasRelatedTags(tagNames) {
+        if (!tagNames || !tagNames.length)
+            return !!this.countAll();
+
+        let keys = tagNames.map(function (t) t + "[]");
+        let leafKey = keys.pop();
+        let branchKey = keys.sort().join("");
+        if (!(branchKey in this._relTagCache)) {
+            p("create relatedTagCache for " + branchKey);
+            let query = "SELECT DISTINCT name FROM tags WHERE ";
+            let conditions = keys.map(function ()
+                "bookmark_id IN (SELECT bookmark_id FROM tags WHERE name = ?)");
+            conditions.push("bookmark_id IN (SELECT bookmark_id FROM tags " +
+                            "GROUP BY bookmark_id HAVING count(*) > " +
+                            tagNames.length + ")");
+            query += conditions.join(" AND ");
+            let tags = Tag.find(query, tagNames.slice(0, -1));
+            this._relTagCache[branchKey] = tags.reduce(function (cache, tag) {
+                cache[tag.name + "[]"] = true;
+                return cache;
+            }, new DictionaryObject());
+        }
+        return leafKey in this._relTagCache[branchKey];
     },
 
     findTagCandidates: function Tag_findTagCandidates(partialTag) {
@@ -67,5 +103,16 @@ extend(Tag, {
     }
 });
 
+Tag._relTagCache = shared.get("relatedTagCache");
+if (!Tag._relTagCache) clearCache();
+
+function clearCache() {
+    Tag._relTagCache = new DictionaryObject();
+    shared.set("relatedTagCache", Tag._relTagCache);
+}
+addBefore(Tag.prototype, "save", clearCache);
+EventService.createListener("UserChange", clearCache);
+
 Model.Tag = Tag;
 Model.MODELS.push("Tag");
+

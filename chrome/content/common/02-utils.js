@@ -10,6 +10,12 @@ function newURI(uriSpec, originCharset, baseURI) {
     return IOService.newURI(uriSpec, originCharset, baseURI);
 }
 
+function favicon(uri) {
+    if (typeof uri === "string")
+        uri = IOService.newURI(uri, null, null);
+    return FaviconService.getFaviconImageForPage(uri).spec;
+}
+
 /*
  * あとで jsm に移植？
  */
@@ -22,6 +28,8 @@ const _SPRINTF_HASH = {
     '%d': parseInt,
     '%f': parseFloat,
 };
+
+const IS_OSX = navigator.platform.toLowerCase().indexOf('mac') == 0;
 
 var sprintf = function (str) {
     let args = Array.slice(arguments, 1);
@@ -54,6 +62,54 @@ var getHistoryNodeByURL = function getHistoryNodeByURL(url) {
     }
     return;
 }
+
+// Timer
+
+var Timer = function(interval, repeatCount) {
+    EventService.implement(this);
+    this.currentCount = 0;
+    this.interval = interval || 60; // ms
+    this.repeatCount = repeatCount || 0;
+}
+
+Timer.prototype = {
+    start: function() {
+        this._running = true;
+        this.loopTimer = setTimeout(function(self) {
+            self.loop();
+        }, this.interval, this);
+    },
+    reset: function() {
+        this.stop();
+        this.currentCount = 0;
+    },
+    stop: function() {
+        this.clearTimer();
+        this._running = false;
+    },
+    clearTimer: function() {
+        if (this.loopTimer) {
+            clearTimeout(this.loopTimer);
+            delete this.loopTimer;
+        }
+    },
+    get running() this._running,
+    loop: function() {
+        if (!this.running) return;
+        this.currentCount++;
+        if (this.repeatCount && this.currentCount >= this.repeatCount) {
+            this.stop();
+            this.dispatch('timer');
+            this.dispatch('timerComplete');
+            return;
+        }
+        this.dispatch('timer');
+        this.loopTimer = setTimeout(function(self) {
+            self.loop();
+        }, this.interval, this);
+    },
+}
+
 
 var async = {};
 
@@ -170,8 +226,40 @@ net.makeQuery =  function net_makeQuery (data) {
     return pairs.join('&');
 }
 
+net.sync_get = function net__sync_get(url, query, method) {
+    if (!method) method == 'GET';
+    if (method == 'GET' && query) {
+        let q = this.makeQuery(query);
+        if (q) {
+            url += '?' + q;
+        }
+    }
+    let Y = function(func) {
+        let g = func(function(t) {
+            try { g.send(t) } catch (e) {};
+        });
+        return g;
+    };
+    let xhr;
+    let gen = Y(function(next) {
+        xhr = new XMLHttpRequest();
+        xhr.mozBackgroundRequest = true;
+        xhr.open('GET', url, false);
+        if (method == 'POST') {
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send(this.makeQuery(query));
+        } else {
+            xhr.send(null);
+        }
+        yield xhr;
+    });
+
+    return gen.next();
+}
+
 net._http = function net__http (url, callback, errorback, async, query, method) {
     let xhr = new XMLHttpRequest();
+    xhr.mozBackgroundRequest = true;
     if (async) {
        xhr.onreadystatechange = function() {
            if (xhr.readyState == 4) {
@@ -209,8 +297,36 @@ net._http = function net__http (url, callback, errorback, async, query, method) 
 net.get = function net_get (url, callback, errorback, async, query)
                 this._http(url, callback, errorback, async, query, 'GET');
 
-net.post = function net_get (url, callback, errorback, async, query)
+net.post = function net_post (url, callback, errorback, async, query)
                 this._http(url, callback, errorback, async, query, 'POST');
+
+/*
+ * parseShortcut function copy from XUL/Migemo
+ */
+var parseShortcut = function parseShortcut(aShortcut) {
+    var accelKey = navigator.platform.toLowerCase().indexOf('mac') == 0 ? 'meta' : 'ctrl' ;
+    aShortcut = aShortcut.replace(/accel/gi, accelKey);
+
+    var keys = aShortcut.split('+');
+
+    var keyCode = keys[keys.length-1].replace(/ /g, '_').toUpperCase();
+    var key     = keyCode;
+
+    sotredKeyCode = (keyCode.length == 1 || keyCode == 'SPACE' || !keyCode) ? '' : 'VK_'+keyCode ;
+    key = sotredKeyCode ? '' : keyCode ;
+
+    return {
+        key      : key,
+        charCode : (key ? key.charCodeAt(0) : '' ),
+        keyCode  : sotredKeyCode,
+        altKey   : /alt/i.test(aShortcut),
+        ctrlKey  : /ctrl|control/i.test(aShortcut),
+        metaKey  : /meta/i.test(aShortcut),
+        shiftKey : /shift/i.test(aShortcut),
+        string   : aShortcut,
+        modified : false
+    };
+}
 
 var EXPORT = [m for (m in new Iterator(this, true))
                           if (m[0] !== "_" && m !== "EXPORT")];

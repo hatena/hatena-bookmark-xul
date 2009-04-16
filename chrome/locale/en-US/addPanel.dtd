@@ -1,0 +1,32 @@
+<!ENTITY hBookmark.addPanel.initialWidth "640">
+<!ENTITY hBookmark.addPanel.initialHeight "480">
+
+<!ENTITY hBookmark.addPanel.welcomeUserLabel.before "Welcome ">
+<!ENTITY hBookmark.addPanel.welcomeUserLabel.after "">
+
+<!ENTITY hBookmark.addPanel.titleLabel "Title:">
+<!ENTITY hBookmark.addPanel.loadingTitleLabel "Loading Title…">
+<!ENTITY hBookmark.addPanel.editTitleLabel "Edit Title">
+<!ENTITY hBookmark.addPanel.cancelEditTitleLabel "Cancel">
+<!ENTITY hBookmark.addPanel.titleDescription "This title is shared with all users. ">
+<!ENTITY hBookmark.addPanel.titleGuidelineLabel "Guidelines for title changes (in Japanese)">
+<!ENTITY hBookmark.addPanel.titleGuidelineURI "http://b.hatena.ne.jp/help/guideline_title">
+<!ENTITY hBookmark.addPanel.lastTitleEditorLabel "Last modified by">
+
+<!ENTITY hBookmark.addPanel.urlLabel "URL:">
+<!ENTITY hBookmark.addPanel.showCommentsLabel "Show Bookmark Comments">
+<!ENTITY hBookmark.addPanel.commentLabel "Comment:">
+<!ENTITY hBookmark.addPanel.confirmEntryLabel "Confirm Bookmark">
+<!ENTITY hBookmark.addPanel.addCollectionLabel "Add to Collection">
+
+<!ENTITY hBookmark.addPanel.imageDescription "The image is shared with all users. ">
+<!ENTITY hBookmark.addPanel.imageGuidelineLabel "Guidelines for image usage (in Japanese)">
+<!ENTITY hBookmark.addPanel.imageGuidelineURI "http://b.hatena.ne.jp/help/guideline_image">
+<!ENTITY hBookmark.addPanel.lastImageEditorLabel "Last modified by">
+
+<!ENTITY hBookmark.addPanel.recommendedTagsLabel "Recommended Tags">
+<!ENTITY hBookmark.addPanel.tagsLabel "Tags">
+<!ENTITY hBookmark.addPanel.showAllTagsLabel "Show all tags">
+<!ENTITY hBookmark.addPanel.showFrequentTagsLabel "Show frequently used tags">
+
+<!ENTITY hBookmark.addPanel.deleteLabel "Delete">

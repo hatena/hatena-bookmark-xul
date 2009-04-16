@@ -16,7 +16,7 @@ function setUp()
 
 function testParseTags() {
     var B = model('Bookmark');
-    assert.equals(B.parseTags('[hoge][huga]mycomment').length, 2);
+    assert.equals(B.parseTags('[hoge][huga]mycomment[foo]').length, 2);
 }
 
 function testBookmark() {
@@ -50,14 +50,27 @@ function testBookmark() {
     b.url = 'http://b.hatena.ne.jp/2';
     b.comment = '[hoge]mycomment2';
     b.title = 'bookmark2';
-    b.date = 0;
+    b.date = 20090401123456;
     b.save();
+
+    var b3 = BOOKMARK.findByUrl(b.url);
+    assert.equals(b.comment, b3[0].comment);
+    assert.equals('2009/04/01', b3[0].dateYMD);
+    assert.equals('2009-04-01 12:34:56',
+                  b3[0].dateObject.toLocaleFormat('%Y-%m-%d %H:%M:%S'))
 
     res = BOOKMARK.findByTags('hoge');
     assert.isTrue(res.length == 2);
 
     res = BOOKMARK.findByTags(['hoge', 'huga']);
     assert.isTrue(res.length == 1);
+
+    res = BOOKMARK.findRecent(1);
+    assert.isTrue(res.length == 1);
+
+    assert.equals(1, model('Tag').findByName('huga').length);
+    BOOKMARK.deleteBookmarks([b2]);
+    assert.equals(0, model('Tag').findByName('huga').length);
 
 }
 
@@ -85,3 +98,5 @@ function testTag() {
     tags = Tag.findByName("Perl");
     assert.equals(tags.length, 0);
 }
+
+

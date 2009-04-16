@@ -1,0 +1,5 @@
+
+#urlbar[searchenabled="true"] {
+    /* osx ... */
+    background-color: transparent !important;
+}

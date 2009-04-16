@@ -1,0 +1,1138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/addPanel.dtd">
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="add-panel"
+             extends="chrome://global/content/bindings/popup.xml#panel">
+        <content flex="1">
+            <xul:label anonid="errorField" hidden="true"/>
+            <xul:hbox class="username-line" align="center" pack="end">
+                    <xul:label value="&hBookmark.addPanel.welcomeUserLabel.before;" />
+                    <xul:image anonid="userIcon"/>
+                    <xul:label anonid="userNameField" class="text-link hBookmarkLink"/>
+                    <xul:label value="&hBookmark.addPanel.welcomeUserLabel.after;" />
+            </xul:hbox>
+            <xul:hbox pack="center" anonid="messageRow">
+                <xul:label anonid="messageField"/>
+            </xul:hbox>
+            <xul:hbox align="start">
+              <xul:grid class="mainGrid" flex="1">
+                  <xul:columns>
+                      <xul:column/>
+                      <xul:column flex="1"/>
+                  </xul:columns>
+                  <xul:rows>
+                      <xul:row align="center">
+                          <xul:label value="&hBookmark.addPanel.titleLabel;" class="labelHeader"/>
+                          <xul:vbox>
+                              <xul:hbox anonid="titleContainer"
+                                        align="center">
+                                  <xul:image anonid="titleIcon"/>
+                                  <xul:label anonid="titleLabel"
+                                             emptytext="&hBookmark.addPanel.loadingTitleLabel;"
+                                             crop="end" flex="1"/>
+                                  <xul:button anonid="editTitleButton"
+                                              tooltiptext="&hBookmark.addPanel.editTitleLabel;"
+                                              oncommand="document.getBindingParent(this).isTitleEditable = true;"/>
+                              </xul:hbox>
+                              <xul:hbox anonid="editableTitleContainer"
+                                        align="center">
+                                  <xul:textbox anonid="titleField" flex="1"/>
+                                  <xul:button anonid="cancelEditTitleButton"
+                                              tooltiptext="&hBookmark.addPanel.cancelEditTitleLabel;"
+                                              oncommand="document.getBindingParent(this).isTitleEditable = false;"/>
+                              </xul:hbox>
+                          </xul:vbox>
+                      </xul:row>
+                      <xul:row anonid="editTitleNotification" hidden="true">
+                          <xul:spacer/>
+                          <xul:vbox align="start" class="notice">
+                              <xul:hbox align="start">
+                                <xul:description>
+                                    &hBookmark.addPanel.titleDescription;
+                                </xul:description>
+                                <xul:label value="&hBookmark.addPanel.titleGuidelineLabel;"
+                                           href="&hBookmark.addPanel.titleGuidelineURI;"
+                                           class="text-link hBookmarkLink"/>
+                              </xul:hbox>
+                              <xul:hbox anonid="lastTitleEditorContainer"
+                                        align="center">
+                                  <xul:label value="&hBookmark.addPanel.lastTitleEditorLabel;"/>
+                                  <xul:image anonid="lastTitleEditorIcon"/>
+                                  <xul:label anonid="lastTitleEditorField"
+                                             class="text-link hBookmarkLink"/>
+                              </xul:hbox>
+                          </xul:vbox>
+                      </xul:row>
+                      <xul:row align="center">
+                          <xul:label value="&hBookmark.addPanel.urlLabel;" class="labelHeader"/>
+                          <xul:label anonid="urlField"
+                                     class="text-link hBookmarkLink"
+                                     crop="end"/>
+                      </xul:row>
+                      <xul:row anonid="usersRow" align="center"
+                               style="visibility: hidden;">
+                          <xul:spacer/>
+                          <xul:hbox align="center">
+                              <xul:label anonid="usersField"
+                                         class="text-link hBookmarkLink"/>
+                              <xul:image anonid="showCommentsButton"
+                                         tooltiptext="&hBookmark.addPanel.showCommentsLabel;"
+                                         onclick="getTopWin().hBookmark.CommentViewer.show(document.getBindingParent(this).bookmark.url);"/>
+                              <xul:hbox anonid="favoritesContainer"
+                                        align="center" flex="1"
+                                        tooltip="hBookmarkFavoriteBookmarkTooltip"
+                                        style="overflow-x: hidden;"/>
+                          </xul:hbox>
+                      </xul:row>
+                      <xul:row align="center">
+                          <xul:label value="&hBookmark.addPanel.commentLabel;" class="labelHeader"/>
+                          <xul:hbox align="center">
+                              <xul:textbox
+                                  anonid="commentField"
+                                  class="hBookmarkMyTagComplete"
+                                  flex="1"
+                              />
+                              <xul:label anonid="commentCounterField"/>
+                          </xul:hbox>
+                      </xul:row>
+                      <xul:row align="center">
+                          <xul:spacer/>
+                          <xul:hbox align="center">
+                              <xul:checkbox anonid="confirmEntryCheck"
+                                            label="&hBookmark.addPanel.confirmEntryLabel;"
+                                            preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
+                              <xul:checkbox anonid="addCollectionCheck"
+                                            label="&hBookmark.addPanel.addCollectionLabel;"
+                                            preference="extensions.hatenabookmark.addPanel.addCollection"/>
+                          </xul:hbox>
+                      </xul:row>
+                  </xul:rows>
+              </xul:grid>
+            <xul:hbox anonid="imageSelector"
+                      class="hBookmarkImageSelector"
+                      hidden="true"/>
+            </xul:hbox>
+            <xul:groupbox anonid="recommendedTagSelectorGroup">
+                <xul:caption label="&hBookmark.addPanel.recommendedTagsLabel;"/>
+                <xul:hbox anonid="recommendedTagSelector"
+                          class="hBookmarkTagSelector"/>
+            </xul:groupbox>
+            <xul:groupbox anonid="tagSelectorGroup" flex="1">
+                <xul:caption>
+                    <xul:label value="&hBookmark.addPanel.tagsLabel;"/>
+                    <xul:label anonid="allTagsLabel"
+                               class="hBookmarkCommandLabel"
+                               value="&hBookmark.addPanel.showAllTagsLabel;"
+                               onclick="document.getBindingParent(this).switchTagSelectorView(true);"/>
+                    <xul:label anonid="frequentTagsLabel"
+                               class="hBookmarkCommandLabel"
+                               value="&hBookmark.addPanel.showFrequentTagsLabel;"
+                               onclick="document.getBindingParent(this).switchTagSelectorView(false);"/>
+                </xul:caption>
+                <xul:hbox anonid="tagSelector"
+                          class="hBookmarkTagSelector"
+                          flex="1"/>
+            </xul:groupbox>
+            <xul:popupset>
+                <xul:tooltip id="hBookmarkFavoriteBookmarkTooltip"/>
+            </xul:popupset>
+        </content>
+
+        <implementation>
+            <constructor><![CDATA[
+                let backgroundImage = Application.prefs.get('extensions.hatenabookmark.addPanel.backgroundImage').value;
+                let w = document.getElementById('hBookmarkAddPanelWindow');
+                w.style.backgroundColor = '#FFF';
+                if (backgroundImage) {
+                    backgroundImage = 'file:///' + encodeURIComponent(backgroundImage);
+                    w.style.backgroundImage = "url('" + backgroundImage + "')";
+                    w.style.backgroundRepeat = 'no-repeat';
+                    w.style.backgroundPosition = 'left bottom';
+                }
+                this.inputHandler = new hBookmark.TagCompleter.InputHandler(this.commentField.inputField);
+            ]]></constructor>
+
+            <field name="userIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "userIcon")
+            </field>
+            <field name="userNameField">
+                document.getAnonymousElementByAttribute(this, "anonid", "userNameField")
+            </field>
+            <field name="messageRow">
+                document.getAnonymousElementByAttribute(this, "anonid", "messageRow")
+            </field>
+            <field name="messageField">
+                document.getAnonymousElementByAttribute(this, "anonid", "messageField")
+            </field>
+            <field name="titleContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleContainer")
+            </field>
+            <field name="editableTitleContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "editableTitleContainer")
+            </field>
+            <field name="titleIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleIcon")
+            </field>
+            <field name="titleLabel">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleLabel")
+            </field>
+            <field name="titleField">
+                document.getAnonymousElementByAttribute(this, "anonid", "titleField")
+            </field>
+            <field name="editTitleButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "editTitleButton")
+            </field>
+            <field name="cancelEditTitleButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "cancelEditTitleButton")
+            </field>
+            <field name="editTitleNotification">
+                document.getAnonymousElementByAttribute(this, "anonid", "editTitleNotification")
+            </field>
+            <field name="lastTitleEditorContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastTitleEditorContainer")
+            </field>
+            <field name="lastTitleEditorIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastTitleEditorIcon")
+            </field>
+            <field name="lastTitleEditorField">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastTitleEditorField")
+            </field>
+            <field name="urlField">
+                document.getAnonymousElementByAttribute(this, "anonid", "urlField")
+            </field>
+            <field name="usersRow">
+                document.getAnonymousElementByAttribute(this, "anonid", "usersRow")
+            </field>
+            <field name="usersField">
+                document.getAnonymousElementByAttribute(this, "anonid", "usersField")
+            </field>
+            <field name="favoritesContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "favoritesContainer")
+            </field>
+            <field name="commentField">
+                document.getAnonymousElementByAttribute(this, "anonid", "commentField")
+            </field>
+            <field name="commentCounterField">
+                document.getAnonymousElementByAttribute(this, "anonid", "commentCounterField")
+            </field>
+            <field name="confirmEntryCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "confirmEntryCheck")
+            </field>
+            <field name="addCollectionCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "addCollectionCheck")
+            </field>
+            <field name="imageSelector">
+                document.getAnonymousElementByAttribute(this, "anonid", "imageSelector")
+            </field>
+            <field name="recommendedTagSelectorGroup">
+                document.getAnonymousElementByAttribute(this, "anonid", "recommendedTagSelectorGroup")
+            </field>
+            <field name="recommendedTagSelector">
+                document.getAnonymousElementByAttribute(this, "anonid", "recommendedTagSelector")
+            </field>
+            <field name="tagSelectorGroup">
+                document.getAnonymousElementByAttribute(this, "anonid", "tagSelectorGroup")
+            </field>
+            <field name="allTagsLabel">
+                document.getAnonymousElementByAttribute(this, "anonid", "allTagsLabel")
+            </field>
+            <field name="frequentTagsLabel">
+                document.getAnonymousElementByAttribute(this, "anonid", "frequentTagsLabel")
+            </field>
+            <field name="tagSelector">
+                document.getAnonymousElementByAttribute(this, "anonid", "tagSelector")
+            </field>
+            <field name="errorField">
+                document.getAnonymousElementByAttribute(this, "anonid", "errorField")
+            </field>
+            <field name="dialog">
+                document.documentElement
+
+            </field>
+
+            <field name="strings">
+                new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
+            </field>
+            <field name="maxCommentLength">100</field>
+            <field name="asin">""</field>
+
+            <field name="_tagSelectors">
+                [this.tagSelector, this.recommendedTagSelector]
+            </field>
+
+            <field name="_tags">[]</field>
+            <field name="_bookmark">({ title: "", url: "", comment: "" })</field>
+            <property name="bookmark">
+                <getter><![CDATA[
+                    return hBookmark.extend(this._bookmark, {
+                        title:   this.titleField.value,
+                        url:     this.urlField.value,
+                        comment: this.commentField.value
+                    });
+                ]]></getter>
+                <setter><![CDATA[
+                    if (val.url !== this._bookmark.url)
+                        this.updateFields(val);
+                    return this._bookmark = val;
+                ]]></setter>
+            </property>
+
+            <property name="isTitleEditable"
+                      onget="return !this.titleField.readOnly;">
+                <setter><![CDATA[
+                    this.titleContainer.hidden = val;
+                    this.editableTitleContainer.hidden = !val;
+                    this.editTitleNotification.hidden = !val;
+                    if (val)
+                        this.titleField.focus();
+                    else
+                        this.titleField.value = this.titleLabel.value;
+                    return val;
+                ]]></setter>
+            </property>
+
+            <property name="isTitleChanged" readonly="true"
+                      onget="return this.titleField.value !== this.titleLabel.value;"/>
+
+            <!-- XXX Prefs#getは"."が入るとうまくいかない? -->
+            <property name="showsTagList" readonly="true"
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShow').value;"/>
+            <property name="showsRecommendedTagList" readonly="true"
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.recommendedTagListShow').value;"/>
+            <property name="frequentTagCount" readonly="true"
+                      onget="return Application.prefs.get('extensions.hatenabookmark.addPanel.frequentTagCount').value;"/>
+            <field name="showAllTagsPref">
+                Application.prefs.get('extensions.hatenabookmark.addPanel.tagListShowAll');
+            </field>
+
+            <method name="show">
+                <parameter name="bookmark"/>
+                <body><![CDATA[
+                    this.bookmark = bookmark;
+                    this.setAddOrEdit(!!bookmark.temporary, bookmark);
+                    this.clearError();
+                    // 遅延しないとうまく focus があたらない？
+                    // これでもタイミング次第では focus あわないので:w
+                    // panel の表示にあわせて focus したほうがよいかも
+                    setTimeout(function(self) {
+                    self.commentField.focus();
+                    }, 0, this);
+                ]]></body>
+            </method>
+
+            <method name="hide">
+                <body><![CDATA[
+                    this.dialog.cancelDialog();
+                ]]></body>
+            </method>
+
+            <method name="updateFields">
+                <parameter name="bookmark"/>
+                <body><![CDATA[
+                    let user = hBookmark.User.user;
+
+                    this.userIcon.src        = user.getProfileIcon(false);
+                    this.userNameField.value = user.name;
+                    this.userNameField.href  = user.bookmarkHomepage;
+
+                    this.titleIcon.src = hBookmark.favicon(bookmark.url);
+                    this.titleLabel.value       = bookmark.title;
+                    this.titleField.value       = bookmark.title;
+                    this.editTitleButton.hidden = user.private;
+                    this.isTitleEditable        = false;
+                    this.lastTitleEditorContainer.hidden = true;
+
+                    this.urlField.value = bookmark.url;
+                    this.urlField.href =
+                        hBookmark.UIUtils.isSafeLink(bookmark.url)
+                        ? bookmark.url : "";
+                    this.usersRow.style.visibility = "hidden";
+
+                    this.commentField.value = bookmark.comment;
+                    this.inputHandler.updateLineValue(); // タグを認識させる
+                    this.updateCommentCounter();
+
+                    this.addCollectionCheck.hidden = true;
+                    this.recommendedTagSelectorGroup.hidden = true;
+                    this.imageSelector.build(bookmark.url);
+                    this.imageSelector.hidden = !this.imageSelector.hasImages ||
+                                                user.private;
+
+                    hBookmark.HTTPCache.entry.async_get(bookmark.url, hBookmark.bind(function(res) {
+                        this._delayedUpdateFields(bookmark, res);
+                    }, this));
+
+                    if (!this.showsTagList) {
+                        this.tagSelectorGroup.setAttribute('hidden', true);
+                        return;
+                    }
+                    this.tagSelectorGroup.removeAttribute('hidden');
+                    let tags = hBookmark.Model.Tag.findDistinctTags();
+                    this.tagSelector.build(tags);
+                    let selectedTags = this.inputHandler.inputLine.tags;
+                    this.tagSelector.update(selectedTags);
+                    this.switchTagSelectorView(this.showAllTagsPref.value);
+                ]]></body>
+            </method>
+
+            <method name="_delayedUpdateFields">
+                <parameter name="bookmark"/>
+                <parameter name="res"/>
+                <body><![CDATA[
+                    if (res) {
+                        if (+res.count) {
+                            this.usersField.value =
+                                hBookmark.UIUtils.getUsersText(res.count);
+                            this.usersField.href = res.entry_url;
+                            res.favorites.reverse();
+                            this.updateFavorites(res.favorites);
+                            this.usersRow.style.visibility = "visible";
+                        }
+
+                        let lastEditor = res.title_last_editor;
+                        if (lastEditor) {
+                            let UU = hBookmark.UserUtils;
+                            this.lastTitleEditorIcon.src =
+                                UU.getProfileIcon(lastEditor, false);
+                            this.lastTitleEditorField.value = lastEditor;
+                            this.lastTitleEditorField.href =
+                                UU.getHomepage(lastEditor, "b");
+                            this.lastTitleEditorContainer.hidden = false;
+                        }
+
+                        let imageURL = res.image_url;
+                        if (imageURL) {
+                            this.imageSelector.defaultImage = imageURL;
+                            this.imageSelector.setLastImageEditor(
+                                res.image_last_editor);
+                        }
+
+                        this.urlField.value = res.url;
+                        this.urlField.href = res.url;
+                        this.addCollectionCheck.hidden = !res.has_asin;
+                        this.asin = res.asin;
+                        this.updateRecommendedTags(res.recommend_tags);
+
+                        if (res.title && res.title !== bookmark.title) {
+                            this.titleLabel.value = res.title;
+                            this.titleField.value = res.title;
+                        }
+                    }
+                    if (!this.titleLabel.value) {
+                        let xhr = hBookmark.net.sync_get(bookmark.url);
+                        let m = (xhr.responseText || '').match(new RegExp('<title>(.*?)</title>', 'i'));
+                        if (m && !/\ufffd/.test(m[1])) {
+                            let title = decodeReferences(m[1]);
+                            this.titleField.value = title;
+                            this.titleLabel.value = title;
+                        } else {
+                            let self = this;
+                            new hBookmark.TitleGuesser(bookmark.url, function (title) {
+                                title = title || bookmark.url;
+                                self.titleField.value = title;
+                                self.titleLabel.value = title;
+                            });
+                        }
+                    }
+                ]]></body>
+            </method>
+
+            <method name="updateFavorites">
+                <parameter name="favorites"/>
+                <body><![CDATA[
+                    let range = document.createRange();
+                    range.selectNodeContents(this.favoritesContainer);
+                    range.deleteContents();
+
+                    let fragment = document.createDocumentFragment();
+                    favorites.forEach(function (f) {
+                        let fav = new hBookmark.FavoriteBookmark(f);
+                        fragment.appendChild(fav.createImage());
+                    }, this);
+                    this.favoritesContainer.appendChild(fragment);
+                ]]></body>
+            </method>
+
+            <method name="updateRecommendedTags">
+                <parameter name="tagNames"/>
+                <body><![CDATA[
+                    if (!this.showsRecommendedTagList ||
+                        !tagNames || !tagNames.length)
+                        return;
+                    this.inputHandler.updateRecommendedTags(tagNames);
+                    let tags = tagNames.map(function (t) ({ name: t, count: 0 }));
+                    this.recommendedTagSelector.build(tags);
+                    let selectedTags = this.inputHandler.inputLine.tags;
+                    this.recommendedTagSelector.update(selectedTags);
+                    this.recommendedTagSelectorGroup.hidden = false;
+                ]]></body>
+            </method>
+
+            <method name="setAddOrEdit">
+                <parameter name="add"/>
+                <parameter name="bookmark"/>
+                <body><![CDATA[
+                    let type = add ? ".add" : ".edit";
+                    document.title =
+                        this.strings.get("title" + type);
+                    this.dialog.getButton("accept").label =
+                        this.strings.get("saveLabel" + type);
+                    this.dialog.buttons =
+                        add ? "accept,cancel" : "accept,cancel,extra2";
+                    if (!add) {
+                        let format = this.strings.get("dateFormat");
+                        let date = bookmark.dateObject.toLocaleFormat(format);
+                        let message = this.strings.get("alreadyBookmarked",
+                                                       [date]);
+                        this.messageField.value = message;
+                    }
+                    this.messageRow.hidden = add;
+                ]]></body>
+            </method>
+
+            <method name="updateCommentCounter">
+                <body><![CDATA[
+                    let body = this.inputHandler.inputLine.body;
+                    // UTF-8のバイト数ではない?
+                    body = body.replace(/[\u0100-\uffff]/g, "foo");
+                    let length = Math.ceil(body.length / 3);
+                    let maxLength = this.maxCommentLength;
+                    let label = this.strings.get("commentCounterLabel",
+                                                 [length, maxLength]);
+                    this.commentCounterField.value = label;
+                    this.commentCounterField.className =
+                        (length > maxLength) ? "hBookmarkCommentOver" : "";
+                ]]></body>
+            </method>
+
+            <method name="switchTagSelectorView">
+                <parameter name="showAll"/>
+                <body><![CDATA[
+                    let count = this.frequentTagCount;
+                    let switcherHidden = (this.tagSelector.tagCount < count);
+                    if (showAll) {
+                        this.allTagsLabel.hidden = true;
+                        this.frequentTagsLabel.hidden = switcherHidden;
+                        this.tagSelector.visibleTagCount = 0;
+                    } else {
+                        this.allTagsLabel.hidden = switcherHidden;
+                        this.frequentTagsLabel.hidden = true;
+                        this.tagSelector.visibleTagCount = count;
+                    }
+                    this.showAllTagsPref.value = showAll;
+                ]]></body>
+            </method>
+
+            <method name="_updateTagSelectorsExcept">
+                <parameter name="tagSelectorExcepted"/>
+                <body><![CDATA[
+                    let tagNames = this.inputHandler.inputLine.tags;
+                    this._tagSelectors.forEach(function (selector) {
+                        if (selector !== tagSelectorExcepted)
+                            selector.update(tagNames);
+                    });
+                ]]></body>
+            </method>
+
+            <method name="setError">
+                <parameter name="message"/>
+                <body><![CDATA[
+                    this.errorField.value = message;
+                    this.errorField.hidden = false;
+                ]]></body>
+            </method>
+
+            <method name="clearError">
+                <parameter name="message"/>
+                <body><![CDATA[
+                    this.errorField.hidden = true;
+                ]]></body>
+            </method>
+
+            <method name="saveBookmark">
+                <body><![CDATA[
+                    let bookmark = this.bookmark;
+                    // コールバック関数中では getTopWin 関数が使えない。
+                    let win = getTopWin();
+                    let confirm = this.confirmEntryCheck.checked;
+                    let command = new hBookmark.RemoteCommand("edit", {
+                        bookmark: bookmark,
+                        changeTitle: this.isTitleChanged,
+                        addCollection: this.addCollectionCheck.checked,
+                        asin: this.asin,
+                        changeImage: this.imageSelector.isImageChanged,
+                        image: this.imageSelector.selectedImageURI,
+                        onComplete: confirm && function () {
+                            win.gBrowser.addTab(bookmark.entryURL);
+                        },
+                        onError: let (self = this) function () {
+                            //self.setError('error');
+                            //self.show(bookmark);
+                            //win.alert('error');
+                            win.hBookmark.AddPanelManager.showPanel(bookmark);
+                        }
+                    });
+                    command.execute();
+                ]]></body>
+            </method>
+
+            <method name="deleteBookmark">
+                <body><![CDATA[
+                    let command = new hBookmark.RemoteCommand("delete", {
+                        bookmark: this.bookmark
+                    });
+                    command.execute();
+                    this.hide();
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="input"><![CDATA[
+                if (event.originalTarget === this.commentField.inputField)
+                    this.updateCommentCounter();
+            ]]></handler>
+            <handler event="HB_TagChange"
+                     action="this._updateTagSelectorsExcept(null);"/>
+            <handler event="HB_TagSelected"><![CDATA[
+                this.inputHandler.inputLine.addTag(event.command);
+                this.inputHandler.updateValue();
+                this._updateTagSelectorsExcept(event.target);
+            ]]></handler>
+            <handler event="HB_TagUnselected"><![CDATA[
+                this.inputHandler.inputLine.deleteTag(event.command);
+                this.inputHandler.updateValue();
+                this._updateTagSelectorsExcept(event.target);
+            ]]></handler>
+        </handlers>
+    </binding>
+
+    <binding id="tag-complete" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
+        <implementation implements="nsIObserver">
+            <constructor><![CDATA[
+                this.popup.__defineGetter__("overrideValue",
+                                            this._popup_getOverrideValue);
+                let os = hBookmark.ObserverService;
+                os.addObserver(this, "autocomplete-will-enter-text", false);
+                os.addObserver(this, "autocomplete-did-enter-text", false);
+            ]]></constructor>
+
+            <destructor><![CDATA[
+                let os = hBookmark.ObserverService;
+                os.removeObserver(this, "autocomplete-will-enter-text");
+                os.removeObserver(this, "autocomplete-did-enter-text");
+            ]]></destructor>
+
+            <field name="_beforeTag">""</field>
+            <field name="_afterTag">""</field>
+
+            <field name="_isCompleting">false</field>
+            <field name="_caretPos">0</field>
+
+            <method name="_setSearchParam">
+                <body><![CDATA[
+                    let comment = this.value;
+                    let caretPos = this.selectionStart;
+
+                    let before = comment.substring(0, caretPos);
+                    let after = comment.substring(caretPos);
+                    let partialTag = "";
+                    let match;
+                    if ((match = /^(?:\[[^?%\/\[\]]+\])*\[([^?%\/\[\]]+)$/.exec(before))) {
+                        partialTag = match[1];
+                        before = before.slice(0, -partialTag.length);
+                    }
+                    if ((match = /^[^?%\/\[\]]*(?=\])/.exec(after))) {
+                        partialTag += match[0];
+                        after = after.substring(match[0].length);
+                    } else {
+                        after = "]" + after;
+                    }
+
+                    this._beforeTag = before;
+                    this._afterTag = after;
+                    this.searchParam = partialTag;
+                    //hBookmark.p("[@_setSearchParam]", before, partialTag, after);
+                ]]></body>
+            </method>
+
+            <method name="_popup_getOverrideValue">
+                <body><![CDATA[
+                    let input = this.input;
+                    let tree = this.tree;
+                    let col = tree.columns.getNamedColumn("treecolAutoCompleteValue");
+                    return input._beforeTag +
+                           tree.view.getCellText(tree.currentIndex, col) +
+                           input._afterTag;
+                ]]></body>
+            </method>
+
+            <method name="_adjustCaretPos">
+                <body><![CDATA[
+                    let pos = this.value.indexOf("]", this._caretPos);
+                    if (pos !== -1)
+                        this.setSelectionRange(pos + 1, pos + 1);
+                ]]></body>
+            </method>
+
+            <method name="observe">
+                <parameter name="subject"/>
+                <parameter name="topic"/>
+                <parameter name="data"/>
+                <body><![CDATA[
+                    if (subject !== this) return;
+                    if (topic === "autocomplete-will-enter-text")
+                        this._caretPos = this.selectionStart;
+                    else
+                        this._adjustCaretPos();
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="input"
+                     action="if (!this._isCompleting) this._setSearchParam();"/>
+            <handler event="keypress" phase="capturing"
+                     action="this._setSearchParam();"/>
+        </handlers>
+    </binding>
+
+    <binding id="tag-selector">
+        <implementation>
+            <field name="_labelByName">({})</field>
+            <field name="_rankedLabels">[]</field>
+
+            <property name="tagCount" readonly="true"
+                      onget="return this._rankedLabels.length;"/>
+
+            <field name="_visibleTagCount">0</field>
+            <property name="visibleTagCount"
+                      onget="return this._visibleTagCount;">
+                <setter><![CDATA[
+                    let maxCount = this.tagCount;
+                    let prevCount = +this._visibleTagCount || maxCount;
+                    let count = +val || maxCount;
+                    if (prevCount > maxCount) prevCount = maxCount;
+                    if (count > maxCount) count = maxCount;
+                    for (let i = prevCount; i < count; i++)
+                        this._rankedLabels[i].hidden = false;
+                    for (let i = count; i < prevCount; i++)
+                        this._rankedLabels[i].hidden = true;
+                    return this._visibleTagCount = val;
+                ]]></setter>
+            </property>
+
+            <property name="selectedLabels" readonly="true"
+                      onget="return Array.slice(this.getElementsByAttribute('class', 'hBookmarkSelectedTag'));"/>
+
+            <method name="build">
+                <parameter name="tags"/>
+                <body><![CDATA[
+                    let range = document.createRange();
+                    range.selectNodeContents(this);
+                    range.deleteContents();
+
+                    let fragment = document.createDocumentFragment();
+                    let labelByName = {};
+                    let rankedLabels = [];
+                    tags.forEach(function (tag) {
+                        let label = this._createTagLabel(tag);
+                        labelByName[tag.name.toLowerCase()] = label;
+                        rankedLabels.push(label);
+                        fragment.appendChild(label);
+                    }, this);
+                    this._labelByName = labelByName;
+                    rankedLabels.sort(function (a, b) b.tag.count - a.tag.count);
+                    this._rankedLabels = rankedLabels;
+                    let maxVisible = this.visibleTagCount || tags.length;
+                    for (let i = maxVisible; i < tags.length; i++)
+                        rankedLabels[i].hidden = true;
+                    this.appendChild(fragment);
+                ]]></body>
+            </method>
+
+            <method name="_createTagLabel">
+                <parameter name="tag"/>
+                <body><![CDATA[
+                    let label = document.createElementNS(hBookmark.XUL_NS, "label");
+                    label.setAttribute("class", "hBookmarkTag");
+                    label.setAttribute("value", tag.name);
+                    label.tag = tag;
+                    return label;
+                ]]></body>
+            </method>
+
+            <method name="update">
+                <parameter name="tagNames"/>
+                <body><![CDATA[
+                    tagNames = tagNames.map(String.toLowerCase);
+                    this.selectedLabels.forEach(function (label) {
+                        if (tagNames.indexOf(label.value.toLowerCase()) === -1)
+                            this._toggleLabel(label);
+                    }, this);
+                    tagNames.forEach(function (tagName) {
+                        let label = this._labelByName[tagName];
+                        if (label)
+                            this._toggleLabel(label, true);
+                    }, this);
+                ]]></body>
+            </method>
+
+            <method name="_toggleLabel">
+                <parameter name="label"/>
+                <parameter name="forceSelect"/>
+                <body><![CDATA[
+                    label.className =
+                        (label.className === "hBookmarkTag" || forceSelect)
+                        ? "hBookmarkSelectedTag" : "hBookmarkTag";
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="click"><![CDATA[
+                let label = event.originalTarget;
+                if (label.localName !== "label") return;
+                this._toggleLabel(label);
+                let tagEvent = document.createEvent("CommandEvent");
+                let type = (label.className === "hBookmarkSelectedTag")
+                           ? "HB_TagSelected" : "HB_TagUnselected";
+                tagEvent.initCommandEvent(type, true, false, label.tag.name);
+                this.dispatchEvent(tagEvent);
+            ]]></handler>
+        </handlers>
+    </binding>
+
+    <binding id="image-selector">
+        <content>
+            <xul:vbox anonid="iconContainer" align="center" pack="center">
+                <xul:image anonid="icon"
+                           src="chrome://hatenabookmark/skin/images/noimages.png"/>
+            </xul:vbox>
+            <xul:popupset>
+                <xul:panel anonid="popup"
+                           class="hBookmarkImageSelectorPopup">
+                    <xul:hbox anonid="container" flex="1"
+                              align="center" pack="start"
+                              style="display: block;">
+                        <xul:image anonid="noImage"
+                                   class="hBookmarkImageSelectorItem"
+                                   src="chrome://hatenabookmark/skin/images/noimages.png"
+                                   originalsrc="http://b.hatena.ne.jp/images/noimages.gif"/>
+                    </xul:hbox>
+                    <xul:hbox anonid="editImageNotification" align="center">
+                        <xul:label value="&hBookmark.addPanel.imageDescription;"/>
+                        <xul:label class="text-link hBookmarkLink"
+                                   value="&hBookmark.addPanel.imageGuidelineLabel;"
+                                   href="&hBookmark.addPanel.imageGuidelineURI;"/>
+                        <xul:spacer flex="1"/>
+                        <xul:hbox anonid="lastImageEditorContainer" align="center">
+                            <xul:label value="&hBookmark.addPanel.lastImageEditorLabel;"/>
+                            <xul:image anonid="lastImageEditorIcon"/>
+                            <xul:label anonid="lastImageEditorField"
+                                       class="text-link hBookmarkLink"/>
+                        </xul:hbox>
+                    </xul:hbox>
+                </xul:panel>
+            </xul:popupset>
+        </content>
+
+        <implementation>
+            <constructor><![CDATA[
+                this.iconContainer.setAttribute("maxwidth", this.maxImageWidth);
+                this.iconContainer.setAttribute("maxheight", this.maxImageHeight);
+            ]]></constructor>
+
+            <field name="iconContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "iconContainer")
+            </field>
+            <field name="icon">
+                document.getAnonymousElementByAttribute(this, "anonid", "icon")
+            </field>
+            <field name="popup">
+                document.getAnonymousElementByAttribute(this, "anonid", "popup")
+            </field>
+            <field name="container">
+                document.getAnonymousElementByAttribute(this, "anonid", "container")
+            </field>
+            <field name="noImage">
+                document.getAnonymousElementByAttribute(this, "anonid", "noImage")
+            </field>
+            <field name="lastImageEditorContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastImageEditorContainer")
+            </field>
+            <field name="lastImageEditorIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastImageEditorIcon")
+            </field>
+            <field name="lastImageEditorField">
+                document.getAnonymousElementByAttribute(this, "anonid", "lastImageEditorField")
+            </field>
+
+            <field name="_images">({})</field>
+            <field name="_shouldShow">true</field>
+
+            <field name="maxImageWidth">
+                hBookmark.Prefs.bookmark.get("addPanel.maxImageWidth")
+            </field>
+            <field name="maxImageHeight">
+                hBookmark.Prefs.bookmark.get("addPanel.maxImageHeight")
+            </field>
+            <field name="maxCount">
+                hBookmark.Prefs.bookmark.get("addPanel.maxImageCount")
+            </field>
+
+            <field name="_defaultImage">this.noImage</field>
+            <property name="defaultImage"
+                      onget="return this._defaultImage;">
+                <setter><![CDATA[
+                    let image = this._getImage(val);
+                    if (!image) return val;
+                    this.selectedImage = image;
+                    this._defaultImage = image;
+                    return val;
+                ]]></setter>
+            </property>
+
+            <field name="_selectedImage">this.noImage</field>
+            <property name="selectedImage"
+                      onget="return this._selectedImage;">
+                <setter><![CDATA[
+                    let image = this._getImage(val);
+                    if (!image) return val;
+                    this._selectedImage.removeAttribute("selected");
+                    image.setAttribute("selected", "true");
+                    this.icon.setAttribute("src", image.getAttribute("src"));
+                    this.icon.setAttribute("width", image.getAttribute("width"));
+                    this.icon.setAttribute("height", image.getAttribute("height"));
+                    this._selectedImage = image;
+                    return val;
+                ]]></setter>
+            </property>
+
+            <property name="selectedImageURI" readonly="true"
+                      onget="return this.selectedImage.getAttribute('originalsrc');"/>
+
+            <property name="isImageChanged" readonly="true"
+                      onget="return this.selectedImage !== this.defaultImage;"/>
+
+            <property name="hasImages" readonly="true"
+                      onget="return !!this.noImage.nextSibling;"/>
+
+            <method name="_getImage">
+                <parameter name="image"/>
+                <body><![CDATA[
+                    return image.nodeType ? image : this._images[image] || null;
+                ]]></body>
+            </method>
+
+            <method name="build">
+                <parameter name="uri"/>
+                <body><![CDATA[
+                    this.clearImage();
+                    let doc = this._getDocumentForURI(uri);
+                    if (!doc) return;
+                    let images = this._getImagesForDocument(doc);
+                    images.forEach(function (image) {
+                        this.addImage(image);
+                    }, this);
+                    this.lastImageEditorContainer.hidden = true;
+                ]]></body>
+            </method>
+
+            <method name="setLastImageEditor">
+                <parameter name="lastEditor"/>
+                <body><![CDATA[
+                    let UU = hBookmark.UserUtils;
+                    this.lastImageEditorIcon.src =
+                        UU.getProfileIcon(lastEditor, false);
+                    this.lastImageEditorField.value = lastEditor;
+                    this.lastImageEditorField.href =
+                        UU.getHomepage(lastEditor, "b");
+                    this.lastImageEditorContainer.hidden = false;
+                ]]></body>
+            </method>
+
+            <method name="addImage">
+                <parameter name="image"/>
+                <body><![CDATA[
+                    if (image.src in this._images) return;
+                    let xulImage = document.createElementNS(hBookmark.XUL_NS, "image");
+                    xulImage.setAttribute("class", "hBookmarkImageSelectorItem");
+                    xulImage.setAttribute("src", image.src);
+                    xulImage.setAttribute("originalsrc", image.src);
+
+                    let maxWidth = this.maxImageWidth;
+                    let maxHeight = this.maxImageHeight;
+                    let width = image.naturalWidth;
+                    let height = image.naturalHeight;
+                    if (width > maxWidth || height > maxHeight) {
+                        if (width / height > maxWidth / maxHeight) {
+                            height = Math.round(height * maxWidth / width);
+                            width = maxWidth;
+                        } else {
+                            width = Math.round(width * maxHeight / height);
+                            height = maxHeight;
+                        }
+                    }
+                    xulImage.setAttribute("width", width);
+                    xulImage.setAttribute("height", height);
+                    this.container.appendChild(xulImage);
+                    this._images[image.src] = xulImage;
+                ]]></body>
+            </method>
+
+            <method name="clearImage">
+                <body><![CDATA[
+                    let noImage = this.noImage;
+                    this.defaultImage = noImage;
+                    let range = document.createRange();
+                    range.selectNodeContents(this.container);
+                    range.setStartAfter(noImage);
+                    range.deleteContents();
+                    this._images = {};
+                    this._images[noImage.getAttribute("src")] = noImage;
+                ]]></body>
+            </method>
+
+            <method name="_getDocumentForURI">
+                <parameter name="uri"/>
+                <body><![CDATA[
+                    let win = getTopWin().gBrowser.contentWindow;
+                    return (win && win.location && win.location.href === uri)
+                        ? win.document : null;
+                ]]></body>
+            </method>
+
+            <method name="_getImagesForDocument">
+                <parameter name="doc"/>
+                <body><![CDATA[
+                    let images = Array.filter(doc.getElementsByTagName("img"),
+                        function (img) img instanceof HTMLImageElement);
+                    if (images.length > this.maxCount) {
+                        images = images.map(function (image, index) {
+                            let size = Math.min(image.naturalWidth,
+                                                image.naturalHeight);
+                            return { image: image, size: size, index: index };
+                        }).sort(function (a, b) b.size - a.size)
+                          .slice(0, this.maxCount)
+                          .sort(function(a, b) a.index - b.index)
+                          .map(function (item) item.image);
+                    }
+                    return images;
+                ]]></body>
+            </method>
+
+            <method name="showPopup">
+                <body><![CDATA[
+                    this.popup.openPopup(this.iconContainer, "after_end",
+                                         0, 0, false, false);
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="click" button="0"><![CDATA[
+                let target = event.originalTarget;
+                if (target === this.icon ||
+                    target === this.iconContainer) {
+                    if (this._shouldShow)
+                        this.showPopup();
+                } else if (target.localName === "image" &&
+                           target.parentNode === this.container) {
+                    this.selectedImage = target;
+                    this.popup.hidePopup();
+                }
+            ]]></handler>
+
+            <handler event="popuphidden"><![CDATA[
+                // XXX iconContainer クリック時にポップアップ表示をトグルする
+                // mousedown 時にはすでにポップアップが閉じているので苦肉の策
+                this._shouldShow = false;
+                setTimeout(function (self) self._shouldShow = true, 150, this);
+            ]]></handler>
+        </handlers>
+    </binding>
+
+    <binding id="favorite-bookmark-tooltip"
+             extends="chrome://global/content/bindings/popup.xml#tooltip">
+        <content>
+            <xul:label anonid="nameField"/>
+            <xul:description anonid="commentField"/>
+        </content>
+
+        <implementation>
+            <field name="nameField">
+                document.getAnonymousElementByAttribute(this, "anonid", "nameField");
+            </field>
+            <field name="commentField">
+                document.getAnonymousElementByAttribute(this, "anonid", "commentField");
+            </field>
+
+            <method name="build">
+                <parameter name="target"/>
+                <body><![CDATA[
+                    let fav = target.favorite;
+                    if (!fav) return false;
+                    this.nameField.value = fav.name;
+                    this.commentField.textContent = fav.comment;
+                    return true;
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="popupshowing" action="return this.build(document.tooltipNode);"/>
+        </handlers>
+    </binding>
+
+    <binding id="placeholder-label"
+             extends="chrome://global/content/bindings/text.xml#label-control">
+        <implementation>
+            <property name="empty" readonly="true"
+                      onget="return this.getAttribute('empty') === 'true';"/>
+
+            <property name="emptyText"
+                      onget="return this.getAttribute('emptytext');"
+                      onset="this.setAttribute('emptytext', val); return val;"/>
+
+            <property name="value"
+                      onget="return this.empty ? '' : this.getAttribute('value') || '';">
+                <setter><![CDATA[
+                    let value = String(val);
+                    if (value) {
+                        this.setAttribute("value", value);
+                        this.removeAttribute("empty");
+                    } else {
+                        this.setAttribute("value", this.emptyText);
+                        this.setAttribute("empty", "true");
+                    }
+                    return val;
+                ]]></setter>
+            </property>
+        </implementation>
+    </binding>
+
+    <binding id="preference-checkbox"
+             extends="chrome://global/content/bindings/checkbox.xml#checkbox">
+        <implementation>
+            <constructor><![CDATA[
+                this.checked = this.pref.value;
+            ]]></constructor>
+
+            <property name="preference"
+                      onget="return this.getAttribute('preference');"
+                      onset="this.setAttribute('preference', val); return val;"/>
+            <property name="pref" readonly="true"
+                      onget="return Application.prefs.get(this.preference);"/>
+        </implementation>
+
+        <handlers>
+            <handler event="command"
+                     action="this.pref.value = this.checked;"/>
+        </handlers>
+    </binding>
+
+</bindings>

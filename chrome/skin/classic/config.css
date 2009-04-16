@@ -1,0 +1,23 @@
+
+
+#BrowserPreferences radio[pane] {
+  list-style-image: none;
+  -moz-image-region: 0px 0px 0px 0px;
+}
+
+.paneButtonIcon {
+    display: none;
+}
+
+.paneButtonLabel {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/*
+.windowDialog,
+.windowDialog prefpane {
+  padding: 1000px;
+}
+*/
+

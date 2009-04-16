@@ -1,0 +1,80 @@
+<!-- XXX: -->
+
+<!ENTITY hBookmark.config.title "Settings for the Hatena Bookmark Extension">
+
+<!ENTITY hBookmark.config.general "General">
+<!ENTITY hBookmark.config.locationbar "Location Bar (Address Bar)">
+
+<!ENTITY hBookmark.config.searchEnabled "Enable Bookmark search">
+<!ENTITY hBookmark.config.searchShortcut "Use the Ctrl+Shift search shortcut">
+<!ENTITY hBookmark.config.toolbar "Bookmark Toolbar">
+<!ENTITY hBookmark.config.toolbarMaxItem "Number of displayed bookmarks">
+<!ENTITY hBookmark.config.contextmenu "Pop-up (Context) menu">
+<!ENTITY hBookmark.config.contextmenuEnabled "Extend the Pop-up menu">
+
+<!ENTITY hBookmark.config.sidebar "Sidebar">
+<!ENTITY hBookmark.config.sidebarReverseDirection "Move search screen to the top of the screen">
+<!ENTITY hBookmark.config.sidebarLayout "Layout">
+<!ENTITY hBookmark.config.sidebarNormal "normal">
+<!ENTITY hBookmark.config.sidebarReverse "reverse">
+
+<!ENTITY hBookmark.config.statusbar "Statusbar">
+<!ENTITY hBookmark.config.statusbarIcon "Display">
+<!ENTITY hBookmark.config.statusbarAddButton "Display the Add button">
+<!ENTITY hBookmark.config.statusbarCounter "Display the user counter">
+<!ENTITY hBookmark.config.statusbarHttpsIngore "Will not be displayed when using https">
+
+<!ENTITY hBookmark.config.commentviewer "Comment Viewer">
+<!ENTITY hBookmark.config.commentviewerAutoShown "Automatically display the comment viewer on mouseover">
+<!ENTITY hBookmark.config.commentviewerAutoResize "Auto size">
+<!ENTITY hBookmark.config.commentviewerSizeSetting "Specify size">
+<!ENTITY hBookmark.config.commentviewerWidth "Width (pixels)">
+<!ENTITY hBookmark.config.commentviewerHeight "Height (pixels)">
+<!-- XXX: -->
+<!ENTITY hBookmark.config.commentviewerAutoFilter "Show all comments when under threadhold">
+<!ENTITY hBookmark.config.commentviewerAutoFilterThreshold "Threshold">
+
+<!ENTITY hBookmark.config.link "Link">
+<!ENTITY hBookmark.config.link.openInNewTab "Open links in a new tab">
+<!ENTITY hBookmark.config.link.openInNewTabNotice "This setting works from the edit screen, comment viewer, etc">
+<!ENTITY hBookmark.config.link.linkOverlay "Open the extended edit screen when you add new links to Hatena Bookmark">
+
+<!ENTITY hBookmark.config.addPanel "Edit screen">
+<!ENTITY hBookmark.config.addPanelTagComplete "Tag Completion">
+<!ENTITY hBookmark.config.addPanelTagCompleteEnabled "Enable Tag Completion">
+<!ENTITY hBookmark.config.addPanelTagCompleteMaxItem "Limit for number of suggestions for Tag Completion">
+<!ENTITY hBookmark.config.addPanelTagCompleteXulMigemoEnabled "Enable Tag Completion with XUL/Migemo">
+<!ENTITY hBookmark.config.addPanelTagCompleteXulMigemoSuffix "is required">
+<!ENTITY hBookmark.config.addPanelTag "Display Tags">
+<!ENTITY hBookmark.config.addPanelTagRecent "Display list of recommended tags">
+<!ENTITY hBookmark.config.addPanelTagMine "Display my tag list">
+<!ENTITY hBookmark.config.addPanelTagItem "Number of initially displayed tags">
+<!ENTITY hBookmark.config.addPanelBackgroundImage "Background Image">
+<!ENTITY hBookmark.config.addPanelBackgroundImageSelect "Select an image">
+<!ENTITY hBookmark.config.addPanelBackgroundImageCancel "Clear selection">
+
+<!ENTITY hBookmark.config.shortcut "Shortcut">
+<!ENTITY hBookmark.config.shortcutAdd "Add to Hatena Bookmark">
+<!ENTITY hBookmark.config.shortcutSet "Setup">
+<!ENTITY hBookmark.config.shortcutClear "Clear">
+<!ENTITY hBookmark.config.shortcutComment "View comments">
+<!ENTITY hBookmark.config.shortcutSidebar "Switch sidebar display">
+<!ENTITY hBookmark.config.shortcutNotice "*You may need to restart your browser before the shortcut key will be effective">
+
+
+<!ENTITY hBookmark.config.data "Data">
+<!ENTITY hBookmark.config.nologin "Not Logged in">
+<!ENTITY hBookmark.config.sync "Sync">
+<!ENTITY hBookmark.config.syncNotice "Sync Hatena Bookmark data with local data">
+<!ENTITY hBookmark.config.syncData "Sync the data">
+<!ENTITY hBookmark.config.syncDataAll "Re-sync all data">
+<!ENTITY hBookmark.config.syncDataAllNotice1 "This will Re-sync all data.">
+<!ENTITY hBookmark.config.syncDataAllNotice2 "Use this to acquire your Hatena Bookmark data from the server and fix differences.">
+<!ENTITY hBookmark.config.deleteData "Delete all data">
+<!ENTITY hBookmark.config.deleteDataNotice1 "Delete the Hatena Bookmark extension's locally stored data">
+<!ENTITY hBookmark.config.deleteDataNotice2 "Hatena Bookmark data stored on the server will not be deleted">
+<!ENTITY hBookmark.config.deleteDataAll "Delete all data">
+
+
+
+

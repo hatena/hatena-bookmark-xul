@@ -1,0 +1,9 @@
+<!ENTITY hBookmark.sidebar.loginDescription "You have to login to Hatena to use the Hatena Bookmark Sidebar">
+<!ENTITY hBookmark.sidebar.loginLabel "Login to Hatena">
+<!ENTITY hBookmark.sidebar.loginURI "https://www.hatena.ne.jp/login">
+
+<!ENTITY hBookmark.sidebar.title "Hatena Bookmark Sidebar">
+<!ENTITY hBookmark.sidebar.searchLabel "Search:">
+<!ENTITY hBookmark.sidebar.tagsLabel "Tags">
+<!ENTITY hBookmark.sidebar.tagCountLabel "Count">
+<!ENTITY hBookmark.sidebar.bookmarksLabel "Bookmarks">

@@ -1,41 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css" ?>
 <?xml-stylesheet href="chrome://browser/skin/browser.css" type="text/css" ?>
-
-<!-- {{ }} で囲まれた文字列はローカライズすべきもの -->
+<?xml-stylesheet href="chrome://browser/skin/places/places.css" type="text/css" ?>
+<?xml-stylesheet href="chrome://hatenabookmark/content/widgets.css" type="text/css" ?>
+<?xml-stylesheet href="chrome://hatenabookmark/skin/sidebar.css" type="text/css" ?>
+<?xul-overlay href="chrome://hatenabookmark/content/popupsOverlay.xul"?>
+<!DOCTYPE page SYSTEM "chrome://hatenabookmark/locale/sidebar.dtd" [
+    <!ENTITY % hBookmark.popups SYSTEM "chrome://hatenabookmark/locale/popups.dtd">
+    %hBookmark.popups;
+]>
 <page xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
       id="hBookmarkSidebar"
-      title="{{Hatena Bookmark Sidebar}}">
+      title="&hBookmark.sidebar.title;">
 
-    <script type="application/javascript" src="autoloader.js"></script>
+    <script type="application/javascript" src="autoloader.js"/>
+    <script type="application/javascript" src="chrome://browser/content/utilityOverlay.js"/>
 
-    <popupset>
-        <menupopup id="tag-tree-menu">
-            <menuitem id="tag-tree-openAllBookmarks" label="{{すべてのブックマークを開く}}"/>
-            <menuseparator/>
-            <menuitem id="tag-tree-open" label="{{タグページを開く}}"/>
-            <menuitem id="tag-tree-openInNewTab" label="{{タグページを新しいタブで開く}}"/>
-            <menuseparator/>
-            <menuitem id="tag-tree-delete" label="{{%S タグを削除}}"/>
-            <menuitem id="tag-tree-rename" label="{{%S タグを置換}}"/>
+    <popupset id="mainPopupSet">
+        <menupopup id="hBookmark-tag-context"
+                   onpopupshowing="return this._context.build(this);"
+                   onpopuphiding="this._context.destroy();">
+            <menuitem id="hBookmark-tag-context-openBookmarks"
+                      oncommand="this.parentNode._context.openBookmarks(event);"/>
+            <menuseparator id="hBookmark-tag-context-openBookmarksSeparator"/>
+            <menuitem id="hBookmark-tag-context-open"
+                      label="&hBookmark.tagContext.openLabel;"
+                      accesskey="&hBookmark.tagContext.openKey;"
+                      oncommand="this.parentNode._context.openIn('current');"/>
+            <menuitem id="hBookmark-tag-context-openInNewTab"
+                      label="&hBookmark.tagContext.openInNewTabLabel;"
+                      accesskey="&hBookmark.tagContext.openInNewTabKey;"
+                      oncommand="this.parentNode._context.openIn('tab');"/>
+            <menuseparator id="hBookmark-tag-context-openSeparator"/>
+            <menuitem id="hBookmark-tag-context-filterToolbar"
+                      oncommand="this.parentNode._context.filterToolbar();"/>
+            <menuitem id="hBookmark-tag-context-editTag"
+                      oncommand="this.parentNode._context.editTag(event);"
+                      onclick="checkForMiddleClick(this, event);"/>
+            <!--
+            <menuitem id="hBookmark-tag-context-delete"
+                      label="Remove Tag &quot;%S&quot;"
+                      oncommand="this.parentNode._context.delete();"/>
+            <menuitem id="hBookmark-tag-context-rename"
+                      label="Rename Tag &quot;%S&quot;"
+                      oncommand="this.parentNode._context.rename();"/>
+            -->
+            <menuseparator id="hBookmark-tag-context-editSeparator"/>
+            <menuitem id="hBookmark-tag-context-deleteBookmarks"
+                      oncommand="this.parentNode._context.deleteBookmarks();"/>
         </menupopup>
     </popupset>
 
-    <vbox flex="1">
+    <vbox id="login-notification" collapsed="true">
+        <description>&hBookmark.sidebar.loginDescription;</description>
+        <hbox pack="start">
+            <label class="text-link hBookmarkLink"
+                   value="&hBookmark.sidebar.loginLabel;"
+                   href="&hBookmark.sidebar.loginURI;"/>
+        </hbox>
+    </vbox>
+    <vbox id="main-content" flex="1" persist="dir">
         <tree id="tag-tree" seltype="single" hidecolumnpicker="true"
-              contextmenu="tag-tree-menu" flex="1">
+              contextmenu="hBookmark-tag-context" flex="1" persist="height">
             <treecols>
-                <treecol label="{{tag}}" primary="true" flex="1"/>
+                <treecol id="hBookmarkTagTree_currentTag"
+                         label="&hBookmark.sidebar.tagsLabel;"
+                         primary="true" flex="1"
+                         persist="width sortDirection sortActive"/>
+                <splitter class="tree-splitter"/>
+                <treecol id="hBookmarkTagTree_count"
+                         label="&hBookmark.sidebar.tagCountLabel;"
+                         persist="width sortDirection sortActive"/>
             </treecols>
             <treechildren/>
         </tree>
 
-        <tree id="bookmark-tree" hidecolumnpicker="true" flex="1">
+        <splitter resizebefore="flex" resizeafter="flex"/>
+
+        <tree id="bookmark-tree" seltype="single"
+              hidecolumnpicker="true" flex="1" persist="height">
             <treecols>
-                <treecol label="{{bookmark}}" primary="true" flex="1"/>
+                <treecol id="bookmark-tree-col-bookmark"
+                         label="&hBookmark.sidebar.bookmarksLabel;"
+                         flex="1"
+                         sortDirection="descending"
+                         persist="sortDirection"/>
             </treecols>
-            <treechildren/>
+            <treechildren context="hBookmark-bookmark-context"
+                          tooltip="hBookmark-bookmark-tooltip"/>
         </tree>
+
+        <hbox align="center">
+            <label value="&hBookmark.sidebar.searchLabel;"/>
+            <textbox id="searchBox" flex="1"/>
+        </hbox>
     </vbox>
 
 </page>

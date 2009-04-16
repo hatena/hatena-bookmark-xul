@@ -1,7 +1,7 @@
 var moduleFile = null;
 
 function warmUp() {
-    Components.utils.import("resource://hatenabookmark/modules/00_utils.jsm");
+    Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 
     var resProtocol = Cc["@mozilla.org/network/protocol;1?name=resource"].
                       getService(Ci.nsIResProtocolHandler);
@@ -63,6 +63,13 @@ function testBindMethod() {
     assert.equals(method(f1, 'callBar').apply({bar: 2}), 1);
 }
 
+function testJSON() {
+    assert.equals({ foo: 42 }, decodeJSON('{ "foo": 42 }'));
+    assert.equals(null, decodeJSON('<error>'));
+
+    assert.equals('[23,42]', encodeJSON([23, 42]));
+}
+
 /*
 function testExtendBuiltIns() {
     extendBuiltIns();
@@ -71,3 +78,8 @@ function testExtendBuiltIns() {
     assert.equals([24, 32, 17, 8, 33].find(function (n) n & 1), 17);
 }
 */
+
+function testDecodeReferences() {
+    assert.equals("\u00abHello &unknown; <world>\u00bb",
+                  decodeReferences("&laquo;H&#101;llo &unknown; &lt;&#x77;orld&gt;&raquo;"));
+}

@@ -1,0 +1,17 @@
+<!ENTITY hBookmark.tagContext.openLabel "Open Tag Page">
+<!ENTITY hBookmark.tagContext.openKey "O">
+<!ENTITY hBookmark.tagContext.openInNewTabLabel "Open Tag Page in a New Tab">
+<!ENTITY hBookmark.tagContext.openInNewTabKey "T">
+
+<!ENTITY hBookmark.bookmarkContext.openLabel "Open">
+<!ENTITY hBookmark.bookmarkContext.openKey "O">
+<!ENTITY hBookmark.bookmarkContext.openInNewTabLabel "Open in a New Tab">
+<!ENTITY hBookmark.bookmarkContext.openInNewTabKey "W">
+<!ENTITY hBookmark.bookmarkContext.openEntryLabel "Show on Hatena Bookmark">
+<!ENTITY hBookmark.bookmarkContext.openEntryKey "B">
+<!ENTITY hBookmark.bookmarkContext.editLabel "Edit…">
+<!ENTITY hBookmark.bookmarkContext.editKey "E">
+<!ENTITY hBookmark.bookmarkContext.deleteLabel "Delete">
+<!ENTITY hBookmark.bookmarkContext.deleteKey "D">
+<!ENTITY hBookmark.bookmarkContext.deleteAllLabel "Delete All">
+<!ENTITY hBookmark.bookmarkContext.deleteAllKey "L">

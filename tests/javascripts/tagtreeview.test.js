@@ -1,6 +1,7 @@
 var hBookmark;
 var view;
 var treeBox = {
+    treeBody: {},
     rowCountChanged: function () {},
     invalidateRow: function () {}
 };
@@ -15,12 +16,14 @@ function setUp() {
     prepareDatabase(hBookmark);
 
     view = new hBookmark.TagTreeView();
+    view._setSortKey = function () {};
     view.setTree(treeBox);
 }
 
 function testTagTreeView() {
     assert.equals(view.rowCount, 3);
-    var cellTexts = [0, 1, 2].map(function (i) view.getCellText(i, {}));
+    var col = { id: "hBookmarkTagTree_currentTag" };
+    var cellTexts = [0, 1, 2].map(function (i) view.getCellText(i, col));
     assert.equals(cellTexts.concat().sort(), ["JavaScript", "Perl", "Ruby"]);
     assert.equals(cellTexts[1], "Perl");
     assert.equals(view.isContainer(1), true);

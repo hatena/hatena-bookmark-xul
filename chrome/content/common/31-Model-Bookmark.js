@@ -13,7 +13,8 @@ let Bookmark = Model.Entity({
 });
 
 let createWhereLike = function (word) {
-    var words = word.split(/\s+/);
+    // sqlite での検索は case_sensitive_like = 1 で行った方が速いため
+    var words = word.toLowerCase().split(/\s+/);
     var sql = [];
     var args = {};
     var c = 0;
@@ -27,14 +28,16 @@ let createWhereLike = function (word) {
         </>.toString(), arg];
     }
     for (var i = 0;  i < words.length; i++) {
-        var w = words[i];
+       var w = words[i];
         if (w.length) {
             var [sq, arg] = likeGenerateor(w);
             sql.push('(' + sq + ')');
             extend(args, arg);
         }
     }
-    return [sql.join(' AND '), args];
+    var res = [sql.join(' AND '), args];
+    // p(sql.join(' AND '), keys(args), values(args));
+    return res;
 }
 
 extend(Bookmark, {
@@ -43,20 +46,23 @@ extend(Bookmark, {
         return tags;
     },
     parse: function(str) {
-        /*
-         * XXX: [hoge][huga] foo [baz] の baz もまっちしてしまう
-         */
-        let regex = new RegExp('\\[([^\:\\[\\]]+)\\]', 'g');
+        let re = /\[([^\[\]]+)\]/g;
         let match;
         let tags = [];
         let lastIndex = 0;
-        while (( match = regex.exec(str) )) {
-            tags.push(match[1]);
-            lastIndex = regex.lastIndex;
+        while ((match = re.exec(str))) {
+            lastIndex += match[0].length; 
+            if (lastIndex == re.lastIndex) {
+                let tag = match[1];
+                if (!tags.some(function(t) tag == t))
+                    tags.push(match[1]);
+            }
         }
-        return [tags, str.substring(lastIndex)];
+        let comment = str.substring(lastIndex) || '';
+
+        return [tags, comment];
     },
-    findByTags: function(tags) {
+    findByTags: function(tags, limit) {
         tags = [].concat(tags);
         if (!tags.length) return [];
         let bids = [];
@@ -74,26 +80,60 @@ extend(Bookmark, {
             if (!res.length) return [];
             bids = res.map(function(t) t.bookmark_id);
         }
-        res = Bookmark.find({
-            where: 'id IN (' + bids.join(',') + ')'
-        });
+        let query = {
+            where: 'id IN (' + bids.join(',') + ')',
+            order: 'date DESC'
+        };
+        if (limit)
+            query.limit = limit;
+        res = Bookmark.find(query);
         return res;
     },
-    search: function(str, limit) {
-        var [sql, args] = createWhereLike(str);
-        extend(args, {
-            limit: limit || 10,
-            order: 'date desc',
-        });
-        var res = Bookmark.find(<>
-             select * from bookmarks
-             where {sql}
-        </>.toString(), args);
+    findRecent: function MB_findRecent(limit) {
+        let query = { order: 'date DESC' };
+        if (limit)
+            query.limit = limit;
+        return Bookmark.find(query);
+    },
+    search: function(str, limit, ascending) {
+        var res;
+        p.b(function() {
+        if (!str) {
+            res = Bookmark.findRecent(limit);
+        } else {
+            var [sql, args] = createWhereLike(str);
+            extend(args, {
+                limit: limit || 10,
+                order: ascending ? 'date asc' : 'date desc'
+            });
+            res = Bookmark.find(<>
+                 select * from bookmarks
+                 where {sql}
+            </>.toString(), args);
+        }
+        }, 'Bookmark search [' + [str, limit].join(' ') + ']');
         return res;
+    },
+    deleteBookmarks: function(bookmarks) {
+        let bmIds = bookmarks.filter(function (b) b.id > 0)
+                             .map(function (b) b.id);
+        if (!bmIds.length) return;
+        let placeholder = bmIds.map(function () "?").join(",");
+        Model.Tag.db.execute("delete from tags where bookmark_id in (" +
+                             placeholder + ")", bmIds);
+        Bookmark.db.execute("delete from bookmarks where id in (" +
+                            placeholder + ")", bmIds);
+        EventService.dispatch("BookmarksUpdated");
     }
 });
 
 extend(Bookmark.prototype, {
+    get entryURL() {
+        return entryURL(this.url);
+    },
+    get imageURL() {
+        return 'http://b.hatena.ne.jp/entry/image/' + this.url.replace('#', '%23');
+    },
     get tags() {
         return Bookmark.parseTags(this.comment);
     },
@@ -105,7 +145,31 @@ extend(Bookmark.prototype, {
         if (!this._favicon) {
             this._favicon = getFaviconURI(this.url);
         }
-        return this._favicon;
+        return this._favicon.spec.toString();
+    },
+    get dateYMD() {
+        let d = this.date.toString();
+        return [d.substr(0,4), d.substr(4,2), d.substr(6,2)].join('/');
+    },
+    get dateObject() {
+        let d = this.date.toString();
+        return new Date(d.substring(0, 4), d.substring(4, 6) - 1,
+                        d.substring(6, 8), d.substring(8, 10),
+                        d.substring(10, 12), d.substring(12, 14));
+    },
+    get searchData() {
+        let res = this.db.execute(<>
+            SELECT
+               id, title, comment, url
+            FROM 
+               bookmarks
+            ORDER_BY date DESC;
+        </>.toString());
+        let data = [];
+        for (let i = 0, len = res.length; i < len; i++) {
+            data.push('\\0' + id + '\\0' + title + "\n" + comment + "\n" + url);
+        }
+        return data.join("\n");
     },
     updateTags: function() {
         let tags = this.tags;
@@ -132,9 +196,16 @@ addAround(Bookmark, 'initialize', function(proceed, args, target) {
 });
 
 addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
-    target.search = [target.title, target.comment, target.url].join("\0"); // SQLite での検索用
+    target.search = [target.title, target.comment, target.url].join("\n").toLowerCase(); // SQLite での検索用
     proceed(args);
     target.updateTags();
+});
+
+addAround(Bookmark, 'rowToObject', function (proceed, args) {
+    let obj = proceed(args);
+    if (obj.title)
+        obj.title = decodeReferences(obj.title);
+    return obj;
 });
 
 Model.Bookmark = Bookmark;

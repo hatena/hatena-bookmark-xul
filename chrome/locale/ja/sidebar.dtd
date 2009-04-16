@@ -1,0 +1,9 @@
+<!ENTITY hBookmark.sidebar.loginDescription "はてなブックマークサイドバーを利用するには、はてなへログインする必要があります">
+<!ENTITY hBookmark.sidebar.loginLabel "はてなへログイン">
+<!ENTITY hBookmark.sidebar.loginURI "https://www.hatena.ne.jp/login">
+
+<!ENTITY hBookmark.sidebar.title "はてなブックマークサイドバー">
+<!ENTITY hBookmark.sidebar.searchLabel "検索:">
+<!ENTITY hBookmark.sidebar.tagsLabel "タグ">
+<!ENTITY hBookmark.sidebar.tagCountLabel "件数">
+<!ENTITY hBookmark.sidebar.bookmarksLabel "ブックマーク">

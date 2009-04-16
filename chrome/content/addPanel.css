@@ -1,0 +1,25 @@
+.hBookmarkAddPanel {
+    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#add-panel");
+}
+
+.hBookmarkTagComplete {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#tag-complete");
+}
+.hBookmarkTagSelector {
+   display: block;
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#tag-selector");
+}
+.hBookmarkImageSelector {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#image-selector");
+}
+#hBookmarkFavoriteBookmarkTooltip {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#favorite-bookmark-tooltip");
+}
+label[emptytext] {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#placeholder-label");
+}
+checkbox[preference] {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#preference-checkbox");
+}
+
+

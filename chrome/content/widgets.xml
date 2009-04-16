@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE bindings [
+    <!ENTITY % browser SYSTEM "chrome://hatenabookmark/locale/browser.dtd">
+    %browser;
+]>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="link"
+             extends="chrome://global/content/bindings/text.xml#text-link">
+        <implementation>
+            <method name="open">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    let href = this.href;
+                    if (!href || this.disabled || event.getPreventDefault())
+                        return;
+                    hBookmark.hOpenUILink(href, event);
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="click" phase="capturing" button="1"
+                     action="this.open(event);"/>
+        </handlers>
+    </binding>
+
+</bindings>

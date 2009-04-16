@@ -37,6 +37,7 @@ function tearDown() {
 }
 
 function testNagayama() {
+<<<<<<< HEAD:tests/javascripts/suffixarray.test.js
 //     var test = utils.readFrom('data/test.null.data', 'UTF-8');
 //     sary = new SuffixArray(test);
 //     sary.make();
@@ -44,6 +45,8 @@ function testNagayama() {
 
     //var data = utils.readFrom('data/secondlife.search.data', 'UTF-8');
     var data = utils.readFrom('data/nagayama.search.data', 'UTF-8');
+//    var data = utils.readFrom('data/secondlife.search.data', 'UTF-8');
+    //var data = utils.readFrom('data/nagayama.search.data', 'UTF-8');
     // var data = utils.readFrom('data/naoya.search.data', 'UTF-8');
 //     var data = utils.readFrom('data/otsune.search.data', 'UTF-8');
     data = data.substr(0, data.length * 3/4);
@@ -53,6 +56,7 @@ function testNagayama() {
     sary = new SuffixArray(data);
     sary.make();
 
+    return;
     var word = 'ブックマーク';
     //p.b(function() {
         // indexes = [i for (i in finder)];

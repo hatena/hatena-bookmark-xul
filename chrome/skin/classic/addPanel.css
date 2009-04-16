@@ -1,0 +1,262 @@
+* {
+    font-family:"Arial","Helvetica",sans-serif;
+}
+
+.username-line {
+    background: #eee url("chrome://hatenabookmark/skin/images/logo-text.png") no-repeat 10px center;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 5px;
+    vertical-align: bottom;
+}
+
+label[anonid="userNameField"] {
+  margin-right: 3px !important;
+}
+
+label[anonid="userIcon"] {
+  margin-left: 3px !important;
+}
+
+.username-line label {
+  margin: 0;
+}
+
+.labelHeader {
+  font-weight: bold;
+  margin-right: 1em;
+  color: #222;
+}
+
+#hBookmarkAddPanelWindow {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background:#fff;
+  -moz-appearance: none;
+}
+
+.notice {
+  background: #eee;
+  -moz-border-radius: 5px;
+  padding: 5px 0;
+}
+
+#hBookmarkAddPanelContent {
+}
+
+#logo-text {
+  margin-left: 5px;
+}
+
+grid.mainGrid {
+  margin: 5px;
+}
+
+label[anonid="titleLabel"] {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+hbox[anonid="messageRow"] {
+    padding: 4px;
+    margin: 5px 3px 5px 3px;
+    background-color: #FFDDDD;
+    -moz-border-radius: 3px;
+    font-weight: bold;
+    color: #555;
+}
+
+[anonid="usersRow"] {
+  min-height: 18px;
+}
+
+[anonid="titleContainer"] {
+  margin-left: 10px;
+}
+
+label[anonid="usersField"] {
+  background: url(chrome://hatenabookmark/skin/images/page.gif) left 0px no-repeat;
+  color: #FF6e6e !important;
+  font-weight: bold;
+  padding-left: 14px;
+  font-size: 10px;
+  font-family: verdana;
+}
+
+textbox {
+}
+
+button[anonid="editTitleButton"],
+button[anonid="cancelEditTitleButton"] {
+  font-size: 11px;
+  list-style-image: url(chrome://hatenabookmark/skin/images/buttons.png);
+  -moz-image-region: rect(46px 147px 62px 131px);
+  -moz-appearance: none !important;
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  margin:0 !important;
+}
+
+button[anonid="cancelEditTitleButton"] {
+  -moz-image-region: rect(62px 147px 78px 131px) !important;
+}
+
+[anonid="editTitleNotification"]  {
+  padding-bottom: 10px;
+}
+
+[anonid="editTitleNotification"] label  {
+  margin:0;
+  padding:0;
+}
+
+[anonid="editTitleNotification"] description {
+  background: url(chrome://hatenabookmark/skin/images/caution.png) left center no-repeat;
+  padding-left: 20px;
+}
+
+[anonid="lastTitleEditorContainer"] {
+  padding-left: 25px;
+}
+
+[anonid="imageSelector"] {
+  border: 1px solid #ddd;
+  background: #eee;
+  padding: 2px;
+  margin: 5px;
+}
+
+panel[anonid="popup"] {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: rgba(255,255,255,1) !important;
+}
+
+[anonid="editImageNotification"] {
+  padding: 5px 5px 5px 25px;
+  background: #eee url(chrome://hatenabookmark/skin/images/caution.png) 5px center no-repeat;
+  border-top: 1px solid #ddd;
+}
+
+[anonid="editImageNotification"] label {
+  margin: 0;
+}
+
+[anonid="commentCounterField"] {
+   color: #808080;
+}
+[anonid="commentCounterField"].hBookmarkCommentOver {
+   color: #ff0000;
+}
+
+[anonid="favoritesContainer"] image {
+  margin-right: 3px;
+  cursor: pointer;
+}
+
+label[empty="true"] {
+  color: #ddd;
+}
+
+.hBookmarkTag, .hBookmarkSelectedTag {
+   border: 1px solid transparent;
+   cursor: pointer;
+   padding:2px 2px;
+   margin: 2px 3px 2px 0;
+}
+
+.hBookmarkSelectedTag {
+   background-color: #559be6;
+   color: #ffffff;
+   border: 1px inset #559be6;
+}
+
+.dialog-button-box {
+  margin: 10px;
+}
+
+caption {
+   background-color: transparent !important; 
+   font-weight: bold;
+   color: #222;
+   margin: 0 0 5px 0;
+}
+
+caption label {
+  margin: 0 5px 0 0;
+}
+
+groupbox {
+    border: none !important;
+    margin: 10px;
+}
+
+.groupbox-body {
+  background: rgba(221, 234, 250, 0.7);
+  -moz-border-radius: 3px;
+}
+
+.hBookmarkCommandLabel {
+   color: #808080;
+   text-decoration: underline;
+   cursor: pointer;
+}
+
+.hBookmarkTagSelector {
+  margin: 0;
+}
+
+[anonid="allTagsLabel"],
+[anonid="frequentTagsLabel"] {
+  font-weight: normal;
+  font-size: 90%;
+}
+
+[anonid="tagSelector"] {
+   overflow: auto;
+}
+
+[anonid="showCommentsButton"] {
+   margin-right: 5px;
+   list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+   -moz-image-region: rect(46px 130px 62px 114px);
+   cursor: pointer;
+}
+
+[anonid="popup"] {
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+.hBookmarkImageSelectorPopup {
+   max-width: 550px;
+}
+.hBookmarkImageSelectorItem {
+   margin: 5px;
+   vertical-align: middle;
+   outline: 3px solid #fff;
+   cursor: pointer;
+}
+.hBookmarkImageSelectorItem:hover {
+  outline: 2px solid #95b6be;
+}
+.hBookmarkImageSelectorItem[selected="true"] {
+   outline: 3px solid #2c63bd;
+}
+
+hbox[anonid="container"] {
+  padding: 10px;
+}
+
+image[anonid="noImage"] {
+  border: 1px solid #ddd;
+  padding: 8px;
+  background: #eee;
+}
+
+image[anonid="icon"] {
+  cursor: pointer;
+}

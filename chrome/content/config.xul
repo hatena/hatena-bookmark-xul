@@ -1,0 +1,481 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin" type="text/css"?>
+<?xml-stylesheet href="chrome://mozapps/content/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://hatenabookmark/skin/config.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
+
+<!DOCTYPE dialog SYSTEM "chrome://hatenabookmark/locale/config.dtd">
+<prefwindow id="hBookmark-config"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    title="&hBookmark.config.title;"
+    >
+
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/transparent.png"
+    id="prefpane-locationbar" label="&hBookmark.config.general;" flex="1">
+    <preferences>
+        <preference 
+            id="extensions.hatenabookmark.locationbar.searchToggle"
+            name="extensions.hatenabookmark.locationbar.searchToggle"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.locationbar.search"
+            name="extensions.hatenabookmark.locationbar.search"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.contextmenu.enabled"
+            name="extensions.hatenabookmark.contextmenu.enabled"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.sidebar.reverseDirection"
+            name="extensions.hatenabookmark.sidebar.reverseDirection"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.recentItemCount"
+            name="extensions.hatenabookmark.recentItemCount"
+            type="int"/>
+        <preference 
+            id="extensions.hatenabookmark.link.openInNewTab"
+            name="extensions.hatenabookmark.link.openInNewTab"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.link.linkOverlay"
+            name="extensions.hatenabookmark.link.linkOverlay"
+            type="bool"/>
+    </preferences>
+
+    <vbox>
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.locationbar;" />
+            <vbox flex="1">
+            <checkbox id="extensions.hatenabookmark.locationbar.search-check" flex="1"
+                label="&hBookmark.config.searchEnabled;"
+                preference="extensions.hatenabookmark.locationbar.search"/>
+            <hbox>
+                <spacer style="width: 1em;" />
+                <checkbox id="extensions.hatenabookmark.locationbar.searchToggle-check" flex="1"
+                    label="&hBookmark.config.searchShortcut;"
+                    preference="extensions.hatenabookmark.locationbar.searchToggle"/>
+            </hbox>
+            </vbox>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.toolbar;" />
+            <vbox flex="1">
+                <hbox flex="1" align="center">
+                <label value="&hBookmark.config.toolbarMaxItem;"
+                    control="recentItemCount"/>
+                <textbox id="recentItemCount"
+                    preference="extensions.hatenabookmark.recentItemCount"
+                    type="number" min="1" increment="1" max="200"
+                    style="width: 5em;"
+                />
+                </hbox>
+            </vbox>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.contextmenu;" />
+            <checkbox id="extensions.hatenabookmark.contextmenu.enabled-check" flex="1"
+                label="&hBookmark.config.contextmenuEnabled;"
+                preference="extensions.hatenabookmark.contextmenu.enabled"/>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.sidebar;" />
+            <hbox flex="1" align="center">
+            <label value="&hBookmark.config.sidebarLayout;" />
+                <radiogroup id="sidebar.reverse"
+                    flex="1"
+                    preference="extensions.hatenabookmark.sidebar.reverseDirection"
+                    orient="horizontal">
+                    <radio value="false" label="&hBookmark.config.sidebarNormal;"
+                        class="image" align="center"
+                        src="chrome://hatenabookmark/skin/images/config_search_bottom.png"
+                        />
+                    <radio value="true" label="&hBookmark.config.sidebarReverse;"
+                        src="chrome://hatenabookmark/skin/images/config_search_top.png"
+                        class="image" align="center"
+                        />
+                </radiogroup>
+            </hbox>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.link;" />
+            <vbox flex="1">
+                <hbox flex="1" align="center">
+                    <checkbox id="link.openInNewTab" flex="1"
+                        label="&hBookmark.config.link.openInNewTab;"
+                        preference="extensions.hatenabookmark.link.openInNewTab" />
+                </hbox>
+                <hbox flex="1" align="center">
+                    <spacer style="width:1em;" />
+                    <label value="&hBookmark.config.link.openInNewTabNotice;" />
+                </hbox>
+                <hbox flex="1" align="center">
+                    <checkbox id="link.linkOverlay" flex="1"
+                        label="&hBookmark.config.link.linkOverlay;"
+                        preference="extensions.hatenabookmark.link.linkOverlay" />
+                </hbox>
+            </vbox>
+        </groupbox>
+
+        <spacer height="50px" />
+    </vbox>
+</prefpane>
+
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/transparent.png"
+    id="prefpane-statusbar" label="&hBookmark.config.statusbar;" flex="1" onpaneload="hBookmark.Config.updateStatus();">
+
+    <preferences>
+        <preference 
+            id="extensions.hatenabookmark.statusbar.addButton"
+            name="extensions.hatenabookmark.statusbar.addButton"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.statusbar.counter"
+            name="extensions.hatenabookmark.statusbar.counter"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.statusbar.httpsIgnore"
+            name="extensions.hatenabookmark.statusbar.httpsIgnore"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.autoHoverShow"
+            name="extensions.hatenabookmark.commentviewer.autoHoverShow"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.autoResize"
+            name="extensions.hatenabookmark.commentviewer.autoResize"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.autoFilter"
+            name="extensions.hatenabookmark.commentviewer.autoFilter"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.autoFilterThreshold"
+            name="extensions.hatenabookmark.commentviewer.autoFilterThreshold"
+            type="int"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.width"
+            name="extensions.hatenabookmark.commentviewer.width"
+            type="int"/>
+        <preference 
+            id="extensions.hatenabookmark.commentviewer.height"
+            name="extensions.hatenabookmark.commentviewer.height"
+            type="int"/>
+    </preferences>
+
+    <vbox>
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.statusbarIcon;" />
+            <checkbox id="extensions.hatenabookmark.statusbar.addButton-check" flex="1"
+                label="&hBookmark.config.statusbarAddButton;"
+                preference="extensions.hatenabookmark.statusbar.addButton"/>
+            <checkbox id="extensions.hatenabookmark.statusbar.counter-check" flex="1"
+                label="&hBookmark.config.statusbarCounter;"
+                preference="extensions.hatenabookmark.statusbar.counter"/>
+                <!-- src="chrome://hatenabookmark/skin/images/nbookmarks.png" -->
+            <hbox>
+            <spacer style="width: 1em;" />
+            <checkbox id="extensions.hatenabookmark.statusbar.httpsIgnore-check" flex="1"
+                label="&hBookmark.config.statusbarHttpsIngore;"
+                preference="extensions.hatenabookmark.statusbar.httpsIgnore"/>
+            </hbox>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.commentviewer;" />
+            <checkbox id="extensions.hatenabookmark.commentviewer.autoHoverShow-check" flex="1"
+                label="&hBookmark.config.commentviewerAutoShown;"
+                preference="extensions.hatenabookmark.commentviewer.autoHoverShow"/>
+
+            <checkbox id="extensions.hatenabookmark.commentviewer.autoResize-check" flex="1"
+                label="&hBookmark.config.commentviewerAutoResize;"
+                onmouseup="setTimeout(hBookmark.Config.updateStatus, 10);"
+                preference="extensions.hatenabookmark.commentviewer.autoResize"/>
+
+            <hbox flex="1" align="center">
+                <spacer style="width: 1em;" />
+                <label value="&hBookmark.config.commentviewerSizeSetting;" />
+                <label value="&hBookmark.config.commentviewerWidth;"
+                    control="commentviewer.width"/>
+                <textbox id="commentviewer.width"
+                    preference="extensions.hatenabookmark.commentviewer.width"
+                    type="number" min="200" increment="10" max="9999"
+                    style="width: 5em;"
+                />
+                <label value="&hBookmark.config.commentviewerHeight;"
+                    control="commentviewer.height"/>
+                <textbox id="commentviewer.height"
+                    preference="extensions.hatenabookmark.commentviewer.height"
+                    type="number" min="100" increment="10" max="9999"
+                    style="width: 5em;"
+                />
+            </hbox>
+
+            <checkbox id="extensions.hatenabookmark.commentviewer.autoFilter-check" flex="1"
+                label="&hBookmark.config.commentviewerAutoFilter;"
+                onmouseup="setTimeout(hBookmark.Config.updateStatus, 10);"
+                preference="extensions.hatenabookmark.commentviewer.autoFilter"/>
+
+            <hbox flex="1" align="center">
+                <spacer style="width: 1em;" />
+                <label value="&hBookmark.config.commentviewerAutoFilterThreshold;"
+                    control="commentviewer.autoFilterThreshold"/>
+                <textbox id="commentviewer.autoFilterThreshold"
+                    preference="extensions.hatenabookmark.commentviewer.autoFilterThreshold"
+                    type="number" min="1" increment="1" max="9999"
+                    style="width: 5em;"
+                />
+            </hbox>
+        </groupbox>
+    </vbox>
+</prefpane>
+
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/transparent.png"
+    id="prefpane-addPanel" label="&hBookmark.config.addPanel;" flex="1" onpaneload="hBookmark.Config.updateUI();">
+    <preferences>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.tagCompleteEnabled"
+            name="extensions.hatenabookmark.addPanel.tagCompleteEnabled"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.tagMaxResult"
+            name="extensions.hatenabookmark.addPanel.tagMaxResult"
+            type="int"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.initialTagCount"
+            name="extensions.hatenabookmark.addPanel.initialTagCount"
+            type="int"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.tagListShow"
+            name="extensions.hatenabookmark.addPanel.tagListShow"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.recommendedTagListShow"
+            name="extensions.hatenabookmark.addPanel.recommendedTagListShow"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.xulMigemo"
+            name="extensions.hatenabookmark.addPanel.xulMigemo"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.backgroundImage"
+            name="extensions.hatenabookmark.addPanel.backgroundImage"
+            type="file"/>
+    </preferences>
+
+    <vbox>
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.addPanelTagComplete;" />
+            <hbox flex="1" align="center">
+                <checkbox id="addPanel.tagCompleteEnabled" flex="1"
+                    label="&hBookmark.config.addPanelTagCompleteEnabled;"
+                    preference="extensions.hatenabookmark.addPanel.tagCompleteEnabled" />
+            </hbox>
+            <hbox flex="1" align="center">
+                <spacer style="width: 2em;" />
+                <label value="&hBookmark.config.addPanelTagCompleteMaxItem;"
+                    control="addPanel.tagMaxResult"/>
+                <textbox id="addPanel.tagMaxResult"
+                    preference="extensions.hatenabookmark.addPanel.tagMaxResult"
+                    type="number" min="1" increment="1"
+                    style="width: 5em;"
+                />
+                <spacer flex="1" />
+            </hbox>
+            <hbox flex="1" align="center">
+                <checkbox id="addPanel.xulMigemo"
+                    label="&hBookmark.config.addPanelTagCompleteXulMigemoEnabled;"
+                    preference="extensions.hatenabookmark.addPanel.xulMigemo" />
+                <label class="text-link hBookmarkLink" value="XUL/Migemo" href="https://addons.mozilla.org/firefox/addon/5239" />
+                <label value="&hBookmark.config.addPanelTagCompleteXulMigemoSuffix;" />
+                <spacer flex="1" />
+            </hbox>
+        </groupbox>
+
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.addPanelTag;" />
+            <hbox flex="1" align="center">
+                <checkbox id="addPanel.recommendedTagListShow" flex="1"
+                    label="&hBookmark.config.addPanelTagRecent;"
+                    preference="extensions.hatenabookmark.addPanel.recommendedTagListShow" />
+            </hbox>
+            <hbox flex="1" align="center">
+                <checkbox id="addPanel.tagListShow" flex="1"
+                    label="&hBookmark.config.addPanelTagMine;"
+                    preference="extensions.hatenabookmark.addPanel.tagListShow" />
+            </hbox>
+            <hbox flex="1" align="center">
+                <spacer style="width: 2em;" />
+                <label value="&hBookmark.config.addPanelTagItem;"
+                    control="addPanel.initialTagCount"/>
+                <textbox id="addPanel.initialTagCount"
+                    preference="extensions.hatenabookmark.addPanel.initialTagCount"
+                    type="number" min="1" increment="1"
+                    style="width: 5em;"
+                />
+                <spacer flex="1" />
+            </hbox>
+        </groupbox>
+
+        <!--
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.addPanelBackgroundImage;" />
+            <hbox align="center" flex="1">
+                <vbox flex="1">
+                <filefield id="addPanel.backgroundImage" flex="1" />
+                    <hbox align="center">
+                        <button label="&hBookmark.config.addPanelBackgroundImageSelect;" oncommand="hBookmark.Config.selectImageFile();" />
+                        <button label="&hBookmark.config.addPanelBackgroundImageCancel;" oncommand="hBookmark.Config.clearImageFile();" />
+                    </hbox>
+                </vbox>
+            </hbox>
+        </groupbox>
+        -->
+    </vbox>
+</prefpane>
+
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/transparent.png"
+    onpaneload="hBookmark.Config.ShortCut.initPane();"
+    id="prefpane-shortcut" label="&hBookmark.config.shortcut;" flex="1">
+
+    <preferences>
+        <preference 
+            id="extensions.hatenabookmark.shortcut.keys.add"
+            name="extensions.hatenabookmark.shortcut.keys.add"
+            type="string"/>
+        <preference 
+            id="extensions.hatenabookmark.shortcut.keys.comment"
+            name="extensions.hatenabookmark.shortcut.keys.comment"
+            type="string"/>
+        <preference 
+            id="extensions.hatenabookmark.shortcut.keys.sidebar"
+            name="extensions.hatenabookmark.shortcut.keys.sidebar"
+            type="string"/>
+    </preferences>
+
+    <!--
+      base code by XUL/Migemo config.xul
+      thx Piro!
+    -->
+    <vbox>
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.shortcutAdd;" />
+            <hbox>
+                    <textbox id="extensions.hatenabookmark.shortcut.keys.add-input"
+                        onclick="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.add);"
+                        readonly="true"
+                        preference="extensions.hatenabookmark.shortcut.keys.add"
+                        flex="1"
+                        />
+                    <button label="&hBookmark.config.shortcutSet;"
+                        oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.add);"/>
+                    <button label="&hBookmark.config.shortcutClear;"
+                        oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.keys.add);"/>
+            </hbox>
+        </groupbox>
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.shortcutComment;" />
+            <hbox>
+                    <textbox id="extensions.hatenabookmark.shortcut.keys.comment-input"
+                        onclick="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.comment);"
+                        readonly="true"
+                        preference="extensions.hatenabookmark.shortcut.keys.comment"
+                        flex="1"
+                        />
+                    <button label="&hBookmark.config.shortcutSet;"
+                        oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.comment);"/>
+                    <button label="&hBookmark.config.shortcutClear;"
+                        oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.keys.comment);"/>
+            </hbox>
+        </groupbox>
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.shortcutSidebar;" />
+            <hbox>
+                    <textbox id="extensions.hatenabookmark.shortcut.keys.sidebar-input"
+                        onclick="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.sidebar);"
+                        readonly="true"
+                        preference="extensions.hatenabookmark.shortcut.keys.sidebar"
+                        flex="1"
+                        />
+                    <button label="&hBookmark.config.shortcutSet;"
+                        oncommand="hBookmark.Config.ShortCut.set(hBookmark.Config.ShortCut.keys.sidebar);"/>
+                    <button label="&hBookmark.config.shortcutClear;"
+                        oncommand="hBookmark.Config.ShortCut.clear(hBookmark.Config.ShortCut.keys.sidebar);"/>
+            </hbox>
+        </groupbox>
+        <label value="&hBookmark.config.shortcutNotice;" />
+    </vbox>
+</prefpane>
+
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/transparent.png"
+    id="prefpane-sync" 
+    label="&hBookmark.config.data;" 
+    flex="1"
+    onpaneload="hBookmark.Config.initDataPane();"
+    >
+    <vbox flex="1">
+            <vbox align="center">
+                <hbox id="pref-loginbox">
+                    <label id="pref-login" valeu="" />
+                </hbox>
+                <label id="pref-nologin" valeu="&hBookmark.config.nologin;"/>
+            </vbox>
+
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.sync;" />
+                <label value="&hBookmark.config.syncNotice;" />
+            <vbox>
+                <hbox>
+                <spacer style="width: 1em;" />
+                    <button label="&hBookmark.config.syncData;"
+                        oncommand="hBookmark.Config.sync();"
+                    />
+                </hbox>
+            </vbox>
+        </groupbox>
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.syncDataAll;" />
+            <vbox>
+                <label value="&hBookmark.config.syncDataAllNotice1;" />
+                <label value="&hBookmark.config.syncDataAllNotice2;" />
+                <hbox>
+                <spacer style="width: 1em;" />
+                    <button label="&hBookmark.config.syncDataAll;"
+                        oncommand="hBookmark.Config.syncALL();"
+                    />
+                </hbox>
+            </vbox>
+        </groupbox>
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.deleteData;" />
+            <vbox>
+                <label value="&hBookmark.config.deleteDataNotice1;" />
+                <label value="&hBookmark.config.deleteDataNotice2;" />
+                <hbox>
+                <spacer style="width: 1em;" />
+                    <button label="&hBookmark.config.deleteDataAll;"
+                        oncommand="hBookmark.Config.deleteAll();"
+                    />
+                </hbox>
+            </vbox>
+        </groupbox>
+        <spacer height="50px" />
+    </vbox>
+</prefpane>
+
+<script type="application/x-javascript" src="chrome://browser/content/utilityOverlay.js"></script>
+<script type="application/javascript; version=1.8" charset="utf-8" src="chrome://hatenabookmark/content/autoloader.js" />
+</prefwindow>
+

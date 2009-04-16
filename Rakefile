@@ -1,6 +1,7 @@
 # based on: http://gravelog.blogspot.com/2007/03/using-rake-to-build-firefox-extensions_04.html
 require 'rexml/document'
 require 'digest/sha1'
+require 'pathname'
 
 include REXML
 include FileUtils::Verbose
@@ -32,7 +33,7 @@ end
 task :create_install_rdf => ["#{BUILD_DIR}/install.rdf"]
 
 task :create_extra_directories => []
-%w(defaults components modules).each do |dir|
+%w(defaults components modules resources searchplugins).each do |dir|
   if File.directory?(dir)
     dst_dir = "#{BUILD_DIR}/#{dir}"
 
@@ -64,7 +65,10 @@ task :create_extension_xpi => [
     version_number = element.text
   end
 
-  sh "cd #{BUILD_DIR} && zip -qr -9 ../../xpi/#{EXTENSION_NAME}-#{version_number}-#{Time.now.strftime('%Y%m%d')}-fx.xpi *"
+  xpi = Pathname.new 'xpi'
+  xpi.mkdir unless xpi.exist? 
+  #sh "cd #{BUILD_DIR} && zip -qr -9 ../../xpi/#{EXTENSION_NAME}-#{version_number}-#{Time.now.strftime('%Y%m%d')}-fx.xpi *"
+  sh "cd #{BUILD_DIR} && zip -qr -9 ../../xpi/#{EXTENSION_NAME}-#{version_number}.xpi *"
   rm_rf "build"
 end
 
@@ -150,5 +154,6 @@ def version_number
 end
 
 def xpi_filename
-  "#{EXTENSION_NAME}-#{version_number}-fx.xpi"
+  #"#{EXTENSION_NAME}-#{version_number}-fx.xpi"
+  "#{EXTENSION_NAME}-#{version_number}.xpi"
 end

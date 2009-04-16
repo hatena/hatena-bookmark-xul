@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd" [
+    <!ENTITY % browser SYSTEM "chrome://hatenabookmark/locale/browser.dtd">
+    %browser;
+]>
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="recent-line">
+        <content flex="1">
+            <xul:hbox class="hBookmark-toolbar-dynamic-item">
+                <xul:toolbarbutton anonid="loginButton"
+                                   class="bookmark-item"
+                                   label="&hBookmark.toolbar.loginLabel;"
+                                   hidden="true"
+                                   oncommand="hBookmark.UIUtils.openLogin(event);"
+                                   onclick="checkForMiddleClick(this, event);"/>
+                <xul:toolbarbutton anonid="addPageButton"
+                                   class="bookmark-item"
+                                   label="&hBookmark.toolbar.addBookmarkLabel;"
+                                   hidden="true"
+                                   oncommand="hBookmark.UIUtils.openAddBookmark(event);"
+                                   onclick="checkForMiddleClick(this, event);"/>
+                <xul:toolbarbutton anonid="tagFilterButton"
+                                   class="hBookmark-tag-filter-button"
+                                   tooltiptext="&hBookmark.toolbar.tagFilterLabel;"
+                                   type="menu"
+                                   hidden="true">
+                    <xul:menupopup anonid="tagFilterPopup"
+                                   class="hBookmark-tag-filter-popup"
+                                   onpopupshowing="return this.build(document.getBindingParent(this));"/>
+                </xul:toolbarbutton>
+            </xul:hbox>
+            <xul:hbox anonid="container"
+                      class="hBookmark-toolbar-recent-line-container hBookmark-toolbar-dynamic-item"
+                      flex="1">
+                <xul:hbox anonid="body"
+                          tooltip="hBookmark-bookmark-tooltip"
+                          context="hBookmark-bookmark-context"/>
+                <xul:toolbarspring/>
+                <xul:toolbarbutton anonid="chevron" class="chevron"
+                                   type="menu" hidden="true">
+                    <xul:menupopup anonid="popup"
+                                   class="hBookmark-toolbar-recent-popup"/>
+                </xul:toolbarbutton>
+            </xul:hbox>
+            <children/>
+        </content>
+
+        <implementation implements="nsIDOMEventListener">
+            <constructor><![CDATA[
+                this.popup.tag = this.tag;
+                let method = hBookmark.method;
+                this._listeners = [
+                    hBookmark.EventService.createListener("BookmarksUpdated",
+                        method(this, "build")),
+                    hBookmark.EventService.createListener("UserChange",
+                        method(this, "build")),
+                    hBookmark.Prefs.bookmark.createListener("recentItemCount",
+                        method(this, "build")),
+                ];
+                window.addEventListener("resize", this, false);
+                this.tagFilterPopup.control = this;
+                // XXX コンストラクタ呼び出し時にはデータを取得できない?
+                setTimeout(function (self, pref) {
+                    self.tag = pref.get("toolbar.filterTag");
+                }, 500, this, hBookmark.Prefs.bookmark);
+            ]]></constructor>
+
+            <destructor><![CDATA[
+                this._listeners.forEach(function (l) l.unlisten());
+                this._listeners = null;
+                window.removeEventListener("resize", this, false);
+                this.tagFilterPopup.control = null;
+            ]]></destructor>
+
+            <field name="_listeners">null</field>
+
+            <field name="loginButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "loginButton")
+            </field>
+            <field name="addPageButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "addPageButton")
+            </field>
+            <field name="tagFilterButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "tagFilterButton")
+            </field>
+            <field name="tagFilterPopup">
+                document.getAnonymousElementByAttribute(this, "anonid", "tagFilterPopup")
+            </field>
+            <field name="container">
+                document.getAnonymousElementByAttribute(this, "anonid", "container")
+            </field>
+            <field name="body">
+                document.getAnonymousElementByAttribute(this, "anonid", "body")
+            </field>
+            <field name="chevron">
+                document.getAnonymousElementByAttribute(this, "anonid", "chevron")
+            </field>
+            <field name="popup">
+                document.getAnonymousElementByAttribute(this, "anonid", "popup")
+            </field>
+
+            <property name="tag"
+                      onget="return this.getAttribute('tag') || '';">
+                <setter><![CDATA[
+                    this.setAttribute("tag", val);
+                    this.tagFilterButton.label = val;
+                    this.popup.tag = val;
+                    this.build();
+                    return val;
+                ]]></setter>
+            </property>
+
+            <method name="build">
+                <body><![CDATA[
+                    hBookmark.UIUtils.deleteContents(this.body);
+                    let bookmarks = this.getBookmarks();
+                    if (!bookmarks.length && this.tag) {
+                        this.tagFilterPopup.deleteTag(this.tag);
+                        this.tag = "";
+                        return;
+                    }
+                    bookmarks.forEach(function (bookmark) {
+                        let button = this._createToolbarButton(bookmark);
+                        this.body.appendChild(button);
+                    }, this);
+
+                    let isLoggedIn = !!hBookmark.User.user;
+                    let hasBookmarks = !!bookmarks.length;
+                    this.loginButton.hidden = isLoggedIn;
+                    this.addPageButton.hidden = !isLoggedIn || hasBookmarks;
+                    this.tagFilterButton.hidden = !isLoggedIn || !hasBookmarks;
+                    this.redraw();
+                ]]></body>
+            </method>
+
+            <method name="getBookmarks">
+                <body><![CDATA[
+                    return this.popup.getBookmarks();
+                ]]></body>
+            </method>
+
+            <method name="_createToolbarButton">
+                <parameter name="bookmark"/>
+                <body><![CDATA[
+                    let button = document.createElementNS(hBookmark.XUL_NS,
+                                                          "toolbarbutton");
+                    button.setAttribute("class", "bookmark-item");
+                    button.setAttribute("label", bookmark.title);
+                    button.setAttribute("image", hBookmark.favicon(bookmark.url));
+                    button.bookmark = bookmark;
+                    return button;
+                ]]></body>
+            </method>
+
+            <method name="redraw">
+                <body><![CDATA[
+                    if (!this.body.hasChildNodes()) {
+                        this.chevron.hidden = true;
+                        return;
+                    }
+                    hBookmark.p('toolbar redraw');
+                    this.chevron.hidden = false;
+                    let availableWidth = this.container.boxObject.width;
+                    let chevronWidth = this._getMarginBoxWidth(this.chevron);
+                    let buttonsWidth = 0;
+                    let visibleCount = 0;
+                    let button = this.body.firstChild;
+                    while (button) {
+                        button.hidden = false;
+                        buttonsWidth += this._getMarginBoxWidth(button);
+                        let nextButton = button.nextSibling;
+                        if (buttonsWidth + (nextButton ? chevronWidth : 0)
+                                > availableWidth)
+                            break;
+                        visibleCount++;
+                        button = nextButton;
+                    }
+                    Array.slice(this.body.childNodes, visibleCount)
+                         .forEach(function (button) button.hidden = true);
+                    this.chevron.hidden = !button;
+                    this.popup.hiddenCount = visibleCount;
+                ]]></body>
+            </method>
+
+            <method name="_getMarginBoxWidth">
+                <parameter name="element"/>
+                <body><![CDATA[
+                    let style = getComputedStyle(element, null);
+                    return element.boxObject.width +
+                        parseInt(style.marginLeft) +
+                        parseInt(style.marginRight);
+                ]]></body>
+            </method>
+
+            <method name="handleEvent">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    // XXX 表示→非表示→リサイズ→再度表示のときに
+                    // 配置が更新されない。
+                    if (event.type === "resize" &&
+                        event.target === window &&
+                        hBookmark.UIUtils.isVisible(this))
+                        this.redraw();
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="command"
+                     action="hBookmark.UIUtils.onBookmarkCommand(event);"/>
+            <handler event="click"
+                     action="hBookmark.UIUtils.onBookmarkClick(event);"/>
+        </handlers>
+    </binding>
+
+    <binding id="recent-popup"
+             extends="chrome://global/content/bindings/popup.xml#popup">
+        <content context="hBookmark-bookmark-context"
+                 tooltip="hBookmark-bookmark-tooltip">
+        </content>
+
+        <implementation>
+            <field name="hiddenCount">0</field>
+
+            <property name="count" readonly="true"
+                      onget="return hBookmark.Prefs.bookmark.get('recentItemCount');"/>
+
+            <property name="tag"
+                      onget="return this.getAttribute('tag') || '';"
+                      onset="this.setAttribute('tag', val); return val;"/>
+
+            <method name="build">
+                <body><![CDATA[
+                    hBookmark.UIUtils.deleteContents(this);
+                    let bookmarks = this.getBookmarks();
+                    bookmarks = bookmarks.slice(this.hiddenCount);
+                    bookmarks.forEach(function (bookmark, i) {
+                        let menuItem = this._createMenuItem(bookmark);
+                        this.appendChild(menuItem);
+                    }, this);
+                ]]></body>
+            </method>
+
+            <method name="getBookmarks">
+                <body><![CDATA[
+                    let tag = this.tag;
+                    let count = this.count;
+                    try {
+                        return tag
+                            ? hBookmark.Model.Bookmark.findByTags([tag], count)
+                            : hBookmark.Model.Bookmark.findRecent(count);
+                    } catch (ex) {
+                        return [];
+                    }
+                ]]></body>
+            </method>
+
+            <method name="_createMenuItem">
+                <parameter name="bookmark"/>
+                <body><![CDATA[
+                    let item = document.createElementNS(hBookmark.XUL_NS,
+                                                        "menuitem");
+                    item.setAttribute("class", "bookmark-item menuitem-iconic");
+                    item.setAttribute("label", bookmark.title);
+                    item.setAttribute("image", hBookmark.favicon(bookmark.url));
+                    item.bookmark = bookmark;
+                    return item;
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="popupshowing" action="this.build();"/>
+        </handlers>
+    </binding>
+
+    <binding id="tag-filter-popup"
+             extends="chrome://global/content/bindings/popup.xml#popup">
+        <content>
+            <xul:menuitem anonid="noFilter"
+                          label="&hBookmark.toolbar.noFilterLabel;"
+                          accesskey="&hBookmark.toolbar.noFilterKey;"
+                          type="radio"
+                          name="filteredBy"
+                          tag=""/>
+            <xul:menuitem label="&hBookmark.toolbar.selectTagLabel;"
+                          accesskey="&hBookmark.toolbar.selectTagKey;"/>
+            <xul:menuseparator anonid="separator"/>
+            <children/>
+        </content>
+
+        <implementation>
+            <field name="noFilter">
+                document.getAnonymousElementByAttribute(this, "anonid", "noFilter")
+            </field>
+            <field name="separator">
+                document.getAnonymousElementByAttribute(this, "anonid", "separator")
+            </field>
+
+            <field name="strings">
+                new hBookmark.Strings("chrome://hatenabookmark/locale/toolbar.properties")
+            </field>
+            <field name="control">null</field>
+
+            <method name="build">
+                <body><![CDATA[
+                    hBookmark.UIUtils.deleteContents(this);
+                    let currentTagName = this.control.tag;
+                    let tagNames = this.getRecentTags();
+                    this.noFilter.setAttribute("checked", !currentTagName);
+                    this.separator.hidden = !tagNames.length;
+                    tagNames.forEach(function (tagName) {
+                        let checked = (tagName === currentTagName);
+                        let item = this._createMenuItem(tagName, checked);
+                        this.appendChild(item);
+                    }, this);
+                ]]></body>
+            </method>
+
+            <method name="_createMenuItem">
+                <parameter name="tagName"/>
+                <parameter name="checked"/>
+                <body><![CDATA[
+                    let item = document.createElementNS(hBookmark.XUL_NS,
+                                                        "menuitem");
+                    item.setAttribute("label", tagName);
+                    item.setAttribute("type", "radio");
+                    item.setAttribute("name", "filteredBy");
+                    if (checked)
+                        item.setAttribute("checked", "true");
+                    item.setAttribute("tag", tagName);
+                    return item;
+                ]]></body>
+            </method>
+
+            <method name="getRecentTags">
+                <body><![CDATA[
+                    let tagNamesString =
+                        hBookmark.Prefs.bookmark.get("toolbar.recentTags");
+                    return tagNamesString ? tagNamesString.split("[]") : [];
+                ]]></body>
+            </method>
+
+            <method name="setTag">
+                <parameter name="tagName"/>
+                <body><![CDATA[
+                    let pref = hBookmark.Prefs.bookmark;
+                    if (tagName) {
+                        let tagNames = this.getRecentTags();
+                        let index = tagNames.indexOf(tagName);
+                        if (index !== -1)
+                            tagNames.splice(index, 1);
+                        tagNames.unshift(tagName);
+                        let maxCount = pref.get("toolbar.recentTagCount");
+                        if (tagNames.length > maxCount)
+                            tagNames.length = maxCount;
+                        pref.set("toolbar.recentTags", tagNames.join("[]"));
+                    }
+                    pref.set("toolbar.filterTag", tagName);
+                    this.control.tag = tagName;
+                ]]></body>
+            </method>
+
+            <method name="selectTag">
+                <body><![CDATA[
+                    let PS = hBookmark.PromptService;
+                    let tags = hBookmark.Model.Tag.findDistinctTags();
+                    if (!tags.length) {
+                        PS.alert(window, this.strings.get("prompt.noTagTitle"),
+                                 this.strings.get("tagFilter.noTagDescription"));
+                        return;
+                    }
+                    let tagNames = tags.map(function (t) t.name);
+                    let selected = {};
+                    let ok = PS.select(window,
+                        this.strings.get("tagFilter.selectTagTitle"),
+                        this.strings.get("tagFilter.selectTagDescription"),
+                        tagNames.length, tagNames, selected);
+                    if (!ok) return;
+                    this.setTag(tags[selected.value].name);
+                ]]></body>
+            </method>
+
+            <method name="deleteTag">
+                <parameter name="tagName"/>
+                <body><![CDATA[
+                    let pref = hBookmark.Prefs.bookmark;
+                    let tags = "[]" + pref.get("toolbar.recentTags") + "[]";
+                    tags = tags.replace("[]" + tagName + "[]", "[]").slice(2, -2);
+                    pref.set("toolbar.recentTags", tags);
+                ]]></body>
+            </method>
+        </implementation>
+
+        <handlers>
+            <handler event="command"><![CDATA[
+                let target = event.originalTarget;
+                if (target.getAttribute("name") === "filteredBy")
+                    this.setTag(target.getAttribute("tag"));
+                else
+                    this.selectTag();
+                event.stopPropagation();
+            ]]></handler>
+        </handlers>
+    </binding>
+
+</bindings>

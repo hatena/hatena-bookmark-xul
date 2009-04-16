@@ -1,6 +1,17 @@
 <?xml version="1.0" ?>
-<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/addPanel.css"?>
-<overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/toolbar.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/toolbar.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/commentViewer.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
+<?xml-stylesheet href="chrome://hatenabookmark/content/browser.css" type="text/css"?>
+<?xul-overlay href="chrome://hatenabookmark/content/popupsOverlay.xul"?>
+<!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/browser.dtd" [
+    <!ENTITY % toolbar SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd">
+    %toolbar;
+]>
+<overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+>
     <script type="application/javascript" src="autoloader.js"></script>
     <script type="text/javascript; version=1.8" charset="utf-8">
     // <![CDATA[
@@ -8,33 +19,276 @@
     // ]]>
     </script>
 
+    <window id="main-window">
+        <keyset id='hBookmark-keyset' />
+    </window>
+
     <menupopup id="viewSidebarMenu">
         <menuitem observes="viewHBookmarkSidebar" />
     </menupopup>
 
+    <menupopup id="menu_ToolsPopup">
+        <menu id="hBookmark-menuToolsPopup"
+            insertbefore="devToolsSeparator"
+            label="&hBookmark.menu.main;"
+            accesskey="&hBookmark.menu.mainKey;">
+            <menupopup>
+                <menuitem
+                    label="&hBookmark.menu.sync;"
+                    accesskey="&hBookmark.menu.syncKey;"
+                    oncommand="hBookmark.Sync.sync();"/>
+                <menuitem
+                    label="&hBookmark.menu.config;"
+                    accesskey="&hBookmark.menu.configKey;"
+                    oncommand="hBookmark.Config.openDialog();"/>
+                <menuseparator/>
+                <menuitem 
+                    label="&hBookmark.menu.help;"
+                    accesskey="&hBookmark.menu.helpKey;"
+                    oncommand="hBookmark.Config.goHelp(event);"/>
+            </menupopup>
+        </menu>
+    </menupopup>
+
+    <popup id="contentAreaContextMenu"> 
+         <menuitem
+             insertafter="context-bookmarkpage"
+             label="&hBookmark.menu.showentry;"
+             id="hBookmark-menu-showentry"
+             oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(window.content.location.href), event);"
+             accesskey="&hBookmark.menu.showentryKey;"
+         />
+         <menuitem
+             insertafter="context-bookmarkpage"
+             label="&hBookmark.menu.add;"
+             id="hBookmark-menu-addentry"
+             class="menuitem-iconic"
+             oncommand="hBookmark.AddPanelManager.showPanel(document.commandDispatcher.focusedWindow);"
+             accesskey="&hBookmark.menu.addKey;"
+         />
+         <menuitem
+             insertafter="context-bookmarklink"
+             label="&hBookmark.menu.showcomment;"
+             id="hBookmark-menu-showcomment"
+             oncommand="hBookmark.CommentViewer.show(gContextMenu.linkURL);"
+             accesskey="&hBookmark.menu.showcommentKey;"
+         />
+         <menuitem
+             insertafter="context-bookmarklink"
+             label="&hBookmark.menu.showlink;"
+             id="hBookmark-menu-showlink"
+             oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(gContextMenu.linkURL), event);"
+             accesskey="&hBookmark.menu.showlinkKey;"
+         />
+         <menuitem
+             class="menuitem-iconic"
+             insertafter="context-bookmarklink"
+             label="&hBookmark.menu.addlink;"
+             id="hBookmark-menu-addlink"
+             accesskey="&hBookmark.menu.addlinkKey;"
+             oncommand="hBookmark.AddPanelManager.showPanel(gContextMenu.linkURL);"
+         />
+         <menuitem
+             insertafter="context-searchselect"
+             label="&hBookmark.menu.searchtext;"
+             id="hBookmark-menu-searchtext"
+             accesskey="&hBookmark.menu.searchtextKey;"
+             oncommand="hBookmark.UIUtils.selectedTextOpenHatenaWebSearch();"
+         />
+    </popup>
+
+
+    <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton id="hBookmark-toolbar-sidebar-button"
+                       class="chromeclass-toolbar-additional"
+                       tooltiptext="&hBookmark.toolbar.toggleSidebarLabel;"
+                       observes="viewHBookmarkSidebar"/>
+
+        <toolbarbutton 
+            id="hBookmark-toolbar-add-button" 
+            label="&hBookmark.toolbar.add;"
+            tooltiptext="&hBookmark.toolbar.add;"
+            class="chromeclass-toolbar-additional"
+            oncommand="hBookmark.AddPanelManager.showPanel(window.content);" />
+
+        <toolbarbutton 
+            id="hBookmark-toolbar-home-button" 
+            label="&hBookmark.toolbar.home;"
+            tooltiptext="&hBookmark.toolbar.home;"
+            class="chromeclass-toolbar-additional"
+            type="menu-button"
+            oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/my', event);"
+            onclick="checkForMiddleClick(this, event);">
+            <menupopup oncommand="event.stopPropagation();">
+                <menuitem label="&hBookmark.toolbar.top;"
+                          accesskey="&hBookmark.toolbar.topKey;"
+                          oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/', event);"
+                          onclick="checkForMiddleClick(this, event);"/>
+                <menuitem label="&hBookmark.toolbar.home;"
+                          accesskey="&hBookmark.toolbar.homeKey;"
+                          default="true"
+                          oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/my', event);"
+                          onclick="checkForMiddleClick(this, event);"/>
+                <menuitem label="&hBookmark.toolbar.favorite;"
+                          accesskey="&hBookmark.toolbar.favoriteKey;"
+                          oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/my/favorite', event);"
+                          onclick="checkForMiddleClick(this, event);"/>
+            </menupopup>
+        </toolbarbutton>
+
+        <toolbarbutton id="hBookmark-toolbar-recent-button"
+                       class="chromeclass-toolbar-additional"
+                       type="menu"
+                       label="&hBookmark.toolbar.recentLabel;"
+                       tooltiptext="&hBookmark.toolbar.recentLabel;">
+            <menupopup class="hBookmark-toolbar-recent-popup"/>
+        </toolbarbutton>
+
+        <toolbaritem id="hBookmark-toolbar-recent-line"
+                     class="chromeclass-toolbar-additional"
+                     title="&hBookmark.toolbar.recentLabel;">
+            <toolbarbutton class="bookmark-item bookmarks-toolbar-customize"
+                           label="&hBookmark.toolbar.recentLabel;"/>
+        </toolbaritem>
+
+        <toolbaritem id="urlbar-container">
+               <textbox id="urlbar">
+                    <hbox id="urlbar-icons">
+                        <image id="hBookmark-search-icon" searchdisabled="true" onclick="hBookmark.LocationBar.iconClickHandler(event);" />
+                    </hbox>
+                </textbox>
+        </toolbaritem>
+    </toolbarpalette>
+
+    <toolbox id="navigator-toolbox">
+        <toolbar id="hBookmarkToolbar"
+                 class="chromeclass-toolbar-additional"
+                 mode="icons"
+                 defaultmode="icons"
+                 iconsize="small"
+                 defaulticonsize="small"
+                 customizable="true"
+                 defaultset="hBookmark-toolbar-sidebar-button,hBookmark-toolbar-add-button,hBookmark-toolbar-home-button,separator,hBookmark-toolbar-recent-line"
+                 context="toolbar-context-menu"
+                 toolbarname="&hBookmark.toolbar.title;"
+                 accesskey="&hBookmark.toolbar.titleKey;"/>
+    </toolbox>
+
+
     <statusbar id="status-bar">
-        <statusbarpanel id="hBookmark-addToBookmarkButton"
-                        label="Add to Bookmark"/>
-        <statusbarpanel id="hBookmark-statusBarPanel">
-            <hbox id="hBookmark-syncProgressBox" hidden="true">
-                <image src="http://b.hatena.ne.jp/images/loading.gif" width="16px" height="16px" />
+        <statusbarpanel id="hBookmark-statusBarPanel"
+             collapsed="false"
+             context="hBookmarkStatusMenu"
+        >
+            <hbox align="center" id="hBookmark-syncProgressBox" hidden="true">
+                <label value="&hBookmark.statusbar.now_syncing;" />
                 <progressmeter 
                 id="hBookmark-syncProgressMeter"
+                tooltiptext="&hBookmark.statusbar.now_syncing;"
                 style="width: 50px"
                 width="50px" mode="determined" value="82" 
                 />
             </hbox>
+
+            <image id="hBookmarkAddButton" added="false"
+                   tooltiptext="&hBookmark.statusbar.tooltip.addButton;"
+                   onclick="hBookmark.StatusBar.showPanelToggle(event);"
+            />
+
+            <hbox
+                 align="center"
+                 pack="end"
+                 id="hBookmark-status-count"
+                 onclick="hBookmark.StatusBar.goEntry(event);"
+                 tooltiptext="&hBookmark.statusbar.tooltip.counter;"
+                 value=""
+            ><label id="hBookmark-status-count-label" /></hbox>
+
+
+          <toolbarseparator class="hBookmark-status-separator" />
+
+          <image
+               id="hBookmark-status-comment"
+               tooltiptext="&hBookmark.statusbar.tooltip.comment;"
+               loading="false"
+          />
+
         </statusbarpanel>
+
+        <menupopup id="hBookmarkStatusMenu">
+            <menuitem
+                label="&hBookmark.menu.sync;"
+                accesskey="&hBookmark.menu.syncKey;"
+                oncommand="hBookmark.Sync.sync();"/>
+            <menuitem
+                label="&hBookmark.menu.config;"
+                accesskey="&hBookmark.menu.configKey;"
+                oncommand="hBookmark.Config.openDialog();"/>
+            <menuseparator/>
+            <menuitem 
+                label="&hBookmark.menu.help;"
+                accesskey="&hBookmark.menu.helpKey;"
+                oncommand="hBookmark.Config.goHelp(event);"/>
+        </menupopup>
     </statusbar>
+
+    <popupset id="mainPopupSet">
+        <panel id="hBookmark-panel-comment" 
+             orient="vertical"
+             noautofocus="true"
+             noautohide="false"
+        >
+        <vbox 
+           flex="1"
+           id="hBookmark-comment-container"
+        >
+            <vbox 
+               flex="1"
+               id="hBookmark-comment-list-container"
+            >
+                <html:div id="hBookmark-comment-div">
+                    <html:img alt="close" title="close" src="chrome://hatenabookmark/skin/images/close-comment.png" id="hBookmark-comment-close" mousethrough="never" />
+                    <html:ul
+                        id="hBookmark-comment-list"
+                    />
+                </html:div>
+            </vbox>
+            <hbox 
+               id="hBookmark-comment-footer"
+               flex="1"
+               align="center"
+            >
+                <image id="hBookmark-comment-favicon" />
+                <label flex="1" id="hBookmark-comment-title" crop="end" />
+                <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-users" />
+                <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-pub-pri-users" />
+                <image onclick="hBookmark.CommentViewer.filterToggle(event);" src="chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png" id="hBookmark-comment-toggle" />
+            </hbox>
+        </vbox>
+        </panel>
+        <panel 
+            id="hBookmark-panel-urlbar" 
+            noautofocus="true"
+            noautohide="false"
+        >
+            <richlistbox 
+            disableKeyNavigation="true"
+            rows="6"
+            context="hBookmark-bookmark-context"
+            id="hBookmark-urlbar-listbox" flex="1" />
+        </panel>
+
+    </popupset>
 
     <broadcasterset id="mainBroadcasterSet">
         <broadcaster id="viewHBookmarkSidebar"
-                     label="Hatena Bookmark Sidebar"
+                     label="&hBookmark.sidebar.label;"
                      autoCheck="false"
                      type="checkbox"
                      group="sidebar"
                      sidebarurl="chrome://hatenabookmark/content/sidebar.xul"
-                     sidebartitle="Hatena Bookmark Sidebar"
+                     sidebartitle="&hBookmark.sidebar.label;"
+                     key="hBookmark-key-sidebar"
                      oncommand="toggleSidebar('viewHBookmarkSidebar');"/>
     </broadcasterset>
 
@@ -42,23 +296,28 @@
     // <![CDATA[
     (function() {
         with(hBookmark) {
-            Application.console.open();
+            if (hBookmark.nowDebug) {
+                Application.console.open();
+            }
 
             EventService.dispatch('preload', window);
 
             window.addEventListener('load', function(e) {
+                EventService.dispatch('Migration', window); // タイミングはここで
+
                 EventService.dispatch('load', window);
 
                 if (!shared.get('firstPreload')) {
+
                     EventService.dispatch('firstPreload', window);
                     shared.set('firstPreload', true);
-
                 }
             }, false);
 
             window.addEventListener('unload', function(e) {
                 EventService.dispatch('unload', window);
             }, false);
+
         }
     })();
     // ]]>

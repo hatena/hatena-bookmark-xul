@@ -1,0 +1,11 @@
+<!-- XXX toggleSidebarLabel should be in browser.dtd? -->
+<!ENTITY hBookmark.toolbar.toggleSidebarLabel "Hatena Bookmark Sidebar">
+
+<!ENTITY hBookmark.toolbar.loginLabel "Login to Hatena">
+<!ENTITY hBookmark.toolbar.addBookmarkLabel "Add Bookmark">
+<!ENTITY hBookmark.toolbar.tagFilterLabel "Filter">
+
+<!ENTITY hBookmark.toolbar.noFilterLabel "No Filter">
+<!ENTITY hBookmark.toolbar.noFilterKey "N">
+<!ENTITY hBookmark.toolbar.selectTagLabel "Filter with Tag…">
+<!ENTITY hBookmark.toolbar.selectTagKey "F">

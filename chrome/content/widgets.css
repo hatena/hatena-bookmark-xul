@@ -1,0 +1,3 @@
+.hBookmark-link, .hBookmarkLink {
+   -moz-binding: url("chrome://hatenabookmark/content/widgets.xml#link");
+}

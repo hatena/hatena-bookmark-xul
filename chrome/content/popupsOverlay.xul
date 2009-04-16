@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/css" href="popups.css"?>
+<!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/popups.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <popupset id="mainPopupSet">
+        <menupopup id="hBookmark-bookmark-context"
+                   onpopupshowing="return new hBookmark.BookmarkContext(this).build(document.popupNode);">
+            <menuitem id="hBookmark-bookmark-context-open"
+                      label="&hBookmark.bookmarkContext.openLabel;"
+                      accesskey="&hBookmark.bookmarkContext.openKey;"
+                      oncommand="this.parentNode._context.openIn('current');"/>
+            <menuitem id="hBookmark-bookmark-context-openInNewTab"
+                      label="&hBookmark.bookmarkContext.openInNewTabLabel;"
+                      accesskey="&hBookmark.bookmarkContext.openInNewTabKey;"
+                      oncommand="this.parentNode._context.openIn('tab');"/>
+            <menuseparator id="hBookmark-bookmark-context-afterOpenSeparator"/>
+            <menuitem id="hBookmark-bookmark-context-openEntry"
+                      label="&hBookmark.bookmarkContext.openEntryLabel;"
+                      accesskey="&hBookmark.bookmarkContext.openEntryKey;"
+                      oncommand="this.parentNode._context.openEntry(event);"
+                      onclick="checkForMiddleClick(this, event);"/>
+            <menuitem id="hBookmark-bookmark-context-edit"
+                      label="&hBookmark.bookmarkContext.editLabel;"
+                      accesskey="&hBookmark.bookmarkContext.editKey;"
+                      oncommand="this.parentNode._context.edit();"/>
+            <menuseparator id="hBookmark-bookmark-context-beforeDeleteSeparator"/>
+            <menuitem id="hBookmark-bookmark-context-delete"
+                      label="&hBookmark.bookmarkContext.deleteLabel;"
+                      accesskey="&hBookmark.bookmarkContext.deleteKey;"
+                      oncommand="this.parentNode._context.delete();"/>
+            <menuitem id="hBookmark-bookmark-context-deleteAll"
+                      label="&hBookmark.bookmarkContext.deleteAllLabel;"
+                      accesskey="&hBookmark.bookmarkContext.deleteAllKey;"
+                      oncommand="this.parentNode._context.deleteAll();"/>
+        </menupopup>
+
+        <tooltip id="hBookmark-bookmark-tooltip"/>
+    </popupset>
+
+</overlay>
