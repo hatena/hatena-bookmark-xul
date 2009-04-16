@@ -119,7 +119,8 @@
             type="menu-button"
             oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/my', event);"
             onclick="checkForMiddleClick(this, event);">
-            <menupopup oncommand="event.stopPropagation();">
+            <menupopup oncommand="event.stopPropagation();"
+                       onclick="event.stopPropagation();">
                 <menuitem label="&hBookmark.toolbar.top;"
                           accesskey="&hBookmark.toolbar.topKey;"
                           oncommand="hBookmark.hOpenUILink('http://b.hatena.ne.jp/', event);"
