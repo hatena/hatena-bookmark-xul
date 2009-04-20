@@ -180,8 +180,12 @@ HTTPCache.counter.isValid = function(url) {
 
 HTTPCache.counter.createFilter = function(ev) {
     let filters = eval( HTTPCache.counter.prefs.get('counterIngoreList') );
-    HTTPCache.counter.filters = filters.map(function(v) new RegExp(v));
+    HTTPCache.counter.setFilter(filters);
 };
+
+HTTPCache.counter.setFilter = function(filters) {
+    HTTPCache.counter.filters = filters.map(function(v) new RegExp(v));
+}
 
 HTTPCache.counter.loadHandler = function(ev) {
     HTTPCache.counter.prefs.createListener('counterIngoreList', HTTPCache.counter.createFilter);

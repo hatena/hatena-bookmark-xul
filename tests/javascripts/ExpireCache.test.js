@@ -10,10 +10,8 @@ function warmUp() {
 }
 
 function setUp() {
-    utils.setPref('extensions.hatenabookmark.statusbar.counterIngoreList', 
-    "['\\^https:\\/\\/.*\\$', '\\^http:\\/\\/192\\\\.168\\\\.\\\\d+\\\\.\\\\d+.*\\$', '\\^http:\\/\\/172\\\\.((1[6-9])|(2[0-9])|(3[0-1]))\\\\.\\\\d+\\\\.\\\\d+.*\\$', '\\^http:\\/\\/10\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+.*\\$']"
-    );
-    HTTPCache.counter.createFilter();
+    let filter = "['\\^https:\\/\\/.*\\$', '\\^https?:\\/\\/192\\\\.168\\\\.\\\\d+\\\\.\\\\d+.*\\$', '\\^https?:\\/\\/172\\\\.((1[6-9])|(2[0-9])|(3[0-1]))\\\\.\\\\d+\\\\.\\\\d+.*\\$', '\\^https?:\\/\\/10\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+.*\\$']";
+    HTTPCache.counter.setFilter(eval(filter));
 }
 
 function testSeriarizer() {
@@ -58,7 +56,9 @@ function testHTTPSCounter() {
 function testLocalURLS() {
     let c = HTTPCache.counter;
     assert.isFalse(c.isValid('http://10.3.2.2/hogehuga?foo=bar'));
+    assert.isFalse(c.isValid('https://10.3.2.2/hogehuga?foo=bar'));
     assert.isFalse(c.isValid('http://192.168.3.22/'));
+    assert.isFalse(c.isValid('https://192.168.3.22/'));
     assert.isFalse(c.isValid('http://192.168.255.200/hogehuga?foo=bar'));
     assert.isTrue(c.isValid('http://10.example.com/hogehuga?foo=bar'));
     assert.isTrue(c.isValid('http://172.168.3.22/'));
@@ -66,6 +66,7 @@ function testLocalURLS() {
     assert.isFalse(c.isValid('http://172.16.3.22/foobar?baz'));
     assert.isFalse(c.isValid('http://172.22.3.22/'));
     assert.isFalse(c.isValid('http://172.31.3.22/'));
+    assert.isFalse(c.isValid('https://172.31.3.22/'));
     assert.isTrue(c.isValid('http://172.32.3.22/'));
 }
 

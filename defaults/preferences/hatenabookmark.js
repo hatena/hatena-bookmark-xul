@@ -29,7 +29,7 @@ pref("extensions.hatenabookmark.contextmenu.enabled", true);
 pref("extensions.hatenabookmark.statusbar.counter", true);
 pref("extensions.hatenabookmark.statusbar.httpsIgnore", true);
 // local addresses
-pref("extensions.hatenabookmark.statusbar.counterIngoreList", "['\\^https:\\/\\/.*\\$', '\\^http:\\/\\/192\\\\.168\\\\.\\\\d+\\\\.\\\\d+.*\\$', '\\^http:\\/\\/172\\\\.((1[6-9])|(2[0-9])|(3[0-1]))\\\\.\\\\d+\\\\.\\\\d+.*\\$', '\\^http:\\/\\/10\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+.*\\$']");
+pref("extensions.hatenabookmark.statusbar.counterIngoreList", "['\\^https:\\/\\/.*\\$', '\\^https?:\\/\\/192\\\\.168\\\\.\\\\d+\\\\.\\\\d+.*\\$', '\\^https?:\\/\\/172\\\\.((1[6-9])|(2[0-9])|(3[0-1]))\\\\.\\\\d+\\\\.\\\\d+.*\\$', '\\^https?:\\/\\/10\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+.*\\$']");
 pref("extensions.hatenabookmark.statusbar.addButton", true);
 
 // addPanel 
