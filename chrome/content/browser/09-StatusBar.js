@@ -72,7 +72,14 @@ var StatusBar = {
         statusCount.appendChild(image);
     },
     checkCount: function StatusBar_checkCount() {
-        statusCount.value = (isHttp ? HTTPCache.counter.get(locationURL) : '0') || '0';
+        if (isHttp) {
+            HTTPCache.counter.async_get(locationURL, StatusBar.setCount);
+        } else {
+            StatusBar.setCount('0');
+        }
+    },
+    setCount: function(val) {
+        statusCount.value = val || '0';
         if (StatusBar.lastCountValue == statusCount.value) return;
         StatusBar.lastCountValue = statusCount.value;
         statusCountLabel.setAttribute('value', statusCount.value);
