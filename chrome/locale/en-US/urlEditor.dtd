@@ -1,0 +1,10 @@
+
+<!ENTITY hBookmark.urlEditor.add "Add">
+<!ENTITY hBookmark.urlEditor.title "Ignore url list">
+<!ENTITY hBookmark.urlEditor.description "If you don't want to send url information the server, you input regexp url.">
+<!ENTITY hBookmark.urlEditor.remove "remove">
+<!ENTITY hBookmark.urlEditor.urllist "url list">
+<!ENTITY hBookmark.urlEditor.setDefault "set default">
+
+
+

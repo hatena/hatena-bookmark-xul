@@ -10,6 +10,10 @@ let Config = {
         } 
         return Config._strings;
     },
+    openURLEditor: function() {
+        let features = 'chrome,titlebar,toolbar,centerscreen,modal';
+        window.openDialog('chrome://hatenabookmark/content/urlEditor.xul', 'URLEditor', features);
+    },
     openDialog: function() {
         let features;
         if (Prefs.global.get('browser.preferences.instantApply')) {

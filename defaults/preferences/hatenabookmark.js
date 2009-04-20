@@ -28,6 +28,7 @@ pref("extensions.hatenabookmark.contextmenu.enabled", true);
 // status bar
 pref("extensions.hatenabookmark.statusbar.counter", true);
 pref("extensions.hatenabookmark.statusbar.httpsIgnore", true);
+pref("extensions.hatenabookmark.statusbar.counterIngoreList", "['\^https:\/\/.*']");
 pref("extensions.hatenabookmark.statusbar.addButton", true);
 
 // addPanel 

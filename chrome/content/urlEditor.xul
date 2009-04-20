@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/css" href="chrome://global/skin/"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE dialog SYSTEM "chrome://hatenabookmark/locale/urlEditor.dtd">
+<dialog id="hBookmark-urlEditor"
+    width="400"
+    height="400"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    title="&hBookmark.urlEditor.title;"
+    buttons="accept,cancel"
+    ondialogaccept="return hBookmark.urlEditor.accept();"
+    onload="hBookmark.urlEditor.init();"
+  >
+  <script type="application/javascript" src="chrome://hatenabookmark/content/autoloader.js"/>
+  <vbox flex="1">
+      <description>&hBookmark.urlEditor.description;</description>
+           <vbox>
+               <textbox 
+                   onkeypress="if (event.keyCode == 13) { hBookmark.urlEditor.add(); event.stopPropagation(); event.preventDefault(); } // XXX"
+                   id="hBookmark-urlEditor-add-input" 
+                   multiline="false" 
+                   flex="1"
+               />
+               <hbox flex="1">
+               <button oncommand="hBookmark.urlEditor.add();" label="&hBookmark.urlEditor.add;" id="hBookmark-urlEditor-add"/>
+               <spacer flex="1" />
+               </hbox>
+           </vbox>
+           <listbox id="hBookmark-urlEditor-listbox"
+               seltype="single"
+               flex="1"
+           >
+               <listhead>
+                   <listheader label="&hBookmark.urlEditor.urllist;"/>
+               </listhead>
+               <listcols>
+                   <listcol 
+                       flex="1" 
+                       style="min-width:120px"
+                   />
+               </listcols>
+           </listbox>
+           <hbox>
+               <button oncommand="hBookmark.urlEditor.remove();" label="&hBookmark.urlEditor.remove;" id="hBookmark-urlEditor-remove"/>
+               <spacer flex="1" />
+               <button oncommand="hBookmark.urlEditor.reset();" label="&hBookmark.urlEditor.setDefault;" id="hBookmark-urlEditor-reset"/>
+           </hbox>
+  </vbox>
+</dialog>

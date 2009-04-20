@@ -187,6 +187,7 @@
             <checkbox id="extensions.hatenabookmark.statusbar.httpsIgnore-check" flex="1"
                 label="&hBookmark.config.statusbarHttpsIngore;"
                 preference="extensions.hatenabookmark.statusbar.httpsIgnore"/>
+            <button label="openconf" oncommand="hBookmark.Config.openURLEditor();" />
             </hbox>
         </groupbox>
 
