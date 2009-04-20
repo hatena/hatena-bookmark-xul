@@ -66,8 +66,8 @@ extend(Model, {
                 db.execute('drop table temptags');
                 db.commitTransaction();
             } catch(e) {
-                db.rollbackTransaction();
                 p('migration error!');
+                db.rollbackTransaction();
             } finally {
                 //
             }
