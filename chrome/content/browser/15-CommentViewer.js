@@ -116,8 +116,6 @@ var CommentViewer = {
     currentURL: null,
     updateComment: function CommentViewer_updateComment(data) {
         CommentViewer.currentURL = data.url;
-        data.publicCount = data.bookmarks.length;
-        data.privateCount = data.count - data.publicCount;
         // 非表示ユーザをフィルター
         if (User.user) {
             let regex = User.user.ignores;
@@ -125,6 +123,8 @@ var CommentViewer = {
                 data.bookmarks = data.bookmarks.filter(function(b) !regex.test(b.user));
             }
         }
+        data.publicCount = data.bookmarks.length;
+        data.privateCount = data.count - data.publicCount;
         panelComment.setAttribute('hTransparent', true);
         panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
         CommentViewer.updateViewer(data);
