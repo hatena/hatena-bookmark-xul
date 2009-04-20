@@ -130,6 +130,7 @@ width: 800px;
     -moz-border-left-colors: #2c6ebd !important;
     -moz-border-color: #000 !important;
     border-width: 4px !important;
+    border-style: solid;
     font-size: 1.2em;
     line-height: 1.3;
 }
