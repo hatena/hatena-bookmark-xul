@@ -22,6 +22,8 @@
 <!ENTITY hBookmark.config.statusbarIcon "Display">
 <!ENTITY hBookmark.config.statusbarAddButton "Display the Add button">
 <!ENTITY hBookmark.config.statusbarCounter "Display the user counter">
+<!ENTITY hBookmark.config.statusbarURLEdit "Ignore url list.">
+<!ENTITY hBookmark.config.statusbarOpenURLEditor "Settings">
 <!ENTITY hBookmark.config.statusbarHttpsIngore "Will not be displayed when using https">
 
 <!ENTITY hBookmark.config.commentviewer "Comment Viewer">

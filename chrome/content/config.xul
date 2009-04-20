@@ -182,12 +182,10 @@
                 label="&hBookmark.config.statusbarCounter;"
                 preference="extensions.hatenabookmark.statusbar.counter"/>
                 <!-- src="chrome://hatenabookmark/skin/images/nbookmarks.png" -->
-            <hbox>
-            <spacer style="width: 1em;" />
-            <checkbox id="extensions.hatenabookmark.statusbar.httpsIgnore-check" flex="1"
-                label="&hBookmark.config.statusbarHttpsIngore;"
-                preference="extensions.hatenabookmark.statusbar.httpsIgnore"/>
-            <button label="openconf" oncommand="hBookmark.Config.openURLEditor();" />
+            <hbox align="center">
+            <spacer style="width: 3em;" />
+            <label value="&hBookmark.config.statusbarURLEdit;" />
+            <button label="&hBookmark.config.statusbarOpenURLEditor;" oncommand="hBookmark.Config.openURLEditor();" />
             </hbox>
         </groupbox>
 
