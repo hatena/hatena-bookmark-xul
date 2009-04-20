@@ -1,13 +1,17 @@
 /*
 #tag-tree > treechildren::-moz-tree-image(tag) {
-   list-style-image: url("chrome://hatenabookmark/skin/images/b.gif") !important;
-   -moz-image-region: auto;
+   list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png") !important;
+   -moz-image-region: rect(46px 196px 62px 180px);
+   -moz-margin-end: 3px;
 }
 */
 
 #hBookmarkTagTree_count {
    text-align: right;
-   padding-right: 5px;
+}
+
+#hBookmarkTagTree_count > .treecol-text {
+   text-align: left;
 }
 
 #tag-tree > treechildren::-moz-tree-cell(count) {
