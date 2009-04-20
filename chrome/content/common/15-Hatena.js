@@ -73,6 +73,8 @@ if (shared.has('User')) {
             if (current) {
                 if (current.name == res.name) {
                     current.options.rks = res.rks;
+                    current.options.ignores_regex = res.ignores_regex;
+                    delete current._ignores;
                     return current;
                 }
             }
