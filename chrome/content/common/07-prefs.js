@@ -25,7 +25,7 @@ Prefs.prototype = {
 
     get branch function() this._branch,
 
-    get: function Prefs_get(name) {
+    get: function Prefs_get(name, debug) {
         let prefs = this.prefs;
         let type = prefs.getPrefType(name);
 
@@ -34,8 +34,9 @@ Prefs.prototype = {
             {
                 case PrefService.PREF_STRING:
                     // for multibyte and localized values
+        if (debug) p(['aaa', type, name]);
                     return prefs.getComplexValue(name,
-                                                 Ci.nsIPrefLocalizedString).data;
+                                                 Ci.nsISupportsString).data;
                     break;
                 case PrefService.PREF_INT:
                     return prefs.getIntPref(name);
