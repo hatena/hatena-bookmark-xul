@@ -208,6 +208,6 @@ HTTPCache.entry = new HTTPCache('entryCache', {
     encoder: encodeURIComponent,
 });
 
-window.addEventListener('load',HTTPCache.counter.loadHandler, false);
+EventService.createListener('load', HTTPCache.counter.loadHandler);
 
 
