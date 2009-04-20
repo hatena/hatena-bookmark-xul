@@ -53,9 +53,27 @@ extend(Model, {
         this.db = db;
         let version = db.version || 0;
         if (version == 0) {
-            // tag の nocase のため、作り直す・・・
+            // tag の nocase のための migration
             p('DB migrate: ' + version);
-            this.resetAll();
+            p.b(function() {
+            try {
+                // もし何らかの例外が起きたときには、rollback する
+                // sqlite3 は alter table のトランザクションが可能らしい
+                db.beginTransaction();
+                db.execute('alter table tags rename to temptags');
+                Model.Tag.initialize();
+                db.execute('insert into tags select id, bookmark_id, name from temptags');
+                db.execute('drop table temptags');
+                db.commitTransaction();
+            } catch(e) {
+                db.rollbackTransaction();
+                p('migration error!');
+            } finally {
+                //
+            }
+            }, 'tag migration');
+            this.db.version = 1;
+            // this.resetAll();
         }
     },
 });
