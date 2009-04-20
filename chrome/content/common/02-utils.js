@@ -209,6 +209,7 @@ async.splitExecuter = function async_splitExecuter(it, loopTimes, callback, fini
  */
 
 /*
+ * XXX
  * サードパーティーのクッキーを無効にされていても
  * はてなブックマークのクッキーを取得するために
  * Gecko のアクセス権限チェックをすり抜けられるような
@@ -217,6 +218,7 @@ async.splitExecuter = function async_splitExecuter(it, loopTimes, callback, fini
  * 内部実装に激しく依存しているので将来的に動かなくなる可能性高し。
  * まっとうな方法でやろうとすると全クッキーを列挙していく必要あり?
  */
+
 getCookieByUrl = function getCookieByUrl(url) {
     let cookieService = getService("@mozilla.org/cookieService;1", Ci.nsICookieService);
     let uri = newURI(url);
@@ -287,6 +289,9 @@ net.sync_get = function net__sync_get(url, query, method) {
 }
 
 net._http = function net__http (url, callback, errorback, async, query, headers, method) {
+    if (!headers)
+        headers = { Cookie: getCookieByUrl(url) };
+
     let xhr = new XMLHttpRequest();
     xhr.mozBackgroundRequest = true;
     if (async) {
@@ -309,10 +314,9 @@ net._http = function net__http (url, callback, errorback, async, query, headers,
         }
     }
     xhr.open(method, url, async);
-    if (typeof headers != 'undefined') {
-        for (let [field, value] in Iterator(headers || {}))
-            xhr.setRequestHeader(field, value);
-    }
+
+    for (let [field, value] in Iterator(headers || {}))
+        xhr.setRequestHeader(field, value);
 
     if (method == 'POST') {
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

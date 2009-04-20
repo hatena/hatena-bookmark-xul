@@ -73,3 +73,10 @@ a.users {
   padding-left: 14px;
 }
 
+a.commentlink {
+  text-decoration: underline;
+  color: #66c;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+

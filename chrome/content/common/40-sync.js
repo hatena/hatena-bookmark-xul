@@ -37,16 +37,14 @@ extend(Sync, {
              let url = User.user.dataURL;
              let b = model('Bookmark').findFirst({order: 'date desc'});
 
-             let headers = {};
-             headers.Cookie = getCookieByUrl(url);
              this.dispatch('start');
              if (b && b.date) {
                  net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true, {
                      timestamp: b.date,
                      _now: ((new Date())*1), // cache のため
-                 }, headers);
+                 });
              } else {
-                 net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true, null, headers);
+                 net.get(url, method(this, 'fetchCallback'), method(this, 'errorback'), true);
              }
         } catch(er) {
             p('sync error:' + er.toString());

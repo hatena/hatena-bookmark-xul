@@ -18,9 +18,7 @@ if (shared.has('User')) {
     extend(User, {
         login: function User_loginCheck () {
             let cookie = getCookieByUrl(MY_NAME_URL);
-            //p('Cookie for ' + uri.spec + ' is ' + cookie);
-            net.post(MY_NAME_URL, User._login, User.loginErrorHandler,
-                     true, null, { Cookie: cookie });
+            net.post(MY_NAME_URL, User._login, User.loginErrorHandler, true);
         },
         _login: function User__login(res) {
             res = decodeJSON(res.responseText);
