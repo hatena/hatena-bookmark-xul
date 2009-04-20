@@ -32,14 +32,11 @@ var urlEditor = {
             listbox.removeItemAt(i);
     },
     accept: function() {
-        p('acce');
         let res = [];
-        p('accept');
         for (var i = 0;  i < listbox.getRowCount(); i++) {
             let item = listbox.getItemAtIndex(i);
             res.push(item.value);
         }
-        p('' + res);
         Application.prefs.get('extensions.hatenabookmark.statusbar.counterIngoreList').value = uneval(res);
     },
     reset: function() {

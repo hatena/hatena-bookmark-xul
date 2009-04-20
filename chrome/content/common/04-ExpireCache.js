@@ -161,12 +161,31 @@ HTTPCache.counter = new HTTPCache('counterCache', {
     encoder: encodeURIComponent,
 });
 
+HTTPCache.counter.filters = [];
+
+HTTPCache.counter.__defineGetter__('prefs', function() {
+    if (!HTTPCache.counter._prefs) {
+        HTTPCache.counter._prefs = new Prefs('extensions.hatenabookmark.statusbar.');
+    }
+    return HTTPCache.counter._prefs;
+});
+
 HTTPCache.counter.isValid = function(url) {
-    if (url.indexOf('https://') == 0 && PrefService.getBranch('extensions.hatenabookmark.statusbar.').getBoolPref('httpsIgnore')) {
+    if (HTTPCache.counter.filters.some(function(re) re.test(url))) {
         return false;
     } else {
         return true;
     }
+};
+
+HTTPCache.counter.createFilter = function(ev) {
+    let filters = eval( HTTPCache.counter.prefs.get('counterIngoreList') );
+    HTTPCache.counter.filters = filters.map(function(v) new RegExp(v));
+};
+
+HTTPCache.counter.loadHandler = function(ev) {
+    HTTPCache.counter.prefs.createListener('counterIngoreList', HTTPCache.counter.createFilter);
+    HTTPCache.counter.createFilter();
 };
 
 HTTPCache.comment = new HTTPCache('commentCache', {
@@ -185,6 +204,6 @@ HTTPCache.entry = new HTTPCache('entryCache', {
     encoder: encodeURIComponent,
 });
 
-
+EventService.createListener('load', HTTPCache.counter.loadHandler);
 
 
