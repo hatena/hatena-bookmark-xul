@@ -17,31 +17,7 @@ if (shared.has('User')) {
 
     extend(User, {
         login: function User_loginCheck () {
-            let cookieService = getService("@mozilla.org/cookieService;1",
-                                           Ci.nsICookieService);
-            let uri = newURI(MY_NAME_URL);
-            // サードパーティーのクッキーを無効にされていても
-            // はてなブックマークのクッキーを取得するために
-            // Gecko のアクセス権限チェックをすり抜けられるような
-            // オブジェクトを作ってやる。
-            // nsCookieService::CheckPrefs あたりを参照のこと。
-            // 内部実装に激しく依存しているので将来的に動かなくなる可能性高し。
-            // まっとうな方法でやろうとすると全クッキーを列挙していく必要あり?
-            let channel = IOService.newChannelFromURI(uri);
-            channel.loadFlags = Ci.nsIChannel.LOAD_DOCUMENT_URI;
-            channel.notificationCallbacks = {
-                // For Gecko 1.9.0 (implements nsIDocShellTreeItem)
-                itemType: Ci.nsIDocShellTreeItem.typeContent,
-                get sameTypeRootTreeItem () this,
-                // For Gecko 1.9.1 (implements nsILoadContext)
-                get topWindow () this,
-                get associatedWindow () this,
-                isAppOfType: function (appType) false,
-                // For both (implements nsIInterfaceRequestor)
-                getInterface: function (iid) this,
-                QueryInterface: function (iid) this
-            };
-            let cookie = cookieService.getCookieString(uri, channel);
+            let cookie = getCookieByUrl(MY_NAME_URL);
             //p('Cookie for ' + uri.spec + ' is ' + cookie);
             net.post(MY_NAME_URL, User._login, User.loginErrorHandler,
                      true, null, { Cookie: cookie });

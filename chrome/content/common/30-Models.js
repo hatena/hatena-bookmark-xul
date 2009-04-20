@@ -22,7 +22,9 @@ extend(Model, {
     resetAll: function() {
         this.deleteAll();
         this.createAll();
-        this.db.version = 1;
+        var db = this.getSafeDB();
+        if (db)
+            db.version = 1;
     },
     deleteAll: function() {
         this.MODELS.forEach(function(m) {

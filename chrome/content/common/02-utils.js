@@ -209,6 +209,35 @@ async.splitExecuter = function async_splitExecuter(it, loopTimes, callback, fini
  */
 
 /*
+ * サードパーティーのクッキーを無効にされていても
+ * はてなブックマークのクッキーを取得するために
+ * Gecko のアクセス権限チェックをすり抜けられるような
+ * オブジェクトを作ってやる。
+ * nsCookieService::CheckPrefs あたりを参照のこと。
+ * 内部実装に激しく依存しているので将来的に動かなくなる可能性高し。
+ * まっとうな方法でやろうとすると全クッキーを列挙していく必要あり?
+ */
+getCookieByUrl = function getCookieByUrl(url) {
+    let cookieService = getService("@mozilla.org/cookieService;1", Ci.nsICookieService);
+    let uri = newURI(url);
+    let channel = IOService.newChannelFromURI(uri);
+    channel.loadFlags = Ci.nsIChannel.LOAD_DOCUMENT_URI;
+    channel.notificationCallbacks = {
+        // For Gecko 1.9.0 (implements nsIDocShellTreeItem)
+        itemType: Ci.nsIDocShellTreeItem.typeContent,
+        get sameTypeRootTreeItem () this,
+        // For Gecko 1.9.1 (implements nsILoadContext)
+        get topWindow () this,
+        get associatedWindow () this,
+        isAppOfType: function (appType) false,
+        // For both (implements nsIInterfaceRequestor)
+        getInterface: function (iid) this,
+        QueryInterface: function (iid) this
+    };
+    return cookieService.getCookieString(uri, channel);
+};
+
+/*
  * net
  */
 var net = {};
@@ -280,8 +309,10 @@ net._http = function net__http (url, callback, errorback, async, query, headers,
         }
     }
     xhr.open(method, url, async);
-    for (let [field, value] in Iterator(headers || {}))
-        xhr.setRequestHeader(field, value);
+    if (typeof headers != 'undefined') {
+        for (let [field, value] in Iterator(headers || {}))
+            xhr.setRequestHeader(field, value);
+    }
 
     if (method == 'POST') {
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -289,8 +320,9 @@ net._http = function net__http (url, callback, errorback, async, query, headers,
     } else {
         xhr.send(null);
         if (!async) {
-            if (typeof callback == 'function')
+            if (typeof callback == 'function') {
                 callback(xhr);
+            }
         }
     }
     return xhr;
