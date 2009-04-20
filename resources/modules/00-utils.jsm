@@ -179,10 +179,13 @@ var model = function(name) {
     return m;
 }
 
+// 特定のウィンドウに属さない辞書用オブジェクトの作成
+function DictionaryObject() ({ __proto__: null });
+
 /*
  * 共用グローバル変数
  */
-let _shared = {};
+let _shared = new DictionaryObject();
 var shared = {
     get: function shared_get (name) {
         return _shared[name];
@@ -268,9 +271,6 @@ function getFaviconURI (url) {
     }
     return faviconURI;
 }
-
-// 特定のウィンドウに属さない辞書用オブジェクトの作成
-function DictionaryObject() ({ __proto__: null });
 
 const _MODULE_BASE_URI = "resource://hatenabookmark/modules/"
 
