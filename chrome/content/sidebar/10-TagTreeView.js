@@ -29,21 +29,6 @@ function TagTreeItem(tag, parentItem) {
 }
 
 extend(TagTreeItem.prototype, {
-    // XXX タグ一覧の更新を実装した暁には削除する。
-    zeroCount: function TTI_zeroCount(treeView) {
-        if (!treeView || !treeView._treeBox) return;
-        let items = treeView._visibleItems;
-        let item = items[this.index];
-        if (!item || item.tags.join("[]") !== this.tags.join("[]")) return;
-        let startIndex = item.index;
-        let endIndex = item.index;
-        do {
-            item.count = 0;
-            item = items[++endIndex];
-        } while (item && item.level > this.level);
-        treeView._treeBox.invalidateRange(startIndex, endIndex - 1);
-    },
-
     get shouldBeOpen TTI_get_shouldBeOpen() {
         let resource = RDFService.GetResource(this.uri);
         return !!resource &&
@@ -87,7 +72,6 @@ extend(TagTreeView.prototype, {
         $count = 0; $start = new Date();
         let treeChildren = this._treeBox.treeBody;
         treeChildren.tags = [];
-        treeChildren.tagItem = null;
         this._setSortKey();
         this._openRelatedTags(this._rootItem, this._visibleItems);
         this._visibleItems.forEach(function (item, i) item.index = i);
@@ -239,6 +223,9 @@ extend(TagTreeView.prototype, {
         case "UserChange":
             this.build();
             break;
+
+        case "BookmarksUpdated":
+            this.refresh();
         }
     },
 
@@ -251,19 +238,25 @@ extend(TagTreeView.prototype, {
         this._treeBox.rowCountChanged(0, this.rowCount);
     },
 
+    refresh: function () {
+        let selectedRow = this.selection.currentIndex;
+        let visibleRow = this._treeBox.getFirstVisibleRow();
+        this.build();
+        this._treeBox.scrollToRow(visibleRow);
+        this.selection.select(selectedRow);
+    },
+
     setTags: function TTV_setTags() {
         let treeChildren = this._treeBox.treeBody;
         let index = this.selection.currentIndex;
         if (index === -1) {
             treeChildren.tags = [];
-            treeChildren.tagItem = null;
         } else {
             treeChildren.tags = this._visibleItems[index].tags.concat();
-            treeChildren.tagItem = this._visibleItems[index];
+            let event = document.createEvent("Event");
+            event.initEvent("HB_TagsSelected", true, false);
+            treeChildren.dispatchEvent(event);
         }
-        let event = document.createEvent("Event");
-        event.initEvent("HB_TagsSelected", true, false);
-        treeChildren.dispatchEvent(event);
     },
 
     handleClick: function TTV_handleClick(event) {
