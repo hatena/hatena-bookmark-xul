@@ -1,6 +1,5 @@
-
 <!ENTITY hBookmark.urlEditor.add "追加">
-<!ENTITY hBookmark.urlEditor.title "ユーザ数カウンター 無理URLリスト">
+<!ENTITY hBookmark.urlEditor.title "ユーザ数カウンター 無視URLリスト">
 <!ENTITY hBookmark.urlEditor.description "ユーザ数カウンターでサーバに情報を送りたくないURLを指定します。正規表現で入力してください。">
 <!ENTITY hBookmark.urlEditor.remove "削除">
 <!ENTITY hBookmark.urlEditor.urllist "URLリスト">
