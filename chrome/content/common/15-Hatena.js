@@ -17,8 +17,8 @@ if (shared.has('User')) {
 
     extend(User, {
         login: function User_loginCheck () {
-            let cookie = getCookieByUrl(MY_NAME_URL);
-            net.post(MY_NAME_URL, User._login, User.loginErrorHandler, true);
+            net.post(MY_NAME_URL, User._login, User.loginErrorHandler,
+                     true, null, { Cookie: 'rk=' + User.rk });
         },
         _login: function User__login(res) {
             res = decodeJSON(res.responseText);
@@ -55,11 +55,22 @@ if (shared.has('User')) {
             let user = new User(res.name, res);
             this.user = user;
             EventService.dispatch('UserChange', this);
-        }
+        },
+        rk: (function User_getRk() {
+            let cookies = getService("@mozilla.org/cookiemanager;1",
+                                     Ci.nsICookieManager).enumerator;
+            while (cookies.hasMoreElements()) {
+                let cookie = cookies.getNext().QueryInterface(Ci.nsICookie);
+                if (cookie.host === ".hatena.ne.jp" && cookie.name === "rk")
+                    return cookie.value;
+            }
+            return "";
+        })()
     });
     
     User.prototype = {
         get name() this._name,
+        get rk() User.rk,
         get rks() this.options.rks,
         get private() this.options.private == 1,
         get public() !this.private,
@@ -133,10 +144,12 @@ if (shared.has('User')) {
             {
                 case 'added':
                 case 'changed':
+                    User.rk = cookie.value;
                     User.login();
                     break;
                 case 'deleted':
                 case 'cleared':
+                    User.rk = "";
                     User.logout();
                     break;
                 default:
