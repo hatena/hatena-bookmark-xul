@@ -1,4 +1,3 @@
-
 <!ENTITY hBookmark.config.title "はてなブックマーク拡張の設定">
 
 <!ENTITY hBookmark.config.general "全般">
@@ -22,11 +21,11 @@
 <!ENTITY hBookmark.config.statusbarAddButton "追加ボタンの表示">
 <!ENTITY hBookmark.config.statusbarCounter "ユーザー数カウンターの表示">
 <!ENTITY hBookmark.config.statusbarHttpsIngore "URL が https の場合はカウントしない">
-<!ENTITY hBookmark.config.statusbarURLEdit "ユーザ数カウンター無視URLリスト">
+<!ENTITY hBookmark.config.statusbarURLEdit "ユーザー数カウンター無視URLリスト">
 <!ENTITY hBookmark.config.statusbarOpenURLEditor "設定">
 
-<!ENTITY hBookmark.config.commentviewer "コメントビュワー">
-<!ENTITY hBookmark.config.commentviewerAutoShown "マウスオーバーで、自動でコメントビュワーを表示">
+<!ENTITY hBookmark.config.commentviewer "コメントビューワー">
+<!ENTITY hBookmark.config.commentviewerAutoShown "マウスオーバーで、自動でコメントビューワーを表示">
 <!ENTITY hBookmark.config.commentviewerAutoResize "自動サイズ調整">
 <!ENTITY hBookmark.config.commentviewerSizeSetting "サイズ指定">
 <!ENTITY hBookmark.config.commentviewerWidth "横幅(px)">
