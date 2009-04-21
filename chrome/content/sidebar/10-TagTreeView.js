@@ -19,10 +19,9 @@ function TagTreeItem(tag, parentItem) {
     this.parent = parentItem;
     this.index = -1;
     this.tags = parentItem ? parentItem.tags.concat(tag.name) : [];
-    this.uri = this.tags.length
-        ? TAG_TREE_URI + "-[" +
-          this.tags.map(String.toLowerCase).map(encodeURI).join("][") + "]"
-        : "";
+    this.uri = parentItem
+        ? parentItem.uri + "[" + encodeURI(tag.name.toLowerCase()) + "]"
+        : location.href + "#tag-tree-";
     this.level = parentItem ? parentItem.level + 1 : -1;
     this.hasNext = true;
     this.isOpen = false;
@@ -46,14 +45,19 @@ extend(TagTreeItem.prototype, {
     },
 
     get shouldBeOpen TTI_get_shouldBeOpen() {
-        //return this.tags.indexOf("JavaScript") === this.tags.length - 1;
-        return false;
         let resource = RDFService.GetResource(this.uri);
         return !!resource &&
                LocalStore.HasAssertion(resource, OPEN, TRUE, true);
     },
 
     set shouldBeOpen TTI_set_shouldBeOpen(open) {
+        let resource = RDFService.GetResource(this.uri);
+        if (resource) {
+            if (open)
+                LocalStore.Assert(resource, OPEN, TRUE, true);
+            else
+                LocalStore.Unassert(resource, OPEN, TRUE);
+        }
         return open;
     }
 });
