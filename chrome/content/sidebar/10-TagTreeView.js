@@ -5,6 +5,12 @@ const TITLE_ATOM = AtomService.getAtom("title");
 const TAG_ATOM   = AtomService.getAtom("tag");
 const COUNT_ATOM = AtomService.getAtom("count");
 
+const RDFService = getService("@mozilla.org/rdf/rdf-service;1", Ci.nsIRDFService);
+const LocalStore = RDFService.GetDataSource("rdf:local-store");
+const OPEN = RDFService.GetResource("http://home.netscape.com/NC-rdf#open");
+const TRUE = RDFService.GetLiteral("true");
+const TAG_TREE_URI = location.href + "#tag-tree";
+
 var Tag = model("Tag");
 
 function TagTreeItem(tag, parentItem) {
@@ -13,26 +19,45 @@ function TagTreeItem(tag, parentItem) {
     this.parent = parentItem;
     this.index = -1;
     this.tags = parentItem ? parentItem.tags.concat(tag.name) : [];
+    this.uri = this.tags.length
+        ? TAG_TREE_URI + "-[" +
+          this.tags.map(String.toLowerCase).map(encodeURI).join("][") + "]"
+        : "";
     this.level = parentItem ? parentItem.level + 1 : -1;
     this.hasNext = true;
     this.isOpen = false;
     this.isEmpty = null;
 }
 
-// XXX タグ一覧の更新を実装した暁には削除する。
-TagTreeItem.prototype.zeroCount = function TTI_zeroCount(treeView) {
-    if (!treeView || !treeView._treeBox) return;
-    let items = treeView._visibleItems;
-    let item = items[this.index];
-    if (!item || item.tags.join("[]") !== this.tags.join("[]")) return;
-    let startIndex = item.index;
-    let endIndex = item.index;
-    do {
-        item.count = 0;
-        item = items[++endIndex];
-    } while (item && item.level > this.level);
-    treeView._treeBox.invalidateRange(startIndex, endIndex - 1);
-};
+extend(TagTreeItem.prototype, {
+    // XXX タグ一覧の更新を実装した暁には削除する。
+    zeroCount: function TTI_zeroCount(treeView) {
+        if (!treeView || !treeView._treeBox) return;
+        let items = treeView._visibleItems;
+        let item = items[this.index];
+        if (!item || item.tags.join("[]") !== this.tags.join("[]")) return;
+        let startIndex = item.index;
+        let endIndex = item.index;
+        do {
+            item.count = 0;
+            item = items[++endIndex];
+        } while (item && item.level > this.level);
+        treeView._treeBox.invalidateRange(startIndex, endIndex - 1);
+    },
+
+    get shouldBeOpen TTI_get_shouldBeOpen() {
+        //return this.tags.indexOf("JavaScript") === this.tags.length - 1;
+        return false;
+        let resource = RDFService.GetResource(this.uri);
+        return !!resource &&
+               LocalStore.HasAssertion(resource, OPEN, TRUE, true);
+    },
+
+    set shouldBeOpen TTI_set_shouldBeOpen(open) {
+        return open;
+    }
+});
+
 
 function TagTreeView() {
     this._visibleItems = [];
@@ -60,7 +85,7 @@ extend(TagTreeView.prototype, {
         treeChildren.tags = [];
         treeChildren.tagItem = null;
         this._setSortKey();
-        this._openRelatedTags(this._rootItem);
+        this._openRelatedTags(this._rootItem, this._visibleItems);
         this._visibleItems.forEach(function (item, i) item.index = i);
     },
 
@@ -76,11 +101,11 @@ extend(TagTreeView.prototype, {
     isContainerOpen: function (index) this._visibleItems[index].isOpen,
     isContainerEmpty: function (index) {
         var item = this._visibleItems[index];
-        if ($count === 0) $start = new Date();
+        //if ($count === 0) $start = new Date();
         if (item.isEmpty === null)
             item.isEmpty = !Tag.hasRelatedTags(item.tags);
-        if (++$count === $maxCount)
-            p("Benchmark isContainerEmpty: " + (new Date() - $start));
+        //if (++$count === $maxCount)
+        //    p("Benchmark isContainerEmpty: " + (new Date() - $start));
         return item.isEmpty;
     },
 
@@ -115,7 +140,7 @@ extend(TagTreeView.prototype, {
 
         this._treeBox.rowCountChanged(0, -this.rowCount);
         this._visibleItems.length = 0;
-        this._openRelatedTags(this._rootItem);
+        this._openRelatedTags(this._rootItem, this._visibleItems);
         this._visibleItems.forEach(function (item, i) item.index = i);
         this._treeBox.rowCountChanged(0, this.rowCount);
     },
@@ -136,7 +161,8 @@ extend(TagTreeView.prototype, {
         var visibleItems = this._visibleItems;
         var item = visibleItems[index];
         var changedCount = item.isOpen
-            ? this._closeRelatedTags(item) : this._openRelatedTags(item);
+            ? this._closeRelatedTags(item, visibleItems)
+            : this._openRelatedTags(item, visibleItems);
         if (changedCount) {
             item.isOpen = !item.isOpen;
             for (var i = index + 1; i < visibleItems.length; i++)
@@ -146,10 +172,11 @@ extend(TagTreeView.prototype, {
             item.isOpen = false;
             item.isEmpty = true;
         }
+        item.shouldBeOpen = item.isOpen;
         this._treeBox.invalidateRow(index);
     },
 
-    _openRelatedTags: function (parentItem) {
+    _openRelatedTags: function (parentItem, parentItems) {
         var tags = Tag.findRelatedTags(parentItem.tags);
         if (!tags.length) return 0;
         var items = tags.map(function (t) new TagTreeItem(t, parentItem));
@@ -164,21 +191,29 @@ extend(TagTreeView.prototype, {
             }
         }
         items[items.length - 1].hasNext = false;
-        var visibleItems = this._visibleItems;
+        for (let i = 0; i < items.length; i++) {
+            let item = items[i];
+            if (item.shouldBeOpen) {
+                item.index = i;
+                let insertedCount = this._openRelatedTags(item, items);
+                item.isOpen = !!insertedCount;
+                item.isEmpty = !insertedCount;
+                i += insertedCount;
+            }
+        }
         var spliceArgs = [parentItem.index + 1, 0].concat(items);
-        visibleItems.splice.apply(visibleItems, spliceArgs);
+        parentItems.splice.apply(parentItems, spliceArgs);
         return items.length;
     },
 
-    _closeRelatedTags: function (parentItem) {
-        var visibleItems = this._visibleItems;
+    _closeRelatedTags: function (parentItem, parentItems) {
         var startIndex = parentItem.index + 1;
         var endIndex = startIndex;
         var currentLevel = parentItem.level;
-        while (endIndex < visibleItems.length &&
-               visibleItems[endIndex].level > currentLevel)
+        while (endIndex < parentItems.length &&
+               parentItems[endIndex].level > currentLevel)
             endIndex++;
-        visibleItems.splice(startIndex, endIndex - startIndex);
+        parentItems.splice(startIndex, endIndex - startIndex);
         return startIndex - endIndex;
     },
 
@@ -206,7 +241,7 @@ extend(TagTreeView.prototype, {
     build: function TTV_build() {
         let prevRowCount = this.rowCount;
         this._visibleItems = [];
-        this._openRelatedTags(this._rootItem);
+        this._openRelatedTags(this._rootItem, this._visibleItems);
         this._visibleItems.forEach(function (item, i) item.index = i);
         this._treeBox.rowCountChanged(0, -prevRowCount);
         this._treeBox.rowCountChanged(0, this.rowCount);
