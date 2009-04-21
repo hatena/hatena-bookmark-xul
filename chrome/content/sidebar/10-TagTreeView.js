@@ -9,9 +9,9 @@ const RDFService = getService("@mozilla.org/rdf/rdf-service;1", Ci.nsIRDFService
 const LocalStore = RDFService.GetDataSource("rdf:local-store");
 const OPEN = RDFService.GetResource("http://home.netscape.com/NC-rdf#open");
 const TRUE = RDFService.GetLiteral("true");
-const TAG_TREE_URI = location.href + "#tag-tree";
 
 var Tag = model("Tag");
+
 
 function TagTreeItem(tag, parentItem) {
     this.currentTag = tag && tag.name;
