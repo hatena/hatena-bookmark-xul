@@ -3,7 +3,7 @@ const EXPORT = ["HttpWatcher"];
 const HTTP_ON_MODIFY_REQUEST = "http-on-modify-request";
 const HTTP_ON_EXAMINE_RESPONSE = "http-on-examine-response";
 
-var HttpWatcher = {
+var HttpWatcher = shared.get("HttpWatcher") || {
     get taskSet HW_get_taskSet() {
         let taskSet = null;
         if (shared.has("HttpWatcherTaskSet")) {
@@ -109,11 +109,20 @@ var HttpWatcher = {
     startObserving: function HW_startObserving() {
         ObserverService.addObserver(this, HTTP_ON_MODIFY_REQUEST, false);
         ObserverService.addObserver(this, HTTP_ON_EXAMINE_RESPONSE, false);
+        ObserverService.addObserver(this.quitObserver, "quit-application", false);
     },
 
     stopObserving: function HW_stopObserving() {
+        p('stop HttpWatcher observing');
         ObserverService.removeObserver(this, HTTP_ON_MODIFY_REQUEST);
         ObserverService.removeObserver(this, HTTP_ON_EXAMINE_RESPONSE);
+        ObserverService.removeObserver(this.quitObserver, "quit-application");
+    },
+
+    quitObserver: {
+        observe: function HW_QO_observe(subject, topic, data) {
+            HttpWatcher.stopObserving();
+        }
     },
 
     observe: function HW_observe(subject, topic, data) {
@@ -138,35 +147,7 @@ var HttpWatcher = {
     }
 };
 
-
-function printRequestHeaders(channel) {
-    let visitor = {
-        visitHeader: function visitHeader(header, value) {
-            this[header] = value;
-        }
-    };
-    channel.visitRequestHeaders(visitor);
-    delete visitor.visitHeader;
-    p(channel.URI.spec);
-    p.apply(null, [header + ": " + value
-                   for ([header, value] in Iterator(visitor))]);
+if (!shared.has("HttpWatcher")) {
+    HttpWatcher.startObserving();
+    shared.set("HttpWatcher", HttpWatcher);
 }
-
-function printPostData(channel) {
-    if (!(channel instanceof Ci.nsIUploadChannel)) return;
-    let rawStream = channel.uploadStream;
-    if (!(rawStream instanceof Ci.nsISeekableStream)) return;
-    let stream = Cc["@mozilla.org/scriptableinputstream;1"].
-                 createInstance(Ci.nsIScriptableInputStream);
-    stream.init(rawStream);
-    let body = stream.read(stream.available());
-    rawStream.seek(Ci.nsISeekableStream.NS_SEEK_SET, 0);
-    p("Post Data:", body);
-}
-
-
-HttpWatcher.startObserving();
-window.addEventListener("unload", function () {
-    p("stop HTTP observing");
-    HttpWatcher.stopObserving();
-}, false);
