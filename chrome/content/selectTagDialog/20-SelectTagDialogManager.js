@@ -22,7 +22,6 @@ extend(SelectTagDialogManager.prototype, {
     },
 
     onTagListClick: function STDM_onTagListClick(event) {
-        p(this.dialog);
         if (event.button === 0 && event.detail === 2)
             this.dialog.acceptDialog();
     }
