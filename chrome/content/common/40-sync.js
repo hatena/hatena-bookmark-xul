@@ -105,7 +105,7 @@ extend(Sync, {
                 }
             } else {
             }
-            if (i % items == 0) {
+            if (i && (i % items == 0)) {
                 this.dispatch('progress', { value: (len-i)/len*100|0 });
                 this.db.commitTransaction();
                 if (i % (items * 10) == 0) {

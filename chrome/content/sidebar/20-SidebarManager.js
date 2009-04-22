@@ -1,17 +1,5 @@
 const EXPORT = ["sidebarBundle"];
 
-/*
-__defineGetter__("sidebarBundle", function get_sidebarBundle() {
-    var object = this;
-    while (object && !object.hasOwnProperty("sidebarBundle"))
-        object = object.__proto__;
-    if (!object)
-        throw new TypeError("The property sidebarBundle doesn't exist");
-    delete object.sidebarBundle;
-    return object.sidebarBundle = document.getElementById("sidebar-bundle");
-});
-*/
-
 window.addEventListener("load", initializeSidebar, false);
 
 function initializeSidebar() {
@@ -30,7 +18,8 @@ function initializeSidebar() {
 
     tagTree.addEventListener("select", tagTreeView, false);
     tagTree.addEventListener("click", tagTreeView, false);
-    EventService.createListener("UserChange", tagTreeView, false);
+    EventService.createListener("BookmarksUpdated", tagTreeView);
+    EventService.createListener("UserChange", tagTreeView);
 
     let searchBox = document.getElementById("searchBox");
     searchBox.addEventListener("keypress", mayFireInputEvent, false);
@@ -43,8 +32,8 @@ function initializeSidebar() {
     bookmarkTree.addEventListener("keypress", bookmarkTreeView, false);
     bookmarkTree.body.addEventListener("mouseover", bookmarkTreeView, false);
     bookmarkTree.body.addEventListener("mousemove", bookmarkTreeView, false);
-    EventService.createListener("BookmarksUpdated", bookmarkTreeView, false);
-    //EventService.createListener("UserChange", bookmarkTreeView, false);
+    EventService.createListener("BookmarksUpdated", bookmarkTreeView);
+    EventService.createListener("UserChange", bookmarkTreeView);
 
     setBoxDirection();
     Prefs.bookmark.createListener("sidebar.reverseDirection", setBoxDirection);

@@ -33,7 +33,7 @@ Prefs.prototype = {
             switch (type)
             {
                 case PrefService.PREF_STRING:
-                    // for multibyte and localized values
+                    // for multibyte values
         if (debug) p(['aaa', type, name]);
                     return prefs.getComplexValue(name,
                                                  Ci.nsISupportsString).data;
@@ -76,6 +76,10 @@ Prefs.prototype = {
         }
     },
 
+    getLocalized: function Prefs_getLocalized(name) {
+        return this.prefs.getComplexValue(name, Ci.nsIPrefLocalizedString).data;
+    },
+
     clear: function Prefs_clear(name) {
         try {
             this.prefs.clearUserPref(name);
@@ -104,4 +108,9 @@ Prefs.global = new Prefs('');
 Prefs.bookmark = new Prefs('extensions.hatenabookmark.');
 Prefs.link = new Prefs('extensions.hatenabookmark.link.');
 
-
+window.addEventListener("unload", function () {
+    Prefs.global.unregister();
+    Prefs.bookmark.unregister();
+    Prefs.link.unregister();
+    p('unregistered prefs');
+}, false);

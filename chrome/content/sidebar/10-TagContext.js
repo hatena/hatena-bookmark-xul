@@ -27,9 +27,6 @@ extend(TagContext.prototype, {
         if (!tags || !tags.length) return false;
         this.tags = tags.concat();
         this.tag = tags[tags.length - 1];
-        this.tagItem = target.tagItem;
-        this.treeView = target.parentNode.view &&
-                        target.parentNode.view.wrappedJSObject;
         let tagsLabel = this._formatTags(this.tags);
         this._setLabel("openBookmarks", [tagsLabel]);
         this._setLabel("deleteBookmarks", [tagsLabel]);
@@ -56,7 +53,7 @@ extend(TagContext.prototype, {
     _formatTags: function TC__formatTags(tags) "[" + tags.join("][") + "]",
 
     destroy: function TC_destory() {
-        this.tags = this.tagItem = this.treeView = null;
+        this.tags = null;
     },
 
     get bookmarks TC_get_bookmarks() Model.Bookmark.findByTags(this.tags),
@@ -97,15 +94,10 @@ extend(TagContext.prototype, {
     },
 
     deleteBookmarks: function TC_deleteBookmarks() {
-        let tagItem = this.tagItem;
-        let treeView = this.treeView;
         let bookmarks = this.bookmarks;
         if (!UIUtils.confirmDeleteBookmarks(bookmarks)) return;
         let command = new RemoteCommand("delete", {
             bookmarks: bookmarks,
-            onComplete: function () {
-                tagItem.zeroCount(treeView);
-            },
             onError: function () {
                 UIUtils.alertBookmarkError("delete", bookmarks);
             }

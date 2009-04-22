@@ -80,8 +80,11 @@ extend(BookmarkTreeView.prototype, {
             break;
 
         case "BookmarksUpdated":
-        case "UserChange":
             this.update();
+            break;
+
+        case "UserChange":
+            this.showBySearchString("");
             break;
 
         case "input":

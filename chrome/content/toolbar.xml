@@ -16,12 +16,6 @@
                                    hidden="true"
                                    oncommand="hBookmark.UIUtils.openLogin(event);"
                                    onclick="checkForMiddleClick(this, event);"/>
-                <xul:toolbarbutton anonid="addPageButton"
-                                   class="bookmark-item"
-                                   label="&hBookmark.toolbar.addBookmarkLabel;"
-                                   hidden="true"
-                                   oncommand="hBookmark.UIUtils.openAddBookmark(event);"
-                                   onclick="checkForMiddleClick(this, event);"/>
                 <xul:toolbarbutton anonid="tagFilterButton"
                                    class="hBookmark-tag-filter-button"
                                    tooltiptext="&hBookmark.toolbar.tagFilterLabel;"
@@ -80,9 +74,6 @@
             <field name="loginButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "loginButton")
             </field>
-            <field name="addPageButton">
-                document.getAnonymousElementByAttribute(this, "anonid", "addPageButton")
-            </field>
             <field name="tagFilterButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "tagFilterButton")
             </field>
@@ -130,7 +121,6 @@
                     let isLoggedIn = !!hBookmark.User.user;
                     let hasBookmarks = !!bookmarks.length;
                     this.loginButton.hidden = isLoggedIn;
-                    this.addPageButton.hidden = !isLoggedIn || hasBookmarks;
                     this.tagFilterButton.hidden = !isLoggedIn || !hasBookmarks;
                     this.redraw();
                 ]]></body>
@@ -286,7 +276,8 @@
                           type="radio"
                           name="filteredBy"
                           tag=""/>
-            <xul:menuitem label="&hBookmark.toolbar.selectTagLabel;"
+            <xul:menuitem anonid="selectTagMenu"
+                          label="&hBookmark.toolbar.selectTagLabel;"
                           accesskey="&hBookmark.toolbar.selectTagKey;"/>
             <xul:menuseparator anonid="separator"/>
             <children/>
@@ -295,6 +286,9 @@
         <implementation>
             <field name="noFilter">
                 document.getAnonymousElementByAttribute(this, "anonid", "noFilter")
+            </field>
+            <field name="selectTagMenu">
+                document.getAnonymousElementByAttribute(this, "anonid", "selectTagMenu")
             </field>
             <field name="separator">
                 document.getAnonymousElementByAttribute(this, "anonid", "separator")
@@ -311,6 +305,8 @@
                     let currentTagName = this.control.tag;
                     let tagNames = this.getRecentTags();
                     this.noFilter.setAttribute("checked", !currentTagName);
+                    this.selectTagMenu.disabled =
+                        !hBookmark.Model.Tag.countAll();
                     this.separator.hidden = !tagNames.length;
                     tagNames.forEach(function (tagName) {
                         let checked = (tagName === currentTagName);

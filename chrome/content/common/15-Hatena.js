@@ -17,8 +17,8 @@ if (shared.has('User')) {
 
     extend(User, {
         login: function User_loginCheck () {
-            let cookie = getCookieByUrl(MY_NAME_URL);
-            net.post(MY_NAME_URL, User._login, User.loginErrorHandler, true);
+            net.post(MY_NAME_URL, User._login, User.loginErrorHandler,
+                     true, null, { Cookie: 'rk=' + User.rk });
         },
         _login: function User__login(res) {
             res = decodeJSON(res.responseText);
@@ -51,15 +51,27 @@ if (shared.has('User')) {
                     delete current._ignores;
                     return current;
                 }
+                this.clearUser();
             }
             let user = new User(res.name, res);
             this.user = user;
             EventService.dispatch('UserChange', this);
-        }
+        },
+        rk: (function User_getRk() {
+            let cookies = getService("@mozilla.org/cookiemanager;1",
+                                     Ci.nsICookieManager).enumerator;
+            while (cookies.hasMoreElements()) {
+                let cookie = cookies.getNext().QueryInterface(Ci.nsICookie);
+                if (cookie.host === ".hatena.ne.jp" && cookie.name === "rk")
+                    return cookie.value;
+            }
+            return "";
+        })()
     });
     
     User.prototype = {
         get name() this._name,
+        get rk() User.rk,
         get rks() this.options.rks,
         get private() this.options.private == 1,
         get public() !this.private,
@@ -99,6 +111,7 @@ if (shared.has('User')) {
         clear: function user_clear() {
             if (this._db) {
                 this._db.connection.close();
+                p(this._name + "'s database is closed");
             }
         },
 
@@ -133,10 +146,12 @@ if (shared.has('User')) {
             {
                 case 'added':
                 case 'changed':
+                    User.rk = cookie.value;
                     User.login();
                     break;
                 case 'deleted':
                 case 'cleared':
+                    User.rk = "";
                     User.logout();
                     break;
                 default:
@@ -154,14 +169,24 @@ if (shared.has('User')) {
     }
     User.ApplicationObserver = {
         observe: function(aSubject, aTopic, aData) {
-            if (aTopic == "quit-application-granted")
+            if (aTopic == "quit-application-granted") {
                 User.logout();
+                User.removeObservers();
+            }
         },
         QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
     }
-    ObserverService.addObserver(User.ApplicationObserver, 'quit-application-granted', false);
-    ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
-    ObserverService.addObserver(User.OfflineObserver, 'network:offline-status-changed', false);
+    User.addObservers = function User_s_addObservers() {
+        ObserverService.addObserver(User.ApplicationObserver, 'quit-application-granted', false);
+        ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
+        ObserverService.addObserver(User.OfflineObserver, 'network:offline-status-changed', false);
+    };
+    User.removeObservers = function User_s_removeObservers() {
+        ObserverService.removeObserver(User.ApplicationObserver, 'quit-application-granted');
+        ObserverService.removeObserver(User.LoginObserver, 'cookie-changed');
+        ObserverService.removeObserver(User.OfflineObserver, 'network:offline-status-changed');
+    };
+    User.addObservers();
 
     User.LoginChecker = new Timer(1000 * 60 * 15); // 15 分
     User.LoginChecker.createListener('timer', function() {

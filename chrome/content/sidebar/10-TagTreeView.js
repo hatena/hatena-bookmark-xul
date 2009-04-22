@@ -9,9 +9,9 @@ const RDFService = getService("@mozilla.org/rdf/rdf-service;1", Ci.nsIRDFService
 const LocalStore = RDFService.GetDataSource("rdf:local-store");
 const OPEN = RDFService.GetResource("http://home.netscape.com/NC-rdf#open");
 const TRUE = RDFService.GetLiteral("true");
-const TAG_TREE_URI = location.href + "#tag-tree";
 
 var Tag = model("Tag");
+
 
 function TagTreeItem(tag, parentItem) {
     this.currentTag = tag && tag.name;
@@ -19,10 +19,9 @@ function TagTreeItem(tag, parentItem) {
     this.parent = parentItem;
     this.index = -1;
     this.tags = parentItem ? parentItem.tags.concat(tag.name) : [];
-    this.uri = this.tags.length
-        ? TAG_TREE_URI + "-[" +
-          this.tags.map(String.toLowerCase).map(encodeURI).join("][") + "]"
-        : "";
+    this.uri = parentItem
+        ? parentItem.uri + "[" + encodeURI(tag.name.toLowerCase()) + "]"
+        : location.href + "#tag-tree-";
     this.level = parentItem ? parentItem.level + 1 : -1;
     this.hasNext = true;
     this.isOpen = false;
@@ -30,30 +29,20 @@ function TagTreeItem(tag, parentItem) {
 }
 
 extend(TagTreeItem.prototype, {
-    // XXX タグ一覧の更新を実装した暁には削除する。
-    zeroCount: function TTI_zeroCount(treeView) {
-        if (!treeView || !treeView._treeBox) return;
-        let items = treeView._visibleItems;
-        let item = items[this.index];
-        if (!item || item.tags.join("[]") !== this.tags.join("[]")) return;
-        let startIndex = item.index;
-        let endIndex = item.index;
-        do {
-            item.count = 0;
-            item = items[++endIndex];
-        } while (item && item.level > this.level);
-        treeView._treeBox.invalidateRange(startIndex, endIndex - 1);
-    },
-
     get shouldBeOpen TTI_get_shouldBeOpen() {
-        //return this.tags.indexOf("JavaScript") === this.tags.length - 1;
-        return false;
         let resource = RDFService.GetResource(this.uri);
         return !!resource &&
                LocalStore.HasAssertion(resource, OPEN, TRUE, true);
     },
 
     set shouldBeOpen TTI_set_shouldBeOpen(open) {
+        let resource = RDFService.GetResource(this.uri);
+        if (resource) {
+            if (open)
+                LocalStore.Assert(resource, OPEN, TRUE, true);
+            else
+                LocalStore.Unassert(resource, OPEN, TRUE);
+        }
         return open;
     }
 });
@@ -83,7 +72,6 @@ extend(TagTreeView.prototype, {
         $count = 0; $start = new Date();
         let treeChildren = this._treeBox.treeBody;
         treeChildren.tags = [];
-        treeChildren.tagItem = null;
         this._setSortKey();
         this._openRelatedTags(this._rootItem, this._visibleItems);
         this._visibleItems.forEach(function (item, i) item.index = i);
@@ -235,6 +223,9 @@ extend(TagTreeView.prototype, {
         case "UserChange":
             this.build();
             break;
+
+        case "BookmarksUpdated":
+            this.refresh();
         }
     },
 
@@ -247,19 +238,25 @@ extend(TagTreeView.prototype, {
         this._treeBox.rowCountChanged(0, this.rowCount);
     },
 
+    refresh: function () {
+        let selectedRow = this.selection.currentIndex;
+        let visibleRow = this._treeBox.getFirstVisibleRow();
+        this.build();
+        this._treeBox.scrollToRow(visibleRow);
+        this.selection.select(selectedRow);
+    },
+
     setTags: function TTV_setTags() {
         let treeChildren = this._treeBox.treeBody;
         let index = this.selection.currentIndex;
         if (index === -1) {
             treeChildren.tags = [];
-            treeChildren.tagItem = null;
         } else {
             treeChildren.tags = this._visibleItems[index].tags.concat();
-            treeChildren.tagItem = this._visibleItems[index];
+            let event = document.createEvent("Event");
+            event.initEvent("HB_TagsSelected", true, false);
+            treeChildren.dispatchEvent(event);
         }
-        let event = document.createEvent("Event");
-        event.initEvent("HB_TagsSelected", true, false);
-        treeChildren.dispatchEvent(event);
     },
 
     handleClick: function TTV_handleClick(event) {
