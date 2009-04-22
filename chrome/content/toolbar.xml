@@ -16,12 +16,6 @@
                                    hidden="true"
                                    oncommand="hBookmark.UIUtils.openLogin(event);"
                                    onclick="checkForMiddleClick(this, event);"/>
-                <xul:toolbarbutton anonid="addPageButton"
-                                   class="bookmark-item"
-                                   label="&hBookmark.toolbar.addBookmarkLabel;"
-                                   hidden="true"
-                                   oncommand="hBookmark.UIUtils.openAddBookmark(event);"
-                                   onclick="checkForMiddleClick(this, event);"/>
                 <xul:toolbarbutton anonid="tagFilterButton"
                                    class="hBookmark-tag-filter-button"
                                    tooltiptext="&hBookmark.toolbar.tagFilterLabel;"
@@ -80,9 +74,6 @@
             <field name="loginButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "loginButton")
             </field>
-            <field name="addPageButton">
-                document.getAnonymousElementByAttribute(this, "anonid", "addPageButton")
-            </field>
             <field name="tagFilterButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "tagFilterButton")
             </field>
@@ -130,7 +121,6 @@
                     let isLoggedIn = !!hBookmark.User.user;
                     let hasBookmarks = !!bookmarks.length;
                     this.loginButton.hidden = isLoggedIn;
-                    this.addPageButton.hidden = !isLoggedIn || hasBookmarks;
                     this.tagFilterButton.hidden = !isLoggedIn || !hasBookmarks;
                     this.redraw();
                 ]]></body>
