@@ -66,7 +66,7 @@ var UIUtils = {
             const MAX_BOOKMARK_DISPLAY_COUNT = 10;
             if (titles.length > MAX_BOOKMARK_DISPLAY_COUNT) {
                 titles.length = MAX_BOOKMARK_DISPLAY_COUNT;
-                titles.push(Prefs.global.get("intl.ellipsis"));
+                titles.push(Prefs.global.getLocalized("intl.ellipsis"));
             }
             message = this.errorStrings.get('failToDeleteBookmarks') +
                       "\n\n" + titles.join("\n");
