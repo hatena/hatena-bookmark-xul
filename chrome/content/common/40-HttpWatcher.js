@@ -17,23 +17,12 @@ var HttpWatcher = shared.get("HttpWatcher") || {
         return this.targetHosts = hosts;
     },
 
-    onBookmarkEdit: function HW_onBookmarkEdit(channel) {
-        let url = this._getBookmakedURL(channel);
+    onEditBookmark: function HW_onEditBookmark(channel) {
+        let url = this._getResponseHeader(channel, "X-Bookmark-URL");
         if (!url) return;
         let data = this._getPostData(channel);
         if (!data) return;
-        this.syncBookmark(data);
-    },
 
-    _getBookmakedURL: function HW__getBookmarkedURL(channel) {
-        try {
-            return channel.getResponseHeader("X-Bookmark-URL");
-        } catch (ex) {
-            return null;
-        }
-    },
-
-    syncBookmark: function HW_syncBookmark(data) {
         // ブックマーク成功したら、sync する
         // これにより、リモートとのデータの同期がとれる
         // XXX: Sync に依存してしまう
@@ -58,6 +47,49 @@ var HttpWatcher = shared.get("HttpWatcher") || {
             bookmark.comment = data.comment;
             bookmark.save();
             EventService.dispatch('BookmarksUpdated');
+        }
+    },
+
+    onEditTag: function HW_onEditTag(channel) {
+        switch (channel.responseStatus) {
+        // タグ編集ページ (/user_id/tag?tag=...) から編集した場合、
+        // レスポンスはタグページまたはホームページへのリダイレクトになる。
+        case 302:
+            let location = this._getResponseHeader(channel, "Location");
+            // 再度タグ入力を求められる
+            // (/user_id/tag?tag=... へ飛ばされる) なら失敗とみなす。
+            // RFC 2616 では Location ヘッダの値は絶対 URI となっているが、
+            // はてなブックマークでは絶対パスの相対 URI になっている。
+            if (!location || /^\/[\w-]+\/tag\?/.test(location)) return;
+            break;
+
+        default:
+            return;
+        }
+        let data = this._getPostData(channel);
+        let oldTag = "[" + data.tag + "]";
+        let newTag = data.newtag ? "[" + data.newtag + "]" : "";
+        let Bookmark = Model.Bookmark;
+        Bookmark.db.beginTransaction();
+        try {
+            Bookmark.findByTags(data.tag).forEach(function (b) {
+                // 置換によりタグの重複が起こったときのことは考えない。
+                b.comment = b.comment.replace(oldTag, newTag, "i");
+                b.save();
+            });
+            Bookmark.db.commitTransaction();
+        } catch (ex) {
+            p("failed to edit tags");
+            Bookmark.db.rollbackTransaction();
+        }
+        EventService.dispatch("BookmarksUpdated");
+    },
+
+    _getResponseHeader: function HW__getResponseHeader(channel, header) {
+        try {
+            return channel.getResponseHeader(header);
+        } catch (ex) {
+            return null;
         }
     },
 
@@ -86,7 +118,8 @@ var HttpWatcher = shared.get("HttpWatcher") || {
         return result;
     },
 
-    EDIT_PATTERN: /^\/(?:bookmarklet\.edit|[\w-]+\/add\.edit)\b/,
+    EDIT_BOOKMARK_PATTERN: /^\/(?:bookmarklet\.edit|[\w-]+\/add\.edit)\b/,
+    EDIT_TAG_PATTERN:      /^\/[\w-]+\/tag\.(?:edit|delete)\b/,
 
     observe: function HW_observe(subject, topic, data) {
         if (!(subject instanceof Ci.nsIHttpChannel) ||
@@ -94,8 +127,10 @@ var HttpWatcher = shared.get("HttpWatcher") || {
             !(subject.URI.host in this.targetHosts))
             return;
         let path = subject.URI.path;
-        if (this.EDIT_PATTERN.test(path)) {
-            this.onBookmarkEdit(subject);
+        if (this.EDIT_BOOKMARK_PATTERN.test(path)) {
+            this.onEditBookmark(subject);
+        } else if (this.EDIT_TAG_PATTERN.test(path)) {
+            this.onEditTag(subject);
         }
     },
 
