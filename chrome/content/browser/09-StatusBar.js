@@ -106,7 +106,7 @@ var StatusBar = {
         }
     },
     registerPrefsListeners: function () {
-        p('register prefs listerners');
+        p('register prefs listeners');
         StatusBar.prefsAddButtonHandler();
         StatusBar.prefsCounterHandler();
         StatusBar.prefs.createListener('addButton', StatusBar.prefsAddButtonHandler);

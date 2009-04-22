@@ -169,14 +169,24 @@ if (shared.has('User')) {
     }
     User.ApplicationObserver = {
         observe: function(aSubject, aTopic, aData) {
-            if (aTopic == "quit-application-granted")
+            if (aTopic == "quit-application-granted") {
                 User.logout();
+                User.removeObservers();
+            }
         },
         QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
     }
-    ObserverService.addObserver(User.ApplicationObserver, 'quit-application-granted', false);
-    ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
-    ObserverService.addObserver(User.OfflineObserver, 'network:offline-status-changed', false);
+    User.addObservers = function User_s_addObservers() {
+        ObserverService.addObserver(User.ApplicationObserver, 'quit-application-granted', false);
+        ObserverService.addObserver(User.LoginObserver, 'cookie-changed', false);
+        ObserverService.addObserver(User.OfflineObserver, 'network:offline-status-changed', false);
+    };
+    User.removeObservers = function User_s_removeObservers() {
+        ObserverService.removeObserver(User.ApplicationObserver, 'quit-application-granted');
+        ObserverService.removeObserver(User.LoginObserver, 'cookie-changed');
+        ObserverService.removeObserver(User.OfflineObserver, 'network:offline-status-changed');
+    };
+    User.addObservers();
 
     User.LoginChecker = new Timer(1000 * 60 * 15); // 15 分
     User.LoginChecker.createListener('timer', function() {

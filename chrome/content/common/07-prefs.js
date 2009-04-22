@@ -108,4 +108,9 @@ Prefs.global = new Prefs('');
 Prefs.bookmark = new Prefs('extensions.hatenabookmark.');
 Prefs.link = new Prefs('extensions.hatenabookmark.link.');
 
-
+window.addEventListener("unload", function () {
+    Prefs.global.unregister();
+    Prefs.bookmark.unregister();
+    Prefs.link.unregister();
+    p('unregistered prefs');
+}, false);
