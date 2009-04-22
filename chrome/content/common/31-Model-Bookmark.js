@@ -186,6 +186,7 @@ extend(Bookmark.prototype, {
             t.name = tag;
             t.save();
         }
+        Model.Tag.clearRelatedTagCache();
     }
 });
 
