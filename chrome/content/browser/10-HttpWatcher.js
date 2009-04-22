@@ -1,52 +1,76 @@
 const EXPORT = ["HttpWatcher"];
 
-const HTTP_ON_MODIFY_REQUEST = "http-on-modify-request";
-const HTTP_ON_EXAMINE_RESPONSE = "http-on-examine-response";
-
 var HttpWatcher = shared.get("HttpWatcher") || {
-    get taskSet HW_get_taskSet() {
-        let taskSet = null;
-        if (shared.has("HttpWatcherTaskSet")) {
-            taskSet = shared.get("HttpWatcherTaskSet");
-        } else {
-            taskSet = {};
-            shared.set("HttpWatcherTaskSet", taskSet);
-        }
-        delete this.taskSet;
-        return this.taskSet = taskSet;
+    // 監視するホスト
+    targetHostsArray: [
+        "b.hatena.ne.jp",
+        //"bbeta.hatena.ne.jp",
+        //"localhost",
+    ],
+
+    get targetHosts HW_get_targetHosts() {
+        let hosts = this.targetHostsArray.reduce(function (hosts, host) {
+            hosts[host] = true;
+            return hosts;
+        }, new DictionaryObject());
+        delete this.targetHosts;
+        return this.targetHosts = hosts;
     },
 
-    pushTask: function HW__pushTask(url, data) {
-        //if (url in this.taskSet) return;
-        this.taskSet[url] = data;
-    },
-
-    popTask: function HW__popTask(url) {
-        let task = null;
-        if (url in this.taskSet) {
-            task = this.taskSet[url];
-            delete this.taskSet[url];
-        }
-        return task;
-    },
-
-    onRequest: function HW_onRequest(channel) {
+    onBookmarkEdit: function HW_onBookmarkEdit(channel) {
+        let url = this._getBookmakedURL(channel);
+        if (!url) return;
         let data = this._getPostData(channel);
-        this.pushTask(data.url, data);
+        if (!data) return;
+        this.syncBookmark(data);
+    },
+
+    _getBookmakedURL: function HW__getBookmarkedURL(channel) {
+        try {
+            return channel.getResponseHeader("X-Bookmark-URL");
+        } catch (ex) {
+            return null;
+        }
+    },
+
+    syncBookmark: function HW_syncBookmark(data) {
+        // ブックマーク成功したら、sync する
+        // これにより、リモートとのデータの同期がとれる
+        // XXX: Sync に依存してしまう
+        let listener = Sync.createListener("complete", function onSync() {
+            p('Sync completed');
+            listener.unlisten();
+            HTTPCache.entry.cache.clear(data.url);
+            if (!Model.Bookmark.findByUrl(data.url).length) {
+                p(data.url + ' is not registered.  Retry sync.');
+                // 同期が間に合わなかったら少し待ってもう一度だけ同期する。
+                setTimeout(method(Sync, 'sync'), 2000);
+            }
+        }, null, 0, false);
+        Sync.sync();
+
+        let bookmark = Model.Bookmark.findByUrl(data.url)[0];
+        if (bookmark) {
+            // すでに存在するブックマークは Sync で
+            // 同期できないので、ここで DB を更新しておく。
+            if (data.title)
+                bookmark.title = data.title;
+            bookmark.comment = data.comment;
+            bookmark.save();
+            EventService.dispatch('BookmarksUpdated');
+        }
     },
 
     _getPostData: function HW__getPostData(channel) {
-        if (!(channel instanceof Ci.nsIUploadChannel)) return;
         let rawStream = channel.uploadStream;
-        if (!(rawStream instanceof Ci.nsISeekableStream)) return;
-        let hasHeaders = rawStream instanceof Ci.nsIMIMEInputStream;
+        if (!(rawStream instanceof Ci.nsISeekableStream)) return null;
+        rawStream.seek(Ci.nsISeekableStream.NS_SEEK_SET, 0);
         let stream = Cc["@mozilla.org/scriptableinputstream;1"].
                      createInstance(Ci.nsIScriptableInputStream);
         stream.init(rawStream);
         let body = stream.read(stream.available());
-        rawStream.seek(Ci.nsISeekableStream.NS_SEEK_SET, 0);
-        if (hasHeaders)
-            body = body.replace(/^[\s\S]*?\r\n\r\n/, "");
+        if (rawStream instanceof Ci.nsIMIMEInputStream)
+            body = body.replace(/^(?:.+\r\n)+\r\n/, "");
         return this._toMap(body);
     },
 
@@ -62,60 +86,27 @@ var HttpWatcher = shared.get("HttpWatcher") || {
         return result;
     },
 
-    onResponse: function HW_onResponse(channel) {
-        let url = this._getBookmakedURL(channel);
-        if (!url) return;
-        let task = this.popTask(url);
-        if (!task) return;
-        this.performTask(task);
-    },
+    EDIT_PATTERN: /^\/(?:bookmarklet\.edit|[\w-]+\/add\.edit)\b/,
 
-    _getBookmakedURL: function HW__getBookmarkedURL(channel) {
-        try {
-            return channel.getResponseHeader("X-Bookmark-URL");
-        } catch (ex) {
-            return null;
-        }
-    },
-
-    performTask: function HW_performTask(task) {
-        // ブックマーク成功したら、sync する
-        // これにより、リモートとのデータの同期がとれる
-        // XXX: Sync に依存してしまう
-        let listener = Sync.createListener("complete", function onSync() {
-            p('Sync completed');
-            listener.unlisten();
-            HTTPCache.entry.cache.clear(task.url);
-            if (!Model.Bookmark.findByUrl(task.url).length) {
-                p(task.url + ' is not registered.  Retry sync.');
-                // 同期が間に合わなかったら少し待ってもう一度だけ同期する。
-                setTimeout(method(Sync, 'sync'), 2000);
-            }
-        }, null, 0, false);
-        Sync.sync();
-
-        let bookmark = Model.Bookmark.findByUrl(task.url)[0];
-        if (bookmark) {
-            // すでに存在するブックマークは Sync で
-            // 同期できないので、ここで DB を更新しておく。
-            if (task.title)
-                bookmark.title = task.title;
-            bookmark.comment = task.comment;
-            bookmark.save();
-            EventService.dispatch('BookmarksUpdated');
+    observe: function HW_observe(subject, topic, data) {
+        if (!(subject instanceof Ci.nsIHttpChannel) ||
+            !(subject instanceof Ci.nsIUploadChannel) ||
+            !(subject.URI.host in this.targetHosts))
+            return;
+        let path = subject.URI.path;
+        if (this.EDIT_PATTERN.test(path)) {
+            this.onBookmarkEdit(subject);
         }
     },
 
     startObserving: function HW_startObserving() {
-        ObserverService.addObserver(this, HTTP_ON_MODIFY_REQUEST, false);
-        ObserverService.addObserver(this, HTTP_ON_EXAMINE_RESPONSE, false);
+        ObserverService.addObserver(this, "http-on-examine-response", false);
         ObserverService.addObserver(this.quitObserver, "quit-application", false);
     },
 
     stopObserving: function HW_stopObserving() {
         p('stop HttpWatcher observing');
-        ObserverService.removeObserver(this, HTTP_ON_MODIFY_REQUEST);
-        ObserverService.removeObserver(this, HTTP_ON_EXAMINE_RESPONSE);
+        ObserverService.removeObserver(this, "http-on-examine-response");
         ObserverService.removeObserver(this.quitObserver, "quit-application");
     },
 
@@ -123,27 +114,6 @@ var HttpWatcher = shared.get("HttpWatcher") || {
         observe: function HW_QO_observe(subject, topic, data) {
             HttpWatcher.stopObserving();
         }
-    },
-
-    observe: function HW_observe(subject, topic, data) {
-        if (!(subject instanceof Ci.nsIHttpChannel) ||
-            !this._isHBookmarkOperation(subject))
-            return;
-        switch (topic) {
-        case HTTP_ON_MODIFY_REQUEST:
-            this.onRequest(subject);
-            break;
-
-        case HTTP_ON_EXAMINE_RESPONSE:
-            this.onResponse(subject);
-            break;
-        }
-    },
-
-    _isHBookmarkOperation: function HW__isHBookmarkOperation(channel) {
-        let uri = channel.URI;
-        return /\.hatena\.ne\.jp$/.test(uri.host) &&
-               /^\/(?:bookmarklet\.edit|[\w-]+\/add\.edit)\b/.test(uri.path);
     }
 };
 
