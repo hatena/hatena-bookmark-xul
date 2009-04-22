@@ -99,8 +99,10 @@ var CommentViewer = {
         if (!url && isHttp) 
             url = aDoc.location.href;
 
-        // ignore https
-        if (url.indexOf('https://') == 0 && Prefs.bookmarks.get('statusbar.httpsIgnore')) return;
+        if (!HTTPCache.counter.isValid(url)) {
+            // valid でない URL なら、自動コメント機能を無効に
+            return;
+        }
 
         if (isHttp && HTTPCache.counter.has(url)) {
             let count = HTTPCache.counter.get(url);
