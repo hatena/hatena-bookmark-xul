@@ -51,6 +51,7 @@ if (shared.has('User')) {
                     delete current._ignores;
                     return current;
                 }
+                this.clearUser();
             }
             let user = new User(res.name, res);
             this.user = user;
@@ -110,6 +111,7 @@ if (shared.has('User')) {
         clear: function user_clear() {
             if (this._db) {
                 this._db.connection.close();
+                p(this._name + "'s database is closed");
             }
         },
 
