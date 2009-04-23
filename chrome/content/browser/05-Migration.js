@@ -6,7 +6,7 @@ const EXPORT = ['Migration'];
 
 var Migration = {
     // 現在の conf のバージョン
-    CURRENT_VERSION: 1,
+    CURRENT_VERSION: 2,
 
     migration: function() {
         let currentVer = Prefs.bookmark.get('migration.version') || 0;
@@ -68,6 +68,10 @@ Migration.Migrations = [
         } catch(e) {
             p('install fail!: ' + e.toString());
         }
+    },
+    function M_2_openStartPage() {
+        // 初回インストール時に、start ページを表示する
+        openUILinkIn('http://b.hatena.ne.jp/guide/firefox_start', 'tab');
     },
 ];
 
