@@ -71,7 +71,12 @@ Migration.Migrations = [
     },
     function M_2_openStartPage() {
         // 初回インストール時に、start ページを表示する
-        openUILinkIn('http://b.hatena.ne.jp/guide/firefox_start', 'tab');
+        EventService.createListener('load', function() {
+            setTimeout(function() {
+                p('open start page');
+                openUILinkIn('http://b.hatena.ne.jp/guide/firefox_start', 'tab');
+            }, 1000);
+        });
     },
 ];
 
