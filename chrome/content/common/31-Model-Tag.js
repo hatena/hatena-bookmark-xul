@@ -101,7 +101,7 @@ function clearCache() {
     Tag._relTagCache = new DictionaryObject();
     shared.set("relatedTagCache", Tag._relTagCache);
 }
-addBefore(Tag.prototype, "save", clearCache);
+Tag.clearRelatedTagCache = clearCache;
 
 // addAround(Tag.prototype, "save", function(proceed, args, target) {
 //     target.lcname = target.name.toLowerCase();

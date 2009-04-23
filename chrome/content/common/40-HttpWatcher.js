@@ -1,0 +1,158 @@
+const EXPORT = ["HttpWatcher"];
+
+var HttpWatcher = shared.get("HttpWatcher") || {
+    // 監視するホスト
+    targetHostsArray: [
+        "b.hatena.ne.jp",
+        //"bbeta.hatena.ne.jp",
+        //"localhost",
+    ],
+
+    get targetHosts HW_get_targetHosts() {
+        let hosts = this.targetHostsArray.reduce(function (hosts, host) {
+            hosts[host] = true;
+            return hosts;
+        }, new DictionaryObject());
+        delete this.targetHosts;
+        return this.targetHosts = hosts;
+    },
+
+    onEditBookmark: function HW_onEditBookmark(channel) {
+        let url = this._getResponseHeader(channel, "X-Bookmark-URL");
+        if (!url) return;
+        let data = this._getPostData(channel);
+        if (!data) return;
+
+        // ブックマーク成功したら、sync する
+        // これにより、リモートとのデータの同期がとれる
+        // XXX: Sync に依存してしまう
+        let listener = Sync.createListener("complete", function onSync() {
+            p('Sync completed');
+            listener.unlisten();
+            HTTPCache.entry.cache.clear(data.url);
+            if (!Model.Bookmark.findByUrl(data.url).length) {
+                p(data.url + ' is not registered.  Retry sync.');
+                // 同期が間に合わなかったら少し待ってもう一度だけ同期する。
+                setTimeout(method(Sync, 'sync'), 2000);
+            }
+        }, null, 0, false);
+        Sync.sync();
+
+        let bookmark = Model.Bookmark.findByUrl(data.url)[0];
+        if (bookmark) {
+            // すでに存在するブックマークは Sync で
+            // 同期できないので、ここで DB を更新しておく。
+            if (data.title)
+                bookmark.title = data.title;
+            bookmark.comment = data.comment;
+            bookmark.save();
+            EventService.dispatch('BookmarksUpdated');
+        }
+    },
+
+    onEditTag: function HW_onEditTag(channel) {
+        switch (channel.responseStatus) {
+        // タグ編集ページ (/user_id/tag?tag=...) から編集した場合、
+        // レスポンスはタグページまたはホームページへのリダイレクトになる。
+        case 302:
+            let location = this._getResponseHeader(channel, "Location");
+            // 再度タグ入力を求められる
+            // (/user_id/tag?tag=... へ飛ばされる) なら失敗とみなす。
+            // RFC 2616 では Location ヘッダの値は絶対 URI となっているが、
+            // はてなブックマークでは絶対パスの相対 URI になっている。
+            if (!location || /^\/[\w-]+\/tag\?/.test(location)) return;
+            break;
+
+        default:
+            return;
+        }
+        let data = this._getPostData(channel);
+        let oldTag = "[" + data.tag + "]";
+        let newTag = data.newtag ? "[" + data.newtag + "]" : "";
+        let Bookmark = Model.Bookmark;
+        Bookmark.db.beginTransaction();
+        try {
+            Bookmark.findByTags(data.tag).forEach(function (b) {
+                // 置換によりタグの重複が起こったときのことは考えない。
+                b.comment = b.comment.replace(oldTag, newTag, "i");
+                b.save();
+            });
+            Bookmark.db.commitTransaction();
+        } catch (ex) {
+            p("failed to edit tags");
+            Bookmark.db.rollbackTransaction();
+        }
+        EventService.dispatch("BookmarksUpdated");
+    },
+
+    _getResponseHeader: function HW__getResponseHeader(channel, header) {
+        try {
+            return channel.getResponseHeader(header);
+        } catch (ex) {
+            return null;
+        }
+    },
+
+    _getPostData: function HW__getPostData(channel) {
+        let rawStream = channel.uploadStream;
+        if (!(rawStream instanceof Ci.nsISeekableStream)) return null;
+        rawStream.seek(Ci.nsISeekableStream.NS_SEEK_SET, 0);
+        let stream = Cc["@mozilla.org/scriptableinputstream;1"].
+                     createInstance(Ci.nsIScriptableInputStream);
+        stream.init(rawStream);
+        let body = stream.read(stream.available());
+        if (rawStream instanceof Ci.nsIMIMEInputStream)
+            body = body.replace(/^(?:.+\r\n)+\r\n/, "");
+        return this._toMap(body);
+    },
+
+    _toMap: function HW__toMap(string) {
+        let result = {};
+        string.replace(/\+/g, "%20").split("&").forEach(function (pair) {
+            let [key, value] = pair.split("=");
+            try {
+                value = decodeURIComponent(value);
+            } catch (ex) {}
+            result[key] = value;
+        });
+        return result;
+    },
+
+    EDIT_BOOKMARK_PATTERN: /^\/(?:bookmarklet\.edit|[\w-]+\/add\.edit)\b/,
+    EDIT_TAG_PATTERN:      /^\/[\w-]+\/tag\.(?:edit|delete)\b/,
+
+    observe: function HW_observe(subject, topic, data) {
+        if (!(subject instanceof Ci.nsIHttpChannel) ||
+            !(subject instanceof Ci.nsIUploadChannel) ||
+            !(subject.URI.host in this.targetHosts))
+            return;
+        let path = subject.URI.path;
+        if (this.EDIT_BOOKMARK_PATTERN.test(path)) {
+            this.onEditBookmark(subject);
+        } else if (this.EDIT_TAG_PATTERN.test(path)) {
+            this.onEditTag(subject);
+        }
+    },
+
+    startObserving: function HW_startObserving() {
+        ObserverService.addObserver(this, "http-on-examine-response", false);
+        ObserverService.addObserver(this.quitObserver, "quit-application", false);
+    },
+
+    stopObserving: function HW_stopObserving() {
+        p('stop HttpWatcher observing');
+        ObserverService.removeObserver(this, "http-on-examine-response");
+        ObserverService.removeObserver(this.quitObserver, "quit-application");
+    },
+
+    quitObserver: {
+        observe: function HW_QO_observe(subject, topic, data) {
+            HttpWatcher.stopObserving();
+        }
+    }
+};
+
+if (!shared.has("HttpWatcher")) {
+    HttpWatcher.startObserving();
+    shared.set("HttpWatcher", HttpWatcher);
+}

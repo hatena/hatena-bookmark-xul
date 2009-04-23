@@ -242,8 +242,12 @@ extend(TagTreeView.prototype, {
         let selectedRow = this.selection.currentIndex;
         let visibleRow = this._treeBox.getFirstVisibleRow();
         this.build();
-        this._treeBox.scrollToRow(visibleRow);
-        this.selection.select(selectedRow);
+        let rowCount = this.rowCount;
+        if (rowCount) {
+            let maxScrollRow = rowCount - this._treeBox.getPageLength();
+            this._treeBox.scrollToRow(Math.min(visibleRow, maxScrollRow));
+            this.selection.select(Math.min(selectedRow, rowCount - 1));
+        }
     },
 
     setTags: function TTV_setTags() {

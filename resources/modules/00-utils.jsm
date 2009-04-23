@@ -188,7 +188,7 @@ function DictionaryObject() ({ __proto__: null });
 let _shared = new DictionaryObject();
 var shared = {
     get: function shared_get (name) {
-        return _shared[name];
+        return (name in _shared) ? _shared[name] : void 0;
     },
     set: function shared_set (name, value) {
         _shared[name] = value;
