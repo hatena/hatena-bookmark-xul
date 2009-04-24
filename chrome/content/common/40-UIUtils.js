@@ -43,7 +43,7 @@ var UIUtils = {
 
     openLogin: function UIU_openLogin(event) {
         User.login(); // 透過的にログインできるかチェックしておく
-        hOpenUILink("https://www.hatena.ne.jp/login", event);
+        hOpenUILink("https://www.hatena.ne.jp/login?via=1000018&location=http%3A%2F%2Fb.hatena.ne.jp%2F%3Ffrom%3Dfirefox", event);
     },
 
     openAddBookmark: function UIU_openAddBookmark(event) {

@@ -1,6 +1,6 @@
 <!ENTITY hBookmark.sidebar.loginDescription "You have to login to Hatena to use the Hatena Bookmark Sidebar">
 <!ENTITY hBookmark.sidebar.loginLabel "Login to Hatena">
-<!ENTITY hBookmark.sidebar.loginURI "https://www.hatena.ne.jp/login">
+<!ENTITY hBookmark.sidebar.loginURI "https://www.hatena.ne.jp/login?via=1000018&amp;location=http&#37;3A&#37;2F&#37;2Fb.hatena.ne.jp&#37;2F&#37;3Ffrom&#37;3Dfirefox">
 
 <!ENTITY hBookmark.sidebar.title "Hatena Bookmark Sidebar">
 <!ENTITY hBookmark.sidebar.searchLabel "Search:">
