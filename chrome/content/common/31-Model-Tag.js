@@ -48,10 +48,15 @@ extend(Tag, {
         if (!tagNames || !tagNames.length)
             return !!this.countAll();
 
+        let tagCache = shared.get("relatedTagCache");
+        if (!tagCache) {
+            tagCache = new DictionaryObject();
+            shared.set("relatedTagCache", tagCache);
+        }
         let keys = tagNames.map(function (t) t.toLowerCase() + "[]");
         let leafKey = keys.pop();
         let branchKey = keys.sort().join("");
-        if (!(branchKey in this._relTagCache)) {
+        if (!(branchKey in tagCache)) {
             p("create relatedTagCache for " + branchKey);
             let query = "SELECT DISTINCT name FROM tags WHERE ";
             let conditions = keys.map(function ()
@@ -61,14 +66,17 @@ extend(Tag, {
                             tagNames.length + ")");
             query += conditions.join(" AND ");
             let tags = Tag.find(query, tagNames.slice(0, -1));
-            this._relTagCache[branchKey] = tags.reduce(function (cache, tag) {
+            tagCache[branchKey] = tags.reduce(function (cache, tag) {
                 cache[tag.name.toLowerCase() + "[]"] = true;
                 return cache;
             }, new DictionaryObject());
         }
-        return leafKey in this._relTagCache[branchKey];
+        return leafKey in tagCache[branchKey];
     },
 
+    clearRelatedTagCache: function Tag_clearRelatedTagCache() {
+        shared.set("relatedTagCache", null);
+    },
 
     deleteByName: function Tag_deleteByName(name) Tag.rename(name, null),
 
@@ -94,21 +102,10 @@ extend(Tag, {
     }
 });
 
-Tag._relTagCache = shared.get("relatedTagCache");
-if (!Tag._relTagCache) clearCache();
-
-function clearCache() {
-    Tag._relTagCache = new DictionaryObject();
-    shared.set("relatedTagCache", Tag._relTagCache);
-}
-Tag.clearRelatedTagCache = clearCache;
-
 // addAround(Tag.prototype, "save", function(proceed, args, target) {
 //     target.lcname = target.name.toLowerCase();
 //     proceed(args);
 // });
-
-EventService.createListener("UserChange", clearCache);
 
 Model.Tag = Tag;
 Model.MODELS.push("Tag");
