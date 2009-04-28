@@ -244,7 +244,7 @@ extend(TagTreeView.prototype, {
         this.build();
         let rowCount = this.rowCount;
         if (rowCount) {
-            let maxScrollRow = rowCount - this._treeBox.getPageLength();
+            let maxScrollRow = Math.max(rowCount - this._treeBox.getPageLength(), 0);
             this._treeBox.scrollToRow(Math.min(visibleRow, maxScrollRow));
             this.selection.select(Math.min(selectedRow, rowCount - 1));
         }
