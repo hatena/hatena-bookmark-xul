@@ -205,7 +205,7 @@ addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
 addAround(Bookmark, 'rowToObject', function (proceed, args) {
     let obj = proceed(args);
     if (obj.title)
-        obj.title = decodeReferences(obj.title);
+        obj.title = decodeReferences(obj.title).replace(/^\s+|\s+$/g, "");
     return obj;
 });
 

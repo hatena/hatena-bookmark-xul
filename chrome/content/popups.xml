@@ -31,10 +31,9 @@
                                 !target.hoveredBookmark))
                     return false;
                 let bookmark = target.hoveredBookmark || target.bookmark;
-                let title = bookmark.title.replace(/^\s+/, "");
-                this.titleField.textContent = title;
+                this.titleField.textContent = bookmark.title;
                 this.urlField.textContent = bookmark.url;
-                this.urlField.hidden = (title === bookmark.url);
+                this.urlField.hidden = (bookmark.title === bookmark.url);
                 let comment = bookmark.comment.replace(/^(?:\[[^\[\]]+\])+(?=[^\[])/, "$& ");
                 this.commentField.textContent = comment;
                 this.commentField.hidden = !/\S/.test(comment);
