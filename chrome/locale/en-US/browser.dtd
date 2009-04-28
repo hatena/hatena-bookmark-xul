@@ -12,10 +12,10 @@
 <!ENTITY hBookmark.sidebar.label "Hatena Bookmark">
 <!ENTITY hBookmark.sidebar.key "A">
 
-<!ENTITY hBookmark.statusbar.now_syncing "Sync with bookmarks…">
+<!ENTITY hBookmark.statusbar.now_syncing "Sync with Bookmarks…">
 <!ENTITY hBookmark.statusbar.tooltip.addButton "Add to Hatena Bookmark">
-<!ENTITY hBookmark.statusbar.tooltip.counter "Open Hatena Bookmark entry page">
-<!ENTITY hBookmark.statusbar.tooltip.comment "Show comments">
+<!ENTITY hBookmark.statusbar.tooltip.counter "Show on Hatena Bookmark">
+<!ENTITY hBookmark.statusbar.tooltip.comment "Show Comments">
 
 <!ENTITY hBookmark.menu.main "Hatena Bookmark">
 <!ENTITY hBookmark.menu.mainKey "B">
@@ -26,15 +26,15 @@
 <!ENTITY hBookmark.menu.help "Help">
 <!ENTITY hBookmark.menu.helpKey "H">
 
-<!ENTITY hBookmark.menu.add "Add this page to Hatena Bookmark">
+<!ENTITY hBookmark.menu.add "Add This Page to Hatena Bookmark">
 <!ENTITY hBookmark.menu.addKey "B">
-<!ENTITY hBookmark.menu.addlink "Add this link to Hatena Bookmark">
+<!ENTITY hBookmark.menu.addlink "Add This Link to Hatena Bookmark">
 <!ENTITY hBookmark.menu.addlinkKey "B">
-<!ENTITY hBookmark.menu.showentry "Show this page on Hatena Bookmark">
+<!ENTITY hBookmark.menu.showentry "Show This Page on Hatena Bookmark">
 <!ENTITY hBookmark.menu.showentryKey "E">
-<!ENTITY hBookmark.menu.showlink "Show this link on Hatena Bookmark">
+<!ENTITY hBookmark.menu.showlink "Show This Link on Hatena Bookmark">
 <!ENTITY hBookmark.menu.showlinkKey "E">
-<!ENTITY hBookmark.menu.showcomment "Show this link on CommentViewer">
+<!ENTITY hBookmark.menu.showcomment "Show This Link on CommentViewer">
 <!ENTITY hBookmark.menu.showcommentKey "C">
 <!ENTITY hBookmark.menu.searchtext "Hatena WebSearch: ">
 <!ENTITY hBookmark.menu.searchtextKey "B">
