@@ -114,6 +114,26 @@ extend(Bookmark, {
         }, 'Bookmark search [' + [str, limit].join(' ') + ']');
         return res;
     },
+    deleteByURLs: function (urls) {
+        urls = [].concat(urls);
+        if (!urls.length) return;
+        Bookmark.db.beginTransaction();
+        try {
+            let query = "SELECT * FROM bookmarks WHERE url IN (" +
+                        urls.map(function () "?").join() + ")";
+            let bmIds = Bookmark.find(query, urls).map(function (b) b.id);
+            if (!bmIds.length) throw "No bookmark to delete";
+            Model.Tag.db.execute("DELETE FROM tags WHERE bookmark_id IN (" +
+                                 bmIds.join() + ")");
+            Bookmark.db.execute("DELETE FROM bookmarks WHERE id IN (" +
+                                bmIds.join() + ")");
+            Bookmark.db.commitTransaction();
+        } catch (ex) {
+            Bookmark.db.rollbackTransaction();
+            return;
+        }
+        EventService.dispatch("BookmarksUpdated");
+    },
     deleteBookmarks: function(bookmarks) {
         let bmIds = bookmarks.filter(function (b) b.id > 0)
                              .map(function (b) b.id);

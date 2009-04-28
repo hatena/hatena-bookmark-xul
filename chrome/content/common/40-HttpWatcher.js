@@ -50,6 +50,15 @@ var HttpWatcher = shared.get("HttpWatcher") || {
         }
     },
 
+    onDeleteBookmarks: function HW_onDeleteBookmarks(channel) {
+        if (channel.responseStatus !== 200) return;
+        let data = this._getPostData(channel);
+        // XXX eid による削除を捕捉出来ない
+        if (!data.url && !data.urllist) return;
+        Model.Bookmark.deleteByURLs(data.urllist
+                                    ? data.urllist.split("|") : data.url);
+    },
+
     onEditTag: function HW_onEditTag(channel) {
         switch (channel.responseStatus) {
         // タグ編集ページ (/user_id/tag?tag=...) から編集した場合、
@@ -106,8 +115,9 @@ var HttpWatcher = shared.get("HttpWatcher") || {
         return result;
     },
 
-    EDIT_BOOKMARK_PATTERN: /^\/(?:bookmarklet\.edit|[\w-]+\/add\.edit)\b/,
-    EDIT_TAG_PATTERN:      /^\/[\w-]+\/tag\.(?:edit|delete)\b/,
+    EDIT_BOOKMARK_PATTERN:    /^\/(?:bookmarklet\.edit|[\w-]+\/add\.edit)\b/,
+    DELETE_BOOKMARKS_PATTERN: /^\/[\w-]+\/api\.delete_bookmark\b/,
+    EDIT_TAG_PATTERN:         /^\/[\w-]+\/tag\.(?:edit|delete)\b/,
 
     observe: function HW_observe(subject, topic, data) {
         if (!(subject instanceof Ci.nsIHttpChannel) ||
@@ -117,6 +127,8 @@ var HttpWatcher = shared.get("HttpWatcher") || {
         let path = subject.URI.path;
         if (this.EDIT_BOOKMARK_PATTERN.test(path)) {
             this.onEditBookmark(subject);
+        } else if (this.DELETE_BOOKMARKS_PATTERN.test(path)) {
+            this.onDeleteBookmarks(subject);
         } else if (this.EDIT_TAG_PATTERN.test(path)) {
             this.onEditTag(subject);
         }

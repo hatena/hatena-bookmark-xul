@@ -143,8 +143,6 @@ extend(RemoteCommand.prototype, {
                 this.onError();
                 return;
             }
-            p('remove bookmarks', bookmarks.map(function (b) b.url).join("\n"));
-            Model.Bookmark.deleteBookmarks(bookmarks);
         };
         this.options.onError = this.options.onError || function () {
             UIUtils.alertBookmarkError('delete', bookmarks);
