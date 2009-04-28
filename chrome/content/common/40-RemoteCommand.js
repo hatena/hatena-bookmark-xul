@@ -32,6 +32,9 @@ extend(RemoteCommand, {
         follow_suggest_ignore   : 'api.follow_suggest_ignore.json',
         unfollow_suggest_ignore : 'api.unfollow_suggest_ignore.json',
 
+        edit_tag                : 'tag.edit',
+        delete_tag              : 'tag.delete',
+
         // Alias
         delete                  : 'api.delete_bookmark.json'
     }

@@ -30,8 +30,10 @@ extend(TagContext.prototype, {
         let tagsLabel = this._formatTags(this.tags);
         this._setLabel("openBookmarks", [tagsLabel]);
         this._setLabel("deleteBookmarks", [tagsLabel]);
-        this._setLabel("editTag", [this.tag]);
         this._setLabel("filterToolbar", [this.tag]);
+        //this._setLabel("editTag", [this.tag]);
+        this._setLabel("rename", [this.tag]);
+        this._setLabel("delete", [this.tag]);
         let line = this._toolbarRecentLine;
         this._getItem("filterToolbar").hidden =
             !line || !UIUtils.isVisible(line);
@@ -68,20 +70,59 @@ extend(TagContext.prototype, {
         openUILinkIn(url, where);
     },
 
-    /*
-    delete: function TC_delete() {
-        let tag = this.tags.pop();
-        alert('Not implemented');
+    filterToolbar: function TC_filterToolbar() {
+        this._toolbarRecentLine.tagFilterPopup.setTag(this.tag);
     },
 
     rename: function TC_rename() {
-        let tag = this.tags.pop();
-        alert('Not implemented');
+        let newTag = { value: "" };
+        let error = { value: "" };
+        let ok;
+        do {
+            let message = this.strings.get("prompt.renameDescription",
+                                           [this.tag]);
+            if (error.value)
+                message += "\n\n" + error.value;
+            ok = PromptService.prompt(
+                     getTopWin(), this.strings.get("prompt.editTagTitle"),
+                     message, newTag, null, {});
+        } while (ok && !this._validateNewTag(newTag.value, error));
+        if (!ok) return;
+        let command = new RemoteCommand("edit_tag", {
+            query: { tag: this.tag, newtag: newTag.value }
+        });
+        command.execute();
     },
-    */
 
-    filterToolbar: function TC_filterToolbar() {
-        this._toolbarRecentLine.tagFilterPopup.setTag(this.tag);
+    _validateNewTag: function TC__validateNewTag(tagName, error) {
+        const MAX_BYTE_LENGTH = 32;
+        let result = true;
+        let message = "";
+        let byteLength = unescape(encodeURI(tagName)).length;
+        if (!/\S/.test(tagName)) {
+            result = false;
+        } else if (!/^[^?:%\/\[\]]+(?:\]\[[^?:%\/\[\]]+)*$/.test(tagName)) {
+            result = false;
+            message = this.strings.get("tagError.invalidCharacter");
+        } else if (byteLength > MAX_BYTE_LENGTH) {
+            result = false;
+            message = this.strings.get("tagError.tooLong",
+                                       [MAX_BYTE_LENGTH, byteLength]);
+        }
+        if (error)
+            error.value = message;
+        return result;
+    },
+
+    delete: function TC_delete() {
+        let ok = PromptService.confirm(
+                     getTopWin(), this.strings.get("prompt.editTagTitle"),
+                     this.strings.get("prompt.deleteDescription", [this.tag]));
+        if (!ok) return;
+        let command = new RemoteCommand("delete_tag", {
+            query: { tag: this.tag }
+        });
+        command.execute();
     },
 
     get _toolbarRecentLine TC_get__toolbarRecentLine() {

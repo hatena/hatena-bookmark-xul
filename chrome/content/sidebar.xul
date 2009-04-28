@@ -34,17 +34,15 @@
             <menuseparator id="hBookmark-tag-context-openSeparator"/>
             <menuitem id="hBookmark-tag-context-filterToolbar"
                       oncommand="this.parentNode._context.filterToolbar();"/>
+            <!--
             <menuitem id="hBookmark-tag-context-editTag"
                       oncommand="this.parentNode._context.editTag(event);"
                       onclick="checkForMiddleClick(this, event);"/>
-            <!--
-            <menuitem id="hBookmark-tag-context-delete"
-                      label="Remove Tag &quot;%S&quot;"
-                      oncommand="this.parentNode._context.delete();"/>
-            <menuitem id="hBookmark-tag-context-rename"
-                      label="Rename Tag &quot;%S&quot;"
-                      oncommand="this.parentNode._context.rename();"/>
             -->
+            <menuitem id="hBookmark-tag-context-rename"
+                      oncommand="this.parentNode._context.rename();"/>
+            <menuitem id="hBookmark-tag-context-delete"
+                      oncommand="this.parentNode._context.delete();"/>
             <menuseparator id="hBookmark-tag-context-editSeparator"/>
             <menuitem id="hBookmark-tag-context-deleteBookmarks"
                       oncommand="this.parentNode._context.deleteBookmarks();"/>
