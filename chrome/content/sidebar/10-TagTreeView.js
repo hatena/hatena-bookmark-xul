@@ -244,9 +244,11 @@ extend(TagTreeView.prototype, {
         this.build();
         let rowCount = this.rowCount;
         if (rowCount) {
+            this.selection.selectEventsSuppressed = true;
             let maxScrollRow = Math.max(rowCount - this._treeBox.getPageLength(), 0);
             this._treeBox.scrollToRow(Math.min(visibleRow, maxScrollRow));
             this.selection.select(Math.min(selectedRow, rowCount - 1));
+            this.selection.selectEventsSuppressed = false;
         }
     },
 
