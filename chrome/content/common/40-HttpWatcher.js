@@ -67,22 +67,10 @@ var HttpWatcher = shared.get("HttpWatcher") || {
             return;
         }
         let data = this._getPostData(channel);
-        let oldTag = "[" + data.tag + "]";
-        let newTag = data.newtag ? "[" + data.newtag + "]" : "";
-        let Bookmark = Model.Bookmark;
-        Bookmark.db.beginTransaction();
-        try {
-            Bookmark.findByTags(data.tag).forEach(function (b) {
-                // 置換によりタグの重複が起こったときのことは考えない。
-                b.comment = b.comment.replace(oldTag, newTag, "i");
-                b.save();
-            });
-            Bookmark.db.commitTransaction();
-        } catch (ex) {
-            p("failed to edit tags");
-            Bookmark.db.rollbackTransaction();
-        }
-        EventService.dispatch("BookmarksUpdated");
+        if (data.newtag)
+            Model.Tag.rename(data.tag, data.newtag);
+        else
+            Model.Tag.deleteByName(data.tag);
     },
 
     _getResponseHeader: function HW__getResponseHeader(channel, header) {

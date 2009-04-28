@@ -78,27 +78,25 @@ extend(Tag, {
         shared.set("relatedTagCache", null);
     },
 
-    deleteByName: function Tag_deleteByName(name) Tag.rename(name, null),
+    deleteByName: function Tag_deleteByName(name) Tag.rename(name, ""),
 
     rename: function Tag_rename(oldName, newName) {
         const Bookmark = Model.Bookmark;
-        let bookmarks = Bookmark.findByTags([oldName]);
-        if (!bookmarks.length) return;
-        let re = new RegExp("^((?:\\[.*?\\])*?)\\[" +
-                            oldName.replace(/[^\w\u0100-\uffff]/g, "\\$&") +
-                            "\\]");
-        // XXX newNameが空文字列だった場合は?
-        // XXX newNameに"["、"]"が含まれていた場合は?
-        let replacement = newName ? "$1[" + newName + "]" : "$1";
+        let oldTag = "[" + oldName + "]";
+        let newTag = newName ? "[" + newName + "]" : "";
         Bookmark.db.beginTransaction();
-        bookmarks.forEach(function (bookmark) {
-            bookmark.comment = bookmark.comment.replace(re, replacement);
-            // XXX 例外発生の可能性あり?
-            bookmark.save();
-        });
-        Bookmark.db.commitTransaction();
-        // XXX delete時には別のイベントを発行すべき?
-        EventService.dispatch("TagNameChanged", { from :oldName, to: newName });
+        try {
+            Bookmark.findByTags(oldName).forEach(function (b) {
+                // 置換によりタグの重複が起こったときのことは考えない。
+                b.comment = b.comment.replace(oldTag, newTag, "i");
+                b.save();
+            });
+            Bookmark.db.commitTransaction();
+        } catch (ex) {
+            p("failed to edit tags");
+            Bookmark.db.rollbackTransaction();
+        }
+        EventService.dispatch("BookmarksUpdated");
     }
 });
 

@@ -85,12 +85,6 @@ function testTag() {
     assert.equals(names.sort(), ["JavaScript"]);
 
     let tags;
-    tags = Tag.findTagCandidates("Java");
-    assert.equals(tags.length, 1);
-    assert.equals(tags[0].name, "JavaScript");
-    tags = Tag.findTagCandidates(null);
-    assert.equals(tags.length, 0);
-
     Tag.rename("JavaScript", "JS");
     tags = Tag.findByName("JS");
     assert.equals(tags.length, 2);
