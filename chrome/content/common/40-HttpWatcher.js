@@ -61,6 +61,10 @@ var HttpWatcher = shared.get("HttpWatcher") || {
 
     onEditTag: function HW_onEditTag(channel) {
         switch (channel.responseStatus) {
+        case 200:
+            // JSON API の成功
+            break;
+
         // タグ編集ページ (/user_id/tag?tag=...) から編集した場合、
         // レスポンスはタグページまたはホームページへのリダイレクトになる。
         case 302:
