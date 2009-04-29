@@ -132,6 +132,7 @@ extend(Bookmark, {
             Bookmark.db.rollbackTransaction();
             return;
         }
+        Model.Tag.clearRelatedTagCache();
         EventService.dispatch("BookmarksUpdated");
     },
     deleteBookmarks: function(bookmarks) {
@@ -143,6 +144,7 @@ extend(Bookmark, {
                              placeholder + ")", bmIds);
         Bookmark.db.execute("delete from bookmarks where id in (" +
                             placeholder + ")", bmIds);
+        Model.Tag.clearRelatedTagCache();
         EventService.dispatch("BookmarksUpdated");
     }
 });
