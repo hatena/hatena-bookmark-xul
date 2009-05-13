@@ -73,6 +73,11 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 /* utility functions */
 var nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
 
+// window.XMLHttpRequest が存在しなくても大丈夫なように
+function XMLHttpRequest() {
+    return Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance();
+}
+
 /*
  * p は一時デバッグ用
  */
