@@ -190,6 +190,7 @@ caption label {
 }
 
 groupbox {
+    -moz-appearance: none;
     border: none !important;
     margin: 10px;
 }
