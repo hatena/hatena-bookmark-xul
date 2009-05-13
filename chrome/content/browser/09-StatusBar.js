@@ -133,8 +133,13 @@ var StatusBar = {
         p('statusbar load handler');
         StatusBar.registerPrefsListeners();
         StatusBar.update();
-        gBrowser.addEventListener('DOMContentLoaded', StatusBar.update, false);
+        gBrowser.addProgressListener(StatusBar.progressListener,
+                                     Ci.nsIWebProgress.NOTIFY_LOCATION);
+        gBrowser.addEventListener('unload', StatusBar.unloadHandler, false);
         statusComment.addEventListener('mouseover', StatusBar.commentViewerOverHandler, false);
+    },
+    unloadHandler: function(ev) {
+        gBrowser.removeProgressListener(StatusBar.progressListener);
     },
     commentViewerOverHandler: function(ev) {
         CommentViewer.autoHoverShow();
@@ -142,45 +147,31 @@ var StatusBar = {
     updateHandler: function(ev) {
         StatusBar.update;
     },
+    progressListener: {
+        onLocationChange: function (progress, request, location) {
+            StatusBar.update();
+        },
+        onStateChange: function (progress, request, flags, status) {},
+        onProgressChange: function (progress, request, curSelf, maxSelf,
+                                    curTotal, maxTotal) {},
+        onProgressChange64: function (progress, request, curSelf, maxSelf,
+                                      curTotal, maxTotal) {},
+        onStatusChange: function (progress, request, status, message) {},
+        onSecurityChange: function (progress, request, state) {},
+        onRefreshAttempted: function (progress, refreshURI, millis, sameURI) {},
+        QueryInterface: XPCOMUtils.generateQI([
+            Ci.nsIWebProgressListener,
+            Ci.nsIWebProgressListener2,
+            Ci.nsISupportsWeakReference,
+        ])
+    }
 }
 
-EventService.createListener('load', StatusBar.loadHandler);
+window.addEventListener('load', StatusBar.loadHandler, false);
 
 document.addEventListener('TabSelect', function() {
     StatusBar.update();
 }, false);
-
-/*
-let ProgressListenr = {
-    QueryInterface: XPCOMUtils.generateQI([
-        Ci.nsIWebProgressListener,
-        Ci.nsIXULBrowserWindow
-    ]),
-    onStateChange: function (webProgress, request, flags, status)
-    {
-         if (flags & (Ci.nsIWebProgressListener.STATE_IS_DOCUMENT | Ci.nsIWebProgressListener.STATE_IS_WINDOW)) {
-             if (flags & Ci.nsIWebProgressListener.STATE_START) {
-                StatusBar.update();
-             }
-         }
-    },
-    onSecurityChange: function (webProgress, aRequest, aState) {},
-    onStatusChange: function (webProgress, request, status, message) {},
-    onProgressChange: function (webProgress, request, curSelfProgress, maxSelfProgress, curTotalProgress, maxTotalProgress) {},
-    onLocationChange: function () {},
-}
-*/
-
-
-// XXX: うーん
-// getBrowser().addProgressListener(ProgressListenr, Ci.nsIWebProgress.NOTIFY_ALL);
-
-/*
-document.addEventListener('TabOpen', function() {
-    //getBrowser().addProgressListener(ProgressListenr, Ci.nsIWebProgress.NOTIFY_ALL);
-    getBrowser().addEventListener('DOMContentLoaded', StatusBar.update, false);
-}, false);
-*/
 
 EventService.createListener('UserChange', function() {
     StatusBar.update();
