@@ -69,11 +69,14 @@ var HttpWatcher = shared.get("HttpWatcher") || {
         // レスポンスはタグページまたはホームページへのリダイレクトになる。
         case 302:
             let location = this._getResponseHeader(channel, "Location");
-            // 再度タグ入力を求められる
-            // (/user_id/tag?tag=... へ飛ばされる) なら失敗とみなす。
+            if (!location) return;
             // RFC 2616 では Location ヘッダの値は絶対 URI となっているが、
             // はてなブックマークでは絶対パスの相対 URI になっている。
-            if (!location || /^\/[\w-]+\/tag\?/.test(location)) return;
+            // どちらでも大丈夫なようにいったん URI を解決する。
+            let path = newURI(location, null, channel.URI).path;
+            // 再度タグ入力を求められる
+            // (/user_id/tag?tag=... へ飛ばされる) なら失敗とみなす。
+            if (/^\/[\w-]+\/tag\?/.test(path)) return;
             break;
 
         default:
