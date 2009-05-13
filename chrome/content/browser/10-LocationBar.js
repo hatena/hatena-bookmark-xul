@@ -432,7 +432,7 @@ FakeAutoCompletePopupController.prototype = {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIAutoCompleteController, Ci.nsISupports]),
 }; 
 
-EventService.createListener('load', function() {
+window.addEventListener('load', function() {
     LocationBar.init();
 
     // toolbox 変更時の処理
@@ -441,7 +441,7 @@ EventService.createListener('load', function() {
         proceed(args);
         LocationBar.init();
     });
-});
+}, false);
 
 
 

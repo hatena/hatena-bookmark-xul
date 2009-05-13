@@ -64,6 +64,6 @@ var LinkClickOverlay = {
     }
 }
 
-EventService.createListener('load', LinkClickOverlay.onloadHandler);
+window.addEventListener('load', LinkClickOverlay.onloadHandler, false);
 
 
