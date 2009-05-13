@@ -185,9 +185,9 @@
                 <label value="&hBookmark.statusbar.now_syncing;" />
                 <progressmeter 
                 id="hBookmark-syncProgressMeter"
+                class="progressmeter-statusbar"
                 tooltiptext="&hBookmark.statusbar.now_syncing;"
-                style="width: 50px"
-                width="50px" mode="determined" value="82" 
+                width="50" mode="determined" value="82" 
                 />
             </hbox>
 
