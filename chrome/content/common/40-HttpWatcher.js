@@ -53,10 +53,10 @@ var HttpWatcher = shared.get("HttpWatcher") || {
     onDeleteBookmarks: function HW_onDeleteBookmarks(channel) {
         if (channel.responseStatus !== 200) return;
         let data = this._getPostData(channel);
-        // XXX eid による削除を捕捉出来ない
-        if (!data.url && !data.urllist) return;
-        Model.Bookmark.deleteByURLs(data.urllist
-                                    ? data.urllist.split("|") : data.url);
+        let url = this._getResponseHeader(channel, "X-Bookmark-URL") || data.url;
+        let urls = url ? [url] : data.urllist ? data.urllist.split("|") : null;
+        if (!urls) return;
+        Model.Bookmark.deleteByURLs(urls);
     },
 
     onEditTag: function HW_onEditTag(channel) {
