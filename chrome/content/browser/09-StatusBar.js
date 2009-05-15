@@ -158,7 +158,7 @@ var StatusBar = {
                                       curTotal, maxTotal) {},
         onStatusChange: function (progress, request, status, message) {},
         onSecurityChange: function (progress, request, state) {},
-        onRefreshAttempted: function (progress, refreshURI, millis, sameURI) {},
+        onRefreshAttempted: function (progress, refreshURI, millis, sameURI) true,
         QueryInterface: XPCOMUtils.generateQI([
             Ci.nsIWebProgressListener,
             Ci.nsIWebProgressListener2,
