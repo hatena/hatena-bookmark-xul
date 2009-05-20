@@ -47,6 +47,7 @@ if (shared.has('User')) {
             if (current) {
                 if (current.name == res.name) {
                     current.options.rks = res.rks;
+                    current.options.plususer = res.plususer;
                     current.options.ignores_regex = res.ignores_regex;
                     delete current._ignores;
                     return current;
@@ -72,6 +73,7 @@ if (shared.has('User')) {
     User.prototype = {
         get name() this._name,
         get rk() User.rk,
+        get plususer() this.options.plususer == 1,
         get rks() this.options.rks,
         get private() this.options.private == 1,
         get public() !this.private,
