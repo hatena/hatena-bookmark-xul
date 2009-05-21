@@ -108,10 +108,13 @@
                                             label="&hBookmark.addPanel.addCollectionLabel;"
                                             preference="extensions.hatenabookmark.addPanel.addCollection"/>
                               <xul:checkbox anonid="isPrivateCheck"
-                                            label="&hBookmark.addPanel.isPrivateLabel;"/>
+                                            label="&hBookmark.addPanel.isPrivateLabel;"
+                                            tooltiptext="&hBookmark.addPanel.isPrivateDescription;"
+                                            normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
                               <xul:checkbox anonid="sendMailCheck"
                                             label="&hBookmark.addPanel.sendMailLabel;"
-                                            preference="extensions.hatenabookmark.addPanel.sendMail"/>
+                                            preference="extensions.hatenabookmark.addPanel.sendMail"
+                                            tooltiptext="&hBookmark.addPanel.sendMailDescription;"/>
                           </xul:hbox>
                       </xul:row>
                   </xul:rows>
@@ -158,6 +161,9 @@
                     w.style.backgroundPosition = 'left bottom';
                 }
                 this.inputHandler = new hBookmark.TagCompleter.InputHandler(this.commentField.inputField);
+                if (!hBookmark.User.user.plususer)
+                    this.isPrivateCheck.tooltipText +=
+                        " " + this.isPrivateCheck.getAttribute("normalusernotice");
             ]]></constructor>
 
             <field name="userIcon">
