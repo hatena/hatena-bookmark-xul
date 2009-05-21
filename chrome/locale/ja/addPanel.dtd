@@ -18,6 +18,8 @@
 <!ENTITY hBookmark.addPanel.commentLabel "コメント:">
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "ブックマークを確認">
 <!ENTITY hBookmark.addPanel.addCollectionLabel "コレクションに追加">
+<!ENTITY hBookmark.addPanel.isPrivateLabel "公開しない">
+<!ENTITY hBookmark.addPanel.sendMailLabel "メールする">
 
 <!ENTITY hBookmark.addPanel.imageDescription "エントリーの画像は全ユーザ共通です">
 <!ENTITY hBookmark.addPanel.imageGuidelineLabel "ガイドライン">

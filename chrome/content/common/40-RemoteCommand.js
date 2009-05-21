@@ -114,15 +114,20 @@ extend(RemoteCommand.prototype, {
             url:     bookmark.url,
             comment: bookmark.comment
         };
-        if (this.options.changeTitle && User.user.public)
+        let user = User.user;
+        if (this.options.changeTitle && user.public)
             query.title = bookmark.title;
         if (this.options.addCollection && this.options.asin) {
             query.add_asin = 1;
             query.asin = this.options.asin;
         }
-        if (this.options.changeImage && User.user.public)
+        if (this.options.isPrivate && user.plususer)
+            query.private = 1;
+        if (this.options.sendMail && user.plususer)
+            query.send_mail = 1;
+        if (this.options.changeImage && user.public)
             query.image = this.options.image;
-        if (User.user.plususer)
+        if (user.plususer)
             query.with_status_op = 1;
         this.options.query = query;
     },

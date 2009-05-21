@@ -18,6 +18,8 @@
 <!ENTITY hBookmark.addPanel.commentLabel "Comment:">
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "Confirm Bookmark">
 <!ENTITY hBookmark.addPanel.addCollectionLabel "Add to Collection">
+<!ENTITY hBookmark.addPanel.isPrivateLabel "Hide from People">
+<!ENTITY hBookmark.addPanel.sendMailLabel "Send Mail">
 
 <!ENTITY hBookmark.addPanel.imageDescription "The image is shared with all users. ">
 <!ENTITY hBookmark.addPanel.imageGuidelineLabel "Guidelines for image usage (in Japanese)">

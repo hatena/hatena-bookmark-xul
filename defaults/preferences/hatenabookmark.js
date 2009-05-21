@@ -36,6 +36,7 @@ pref("extensions.hatenabookmark.statusbar.addButton", true);
 pref("extensions.hatenabookmark.addPanel.backgroundImage", '');
 pref("extensions.hatenabookmark.addPanel.confirmEntry", false);
 pref("extensions.hatenabookmark.addPanel.addCollection", true);
+pref("extensions.hatenabookmark.addPanel.sendMail", false);
 pref("extensions.hatenabookmark.addPanel.maxImageWidth", 100);
 pref("extensions.hatenabookmark.addPanel.maxImageHeight", 100);
 pref("extensions.hatenabookmark.addPanel.maxImageCount", 20);

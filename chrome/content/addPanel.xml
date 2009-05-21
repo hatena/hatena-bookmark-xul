@@ -107,6 +107,11 @@
                               <xul:checkbox anonid="addCollectionCheck"
                                             label="&hBookmark.addPanel.addCollectionLabel;"
                                             preference="extensions.hatenabookmark.addPanel.addCollection"/>
+                              <xul:checkbox anonid="isPrivateCheck"
+                                            label="&hBookmark.addPanel.isPrivateLabel;"/>
+                              <xul:checkbox anonid="sendMailCheck"
+                                            label="&hBookmark.addPanel.sendMailLabel;"
+                                            preference="extensions.hatenabookmark.addPanel.sendMail"/>
                           </xul:hbox>
                       </xul:row>
                   </xul:rows>
@@ -223,6 +228,12 @@
             </field>
             <field name="addCollectionCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "addCollectionCheck")
+            </field>
+            <field name="isPrivateCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "isPrivateCheck")
+            </field>
+            <field name="sendMailCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "sendMailCheck")
             </field>
             <field name="imageSelector">
                 document.getAnonymousElementByAttribute(this, "anonid", "imageSelector")
@@ -355,6 +366,10 @@
                     this.updateCommentCounter();
 
                     this.addCollectionCheck.hidden = true;
+                    this.isPrivateCheck.hidden = !user.plususer;
+                    this.isPrivateCheck.disabled = !user.plususer;
+                    this.isPrivateCheck.checked = false;
+                    this.sendMailCheck.hidden = !user.plususer;
                     this.recommendedTagSelectorGroup.hidden = true;
                     this.imageSelector.build(bookmark.url);
                     this.imageSelector.hidden = !this.imageSelector.hasImages ||
@@ -412,6 +427,11 @@
                         this.urlField.value = res.url;
                         this.urlField.href = res.url;
                         this.addCollectionCheck.hidden = !res.has_asin;
+                        //res.is_private = 1;
+                        if (res.is_private) {
+                            this.isPrivateCheck.checked = true;
+                            this.isPrivateCheck.hidden = false;
+                        }
                         this.asin = res.asin;
                         this.updateRecommendedTags(res.recommend_tags);
 
@@ -561,6 +581,8 @@
                         bookmark: bookmark,
                         changeTitle: this.isTitleChanged,
                         addCollection: this.addCollectionCheck.checked,
+                        isPrivate: this.isPrivateCheck.checked,
+                        sendMail: this.sendMailCheck.checked,
                         asin: this.asin,
                         changeImage: this.imageSelector.isImageChanged,
                         image: this.imageSelector.selectedImageURI,
