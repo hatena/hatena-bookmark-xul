@@ -1,7 +1,8 @@
+const UTILS_MODULE = "resource://hatenabookmark/modules/00-utils.jsm";
 var moduleFile = null;
 
 function warmUp() {
-    Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+    Components.utils.import(UTILS_MODULE);
 
     var resProtocol = Cc["@mozilla.org/network/protocol;1?name=resource"].
                       getService(Ci.nsIResProtocolHandler);
@@ -90,4 +91,22 @@ function testIRI() {
                   iri2uri(iri));
     assert.equals("http%3A%2F%2Fxn--wgv71a119e.jp%2F%25E5%25A4%25A9%25E6%25B0%2597",
                   escapeIRI(iri));
+}
+
+function testXMLExtras() {
+    let u = Cu.import(UTILS_MODULE, {});
+
+    let xhr = new u.XMLHttpRequest();
+    assert.isFunction(xhr.open);
+    assert.isTrue(xhr.onload === null);
+    assert.isTrue(xhr instanceof Ci.nsIXMLHttpRequest);
+
+    let parser = new u.DOMParser();
+    let doc = parser.parseFromString("<x/>", "application/xml");
+    assert.equals("x", doc.documentElement.nodeName);
+    assert.isTrue(parser instanceof Ci.nsIDOMParser);
+
+    let serializer = new u.XMLSerializer();
+    assert.equals("<x/>", serializer.serializeToString(doc));
+    assert.isTrue(serializer instanceof Ci.nsIDOMSerializer);
 }

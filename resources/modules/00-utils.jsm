@@ -74,9 +74,9 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 var nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
 
 // window.XMLHttpRequest が存在しなくても大丈夫なように
-function XMLHttpRequest() {
-    return Cc["@mozilla.org/xmlextras/xmlhttprequest;1"].createInstance();
-}
+var XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1");
+var XMLSerializer = Components.Constructor("@mozilla.org/xmlextras/xmlserializer;1");
+var DOMParser = Components.Constructor("@mozilla.org/xmlextras/domparser;1");
 
 /*
  * p は一時デバッグ用
