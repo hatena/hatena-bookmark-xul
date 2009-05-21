@@ -9,8 +9,8 @@ var AddPanelManager = {
     getBookmarkFor: function APM_getBookmarkFor(item) {
         if (item.url) return item;
         let win = item instanceof Ci.nsIDOMWindow ? item : null;
-        let url = win ? win.location.href :
-            (item instanceof Ci.nsIURI) ? item.spec : String(item);
+        let url = win ? win.document.documentURIObject.asciiSpec :
+            (item instanceof Ci.nsIURI) ? item.asciiSpec : iri2uri(item);
         let bookmark = Bookmark.findByUrl(url)[0];
         if (bookmark) return bookmark;
         bookmark = new Bookmark();
@@ -33,7 +33,7 @@ var AddPanelManager = {
 
     toggle: function APM_toggle() {
         let panel = this.panelContent;
-        if (panel && panel.bookmark.url === gBrowser.currentURI.spec)
+        if (panel && panel.bookmark.url === gBrowser.currentURI.asciiSpec)
             this.panelDialog.cancelDialog();
         else
             this.showPanel(gBrowser.contentWindow);

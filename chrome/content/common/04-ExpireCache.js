@@ -158,7 +158,7 @@ HTTPCache.prototype = {
 HTTPCache.counter = new HTTPCache('counterCache', {
     expire: 60 * 60,
     baseURL: 'http://b.hatena.ne.jp/entry.count?url=',
-    encoder: encodeURIComponent,
+    encoder: escapeIRI,
 });
 
 HTTPCache.counter.filters = [];
@@ -197,7 +197,7 @@ HTTPCache.comment = new HTTPCache('commentCache', {
     baseURL: 'http://b.hatena.ne.jp/entry/json/?url=',
     seriarizer: 'uneval',
     json: true,
-    encoder: encodeURIComponent,
+    encoder: escapeIRI,
 });
 
 HTTPCache.entry = new HTTPCache('entryCache', {
@@ -205,7 +205,7 @@ HTTPCache.entry = new HTTPCache('entryCache', {
     baseURL: 'http://b.hatena.ne.jp/my.entry?url=',
     seriarizer: 'uneval',
     json: true,
-    encoder: encodeURIComponent,
+    encoder: escapeIRI,
 });
 
 EventService.createListener('load', HTTPCache.counter.loadHandler);

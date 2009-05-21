@@ -163,8 +163,16 @@ var elementGetter = function(self, name, idName, doc, uncache) {
     });
 }
 
+var iri2uri = function(iri) {
+    return IOService.newURI(iri, null, null).asciiSpec;
+}
+
+var escapeIRI = function(iri) {
+    return encodeURIComponent(iri2uri(iri));
+}
+
 var entryURL = function(url) {
-    return 'http://b.hatena.ne.jp/entry/' + url.replace('#', '%23');
+    return 'http://b.hatena.ne.jp/entry/' + iri2uri(url).replace(/#/g, '%23');
 }
 
 var isInclude = function(val, ary) {

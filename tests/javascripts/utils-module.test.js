@@ -83,3 +83,11 @@ function testDecodeReferences() {
     assert.equals("\u00abHello &unknown; <world>\u00bb",
                   decodeReferences("&laquo;H&#101;llo &unknown; &lt;&#x77;orld&gt;&raquo;"));
 }
+
+function testIRI() {
+    var iri = "http://日本語.jp/天気";
+    assert.equals("http://xn--wgv71a119e.jp/%E5%A4%A9%E6%B0%97",
+                  iri2uri(iri));
+    assert.equals("http%3A%2F%2Fxn--wgv71a119e.jp%2F%25E5%25A4%25A9%25E6%25B0%2597",
+                  escapeIRI(iri));
+}
