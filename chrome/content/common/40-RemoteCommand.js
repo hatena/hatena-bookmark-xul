@@ -122,6 +122,8 @@ extend(RemoteCommand.prototype, {
         }
         if (this.options.changeImage && User.user.public)
             query.image = this.options.image;
+        if (User.user.plususer)
+            query.with_status_op = 1;
         this.options.query = query;
     },
 
