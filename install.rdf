@@ -5,7 +5,6 @@
         <em:id>bookmark@hatena.ne.jp</em:id>
         <em:version>1.1.4</em:version>
         <em:type>2</em:type>
-        <em:homepageURL>https://addons.mozilla.org/ja/firefox/addon/11285</em:homepageURL>
         <em:optionsURL>chrome://hatenabookmark/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://hatenabookmark/skin/images/favicon32.png</em:iconURL>
         <em:localized>
@@ -14,14 +13,16 @@
             <em:locale>en-US</em:locale>
             <em:description>Hatena Bookmark Firefox Add-on</em:description>
             <em:creator>Hatena</em:creator>
+            <em:homepageURL>http://b.hatena.ne.jp/help/firefox_addon</em:homepageURL>
           </Description>
         </em:localized>
         <em:localized>
           <Description>
             <em:name>Hatena Bookmark</em:name>
-            <em:locale>ja-JP</em:locale>
+            <em:locale>ja</em:locale>
             <em:description>はてなブックマークへのブックマーク追加や、高速な検索、ツールバー、サイドバー機能などを提供します</em:description>
             <em:creator>Hatena</em:creator>
+            <em:homepageURL>http://b.hatena.ne.jp/help/firefox_addon</em:homepageURL>
           </Description>
         </em:localized>
 
