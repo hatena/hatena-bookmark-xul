@@ -1,5 +1,8 @@
 // エクスポートしたくないメンバの名前はアンダースコア(_)からはじめること。
 
+const B_HOST = 'b.hatena.ne.jp';
+const B_HTTP = 'http://' + B_HOST + '/';
+
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
