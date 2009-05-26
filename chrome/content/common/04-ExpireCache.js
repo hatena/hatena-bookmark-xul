@@ -147,6 +147,7 @@ HTTPCache.prototype = {
     },
     clear: function HTTPCache_clear (url) {
         let cache = this.cache;
+        p('http cache clear: ' + url);
         return cache.clear(url);
     },
     has: function HTTPCache_has (url) {

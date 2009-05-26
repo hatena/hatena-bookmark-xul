@@ -583,6 +583,7 @@
                     // コールバック関数中では getTopWin 関数が使えない。
                     let win = getTopWin();
                     let confirm = this.confirmEntryCheck.checked;
+                    let hb = hBookmark;
                     let command = new hBookmark.RemoteCommand("edit", {
                         bookmark: bookmark,
                         changeTitle: this.isTitleChanged,
@@ -592,8 +593,9 @@
                         asin: this.asin,
                         changeImage: this.imageSelector.isImageChanged,
                         image: this.imageSelector.selectedImageURI,
-                        onComplete: confirm && function () {
-                            win.gBrowser.addTab(bookmark.entryURL);
+                        onComplete: function () {
+                            hb.HTTPCache.entry.clear(bookmark.url);
+                            if (confirm) win.gBrowser.addTab(bookmark.entryURL);
                         },
                         onError: let (self = this) function () {
                             //self.setError('error');
