@@ -1027,9 +1027,9 @@
             <method name="_getDocumentForURI">
                 <parameter name="uri"/>
                 <body><![CDATA[
-                    let doc = getTopWin().gBrowser.contentDocument;
-                    return (doc && doc.documentURIObject.asciiSpec === uri)
-                           ? doc : null;
+                    let win = getTopWin().gBrowser.contentWindow;
+                    return (win && hBookmark.iri2uri(win.location.href) === uri)
+                           ? win.document : null;
                 ]]></body>
             </method>
 
