@@ -1,6 +1,6 @@
 
 const EXPORT = ["User"];
-const MY_NAME_URL = 'http://b.hatena.ne.jp/my.name';
+const MY_NAME_URL = B_HTTP + 'my.name';
 
 var User;
 
@@ -104,7 +104,7 @@ if (shared.has('User')) {
             }
             return this._db;
         },
-        get dataURL() sprintf('http://b.hatena.ne.jp/%s/search.data', this.name),
+        get dataURL() sprintf(B_HTTP + '%s/search.data', this.name),
         get bookmarkHomepage() UserUtils.getHomepage(this.name, 'b'),
         getProfileIcon: function user_getProfileIcon(isLarge) {
             return UserUtils.getProfileIcon(this.name, isLarge);

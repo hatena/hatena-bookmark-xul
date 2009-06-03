@@ -157,7 +157,7 @@ HTTPCache.prototype = {
 
 HTTPCache.counter = new HTTPCache('counterCache', {
     expire: 60 * 60,
-    baseURL: 'http://b.hatena.ne.jp/entry.count?url=',
+    baseURL: B_HTTP + 'entry.count?url=',
     encoder: escapeIRI,
 });
 
@@ -194,7 +194,7 @@ HTTPCache.counter.loadHandler = function(ev) {
 
 HTTPCache.comment = new HTTPCache('commentCache', {
     expire: 60 * 60,
-    baseURL: 'http://b.hatena.ne.jp/entry/json/?url=',
+    baseURL: B_HTTP + 'entry/json/?url=',
     seriarizer: 'uneval',
     json: true,
     encoder: escapeIRI,
@@ -202,7 +202,7 @@ HTTPCache.comment = new HTTPCache('commentCache', {
 
 HTTPCache.entry = new HTTPCache('entryCache', {
     expire: 60 * 4,
-    baseURL: 'http://b.hatena.ne.jp/my.entry?url=',
+    baseURL: B_HTTP + 'my.entry?url=',
     seriarizer: 'uneval',
     json: true,
     encoder: escapeIRI,
