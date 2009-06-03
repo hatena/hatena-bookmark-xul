@@ -1,16 +1,15 @@
 const EXPORT = ["TagContext"];
 
 function getURIFor(pageType) {
-    let base = "http://b.hatena.ne.jp/";
-    let userBase = base + User.user.name + "/";
+    let base = B_HTTP + User.user.name + "/";
     switch (pageType.toLowerCase()) {
     case "tags":
         let tags = arguments[1];
-        return userBase + tags.map(encodeURIComponent).join("/") + "/";
+        return base + tags.map(encodeURIComponent).join("/") + "/";
 
     case "edittag":
         let tag = arguments[1];
-        return userBase + "tag?tag=" + encodeURIComponent(tag);
+        return base + "tag?tag=" + encodeURIComponent(tag);
     }
 }
 

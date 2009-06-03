@@ -3,7 +3,7 @@ const EXPORT = ["HttpWatcher"];
 var HttpWatcher = shared.get("HttpWatcher") || {
     // 監視するホスト
     targetHostsArray: [
-        "b.hatena.ne.jp",
+        B_HOST,
         //"bbeta.hatena.ne.jp",
         //"localhost",
     ],
