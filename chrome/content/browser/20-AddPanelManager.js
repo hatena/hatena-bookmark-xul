@@ -9,7 +9,7 @@ var AddPanelManager = {
     getBookmarkFor: function APM_getBookmarkFor(item) {
         if (item.url) return item;
         let win = item instanceof Ci.nsIDOMWindow ? item : null;
-        let url = win ? win.document.documentURIObject.asciiSpec :
+        let url = win ? iri2uri(win.location.href) :
             (item instanceof Ci.nsIURI) ? item.asciiSpec : iri2uri(item);
         let bookmark = Bookmark.findByUrl(url)[0];
         if (bookmark) return bookmark;
