@@ -9,8 +9,8 @@ function RemoteCommand(type, options) {
         retryCount: 3
     };
     extend(this.options, options || {});
-    this.xhr = null;
-    this._timerId = 0;
+    this._request = null;
+    this._timer = null;
     this.resetListeners(); // EventService
 }
 
@@ -58,46 +58,77 @@ extend(RemoteCommand.prototype, {
 
     execute: function RC_execute() {
         this.hook();
-        this.xhr = net.post(this.url, method(this, 'onComplete'),
-                            method(this, 'onError'), true, this.query);
-        this.setTimeoutHandler();
+        this.setTimer();
+        this._request = new XMLHttpRequest();
+        this._request.mozBackgroundRequest = true;
+        this._request.open("POST", this.url);
+        this._request.addEventListener("load", this, false);
+        this._request.addEventListener("error", this, false);
+        let headers = {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Cookie":       "rk=" + User.user.rk
+        };
+        for (let [field, value] in Iterator(headers))
+            this._request.setRequestHeader(field, value);
+        this._request.send(net.makeQuery(this.query));
     },
 
-    onComplete: function RC_onComplete(xhr) {
-        this.clearTimeoutHandler();
-        let json = decodeJSON(xhr.responseText);
-        (this.options.onComplete || NOP).call(this, json);
-        this.dispatch("complete");
-    },
-
-    onError: function RC_onError() {
-        this.clearTimeoutHandler();
-        if (this.options.retryCount) {
-            this.retry();
+    complete: function RC_complete(success, result) {
+        result = result || null;
+        this.clearTimer();
+        if (success) {
+            (this.options.onComplete || NOP).call(this, result);
+            this.dispatch("complete");
         } else {
-            (this.options.onError || NOP).call(this);
+            (this.options.onError || NOP).call(this, result);
             this.dispatch("error");
         }
     },
 
-    retry: function RC_retry() {
-        this.execute();
-        this.options.retryCount--;
-        this.dispatch("retry");
+    setTimer: function RC_setTimer() {
+        if (this._timer) return;
+        this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
+        this._timer.init(this, this.options.timeout * 1000,
+                         Ci.nsITimer.TYPE_REPEATING_SLACK);
     },
 
-    setTimeoutHandler: function RC_setTimeoutHandler() {
-        this._timerId = setTimeout(function (self) {
-            self.clearTimeoutHandler();
-            self.xhr.abort();
-            self.onError();
-        }, this.options.timeout * 1000, this);
+    clearTimer: function RC_clearTimer() {
+        if (!this._timer) return;
+        this._timer.cancel();
+        this._timer = null;
     },
 
-    clearTimeoutHandler: function RC_clearTimeoutHandler() {
-        if (this._timerId)
-            clearTimeout(this._timerId);
-        this._timerId = 0;
+    // nsIDOMEventListener (for nsIXMLHttpRequest)
+    handleEvent: function RC_handleEvent(event) {
+        p([key + ': ' + value for ([key, value] in Iterator(event))].join("\n"));
+        p(this._request.status + "\n" + this._request.responseText);
+        let status = (event.type === "load") ? this._request.status : 0;
+        // HTTP ステータスコードが 200 なら成功として終了、
+        // 4xx なら失敗として終了、5xx なら再挑戦。
+        if (200 <= status && status < 500) {
+            let result = decodeJSON(this._request.responseText);
+            this.complete(status === 200, result);
+        } else if (this.options.retryCount <= 0) {
+            // 再挑戦できないなら失敗として終了。
+            this.complete(false);
+        }
+        this._request = null;
+        // 再挑戦するタイミングは nsITimer によって管理されているので、
+        // 再挑戦する場合もここで execute を呼び出す必要はない。
+    },
+
+    // nsIObserver (for nsITimer)
+    observe: function RC_observe(subject, topic, data) {
+        if (topic !== "timer-callback") return;
+        if (this._request) {
+            this._request.abort();
+            this._request = null;
+        }
+        if (this.options.retryCount-- > 0) {
+            this.execute();
+        } else {
+            this.complete(false);
+        }
     },
 
     hook: function RC_hook() {
