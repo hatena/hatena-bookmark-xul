@@ -273,7 +273,9 @@
             <field name="strings">
                 new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
             </field>
-            <field name="maxCommentLength">100</field>
+            <field name="maxCommentLength">
+                hBookmark.User.user.maxCommentLength
+            </field>
             <field name="asin">""</field>
 
             <field name="_tagSelectors">
