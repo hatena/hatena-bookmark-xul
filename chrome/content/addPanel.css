@@ -12,6 +12,9 @@
 .hBookmarkImageSelector {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#image-selector");
 }
+.hBookmarkURLSuggestor {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#url-suggestor");
+}
 #hBookmarkFavoriteBookmarkTooltip {
    -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#favorite-bookmark-tooltip");
 }
