@@ -453,8 +453,11 @@
                                 res.image_last_editor);
                         }
 
-                        this.urlField.value = res.url;
-                        this.urlField.href = res.url;
+                        if (res.url !== this.urlField.value) {
+                            this.urlSuggestor.hidden = true;
+                            this.urlField.value = res.url;
+                            this.urlField.href = res.url;
+                        }
                         this.addCollectionCheck.hidden = !res.has_asin;
                         //res.is_private = 1;
                         if (res.is_private) {
