@@ -15,6 +15,8 @@ elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
 elementGetter(this, 'statusCountLabel', 'hBookmark-status-count-label', document);
 elementGetter(this, 'statusComment', 'hBookmark-status-comment', document);
 
+let strings = new Strings('chrome://hatenabookmark/locale/browser.properties');
+
 var StatusBar = {
     goEntry: function StatusBar_goEntry(ev) {
         if (ev.button == 2) return; // 右クリック
@@ -53,7 +55,7 @@ var StatusBar = {
         }
         return StatusBar._prefs;
     },
-    lastCountValue: null,
+    lastCountValue: NaN,
     appendCountImage: function StatusBar_appendCountImage(url) {
         let doc = document;
         if (!document) {
@@ -79,25 +81,28 @@ var StatusBar = {
         }
     },
     setCount: function(val) {
-        statusCount.value = val || '0';
-        if (StatusBar.lastCountValue == statusCount.value) return;
-        StatusBar.lastCountValue = statusCount.value;
-        statusCountLabel.setAttribute('value', statusCount.value);
-        while (statusCount.firstChild) statusCount.removeChild(statusCount.firstChild);
+        if (val !== null) val = +val || 0;
+        if (StatusBar.lastCountValue == val) return;
+        StatusBar.lastCountValue = val;
+        let label = (val == null) ? strings.get('counter.ignoredLabel') : val;
+        statusCountLabel.setAttribute('value', label);
+        UIUtils.deleteContents(statusCount);
         statusCount.appendChild(statusCountLabel);
-        if (statusCount.value > 0) {
-            let counts = statusCount.value.toString().split('');
+        if (val > 0) {
+            let counts = val.toString().split('');
             counts.forEach(function(i) {
                 StatusBar.appendCountImage('chrome://hatenabookmark/skin/images/counter_' + i + '.png');
             });
+        } else if (val == 0) {
+            StatusBar.appendCountImage('chrome://hatenabookmark/skin/images/counter_disable.png');
         } else {
-             StatusBar.appendCountImage('chrome://hatenabookmark/skin/images/counter_disable.png');
+            StatusBar.appendCountImage('chrome://hatenabookmark/skin/images/counter_ignored.png');
         }
 
-        if (statusCount.value >= 5) {
+        if (val >= 5) {
             statusCount.setAttribute('users', 'many');
             statusComment.setAttribute('comment', 'true');
-        } else if (statusCount.value >= 1) {
+        } else if (val >= 1) {
             statusComment.setAttribute('comment', 'true');
             statusCount.setAttribute('users', 'few');
         } else {

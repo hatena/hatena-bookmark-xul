@@ -14,6 +14,9 @@
                     <xul:label anonid="userNameField" class="text-link hBookmarkLink"/>
                     <xul:label value="&hBookmark.addPanel.welcomeUserLabel.after;" />
             </xul:hbox>
+            <xul:vbox anonid="urlSuggestor"
+                      class="hBookmarkURLSuggestor"
+                      hidden="true"/>
             <xul:hbox pack="center" anonid="messageRow">
                 <xul:label anonid="messageField"/>
             </xul:hbox>
@@ -172,6 +175,9 @@
             <field name="userNameField">
                 document.getAnonymousElementByAttribute(this, "anonid", "userNameField")
             </field>
+            <field name="urlSuggestor">
+                document.getAnonymousElementByAttribute(this, "anonid", "urlSuggestor")
+            </field>
             <field name="messageRow">
                 document.getAnonymousElementByAttribute(this, "anonid", "messageRow")
             </field>
@@ -273,7 +279,9 @@
             <field name="strings">
                 new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
             </field>
-            <field name="maxCommentLength">100</field>
+            <field name="maxCommentLength">
+                hBookmark.User.user.maxCommentLength
+            </field>
             <field name="asin">""</field>
 
             <field name="_tagSelectors">
@@ -295,6 +303,21 @@
                         this.updateFields(val);
                     return this._bookmark = val;
                 ]]></setter>
+            </property>
+
+            <property name="targetWindow" readonly="true">
+                <getter><![CDATA[
+                    let win = getTopWin().gBrowser.contentWindow;
+                    return (win && hBookmark.iri2uri(win.location.href) === this.bookmark.url)
+                           ? win : null;
+                ]]></getter>
+            </property>
+
+            <property name="targetDocument" readonly="true">
+                <getter><![CDATA[
+                    let win = this.targetWindow;
+                    return win && win.document;
+                ]]></getter>
             </property>
 
             <property name="isTitleEditable"
@@ -377,7 +400,7 @@
                     this.isPrivateCheck.checked = false;
                     this.sendMailCheck.hidden = !user.plususer;
                     this.recommendedTagSelectorGroup.hidden = true;
-                    this.imageSelector.build(bookmark.url);
+                    this.imageSelector.build();
                     this.imageSelector.hidden = !this.imageSelector.hasImages ||
                                                 user.private;
 
@@ -430,8 +453,11 @@
                                 res.image_last_editor);
                         }
 
-                        this.urlField.value = res.url;
-                        this.urlField.href = res.url;
+                        if (res.url !== this.urlField.value) {
+                            this.urlSuggestor.hidden = true;
+                            this.urlField.value = res.url;
+                            this.urlField.href = res.url;
+                        }
                         this.addCollectionCheck.hidden = !res.has_asin;
                         //res.is_private = 1;
                         if (res.is_private) {
@@ -507,7 +533,15 @@
                         this.strings.get("saveLabel" + type);
                     this.dialog.buttons =
                         add ? "accept,cancel" : "accept,cancel,extra2";
-                    if (!add) {
+                    this.urlSuggestor.hidden = true;
+                    if (add) {
+                        let suggestion = new hBookmark.URLSuggestion(bookmark.url, this.targetDocument);
+                        if (suggestion.url) {
+                            this.urlSuggestor.type = suggestion.type;
+                            this.urlSuggestor.url = suggestion.url;
+                            this.urlSuggestor.hidden = false;
+                        }
+                    } else {
                         let format = this.strings.get("dateFormat");
                         let date = bookmark.dateObject.toLocaleFormat(format);
                         let message = this.strings.get("alreadyBookmarked",
@@ -958,10 +992,9 @@
             </method>
 
             <method name="build">
-                <parameter name="uri"/>
                 <body><![CDATA[
                     this.clearImage();
-                    let doc = this._getDocumentForURI(uri);
+                    let doc = document.getBindingParent(this).targetDocument;
                     if (!doc) return;
                     let images = this._getImagesForDocument(doc);
                     images.forEach(function (image) {
@@ -1026,15 +1059,6 @@
                 ]]></body>
             </method>
 
-            <method name="_getDocumentForURI">
-                <parameter name="uri"/>
-                <body><![CDATA[
-                    let win = getTopWin().gBrowser.contentWindow;
-                    return (win && hBookmark.iri2uri(win.location.href) === uri)
-                           ? win.document : null;
-                ]]></body>
-            </method>
-
             <method name="_getImagesForDocument">
                 <parameter name="doc"/>
                 <body><![CDATA[
@@ -1083,6 +1107,112 @@
                 setTimeout(function (self) self._shouldShow = true, 150, this);
             ]]></handler>
         </handlers>
+    </binding>
+
+    <binding id="url-suggestor">
+        <content>
+            <xul:hbox align="center">
+                <xul:description anonid="descriptionField" flex="1"/>
+                <xul:button anonid="acceptButton"
+                            onclick="document.getBindingParent(this).acceptSuggestion();"/>
+            </xul:hbox>
+            <xul:hbox align="center">
+                <xul:label anonid="urlField"
+                           class="text-link hBookmarkLink"
+                           flex="1"
+                           crop="end"/>
+                <xul:hbox anonid="usersContainer"
+                          align="center"
+                          collapsed="true">
+                    <xul:label anonid="usersField"
+                               class="text-link hBookmarkLink"
+                               href="http://example.net/"
+                               value="n users"/>
+                    <xul:image anonid="showCommentsButton"
+                               tooltiptext="&hBookmark.addPanel.showCommentsLabel;"
+                               onclick="getTopWin().hBookmark.CommentViewer.show(document.getBindingParent(this).bookmark.url);"/>
+                </xul:hbox>
+            </xul:hbox>
+        </content>
+
+        <implementation>
+            <field name="descriptionField">
+                document.getAnonymousElementByAttribute(this, "anonid", "descriptionField")
+            </field>
+            <field name="acceptButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "acceptButton")
+            </field>
+            <field name="urlField">
+                document.getAnonymousElementByAttribute(this, "anonid", "urlField")
+            </field>
+            <field name="usersContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "usersContainer")
+            </field>
+            <field name="usersField">
+                document.getAnonymousElementByAttribute(this, "anonid", "usersField")
+            </field>
+            <field name="showCommentsButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "showCommentsButton")
+            </field>
+
+            <field name="strings">
+                new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
+            </field>
+
+            <property name="type"
+                      onget="return this.getAttribute('suggestiontype');">
+                <setter><![CDATA[
+                    this.setAttribute("suggestiontype", val);
+                    this.descriptionField.textContent =
+                        this.strings.get("urlSuggestor.description." + val);
+                    this.acceptButton.label =
+                        this.strings.get("urlSuggestor.acceptLabel." + val);
+                    return val;
+                ]]></setter>
+            </property>
+
+            <property name="url"
+                      onget="return this.getAttribute('suggestedurl');">
+                <setter><![CDATA[
+                    this.setAttribute("suggestedurl", val)
+                    this.urlField.value = val;
+                    this.urlField.href = val;
+                    this.usersContainer.collapsed = true;
+                    hBookmark.HTTPCache.counter.async_get(val, hBookmark.method(this, "_showCounter"));
+                    return val;
+                ]]></setter>
+            </property>
+
+            <property name="bookmark" readonly="true">
+                <getter><![CDATA[
+                    const Bookmark = hBookmark.Model.Bookmark;
+                    let bookmark = Bookmark.findByUrl(this.url)[0];
+                    if (!bookmark) {
+                        bookmark = new Bookmark();
+                        bookmark.title = bookmark.url = this.url;
+                        bookmark.comment = "";
+                    }
+                    return bookmark;
+                ]]></getter>
+            </property>
+
+            <method name="acceptSuggestion">
+                <body><![CDATA[
+                    document.getBindingParent(this).show(this.bookmark);
+                ]]></body>
+            </method>
+
+            <method name="_showCounter">
+                <parameter name="count"/>
+                <body><![CDATA[
+                    count = +count;
+                    if (!count) return;
+                    this.usersField.value = hBookmark.UIUtils.getUsersText(count);
+                    this.usersField.href = hBookmark.entryURL(this.url);
+                    this.usersContainer.collapsed = false;
+                ]]></body>
+            </method>
+        </implementation>
     </binding>
 
     <binding id="favorite-bookmark-tooltip"

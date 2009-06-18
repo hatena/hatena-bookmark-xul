@@ -261,3 +261,11 @@ image[anonid="noImage"] {
 image[anonid="icon"] {
   cursor: pointer;
 }
+
+.hBookmarkURLSuggestor {
+  padding: 4px;
+  margin: 5px 3px 5px 3px;
+  -moz-border-radius: 3px;
+  background-color: InfoBackground;
+  color: InfoText;
+}

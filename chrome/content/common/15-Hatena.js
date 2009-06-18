@@ -77,6 +77,7 @@ if (shared.has('User')) {
         get rks() this.options.rks,
         get private() this.options.private == 1,
         get public() !this.private,
+        get maxCommentLength() this.options.max_comment_length || 100,
         get ignores() {
             if (this.options.ignores_regex) {
                 if (typeof this._ignores == 'undefined') {

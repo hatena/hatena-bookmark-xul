@@ -3,7 +3,7 @@
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/toolbar.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/commentViewer.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
-<?xml-stylesheet href="chrome://hatenabookmark/content/browser.css" type="text/css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/browser.css"?>
 <?xul-overlay href="chrome://hatenabookmark/content/popupsOverlay.xul"?>
 <!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/browser.dtd" [
     <!ENTITY % toolbar SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd">
