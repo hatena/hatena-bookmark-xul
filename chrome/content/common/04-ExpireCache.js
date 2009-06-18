@@ -157,7 +157,7 @@ HTTPCache.prototype = {
 }
 
 HTTPCache.counter = new HTTPCache('counterCache', {
-    expire: 60 * 60,
+    expire: 60 * 15,
     baseURL: B_HTTP + 'entry.count?url=',
     encoder: escapeIRI,
 });
@@ -194,7 +194,7 @@ HTTPCache.counter.loadHandler = function(ev) {
 };
 
 HTTPCache.comment = new HTTPCache('commentCache', {
-    expire: 60 * 60,
+    expire: 60 * 15,
     baseURL: B_HTTP + 'entry/json/?url=',
     seriarizer: 'uneval',
     json: true,
