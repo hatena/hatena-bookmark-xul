@@ -15,6 +15,20 @@ function URLSuggestion(originalURL, doc) {
 }
 
 var suggestors = {
+    meta: function US_suggestor_meta(originalURL, doc) {
+        const B_ENTRY = B_HTTP + "entry/";
+        if (!Prefs.bookmark.get("addPanel.notifyMetaBookmark") ||
+            originalURL.substring(0, B_ENTRY.length) !== B_ENTRY)
+            return null;
+        let url = originalURL.substring(B_ENTRY.length).replace(/%23/g, "#");
+        if (doc) {
+            let link = doc.getElementById("head-entry-link");
+            if (link && link.href)
+                url = link.href;
+        }
+        return /^https?:\/\//.test(url) ? url : null;
+    },
+
     canonical: function US_suggestor_canonical(originalURL, doc) {
         if (!Prefs.bookmark.get("addPanel.notifyCanonicalURL") ||
             !(doc instanceof HTMLDocument))
@@ -32,20 +46,6 @@ var suggestors = {
             url += doc.defaultView.location.hash;
         return (isSameEffectiveDomain(url, originalURL) && url !== originalURL)
                ? url : null;
-    },
-
-    meta: function US_suggestor_meta(originalURL, doc) {
-        const B_ENTRY = B_HTTP + "entry/";
-        if (!Prefs.bookmark.get("addPanel.notifyMetaBookmark") ||
-            originalURL.substring(0, B_ENTRY.length) !== B_ENTRY)
-            return null;
-        let url = originalURL.substring(B_ENTRY.length).replace(/%23/g, "#");
-        if (doc) {
-            let link = doc.getElementById("head-entry-link");
-            if (link && link.href)
-                url = link.href;
-        }
-        return /^https?:\/\//.test(url) ? url : null;
     }
 };
 
