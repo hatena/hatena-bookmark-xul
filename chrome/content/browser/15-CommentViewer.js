@@ -25,7 +25,7 @@ elementGetter(this, 'toggleImage', 'hBookmark-comment-toggle', document);
 
 let userIcon = function(username) {
     return E('img', {
-        src: 'https://www.hatena.ne.jp/users/' + username.substring(0, 2) + '/' + username + '/profile_s.gif',
+        src: UserUtils.getProfileIcon(username),
         className: 'usericon',
         width: '16px',
         height: '16px',
