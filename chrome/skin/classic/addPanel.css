@@ -261,3 +261,9 @@ image[anonid="noImage"] {
 image[anonid="icon"] {
   cursor: pointer;
 }
+
+.hBookmarkURLSuggestor {
+  /* XXX This is temporary style. */
+  background-color: InfoBackground;
+  color: InfoText;
+}

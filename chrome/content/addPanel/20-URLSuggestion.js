@@ -20,7 +20,7 @@ var suggestors = {
         let link = doc.evaluate(
             '/h:html/h:head/h:link[translate(@rel, "CANONICAL", "canonical") = "canonical"]',
             doc,
-            function () (doc.contentType === "text/html") ? "" : XHTML_NS,
+            function () doc.documentElement.namespaceURI || "",
             XPathResult.FIRST_ORDERED_NODE_TYPE,
             null
         ).singleNodeValue;

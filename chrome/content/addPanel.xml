@@ -14,7 +14,7 @@
                     <xul:label anonid="userNameField" class="text-link hBookmarkLink"/>
                     <xul:label value="&hBookmark.addPanel.welcomeUserLabel.after;" />
             </xul:hbox>
-            <xul:hbox anonid="urlSuggestor"
+            <xul:vbox anonid="urlSuggestor"
                       class="hBookmarkURLSuggestor"
                       hidden="true"/>
             <xul:hbox pack="center" anonid="messageRow">
@@ -1110,18 +1110,63 @@
     </binding>
 
     <binding id="url-suggestor">
-        <content align="center" style="/* XXX To be removed */ background-color: #ffc;">
-            <xul:label value="{{正しいURLでブックマークしますか?}}" flex="1"/>
-            <xul:button label="{{ok}}"
-                        onclick="document.getBindingParent(this).adoptSuggestion();"/>
+        <content>
+            <xul:hbox align="center">
+                <xul:description anonid="descriptionField" flex="1"/>
+                <xul:button anonid="acceptButton"
+                            onclick="document.getBindingParent(this).acceptSuggestion();"/>
+            </xul:hbox>
+            <xul:hbox align="center">
+                <xul:label anonid="urlField"
+                           class="text-link hBookmarkLink"
+                           flex="1"
+                           />
+                <xul:hbox anonid="usersContainer"
+                          align="center"
+                          collapsed="true">
+                    <xul:label anonid="usersField"
+                               class="text-link hBookmarkLink"
+                               href="http://example.net/"
+                               value="n users"/>
+                    <xul:image anonid="showCommentsButton"
+                               tooltiptext="&hBookmark.addPanel.showCommentsLabel;"
+                               onclick="getTopWin().hBookmark.CommentViewer.show(document.getBindingParent(this).bookmark.url);"/>
+                </xul:hbox>
+            </xul:hbox>
         </content>
 
         <implementation>
+            <field name="descriptionField">
+                document.getAnonymousElementByAttribute(this, "anonid", "descriptionField")
+            </field>
+            <field name="acceptButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "acceptButton")
+            </field>
+            <field name="urlField">
+                document.getAnonymousElementByAttribute(this, "anonid", "urlField")
+            </field>
+            <field name="usersContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "usersContainer")
+            </field>
+            <field name="usersField">
+                document.getAnonymousElementByAttribute(this, "anonid", "usersField")
+            </field>
+            <field name="showCommentsButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "showCommentsButton")
+            </field>
+
+            <field name="strings">
+                new hBookmark.Strings("chrome://hatenabookmark/locale/addPanel.properties")
+            </field>
+
             <property name="type"
                       onget="return this.getAttribute('suggestiontype');">
                 <setter><![CDATA[
                     this.setAttribute("suggestiontype", val);
-                    // XXX TBD: canonical/metaに応じてラベルを設定。
+                    this.descriptionField.textContent =
+                        this.strings.get("urlSuggestor.description." + val);
+                    this.acceptButton.label =
+                        this.strings.get("urlSuggestor.acceptLabel." + val);
                     return val;
                 ]]></setter>
             </property>
@@ -1130,7 +1175,10 @@
                       onget="return this.getAttribute('suggestedurl');">
                 <setter><![CDATA[
                     this.setAttribute("suggestedurl", val)
-                    // XXX TBD: リンク先を設定
+                    this.urlField.value = val;
+                    this.urlField.href = val;
+                    this.usersContainer.collapsed = true;
+                    hBookmark.HTTPCache.counter.async_get(val, hBookmark.method(this, "_showCounter"));
                     return val;
                 ]]></setter>
             </property>
@@ -1148,9 +1196,20 @@
                 ]]></getter>
             </property>
 
-            <method name="adoptSuggestion">
+            <method name="acceptSuggestion">
                 <body><![CDATA[
                     document.getBindingParent(this).show(this.bookmark);
+                ]]></body>
+            </method>
+
+            <method name="_showCounter">
+                <parameter name="count"/>
+                <body><![CDATA[
+                    count = +count;
+                    if (!count) return;
+                    this.usersField.value = hBookmark.UIUtils.getUsersText(count);
+                    this.usersField.href = hBookmark.entryURL(this.url);
+                    this.usersContainer.collapsed = false;
                 ]]></body>
             </method>
         </implementation>
