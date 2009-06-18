@@ -1120,7 +1120,7 @@
                 <xul:label anonid="urlField"
                            class="text-link hBookmarkLink"
                            flex="1"
-                           />
+                           crop="end"/>
                 <xul:hbox anonid="usersContainer"
                           align="center"
                           collapsed="true">

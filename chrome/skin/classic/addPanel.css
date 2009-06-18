@@ -263,7 +263,9 @@ image[anonid="icon"] {
 }
 
 .hBookmarkURLSuggestor {
-  /* XXX This is temporary style. */
+  padding: 4px;
+  margin: 5px 3px 5px 3px;
+  -moz-border-radius: 3px;
   background-color: InfoBackground;
   color: InfoText;
 }
