@@ -40,6 +40,8 @@ pref("extensions.hatenabookmark.addPanel.sendMail", false);
 pref("extensions.hatenabookmark.addPanel.maxImageWidth", 100);
 pref("extensions.hatenabookmark.addPanel.maxImageHeight", 100);
 pref("extensions.hatenabookmark.addPanel.maxImageCount", 20);
+pref("extensions.hatenabookmark.addPanel.notifyMetaBookmark", true);
+pref("extensions.hatenabookmark.addPanel.notifyCanonicalURL", true);
 
 // addPanel tagsuggest
 pref("extensions.hatenabookmark.addPanel.tagCompleteEnabled", true);

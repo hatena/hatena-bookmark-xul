@@ -16,7 +16,9 @@ function URLSuggestion(originalURL, doc) {
 
 var suggestors = {
     canonical: function US_suggestor_canonical(originalURL, doc) {
-        if (!(doc instanceof HTMLDocument)) return null;
+        if (!Prefs.bookmark.get("addPanel.notifyCanonicalURL") ||
+            !(doc instanceof HTMLDocument))
+            return null;
         let link = doc.evaluate(
             '/h:html/h:head/h:link[translate(@rel, "CANONICAL", "canonical") = "canonical"]',
             doc,
@@ -34,7 +36,9 @@ var suggestors = {
 
     meta: function US_suggestor_meta(originalURL, doc) {
         const B_ENTRY = B_HTTP + "entry/";
-        if (originalURL.substring(0, B_ENTRY.length) !== B_ENTRY) return null;
+        if (!Prefs.bookmark.get("addPanel.notifyMetaBookmark") ||
+            originalURL.substring(0, B_ENTRY.length) !== B_ENTRY)
+            return null;
         let url = originalURL.substring(B_ENTRY.length).replace(/%23/g, "#");
         if (doc) {
             let link = doc.getElementById("head-entry-link");
