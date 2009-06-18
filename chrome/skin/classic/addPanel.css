@@ -264,8 +264,13 @@ image[anonid="icon"] {
 
 .hBookmarkURLSuggestor {
   padding: 4px;
-  margin: 5px 3px 5px 3px;
+  margin: 3px;
   -moz-border-radius: 3px;
-  background-color: InfoBackground;
-  color: InfoText;
+  background-color: #fff9c5;
+  color: #000000;
+}
+
+.hBookmarkURLSuggestor > hbox > [anonid="descriptionField"] {
+  padding-left: 16px;
+  background: url("chrome://hatenabookmark/skin/images/hints.gif") left no-repeat;
 }
