@@ -11,5 +11,10 @@ var hOpenUILink = function(link, ev) {
         event[key] = !ev[key];
         event.__proto__ = ev;
     }
-    return openUILink(link, event);
+    let where = whereToOpenLink(event);
+    if ((where === "tab" || where === "tabshifted") &&
+        Prefs.bookmark.get("link.supportTreeStyleTab") &&
+        typeof TreeStyleTabService !== "undefined")
+        TreeStyleTabService.readyToOpenChildTab(getTopWin().gBrowser.currentTab, false);
+    return openUILinkIn(link, where);
 }
