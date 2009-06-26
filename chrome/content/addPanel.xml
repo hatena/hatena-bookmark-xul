@@ -475,7 +475,7 @@
                     if (!this.titleLabel.value) {
                         let xhr = hBookmark.net.sync_get(bookmark.url);
                         let m = (xhr.responseText || '').match(new RegExp('<title>(.*?)</title>', 'i'));
-                        if (m && !/\ufffd/.test(m[1])) {
+                        if (m && m[1].indexOf("\ufffd") === -1) {
                             let title = hBookmark.decodeReferences(m[1]);
                             this.titleField.value = title;
                             this.titleLabel.value = title;
@@ -536,11 +536,12 @@
                     this.urlSuggestor.hidden = true;
                     if (add) {
                         let suggestion = new hBookmark.URLSuggestion(bookmark.url, this.targetDocument);
-                        if (suggestion.url) {
+                        suggestion.suggest(function () {
+                            if (this.bookmark.url !== bookmark.url) return;
                             this.urlSuggestor.type = suggestion.type;
                             this.urlSuggestor.url = suggestion.url;
                             this.urlSuggestor.hidden = false;
-                        }
+                        }, this);
                     } else {
                         let format = this.strings.get("dateFormat");
                         let date = bookmark.dateObject.toLocaleFormat(format);
@@ -1163,10 +1164,16 @@
                       onget="return this.getAttribute('suggestiontype');">
                 <setter><![CDATA[
                     this.setAttribute("suggestiontype", val);
-                    this.descriptionField.textContent =
-                        this.strings.get("urlSuggestor.description." + val);
-                    this.acceptButton.label =
-                        this.strings.get("urlSuggestor.acceptLabel." + val);
+                    let descriptoin, acceptLabel;
+                    try {
+                        description = this.strings.get("urlSuggestor.description." + val);
+                        acceptLabel = this.strings.get("urlSuggestor.acceptLabel." + val);
+                    } catch (ex) {
+                        description = this.strings.get("urlSuggestor.description.default");
+                        acceptLabel = this.strings.get("urlSuggestor.acceptLabel.default");
+                    }
+                    this.descriptionField.textContent = description;
+                    this.acceptButton.label = acceptLabel;
                     return val;
                 ]]></setter>
             </property>

@@ -20,10 +20,40 @@ function testEffectiveDomain() {
 }
 
 function testMetaSuggestor() {
+    let suggestors = hBookmark.URLSuggestion.suggestors;
     assert.equals(
         "http://b.hatena.ne.jp/guide/staff_bookmark_04",
-        hBookmark.suggestors.meta("http://b.hatena.ne.jp/entry/http://b.hatena.ne.jp/guide/staff_bookmark_04", null))
+        suggestors.meta("http://b.hatena.ne.jp/entry/http://b.hatena.ne.jp/guide/staff_bookmark_04", null))
     assert.equals(
         null,
-        hBookmark.suggestors.meta("http://b.hatena.ne.jp/entry/12345", null))
+        suggestors.meta("http://b.hatena.ne.jp/entry/12345", null))
+}
+
+function testCanonicalResponseSuggestor() {
+    let suggestor = hBookmark.URLSuggestion.responseSuggestors.canonical;
+    let response = {
+        responseText: <html>
+            <head>
+                <link rel="canonical" href="http://example.org/canonical"/>
+            </head>
+            <body>
+                <p>Hello, world</p>
+            </body>
+        </html>.toXMLString()
+    }
+    assert.equals("http://example.org/canonical",
+                  suggestor("http://example.org/", response));
+
+    response.responseText = <html>
+        <head>
+            <link href="canonical-url" rel="canonical"/>
+        </head>
+        <body>
+            <p>Hello, world</p>
+        </body>
+    </html>.toXMLString();
+    assert.equals("http://example.org/canonical-url",
+                  suggestor("http://example.org/", response));
+    assert.equals("http://example.org/canonical-url#fragment",
+                  suggestor("http://example.org/#fragment", response));
 }
