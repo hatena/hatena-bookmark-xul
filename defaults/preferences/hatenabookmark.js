@@ -79,4 +79,5 @@ pref("extensions.hatenabookmark.link.openInNewTab", true);
 pref("extensions.hatenabookmark.link.linkOverlay", true);
 pref("extensions.hatenabookmark.link.supportTreeStyleTab", true);
 
-
+// Inline Counter (in search result pages)
+pref("extensions.hatenabookmark.inlineCounter.enabled", false);
