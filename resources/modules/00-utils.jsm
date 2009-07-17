@@ -80,6 +80,8 @@ var nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').va
 var XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1");
 var XMLSerializer = Components.Constructor("@mozilla.org/xmlextras/xmlserializer;1");
 var DOMParser = Components.Constructor("@mozilla.org/xmlextras/domparser;1");
+var XPathEvaluator = Components.Constructor("@mozilla.org/dom/xpath-evaluator;1");
+var XPathResult = Ci.nsIDOMXPathResult;
 
 /*
  * p は一時デバッグ用
@@ -175,7 +177,11 @@ var escapeIRI = function(iri) {
 }
 
 var entryURL = function(url) {
-    return 'http://b.hatena.ne.jp/entry/' + iri2uri(url).replace(/#/g, '%23');
+    return B_HTTP + 'entry/' + iri2uri(url).replace(/#/g, '%23');
+}
+
+var addPageURL = function(url) {
+    return B_HTTP + 'my/add.confirm?url=' + escapeIRI(url);
 }
 
 var isInclude = function(val, ary) {
