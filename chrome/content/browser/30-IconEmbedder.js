@@ -5,13 +5,14 @@ const HB_NS = "http://b.hatena.ne.jp/";
 function IconEmbedder(doc) {
     this.doc = doc;
     this.site = SiteInfoSet.Paragraphs.get(doc);
-    if (this.site)
+    if (this.site && !this.site.data.disabled)
         this.ready();
 }
 
 IconEmbedder.STYLE = <![CDATA[
     .hBookmark-embedded-counter img,
     .hBookmark-embedded-add-button img {
+        margin: 0 3px;
         border: none;
         vertical-align: text-bottom;
     }
@@ -46,7 +47,7 @@ extend(IconEmbedder.prototype, {
             let annotation = this.site.query("annotation", paragraph) || link;
             let container = annotation.parentNode;
             let anchor = annotation.nextSibling;
-            switch (this.site.annotationPosition) {
+            switch (this.site.data.annotationPosition) {
             case "before":
                 anchor = annotation;
                 break;
@@ -80,21 +81,19 @@ extend(IconEmbedder.prototype, {
                    href={ entryURL(link.href) }
                    title={ this.strings.get("embed.showEntryLabel") }>
                     <img src={ B_HTTP + 'entry/image/' + link.href }
-                         alt={ this.strings.get("embed.showEntryLabel") }/>
+                         alt={ "[" + this.strings.get("embed.showEntryLabel") + "] " }/>
                 </a>
             );
             icons.appendChild(counter);
         }
         if (Prefs.bookmark.get("embed.addButton")) {
-            if (icons.lastChild)
-                icons.appendChild(space.cloneNode(false));
             let addButton = xml2dom(
                 <a xmlns={ XHTML_NS }
                    class="hBookmark-embedded-add-button"
                    href={ addPageURL(link.href) }
                    title={ this.strings.get("embed.addBookmarkLabel") }>
                     <img src="http://b.hatena.ne.jp/images/append.gif"
-                         alt={ this.strings.get("embed.addBookmarkLabel") }/>
+                         alt={ "[" + this.strings.get("embed.addBookmarkLabel") + "] " }/>
                 </a>
             );
             icons.appendChild(addButton)

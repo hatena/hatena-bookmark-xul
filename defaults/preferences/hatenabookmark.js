@@ -80,6 +80,7 @@ pref("extensions.hatenabookmark.link.linkOverlay", true);
 pref("extensions.hatenabookmark.link.supportTreeStyleTab", true);
 
 // Embed counter, add-bookmark button, and etc. in search result pages
-pref("extensions.hatenabookmark.embed.enabled", false);
+pref("extensions.hatenabookmark.embed.enabled", true);
+// Each widgets
 pref("extensions.hatenabookmark.embed.counter", true);
 pref("extensions.hatenabookmark.embed.addButton", true);
