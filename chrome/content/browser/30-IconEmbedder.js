@@ -9,13 +9,31 @@ function IconEmbedder(doc) {
         this.ready();
 }
 
+IconEmbedder.STYLE = <![CDATA[
+    .hBookmark-embedded-counter img,
+    .hBookmark-embedded-add-button img {
+        border: none;
+        vertical-align: text-bottom;
+    }
+]]>.toString().replace(/\s+/g, " ");
+
 extend(IconEmbedder.prototype, {
     strings: new Strings("chrome://hatenabookmark/locale/browser.properties"),
 
     ready: function IE_ready() {
+        this.embedStyles();
         this.embed();
         this.doc.addEventListener("HB.PageInserted", this, false);
         this.doc.defaultView.addEventListener("GM_AutoPagerizeLoaded", this, false, true);
+    },
+
+    embedStyles: function IE_embedStyles() {
+        let style = this.doc.createElementNS(XHTML_NS, "style");
+        style.setAttribute("type", "text/css");
+        style.textContent = IconEmbedder.STYLE;
+        let head = this.doc.getElementsByTagName("head")[0];
+        if (!head) return;
+        head.appendChild(style);
     },
 
     embed: function IE_embed() {
@@ -58,7 +76,7 @@ extend(IconEmbedder.prototype, {
         if (Prefs.bookmark.get("embed.counter")) {
             let counter = xml2dom(
                 <a xmlns={ XHTML_NS }
-                   class="hBookmark-counter"
+                   class="hBookmark-embedded-counter"
                    href={ entryURL(link.href) }
                    title={ this.strings.get("embed.showEntryLabel") }>
                     <img src={ B_HTTP + 'entry/image/' + link.href }
@@ -72,7 +90,7 @@ extend(IconEmbedder.prototype, {
                 icons.appendChild(space.cloneNode(false));
             let addButton = xml2dom(
                 <a xmlns={ XHTML_NS }
-                   class="hBookmark-add-button"
+                   class="hBookmark-embedded-add-button"
                    href={ addPageURL(link.href) }
                    title={ this.strings.get("embed.addBookmarkLabel") }>
                     <img src="http://b.hatena.ne.jp/images/append.gif"
