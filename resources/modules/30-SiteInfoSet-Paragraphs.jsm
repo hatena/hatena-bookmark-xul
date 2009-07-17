@@ -12,7 +12,6 @@ paragraphs.addData([
         link:       'descendant::a[contains(concat(" ", @class, " "), "l")]',
         //annotation: 'descendant::cite',
         annotation: 'descendant::span[@class = "gl"]',
-        annotationPosition: "last",
         isPage:     'self::div[ol and parent::div[@id = "res"]]',
     },
 ]);
