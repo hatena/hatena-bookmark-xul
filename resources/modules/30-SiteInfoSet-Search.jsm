@@ -15,6 +15,7 @@ search.addData([
         encoding:
         annotation:
         annotationPosition:
+        style:
     },
     */
     { // Google Web Search
