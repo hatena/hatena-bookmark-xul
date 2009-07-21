@@ -79,8 +79,9 @@ extend(IconEmbedder.prototype, {
     createIcons: function IE_createIcons(link, paragraph) {
         let icons = this.doc.createDocumentFragment();
         let space = this.doc.createTextNode(" ");
+        let inNewTab = Prefs.bookmark.get("link.openInNewTab");
         if (Prefs.bookmark.get("embed.counter")) {
-            let counter = xml2dom(
+            let counter =
                 <a xmlns={ XHTML_NS }
                    class="hBookmark-embedded-counter"
                    href={ entryURL(link.href) }
@@ -93,12 +94,13 @@ extend(IconEmbedder.prototype, {
                                  else
                                      this.width = this.naturalWidth;"
                          onerror="this.parentNode.parentNode.removeChild(this.parentNode);"/>
-                </a>
-            );
-            icons.appendChild(counter);
+                </a>;
+            if (inNewTab)
+                counter.@target = "_blank";
+            icons.appendChild(xml2dom(counter));
         }
         if (Prefs.bookmark.get("embed.addButton")) {
-            let addButton = xml2dom(
+            let addButton =
                 <a xmlns={ XHTML_NS }
                    class="hBookmark-embedded-add-button"
                    href={ addPageURL(link.href) }
@@ -106,9 +108,10 @@ extend(IconEmbedder.prototype, {
                     <img src="http://b.hatena.ne.jp/images/append.gif"
                          alt={ "[" + this.strings.get("embed.addBookmarkLabel") + "] " }
                          width="16" height="12"/>
-                </a>
-            );
-            icons.appendChild(addButton)
+                </a>;
+            if (inNewTab)
+                addButton.@target = "_blank";
+            icons.appendChild(xml2dom(addButton));
         }
         if (icons.firstChild) {
             icons.insertBefore(space.cloneNode(false), icons.firstChild);
