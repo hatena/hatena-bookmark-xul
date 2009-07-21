@@ -163,6 +163,7 @@
             <checkbox id="extensions.hatenabookmark.embed.addButton-check"
                       label="&hBookmark.config.browsing.embedAddButton;"
                       preference="extensions.hatenabookmark.embed.addButton"
+                      src="chrome://hatenabookmark/skin/images/b_add_16x16.gif"
                       class="indent" flex="1"/>
         </groupbox>
     </vbox>
