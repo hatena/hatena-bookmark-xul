@@ -10,11 +10,16 @@ function IconEmbedder(doc) {
 }
 
 IconEmbedder.STYLE = <![CDATA[
+    .hBookmark-embedded-counter,
+    .hBookmark-embedded-add-button {
+        text-decoration: none;
+        margin: 0 3px;
+    }
     .hBookmark-embedded-counter img,
     .hBookmark-embedded-add-button img {
-        margin: 0 3px;
         border: none;
         vertical-align: text-bottom;
+        -moz-force-broken-image-icon: 1;
     }
 ]]>.toString().replace(/\s+/g, " ");
 
@@ -81,7 +86,13 @@ extend(IconEmbedder.prototype, {
                    href={ entryURL(link.href) }
                    title={ this.strings.get("embed.showEntryLabel") }>
                     <img src={ B_HTTP + 'entry/image/' + link.href }
-                         alt={ "[" + this.strings.get("embed.showEntryLabel") + "] " }/>
+                         alt={ "[" + this.strings.get("embed.showEntryLabel") + "] " }
+                         width="1" height="13"
+                         onload="if (this.naturalWidth === 1)
+                                     this.parentNode.parentNode.removeChild(this.parentNode);
+                                 else
+                                     this.width = this.naturalWidth;"
+                         onerror="this.parentNode.parentNode.removeChild(this.parentNode);"/>
                 </a>
             );
             icons.appendChild(counter);
@@ -93,7 +104,8 @@ extend(IconEmbedder.prototype, {
                    href={ addPageURL(link.href) }
                    title={ this.strings.get("embed.addBookmarkLabel") }>
                     <img src="http://b.hatena.ne.jp/images/append.gif"
-                         alt={ "[" + this.strings.get("embed.addBookmarkLabel") + "] " }/>
+                         alt={ "[" + this.strings.get("embed.addBookmarkLabel") + "] " }
+                         width="16" height="12"/>
                 </a>
             );
             icons.appendChild(addButton)
