@@ -44,8 +44,8 @@ extend(IconEmbedder.prototype, {
 
     embed: function IE_embed() {
         this.site.queryAll("paragraph").forEach(function (paragraph) {
-            if (paragraph.hasAttributeNS(HB_NS, "counter")) return;
-            paragraph.setAttributeNS(HB_NS, "hb:counter", "true");
+            if (paragraph.hasAttributeNS(HB_NS, "annotation")) return;
+            paragraph.setAttributeNS(HB_NS, "hb:annotation", "true");
 
             let link = this.site.query("link", paragraph) || paragraph;
             if (!link.href) return;

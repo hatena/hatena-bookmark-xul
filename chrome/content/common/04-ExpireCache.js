@@ -35,7 +35,7 @@ ExpireCache.prototype = {
     set key(value) {
         this._key = value || 'global';
         if (!shared[this.sharedKey])
-            shared[this.sharedKey] = {};
+            shared[this.sharedKey] = new DictionaryObject();
     },
     get sharedKey() '_cache_' + this._key,
     get cache() shared[this.sharedKey],
@@ -71,7 +71,7 @@ ExpireCache.prototype = {
         }
     },
     clearAll: function ExpireCache_clearAll() {
-        this.cache = {};
+        shared[this.sharedKey] = new DictionaryObject();
     },
     set: function ExpireCache_set(key, value, expire) {
         if (!expire) expire = this.defaultExpire;

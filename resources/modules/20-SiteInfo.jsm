@@ -6,30 +6,6 @@ const DEFAULT_PREFIX = "__default__";
 let evaluator = new XPathEvaluator();
 
 
-// XXX To be moved to the independent module.
-function addDefaultPrefix(xpath, prefix) {
-    const tokenPattern = /([A-Za-z_\u00c0-\ufffd][\w\-.\u00b7-\ufffd]*|\*)\s*(::?|\()?|(".*?"|'.*?'|\d+(?:\.\d*)?|\.(?:\.|\d+)?|[\)\]])|(\/\/?|!=|[<>]=?|[\(\[|,=+-])|([@$])/g;
-    const TERM = 1, OPERATOR = 2, MODIFIER = 3;
-    var tokenType = OPERATOR;
-    prefix += ':';
-    function replacer(token, identifier, suffix, term, operator, modifier) {
-        if (suffix) {
-            tokenType = (suffix == ':' || (suffix == '::' &&
-                         (identifier == 'attribute' || identifier == 'namespace')))
-                        ? MODIFIER : OPERATOR;
-        } else if (identifier) {
-            if (tokenType == OPERATOR && identifier != '*')
-                token = prefix + token;
-            tokenType = (tokenType == TERM) ? OPERATOR : TERM;
-        } else {
-            tokenType = term ? TERM : operator ? OPERATOR : MODIFIER;
-        }
-        return token;
-    }
-    return xpath.replace(tokenPattern, replacer);
-}
-
-
 function SiteInfo(item, doc) {
     this.item = item;
     this.data = item.data;
@@ -39,6 +15,9 @@ function SiteInfo(item, doc) {
 }
 
 extend(SiteInfo.prototype, {
+    get doc SI_get_doc() this._doc,
+    get win SI_get_win() this._doc.defaultView,
+
     query: function SI_query(key, context, resultType) {
         context = context || this._doc;
         let expr = this._exprs[key];
@@ -103,6 +82,25 @@ extend(SiteInfo.prototype, {
         return this.query(key, context, Array);
     },
 
+    queryFirstString: function SI_queryFirstString(key, source) {
+        let expr = this._exprs[key];
+        if (!expr) {
+            expr = this.data[key];
+            if (typeof expr === "string")
+                expr = new RegExp(expr);
+            this._exprs[key] = expr;
+        }
+        if (typeof expr === "function" && expr.call)
+            return expr.call(this, source);
+
+        let match = expr.exec(source);
+        if (!match) return null;
+        for (let i = 1; i < match.length; i++)
+            if (match[i])
+                return match[i];
+        return match[0];
+    },
+
     lookupNamespaceURI: function SI_lookupNamespaceURI(prefix) {
         return (prefix === DEFAULT_PREFIX)
             ? this._doc.lookupNamespaceURI(null)
@@ -131,6 +129,7 @@ extend(SiteInfoSet.prototype, {
     },
 
     get: function SIS_get(doc) {
+        if (!doc) return null;
         let url = doc.defaultView.location.href;
         doc.defaultView.location.href;
         for (let i = 0; i < this.items.length; i++) {
@@ -148,3 +147,27 @@ extend(SiteInfoSet.prototype, {
         return null;
     },
 });
+
+
+// XXX To be moved to the independent module.
+function addDefaultPrefix(xpath, prefix) {
+    const tokenPattern = /([A-Za-z_\u00c0-\ufffd][\w\-.\u00b7-\ufffd]*|\*)\s*(::?|\()?|(".*?"|'.*?'|\d+(?:\.\d*)?|\.(?:\.|\d+)?|[\)\]])|(\/\/?|!=|[<>]=?|[\(\[|,=+-])|([@$])/g;
+    const TERM = 1, OPERATOR = 2, MODIFIER = 3;
+    var tokenType = OPERATOR;
+    prefix += ':';
+    function replacer(token, identifier, suffix, term, operator, modifier) {
+        if (suffix) {
+            tokenType = (suffix == ':' || (suffix == '::' &&
+                         (identifier == 'attribute' || identifier == 'namespace')))
+                        ? MODIFIER : OPERATOR;
+        } else if (identifier) {
+            if (tokenType == OPERATOR && identifier != '*')
+                token = prefix + token;
+            tokenType = (tokenType == TERM) ? OPERATOR : TERM;
+        } else {
+            tokenType = term ? TERM : operator ? OPERATOR : MODIFIER;
+        }
+        return token;
+    }
+    return xpath.replace(tokenPattern, replacer);
+}
