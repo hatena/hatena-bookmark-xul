@@ -113,6 +113,13 @@ let Config = {
             th.setAttribute('disabled', true);
         }
     },
+    updateBrowsingStatus: function() {
+        let embedDisabled = !document.getElementById('extensions.hatenabookmark.embed.enabled-check').checked;
+        ['counter', 'addButton'].forEach(function (key) {
+            let id = 'extensions.hatenabookmark.embed.' + key + '-check';
+            document.getElementById(id).disabled = embedDisabled;
+        });
+    },
     clearImageFile: function() {
         let file = document.getElementById(PrefsBackgroundImage).value;
         if (file) {

@@ -131,6 +131,45 @@
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/transparent.png"
+    id="prefpane-browsing" label="&hBookmark.config.browsing;" flex="1"
+    onpaneload="hBookmark.Config.updateBrowsingStatus();">
+    <preferences>
+        <preference 
+            id="extensions.hatenabookmark.embed.enabled"
+            name="extensions.hatenabookmark.embed.enabled"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.embed.counter"
+            name="extensions.hatenabookmark.embed.counter"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.embed.addButton"
+            name="extensions.hatenabookmark.embed.addButton"
+            type="bool"/>
+    </preferences>
+
+    <vbox>
+        <groupbox orient="vertical">
+            <caption label="&hBookmark.config.browsing.embedCaption;"/>
+            <checkbox id="extensions.hatenabookmark.embed.enabled-check"
+                      label="&hBookmark.config.browsing.embed;"
+                      preference="extensions.hatenabookmark.embed.enabled"
+                      oncommand="hBookmark.Config.updateBrowsingStatus();"
+                      flex="1"/>
+            <checkbox id="extensions.hatenabookmark.embed.counter-check"
+                      label="&hBookmark.config.browsing.embedCounter;"
+                      preference="extensions.hatenabookmark.embed.counter"
+                      class="indent" flex="1"/>
+            <checkbox id="extensions.hatenabookmark.embed.addButton-check"
+                      label="&hBookmark.config.browsing.embedAddButton;"
+                      preference="extensions.hatenabookmark.embed.addButton"
+                      class="indent" flex="1"/>
+        </groupbox>
+    </vbox>
+</prefpane>
+
+<prefpane 
+    image="chrome://hatenabookmark/skin/images/transparent.png"
     id="prefpane-statusbar" label="&hBookmark.config.statusbar;" flex="1" onpaneload="hBookmark.Config.updateStatus();">
 
     <preferences>
