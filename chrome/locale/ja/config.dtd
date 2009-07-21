@@ -18,7 +18,7 @@
 
 <!ENTITY hBookmark.config.browsing "Web 閲覧">
 <!ENTITY hBookmark.config.browsing.embedCaption "ブックマーク情報">
-<!ENTITY hBookmark.config.browsing.embed "Google と Yahoo の検索結果にはてなブックマークの情報を表示する">
+<!ENTITY hBookmark.config.browsing.embed "Google と Yahoo! の検索結果にはてなブックマークの情報を表示する">
 <!ENTITY hBookmark.config.browsing.embedCounter "ブックマークされた数を表示する">
 <!ENTITY hBookmark.config.browsing.embedAddButton "「ブックマークに追加」ボタンを表示する">
 
