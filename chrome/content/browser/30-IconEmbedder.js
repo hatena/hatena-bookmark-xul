@@ -80,6 +80,7 @@ extend(IconEmbedder.prototype, {
         let icons = this.doc.createDocumentFragment();
         let space = this.doc.createTextNode(" ");
         let inNewTab = Prefs.bookmark.get("link.openInNewTab");
+        let xml2domOptions = { document: this.doc, context: paragraph };
         if (Prefs.bookmark.get("embed.counter")) {
             let counter =
                 <a xmlns={ XHTML_NS }
@@ -97,7 +98,7 @@ extend(IconEmbedder.prototype, {
                 </a>;
             if (inNewTab)
                 counter.@target = "_blank";
-            icons.appendChild(xml2dom(counter));
+            icons.appendChild(xml2dom(counter, xml2domOptions));
         }
         if (Prefs.bookmark.get("embed.addButton")) {
             let addButton =
@@ -112,7 +113,7 @@ extend(IconEmbedder.prototype, {
                 </a>;
             if (inNewTab)
                 addButton.@target = "_blank";
-            icons.appendChild(xml2dom(addButton));
+            icons.appendChild(xml2dom(addButton, xml2domOptions));
         }
         if (icons.firstChild) {
             icons.insertBefore(space.cloneNode(false), icons.firstChild);
