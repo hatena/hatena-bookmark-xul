@@ -24,7 +24,7 @@ IconEmbedder.STYLE = <![CDATA[
 ]]>.toString().replace(/\s+/g, " ");
 
 extend(IconEmbedder.prototype, {
-    strings: new Strings("chrome://hatenabookmark/locale/browser.properties"),
+    strings: new Strings("chrome://hatenabookmark/locale/embed.properties"),
 
     ready: function IE_ready() {
         this.embedStyles();
@@ -86,10 +86,10 @@ extend(IconEmbedder.prototype, {
                 <a xmlns={ XHTML_NS }
                    class="hBookmark-embedded-counter"
                    href={ entryURL(link.href) }
-                   title={ this.strings.get("embed.showEntryLabel") }
+                   title={ this.strings.get("embed.showEntryTitle") }
                    style="display: none;">
                     <img src={ B_HTTP + 'entry/image/' + link.href }
-                         alt={ "[" + this.strings.get("embed.showEntryLabel") + "] " }
+                         alt={ this.strings.get("embed.showEntryText") }
                          onload="if (this.naturalWidth === 1)
                                      this.onerror();
                                  else
@@ -105,9 +105,9 @@ extend(IconEmbedder.prototype, {
                 <a xmlns={ XHTML_NS }
                    class="hBookmark-embedded-add-button"
                    href={ addPageURL(link.href) }
-                   title={ this.strings.get("embed.addBookmarkLabel") }>
+                   title={ this.strings.get("embed.addBookmarkTitle") }>
                     <img src="http://b.hatena.ne.jp/images/append.gif"
-                         alt={ "[" + this.strings.get("embed.addBookmarkLabel") + "] " }
+                         alt={ this.strings.get("embed.addBookmarkText") }
                          width="16" height="12"
                          style="margin-top: 1px; /* Adjust height with counter */"/>
                 </a>;
