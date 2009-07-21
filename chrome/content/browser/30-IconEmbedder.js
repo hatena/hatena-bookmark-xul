@@ -85,14 +85,14 @@ extend(IconEmbedder.prototype, {
                 <a xmlns={ XHTML_NS }
                    class="hBookmark-embedded-counter"
                    href={ entryURL(link.href) }
-                   title={ this.strings.get("embed.showEntryLabel") }>
+                   title={ this.strings.get("embed.showEntryLabel") }
+                   style="display: none;">
                     <img src={ B_HTTP + 'entry/image/' + link.href }
                          alt={ "[" + this.strings.get("embed.showEntryLabel") + "] " }
-                         width="1" height="13"
                          onload="if (this.naturalWidth === 1)
-                                     this.parentNode.parentNode.removeChild(this.parentNode);
+                                     this.onerror();
                                  else
-                                     this.width = this.naturalWidth;"
+                                     this.parentNode.style.display = '';"
                          onerror="this.parentNode.parentNode.removeChild(this.parentNode);"/>
                 </a>;
             if (inNewTab)
@@ -107,7 +107,8 @@ extend(IconEmbedder.prototype, {
                    title={ this.strings.get("embed.addBookmarkLabel") }>
                     <img src="http://b.hatena.ne.jp/images/append.gif"
                          alt={ "[" + this.strings.get("embed.addBookmarkLabel") + "] " }
-                         width="16" height="12"/>
+                         width="16" height="12"
+                         style="margin-top: 1px; /* Adjust height with counter */"/>
                 </a>;
             if (inNewTab)
                 addButton.@target = "_blank";
