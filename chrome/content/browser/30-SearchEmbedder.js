@@ -58,10 +58,46 @@ extend(SearchEmbedder.prototype, {
         container.insertBefore(search, anchor);
     },
 
+    // XXX WIP! WIP! WIP!
     createSearchResult: function SE_createSearchResult(container) {
-        var result = <p>
-            {this.data.meta.total} results
-        </p>;
+        default xml namespace = XHTML_NS;
+        <></>.(see.mozilla.bug[330572].for.this.expression);
+
+        let result = <div id="hBookmark-search">
+            <div id="hBookmark-search-heading">
+                <span id="hBookmark-search-user">
+                    <img src={ User.user.getProfileIcon() }
+                         alt="" width="16" height="16"/>
+                    { User.user.name }
+                </span>
+                <span id="hBookmark-search-status"/>
+            </div>
+            <dl id="hBookmark-search-results"/>
+        </div>;
+        let headingParts = {
+            query: <span id="hBookmark-search-query">{ this.query }</span>,
+            count: <span id="hBookmark-search-count">{ this.data.bookmarks.length }</span>,
+            total: <span id="hBookmark-search-total">{ this.data.meta.total }</span>,
+            elapsed: <span id="hBookmark-search-elapsed">{ this.data.meta.elapsed.toFixed(2) }</span>,
+        };
+        let headingContent = '{count} of {total} for {query} ({elapsed} sec)';
+        headingContent.split(/\{(.*?)\}/).map(function (c, i) {
+            return ((i & 1) && c in headingParts) ? headingParts[c] : c;
+        }).reduce(function (p, c) p.appendChild(c), result.div[0].span[1]);
+
+        this.data.bookmarks.reduce(function (dl, bookmark) {
+            return dl.appendChild(<>
+                <dt>
+                    <a href={ bookmark.entry.url }>
+                    <img src={ 'http://favicon.st-hatena.com/?url=' + encodeURIComponent(bookmark.entry.url) }
+                         alt="" width="16" height="16"/>
+                        { bookmark.entry.title }
+                    </a>
+                </dt>
+                <dd>{ bookmark.entry.snippet || "" }</dd>
+            </>);
+        }, result.dl[0]);
+
         return xml2dom(result, { document: this.doc, context: container });
     },
 
@@ -88,10 +124,8 @@ extend(SearchEmbedder, {
 
         onLocationChange: function SEPL_onLocationChange(progress, request,
                                                          location) {
-            let site = null;
-            if (!User.user || !User.user.plususer
-                // || !Prefs.bookmark.get("embed.search")
-               )
+            if (!User.user || !User.user.plususer ||
+                !Prefs.bookmark.get("embed.search"))
                 return;
             new SearchEmbedder(progress.DOMWindow.document);
         },
