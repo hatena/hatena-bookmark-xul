@@ -86,10 +86,10 @@ extend(IconEmbedder.prototype, {
                 <a xmlns={ XHTML_NS }
                    class="hBookmark-embedded-counter"
                    href={ entryURL(link.href) }
-                   title={ this.strings.get("embed.showEntryTitle") }
+                   title={ this.strings.get("showEntryTitle") }
                    style="display: none;">
-                    <img src={ B_HTTP + 'entry/image/' + link.href }
-                         alt={ this.strings.get("embed.showEntryText") }
+                    <img src={ B_STATIC_HTTP + 'entry/image/' + link.href }
+                         alt={ this.strings.get("showEntryText") }
                          onload="if (this.naturalWidth === 1)
                                      this.onerror();
                                  else
@@ -105,9 +105,9 @@ extend(IconEmbedder.prototype, {
                 <a xmlns={ XHTML_NS }
                    class="hBookmark-embedded-add-button"
                    href={ addPageURL(link.href) }
-                   title={ this.strings.get("embed.addBookmarkTitle") }>
+                   title={ this.strings.get("addBookmarkTitle") }>
                     <img src="http://b.hatena.ne.jp/images/append.gif"
-                         alt={ this.strings.get("embed.addBookmarkText") }
+                         alt={ this.strings.get("addBookmarkText") }
                          width="16" height="12"
                          style="margin-top: 1px; /* Adjust height with counter */"/>
                 </a>;
