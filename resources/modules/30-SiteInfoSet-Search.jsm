@@ -11,6 +11,7 @@ search.addData([
     /*
     {
         url:
+        baseDomain:
         query:
         encoding:
         annotation:
@@ -20,6 +21,7 @@ search.addData([
     */
     { // Google Web Search
         url:        /^http:\/\/www\.google(?:\.\w+){1,2}\/search\?/,
+        baseDomain: /^google\./,
         query:      /[?&;]q=([^?&;#]+)/,
         encoding:   /[?&;]ie=([\w-]+)/,
         //annotation: 'id("res")',
@@ -49,6 +51,7 @@ search.addData([
     },
     { // Yahoo Web Search
         url:        /^http:\/\/search\.yahoo(?:\.\w+){1,2}\/search\?/,
+        baseDomain: /^yahoo\./,
         query:      /[?&;]p=([^?&;#]+)/,
         encoding:   /[?&;]ei=([\w-]+)/,
         annotation: 'id("yschres")',

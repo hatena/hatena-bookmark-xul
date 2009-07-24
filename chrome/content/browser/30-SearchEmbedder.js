@@ -4,7 +4,7 @@ function SearchEmbedder(doc) {
     this.doc = doc;
     this.site = SiteInfoSet.Search.get(doc);
     this.state = SearchEmbedder.STATE_INITIALIZED;
-    if (this.site)
+    if (this.site && this.isValidDomain())
         this.ready();
 }
 
@@ -108,6 +108,16 @@ extend(SearchEmbedder.prototype, {
 
     get win SE_get_win() this.doc.defaultView,
     get url SE_get_url() this.win.location.href,
+
+    isValidDomain: function SE_isValidDomain() {
+        const TLDService = getService("@mozilla.org/network/effective-tld-service;1", Ci.nsIEffectiveTLDService);
+        let domainPattern = this.site.data.baseDomain;
+        if (!domainPattern) return false;
+        if (typeof domainPattern === "string")
+            domainPattern = new RegExp(domainPattern);
+        let domain = TLDService.getBaseDomainFromHost(this.win.location.hostname);
+        return domainPattern.test(domain);
+    },
 
     ready: function SE_ready() {
         let url = this.url;
