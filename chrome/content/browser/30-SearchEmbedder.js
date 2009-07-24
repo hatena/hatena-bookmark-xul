@@ -17,7 +17,7 @@ SearchEmbedder.STATE_EMBED_READY = SearchEmbedder.STATE_LOAD_DONE |
 SearchEmbedder.STYLE = <![CDATA[
     #hBookmark-search {
         font: 1em/1.4 Arial, Helvetica, sans-serif;
-        background-color: #eff;
+        background-color: #f3fbff;
         color: #000;
         margin: 0 0 0.5em 1em;
         padding: 0;
@@ -42,16 +42,19 @@ SearchEmbedder.STYLE = <![CDATA[
         border: none;
     }
     #hBookmark-search :link {
-        color: #00a;
+        text-decoration: underline;
+        color: #2200cc;
     }
     #hBookmark-search :visited {
-        color: #707;
+        text-decoration: underline;
+        color: #551a8b;
     }
     #hBookmark-search .hBookmark-search-heading {
-        background-color: #06f;
+        background: #3c7ecd url("http://b.st-hatena.com/images/favicon.gif") 0.3em 0.5em no-repeat;
         color: #fff;
         text-align: right;
         padding: 0.3em 0.5em;
+        border: 1px outset #3c7ecd;
     }
     #hBookmark-search .hBookmark-search-user {
         color: inherit;
@@ -77,6 +80,16 @@ SearchEmbedder.STYLE = <![CDATA[
     #hBookmark-search dd {
         margin-left: 0.7em;
     }
+    #hBookmark-search .hBookmark-search-many {
+        background-color: #fff0f0;
+        color: #ff6666;
+        font-weight: bold;
+    }
+    #hBookmark-search .hBookmark-search-too-many {
+        background-color: #ffcccc;
+        color: #ff0000;
+        font-weight: bold;
+    }
     #hBookmark-search .hBookmark-search-more {
         text-align: right;
         padding: 0 1em 1em 1em;
@@ -86,7 +99,7 @@ SearchEmbedder.STYLE = <![CDATA[
         font-weight: bold;
     }
     #hBookmark-search .hBookmark-search-url {
-        color: #080;
+        color: #008000;
     }
 ]]>.toString();
 
@@ -205,6 +218,10 @@ extend(SearchEmbedder.prototype, {
             </dd>;
             let displayURL = entry.url.replace(/^https?:\/\//, "");
             this._appendEmphasizedContent(info.span[0], displayURL, query);
+            if (entry.count >= 3) {
+                info.a[0].@class += (entry.count >= 10)
+                    ? " hBookmark-search-too-many" : " hBookmark-search-many";
+            }
             info.insertChildAfter(info.span[0], " ");
 
             dl.appendChild(title + snippet + info);
