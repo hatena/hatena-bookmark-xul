@@ -88,3 +88,4 @@ pref("extensions.hatenabookmark.embed.addButton", true);
 // XXX Incomplete!  Don't turn this on.
 pref("extensions.hatenabookmark.embed.search", false);
 pref("extensions.hatenabookmark.embed.searchCount", 5);
+pref("extensions.hatenabookmark.embed.searchSnippetLength", 60);

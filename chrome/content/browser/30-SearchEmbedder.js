@@ -22,7 +22,7 @@ SearchEmbedder.STYLE = <![CDATA[
         margin: 0 0 0.5em 1em;
         padding: 0;
         width: 30%;
-        max-width: 20em;
+        max-width: 25em;
         float: right;
     }
     #hBookmark-search span,
@@ -129,7 +129,8 @@ extend(SearchEmbedder.prototype, {
 
     get httpQuery SE_get_httpQuery() {
         return '?q=' + encodeURIComponent(this.query) +
-               '&limit=' + Prefs.bookmark.get("embed.searchCount");
+               '&limit=' + Prefs.bookmark.get("embed.searchCount") +
+               '&snip=' + Prefs.bookmark.get("embed.searchSnippetLength");
     },
 
     embed: function SE_embed() {
