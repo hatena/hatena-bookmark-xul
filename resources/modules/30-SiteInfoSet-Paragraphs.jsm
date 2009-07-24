@@ -47,6 +47,20 @@ paragraphs.addData([
         annotation: 'descendant::span[@class = "gl"]',
         isPage:     'self::div[ol and parent::div[@id = "res"]]',
     },
+    { // Google News
+        domain:     /^http:\/\/news\.google(?:\.\w+){1,2}\//,
+        paragraph:  'descendant::div[contains(concat(" ", @class, " "), " story ")]',
+        link:       'descendant::a[starts-with(concat(" ", @class), " usg-")]',
+        //annotation: 'descendant::div[contains(concat(" ", @class, " "), " sources ")]',
+        //annotationPosition: 'last',
+        annotation: function (context) {
+            let sources = context.getElementsByClassName("sources")[0];
+            return sources &&
+                   (sources.getElementsByClassName("moreLinks")[0] ||
+                    sources.lastChild);
+        },
+        isPage:     'self::*[@id = "search-stories"]',
+    },
     { // Yahoo Web Search
         domain:     /^http:\/\/search\.yahoo(?:\.\w+){1,2}\/search\?/,
         paragraph:  'id("yschcont")/descendant::div[@class = "web"]',
