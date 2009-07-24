@@ -14,6 +14,9 @@ SearchEmbedder.STATE_SEARCH_DONE = 0x02;
 SearchEmbedder.STATE_EMBED_READY = SearchEmbedder.STATE_LOAD_DONE |
                                    SearchEmbedder.STATE_SEARCH_DONE;
 
+SearchEmbedder.STYLE = <![CDATA[
+]]>.toString();
+
 extend(SearchEmbedder.prototype, {
     get win SE_get_win() this.doc.defaultView,
     get url SE_get_url() this.win.location.href,
@@ -31,13 +34,24 @@ extend(SearchEmbedder.prototype, {
         } catch (ex) {}
         this.query = query;
         this.doc.addEventListener("DOMContentLoaded", this, false);
-        SearchEmbedder.http.async_get(query, method(this, 'onSearch'));
+        SearchEmbedder.http.async_get(this.httpQuery, method(this, 'onSearch'));
+    },
+
+    get httpQuery SE_get_httpQuery() {
+        // XXX ToDo: Move magic number "5" to prefs
+        return '?q=' + encodeURIComponent(this.query) + '&limit=' + 5;
     },
 
     embed: function SE_embed() {
         if (this.state !== SearchEmbedder.STATE_EMBED_READY) return;
+        let head = this.doc.getElementsByTagName("head")[0];
         let container = this.site.query("annotation", this.doc);
-        if (!container) return;
+        if (!head || !container) return;
+
+        let style = this.doc.createElement("style");
+        style.textContent = SearchEmbedder.STYLE + (this.site.data.style || "");
+        head.appendChild(style);
+
         let anchor = null;
         switch (this.site.data.annotationPosition || "last") {
         case "before":
@@ -58,47 +72,90 @@ extend(SearchEmbedder.prototype, {
         container.insertBefore(search, anchor);
     },
 
-    // XXX WIP! WIP! WIP!
     createSearchResult: function SE_createSearchResult(container) {
         default xml namespace = XHTML_NS;
-        <></>.(see.mozilla.bug[330572].for.this.expression);
+        // <></>.(See.mozilla.bug[330572].for.this.workaround);
+        let data = this.data;
+        let query = this.query;
 
         let result = <div id="hBookmark-search">
-            <div id="hBookmark-search-heading">
-                <span id="hBookmark-search-user">
+            <div class="hBookmark-search-heading">
+                <a class="hBookmark-search-user"
+                   href={ User.user.bookmarkHomepage }>
                     <img src={ User.user.getProfileIcon() }
                          alt="" width="16" height="16"/>
                     { User.user.name }
-                </span>
-                <span id="hBookmark-search-status"/>
+                </a>
+                <span class="hBookmark-search-status"/>
             </div>
-            <dl id="hBookmark-search-results"/>
+            <dl class="hBookmark-search-results"/>
         </div>;
-        let headingParts = {
-            query: <span id="hBookmark-search-query">{ this.query }</span>,
-            count: <span id="hBookmark-search-count">{ this.data.bookmarks.length }</span>,
-            total: <span id="hBookmark-search-total">{ this.data.meta.total }</span>,
-            elapsed: <span id="hBookmark-search-elapsed">{ this.data.meta.elapsed.toFixed(2) }</span>,
-        };
-        let headingContent = '{count} of {total} for {query} ({elapsed} sec)';
-        headingContent.split(/\{(.*?)\}/).map(function (c, i) {
-            return ((i & 1) && c in headingParts) ? headingParts[c] : c;
-        }).reduce(function (p, c) p.appendChild(c), result.div[0].span[1]);
 
-        this.data.bookmarks.reduce(function (dl, bookmark) {
-            return dl.appendChild(<>
-                <dt>
-                    <a href={ bookmark.entry.url }>
-                    <img src={ 'http://favicon.st-hatena.com/?url=' + encodeURIComponent(bookmark.entry.url) }
+        let heading = result.div[0];
+        heading.insertChildAfter(heading.a[0], " ");
+        let headingContent = '{count} of {total} for {query} ({elapsed} sec)';
+        this._appendFilledInContent(heading.span[0], headingContent, {
+            query:   <b class="hBookmark-search-query">{ query }</b>,
+            count:   <b>{ data.bookmarks.length }</b>,
+            total:   <b>{ data.meta.total }</b>,
+            elapsed: <b>{ data.meta.elapsed.toFixed(2) }</b>,
+        });
+
+        let dl = result.dl[0];
+        data.bookmarks.forEach(function (bookmark) {
+            let entry = bookmark.entry;
+
+            let title = <dt>
+                <a href={ entry.url }>
+                    <img src={ 'http://favicon.st-hatena.com/?url=' + encodeURIComponent(entry.url) }
                          alt="" width="16" height="16"/>
-                        { bookmark.entry.title }
-                    </a>
-                </dt>
-                <dd>{ bookmark.entry.snippet || "" }</dd>
-            </>);
-        }, result.dl[0]);
+                </a>
+            </dt>;
+            this._appendEmphasizedContent(title.a[0], entry.title, query);
+
+            let snippet = <></>
+            if (entry.snippet) {
+                snippet = <dd class="hBookmark-search-snippet"/>;
+                this._appendEmphasizedContent(snippet, entry.snippet, query);
+            }
+
+            let info = <dd class="hBookmark-search-info">
+                <span class="hBookmark-search-url"/>
+                <span class="hBookmark-search-counter">{ entry.count + " users" }</span>
+            </dd>;
+            this._appendEmphasizedContent(info.span[0], entry.url, query);
+            info.insertChildAfter(info.span[0], " ");
+
+            dl.appendChild(title + snippet + info);
+        }, this);
+
+        if (data.meta.total > data.bookmarks.length) {
+            result.* += <div class="hBookmark-search-more">
+                <a href={ B_HTTP + User.user.name + '/search?q=' + encodeURIComponent(query) }>Show all results</a>
+            </div>;
+        }
 
         return xml2dom(result, { document: this.doc, context: container });
+    },
+
+    _appendFilledInContent: function SE__appendFilledInContent(element,
+                                                               pattern,
+                                                               map) {
+        pattern.split(/\{(.*?)\}/).forEach(function (key, i) {
+            element.appendChild((i & 1) ? map[key] : key);
+        });
+        return element;
+    },
+
+    _appendEmphasizedContent: function SE__appendEmphasizedContent(element,
+                                                                   text,
+                                                                   keyword) {
+        default xml namespace = XHTML_NS;
+        text.split(keyword).forEach(function (fragment, i) {
+            if (i) element.appendChild(<em>{ keyword }</em>);
+            element.appendChild(fragment);
+        });
+        return element;
     },
 
     handleEvent: function SE_handleEvent(event) {
@@ -135,13 +192,11 @@ extend(SearchEmbedder, {
         expire: 60 * 60,
         baseURL: {
             toString: function SE_s_cache_baseURL_toString() {
-                return B_HTTP + User.user.name + '/search/json?limit=' +
-                       5 + '&q=';
+                return B_HTTP + User.user.name + '/search/json';
             },
         },
         seriarizer: 'uneval', // XXX The correct spell is "serializer"
         json: true,
-        encoder: encodeURIComponent,
     }),
 });
 
