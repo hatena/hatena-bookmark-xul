@@ -16,8 +16,7 @@ SearchEmbedder.STATE_EMBED_READY = SearchEmbedder.STATE_LOAD_DONE |
 
 SearchEmbedder.STYLE = <![CDATA[
     #hBookmark-search {
-        font-size: 0.8em;
-        line-height: 1.4;
+        font: 1em/1.4 Arial, Helvetica, sans-serif;
         background-color: #eff;
         color: #000;
         margin: 0 0 0.5em 1em;
@@ -42,6 +41,12 @@ SearchEmbedder.STYLE = <![CDATA[
         padding: 0;
         border: none;
     }
+    #hBookmark-search :link {
+        color: #00a;
+    }
+    #hBookmark-search :visited {
+        color: #707;
+    }
     #hBookmark-search .hBookmark-search-heading {
         background-color: #06f;
         color: #fff;
@@ -49,31 +54,39 @@ SearchEmbedder.STYLE = <![CDATA[
         padding: 0.3em 0.5em;
     }
     #hBookmark-search .hBookmark-search-user {
+        color: inherit;
         text-decoration: none;
+        margin-bottom: 0.2em;
+        float: right;
     }
     #hBookmark-search a > img {
-        margin-right: 0.3em;
-        vertical-align: middle;
+        margin: 0.2em 0.3em -0.2em 0;
+        float: left;
     }
     #hBookmark-search .hBookmark-search-status {
         display: block;
         text-align: left;
-        margin-top: 0.2em;
+        clear: both;
     }
     #hBookmark-search dl {
-        padding: 0.5em;
+        padding: 0 0.5em 1em 0.5em;
     }
-    #hBookmark-search dt > a > img {
-        margin-top: 0.1em;
-        margin-bottom: -0.1em;
-        float: left;
-    }
-    #hBookmark-search dd + dt {
+    #hBookmark-search dt {
         margin-top: 1em;
+    }
+    #hBookmark-search dd {
+        margin-left: 0.7em;
+    }
+    #hBookmark-search .hBookmark-search-more {
+        text-align: right;
+        padding: 0 1em 1em 1em;
     }
     #hBookmark-search .hBookmark-search-query,
     #hBookmark-search em {
         font-weight: bold;
+    }
+    #hBookmark-search .hBookmark-search-url {
+        color: #080;
     }
 ]]>.toString();
 
@@ -190,7 +203,8 @@ extend(SearchEmbedder.prototype, {
                     UIUtils.getUsersText(entry.count)
                 }</a>
             </dd>;
-            this._appendEmphasizedContent(info.span[0], entry.url, query);
+            let displayURL = entry.url.replace(/^https?:\/\//, "");
+            this._appendEmphasizedContent(info.span[0], displayURL, query);
             info.insertChildAfter(info.span[0], " ");
 
             dl.appendChild(title + snippet + info);

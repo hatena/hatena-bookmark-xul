@@ -37,11 +37,13 @@ search.addData([
         annotationPosition: 'first',
         style: <![CDATA[
             td > #hBookmark-search {
-                font-size: 1em;
                 margin: 1em 0 0 0;
                 width: auto;
                 float: none;
                 white-space: normal;
+            }
+            div > #hBookmark-search {
+                font-size: 0.8em;
             }
         ]]>.toString(),
     },
@@ -50,6 +52,11 @@ search.addData([
         query:      /[?&;]p=([^?&;#]+)/,
         encoding:   /[?&;]ei=([\w-]+)/,
         annotation: 'id("yschres")',
+        style: <![CDATA[
+            #hBookmark-search {
+                margin-right: 1em;
+            }
+        ]]>.toString(),
     },
 ]);
 
