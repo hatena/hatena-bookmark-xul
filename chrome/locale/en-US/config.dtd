@@ -19,10 +19,10 @@
 <!ENTITY hBookmark.config.sidebarReverse "reverse">
 
 <!ENTITY hBookmark.config.browsing "Web Browsing">
-<!ENTITY hBookmark.config.browsing.embedCaption "Bookmark Informations">
+<!ENTITY hBookmark.config.browsing.embedCaption "Hatena Bookmark Informations">
 <!ENTITY hBookmark.config.browsing.embed "Show Hatena Bookmark informations on search results of Google and Yahoo!">
-<!ENTITY hBookmark.config.browsing.embedCounter "Show the count of bookmarks">
-<!ENTITY hBookmark.config.browsing.embedAddButton "Show Add-to-Bookmark button">
+<!ENTITY hBookmark.config.browsing.embedCounter "Show the count of bookmarks (xx users)">
+<!ENTITY hBookmark.config.browsing.embedAddButton "Show Add-to-Bookmark button (B!)">
 
 <!ENTITY hBookmark.config.statusbar "Statusbar">
 <!ENTITY hBookmark.config.statusbarIcon "Display">
