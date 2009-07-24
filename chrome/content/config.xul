@@ -137,7 +137,8 @@
         <preference 
             id="extensions.hatenabookmark.embed.enabled"
             name="extensions.hatenabookmark.embed.enabled"
-            type="bool"/>
+            type="bool"
+            onchange="hBookmark.Config.updateBrowsingStatus();"/>
         <preference 
             id="extensions.hatenabookmark.embed.counter"
             name="extensions.hatenabookmark.embed.counter"
@@ -146,6 +147,15 @@
             id="extensions.hatenabookmark.embed.addButton"
             name="extensions.hatenabookmark.embed.addButton"
             type="bool"/>
+        <preference
+            id="extensions.hatenabookmark.embed.search"
+            name="extensions.hatenabookmark.embed.search"
+            type="bool"
+            onchange="hBookmark.Config.updateBrowsingStatus();"/>
+        <preference
+            id="extensions.hatenabookmark.embed.searchCount"
+            name="extensions.hatenabookmark.embed.searchCount"
+            type="int"/>
     </preferences>
 
     <vbox>
@@ -154,7 +164,6 @@
             <checkbox id="extensions.hatenabookmark.embed.enabled-check"
                       label="&hBookmark.config.browsing.embed;"
                       preference="extensions.hatenabookmark.embed.enabled"
-                      oncommand="hBookmark.Config.updateBrowsingStatus();"
                       flex="1"/>
             <checkbox id="extensions.hatenabookmark.embed.counter-check"
                       label="&hBookmark.config.browsing.embedCounter;"
@@ -164,6 +173,27 @@
                       label="&hBookmark.config.browsing.embedAddButton;"
                       preference="extensions.hatenabookmark.embed.addButton"
                       class="indent" flex="1"/>
+        </groupbox>
+
+        <groupbox>
+            <caption label="&hBookmark.config.browsing.searchCaption;"/>
+            <checkbox id="extensions.hatenabookmark.embed.search-check"
+                      label="&hBookmark.config.browsing.search;"
+                      preference="extensions.hatenabookmark.embed.search"/>
+            <hbox class="indent" align="center">
+                <label value="&hBookmark.config.browsing.searchCount.before;"/>
+                <textbox id="extensions.hatenabookmark.embed.searchCount-field"
+                         preference="extensions.hatenabookmark.embed.searchCount"
+                         type="number" min="1" size="3"/>
+                <label value="&hBookmark.config.browsing.searchCount.after;"/>
+            </hbox>
+            <hbox align="center">
+                <label value="&hBookmark.config.browsing.plus.before;"/>
+                <label value="&hBookmark.config.browsing.plus.label;"
+                       class="text-link plain hBookmark-link"
+                       href="&hBookmark.config.browsing.plus.link;"/>
+                <label value="&hBookmark.config.browsing.plus.after;"/>
+            </hbox>
         </groupbox>
     </vbox>
 </prefpane>

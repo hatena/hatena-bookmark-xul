@@ -113,12 +113,18 @@ let Config = {
             th.setAttribute('disabled', true);
         }
     },
+    browsingStatusDependencies: {
+        'enabled-check': ['counter-check', 'addButton-check'],
+        'search-check': ['searchCount-field'],
+    },
     updateBrowsingStatus: function() {
-        let embedDisabled = !document.getElementById('extensions.hatenabookmark.embed.enabled-check').checked;
-        ['counter', 'addButton'].forEach(function (key) {
-            let id = 'extensions.hatenabookmark.embed.' + key + '-check';
-            document.getElementById(id).disabled = embedDisabled;
-        });
+        const ID_PREFIX = 'extensions.hatenabookmark.embed.';
+        for (let [master, slaves] in Iterator(this.browsingStatusDependencies)) {
+            let disabled = !document.getElementById(ID_PREFIX + master).checked;
+            slaves.forEach(function (slave) {
+                document.getElementById(ID_PREFIX + slave).disabled = disabled;
+            });
+        }
     },
     clearImageFile: function() {
         let file = document.getElementById(PrefsBackgroundImage).value;
