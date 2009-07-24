@@ -15,6 +15,66 @@ SearchEmbedder.STATE_EMBED_READY = SearchEmbedder.STATE_LOAD_DONE |
                                    SearchEmbedder.STATE_SEARCH_DONE;
 
 SearchEmbedder.STYLE = <![CDATA[
+    #hBookmark-search {
+        font-size: 0.8em;
+        line-height: 1.4;
+        background-color: #eff;
+        color: #000;
+        margin: 0 0 0.5em 1em;
+        padding: 0;
+        width: 30%;
+        max-width: 20em;
+        float: right;
+    }
+    #hBookmark-search span,
+    #hBookmark-search a,
+    #hBookmark-search b,
+    #hBookmark-search em,
+    #hBookmark-search img,
+    #hBookmark-search div,
+    #hBookmark-search dl,
+    #hBookmark-search dt,
+    #hBookmark-search dd {
+        font: inherit;
+        background: none;
+        color: inherit;
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+    #hBookmark-search .hBookmark-search-heading {
+        background-color: #06f;
+        color: #fff;
+        text-align: right;
+        padding: 0.3em 0.5em;
+    }
+    #hBookmark-search .hBookmark-search-user {
+        text-decoration: none;
+    }
+    #hBookmark-search a > img {
+        margin-right: 0.3em;
+        vertical-align: middle;
+    }
+    #hBookmark-search .hBookmark-search-status {
+        display: block;
+        text-align: left;
+        margin-top: 0.2em;
+    }
+    #hBookmark-search dl {
+        padding: 0.5em;
+    }
+    #hBookmark-search dt > a > img {
+        margin-top: 0.1em;
+        margin-bottom: -0.1em;
+        float: left;
+    }
+    #hBookmark-search dd + dt {
+        margin-top: 1em;
+    }
+    #hBookmark-search .hBookmark-search-query,
+    #hBookmark-search em {
+        font-weight: bold;
+    }
 ]]>.toString();
 
 extend(SearchEmbedder.prototype, {
@@ -36,6 +96,8 @@ extend(SearchEmbedder.prototype, {
         } catch (ex) {}
         this.query = query;
         this.doc.addEventListener("DOMContentLoaded", this, false);
+        //this.win.addEventListener("pageshow", this, false);
+        //this.win.addEventListener("load", this, false);
         SearchEmbedder.http.async_get(this.httpQuery, method(this, 'onSearch'));
     },
 
@@ -123,9 +185,10 @@ extend(SearchEmbedder.prototype, {
 
             let info = <dd class="hBookmark-search-info">
                 <span class="hBookmark-search-url"/>
-                <span class="hBookmark-search-counter">{
+                <a class="hBookmark-search-counter"
+                   href={ entryURL(entry.url) }>{
                     UIUtils.getUsersText(entry.count)
-                }</span>
+                }</a>
             </dd>;
             this._appendEmphasizedContent(info.span[0], entry.url, query);
             info.insertChildAfter(info.span[0], " ");
@@ -169,6 +232,12 @@ extend(SearchEmbedder.prototype, {
         case "DOMContentLoaded":
             this.state |= SearchEmbedder.STATE_LOAD_DONE;
             this.embed();
+            break;
+
+        case "pageshow":
+        case "load":
+            p(event.type + " " + this.state);
+            break;
         }
     },
 

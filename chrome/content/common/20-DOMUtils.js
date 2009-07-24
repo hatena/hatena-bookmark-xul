@@ -10,12 +10,18 @@ function queryXPathAll(xpath, context);
 function xml2dom(xml, options) {
     options = extend({
         prettyPrinting: false,
-    }, options);
+        context:        document,
+    }, (typeof options.nodeType === "number") ? { context: options } : options);
     let prevSettings = XML.settings();
     XML.setSettings(options);
-    let doc = options.document || document;
-    let range = doc.createRange();
-    range.selectNodeContents(options.context || doc.documentElement);
+    let range = options.range;
+    if (!range) {
+        let context = options.context;
+        if (context.nodeType === Node.DOCUMENT_NODE)
+            context = context.documentElement;
+        range = context.ownerDocument.createRange();
+        range.selectNodeContents(context);
+    }
     let result = range.createContextualFragment(xml.toXMLString());
     XML.setSettings(prevSettings);
     return result;
