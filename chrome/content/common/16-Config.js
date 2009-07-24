@@ -119,10 +119,16 @@ let Config = {
     },
     updateBrowsingStatus: function() {
         const ID_PREFIX = 'extensions.hatenabookmark.embed.';
-        for (let [master, slaves] in Iterator(this.browsingStatusDependencies)) {
+        let dependencies = this.browsingStatusDependencies;
+        for (let [master, slaves] in Iterator(dependencies)) {
             let disabled = !document.getElementById(ID_PREFIX + master).checked;
             slaves.forEach(function (slave) {
                 document.getElementById(ID_PREFIX + slave).disabled = disabled;
+            });
+        }
+        if (!User.user || !User.user.plususer) {
+            ['search-check'].concat(dependencies['search-check']).forEach(function (key) {
+                document.getElementById(ID_PREFIX + key).disabled = true;
             });
         }
     },
