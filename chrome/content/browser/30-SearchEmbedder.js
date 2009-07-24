@@ -18,6 +18,8 @@ SearchEmbedder.STYLE = <![CDATA[
 ]]>.toString();
 
 extend(SearchEmbedder.prototype, {
+    strings: new Strings("chrome://hatenabookmark/locale/embed.properties"),
+
     get win SE_get_win() this.doc.defaultView,
     get url SE_get_url() this.win.location.href,
 
@@ -93,8 +95,8 @@ extend(SearchEmbedder.prototype, {
 
         let heading = result.div[0];
         heading.insertChildAfter(heading.a[0], " ");
-        let headingContent = '{count} of {total} for {query} ({elapsed} sec)';
-        this._appendFilledInContent(heading.span[0], headingContent, {
+        let statusPattern = this.strings.get("search.statusPattern");
+        this._appendFilledInContent(heading.span[0], statusPattern, {
             query:   <b class="hBookmark-search-query">{ query }</b>,
             count:   <b>{ data.bookmarks.length }</b>,
             total:   <b>{ data.meta.total }</b>,
@@ -121,7 +123,9 @@ extend(SearchEmbedder.prototype, {
 
             let info = <dd class="hBookmark-search-info">
                 <span class="hBookmark-search-url"/>
-                <span class="hBookmark-search-counter">{ entry.count + " users" }</span>
+                <span class="hBookmark-search-counter">{
+                    UIUtils.getUsersText(entry.count)
+                }</span>
             </dd>;
             this._appendEmphasizedContent(info.span[0], entry.url, query);
             info.insertChildAfter(info.span[0], " ");
@@ -131,7 +135,9 @@ extend(SearchEmbedder.prototype, {
 
         if (data.meta.total > data.bookmarks.length) {
             result.* += <div class="hBookmark-search-more">
-                <a href={ B_HTTP + User.user.name + '/search?q=' + encodeURIComponent(query) }>Show all results</a>
+                <a href={ B_HTTP + User.user.name + '/search?q=' + encodeURIComponent(query) }>{
+                    this.strings.get("search.showAllLabel")
+                }</a>
             </div>;
         }
 
