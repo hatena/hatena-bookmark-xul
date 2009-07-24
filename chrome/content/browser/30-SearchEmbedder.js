@@ -40,8 +40,8 @@ extend(SearchEmbedder.prototype, {
     },
 
     get httpQuery SE_get_httpQuery() {
-        // XXX ToDo: Move magic number "5" to prefs
-        return '?q=' + encodeURIComponent(this.query) + '&limit=' + 5;
+        return '?q=' + encodeURIComponent(this.query) +
+               '&limit=' + Prefs.bookmark.get("embed.searchCount");
     },
 
     embed: function SE_embed() {
