@@ -16,8 +16,8 @@ SearchEmbedder.STATE_EMBED_READY = SearchEmbedder.STATE_LOAD_DONE |
 
 SearchEmbedder.STYLE = <![CDATA[
     #hBookmark-search {
-        font: 1em/1.4 Arial, Helvetica, sans-serif;
-        background-color: #f3fbff;
+      font-size: 1em;
+      line-height: 1.4;
         color: #000;
         margin: 0 0 0.5em 1em;
         padding: 0;
@@ -50,35 +50,74 @@ SearchEmbedder.STYLE = <![CDATA[
         color: #551a8b;
     }
     #hBookmark-search .hBookmark-search-heading {
-        background: #3c7ecd url("http://b.st-hatena.com/images/favicon.gif") 0.3em 0.5em no-repeat;
+        background: #4272c4 url("http://b.st-hatena.com/images/fx_addon_search_bg.gif") left center;
+        border: 1px solid #2c6ebf;
         color: #fff;
-        text-align: right;
-        padding: 0.3em 0.5em;
-        border: 1px outset #3c7ecd;
+        padding: 5px;
+        -moz-border-radius-topleft: 5px;
+        -moz-border-radius-topright: 5px;
+        overflow: hidden;
+        position: relative;
+    }
+    #hBookmark-search .hBookmark-search-title {
+      background: url(http://b.st-hatena.com/images/favicon.gif) left center no-repeat;
+      padding-left: 18px;
+      font-weight:bold;
     }
     #hBookmark-search .hBookmark-search-user {
         color: inherit;
         text-decoration: none;
-        margin-bottom: 0.2em;
+        font-size: 12px;
+        display: inline-block;
+        width: 50%;
+        text-align: right;
+        color: #666;
         float: right;
+        margin-bottom: 1em;
     }
     #hBookmark-search a > img {
-        margin: 0.2em 0.3em -0.2em 0;
-        float: left;
+        margin: 0 3px -5px 0;
     }
     #hBookmark-search .hBookmark-search-status {
         display: block;
         text-align: left;
-        clear: both;
+        float: left;
+        display: inline-block;
+        width: 50%;
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 1em;
+    }
+    #hBookmark-search div.hBookmark-search-container {
+        border: 1px solid #ccc;
+        -moz-border-radius-bottomleft: 5px;
+        -moz-border-radius-bottomright: 5px;
+        padding: 5px;
     }
     #hBookmark-search dl {
-        padding: 0 0.5em 1em 0.5em;
+        clear: both;
+        margin: 0;
+        padding: 0 0 10px 20px;
     }
     #hBookmark-search dt {
-        margin-top: 1em;
+      margin-top: 0.5em;
     }
     #hBookmark-search dd {
-        margin-left: 0.7em;
+      font-size: 90%;
+      margin: 0.2em 0;
+    }
+
+    #hBookmark-search dd.hBookmark-search-info {
+      margin-bottom: 1em;
+    }
+    #hBookmark-search a.hBookmark-search-counter {
+      display: inline-block;
+      margin-left: 3px;
+    }
+
+    #hBookmark-search dt a img {
+      position: relative;
+      margin-left: -20px;
     }
     #hBookmark-search .hBookmark-search-many {
         background-color: #fff0f0;
@@ -92,14 +131,24 @@ SearchEmbedder.STYLE = <![CDATA[
     }
     #hBookmark-search .hBookmark-search-more {
         text-align: right;
-        padding: 0 1em 1em 1em;
+        padding: 0.5em 0 0 0;
     }
     #hBookmark-search .hBookmark-search-query,
     #hBookmark-search em {
         font-weight: bold;
     }
     #hBookmark-search .hBookmark-search-url {
-        color: #008000;
+        color: green;
+    }
+
+    td > #hBookmark-search {
+        margin: 1em 0 0 0;
+        width: auto;
+        float: none;
+        white-space: normal;
+    }
+    div > #hBookmark-search {
+        font-size: 0.8em;
     }
 ]]>.toString();
 
@@ -126,9 +175,10 @@ extend(SearchEmbedder.prototype, {
         let encoding = this.site.queryFirstString("encoding", url) || "utf-8";
         let converter = Cc["@mozilla.org/intl/scriptableunicodeconverter"].
                         createInstance(Ci.nsIScriptableUnicodeConverter);
+        query = unescape(query.replace(/\+/g, " "));
         try {
             converter.charset = encoding;
-            query = converter.ConvertToUnicode(unescape(query));
+            query = converter.ConvertToUnicode(query);
         } catch (ex) {}
         this.query = query;
         this.doc.addEventListener("DOMContentLoaded", this, false);
@@ -181,6 +231,9 @@ extend(SearchEmbedder.prototype, {
 
         let result = <div id="hBookmark-search">
             <div class="hBookmark-search-heading">
+                <span class="hBookmark-search-title">Search Bookmark</span>
+            </div>
+            <div class="hBookmark-search-container">
                 <a class="hBookmark-search-user"
                    href={ User.user.bookmarkHomepage }>
                     <img src={ User.user.getProfileIcon() }
@@ -188,11 +241,12 @@ extend(SearchEmbedder.prototype, {
                     { User.user.name }
                 </a>
                 <span class="hBookmark-search-status"/>
+
+                <dl class="hBookmark-search-results"/>
             </div>
-            <dl class="hBookmark-search-results"/>
         </div>;
 
-        let heading = result.div[0];
+        let heading = result.div[1];
         heading.insertChildAfter(heading.a[0], " ");
         let statusPattern = this.strings.get("search.statusPattern");
         this._appendFilledInContent(heading.span[0], statusPattern, {
@@ -202,7 +256,7 @@ extend(SearchEmbedder.prototype, {
             elapsed: <b>{ data.meta.elapsed.toFixed(2) }</b>,
         });
 
-        let dl = result.dl[0];
+        let dl = heading.dl[0];
         data.bookmarks.forEach(function (bookmark) {
             let entry = bookmark.entry;
 
