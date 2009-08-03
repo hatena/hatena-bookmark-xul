@@ -179,7 +179,12 @@ var escapeIRI = function(iri) {
 }
 
 var entryURL = function(url) {
-    return B_HTTP + 'entry/' + iri2uri(url).replace(/#/g, '%23');
+    let suffix = iri2uri(url).replace(/#/g, '%23');
+    if (suffix.indexOf("http://") === 0)
+        suffix = suffix.substring(7);
+    else if (suffix.indexOf("https://") === 0)
+        suffix = "s/" + suffix.substring(8);
+    return B_HTTP + 'entry/' + suffix;
 }
 
 var addPageURL = function(url) {
