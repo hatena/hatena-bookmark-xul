@@ -156,7 +156,7 @@ extend(SearchEmbedder.prototype, {
 
     createSearchResult: function SE_createSearchResult(container) {
         default xml namespace = XHTML_NS;
-        // <></>.(See.mozilla.bug[330572].for.this.workaround);
+        <></>.(See.mozilla.bug[330572].for.this.workaround);
         let data = this.data;
         let query = this.query;
 
