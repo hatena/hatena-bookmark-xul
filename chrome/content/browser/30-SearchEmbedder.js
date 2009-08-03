@@ -422,6 +422,10 @@ SearchEmbedder.STYLE = <![CDATA[
         font-size: 90%;
         margin: 0.2em 0;
     }
+    #hBookmark-search .hBookmark-search-comment {
+        color: #777777;
+        margin-left: 0.5em;
+    }
     #hBookmark-search .hBookmark-search-tag {
         color: #6666cc;
     }
@@ -435,7 +439,7 @@ SearchEmbedder.STYLE = <![CDATA[
         display: inline-block;
     }
 
-    #hBookmark-search dt a img {
+    #hBookmark-search dt > a > img {
         position: relative;
         margin-left: -20px;
     }
