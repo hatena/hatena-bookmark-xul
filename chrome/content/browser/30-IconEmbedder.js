@@ -88,7 +88,8 @@ extend(IconEmbedder.prototype, {
                    href={ entryURL(link.href) }
                    title={ this.strings.get("showEntryTitle") }
                    style="display: none;">
-                    <img src={ B_STATIC_HTTP + 'entry/image/' + link.href }
+                    <img src={ B_STATIC_HTTP + 'entry/image/' +
+                               link.href.replace(/#/g, "%23") }
                          alt={ this.strings.get("showEntryText") }
                          onload="if (this.naturalWidth === 1)
                                      this.onerror();
