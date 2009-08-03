@@ -110,7 +110,9 @@ SearchEmbedder.STYLE = <![CDATA[
         font-size: 90%;
         margin: 0.2em 0;
     }
-
+    #hBookmark-search .hBookmark-search-tag {
+        color: #6666cc;
+    }
     #hBookmark-search dd.hBookmark-search-info {
         /*margin-bottom: 1em;*/
     }
@@ -227,9 +229,9 @@ extend(SearchEmbedder.prototype, {
 
         let result = <div id="hBookmark-search">
             <div class="hBookmark-search-heading">
-                <span class="hBookmark-search-title">
-                    { this.strings.get("search.title") }
-                </span>
+                <span class="hBookmark-search-title">{
+                    this.strings.get("search.title")
+                }</span>
             </div>
             <div class="hBookmark-search-container">
                 <div class="hBookmark-search-info">
@@ -268,10 +270,17 @@ extend(SearchEmbedder.prototype, {
             </dt>;
             this._appendEmphasizedContent(title.a[0], entry.title, query);
 
-            let snippet = <></>
+            let snippet = <></>;
             if (entry.snippet) {
                 snippet = <dd class="hBookmark-search-snippet"/>;
                 this._appendEmphasizedContent(snippet, entry.snippet, query);
+            }
+
+            let comment = <></>;
+            if (bookmark.comment) {
+                comment = <dd class="hBookmark-search-comment"/>;
+                this._appendCommentContents(comment, bookmark.comment);
+                
             }
 
             let info = <dd class="hBookmark-search-info">
@@ -289,7 +298,7 @@ extend(SearchEmbedder.prototype, {
             }
             info.insertChildAfter(info.span[0], " ");
 
-            dl.appendChild(title + snippet + info);
+            dl.appendChild(title + snippet + comment + info);
         }, this);
 
         if (data.meta.total > data.bookmarks.length) {
@@ -320,6 +329,25 @@ extend(SearchEmbedder.prototype, {
             if (i) element.appendChild(<em>{ keyword }</em>);
             element.appendChild(fragment);
         });
+        return element;
+    },
+
+    _appendCommentContents: function SE__appendCommentContents(element,
+                                                               comment) {
+        default xml namespace = XHTML_NS;
+        let tags = comment.match(/\[[^\[\]]+\]/gy);
+        if (tags) {
+            let n = 0;
+            tags.forEach(function (tag, i, tags) {
+                n += tag.length;
+                element.appendChild(<span class="hBookmark-search-tag">{
+                    tag.slice(1, -1)
+                }</span>);
+                element.appendChild((i === tags.length - 1) ? " " : ", ");
+            }, this);
+            comment = comment.substring(n);
+        }
+        element.appendChild(comment);
         return element;
     },
 
