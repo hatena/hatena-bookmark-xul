@@ -113,6 +113,10 @@ var UIUtils = {
 
     forceOpenLinks: function UIU_forceOpenLinks(uris, event) {
         let win = getTopWin();
+        if (Prefs.link.get("openInNewTab")) {
+            event = event || { ctrlKey: false, metaKey: false };
+            event = { ctrlKey: !event.ctrlKey, metaKey: !event.metaKey, __proto__: event };
+        }
         let where = whereToOpenLink(event, false, true);
         if (!win || where === "window") {
             window.openDialog(getBrowserURL(), "_blank",
