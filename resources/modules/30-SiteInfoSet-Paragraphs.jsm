@@ -51,14 +51,7 @@ paragraphs.addData([
         domain:     /^http:\/\/news\.google(?:\.\w+){1,2}\//,
         paragraph:  'descendant::div[contains(concat(" ", @class, " "), " story ")]',
         link:       'descendant::a[starts-with(concat(" ", @class), " usg-")]',
-        //annotation: 'descendant::div[contains(concat(" ", @class, " "), " sources ")]',
-        //annotationPosition: 'last',
-        annotation: function (context) {
-            let sources = context.getElementsByClassName("sources")[0];
-            return sources &&
-                   (sources.getElementsByClassName("moreLinks")[0] ||
-                    sources.lastChild);
-        },
+        annotation: 'descendant::div[contains(concat(" ", @class, " "), " sources ")]/*[contains(concat(" ", @class, " "), " moreLinks ") or not(following-sibling::*)]',
         isPage:     'self::*[@id = "search-stories"]',
     },
     { // Yahoo Web Search
