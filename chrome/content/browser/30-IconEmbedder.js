@@ -25,12 +25,17 @@ IconEmbedder.STYLE = <![CDATA[
 
 extend(IconEmbedder.prototype, {
     strings: new Strings("chrome://hatenabookmark/locale/embed.properties"),
+    isAutoPagerInstalled: !!getService("@mozilla.org/extensions/manager;1",
+                                       Ci.nsIExtensionManager)
+                              .getInstallLocation("autopager@mozilla.org"),
 
     ready: function IE_ready() {
         this.embedStyles();
         this.embed();
         this.doc.addEventListener("HB.PageInserted", this, false);
         this.doc.defaultView.addEventListener("GM_AutoPagerizeLoaded", this, false, true);
+        if (this.isAutoPagerInstalled)
+            this.doc.addEventListener("DOMNodeInserted", this, false);
     },
 
     embedStyles: function IE_embedStyles() {

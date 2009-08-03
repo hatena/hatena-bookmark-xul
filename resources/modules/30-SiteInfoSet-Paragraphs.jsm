@@ -41,11 +41,13 @@ paragraphs.addData([
     */
     { // Google Web Search
         domain:     /^http:\/\/www\.google(?:\.\w+){1,2}\/search\?/,
-        paragraph:  'id("res")/div/ol/li[contains(concat(" ", @class, " "), " g ")]',
+        // AutoPager insert <div id="res"> so we can't use id function.
+        //paragraph:  'id("res")/div/ol/li[contains(concat(" ", @class, " "), " g ")]',
+        paragraph:  'descendant::div[@id = "res"]/div/ol/li[contains(concat(" ", @class, " "), " g ")]',
         link:       'descendant::a[contains(concat(" ", @class, " "), "l")]',
         //annotation: 'descendant::cite',
         annotation: 'descendant::span[@class = "gl"]',
-        isPage:     'self::div[ol and parent::div[@id = "res"]]',
+        isPage:     'self::div[(ol and parent::div[@id = "res"]) or @id = "res"]',
     },
     { // Google News
         domain:     /^http:\/\/news\.google(?:\.\w+){1,2}\//,
@@ -71,7 +73,7 @@ paragraphs.addData([
         },
         annotation: 'descendant::div[@class = "sinf"]',
         annotationPosition: 'last',
-        isPage:     'self::div[@id = "yschpri"]',
+        isPage:     'self::div[@id = "yschpri" or @class = "web"]',
     },
 ]);
 
