@@ -88,3 +88,4 @@ pref("extensions.hatenabookmark.embed.addButton", true);
 pref("extensions.hatenabookmark.embed.search", true);
 pref("extensions.hatenabookmark.embed.searchCount", 5);
 pref("extensions.hatenabookmark.embed.searchSnippetLength", 100);
+pref("extensions.hatenabookmark.embed.showSearchStandby", true);
