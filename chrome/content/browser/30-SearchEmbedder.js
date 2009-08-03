@@ -16,8 +16,8 @@ SearchEmbedder.STATE_EMBED_READY = SearchEmbedder.STATE_LOAD_DONE |
 
 SearchEmbedder.STYLE = <![CDATA[
     #hBookmark-search {
-      font-size: 1em;
-      line-height: 1.4;
+        font-size: 1em;
+        line-height: 1.4;
         color: #000;
         margin: 0 0 0.5em 1em;
         padding: 0;
@@ -60,9 +60,9 @@ SearchEmbedder.STYLE = <![CDATA[
         position: relative;
     }
     #hBookmark-search .hBookmark-search-title {
-      background: url(http://b.st-hatena.com/images/favicon.gif) left center no-repeat;
-      padding-left: 18px;
-      font-weight:bold;
+        background: url("http://b.st-hatena.com/images/favicon.gif") left center no-repeat;
+        padding-left: 18px;
+        font-weight:bold;
     }
     #hBookmark-search .hBookmark-search-user {
         color: inherit;
@@ -73,7 +73,7 @@ SearchEmbedder.STYLE = <![CDATA[
         text-align: right;
         color: #666;
         float: right;
-        margin-bottom: 1em;
+        /*margin-bottom: 1em;*/
     }
     #hBookmark-search a > img {
         margin: 0 3px -5px 0;
@@ -86,7 +86,12 @@ SearchEmbedder.STYLE = <![CDATA[
         width: 50%;
         font-size: 12px;
         color: #666;
-        margin-bottom: 1em;
+        /*margin-bottom: 1em;*/
+    }
+    #hBookmark-search .hBookmark-search-container > .hBookmark-search-info:after {
+        content: "";
+        display: block;
+        clear: both;
     }
     #hBookmark-search div.hBookmark-search-container {
         border: 1px solid #ccc;
@@ -95,29 +100,30 @@ SearchEmbedder.STYLE = <![CDATA[
         padding: 5px;
     }
     #hBookmark-search dl {
-        clear: both;
-        margin: 0;
-        padding: 0 0 10px 20px;
+        margin: 0 0 0 20px;
+        padding: 0 0 10px 0;
     }
     #hBookmark-search dt {
-      margin-top: 0.5em;
+        margin-top: 1em;
     }
     #hBookmark-search dd {
-      font-size: 90%;
-      margin: 0.2em 0;
+        font-size: 90%;
+        margin: 0.2em 0;
     }
 
     #hBookmark-search dd.hBookmark-search-info {
-      margin-bottom: 1em;
+        /*margin-bottom: 1em;*/
+    }
+    #hBookmark-search .hBookmark-search-url {
+        margin-right: 3px;
     }
     #hBookmark-search a.hBookmark-search-counter {
-      display: inline-block;
-      margin-left: 3px;
+        display: inline-block;
     }
 
     #hBookmark-search dt a img {
-      position: relative;
-      margin-left: -20px;
+        position: relative;
+        margin-left: -20px;
     }
     #hBookmark-search .hBookmark-search-many {
         background-color: #fff0f0;
@@ -131,7 +137,7 @@ SearchEmbedder.STYLE = <![CDATA[
     }
     #hBookmark-search .hBookmark-search-more {
         text-align: right;
-        padding: 0.5em 0 0 0;
+        margin: 0 0.5em 0.5em 0;
     }
     #hBookmark-search .hBookmark-search-query,
     #hBookmark-search em {
@@ -139,16 +145,6 @@ SearchEmbedder.STYLE = <![CDATA[
     }
     #hBookmark-search .hBookmark-search-url {
         color: green;
-    }
-
-    td > #hBookmark-search {
-        margin: 1em 0 0 0;
-        width: auto;
-        float: none;
-        white-space: normal;
-    }
-    div > #hBookmark-search {
-        font-size: 0.8em;
     }
 ]]>.toString();
 
@@ -231,32 +227,36 @@ extend(SearchEmbedder.prototype, {
 
         let result = <div id="hBookmark-search">
             <div class="hBookmark-search-heading">
-                <span class="hBookmark-search-title">Search Bookmark</span>
+                <span class="hBookmark-search-title">
+                    { this.strings.get("search.title") }
+                </span>
             </div>
             <div class="hBookmark-search-container">
-                <a class="hBookmark-search-user"
-                   href={ User.user.bookmarkHomepage }>
-                    <img src={ User.user.getProfileIcon() }
-                         alt="" width="16" height="16"/>
-                    { User.user.name }
-                </a>
-                <span class="hBookmark-search-status"/>
+                <div class="hBookmark-search-info">
+                    <a class="hBookmark-search-user"
+                       href={ User.user.bookmarkHomepage }>
+                        <img src={ User.user.getProfileIcon() }
+                             alt="" width="16" height="16"/>
+                        { User.user.name }
+                    </a>
+                    <span class="hBookmark-search-status"/>
+                </div>
 
                 <dl class="hBookmark-search-results"/>
             </div>
         </div>;
 
-        let heading = result.div[1];
-        heading.insertChildAfter(heading.a[0], " ");
+        let status = result.div[1].div[0].span[0];
+        status.parent().insertChildBefore(status, " ");
         let statusPattern = this.strings.get("search.statusPattern");
-        this._appendFilledInContent(heading.span[0], statusPattern, {
+        this._appendFilledInContent(status, statusPattern, {
             query:   <b class="hBookmark-search-query">{ query }</b>,
             count:   <b>{ data.bookmarks.length }</b>,
             total:   <b>{ data.meta.total }</b>,
             elapsed: <b>{ data.meta.elapsed.toFixed(2) }</b>,
         });
 
-        let dl = heading.dl[0];
+        let dl = result.div[1].dl[0];
         data.bookmarks.forEach(function (bookmark) {
             let entry = bookmark.entry;
 
@@ -293,7 +293,7 @@ extend(SearchEmbedder.prototype, {
         }, this);
 
         if (data.meta.total > data.bookmarks.length) {
-            result.* += <div class="hBookmark-search-more">
+            result.div[1].* += <div class="hBookmark-search-more">
                 <a href={ B_HTTP + User.user.name + '/search?q=' + encodeURIComponent(query) }>{
                     this.strings.get("search.showAllLabel")
                 }</a>
