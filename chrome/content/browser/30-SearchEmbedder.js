@@ -350,7 +350,7 @@ SearchEmbedder.STYLE = <![CDATA[
         font-size: 1em;
         line-height: 1.4;
         color: #000;
-        margin: 0 0 0.5em 1em;
+        margin: 0;
         padding: 0;
         width: 30%;
         max-width: 25em;
@@ -381,12 +381,9 @@ SearchEmbedder.STYLE = <![CDATA[
         color: #551a8b;
     }
     #hBookmark-search .hBookmark-search-heading {
-        background: #4272c4 url("http://b.st-hatena.com/images/fx_addon_search_bg.gif") left center;
-        border: 1px solid #2c6ebf;
-        color: #fff;
-        padding: 5px;
-        -moz-border-radius-topleft: 5px;
-        -moz-border-radius-topright: 5px;
+        margin-bottom: 0.3em;
+        padding-bottom: 0.2em;
+        border-bottom: 1px solid #c9d7f1;
         overflow: hidden;
         position: relative;
     }
@@ -400,39 +397,23 @@ SearchEmbedder.STYLE = <![CDATA[
         text-decoration: none;
         font-size: 12px;
         display: inline-block;
-        width: 50%;
         text-align: right;
-        color: #666;
         float: right;
-        /*margin-bottom: 1em;*/
+        margin-bottom: 1em;
+        white-space: nowrap;
     }
     #hBookmark-search a > img {
         margin: 0 3px -5px 0;
     }
     #hBookmark-search .hBookmark-search-status {
-        display: block;
-        text-align: left;
-        float: left;
-        display: inline-block;
-        width: 50%;
         font-size: 12px;
-        color: #666;
-        /*margin-bottom: 1em;*/
-    }
-    #hBookmark-search .hBookmark-search-container > .hBookmark-search-info:after {
-        content: "";
-        display: block;
-        clear: both;
     }
     #hBookmark-search div.hBookmark-search-container {
-        border: 1px solid #ccc;
-        -moz-border-radius-bottomleft: 5px;
-        -moz-border-radius-bottomright: 5px;
-        padding: 5px;
     }
     #hBookmark-search dl {
-        margin: 0 0 0 20px;
-        padding: 0 0 10px 0;
+        clear: both;
+        margin: 0;
+        padding: 0 0 10px 20px;
     }
     #hBookmark-search dt {
         margin-top: 1em;
@@ -445,9 +426,9 @@ SearchEmbedder.STYLE = <![CDATA[
         color: #6666cc;
     }
     #hBookmark-search dd.hBookmark-search-info {
-        /*margin-bottom: 1em;*/
     }
     #hBookmark-search .hBookmark-search-url {
+        color: green;
         margin-right: 3px;
     }
     #hBookmark-search a.hBookmark-search-counter {
@@ -470,14 +451,14 @@ SearchEmbedder.STYLE = <![CDATA[
     }
     #hBookmark-search .hBookmark-search-more {
         text-align: right;
-        margin: 0 0.5em 0.5em 0;
+        margin: 0.5em 0 0 0;
+    }
+    #hBookmark-search .hBookmark-search-more > a {
+        color: #7777cc;
     }
     #hBookmark-search .hBookmark-search-query,
     #hBookmark-search em {
         font-weight: bold;
-    }
-    #hBookmark-search .hBookmark-search-url {
-        color: green;
     }
 ]]>.toString();
 
