@@ -191,6 +191,7 @@ extend(SearchEmbedder.prototype, {
             elapsed: <b>{ data.meta.elapsed.toFixed(2) }</b>,
         });
 
+        let queryRE = this._createKeywordPattern(data.meta.query.queries);
         let dl = result.div[1].dl[0];
         data.bookmarks.forEach(function (bookmark) {
             let entry = bookmark.entry;
@@ -201,18 +202,18 @@ extend(SearchEmbedder.prototype, {
                          alt="" width="16" height="16"/>
                 </a>
             </dt>;
-            this._appendEmphasizedContent(title.a[0], entry.title, query);
+            this._appendEmphasizedContent(title.a[0], entry.title, queryRE);
 
             let snippet = <></>;
             if (entry.snippet) {
                 snippet = <dd class="hBookmark-search-snippet"/>;
-                this._appendEmphasizedContent(snippet, entry.snippet, query);
+                this._appendEmphasizedContent(snippet, entry.snippet, queryRE);
             }
 
             let comment = <></>;
             if (bookmark.comment) {
                 comment = <dd class="hBookmark-search-comment"/>;
-                this._appendCommentContents(comment, bookmark.comment);
+                this._appendCommentContents(comment, bookmark.comment, queryRE);
             }
 
             let info = <dd class="hBookmark-search-info">
@@ -223,7 +224,7 @@ extend(SearchEmbedder.prototype, {
                 }</a>
             </dd>;
             let displayURL = UIUtils.cropURL(entry.url);
-            this._appendEmphasizedContent(info.span[0], displayURL, query);
+            this._appendEmphasizedContent(info.span[0], displayURL, queryRE);
             if (entry.count >= 3) {
                 info.a[0].@class += (entry.count >= 10)
                     ? " hBookmark-search-too-many" : " hBookmark-search-many";
@@ -261,29 +262,37 @@ extend(SearchEmbedder.prototype, {
                                                                    text,
                                                                    keyword) {
         default xml namespace = XHTML_NS;
+        if (keyword.constructor.name !== "RegExp")
+            keyword = this._createKeywordPattern(keyword);
         text.split(keyword).forEach(function (fragment, i) {
-            if (i) element.appendChild(<em>{ keyword }</em>);
-            element.appendChild(fragment);
+            element.appendChild((i & 1) ? <em>{ fragment }</em> : fragment);
         });
         return element;
     },
 
+    _createKeywordPattern: function SE__createKeywordPattern(keywords) {
+        return new RegExp("(" + [].concat(keywords).map(function (k) {
+            return k.replace(/\W/g, "\\$&");
+        }).join("|") + ")", "i");
+    },
+
     _appendCommentContents: function SE__appendCommentContents(element,
-                                                               comment) {
+                                                               comment,
+                                                               keyword) {
         default xml namespace = XHTML_NS;
         let tags = comment.match(/\[[^\[\]]+\]/gy);
         if (tags) {
             let n = 0;
             tags.forEach(function (tag, i, tags) {
                 n += tag.length;
-                element.appendChild(<span class="hBookmark-search-tag">{
-                    tag.slice(1, -1)
-                }</span>);
+                let tagElement = <span class="hBookmark-search-tag"/>;
+                this._appendEmphasizedContent(tagElement, tag.slice(1, -1), keyword);
+                element.appendChild(tagElement);
                 element.appendChild((i === tags.length - 1) ? " " : ", ");
             }, this);
             comment = comment.substring(n);
         }
-        element.appendChild(comment);
+        this._appendEmphasizedContent(element, comment, keyword);
         return element;
     },
 
@@ -302,8 +311,8 @@ extend(SearchEmbedder.prototype, {
     },
 
     onSearch: function SE_onSearch(data) {
-        //if (!data || !data.meta || data.meta.status !== 200 || !data.meta.total)
-        //    return;
+        if (!data)
+            SearchEmbedder.http.clear(this.httpQuery);
         this.data = data;
         this.state |= SearchEmbedder.STATE_SEARCH_DONE;
         this.embed();
