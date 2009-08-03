@@ -27,7 +27,7 @@ var UIUtils = {
                 ctrlKey:  true,
                 shiftKey: false,
                 altKey:   false,
-                metaKey:  false,
+                metaKey:  true,
                 button:   0
             });
         }
