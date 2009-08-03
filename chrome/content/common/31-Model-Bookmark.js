@@ -96,6 +96,7 @@ extend(Bookmark, {
         return Bookmark.find(query);
     },
     search: function(str, limit, ascending) {
+        str = String(str).replace(/^\s+|\s+$/g, "");
         var res;
         p.b(function() {
         if (!str) {
