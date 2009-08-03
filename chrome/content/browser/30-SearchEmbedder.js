@@ -281,7 +281,7 @@ extend(SearchEmbedder.prototype, {
                     UIUtils.getUsersText(entry.count)
                 }</a>
             </dd>;
-            let displayURL = entry.url.replace(/^https?:\/\//, "");
+            let displayURL = UIUtils.cropURL(entry.url);
             this._appendEmphasizedContent(info.span[0], displayURL, query);
             if (entry.count >= 3) {
                 info.a[0].@class += (entry.count >= 10)

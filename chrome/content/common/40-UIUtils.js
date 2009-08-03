@@ -168,5 +168,23 @@ var UIUtils = {
             if (element.collapsed || element.hidden)
                 return false;
         return true;
-    }
+    },
+
+    crop: function UIU_crop(str, size, suffix) {
+        size = size || 32;
+        suffix = suffix || Prefs.global.getLocalized("intl.ellipsis");
+        let b = 0;
+        for (let i = 0; i < str.length; i++) {
+            b += (str.charCodeAt(i) < 0x100) ? 1 : 2;
+            if (b > size)
+                return str.substring(0, i) + suffix;
+        }
+        return str;
+    },
+
+    cropURL: function UIU_cropURL(url, size) {
+        size = size || 40;
+        url = url.replace(/^https?:\/\//, "").replace(/\.[^\/]+$/, "");
+        return UIUtils.crop(url, size);
+    },
 };

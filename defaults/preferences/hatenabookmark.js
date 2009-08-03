@@ -87,4 +87,4 @@ pref("extensions.hatenabookmark.embed.addButton", true);
 // Integrate web search and Hatena Bookmark full-text search
 pref("extensions.hatenabookmark.embed.search", true);
 pref("extensions.hatenabookmark.embed.searchCount", 5);
-pref("extensions.hatenabookmark.embed.searchSnippetLength", 60);
+pref("extensions.hatenabookmark.embed.searchSnippetLength", 100);
