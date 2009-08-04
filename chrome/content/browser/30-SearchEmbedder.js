@@ -424,7 +424,6 @@ SearchEmbedder.STYLE = <![CDATA[
     }
     #hBookmark-search .hBookmark-search-comment {
         color: #777777;
-        margin-left: 0.5em;
     }
     #hBookmark-search .hBookmark-search-tag {
         color: #6666cc;
