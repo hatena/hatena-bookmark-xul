@@ -458,6 +458,8 @@ SearchEmbedder.STYLE = <![CDATA[
         margin: 0.5em 0 0 0;
     }
     #hBookmark-search .hBookmark-search-more > a {
+        background: url("http://b.st-hatena.com/images/favicon.gif") left center no-repeat;
+        padding-left: 18px;
         color: #7777cc;
     }
     #hBookmark-search .hBookmark-search-query,
