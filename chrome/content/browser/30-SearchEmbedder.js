@@ -13,6 +13,7 @@ SearchEmbedder.STATE_LOAD_DONE   = 0x01;
 SearchEmbedder.STATE_SEARCH_DONE = 0x02;
 SearchEmbedder.STATE_EMBED_READY = SearchEmbedder.STATE_LOAD_DONE |
                                    SearchEmbedder.STATE_SEARCH_DONE;
+SearchEmbedder.STATE_COMPLETE    = -1;
 
 extend(SearchEmbedder.prototype, {
     strings: new Strings("chrome://hatenabookmark/locale/embed.properties"),
@@ -47,6 +48,14 @@ extend(SearchEmbedder.prototype, {
         //this.win.addEventListener("pageshow", this, false);
         //this.win.addEventListener("load", this, false);
         SearchEmbedder.http.async_get(this.httpQuery, method(this, 'onSearch'));
+        // XXX Since net.get() can't handle timeout,
+        // manually force an error display.
+        this.win.setTimeout(function (self) {
+            if (self.state === SearchEmbedder.STATE_COMPLETE) return;
+            p('SearchEmbedder: maybe timeout');
+            self.embedFailure();
+            //self.state = SearchEmbedder.STATE_COMPLETE;
+        }, 10000, this);
     },
 
     get httpQuery SE_get_httpQuery() {
@@ -60,12 +69,13 @@ extend(SearchEmbedder.prototype, {
             this.embedStandby();
             return;
         }
-        if (!this.data || !this.data.meta ||
-            this.data.meta.status !== 200 || !this.data.meta.total) {
+        let data = this.data;
+        if (data && data.meta && data.meta.status === 200 && data.meta.total) {
+            this.embedContent(this.createSearchResult());
+        } else {
             this.embedFailure();
-            return;
         }
-        this.embedContent(this.createSearchResult());
+        this.state = SearchEmbedder.STATE_COMPLETE;
     },
 
     embedStandby: function SE_embedStandby() {
