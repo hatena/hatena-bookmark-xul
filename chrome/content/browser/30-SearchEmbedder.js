@@ -55,7 +55,7 @@ extend(SearchEmbedder.prototype, {
             p('SearchEmbedder: maybe timeout');
             self.embedFailure();
             //self.state = SearchEmbedder.STATE_COMPLETE;
-        }, 10000, this);
+        }, 15000, this);
     },
 
     get httpQuery SE_get_httpQuery() {
@@ -65,6 +65,7 @@ extend(SearchEmbedder.prototype, {
     },
 
     embed: function SE_embed() {
+        if (this.state === SearchEmbedder.STATE_COMPLETE) return;
         if (this.state !== SearchEmbedder.STATE_EMBED_READY) {
             this.embedStandby();
             return;
