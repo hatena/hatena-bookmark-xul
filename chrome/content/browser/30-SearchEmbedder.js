@@ -65,53 +65,42 @@ extend(SearchEmbedder.prototype, {
             this.embedFailure();
             return;
         }
-        let standby = this.searchElement;
-        if (standby) {
-            let search = this.createSearchResult(standby.parentNode);
-            standby.parentNode.replaceChild(search, standby);
-        } else {
-            let point = this.insertionPoint;
-            if (!point) return;
-            this.embedStyle();
-            let search = this.createSearchResult(point.startContainer);
-            point.insertNode(search);
-        }
+        this.embedContent(this.createSearchResult());
     },
 
     embedStandby: function SE_embedStandby() {
-        if (!Prefs.bookmark.get("embed.showSearchStandby") ||
-            this.searchElement)
-            return;
-        let standby = <div id="hBookmark-search">
-            <div class="hBookmark-search-heading">
-                <span class="hBookmark-search-title">{
-                    this.strings.get("search.title")
-                }</span>
-            </div>
-            <div class="hBookmark-search-container">
-                <div class="hBookmark-search-standby">{
-                    this.strings.get("search.standbyLabel")
-                }</div>
-            </div>
-        </div>;
-        let point = this.insertionPoint;
-        if (!point) return;
-        this.embedStyle();
-        point.insertNode(xml2dom(standby, { range: point }));
+        if (!Prefs.bookmark.get("embed.showSearchStandby")) return;
+        this.embedContent(<div class="hBookmark-search-standby">{
+            this.strings.get("search.standbyLabel")
+        }</div>);
     },
 
     embedFailure: function SE_embedFailure() {
-        let standby = this.searchElement;
-        if (!standby) return;
-        let container = standby.getElementsByClassName("hBookmark-search-container")[0];
+        if (!Prefs.bookmark.get("embed.showSearchStandby")) return;
+        this.embedContent(<div class="hBookmark-search-failure">{
+            (this.data && this.data.meta && !this.data.meta.total)
+                ? this.strings.get("search.noMatchError")
+                : this.strings.get("search.unexpectedError")
+        }</div>);
+    },
+
+    embedContent: function SE_embedContent(content) {
+        let search = this.searchElement;
+        if (!search) {
+            let point = this.insertionPoint;
+            if (!point) return;
+            this.embedStyle();
+            search = xml2dom(this.createSearchContainer(), point);
+            point.insertNode(search);
+        }
+        let container = search.getElementsByClassName("hBookmark-search-container")[0];
+        if (!container) return;
+        content =
+            (typeof content === "xml")    ? xml2dom(content, container)      :
+            (typeof content === "string") ? this.doc.createTextNode(content) :
+                                            content;
         UIUtils.deleteContents(container);
-        let message = (this.data && this.data.meta && !this.data.meta.total)
-            ? this.strings.get("search.noMatchError")
-            : this.strings.get("search.unexpectedError");
-        container.appendChild(xml2dom(
-            <div class="hBookmark-search-failure">{ message }</div>,
-            { context: container }
-        ));
+        container.appendChild(content);
     },
 
     embedStyle: function SE_embedStyle() {
@@ -154,34 +143,38 @@ extend(SearchEmbedder.prototype, {
         return this.doc.getElementById("hBookmark-search");
     },
 
-    createSearchResult: function SE_createSearchResult(container) {
+    createSearchContainer: function SE_createSearchContainer() {
         default xml namespace = XHTML_NS;
-        <></>.(See.mozilla.bug[330572].for.this.workaround);
-        let data = this.data;
-        let query = this.query;
-
-        let result = <div id="hBookmark-search">
+        return <div id="hBookmark-search">
             <div class="hBookmark-search-heading">
                 <span class="hBookmark-search-title">{
                     this.strings.get("search.title")
                 }</span>
             </div>
-            <div class="hBookmark-search-container">
-                <div class="hBookmark-search-info">
-                    <a class="hBookmark-search-user"
-                       href={ User.user.bookmarkHomepage }>
-                        <img src={ User.user.getProfileIcon() }
-                             alt="" width="16" height="16"/>
-                        { User.user.name }
-                    </a>
-                    <span class="hBookmark-search-status"/>
-                </div>
-
-                <dl class="hBookmark-search-results"/>
-            </div>
+            <div class="hBookmark-search-container"/>
         </div>;
+    },
 
-        let status = result.div[1].div[0].span[0];
+    createSearchResult: function SE_createSearchResult() {
+        default xml namespace = XHTML_NS;
+        <></>.(See.mozilla.bug[330572].for.this.workaround);
+        let data = this.data;
+        let query = this.query;
+
+        let result = <>
+            <div class="hBookmark-search-info">
+                <a class="hBookmark-search-user"
+                   href={ User.user.bookmarkHomepage }>
+                    <img src={ User.user.getProfileIcon() }
+                         alt="" width="16" height="16"/>
+                    { User.user.name }
+                </a>
+                <span class="hBookmark-search-status"/>
+            </div>
+            <dl class="hBookmark-search-results"/>
+        </>;
+
+        let status = result[0].span[0];
         status.parent().insertChildBefore(status, " ");
         let statusPattern = this.strings.get("search.statusPattern");
         this._appendFilledInContent(status, statusPattern, {
@@ -192,7 +185,7 @@ extend(SearchEmbedder.prototype, {
         });
 
         let queryRE = this._createKeywordPattern(data.meta.query.queries);
-        let dl = result.div[1].dl[0];
+        let dl = result[1];
         data.bookmarks.forEach(function (bookmark) {
             let entry = bookmark.entry;
 
@@ -235,7 +228,7 @@ extend(SearchEmbedder.prototype, {
         }, this);
 
         if (data.meta.total > data.bookmarks.length) {
-            result.div[1].* += <div class="hBookmark-search-more">
+            result += <div class="hBookmark-search-more">
                 <a href={ B_HTTP + User.user.name + '/search?q=' + encodeURIComponent(query) }>{
                     this.strings.get("search.showAllLabel")
                 }</a>
@@ -246,7 +239,7 @@ extend(SearchEmbedder.prototype, {
             for each (let a in result..a)
                 a.@target = "_blank";
         }
-        return xml2dom(result, { document: this.doc, context: container });
+        return result;
     },
 
     _appendFilledInContent: function SE__appendFilledInContent(element,

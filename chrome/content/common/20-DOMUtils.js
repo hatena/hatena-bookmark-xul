@@ -8,10 +8,14 @@ function queryXPathAll(xpath, context);
 
 // XXX ToDo: optionsでrangeを指定できるようにしたい
 function xml2dom(xml, options) {
+    options = (options instanceof Ci.nsIDOMNode)  ? { context: options } :
+              (options instanceof Ci.nsIDOMRange) ? { range:   options } :
+                                                    options;
+    
     options = extend({
         prettyPrinting: false,
         context:        document,
-    }, (typeof options.nodeType === "number") ? { context: options } : options);
+    }, options);
     let prevSettings = XML.settings();
     XML.setSettings(options);
     let range = options.range;
@@ -24,5 +28,5 @@ function xml2dom(xml, options) {
     }
     let result = range.createContextualFragment(xml.toXMLString());
     XML.setSettings(prevSettings);
-    return result;
+    return (result.childNodes.length === 1) ? result.firstChild : result;
 }
