@@ -168,7 +168,10 @@ extend(SearchEmbedder.prototype, {
 
     createSearchResult: function SE_createSearchResult() {
         default xml namespace = XHTML_NS;
-        <></>.(See.mozilla.bug[330572].for.this.workaround);
+        <></>.(This.is.a.workaround.for.mozilla.bug[330572]);
+        // Since Vimperator overrides XML settings, we override them again.
+        let xmlSettings = XML.settings();
+        XML.setSettings({ ignoreWhitespace: true });
         let data = this.data;
         let query = this.query;
 
@@ -250,6 +253,7 @@ extend(SearchEmbedder.prototype, {
             for each (let a in result..a)
                 a.@target = "_blank";
         }
+        XML.setSettings(xmlSettings);
         return result;
     },
 

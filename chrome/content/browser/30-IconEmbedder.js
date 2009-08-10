@@ -82,6 +82,9 @@ extend(IconEmbedder.prototype, {
     },
 
     createIcons: function IE_createIcons(link, paragraph) {
+        // Since Vimperator overrides XML settings, we override them again.
+        let xmlSettings = XML.settings();
+        XML.setSettings({ ignoreWhitespace: true });
         let icons = this.doc.createDocumentFragment();
         let space = this.doc.createTextNode(" ");
         let inNewTab = Prefs.bookmark.get("link.openInNewTab");
@@ -125,6 +128,7 @@ extend(IconEmbedder.prototype, {
             icons.insertBefore(space.cloneNode(false), icons.firstChild);
             icons.appendChild(space.cloneNode(false));
         }
+        XML.setSettings(xmlSettings);
         return icons;
     },
 
