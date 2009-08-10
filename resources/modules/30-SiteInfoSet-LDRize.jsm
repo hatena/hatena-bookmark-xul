@@ -76,7 +76,7 @@ function ldrizeMatcher(item, url, doc) {
     if (item.xpath)
         return doc.evaluate(item.xpath, doc,
                             function () doc.lookupNamespaceURI(null) || "",
-                            XPathResult.BOOLEAN_TYPE, null);
+                            XPathResult.BOOLEAN_TYPE, null).booleanValue;
     if (item.isInvalid) return false;
 
     let key = item.data.domain;
