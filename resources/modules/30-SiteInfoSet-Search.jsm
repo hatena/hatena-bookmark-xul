@@ -3,11 +3,7 @@ loadPrecedingModules();
 
 const EXPORTED_SYMBOLS = [];
 
-// XXX ToDo: SITEINFOの外部ファイル化及びその外部ファイルの自動更新
-
-let search = new SiteInfoSet("url");
-
-search.addData([
+let builtInSearchSiteInfo = [
     /*
     {
         url:
@@ -61,6 +57,14 @@ search.addData([
             }
         ]]>.toString(),
     },
-]);
+];
 
-SiteInfoSet.Search = search;
+let Search = new SiteInfoSet2({
+    matcher: SiteInfoSet2.createURLMatcher('url'),
+    sources: [
+        { file: 'Search-user-siteinfo.js' },
+        { data: builtInSearchSiteInfo },
+    ],
+});
+
+SiteInfoSet.Search = Search;

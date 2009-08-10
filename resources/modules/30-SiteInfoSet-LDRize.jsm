@@ -20,13 +20,15 @@ let builtInSiteInfo = [
         annotation:
                 An XPath expression that matches an element where Hatena
                 Bookmark widgets are inserted or a function that returns an
-                element.  This parameter is optional.  If you omit this, the
-                link is used.
+                element or a range.  This parameter is optional.  If you
+                omit this, the link is used.
         annotationPosition:
                 One of the strings: "before", "after", "first", "last".  This
                 indicates the position where widgets are inserted, relative to
                 the annotation element.  This parameter is optinal and the
-                default value is "after".
+                default value is "after" if the annotation element is a, br,
+                hr, image, canvas, object, input, button, select, or textarea.
+                Otherwise "last".  This is not used if annotation is a range.
     },
     */
 
@@ -37,12 +39,14 @@ let builtInSiteInfo = [
         paragraph:  'descendant::div[@id = "res"]/div/ol/li[contains(concat(" ", @class, " "), " g ")]',
         link:       'descendant::a[contains(concat(" ", @class, " "), "l")]',
         annotation: 'descendant::span[@class = "gl"]',
+        annotationPosition: 'after',
     },
     { // Google News
         domain:     /^http:\/\/news\.google(?:\.\w+){1,2}\//,
         paragraph:  'descendant::div[contains(concat(" ", @class, " "), " story ")]',
         link:       'descendant::a[starts-with(concat(" ", @class), " usg-")]',
         annotation: 'descendant::div[contains(concat(" ", @class, " "), " sources ")]/*[contains(concat(" ", @class, " "), " moreLinks ") or not(following-sibling::*)]',
+        annotationPosition: 'after',
     },
     { // Yahoo Web Search
         domain:     /^http:\/\/search\.yahoo(?:\.\w+){1,2}\/search\?/,
@@ -64,17 +68,49 @@ let builtInSiteInfo = [
     },
 ];
 
-let LDRize = true || new SiteInfoSet({
-    matcher: SiteInfoSet.createURLMatcher('url'),
+var evaluator = new XPathEvaluator();
+
+function ldrizeMatcher(item, url, doc) {
+    if (item.urlPattern)
+        return item.urlPattern.test(url);
+    if (item.xpath)
+        return doc.evaluate(item.xpath, doc,
+                            function () doc.lookupNamespaceURI(null) || "",
+                            XPathResult.BOOLEAN_TYPE, null);
+    if (item.isInvalid) return false;
+
+    let key = item.data.domain;
+    if (key) {
+        if (key.constructor.name === "RegExp" ||
+            /^\^?http(?:s\??)?:/.test(key)) {
+            item.urlPattern = new RegExp(key);
+            return ldrizeMatcher(item, url, doc);
+        }
+        try {
+            doc.createExpression(key, null);
+            item.xpath = addDefaultPrefix(key, "__default__");
+            return ldrizeMatcher(item, url, doc);
+        } catch (ex) {}
+    }
+    item.isInvalid = true;
+    return false;
+}
+
+let LDRize = new SiteInfoSet2({
+    matcher: ldrizeMatcher,
     sources: [
         { file: 'LDRize-user-siteinfo.js' },
         { data: builtInSiteInfo },
         {
             file: 'LDRize-siteinfo.js',
-            url: 'http://wedata.net/databases/AutoPagerize/items.json',
+            url: 'http://wedata.net/databases/LDRize/items.json',
+            // XXX ToDo: create pref for this
             shouldUse: function () true || Prefs.bookmark.get("embed."),
         },
     ],
 });
+
+// For check
+// try { alert(target.hBookmark.SiteInfoSet.LDRize.get(target.gBrowser.contentDocument).data.toSource()); } catch (ex) { Application.console.log(ex); }
 
 SiteInfoSet.LDRize = LDRize;

@@ -4,7 +4,7 @@ const HB_NS = "http://b.hatena.ne.jp/";
 
 function IconEmbedder(doc) {
     this.doc = doc;
-    this.site = SiteInfoSet.Paragraphs.get(doc);
+    this.site = SiteInfoSet.LDRize.get(doc);
     if (this.site && !this.site.data.disabled)
         this.ready();
 }
@@ -55,40 +55,39 @@ extend(IconEmbedder.prototype, {
             let link = this.site.query("link", paragraph) || paragraph;
             if (!link.href) return;
             let annotation = this.site.query("annotation", paragraph) || link;
-            let container = annotation.parentNode;
-            let anchor = annotation.nextSibling;
-            switch (this.site.data.annotationPosition) {
-            case "before":
-                anchor = annotation;
-                break;
-
-            case "first":
-                container = annotation;
-                anchor = annotation.firstChild;
-                break;
-
-            case "last":
-                container = annotation;
-                anchor = null;
-                break;
-
-            case "after":
-            default:
-                break;
+            if (!(annotation instanceof Ci.nsIDOMRange)) {
+                let range = this.doc.createRange();
+                let position = this.site.data.annotationPosition ||
+                    ((annotation instanceof Ci.nsIDOMHTMLAnchorElement ||
+                      annotation instanceof Ci.nsIDOMHTMLBRElement ||
+                      annotation instanceof Ci.nsIDOMHTMLHRElement ||
+                      annotation instanceof Ci.nsIDOMHTMLImageElement ||
+                      annotation instanceof Ci.nsIDOMHTMLCanvasElement ||
+                      annotation instanceof Ci.nsIDOMHTMLObjectElement ||
+                      annotation instanceof Ci.nsIDOMHTMLInputElement ||
+                      annotation instanceof Ci.nsIDOMHTMLButtonElement ||
+                      annotation instanceof Ci.nsIDOMHTMLSelectElement ||
+                      annotation instanceof Ci.nsIDOMHTMLTextAreaElement)
+                     ? 'after' : 'last');
+                if (position === 'before' || position === 'after')
+                    range.selectNode(annotation);
+                else
+                    range.selectNodeContents(annotation);
+                range.collapse(position === 'before' || position === 'start');
+                annotation = range;
             }
-            let icons = this.createIcons(link, paragraph);
-            container.insertBefore(icons, anchor);
+            let icons = this.createIcons(link, paragraph, annotation);
+            annotation.insertNode(icons);
         }, this);
     },
 
-    createIcons: function IE_createIcons(link, paragraph) {
+    createIcons: function IE_createIcons(link, paragraph, range) {
         // Since Vimperator overrides XML settings, we override them again.
         let xmlSettings = XML.settings();
         XML.setSettings({ ignoreWhitespace: true });
         let icons = this.doc.createDocumentFragment();
         let space = this.doc.createTextNode(" ");
         let inNewTab = Prefs.bookmark.get("link.openInNewTab");
-        let xml2domOptions = { document: this.doc, context: paragraph };
         if (Prefs.bookmark.get("embed.counter")) {
             let counter =
                 <a xmlns={ XHTML_NS }
@@ -107,7 +106,7 @@ extend(IconEmbedder.prototype, {
                 </a>;
             if (inNewTab)
                 counter.@target = "_blank";
-            icons.appendChild(xml2dom(counter, xml2domOptions));
+            icons.appendChild(xml2dom(counter, range));
         }
         if (Prefs.bookmark.get("embed.addButton")) {
             let addButton =
@@ -115,14 +114,14 @@ extend(IconEmbedder.prototype, {
                    class="hBookmark-embedded-add-button"
                    href={ addPageURL(link.href) }
                    title={ this.strings.get("addBookmarkTitle") }>
-                    <img src="http://b.hatena.ne.jp/images/append.gif"
+                    <img src={ B_STATIC_HTTP + "images/append.gif" }
                          alt={ this.strings.get("addBookmarkText") }
                          width="16" height="12"
                          style="margin-top: 1px; /* Adjust height with counter */"/>
                 </a>;
             if (inNewTab)
                 addButton.@target = "_blank";
-            icons.appendChild(xml2dom(addButton, xml2domOptions));
+            icons.appendChild(xml2dom(addButton, range));
         }
         if (icons.firstChild) {
             icons.insertBefore(space.cloneNode(false), icons.firstChild);

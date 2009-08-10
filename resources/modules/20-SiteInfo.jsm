@@ -104,7 +104,7 @@ extend(SiteInfo.prototype, {
     lookupNamespaceURI: function SI_lookupNamespaceURI(prefix) {
         return (prefix === DEFAULT_PREFIX)
             ? this._doc.lookupNamespaceURI(null)
-            : element.lookupNamespaceURI(prefix);
+            : this._doc.lookupNamespaceURI(prefix);
     },
 });
 
@@ -139,15 +139,25 @@ extend(SiteInfoSet2.prototype, {
         this.sources.splice(index, 0, source);
     },
 
-    //update: function SIS_update(forceUpdate) {
-    //},
+    update: function SIS_update(forceUpdate) {
+        this.sources.forEach(function (source) {
+            if (source.data)
+                source.items = source.data.map(function (d) ({ data: d }));
+            if (source.file)
+                this._refreshSource(source);
+            if (source.url)
+                this._fetchSource(source, forceUpdate);
+        }, this);
+    },
 
     get: function SIS_get(doc) {
         if (!doc) return null;
         let url = doc.defaultView.location.href;
         let matcher = this.matcher;
         for (let i = 0; i < this.sources.length; i++) {
-            let items = this.sources[i].items;
+            let source = this.sources[i];
+            if (source.shouldUse && !source.shouldUse()) continue;
+            let items = source.items;
             if (!items) continue;
             for (let j = 0; j < items.length; j++) {
                 if (matcher(items[j], url, doc))
@@ -158,7 +168,9 @@ extend(SiteInfoSet2.prototype, {
     },
 
     _refreshSource: function SIS__refreshSource(source) {
-        if (!source.file) return;
+        if (!source.file || !(source.file instanceof Ci.nsIFile) ||
+            !source.file.exists())
+            return;
         let loader = getService('@mozilla.org/moz/jssubscript-loader;1',
                                 Ci.mozIJSSubScriptLoader);
         let handler = getService('@mozilla.org/network/protocol;1?name=file',
@@ -169,6 +181,13 @@ extend(SiteInfoSet2.prototype, {
             newSource = loader.loadSubScript(url);
         } catch (ex) {
             newSource = { updated: 0, items: [] };
+        }
+        if (!newSource) return;
+        if (newSource.constructor.name === 'Array') {
+            newSource = {
+                updated: 0,
+                items: newSource.map(function (d) ({ data: d })),
+            };
         }
         source.updated = newSource.updated;
         source.items = newSource.items;
@@ -188,17 +207,21 @@ extend(SiteInfoSet2.prototype, {
     _fetchSource: function SIS__fetchSource(source, forceFetch) {
         let checkInterval = 24 * 60 * 60 * 1000; // XXX ToDo: to prefs
         if (!forceFetch && source.updated + checkInterval > Date.now()) return;
-        let headers = {
-            'If-Modifield-Since': new Date(source.updated).toUTCString(),
-        };
+        p('SiteInfoSet#_fetchSource: begin fetch')
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', source.url);
+        xhr.setRequestHeader('If-Modifield-Since',
+                             new Date(source.updated).toUTCString());
         let self = this;
-        net.get(source.url, function SIS_onFetch(res) {
-            let items = decodeJSON(res.responseText);
+        xhr.addEventListener('load', function SIS_onFetch() {
+            p('SiteInfoSet#_fetchSource: loaded')
+            let items = decodeJSON(xhr.responseText);
             if (!items) return;
             source.updated = Date.now();
             source.items = items;
             self._writeSource(source);
-        }, null, true, null, headers);
+        }, false);
+        xhr.send(null);
     },
 });
 
@@ -254,27 +277,3 @@ extend(SiteInfoSet.prototype, {
         return null;
     },
 });
-
-
-// XXX To be moved to the independent module.
-function addDefaultPrefix(xpath, prefix) {
-    const tokenPattern = /([A-Za-z_\u00c0-\ufffd][\w\-.\u00b7-\ufffd]*|\*)\s*(::?|\()?|(".*?"|'.*?'|\d+(?:\.\d*)?|\.(?:\.|\d+)?|[\)\]])|(\/\/?|!=|[<>]=?|[\(\[|,=+-])|([@$])/g;
-    const TERM = 1, OPERATOR = 2, MODIFIER = 3;
-    var tokenType = OPERATOR;
-    prefix += ':';
-    function replacer(token, identifier, suffix, term, operator, modifier) {
-        if (suffix) {
-            tokenType = (suffix == ':' || (suffix == '::' &&
-                         (identifier == 'attribute' || identifier == 'namespace')))
-                        ? MODIFIER : OPERATOR;
-        } else if (identifier) {
-            if (tokenType == OPERATOR && identifier != '*')
-                token = prefix + token;
-            tokenType = (tokenType == TERM) ? OPERATOR : TERM;
-        } else {
-            tokenType = term ? TERM : operator ? OPERATOR : MODIFIER;
-        }
-        return token;
-    }
-    return xpath.replace(tokenPattern, replacer);
-}

@@ -301,6 +301,30 @@ function getFaviconURI (url) {
     return faviconURI;
 }
 
+// XPath 式中の接頭辞のない名前テストに接頭辞 prefix を追加する
+// e.g. '//body[@class = "foo"]/p' -> '//prefix:body[@class = "foo"]/prefix:p'
+function addDefaultPrefix(xpath, prefix) {
+    const tokenPattern = /([A-Za-z_\u00c0-\ufffd][\w\-.\u00b7-\ufffd]*|\*)\s*(::?|\()?|(".*?"|'.*?'|\d+(?:\.\d*)?|\.(?:\.|\d+)?|[\)\]])|(\/\/?|!=|[<>]=?|[\(\[|,=+-])|([@$])/g;
+    const TERM = 1, OPERATOR = 2, MODIFIER = 3;
+    var tokenType = OPERATOR;
+    prefix += ':';
+    function replacer(token, identifier, suffix, term, operator, modifier) {
+        if (suffix) {
+            tokenType = (suffix == ':' || (suffix == '::' &&
+                         (identifier == 'attribute' || identifier == 'namespace')))
+                        ? MODIFIER : OPERATOR;
+        } else if (identifier) {
+            if (tokenType == OPERATOR && identifier != '*')
+                token = prefix + token;
+            tokenType = (tokenType == TERM) ? OPERATOR : TERM;
+        } else {
+            tokenType = term ? TERM : operator ? OPERATOR : MODIFIER;
+        }
+        return token;
+    }
+    return xpath.replace(tokenPattern, replacer);
+}
+
 const _MODULE_BASE_URI = "resource://hatenabookmark/modules/"
 
 function loadModules() {
