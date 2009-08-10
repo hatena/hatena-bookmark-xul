@@ -113,9 +113,18 @@ function SiteInfoSet2(options) {
     this.matcher = options.matcher; // matcher: (siteinfo, url, doc) -> boolean
     this.sources = [];
     (options.sources || []).forEach(this.insertSource, this);
+    SiteInfoSet2._instances.push(this);
 }
 
 extend(SiteInfoSet2.prototype, {
+    dispose: function SIS_dispose() {
+        this.matcher = null;
+        this.sources = null;
+        let i = SiteInfoSet2._instances.indexOf(this);
+        if (i !== -1)
+            SiteInfoSet2._instances.splice(i, 1);
+    },
+
     insertSource: function SIS_insertSource(source, index) {
         source = extend({ updated: 0 }, source);
         if (typeof index === 'undefined' || index < 0)
@@ -207,7 +216,7 @@ extend(SiteInfoSet2.prototype, {
     _fetchSource: function SIS__fetchSource(source, forceFetch) {
         let checkInterval = 24 * 60 * 60 * 1000; // XXX ToDo: to prefs
         if (!forceFetch && source.updated + checkInterval > Date.now()) return;
-        p('SiteInfoSet#_fetchSource: begin fetch')
+        p('SiteInfoSet#_fetchSource: begin load')
         let xhr = new XMLHttpRequest();
         xhr.open('GET', source.url);
         xhr.setRequestHeader('If-Modifield-Since',
@@ -220,23 +229,59 @@ extend(SiteInfoSet2.prototype, {
             source.updated = Date.now();
             source.items = items;
             self._writeSource(source);
+            p('SiteInfoSet#_fetchSource: written')
         }, false);
         xhr.send(null);
     },
 });
 
-SiteInfoSet2.createURLMatcher = function SIS_s_createURLMatcher(key) {
-    return function SIS_urlMatcher(item, url) {
-        let pattern = item.urlPattern;
-        if (!pattern) {
-            pattern = item.data[key];
-            if (typeof pattern === "string")
-                pattern = new RegExp(pattern);
-            item.urlPattern = pattern;
+extend(SiteInfoSet2, {
+    _instances: [],
+    _timer: null,
+
+    onTimer: function SIS_s_onTimer() {
+        this._instances.forEach(function (set) set.update());
+    },
+
+    startObserving: function SIS_s_startObserving() {
+        this._timer = Cc['@mozilla.org/timer;1'].createInstance(Ci.nsITimer);
+        this._timer.init(this, 10 * 60 * 1000, Ci.nsITimer.TYPE_REPEATING_SLACK);
+        ObserverService.addObserver(this, 'quit-application', false);
+    },
+
+    stopObserving: function SIS_s_stopObserving() {
+        this._timer.cancel();
+        this._timer = null;
+        ObserverService.removeObserver(this, 'quit-application');
+        this._instances.length = 0;
+    },
+
+    observe: function SIS_s_observe(subject, topic, data) {
+        switch (topic) {
+        case 'timer-callback':
+            this.onTimer();
+            break;
+        case 'quit-application':
+            this.stopObserving();
+            break;
         }
-        return pattern.test(url);
-    };
-};
+    },
+
+    createURLMatcher: function SIS_s_createURLMatcher(key) {
+        return function SIS_urlMatcher(item, url) {
+            let pattern = item.urlPattern;
+            if (!pattern) {
+                pattern = item.data[key];
+                if (typeof pattern === 'string')
+                    pattern = new RegExp(pattern);
+                item.urlPattern = pattern;
+            }
+            return pattern.test(url);
+        };
+    },
+});
+
+SiteInfoSet2.startObserving();
 
 
 function SiteInfoSet(urlKey) {
