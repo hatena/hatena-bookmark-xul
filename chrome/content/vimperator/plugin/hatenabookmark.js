@@ -230,6 +230,10 @@ liberator.plugins.hBookmark = (function() {
 
     completion.addUrlCompleter("H", "Hatena Bookmarks", plugin.command.createCompleter(['Hatena Bookmark']));
     config.guioptions['H'] = ['HatenaBookmark Toolbar',['hBookmarkToolbar']];
+	config.dialogs.push([
+		"hatenabookmark", "Hatenabookmark Config",
+		function(){ window.openDialog("chrome://hatenabookmark/content/config.xul","", "chrome,titlebar,toolbar,centerscreen,dialog=no"); }
+	]);
 
     return plugin;
 })();
