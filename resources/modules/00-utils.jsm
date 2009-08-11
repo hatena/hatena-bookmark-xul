@@ -4,6 +4,8 @@ const B_HOST = 'b.hatena.ne.jp';
 const B_HTTP = 'http://' + B_HOST + '/';
 const B_STATIC_HOST = 'b.st-hatena.com';
 const B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
+const B_API_STATIC_HOST = 'api.b.st-hatena.com';
+const B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
 
 const Cc = Components.classes;
 const Ci = Components.interfaces;
