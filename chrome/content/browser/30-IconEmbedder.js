@@ -1,11 +1,9 @@
 const EXPORT = ["IconEmbedder"];
 
-const HB_NS = "http://b.hatena.ne.jp/";
-
 function IconEmbedder(doc) {
     this.doc = doc;
     this.site = SiteInfoSet.LDRize.get(doc);
-    if (this.site && !this.site.data.disabled)
+    if (this.site && !this.site.data.disable)
         this.ready();
 }
 

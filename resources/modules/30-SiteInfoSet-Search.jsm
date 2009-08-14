@@ -13,6 +13,7 @@ let builtInSearchSiteInfo = [
         annotation:
         annotationPosition:
         style:
+        disable:
     },
     */
     { // Google Web Search
@@ -62,8 +63,8 @@ let builtInSearchSiteInfo = [
 let Search = new SiteInfoSet2({
     matcher: SiteInfoSet2.createURLMatcher('url'),
     sources: [
-        { file: 'Search-user-siteinfo.js' },
-        { data: builtInSearchSiteInfo },
+        { file: 'FullTextSearch.user.siteinfo.js' },
+        { items: builtInSearchSiteInfo },
     ],
 });
 

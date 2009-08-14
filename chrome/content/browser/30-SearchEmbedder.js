@@ -4,7 +4,8 @@ function SearchEmbedder(doc) {
     this.doc = doc;
     this.site = SiteInfoSet.Search.get(doc);
     this.state = SearchEmbedder.STATE_INITIALIZED;
-    if (this.site && this.isValidDomain() && !this.searchElement)
+    if (this.site && !this.site.data.disable &&
+        this.isValidDomain() && !this.searchElement)
         this.ready();
 }
 

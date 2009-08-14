@@ -71,39 +71,51 @@ let builtInSiteInfo = [
 var evaluator = new XPathEvaluator();
 
 function ldrizeMatcher(item, url, doc) {
-    if (item.urlPattern)
-        return item.urlPattern.test(url);
-    if (item.xpath)
-        return doc.evaluate(item.xpath, doc,
+    if (item._urlPattern)
+        return item._urlPattern.test(url);
+    if (item._xpath)
+        return doc.evaluate(item._xpath, doc,
                             function () doc.lookupNamespaceURI(null) || "",
                             XPathResult.BOOLEAN_TYPE, null).booleanValue;
-    if (item.isInvalid) return false;
+    if (item._matchFunction) {
+        try {
+            return item._matchFunction(url, doc);
+        } catch (ex) {
+            return false;
+        }
+    }
+    if (item._isInvalid) return false;
 
-    let key = item.data.domain;
+    let key = item.domain;
     if (key) {
         if (key.constructor.name === "RegExp" ||
             /^\^?http(?:s\??)?:/.test(key)) {
-            item.urlPattern = new RegExp(key);
+            item._urlPattern = new RegExp(key);
+            return ldrizeMatcher(item, url, doc);
+        }
+        if (typeof key === "function") {
+            item._matchFunction = key;
             return ldrizeMatcher(item, url, doc);
         }
         try {
-            doc.createExpression(key, null);
-            item.xpath = addDefaultPrefix(key, "__default__");
+            doc.createExpression(key, null); // Check if XPath is valid
+            item._xpath = addDefaultPrefix(key, "__default__");
             return ldrizeMatcher(item, url, doc);
         } catch (ex) {}
     }
-    item.isInvalid = true;
+    item._isInvalid = true;
     return false;
 }
 
 let LDRize = new SiteInfoSet2({
     matcher: ldrizeMatcher,
     sources: [
-        { file: 'LDRize-user-siteinfo.js' },
-        { data: builtInSiteInfo },
+        { file: 'LDRize.user.siteinfo.js' },
+        { items: builtInSiteInfo },
         {
-            file: 'LDRize-siteinfo.js',
+            file: 'LDRize.siteinfo.js',
             url: 'http://wedata.net/databases/LDRize/items.json',
+            format: 'wedata',
             // XXX ToDo: create pref for this
             shouldUse: function () true || Prefs.bookmark.get("embed."),
         },

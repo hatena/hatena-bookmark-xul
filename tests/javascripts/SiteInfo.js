@@ -2,7 +2,7 @@ function setUp() {
     Components.utils.import("resource://hatenabookmark/modules/20-SiteInfo.jsm");
 }
 
-function testSiteInfo() {
+function _testSiteInfo() {
     let data = [
         {
             url: "^http://www\\.google(?:\\.\\w+){1,2}/",
@@ -33,7 +33,7 @@ function testSiteInfo2() {
     let set = new SiteInfoSet2({
         matcher: SiteInfoSet2.createURLMatcher('url'),
         sources: [
-            { data: [
+            { items: [
                 {
                     url: "^http://www\\.google(?:\\.\\w+){1,2}/",
                     title: "Google",

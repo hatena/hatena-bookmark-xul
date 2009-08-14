@@ -74,6 +74,7 @@ const XBL_NS = "http://www.mozilla.org/xbl";
 const XHTML_NS = "http://www.w3.org/1999/xhtml";
 const XML_NS = "http://www.w3.org/XML/1998/namespace";
 const XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+const HB_NS = "http://b.hatena.ne.jp/";
 
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 

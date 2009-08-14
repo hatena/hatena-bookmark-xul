@@ -6,9 +6,8 @@ const DEFAULT_PREFIX = "__default__";
 let evaluator = new XPathEvaluator();
 
 
-function SiteInfo(item, doc) {
-    this.item = item;
-    this.data = item.data;
+function SiteInfo(data, doc) {
+    this.data = data;
     this._doc = doc;
     this._isHTML = (doc.contentType === "text/html");
     this._exprs = {};
@@ -79,7 +78,7 @@ extend(SiteInfo.prototype, {
     },
 
     queryAll: function SI_queryAll(key, context) {
-        return this.query(key, context, Array);
+        return this.query(key, context, Array) || [];
     },
 
     queryFirstString: function SI_queryFirstString(key, source) {
@@ -126,9 +125,7 @@ extend(SiteInfoSet2.prototype, {
     },
 
     insertSource: function SIS_insertSource(source, index) {
-        source = extend({ updated: 0 }, source);
-        if (typeof index === 'undefined' || index < 0)
-            index = this.sources.length;
+        source = extend({ updated: 0, items: [], format: '' }, source);
         if (source.file) {
             let file = source.file;
             if (!(file instanceof Ci.nsIFile)) {
@@ -141,18 +138,17 @@ extend(SiteInfoSet2.prototype, {
             }
             this._refreshSource(source);
         }
-        if (source.data)
-            source.items = source.data.map(function (d) ({ data: d }));
         if (source.url)
             this._fetchSource(source);
-        this.sources.splice(index, 0, source);
+        if (typeof index === 'undefined' || index < 0)
+            this.sources.push(source);
+        else
+            this.sources.splice(index, 0, source);
     },
 
     update: function SIS_update(forceUpdate) {
         this.sources.forEach(function (source) {
-            if (source.data)
-                source.items = source.data.map(function (d) ({ data: d }));
-            if (source.file)
+            if (source.file && forceUpdate)
                 this._refreshSource(source);
             if (source.url)
                 this._fetchSource(source, forceUpdate);
@@ -185,32 +181,29 @@ extend(SiteInfoSet2.prototype, {
         let handler = getService('@mozilla.org/network/protocol;1?name=file',
                                  Ci.nsIFileProtocolHandler);
         let url = handler.getURLSpecFromFile(source.file);
-        let newSource;
+        let data = null;
         try {
-            newSource = loader.loadSubScript(url);
-        } catch (ex) {
-            newSource = { updated: 0, items: [] };
-        }
-        if (!newSource) return;
-        if (newSource.constructor.name === 'Array') {
-            newSource = {
-                updated: 0,
-                items: newSource.map(function (d) ({ data: d })),
-            };
-        }
-        source.updated = newSource.updated;
-        source.items = newSource.items;
+            data = loader.loadSubScript(url);
+            p('SiteInfoSet#_refreshSource: read from ' + source.file.path);
+        } catch (ex) {}
+        [source.items, source.updated] =
+            this._getItemsAndUpdated(data, source.format);
     },
 
     _writeSource: function SIS__writeSource(source) {
-        if (!source.file) return;
+        if (!source.file || !(source.file instanceof Ci.nsIFile)) return;
         let stream = Cc['@mozilla.org/network/file-output-stream;1'].
                      createInstance(Ci.nsIFileOutputStream);
-        stream.init(source.file, 0x02 | 0x08 | 0x20, 0644, 0);
         // The result of toSource() will be ASCII string.
         let data = { updated: source.updated, items: source.items }.toSource();
-        stream.write(data, data.length);
-        stream.close();
+        try {
+            stream.init(source.file, 0x02 | 0x08 | 0x20, 0644, 0);
+            stream.write(data, data.length);
+            p('SiteInfoSet#_fetchSource: written to ' + source.file.path)
+        } catch (ex) {
+        } finally {
+            stream.close();
+        }
     },
 
     _fetchSource: function SIS__fetchSource(source, forceFetch) {
@@ -224,14 +217,22 @@ extend(SiteInfoSet2.prototype, {
         let self = this;
         xhr.addEventListener('load', function SIS_onFetch() {
             p('SiteInfoSet#_fetchSource: loaded')
-            let items = decodeJSON(xhr.responseText);
-            if (!items) return;
-            source.updated = Date.now();
-            source.items = items;
+            let json = decodeJSON(xhr.responseText);
+            [source.items, source.updated] =
+                self._getItemsAndUpdated(json, source.format);
             self._writeSource(source);
-            p('SiteInfoSet#_fetchSource: written')
         }, false);
         xhr.send(null);
+    },
+
+    _getItemsAndUpdated: function SIS__getItemsAndUpdated(rawData, format) {
+        if (Object.prototype.toString.call(rawData) === '[object Array]') {
+            let items = (format === 'wedata')
+                        ? rawData.map(function (i) i.data) : rawData;
+            return [items, Date.now()];
+        }
+        rawData = rawData || {};
+        return [rawData.items || [], rawData.updated || Date.now()];
     },
 });
 
@@ -269,12 +270,12 @@ extend(SiteInfoSet2, {
 
     createURLMatcher: function SIS_s_createURLMatcher(key) {
         return function SIS_urlMatcher(item, url) {
-            let pattern = item.urlPattern;
+            let pattern = item._urlPattern;
             if (!pattern) {
-                pattern = item.data[key];
+                pattern = item[key];
                 if (typeof pattern === 'string')
                     pattern = new RegExp(pattern);
-                item.urlPattern = pattern;
+                item._urlPattern = pattern;
             }
             return pattern.test(url);
         };
