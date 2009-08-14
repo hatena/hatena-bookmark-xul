@@ -4,10 +4,15 @@ var getEntryURL = entryURL;
 var getAddPageURL = addPageURL;
 
 function WidgetEmbedder(doc) {
-    this.doc = doc;
     this.site = SiteInfoSet.LDRize.get(doc);
-    if (this.site && !this.site.data.disable)
-        this.ready();
+    if (!this.site || this.site.data.disable) return;
+    this.doc = doc;
+    this.win = doc.defaultView;
+    this.embedStyle();
+    this.win.addEventListener("GM_AutoPagerizeLoaded", this, false, true);
+    this.doc.addEventListener("HB.PageInserted", this, false, true);
+    this.doc.addEventListener("DOMNodeInserted", this, false);
+    this._timerId = this.win.setTimeout(this.onTimer, 50, this);
 }
 
 const embedStrings =
@@ -40,20 +45,7 @@ extend(WidgetEmbedder, {
 });
 
 extend(WidgetEmbedder.prototype, {
-    isAutoPagerInstalled: !!getService("@mozilla.org/extensions/manager;1",
-                                       Ci.nsIExtensionManager)
-                              .getInstallLocation("autopager@mozilla.org"),
-
-    ready: function WE_ready() {
-        this.embedStyles();
-        this.embed();
-        this.doc.addEventListener("HB.PageInserted", this, false);
-        this.doc.defaultView.addEventListener("GM_AutoPagerizeLoaded", this, false, true);
-        if (this.isAutoPagerInstalled)
-            this.doc.addEventListener("DOMNodeInserted", this, false);
-    },
-
-    embedStyles: function WE_embedStyles() {
+    embedStyle: function WE_embedStyle() {
         let style = this.doc.createElementNS(XHTML_NS, "style");
         style.setAttribute("type", "text/css");
         style.textContent = WidgetEmbedder.STYLE + (this.site.data.style || "");
@@ -280,19 +272,27 @@ extend(WidgetEmbedder.prototype, {
     handleEvent: function WE_handleEvent(event) {
         switch (event.type) {
         case "DOMNodeInserted":
-            if ("isPage" in this.site.data &&
-                !this.site.query("isPage", event.target, Boolean))
-                break;
-            // fall through
+            if (!this._timerId)
+                this._timerId = this.win.setTimeout(this.onTimer, 350, this);
+            break;
+
         case "HB.PageInserted":
+        case "GM_AutoPagerizeNextPageLoaded":
             this.embed();
             break;
 
         case "GM_AutoPagerizeLoaded":
-            this.doc.addEventListener("DOMNodeInserted", this, false);
+            this.win.removeEventListener("GM_AutoPagerizeLoaded", this, false);
+            this.doc.removeEventListener("DOMNodeInserted", this, false);
+            this.doc.addEventListener("GM_AutoPagerizeNextPageLoaded", this, false, true);
             break;
         }
-    }
+    },
+
+    onTimer: function WE_onTimer(self) {
+        self._timerId = 0;
+        self.embed();
+    },
 });
 
 
@@ -303,7 +303,7 @@ function tryToEmbedWidgets(event) {
 }
 
 window.addEventListener("load", function WidgetEmbedder_BEGIN() {
-    gBrowser.addEventListener("DOMContentLoaded", tryToEmbedWidgets, false);
+    gBrowser.addEventListener("DOMContentLoaded", tryToEmbedWidgets, true);
 }, false);
 
 
