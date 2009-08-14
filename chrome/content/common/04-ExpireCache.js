@@ -180,7 +180,7 @@ HTTPCache.counter.isValid = function(url) {
 };
 
 HTTPCache.counter.createFilter = function(ev) {
-    let filters = eval( '(' + HTTPCache.counter.prefs.get('counterIngoreList') + ')');
+    let filters = eval( '(' + HTTPCache.counter.prefs.get('counterIgnoreList') + ')');
     HTTPCache.counter.setFilter(filters);
 };
 
@@ -190,7 +190,7 @@ HTTPCache.counter.setFilter = function(filters) {
 
 HTTPCache.counter.loadHandler = function(ev) {
     HTTPCache.counter.createFilter();
-    HTTPCache.counter.prefs.createListener('counterIngoreList', HTTPCache.counter.createFilter);
+    HTTPCache.counter.prefs.createListener('counterIgnoreList', HTTPCache.counter.createFilter);
 };
 
 HTTPCache.comment = new HTTPCache('commentCache', {

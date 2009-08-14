@@ -37,23 +37,23 @@ var urlEditor = {
             let item = listbox.getItemAtIndex(i);
             res.push(item.value);
         }
-        Application.prefs.get('extensions.hatenabookmark.statusbar.counterIngoreList').value = uneval(res);
+        Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').value = uneval(res);
     },
     reset: function() {
         if (window.confirm(urlEditor.strings.get('defaultConfirm'))) {
-            let current = Application.prefs.get('extensions.hatenabookmark.statusbar.counterIngoreList').value;
-            Application.prefs.get('extensions.hatenabookmark.statusbar.counterIngoreList').reset();
+            let current = Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').value;
+            Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').reset();
             urlEditor.init();
-            Application.prefs.get('extensions.hatenabookmark.statusbar.counterIngoreList').value = current;
+            Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').value = current;
         }
     },
     init: function() {
         let list;
         try {
-            list = eval(Application.prefs.get('extensions.hatenabookmark.statusbar.counterIngoreList').value);
+            list = eval(Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').value);
         } catch(e) {
-            Application.prefs.get('extensions.hatenabookmark.statusbar.counterIngoreList').reset();
-            list = eval(Application.prefs.get('extensions.hatenabookmark.statusbar.counterIngoreList').value);
+            Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').reset();
+            list = eval(Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').value);
         }
         while(listbox.getRowCount()) listbox.removeItemAt(0);
         list.forEach(function(v) listbox.appendItem(v, v));

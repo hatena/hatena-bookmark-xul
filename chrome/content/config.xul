@@ -212,10 +212,6 @@
             name="extensions.hatenabookmark.statusbar.counter"
             type="bool"/>
         <preference 
-            id="extensions.hatenabookmark.statusbar.httpsIgnore"
-            name="extensions.hatenabookmark.statusbar.httpsIgnore"
-            type="bool"/>
-        <preference 
             id="extensions.hatenabookmark.commentviewer.autoHoverShow"
             name="extensions.hatenabookmark.commentviewer.autoHoverShow"
             type="bool"/>
