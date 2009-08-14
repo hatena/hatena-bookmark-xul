@@ -29,6 +29,8 @@ let builtInSiteInfo = [
                 default value is "after" if the annotation element is a, br,
                 hr, image, canvas, object, input, button, select, or textarea.
                 Otherwise "last".  This is not used if annotation is a range.
+        disable:
+                If this is set to true, widgets are not embedded.
     },
     */
 
