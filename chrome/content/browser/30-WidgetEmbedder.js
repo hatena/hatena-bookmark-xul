@@ -1,9 +1,9 @@
-const EXPORT = ["IconEmbedder"];
+const EXPORT = ["WidgetEmbedder", "IconEmbedder"];
 
 var getEntryURL = entryURL;
 var getAddPageURL = addPageURL;
 
-function IconEmbedder(doc) {
+function WidgetEmbedder(doc) {
     this.doc = doc;
     this.site = SiteInfoSet.LDRize.get(doc);
     if (this.site && !this.site.data.disable)
@@ -14,7 +14,7 @@ const embedStrings =
     new Strings("chrome://hatenabookmark/locale/embed.properties");
 
 
-extend(IconEmbedder, {
+extend(WidgetEmbedder, {
     IMAGE_API_PREFIX: B_STATIC_HTTP + 'entry/image/',
     ADD_BUTTON_URL:   B_STATIC_HTTP + 'images/append.gif',
 
@@ -39,12 +39,12 @@ extend(IconEmbedder, {
     ]]>.toString(),
 });
 
-extend(IconEmbedder.prototype, {
+extend(WidgetEmbedder.prototype, {
     isAutoPagerInstalled: !!getService("@mozilla.org/extensions/manager;1",
                                        Ci.nsIExtensionManager)
                               .getInstallLocation("autopager@mozilla.org"),
 
-    ready: function IE_ready() {
+    ready: function WE_ready() {
         this.embedStyles();
         this.embed();
         this.doc.addEventListener("HB.PageInserted", this, false);
@@ -53,16 +53,16 @@ extend(IconEmbedder.prototype, {
             this.doc.addEventListener("DOMNodeInserted", this, false);
     },
 
-    embedStyles: function IE_embedStyles() {
+    embedStyles: function WE_embedStyles() {
         let style = this.doc.createElementNS(XHTML_NS, "style");
         style.setAttribute("type", "text/css");
-        style.textContent = IconEmbedder.STYLE;
+        style.textContent = WidgetEmbedder.STYLE;
         let head = this.doc.getElementsByTagName("head")[0];
         if (!head) return;
         head.appendChild(style);
     },
 
-    embed: function IE_embed() {
+    embed: function WE_embed() {
         let pref = Prefs.bookmark;
         this._inNewTab = pref.get("link.openInNewTab");
         this._embedCounter = pref.get("embed.counter");
@@ -71,7 +71,7 @@ extend(IconEmbedder.prototype, {
         this.site.queryAll("paragraph").forEach(this.embedInParagraph, this);
     },
 
-    embedInParagraph: function IE_embedInParagraph(paragraph) {
+    embedInParagraph: function WE_embedInParagraph(paragraph) {
         if (paragraph.hasAttributeNS(HB_NS, "annotation")) return;
         paragraph.setAttributeNS(HB_NS, "hb:annotation", "true");
 
@@ -126,7 +126,7 @@ extend(IconEmbedder.prototype, {
         }
     },
 
-    getInsertionPoints: function IE_getInsertionPoints(paragraph, link) {
+    getInsertionPoints: function WE_getInsertionPoints(paragraph, link) {
         let existings = this.getExistingWidgets(paragraph, link);
         let counterPoint = null, commentsPoint = null, addButtonPoint = null;
         if (!existings.counter) {
@@ -166,7 +166,7 @@ extend(IconEmbedder.prototype, {
         };
     },
 
-    getExistingWidgets: function IE_getExistingWidgets(paragraph, link) {
+    getExistingWidgets: function WE_getExistingWidgets(paragraph, link) {
         const url = iri2uri(link.href);
         const escapedURL = encodeURIComponent(url);
         const entryURL = getEntryURL(link.href);
@@ -218,7 +218,7 @@ extend(IconEmbedder.prototype, {
         return widgets;
     },
 
-    getAnnotationPoint: function IE_getAnnotationPoint(paragraph, link) {
+    getAnnotationPoint: function WE_getAnnotationPoint(paragraph, link) {
         let annotation = this.site.query("annotation", paragraph) || link;
         if (annotation instanceof Ci.nsIDOMRange) return annotation;
         let point = this.doc.createRange();
@@ -242,21 +242,21 @@ extend(IconEmbedder.prototype, {
         return point;
     },
 
-    createWidgetXMLs: function IE_createWidgetXMLs(link) {
+    createWidgetXMLs: function WE_createWidgetXMLs(link) {
         default xml namespace = XHTML_NS;
         // Since Vimperator overrides XML settings, we override them again.
         let xmlSettings = XML.settings();
         XML.setSettings();
-        const IE = IconEmbedder;
+        const WE = WidgetEmbedder;
         let url = link.href;
         let entryURL = getEntryURL(url);
         let xmls = <>
             <a class="hBookmark-embedded-widget hBookmark-embedded-counter"
                href={ entryURL }
-               title={ IE.STRING_SHOW_ENTRY_TITLE }
+               title={ WE.STRING_SHOW_ENTRY_TITLE }
                style="display: none;">
-                <img src={ IE.IMAGE_API_PREFIX + url.replace(/#/g, "%23") }
-                     alt={ IE.STRING_SHOW_ENTRY_TEXT }/>
+                <img src={ WE.IMAGE_API_PREFIX + url.replace(/#/g, "%23") }
+                     alt={ WE.STRING_SHOW_ENTRY_TEXT }/>
             </a>
             <a class="hBookmark-embedded-widget hBookmark-embedded-comments"
                href={ entryURL }
@@ -264,9 +264,9 @@ extend(IconEmbedder.prototype, {
                style="display: none;">[c]</a>
             <a class="hBookmark-embedded-widget hBookmark-embedded-add-button"
                href={ addPageURL(url) }
-               title={ IE.STRING_ADD_BOOKMARK_TITLE }>
-                <img src={ IE.ADD_BUTTON_URL }
-                     alt={ IE.STRING_ADD_BOOKMARK_TEXT }
+               title={ WE.STRING_ADD_BOOKMARK_TITLE }>
+                <img src={ WE.ADD_BUTTON_URL }
+                     alt={ WE.STRING_ADD_BOOKMARK_TEXT }
                      width="16" height="12"/>
             </a>;
         </>;
@@ -277,7 +277,7 @@ extend(IconEmbedder.prototype, {
         return xmls;
     },
 
-    handleEvent: function IE_handleEvent(event) {
+    handleEvent: function WE_handleEvent(event) {
         switch (event.type) {
         case "DOMNodeInserted":
             if ("isPage" in this.site.data &&
@@ -296,12 +296,16 @@ extend(IconEmbedder.prototype, {
 });
 
 
-function tryToEmbedIcons(event) {
+function tryToEmbedWidgets(event) {
     if (Prefs.bookmark.get("embed.enabled") &&
         event.target instanceof HTMLDocument)
-        new IconEmbedder(event.target);
+        new WidgetEmbedder(event.target);
 }
 
-window.addEventListener("load", function IconEmbedder_BEGIN() {
-    gBrowser.addEventListener("DOMContentLoaded", tryToEmbedIcons, false);
+window.addEventListener("load", function WidgetEmbedder_BEGIN() {
+    gBrowser.addEventListener("DOMContentLoaded", tryToEmbedWidgets, false);
 }, false);
+
+
+// "IconEmbedder" is deprecated.  Use "WidgetEmbedder".
+var IconEmbedder = WidgetEmbedder;
