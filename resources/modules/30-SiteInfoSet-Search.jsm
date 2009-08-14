@@ -60,8 +60,8 @@ let builtInSearchSiteInfo = [
     },
 ];
 
-let Search = new SiteInfoSet2({
-    matcher: SiteInfoSet2.createURLMatcher('url'),
+let Search = new SiteInfoSet({
+    matcher: SiteInfoSet.createURLMatcher('url'),
     sources: [
         { file: 'FullTextSearch.user.siteinfo.js' },
         { items: builtInSearchSiteInfo },

@@ -1,6 +1,6 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 
-const EXPORTED_SYMBOLS = ["SiteInfo", "SiteInfoSet2", "SiteInfoSet"];
+const EXPORTED_SYMBOLS = ["SiteInfo", "SiteInfoSet"];
 
 const DEFAULT_PREFIX = "__default__";
 let evaluator = new XPathEvaluator();
@@ -108,20 +108,20 @@ extend(SiteInfo.prototype, {
 });
 
 
-function SiteInfoSet2(options) {
+function SiteInfoSet(options) {
     this.matcher = options.matcher; // matcher: (siteinfo, url, doc) -> boolean
     this.sources = [];
     (options.sources || []).forEach(this.insertSource, this);
-    SiteInfoSet2._instances.push(this);
+    SiteInfoSet._instances.push(this);
 }
 
-extend(SiteInfoSet2.prototype, {
+extend(SiteInfoSet.prototype, {
     dispose: function SIS_dispose() {
         this.matcher = null;
         this.sources = null;
-        let i = SiteInfoSet2._instances.indexOf(this);
+        let i = SiteInfoSet._instances.indexOf(this);
         if (i !== -1)
-            SiteInfoSet2._instances.splice(i, 1);
+            SiteInfoSet._instances.splice(i, 1);
     },
 
     insertSource: function SIS_insertSource(source, index) {
@@ -236,7 +236,7 @@ extend(SiteInfoSet2.prototype, {
     },
 });
 
-extend(SiteInfoSet2, {
+extend(SiteInfoSet, {
     _instances: [],
     _timer: null,
 
@@ -282,44 +282,4 @@ extend(SiteInfoSet2, {
     },
 });
 
-SiteInfoSet2.startObserving();
-
-
-function SiteInfoSet(urlKey) {
-    this.urlKey = urlKey;
-    this.items = [];
-}
-
-extend(SiteInfoSet.prototype, {
-    addItems: function SIS_addItems(items) {
-        this.items = this.items.concat(items);
-    },
-
-    addData: function SIS_addData(data) {
-        let items = [].concat(data).map(function (d) ({ data: d }));
-        this.addItems(items);
-    },
-
-    clearItems: function SIS_clearItems() {
-        this.items = [];
-    },
-
-    get: function SIS_get(doc) {
-        if (!doc) return null;
-        let url = doc.defaultView.location.href;
-        doc.defaultView.location.href;
-        for (let i = 0; i < this.items.length; i++) {
-            let item = this.items[i];
-            let pattern = item.urlPattern;
-            if (!pattern) {
-                pattern = item.data[this.urlKey];
-                if (typeof pattern === "string")
-                    pattern = new RegExp(pattern);
-                item.urlPattern = pattern;
-            }
-            if (pattern.test(url))
-                return new SiteInfo(item, doc);
-        }
-        return null;
-    },
-});
+SiteInfoSet.startObserving();

@@ -107,7 +107,7 @@ function ldrizeMatcher(item, url, doc) {
     return false;
 }
 
-let LDRize = new SiteInfoSet2({
+let LDRize = new SiteInfoSet({
     matcher: ldrizeMatcher,
     sources: [
         { file: 'LDRize.user.siteinfo.js' },
