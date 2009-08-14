@@ -297,9 +297,11 @@ extend(WidgetEmbedder.prototype, {
 
 
 function tryToEmbedWidgets(event) {
+    let doc = event.target;
     if (Prefs.bookmark.get("embed.enabled") &&
-        event.target instanceof HTMLDocument)
-        new WidgetEmbedder(event.target);
+        doc instanceof HTMLDocument &&
+        HTTPCache.counter.isValid(doc.defaultView.location.href))
+        new WidgetEmbedder(doc);
 }
 
 window.addEventListener("load", function WidgetEmbedder_BEGIN() {
