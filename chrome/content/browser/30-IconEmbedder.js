@@ -16,7 +16,7 @@ IconEmbedder.STYLE = <![CDATA[
     .hBookmark-embedded-counter img,
     .hBookmark-embedded-add-button img {
         border: none;
-        vertical-align: text-bottom;
+        vertical-align: middle;
         -moz-force-broken-image-icon: 1;
     }
 ]]>.toString().replace(/\s+/g, " ");
