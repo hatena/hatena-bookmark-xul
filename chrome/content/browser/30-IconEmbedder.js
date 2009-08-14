@@ -1,5 +1,8 @@
 const EXPORT = ["IconEmbedder"];
 
+var getEntryURL = entryURL;
+var getAddPageURL = addPageURL;
+
 function IconEmbedder(doc) {
     this.doc = doc;
     this.site = SiteInfoSet.LDRize.get(doc);
@@ -7,22 +10,36 @@ function IconEmbedder(doc) {
         this.ready();
 }
 
-IconEmbedder.STYLE = <![CDATA[
-    .hBookmark-embedded-counter,
-    .hBookmark-embedded-add-button {
-        text-decoration: none;
-        margin: 0 2px 0 4px;
-    }
-    .hBookmark-embedded-counter img,
-    .hBookmark-embedded-add-button img {
-        border: none;
-        vertical-align: middle;
-        -moz-force-broken-image-icon: 1;
-    }
-]]>.toString().replace(/\s+/g, " ");
+const embedStrings =
+    new Strings("chrome://hatenabookmark/locale/embed.properties");
+
+
+extend(IconEmbedder, {
+    IMAGE_API_PREFIX: B_STATIC_HTTP + 'entry/image/',
+    ADD_BUTTON_URL:   B_STATIC_HTTP + 'images/append.gif',
+
+    STRING_SHOW_ENTRY_TITLE:   embedStrings.get('showEntryTitle'),
+    STRING_SHOW_ENTRY_TEXT:    embedStrings.get('showEntryText'),
+    STRING_ADD_BOOKMARK_TITLE: embedStrings.get('addBookmarkTitle'),
+    STRING_ADD_BOOKMARK_TEXT:  embedStrings.get('addBookmarkText'),
+
+    STYLE: <![CDATA[
+        .hBookmark-embedded-widget {
+            text-decoration: none;
+            margin: 0 0 0 2px;
+        }
+        .hBookmark-embedded-widget > img {
+            border: none;
+            vertical-align: middle;
+            -moz-force-broken-image-icon: 1;
+        }
+        .hBookmark-embedded-add-button > img {
+            margin-top: 1px; /* Adjust height with counter */
+        }
+    ]]>.toString(),
+});
 
 extend(IconEmbedder.prototype, {
-    strings: new Strings("chrome://hatenabookmark/locale/embed.properties"),
     isAutoPagerInstalled: !!getService("@mozilla.org/extensions/manager;1",
                                        Ci.nsIExtensionManager)
                               .getInstallLocation("autopager@mozilla.org"),
@@ -46,116 +63,218 @@ extend(IconEmbedder.prototype, {
     },
 
     embed: function IE_embed() {
-        this.site.queryAll("paragraph").forEach(function (paragraph) {
-            if (paragraph.hasAttributeNS(HB_NS, "annotation")) return;
-            paragraph.setAttributeNS(HB_NS, "hb:annotation", "true");
+        let pref = Prefs.bookmark;
+        this._inNewTab = pref.get("link.openInNewTab");
+        this._embedCounter = pref.get("embed.counter");
+        this._embedComments = false && pref.get("embed.comments"); // XXX temp
+        this._embedAddButton = pref.get("embed.addButton");
+        this.site.queryAll("paragraph").forEach(this.embedInParagraph, this);
+    },
 
-            let link = this.site.query("link", paragraph) || paragraph;
-            if (!link.href) return;
-            let annotation = this.site.query("annotation", paragraph) || link;
-            if (!(annotation instanceof Ci.nsIDOMRange)) {
-                let range = this.doc.createRange();
-                let position = this.site.data.annotationPosition ||
-                    ((annotation instanceof Ci.nsIDOMHTMLAnchorElement ||
-                      annotation instanceof Ci.nsIDOMHTMLBRElement ||
-                      annotation instanceof Ci.nsIDOMHTMLHRElement ||
-                      annotation instanceof Ci.nsIDOMHTMLImageElement ||
-                      annotation instanceof Ci.nsIDOMHTMLCanvasElement ||
-                      annotation instanceof Ci.nsIDOMHTMLObjectElement ||
-                      annotation instanceof Ci.nsIDOMHTMLInputElement ||
-                      annotation instanceof Ci.nsIDOMHTMLButtonElement ||
-                      annotation instanceof Ci.nsIDOMHTMLSelectElement ||
-                      annotation instanceof Ci.nsIDOMHTMLTextAreaElement)
-                     ? 'after' : 'last');
-                if (position === 'before' || position === 'after')
-                    range.selectNode(annotation);
-                else
-                    range.selectNodeContents(annotation);
-                range.collapse(position === 'before' || position === 'start');
-                annotation = range;
+    embedInParagraph: function IE_embedInParagraph(paragraph) {
+        if (paragraph.hasAttributeNS(HB_NS, "annotation")) return;
+        paragraph.setAttributeNS(HB_NS, "hb:annotation", "true");
+
+        let link = this.site.query("link", paragraph) || paragraph;
+        if (!link.href) return;
+        let points = this.getInsertionPoints(paragraph, link);
+        let xmls = this.createWidgetXMLs(link);
+        let space = this.doc.createTextNode(" ");
+        let fragment = this.doc.createDocumentFragment();
+        fragment.appendChild(space.cloneNode(false));
+
+        let counter = null, comments = null;
+        if (points.addButton) {
+            let f = fragment.cloneNode(true);
+            f.appendChild(xml2dom(xmls[2], points.addButton));
+            f.appendChild(space.cloneNode(false));
+            points.addButton.insertNode(f);
+        }
+        if (points.comments) {
+            if (!points.counter)
+                delete xmls[1].@style;
+            comments = xml2dom(xmls[1], points.comments);
+            let f = fragment.cloneNode(true);
+            f.appendChild(comments);
+            if (points.comments !== points.addButton)
+                f.appendChild(space.cloneNode(false));
+            points.comments.insertNode(f);
+        }
+        if (points.counter) {
+            counter = xml2dom(xmls[0], points.counter);
+            let img = counter.firstChild;
+            img.addEventListener("load", onCounterEvent, false);
+            img.addEventListener("error", onCounterEvent, false);
+            img.addEventListener("abort", onCounterEvent, false);
+            let f = fragment.cloneNode(true);
+            f.appendChild(counter);
+            if (points.counter !== points.comments)
+                f.appendChild(space.cloneNode(false));
+            points.counter.insertNode(f);
+        }
+
+        function onCounterEvent(event) {
+            let target = event.target;
+            if (event.type === "load" && target.naturalWidth !== 1) {
+                counter.removeAttribute("style");
+                if (comments)
+                    comments.removeAttribute("style");
             }
-            let options = {
-                embedCounter:   Prefs.bookmark.get("embed.counter") &&
-                                !this.isCounterEmbedded(paragraph, link),
-                embedAddButton: Prefs.bookmark.get("embed.addButton") &&
-                                !this.isAddButtonEmbedded(paragraph, link),
-                range:          annotation,
-            };
-            let icons = this.createIcons(link, options);
-            annotation.insertNode(icons);
-        }, this);
+            target.removeEventListener("load", onCounterEvent, false);
+            target.removeEventListener("error", onCounterEvent, false);
+            target.removeEventListener("abort", onCounterEvent, false);
+        }
     },
 
-    isCounterEmbedded: function IE_isCounterEmbedded(paragraph, link) {
-        let oldEntryURL = B_HTTP + 'entry/' +
-                          iri2uri(link.href).replace(/#/g, '%23');
-        let xpath =
-            'descendant::a[' +
-            '    (@href = "' + entryURL(link.href) + '" or ' +
-            '     @href = "' + oldEntryURL + '") and ' +
-            '    (contains(., " users") or ' +
-            '     img[starts-with(@src, "' + B_HTTP + 'entry/image/") or ' +
-            '         starts-with(@src, "' + B_STATIC_HTTP + 'entry/image/")])' +
-            ']';
-        return this.doc.evaluate(xpath, paragraph, null,
-                                 XPathResult.BOOLEAN_TYPE, null).booleanValue;
+    getInsertionPoints: function IE_getInsertionPoints(paragraph, link) {
+        let existings = this.getExistingWidgets(paragraph, link);
+        let counterPoint = null, commentsPoint = null, addButtonPoint = null;
+        if (!existings.counter) {
+            let anchor = existings.entry ||
+                         existings.comments ||
+                         existings.addButton;
+            if (anchor) {
+                counterPoint = this.doc.createRange();
+                counterPoint.selectNode(anchor);
+                counterPoint.collapse(anchor !== existings.entry);
+            } else {
+                counterPoint = this.getAnnotationPoint(paragraph, link);
+            }
+        }
+        if (!existings.comments) {
+            if (existings.counter) {
+                commentsPoint = this.doc.createRange();
+                commentsPoint.selectNode(existings.counter);
+                commentsPoint.collapse(false);
+            } else {
+                commentsPoint = counterPoint;
+            }
+        }
+        if (!existings.addButton) {
+            if (existings.comments) {
+                addButtonPoint = this.doc.createRange();
+                addButtonPoint.selectNode(existings.comments);
+                addButtonPoint.collapse(false);
+            } else {
+                addButtonPoint = commentsPoint;
+            }
+        }
+        return {
+            counter:   this._embedCounter   ? counterPoint   : null,
+            comments:  this._embedComments  ? commentsPoint  : null,
+            addButton: this._embedAddButton ? addButtonPoint : null,
+        };
     },
 
-    isAddButtonEmbedded: function IE_isAddButtonEmbedded(paragraph, link) {
-        let xpath = 'descendant::a[@href = "' +
-            B_HTTP + 'my/add.confirm/?url=' + escapeIRI(link.href) + '"]';
-        return this.doc.evaluate(xpath, paragraph, null,
-                                 XPathResult.BOOLEAN_TYPE, null).booleanValue;
+    getExistingWidgets: function IE_getExistingWidgets(paragraph, link) {
+        const url = iri2uri(link.href);
+        const escapedURL = encodeURIComponent(url);
+        const entryURL = getEntryURL(link.href);
+        const oldEntryURL = B_HTTP + 'entry/' + url.replace(/#/g, '%23');
+        const imageAPIPrefix = B_STATIC_HTTP + 'entry/image/';
+        const oldImageAPIPrefix = B_HTTP + 'entry/image/';
+        const addURL = getAddPageURL(link.href);
+        const oldAddURL = B_HTTP + 'append?' + escapedURL;
+        const commentsImagePrefix = 'http://d.hatena.ne.jp/images/b_entry';
+        let widgets = {
+            entry:     null,
+            counter:   null,
+            comments:  null,
+            addButton: null
+        };
+        Array.forEach(paragraph.getElementsByTagName('a'), function (a) {
+            switch (a.href) {
+            case entryURL:
+            case oldEntryURL:
+                let content = a.firstChild;
+                if (!content) break;
+                if (content.nodeType === Node.TEXT_NODE) {
+                    if (content.nodeValue.indexOf(' users') !== -1) {
+                        widgets.counter = a;
+                        break;
+                    }
+                    if (content.nextSibling)
+                        content = content.nextSibling;
+                    else
+                        break;
+                }
+                if (content instanceof Ci.nsIDOMHTMLImageElement) {
+                    let src = content.src;
+                    if (src.indexOf(imageAPIPrefix) === 0 ||
+                        src.indexOf(oldImageAPIPrefix) === 0)
+                        widgets.counter = a;
+                    else if (src.indexOf(commentsImagePrefix) === 0)
+                        widgets.entry = a;
+                }
+                break;
+
+            case addURL:
+            case oldAddURL:
+                widgets.addButton = a;
+                break;
+            }
+        });
+        widgets.comments = paragraph.getElementsByClassName("hatena-bcomment-view-icon").item(0);
+        return widgets;
     },
 
-    createIcons: function IE_createIcons(link, options) {
+    getAnnotationPoint: function IE_getAnnotationPoint(paragraph, link) {
+        let annotation = this.site.query("annotation", paragraph) || link;
+        if (annotation instanceof Ci.nsIDOMRange) return annotation;
+        let point = this.doc.createRange();
+        let position = this.site.data.annotationPosition ||
+            ((annotation instanceof Ci.nsIDOMHTMLAnchorElement ||
+              annotation instanceof Ci.nsIDOMHTMLBRElement ||
+              annotation instanceof Ci.nsIDOMHTMLHRElement ||
+              annotation instanceof Ci.nsIDOMHTMLImageElement ||
+              annotation instanceof Ci.nsIDOMHTMLCanvasElement ||
+              annotation instanceof Ci.nsIDOMHTMLObjectElement ||
+              annotation instanceof Ci.nsIDOMHTMLInputElement ||
+              annotation instanceof Ci.nsIDOMHTMLButtonElement ||
+              annotation instanceof Ci.nsIDOMHTMLSelectElement ||
+              annotation instanceof Ci.nsIDOMHTMLTextAreaElement)
+             ? 'after' : 'last');
+        if (position === 'before' || position === 'after')
+            point.selectNode(annotation);
+        else
+            point.selectNodeContents(annotation);
+        point.collapse(position === 'before' || position === 'start');
+        return point;
+    },
+
+    createWidgetXMLs: function IE_createWidgetXMLs(link) {
+        default xml namespace = XHTML_NS;
         // Since Vimperator overrides XML settings, we override them again.
         let xmlSettings = XML.settings();
-        XML.setSettings({ ignoreWhitespace: true });
-        let icons = this.doc.createDocumentFragment();
-        let space = this.doc.createTextNode(" ");
-        let inNewTab = Prefs.bookmark.get("link.openInNewTab");
-        if (options.embedCounter) {
-            let counter =
-                <a xmlns={ XHTML_NS }
-                   class="hBookmark-embedded-counter"
-                   href={ entryURL(link.href) }
-                   title={ this.strings.get("showEntryTitle") }
-                   style="display: none;">
-                    <img src={ B_STATIC_HTTP + 'entry/image/' +
-                               link.href.replace(/#/g, "%23") }
-                         alt={ this.strings.get("showEntryText") }
-                         onload="if (this.naturalWidth === 1)
-                                     this.onerror();
-                                 else
-                                     this.parentNode.style.display = '';"
-                         onerror="this.parentNode.parentNode.removeChild(this.parentNode);"/>
-                </a>;
-            if (inNewTab)
-                counter.@target = "_blank";
-            icons.appendChild(xml2dom(counter, options.range));
-        }
-        if (options.embedAddButton) {
-            let addButton =
-                <a xmlns={ XHTML_NS }
-                   class="hBookmark-embedded-add-button"
-                   href={ addPageURL(link.href) }
-                   title={ this.strings.get("addBookmarkTitle") }>
-                    <img src={ B_STATIC_HTTP + "images/append.gif" }
-                         alt={ this.strings.get("addBookmarkText") }
-                         width="16" height="12"
-                         style="margin-top: 1px; /* Adjust height with counter */"/>
-                </a>;
-            if (inNewTab)
-                addButton.@target = "_blank";
-            icons.appendChild(xml2dom(addButton, options.range));
-        }
-        if (icons.firstChild) {
-            icons.insertBefore(space.cloneNode(false), icons.firstChild);
-            icons.appendChild(space.cloneNode(false));
-        }
+        XML.setSettings();
+        const IE = IconEmbedder;
+        let url = link.href;
+        let entryURL = getEntryURL(url);
+        let xmls = <>
+            <a class="hBookmark-embedded-widget hBookmark-embedded-counter"
+               href={ entryURL }
+               title={ IE.STRING_SHOW_ENTRY_TITLE }
+               style="display: none;">
+                <img src={ IE.IMAGE_API_PREFIX + url.replace(/#/g, "%23") }
+                     alt={ IE.STRING_SHOW_ENTRY_TEXT }/>
+            </a>
+            <a class="hBookmark-embedded-widget hBookmark-embedded-comments"
+               href={ entryURL }
+               title=""
+               style="display: none;">[c]</a>
+            <a class="hBookmark-embedded-widget hBookmark-embedded-add-button"
+               href={ addPageURL(url) }
+               title={ IE.STRING_ADD_BOOKMARK_TITLE }>
+                <img src={ IE.ADD_BUTTON_URL }
+                     alt={ IE.STRING_ADD_BOOKMARK_TEXT }
+                     width="16" height="12"/>
+            </a>;
+        </>;
+        if (this._inNewTab)
+            for each (let a in xmls)
+                a.@target = '_blank';
         XML.setSettings(xmlSettings);
-        return icons;
+        return xmls;
     },
 
     handleEvent: function IE_handleEvent(event) {
