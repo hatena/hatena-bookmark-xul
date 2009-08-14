@@ -56,7 +56,7 @@ extend(WidgetEmbedder.prototype, {
     embedStyles: function WE_embedStyles() {
         let style = this.doc.createElementNS(XHTML_NS, "style");
         style.setAttribute("type", "text/css");
-        style.textContent = WidgetEmbedder.STYLE;
+        style.textContent = WidgetEmbedder.STYLE + (this.site.data.style || "");
         let head = this.doc.getElementsByTagName("head")[0];
         if (!head) return;
         head.appendChild(style);

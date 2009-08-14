@@ -29,6 +29,8 @@ let builtInSiteInfo = [
                 default value is "after" if the annotation element is a, br,
                 hr, image, canvas, object, input, button, select, or textarea.
                 Otherwise "last".  This is not used if annotation is a range.
+        style:
+                CSS to apply the page.
         disable:
                 If this is set to true, widgets are not embedded.
     },
@@ -67,6 +69,11 @@ let builtInSiteInfo = [
         },
         annotation: 'descendant::div[@class = "sinf"]',
         annotationPosition: 'last',
+        style: <![CDATA[
+            .hBookmark-embedded-widget {
+                margin-left: 6px;
+            }
+        ]]>.toString(),
     },
 ];
 
