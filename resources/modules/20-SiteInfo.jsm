@@ -138,13 +138,13 @@ extend(SiteInfoSet.prototype, {
 
     insertSource: function SIS_insertSource(source, index) {
         source = extend({ updated: 0, items: [], format: '' }, source);
-        if (source.file && !(source.file instanceof Ci.nsIFile)) {
+        if (source.file && !source.fileObject) {
             let file = DirectoryService.get('ProfD', Ci.nsIFile);
             file.append('hatenabookmark');
             if (!file.exists())
                 file.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
             file.append(source.file);
-            source.file = file;
+            source.fileObject = file;
         }
         this._refreshSource(source);
         this._fetchSource(source);
@@ -180,32 +180,30 @@ extend(SiteInfoSet.prototype, {
     },
 
     _refreshSource: function SIS__refreshSource(source) {
-        if (!source.file || !(source.file instanceof Ci.nsIFile) ||
-            !source.file.exists())
-            return;
+        if (!source.fileObject || !source.fileObject.exists()) return;
         let loader = getService('@mozilla.org/moz/jssubscript-loader;1',
                                 Ci.mozIJSSubScriptLoader);
         let handler = getService('@mozilla.org/network/protocol;1?name=file',
                                  Ci.nsIFileProtocolHandler);
-        let url = handler.getURLSpecFromFile(source.file);
+        let url = handler.getURLSpecFromFile(source.fileObject);
         let data = null;
         try {
             data = loader.loadSubScript(url);
-            p('SiteInfoSet#_refreshSource: read from ' + source.file.path);
+            p('SiteInfoSet#_refreshSource: read from ' + source.fileObject.path);
         } catch (ex) {}
         [source.items, source.updated] = this._getItemsAndUpdated(data);
     },
 
     _writeSource: function SIS__writeSource(source) {
-        if (!source.file || !(source.file instanceof Ci.nsIFile)) return;
+        if (!source.fileObject) return;
         let stream = Cc['@mozilla.org/network/file-output-stream;1'].
                      createInstance(Ci.nsIFileOutputStream);
         // We assume that the result of toSource() is an ASCII string.
         let data = { updated: source.updated, items: source.items }.toSource();
         try {
-            stream.init(source.file, 0x02 | 0x08 | 0x20, 0644, 0);
+            stream.init(source.fileObject, 0x02 | 0x08 | 0x20, 0644, 0);
             stream.write(data, data.length);
-            p('SiteInfoSet#_writeSource: written to ' + source.file.path)
+            p('SiteInfoSet#_writeSource: written to ' + source.fileObject.path)
         } catch (ex) {
         } finally {
             stream.close();
