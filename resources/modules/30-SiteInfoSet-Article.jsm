@@ -140,8 +140,7 @@ let Article = new SiteInfoSet({
                 'http://wedata.net/databases/LDRize/items.json',
                 //'http://ss-o.net/json/wedataLDRize.json.gz',
             ],
-            // XXX ToDo: create pref for this
-            shouldUse: function () true || Prefs.bookmark.get("embed."),
+            shouldUse: function () PrefService.getBoolPref('extensions.hatenabookmark.embed.useExternalSiteInfo'),
         },
     ],
 });

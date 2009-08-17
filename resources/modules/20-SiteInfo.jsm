@@ -212,8 +212,8 @@ extend(SiteInfoSet.prototype, {
 
     _fetchSource: function SIS__fetchSource(source, forceFetch) {
         if (!source.urls && !source.url) return;
-        let checkInterval = 24 * 60 * 60 * 1000; // XXX ToDo: to prefs
-        if (!forceFetch && source.updated + checkInterval > Date.now()) return;
+        let updateInterval = PrefService.getIntPref('extensions.hatenabookmark.embed.siteInfoUpdateInterval') * 1000;
+        if (!forceFetch && source.updated + updateInterval > Date.now()) return;
         let urls = [].concat(source.urls || source.url);
         this._doFetchSource(source, urls);
     },

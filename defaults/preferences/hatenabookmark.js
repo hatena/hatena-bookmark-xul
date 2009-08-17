@@ -85,7 +85,11 @@ pref("extensions.hatenabookmark.link.supportTreeStyleTab", true);
 pref("extensions.hatenabookmark.embed.enabled", true);
 // Each widgets
 pref("extensions.hatenabookmark.embed.counter", true);
+pref("extensions.hatenabookmark.embed.comments", false);
 pref("extensions.hatenabookmark.embed.addButton", true);
+pref("extensions.hatenabookmark.embed.useExternalSiteInfo", true);
+// in seconds
+pref("extensions.hatenabookmark.embed.siteInfoUpdateInterval", 86400);
 // Integrate web search and Hatena Bookmark full-text search
 pref("extensions.hatenabookmark.embed.search", true);
 pref("extensions.hatenabookmark.embed.searchCount", 5);

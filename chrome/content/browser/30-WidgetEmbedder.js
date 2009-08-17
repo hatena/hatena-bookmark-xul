@@ -11,7 +11,7 @@ function WidgetEmbedder(doc) {
     let pref = Prefs.bookmark;
     this._inNewTab = pref.get("link.openInNewTab");
     this._embedCounter = pref.get("embed.counter");
-    this._embedComments = false && pref.get("embed.comments"); // XXX temp
+    this._embedComments = pref.get("embed.comments");
     this._embedAddButton = pref.get("embed.addButton");
     this._timerId = doc.defaultView.setTimeout(this.onTimer, WidgetEmbedder.INITIAL_DELAY, this);
     doc.addEventListener("GM_AutoPagerizeLoaded", this, false, true);
