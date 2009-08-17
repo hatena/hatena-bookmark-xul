@@ -164,18 +164,18 @@ extend(WidgetEmbedder.prototype, {
     getExistingWidgets: function WE_getExistingWidgets(paragraph, link) {
         const url = iri2uri(link.href);
         const escapedURL = encodeURIComponent(url);
-        const entryURL = getEntryURL(link.href);
+        const entryURL    = getEntryURL(link.href);
         const oldEntryURL = B_HTTP + 'entry/' + url.replace(/#/g, '%23');
-        const imageAPIPrefix = B_STATIC_HTTP + 'entry/image/';
+        const imageAPIPrefix    = B_STATIC_HTTP + 'entry/image/';
         const oldImageAPIPrefix = B_HTTP + 'entry/image/';
-        const addURL = getAddPageURL(link.href);
+        const addURL    = getAddPageURL(link.href);
         const oldAddURL = B_HTTP + 'append?' + escapedURL;
-        const commentsImagePrefix = 'http://d.hatena.ne.jp/images/b_entry';
+        const entryImagePrefix = 'http://d.hatena.ne.jp/images/b_entry';
         let widgets = {
             entry:     null,
             counter:   null,
             comments:  null,
-            addButton: null
+            addButton: null,
         };
         Array.forEach(paragraph.getElementsByTagName('a'), function (a) {
             switch (a.href) {
@@ -184,21 +184,19 @@ extend(WidgetEmbedder.prototype, {
                 let content = a.firstChild;
                 if (!content) break;
                 if (content.nodeType === Node.TEXT_NODE) {
-                    if (content.nodeValue.indexOf(' users') !== -1) {
+                    if (content.nodeValue.indexOf(' user') !== -1) {
                         widgets.counter = a;
                         break;
                     }
-                    if (content.nextSibling)
-                        content = content.nextSibling;
-                    else
-                        break;
+                    if (!content.nextSibling) break;
+                    content = content.nextSibling;
                 }
                 if (content instanceof Ci.nsIDOMHTMLImageElement) {
                     let src = content.src;
                     if (src.indexOf(imageAPIPrefix) === 0 ||
                         src.indexOf(oldImageAPIPrefix) === 0)
                         widgets.counter = a;
-                    else if (src.indexOf(commentsImagePrefix) === 0)
+                    else if (src.indexOf(entryImagePrefix) === 0)
                         widgets.entry = a;
                 }
                 break;
