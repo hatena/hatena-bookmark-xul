@@ -63,7 +63,7 @@ let builtInSearchSiteInfo = [
 let Search = new SiteInfoSet({
     matcher: SiteInfoSet.createURLMatcher('url'),
     sources: [
-        { file: 'FullTextSearch.user.siteinfo.js' },
+        { file: 'Search.user.siteinfo.js' },
         { items: builtInSearchSiteInfo },
     ],
 });
