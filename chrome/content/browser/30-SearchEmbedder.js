@@ -1,7 +1,6 @@
 const EXPORT = ["SearchEmbedder"];
 
 function SearchEmbedder(doc) {
-    this.doc = doc;
     this.site = SiteInfoSet.Search.get(doc);
     this.state = SearchEmbedder.STATE_INITIALIZED;
     if (this.site && !this.site.data.disable &&
@@ -19,8 +18,9 @@ SearchEmbedder.STATE_COMPLETE    = -1;
 extend(SearchEmbedder.prototype, {
     strings: new Strings("chrome://hatenabookmark/locale/embed.properties"),
 
-    get win SE_get_win() this.doc.defaultView,
-    get url SE_get_url() this.win.location.href,
+    get doc SE_get_doc() this.site.doc,
+    get win SE_get_win() this.site.win,
+    get url SE_get_url() this.site.url,
 
     isValidDomain: function SE_isValidDomain() {
         const TLDService = getService("@mozilla.org/network/effective-tld-service;1", Ci.nsIEffectiveTLDService);

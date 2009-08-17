@@ -32,10 +32,17 @@ function testSiteInfo() {
     assert.equals("dynamic result", info.query("dynamic"));
 }
 
-function createDocumentForURL(url) ({
-    defaultView: {
-        location: {
-            href: url,
+function createDocumentForURL(url) {
+    let doc = {
+        defaultView: {
+            location: {
+                href: url,
+            },
+            GetWeakReference: function () ({
+                QueryReferent: function () doc.defaultView,
+            }),
+            QueryInterface: function () this,
         }
-    }
-});
+    };
+    return doc;
+}

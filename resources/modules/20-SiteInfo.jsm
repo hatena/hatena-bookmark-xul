@@ -6,19 +6,31 @@ const DEFAULT_PREFIX = "__default__";
 let evaluator = new XPathEvaluator();
 
 
-function SiteInfo(data, doc) {
+function SiteInfo(data, url, doc) {
     this.data = data;
-    this._doc = doc;
+    this.url = url;
+    // 念のため循環参照にならないよう弱参照で持つ
+    // 本当に弱参照にしないといけないか (そうしないと
+    // メモリリークが発生するか) は不明、未確認。
+    this._win = doc.defaultView
+                   .QueryInterface(Ci.nsISupportsWeakReference)
+                   .GetWeakReference();
     this._isHTML = (doc.contentType === "text/html");
     this._exprs = {};
 }
 
 extend(SiteInfo.prototype, {
-    get doc SI_get_doc() this._doc,
-    get win SI_get_win() this._doc.defaultView,
+    get doc SI_get_doc() let (w = this.win) w && w.document,
+    get win SI_get_win() {
+        try {
+            return this._win.QueryReferent(Ci.nsIDOMWindow);
+        } catch (ex) {
+            return null;
+        }
+    },
 
     query: function SI_query(key, context, resultType) {
-        context = context || this._doc;
+        context = context || this.doc;
         let expr = this._exprs[key];
         if (!expr) {
             expr = this.data[key];
@@ -102,8 +114,8 @@ extend(SiteInfo.prototype, {
 
     lookupNamespaceURI: function SI_lookupNamespaceURI(prefix) {
         return (prefix === DEFAULT_PREFIX)
-            ? this._doc.lookupNamespaceURI(null)
-            : this._doc.lookupNamespaceURI(prefix);
+            ? this.doc.lookupNamespaceURI(null)
+            : this.doc.lookupNamespaceURI(prefix);
     },
 });
 
@@ -166,7 +178,7 @@ extend(SiteInfoSet.prototype, {
             if (!items) continue;
             for (let j = 0; j < items.length; j++) {
                 if (matcher(items[j], url, doc))
-                    return new SiteInfo(items[j], doc);
+                    return new SiteInfo(items[j], url, doc);
             }
         }
         return null;

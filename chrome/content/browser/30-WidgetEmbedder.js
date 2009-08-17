@@ -6,18 +6,17 @@ var getAddPageURL = addPageURL;
 function WidgetEmbedder(doc) {
     this.site = SiteInfoSet.LDRize.get(doc);
     if (!this.site || this.site.data.disable) return;
-    this.doc = doc;
-    this.win = doc.defaultView;
-    this.embedStyle();
-    this.doc.addEventListener("GM_AutoPagerizeLoaded", this, false, true);
-    this.doc.addEventListener("HB.PageInserted", this, false, true);
-    this.doc.addEventListener("DOMNodeInserted", this, false);
+    this.embedStyle(doc);
+    this.doc = null;
     let pref = Prefs.bookmark;
     this._inNewTab = pref.get("link.openInNewTab");
     this._embedCounter = pref.get("embed.counter");
     this._embedComments = false && pref.get("embed.comments"); // XXX temp
     this._embedAddButton = pref.get("embed.addButton");
-    this._timerId = this.win.setTimeout(this.onTimer, WidgetEmbedder.INITIAL_DELAY, this);
+    this._timerId = doc.defaultView.setTimeout(this.onTimer, WidgetEmbedder.INITIAL_DELAY, this);
+    doc.addEventListener("GM_AutoPagerizeLoaded", this, false, true);
+    doc.addEventListener("HB.PageInserted", this, false, true);
+    doc.addEventListener("DOMNodeInserted", this, false);
 }
 
 const embedStrings =
@@ -53,18 +52,21 @@ extend(WidgetEmbedder, {
 });
 
 extend(WidgetEmbedder.prototype, {
-    embedStyle: function WE_embedStyle() {
-        let style = this.doc.createElementNS(XHTML_NS, "style");
+    embedStyle: function WE_embedStyle(doc) {
+        let style = doc.createElementNS(XHTML_NS, "style");
         style.setAttribute("type", "text/css");
         style.textContent = WidgetEmbedder.STYLE + (this.site.data.style || "");
-        let head = this.doc.getElementsByTagName("head")[0];
+        let head = doc.getElementsByTagName("head").item(0);
         if (!head) return;
         head.appendChild(style);
     },
 
     embed: function WE_embed() {
-        p('WidgetEmbedder#embed');
-        this.site.queryAll("paragraph").forEach(this.embedInParagraph, this);
+        //p('WidgetEmbedder#embed on ' + this.site.url);
+        this.doc = this.site.doc;
+        this.site.queryAll("paragraph", this.doc)
+                 .forEach(this.embedInParagraph, this);
+        this.doc = null;
     },
 
     embedInParagraph: function WE_embedInParagraph(paragraph) {
@@ -274,23 +276,24 @@ extend(WidgetEmbedder.prototype, {
     },
 
     handleEvent: function WE_handleEvent(event) {
+        let doc = event.currentTarget;
         switch (event.type) {
         case "DOMNodeInserted":
             if (this._timerId) break;
-            this._timerId = this.win.setTimeout(this.onTimer, WidgetEmbedder.MUTATION_DELAY, this);
+            this._timerId = doc.defaultView.setTimeout(this.onTimer, WidgetEmbedder.MUTATION_DELAY, this);
             break;
 
         case "HB.PageInserted":
-            this.doc.removeEventListener("DOMNodeInserted", this, false);
+            doc.removeEventListener("DOMNodeInserted", this, false);
             /* FALL THROUGH */
         case "GM_AutoPagerizeNextPageLoaded":
             this.embed();
             break;
 
         case "GM_AutoPagerizeLoaded":
-            this.doc.removeEventListener("GM_AutoPagerizeLoaded", this, false);
-            this.doc.removeEventListener("DOMNodeInserted", this, false);
-            this.doc.addEventListener("GM_AutoPagerizeNextPageLoaded", this, false, true);
+            doc.removeEventListener("GM_AutoPagerizeLoaded", this, false);
+            doc.removeEventListener("DOMNodeInserted", this, false);
+            doc.addEventListener("GM_AutoPagerizeNextPageLoaded", this, false, true);
             break;
         }
     },
