@@ -45,7 +45,7 @@ let builtInSiteInfo = [
         annotation: 'descendant::span[@class = "gl"]',
         annotationPosition: 'after',
         style: <![CDATA[
-            .hBookmark-embedded-widget > img {
+            .hBookmark-widget > img {
                 vertical-align: middle;
             }
         ]]>.toString(),
@@ -57,7 +57,7 @@ let builtInSiteInfo = [
         annotation: 'descendant::div[contains(concat(" ", @class, " "), " sources ")]/*[contains(concat(" ", @class, " "), " moreLinks ") or not(following-sibling::*)]',
         annotationPosition: 'after',
         style: <![CDATA[
-            .hBookmark-embedded-widget > img {
+            .hBookmark-widget > img {
                 vertical-align: middle;
             }
         ]]>.toString(),
@@ -80,10 +80,10 @@ let builtInSiteInfo = [
         annotation: 'descendant::div[@class = "sinf"]',
         annotationPosition: 'last',
         style: <![CDATA[
-            .hBookmark-embedded-widget {
+            .hBookmark-widget {
                 margin-left: 6px;
             }
-            .hBookmark-embedded-widget > img {
+            .hBookmark-widget > img {
                 vertical-align: middle;
             }
         ]]>.toString(),

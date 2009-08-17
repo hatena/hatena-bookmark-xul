@@ -36,12 +36,12 @@ extend(WidgetEmbedder, {
     STRING_ADD_BOOKMARK_TEXT:  embedStrings.get('addBookmarkText'),
 
     STYLE: <![CDATA[
-        .hBookmark-embedded-widget {
+        .hBookmark-widget {
             text-decoration: none;
             margin: 0 0 0 2px;
             display: inline;
         }
-        .hBookmark-embedded-widget > img {
+        .hBookmark-widget > img {
             border: none;
             -moz-force-broken-image-icon: 1;
         }
@@ -244,18 +244,18 @@ extend(WidgetEmbedder.prototype, {
         let url = link.href;
         let entryURL = getEntryURL(url);
         let xmls = <>
-            <a class="hBookmark-embedded-widget hBookmark-embedded-counter"
+            <a class="hBookmark-widget hBookmark-widget-counter"
                href={ entryURL }
                title={ WE.STRING_SHOW_ENTRY_TITLE }
                style="display: none;">
                 <img src={ WE.IMAGE_API_PREFIX + url.replace(/#/g, "%23") }
                      alt={ WE.STRING_SHOW_ENTRY_TEXT }/>
             </a>
-            <a class="hBookmark-embedded-widget hBookmark-embedded-comments"
+            <a class="hBookmark-widget hBookmark-widget-comments"
                href={ entryURL }
                title=""
                style="display: none;">[c]</a>
-            <a class="hBookmark-embedded-widget hBookmark-embedded-add-button"
+            <a class="hBookmark-widget hBookmark-widget-add-button"
                href={ addPageURL(url) }
                title={ WE.STRING_ADD_BOOKMARK_TITLE }>
                 <img src={ WE.ADD_BUTTON_URL }
