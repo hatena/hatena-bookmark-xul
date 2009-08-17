@@ -140,7 +140,6 @@ let LDRize = new SiteInfoSet({
                 'http://wedata.net/databases/LDRize/items.json',
                 //'http://ss-o.net/json/wedataLDRize.json.gz',
             ],
-            format: 'wedata',
             // XXX ToDo: create pref for this
             shouldUse: function () true || Prefs.bookmark.get("embed."),
         },
