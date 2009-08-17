@@ -39,14 +39,11 @@ extend(WidgetEmbedder, {
         .hBookmark-embedded-widget {
             text-decoration: none;
             margin: 0 0 0 2px;
+            display: inline;
         }
         .hBookmark-embedded-widget > img {
             border: none;
-            vertical-align: middle;
             -moz-force-broken-image-icon: 1;
-        }
-        .hBookmark-embedded-add-button > img {
-            margin-top: 1px; /* Adjust height with counter */
         }
     ]]>.toString(),
 });
