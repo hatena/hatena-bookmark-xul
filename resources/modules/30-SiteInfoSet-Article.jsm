@@ -92,7 +92,7 @@ let builtInSiteInfo = [
 
 var evaluator = new XPathEvaluator();
 
-function ldrizeMatcher(item, url, doc) {
+function articleMatcher(item, url, doc) {
     if (item._urlPattern)
         return item._urlPattern.test(url);
     if (item._xpath)
@@ -113,26 +113,26 @@ function ldrizeMatcher(item, url, doc) {
         if (key.constructor.name === "RegExp" ||
             /^\^?http(?:s\??)?:/.test(key)) {
             item._urlPattern = new RegExp(key);
-            return ldrizeMatcher(item, url, doc);
+            return articleMatcher(item, url, doc);
         }
         if (typeof key === "function") {
             item._matchFunction = key;
-            return ldrizeMatcher(item, url, doc);
+            return articleMatcher(item, url, doc);
         }
         try {
             doc.createExpression(key, null); // Check if XPath is valid
             item._xpath = addDefaultPrefix(key, "__default__");
-            return ldrizeMatcher(item, url, doc);
+            return articleMatcher(item, url, doc);
         } catch (ex) {}
     }
     item._isInvalid = true;
     return false;
 }
 
-let LDRize = new SiteInfoSet({
-    matcher: ldrizeMatcher,
+let Article = new SiteInfoSet({
+    matcher: articleMatcher,
     sources: [
-        { file: 'LDRize.user.siteinfo.js' },
+        { file: 'Article.user.siteinfo.js' },
         { items: builtInSiteInfo },
         {
             file: 'LDRize.siteinfo.js',
@@ -147,6 +147,6 @@ let LDRize = new SiteInfoSet({
 });
 
 // For check
-// try { alert(target.hBookmark.SiteInfoSet.LDRize.get(target.gBrowser.contentDocument).data.toSource()); } catch (ex) { Application.console.log(ex); }
+// try { alert(target.hBookmark.SiteInfoSet.Article.get(target.gBrowser.contentDocument).data.toSource()); } catch (ex) { Application.console.log(ex); }
 
-SiteInfoSet.LDRize = LDRize;
+SiteInfoSet.Article = Article;

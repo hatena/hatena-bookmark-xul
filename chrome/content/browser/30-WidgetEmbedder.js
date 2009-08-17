@@ -4,7 +4,7 @@ var getEntryURL = entryURL;
 var getAddPageURL = addPageURL;
 
 function WidgetEmbedder(doc) {
-    this.site = SiteInfoSet.LDRize.get(doc);
+    this.site = SiteInfoSet.Article.get(doc);
     if (!this.site || this.site.data.disable) return;
     this.embedStyle(doc);
     this.doc = null;
