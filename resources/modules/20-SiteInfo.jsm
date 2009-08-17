@@ -138,20 +138,16 @@ extend(SiteInfoSet.prototype, {
 
     insertSource: function SIS_insertSource(source, index) {
         source = extend({ updated: 0, items: [], format: '' }, source);
-        if (source.file) {
-            let file = source.file;
-            if (!(file instanceof Ci.nsIFile)) {
-                file = DirectoryService.get('ProfD', Ci.nsIFile);
-                file.append('hatenabookmark');
-                if (!file.exists())
-                    file.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
-                file.append(source.file);
-                source.file = file;
-            }
-            this._refreshSource(source);
+        if (source.file && !(source.file instanceof Ci.nsIFile)) {
+            let file = DirectoryService.get('ProfD', Ci.nsIFile);
+            file.append('hatenabookmark');
+            if (!file.exists())
+                file.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
+            file.append(source.file);
+            source.file = file;
         }
-        if (source.url)
-            this._fetchSource(source);
+        this._refreshSource(source);
+        this._fetchSource(source);
         if (typeof index === 'undefined' || index < 0)
             this.sources.push(source);
         else
@@ -160,10 +156,9 @@ extend(SiteInfoSet.prototype, {
 
     update: function SIS_update(forceUpdate) {
         this.sources.forEach(function (source) {
-            if (source.file && forceUpdate)
+            if (forceUpdate)
                 this._refreshSource(source);
-            if (source.url)
-                this._fetchSource(source, forceUpdate);
+            this._fetchSource(source, forceUpdate);
         }, this);
     },
 
@@ -198,20 +193,19 @@ extend(SiteInfoSet.prototype, {
             data = loader.loadSubScript(url);
             p('SiteInfoSet#_refreshSource: read from ' + source.file.path);
         } catch (ex) {}
-        [source.items, source.updated] =
-            this._getItemsAndUpdated(data, source.format);
+        [source.items, source.updated] = this._getItemsAndUpdated(data);
     },
 
     _writeSource: function SIS__writeSource(source) {
         if (!source.file || !(source.file instanceof Ci.nsIFile)) return;
         let stream = Cc['@mozilla.org/network/file-output-stream;1'].
                      createInstance(Ci.nsIFileOutputStream);
-        // The result of toSource() will be ASCII string.
+        // We assume that the result of toSource() is an ASCII string.
         let data = { updated: source.updated, items: source.items }.toSource();
         try {
             stream.init(source.file, 0x02 | 0x08 | 0x20, 0644, 0);
             stream.write(data, data.length);
-            p('SiteInfoSet#_fetchSource: written to ' + source.file.path)
+            p('SiteInfoSet#_writeSource: written to ' + source.file.path)
         } catch (ex) {
         } finally {
             stream.close();
@@ -219,27 +213,53 @@ extend(SiteInfoSet.prototype, {
     },
 
     _fetchSource: function SIS__fetchSource(source, forceFetch) {
+        if (!source.urls && !source.url) return;
         let checkInterval = 24 * 60 * 60 * 1000; // XXX ToDo: to prefs
         if (!forceFetch && source.updated + checkInterval > Date.now()) return;
-        p('SiteInfoSet#_fetchSource: begin load')
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', source.url);
-        xhr.setRequestHeader('If-Modifield-Since',
-                             new Date(source.updated).toUTCString());
-        let self = this;
-        xhr.addEventListener('load', function SIS_onFetch() {
-            p('SiteInfoSet#_fetchSource: loaded')
-            let json = decodeJSON(xhr.responseText);
-            [source.items, source.updated] =
-                self._getItemsAndUpdated(json, source.format);
-            self._writeSource(source);
-        }, false);
-        xhr.send(null);
+        let urls = [].concat(source.urls || source.url);
+        this._doFetchSource(source, urls);
     },
 
-    _getItemsAndUpdated: function SIS__getItemsAndUpdated(rawData, format) {
+    _doFetchSource: function SIS__doFetchSource(source, urls) {
+        p('SiteInfoSet#_doFetchSource')
+        let url = urls.splice(Math.floor(Math.random() * urls.length), 1)[0];
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.setRequestHeader('If-Modifield-Since',
+                             new Date(source.updated).toUTCString());
+        xhr.addEventListener('load', onFetch, false);
+        xhr.addEventListener('error', onFetch, false);
+        xhr.send(null);
+
+        let self = this;
+        function onFetch(event) {
+            p('SiteInfoSet#_doFetchSource onFetch');
+            let succeeded = false;
+            if (event.type === 'load') {
+                if (xhr.status === 200) {
+                    let json = decodeJSON(xhr.responseText);
+                    if (json) {
+                        [source.items, source.updated] =
+                            self._getItemsAndUpdated(json);
+                        succeeded = true;
+                    }
+                } else if (xhr.status === 304) {
+                    self.updated = Date.now();
+                    succeeded = true;
+                }
+            }
+            if (succeeded)
+                self._writeSource(source);
+            else if (urls.length)
+                self._doFetchSource(source, urls);
+            xhr.removeEventListener('load', onFetch, false);
+            xhr.removeEventListener('error', onFetch, false);
+        }
+    },
+
+    _getItemsAndUpdated: function SIS__getItemsAndUpdated(rawData) {
         if (Object.prototype.toString.call(rawData) === '[object Array]') {
-            let items = (format === 'wedata')
+            let items = (rawData.length && typeof rawData[0].data === 'object')
                         ? rawData.map(function (i) i.data) : rawData;
             return [items, Date.now()];
         }

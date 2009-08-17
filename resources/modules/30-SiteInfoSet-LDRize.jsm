@@ -136,7 +136,10 @@ let LDRize = new SiteInfoSet({
         { items: builtInSiteInfo },
         {
             file: 'LDRize.siteinfo.js',
-            url: 'http://wedata.net/databases/LDRize/items.json',
+            urls: [
+                'http://wedata.net/databases/LDRize/items.json',
+                //'http://ss-o.net/json/wedataLDRize.json.gz',
+            ],
             format: 'wedata',
             // XXX ToDo: create pref for this
             shouldUse: function () true || Prefs.bookmark.get("embed."),
