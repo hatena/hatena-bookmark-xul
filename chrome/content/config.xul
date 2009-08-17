@@ -140,6 +140,14 @@
             type="bool"
             onchange="hBookmark.Config.updateBrowsingStatus();"/>
         <preference 
+            id="extensions.hatenabookmark.embed._inSupportingPages"
+            name="extensions.hatenabookmark.embed.useExternalSiteInfo"
+            type="bool"/>
+        <preference 
+            id="extensions.hatenabookmark.embed._onlyInSearchSites"
+            name="extensions.hatenabookmark.embed.useExternalSiteInfo"
+            type="bool" inverted="true"/>
+        <preference 
             id="extensions.hatenabookmark.embed.counter"
             name="extensions.hatenabookmark.embed.counter"
             type="bool"/>
@@ -151,10 +159,6 @@
             id="extensions.hatenabookmark.embed.addButton"
             name="extensions.hatenabookmark.embed.addButton"
             type="bool"/>
-        <preference 
-            id="extensions.hatenabookmark.embed._onlyInSearchSite"
-            name="extensions.hatenabookmark.embed.useExternalSiteInfo"
-            type="bool" inverted="true"/>
         <preference
             id="extensions.hatenabookmark.embed.search"
             name="extensions.hatenabookmark.embed.search"
@@ -172,10 +176,14 @@
             <checkbox id="extensions.hatenabookmark.embed.enabled-check"
                       label="&hBookmark.config.browsing.embed;"
                       preference="extensions.hatenabookmark.embed.enabled"/>
-            <checkbox id="extensions.hatenabookmark.embed.onlyInSearchSite-check"
-                      label="&hBookmark.config.browsing.embedOnlyInSearchSites;"
-                      preference="extensions.hatenabookmark.embed._onlyInSearchSite"
-                      class="indent"/>
+            <radiogroup id="extensions.hatenabookmark.embed._targetPages-group" class="indent">
+                <radio id="extensions.hatenabookmark.embed.inSupporingPages-check"
+                       label="{{Show on supporting pages}}"
+                       preference="extensions.hatenabookmark.embed._inSupportingPages"/>
+                <radio id="extensions.hatenabookmark.embed.onlyInSearchSites-check"
+                       label="&hBookmark.config.browsing.embedOnlyInSearchSites;"
+                       preference="extensions.hatenabookmark.embed._onlyInSearchSites"/>
+            </radiogroup>
             <separator class="indent"/>
             <checkbox id="extensions.hatenabookmark.embed.counter-check"
                       label="&hBookmark.config.browsing.embedCounter;"
