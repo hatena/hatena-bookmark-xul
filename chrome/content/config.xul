@@ -189,12 +189,10 @@
                       label="&hBookmark.config.browsing.embedCounter;"
                       preference="extensions.hatenabookmark.embed.counter"
                       class="indent"/>
-            <!--
             <checkbox id="extensions.hatenabookmark.embed.comments-check"
                       label="&hBookmark.config.browsing.embedComments;"
                       preference="extensions.hatenabookmark.embed.comments"
                       class="indent"/>
-            -->
             <checkbox id="extensions.hatenabookmark.embed.addButton-check"
                       label="&hBookmark.config.browsing.embedAddButton;"
                       preference="extensions.hatenabookmark.embed.addButton"

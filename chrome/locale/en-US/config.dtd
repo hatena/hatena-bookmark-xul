@@ -23,7 +23,7 @@
 <!ENTITY hBookmark.config.browsing.embed "Show Hatena Bookmark informations on web pages">
 <!ENTITY hBookmark.config.browsing.embedOnlyInSearchSites "Show informations only on search sites *">
 <!ENTITY hBookmark.config.browsing.embedCounter "Show the count of bookmarks (xx users)">
-<!ENTITY hBookmark.config.browsing.embedComments "Show Show-on-Comment-Viewer button">
+<!ENTITY hBookmark.config.browsing.embedComments "Show Show-on-CommentViewer button">
 <!ENTITY hBookmark.config.browsing.embedAddButton "Show Add-to-Bookmark button (B!)">
 <!ENTITY hBookmark.config.browsing.searchCaption "My Bookmark Full-Text Search">
 <!ENTITY hBookmark.config.browsing.search "Show my bookmark full-text search results on search sites *">

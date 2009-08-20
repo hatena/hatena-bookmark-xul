@@ -115,7 +115,7 @@ let Config = {
     },
     browsingStatusDependencies: {
         'enabled-check': ['_targetPages-group', 'counter-check',
-                          /*'comments-check',*/ 'addButton-check'],
+                          'comments-check', 'addButton-check'],
         'search-check': ['searchCount-field'],
     },
     updateBrowsingStatus: function() {
