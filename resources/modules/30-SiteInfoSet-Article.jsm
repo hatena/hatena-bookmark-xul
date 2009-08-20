@@ -44,11 +44,6 @@ let builtInSiteInfo = [
         link:       'descendant::a[contains(concat(" ", @class, " "), "l")]',
         annotation: 'descendant::span[@class = "gl"]',
         annotationPosition: 'after',
-        style: <![CDATA[
-            .hBookmark-widget > img {
-                vertical-align: middle;
-            }
-        ]]>.toString(),
     },
     { // Google News
         domain:     /^http:\/\/news\.google(?:\.\w+){1,2}\//,
@@ -56,11 +51,6 @@ let builtInSiteInfo = [
         link:       'descendant::a[starts-with(concat(" ", @class), " usg-")]',
         annotation: 'descendant::div[contains(concat(" ", @class, " "), " sources ")]/*[contains(concat(" ", @class, " "), " moreLinks ") or not(following-sibling::*)]',
         annotationPosition: 'after',
-        style: <![CDATA[
-            .hBookmark-widget > img {
-                vertical-align: middle;
-            }
-        ]]>.toString(),
     },
     { // Yahoo Web Search
         domain:     /^http:\/\/search\.yahoo(?:\.\w+){1,2}\/search\?/,
@@ -82,9 +72,6 @@ let builtInSiteInfo = [
         style: <![CDATA[
             .hBookmark-widget {
                 margin-left: 6px;
-            }
-            .hBookmark-widget > img {
-                vertical-align: middle;
             }
         ]]>.toString(),
     },

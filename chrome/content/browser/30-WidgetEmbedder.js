@@ -37,12 +37,13 @@ extend(WidgetEmbedder, {
 
     STYLE: <![CDATA[
         .hBookmark-widget {
-            text-decoration: none;
+            text-decoration: none !important;
             margin: 0 0 0 2px;
-            display: inline;
+            display: inline !important;
         }
         .hBookmark-widget > img {
             border: none;
+            vertical-align: middle;
             -moz-force-broken-image-icon: 1;
         }
     ]]>.toString(),
@@ -71,7 +72,7 @@ extend(WidgetEmbedder.prototype, {
         paragraph.setAttributeNS(HB_NS, "hb:annotation", "true");
 
         let link = this.site.query("link", paragraph) || paragraph;
-        if (!link.href) return;
+        if (!link.href || !/^https?:\/\//.test(link.href)) return;
         let points = this.getInsertionPoints(paragraph, link);
         let xmls = this.createWidgetXMLs(link);
         let space = this.doc.createTextNode(" ");
