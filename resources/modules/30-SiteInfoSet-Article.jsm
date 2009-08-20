@@ -117,6 +117,10 @@ function articleMatcher(item, url, doc) {
     return false;
 }
 
+function shouldUseExternalSiteInfo() {
+    return PrefService.getBoolPref('extensions.hatenabookmark.embed.useExternalSiteInfo');
+}
+
 let Article = new SiteInfoSet({
     matcher: articleMatcher,
     sources: [
@@ -128,7 +132,14 @@ let Article = new SiteInfoSet({
                 'http://wedata.net/databases/LDRize/items.json',
                 //'http://ss-o.net/json/wedataLDRize.json.gz',
             ],
-            shouldUse: function () PrefService.getBoolPref('extensions.hatenabookmark.embed.useExternalSiteInfo'),
+            format: 'wedata',
+            shouldUse: shouldUseExternalSiteInfo,
+        },
+        {
+            file: 'HatenaStar.siteinfo.js',
+            url: 'http://s.hatena.ne.jp/siteconfig.json',
+            format: 'hatenastar',
+            shouldUse: shouldUseExternalSiteInfo,
         },
     ],
 });

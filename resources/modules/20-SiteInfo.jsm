@@ -238,10 +238,10 @@ extend(SiteInfoSet.prototype, {
             let succeeded = false;
             if (event.type === 'load') {
                 if (xhr.status === 200) {
-                    let json = decodeJSON(xhr.responseText);
-                    if (json) {
+                    if (xhr.responseText) {
                         [source.items, source.updated] =
-                            self._getItemsAndUpdated(json);
+                            self._getItemsAndUpdated(xhr.responseText,
+                                                     source.format);
                         succeeded = true;
                     }
                 } else if (xhr.status === 304) {
@@ -268,7 +268,12 @@ extend(SiteInfoSet.prototype, {
         }
     },
 
-    _getItemsAndUpdated: function SIS__getItemsAndUpdated(rawData) {
+    _getItemsAndUpdated: function SIS__getItemsAndUpdated(rawData, format) {
+        if (typeof rawData === 'string') {
+            if (!(format in SiteInfoSet.converters))
+                format = 'wedata';
+            return [SiteInfoSet.converters[format](rawData), Date.now()];
+        }
         if (Object.prototype.toString.call(rawData) === '[object Array]') {
             let items = (rawData.length && typeof rawData[0].data === 'object')
                         ? rawData.map(function (i) i.data) : rawData;
@@ -322,6 +327,15 @@ extend(SiteInfoSet, {
             }
             return pattern.test(url);
         };
+    },
+
+    converters: {
+        wedata: function SIS_wedata_converter(text) {
+            let items = decodeJSON(text) || [];
+            if (items.length && typeof items[0].data === 'object')
+                items = items.map(function (i) i.data);
+            return items;
+        },
     },
 });
 
