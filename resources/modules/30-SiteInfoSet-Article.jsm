@@ -110,18 +110,19 @@ function articleMatcher(item, url, doc) {
 
     let key = item.domain;
     if (key) {
-        if (key.constructor.name === "RegExp" ||
-            /^\^?http(?:s\??)?:/.test(key)) {
-            item._urlPattern = new RegExp(key);
-            return articleMatcher(item, url, doc);
+        if (typeof key === "string" && !/^\^?http(?:s\??)?:/.test(key)) {
+            try {
+                doc.createExpression(key, null); // Check if XPath is valid
+                item.xpath = addDefaultPrefix(key, "__default__");
+                return articleMatcher(item, url, doc);
+            } catch (ex) {}
         }
         if (typeof key === "function") {
             item._matchFunction = key;
             return articleMatcher(item, url, doc);
         }
         try {
-            doc.createExpression(key, null); // Check if XPath is valid
-            item._xpath = addDefaultPrefix(key, "__default__");
+            item._urlPattern = RegExp(key);
             return articleMatcher(item, url, doc);
         } catch (ex) {}
     }
