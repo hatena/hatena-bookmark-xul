@@ -91,6 +91,7 @@ extend(WidgetEmbedder.prototype, {
             if (!points.counter)
                 delete xmls[1].@style;
             comments = xml2dom(xmls[1], points.comments);
+            comments.setAttributeNS(HB_NS, "hb:url", link.href);
             let f = fragment.cloneNode(true);
             f.appendChild(comments);
             if (points.comments !== points.addButton)
