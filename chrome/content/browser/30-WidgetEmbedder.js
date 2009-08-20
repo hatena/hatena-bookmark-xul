@@ -39,6 +39,7 @@ extend(WidgetEmbedder, {
         .hBookmark-widget {
             text-decoration: none !important;
             margin: 0 0 0 2px;
+            border: none !important;
             display: inline !important;
         }
         .hBookmark-widget > img {
