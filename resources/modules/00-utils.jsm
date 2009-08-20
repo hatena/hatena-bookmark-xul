@@ -88,6 +88,8 @@ var DOMParser = Components.Constructor("@mozilla.org/xmlextras/domparser;1");
 var XPathEvaluator = Components.Constructor("@mozilla.org/dom/xpath-evaluator;1");
 var XPathResult = Ci.nsIDOMXPathResult;
 
+var BuiltInTimer = Components.Constructor("@mozilla.org/timer;1", "nsITimer", "init");
+
 /*
  * p は一時デバッグ用
  */

@@ -228,6 +228,8 @@ extend(SiteInfoSet.prototype, {
         xhr.addEventListener('load', onFetch, false);
         xhr.addEventListener('error', onFetch, false);
         xhr.send(null);
+        let timer = new BuiltInTimer({ observe: onTimeout }, 60 * 1000,
+                                     Ci.nsITimer.TYPE_ONE_SHOT);
 
         let self = this;
         function onFetch(event) {
@@ -252,6 +254,16 @@ extend(SiteInfoSet.prototype, {
                 self._doFetchSource(source, urls);
             xhr.removeEventListener('load', onFetch, false);
             xhr.removeEventListener('error', onFetch, false);
+            xhr = null;
+        }
+
+        function onTimeout() {
+            if (xhr) {
+                xhr.abort();
+                onFetch({ type: 'timeout' });
+            }
+            timer.cancel();
+            timer = null;
         }
     },
 
