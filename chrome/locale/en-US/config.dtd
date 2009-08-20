@@ -21,6 +21,9 @@
 <!ENTITY hBookmark.config.browsing "Web Browsing">
 <!ENTITY hBookmark.config.browsing.embedCaption "Hatena Bookmark Informations">
 <!ENTITY hBookmark.config.browsing.embed "Show Hatena Bookmark informations on web pages">
+<!ENTITY hBookmark.config.browsing.embedLeanMoreText "Lean more">
+<!ENTITY hBookmark.config.browsing.embedLeanMoreURL "http://b.hatena.ne.jp/guide/firefox_addon"><!-- XXX Specify correct URL -->
+<!ENTITY hBookmark.config.browsing.embedInSupportingPages "Show informations on all supporting pages">
 <!ENTITY hBookmark.config.browsing.embedOnlyInSearchSites "Show informations only on search sites *">
 <!ENTITY hBookmark.config.browsing.embedCounter "Show the count of bookmarks (xx users)">
 <!ENTITY hBookmark.config.browsing.embedComments "Show Show-on-CommentViewer button">

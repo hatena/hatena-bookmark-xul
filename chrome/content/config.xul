@@ -173,12 +173,18 @@
     <vbox>
         <groupbox orient="vertical">
             <caption label="&hBookmark.config.browsing.embedCaption;"/>
-            <checkbox id="extensions.hatenabookmark.embed.enabled-check"
-                      label="&hBookmark.config.browsing.embed;"
-                      preference="extensions.hatenabookmark.embed.enabled"/>
+            <hbox align="center">
+                <checkbox id="extensions.hatenabookmark.embed.enabled-check"
+                          label="&hBookmark.config.browsing.embed;"
+                          preference="extensions.hatenabookmark.embed.enabled"/>
+                <separator orient="vertical"/>
+                <label class="text-link hBookmark-link"
+                       value="&hBookmark.config.browsing.embedLeanMoreText;"
+                       href="&hBookmark.config.browsing.embedLeanMoreURL;"/>
+            </hbox>
             <radiogroup id="extensions.hatenabookmark.embed._targetPages-group" class="indent">
                 <radio id="extensions.hatenabookmark.embed.inSupporingPages-check"
-                       label="{{Show on supporting pages}}"
+                       label="&hBookmark.config.browsing.embedInSupportingPages;"
                        preference="extensions.hatenabookmark.embed._inSupportingPages"/>
                 <radio id="extensions.hatenabookmark.embed.onlyInSearchSites-check"
                        label="&hBookmark.config.browsing.embedOnlyInSearchSites;"
