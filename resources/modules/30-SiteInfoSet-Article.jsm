@@ -100,7 +100,7 @@ function articleMatcher(item, url, doc) {
         if (typeof key === "string" && !/^\^?http(?:s\??)?:/.test(key)) {
             try {
                 doc.createExpression(key, null); // Check if XPath is valid
-                item.xpath = addDefaultPrefix(key, "__default__");
+                item._xpath = addDefaultPrefix(key, "__default__");
                 return articleMatcher(item, url, doc);
             } catch (ex) {}
         }
