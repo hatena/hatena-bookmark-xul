@@ -6,7 +6,7 @@ const EXPORT = ['Migration'];
 
 var Migration = {
     // 現在の conf のバージョン
-    CURRENT_VERSION: 2,
+    CURRENT_VERSION: 3,
 
     migration: function() {
         let currentVer = Prefs.bookmark.get('migration.version') || 0;
@@ -80,6 +80,26 @@ Migration.Migrations = [
             }, 1000);
         });
 
+    },
+    function M_3_renamePrefs() {
+        const PREFIX = 'extensions.hatenabookmark.';
+        const OLD_IGNORE = PREFIX + 'statusbar.counterIngoreList';
+        const NEW_IGNORE = PREFIX + 'statusbar.counterIgnoreList';
+        const OLD_CAPTURE = PREFIX + 'link.linkOverlay';
+        const NEW_CAPTURE = PREFIX + 'link.captureAddition';
+        const CAPTURE_COMMENTS = PREFIX + 'link.captureComments';
+
+        if (PrefService.prefHasUserValue(OLD_IGNORE)) {
+            let value = PrefService.getCharPref(OLD_IGNORE);
+            PrefService.setCharPref(NEW_IGNORE, value);
+            PrefService.clearUserPref(OLD_IGNORE);
+        }
+        if (PrefService.prefHasUserValue(OLD_CAPTURE)) {
+            let value = PrefService.getBoolPref(OLD_CAPTURE);
+            PrefService.setBoolPref(NEW_CAPTURE, value);
+            PrefService.setBoolPref(CAPTURE_COMMENTS, value);
+            PrefService.clearUserPref(OLD_CAPTURE);
+        }
     },
 ];
 

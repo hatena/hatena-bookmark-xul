@@ -78,7 +78,10 @@ pref("extensions.hatenabookmark.shortcut.keys.sidebar", "");
 
 // Link texts
 pref("extensions.hatenabookmark.link.openInNewTab", true);
-pref("extensions.hatenabookmark.link.linkOverlay", true);
+// Obsoleted.  Use 'captureAddition' instead.
+//pref("extensions.hatenabookmark.link.linkOverlay", true);
+pref("extensions.hatenabookmark.link.captureAddition", true);
+pref("extensions.hatenabookmark.link.captureComments", true);
 pref("extensions.hatenabookmark.link.supportTreeStyleTab", true);
 
 // Embed counter, add-bookmark button, and etc. in search result pages

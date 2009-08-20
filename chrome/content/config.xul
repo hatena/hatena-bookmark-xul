@@ -42,8 +42,8 @@
             name="extensions.hatenabookmark.link.openInNewTab"
             type="bool"/>
         <preference 
-            id="extensions.hatenabookmark.link.linkOverlay"
-            name="extensions.hatenabookmark.link.linkOverlay"
+            id="extensions.hatenabookmark.link.captureAddition"
+            name="extensions.hatenabookmark.link.captureAddition"
             type="bool"/>
     </preferences>
 
@@ -118,9 +118,9 @@
                     <label value="&hBookmark.config.link.openInNewTabNotice;" />
                 </hbox>
                 <hbox flex="1" align="center">
-                    <checkbox id="link.linkOverlay" flex="1"
+                    <checkbox id="link.captureAddition" flex="1"
                         label="&hBookmark.config.link.linkOverlay;"
-                        preference="extensions.hatenabookmark.link.linkOverlay" />
+                        preference="extensions.hatenabookmark.link.captureAddition" />
                 </hbox>
             </vbox>
         </groupbox>

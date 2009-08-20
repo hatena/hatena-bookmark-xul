@@ -52,7 +52,7 @@ var LinkClickOverlay = {
         return LinkClickOverlay._prefs;
     },
     prefsLinkOverlay: function(ev) {
-        if (LinkClickOverlay.prefs.get('linkOverlay')) {
+        if (LinkClickOverlay.prefs.get('captureAddition')) {
             LinkClickOverlay.register();
         } else {
             LinkClickOverlay.unregister();
@@ -60,7 +60,7 @@ var LinkClickOverlay = {
     },
     onloadHandler: function(ev) {
         LinkClickOverlay.prefsLinkOverlay();
-        LinkClickOverlay.prefs.createListener('linkOverlay', LinkClickOverlay.prefsLinkOverlay);
+        LinkClickOverlay.prefs.createListener('captureAddition', LinkClickOverlay.prefsLinkOverlay);
     }
 }
 
