@@ -16,6 +16,10 @@
 <!ENTITY hBookmark.config.sidebarNormal "通常">
 <!ENTITY hBookmark.config.sidebarReverse "上下反転">
 
+<!ENTITY hBookmark.config.tabs "タブ">
+<!ENTITY hBookmark.config.tabs.openInNewTab "ブックマークやリンクを新しいタブで開く">
+<!ENTITY hBookmark.config.tabs.openInNewTabNotice "この設定は、はてなブックマーク拡張全般で有効です">
+
 <!ENTITY hBookmark.config.browsing "Web 閲覧">
 <!ENTITY hBookmark.config.browsing.embedCaption "はてなブックマークの情報表示">
 <!ENTITY hBookmark.config.browsing.embed "Web ページにはてなブックマークの情報を表示する">
@@ -26,6 +30,11 @@
 <!ENTITY hBookmark.config.browsing.embedCounter "ブックマークされた数 (xx users) を表示する">
 <!ENTITY hBookmark.config.browsing.embedComments "『コメントビューワーで表示』 ボタンを表示する">
 <!ENTITY hBookmark.config.browsing.embedAddButton "『ブックマークを追加』 ボタン (B!) を表示する">
+
+<!ENTITY hBookmark.config.link "リンク">
+<!ENTITY hBookmark.config.link.captureAddition "はてなブックマーク追加リンククリック時に、拡張の編集画面を開く">
+<!ENTITY hBookmark.config.link.captureComments "ブックマークコメント表示ボタンクリック時に、拡張のコメントビューワーを開く">
+
 <!ENTITY hBookmark.config.browsing.searchCaption "マイブックマーク全文検索">
 <!ENTITY hBookmark.config.browsing.search "検索サイトにマイブックマーク全文検索結果を表示する *">
 <!ENTITY hBookmark.config.browsing.searchCount.before "検索結果を">
@@ -52,11 +61,6 @@
 <!ENTITY hBookmark.config.commentviewerHeight "縦幅(px)">
 <!ENTITY hBookmark.config.commentviewerAutoFilter "閾値以下なら、コメントをすべて表示する">
 <!ENTITY hBookmark.config.commentviewerAutoFilterThreshold "閾値">
-
-<!ENTITY hBookmark.config.link "リンク">
-<!ENTITY hBookmark.config.link.openInNewTab "リンクを新しいタブで開く">
-<!ENTITY hBookmark.config.link.openInNewTabNotice "この設定は、はてなブックマーク拡張全般で有効です">
-<!ENTITY hBookmark.config.link.linkOverlay "はてなブックマーク追加リンククリック時に、拡張の編集画面を開く">
 
 <!ENTITY hBookmark.config.addPanel "編集画面">
 <!ENTITY hBookmark.config.addPanelTagComplete "タグ補完">
