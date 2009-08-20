@@ -43,6 +43,7 @@ let builtInSearchSiteInfo = [
             }
             div > #hBookmark-search {
                 font-size: 0.8em;
+                margin-left: 0.6em;
             }
         ]]>.toString(),
     },
