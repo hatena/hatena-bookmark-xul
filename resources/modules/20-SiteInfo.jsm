@@ -220,8 +220,9 @@ extend(SiteInfoSet.prototype, {
 
     _doFetchSource: function SIS__doFetchSource(source, urls) {
         p('SiteInfoSet#_doFetchSource')
-        let url = urls.splice(Math.floor(Math.random() * urls.length), 1)[0];
+        let url = urls.shift();
         let xhr = new XMLHttpRequest();
+        xhr.mozBackgroundRequest = true;
         xhr.open('GET', url);
         xhr.setRequestHeader('If-Modifield-Since',
                              new Date(source.updated).toUTCString());
@@ -233,7 +234,7 @@ extend(SiteInfoSet.prototype, {
 
         let self = this;
         function onFetch(event) {
-            p('SiteInfoSet#_doFetchSource onFetch');
+            p('SiteInfoSet#_doFetchSource onFetch: ' + url);
             let succeeded = false;
             if (event.type === 'load') {
                 if (xhr.status === 200) {
