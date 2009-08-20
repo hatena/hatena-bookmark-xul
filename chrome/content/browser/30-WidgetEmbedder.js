@@ -42,6 +42,7 @@ extend(WidgetEmbedder, {
 
     STYLE: <![CDATA[
         .hBookmark-widget {
+            background: none !important;
             text-decoration: none !important;
             margin: 0 0 0 2px;
             border: none !important;
