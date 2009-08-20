@@ -6,7 +6,6 @@ var getAddPageURL = addPageURL;
 function WidgetEmbedder(doc) {
     this.site = SiteInfoSet.Article.get(doc);
     if (!this.site || this.site.data.disable) return;
-    this.embedStyle(doc);
     this.doc = null;
     let pref = Prefs.bookmark;
     this._inNewTab = pref.get("link.openInNewTab");
@@ -14,6 +13,7 @@ function WidgetEmbedder(doc) {
     this._embedComments = pref.get("embed.comments");
     this._embedAddButton = pref.get("embed.addButton");
     this._timerId = doc.defaultView.setTimeout(this.onTimer, WidgetEmbedder.INITIAL_DELAY, this);
+    this.embedStyle();
     doc.addEventListener("GM_AutoPagerizeLoaded", this, false, true);
     doc.addEventListener("HB.PageInserted", this, false, true);
     doc.addEventListener("DOMNodeInserted", this, false);
@@ -57,7 +57,8 @@ extend(WidgetEmbedder, {
 });
 
 extend(WidgetEmbedder.prototype, {
-    embedStyle: function WE_embedStyle(doc) {
+    embedStyle: function WE_embedStyle() {
+        let doc = this.site.doc;
         let style = doc.createElementNS(XHTML_NS, "style");
         style.setAttribute("type", "text/css");
         style.textContent = WidgetEmbedder.STYLE + (this.site.data.style || "");
