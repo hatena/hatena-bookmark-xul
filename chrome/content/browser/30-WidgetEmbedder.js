@@ -27,11 +27,14 @@ extend(WidgetEmbedder, {
     INITIAL_DELAY:  50,
     MUTATION_DELAY: 350,
 
-    IMAGE_API_PREFIX: B_STATIC_HTTP + 'entry/image/',
-    ADD_BUTTON_URL:   B_STATIC_HTTP + 'images/append.gif',
+    IMAGE_API_PREFIX:   B_STATIC_HTTP + 'entry/image/',
+    COMMENTS_IMAGE_URL: "data:image/png,%89PNG%0D%0A%1A%0A%00%00%00%0DIHDR%00%00%00%0E%00%00%00%0D%08%06%00%00%00%99%DC_%7F%00%00%00%01sRGB%00%AE%CE%1C%E9%00%00%00%06bKGD%00%FF%00%FF%00%FF%A0%BD%A7%93%00%00%01%B9IDAT(%CF%8D%D0%B1n%13A%14%05%D0%F7f%DE%8C%1D3%0EA%C8%A0%15q%1C%2C%84%84%A0%A0p%89%F0%1F%20Y4%E1%23%A0%A1%A4I%C3%17%F8%07(%91%1B%0A%D7%14%08%C4'%A4%81%02%D92V%D6%12%B1%9DY%EF%EE%CC%DB%19%9A8e%E4%5B%DF%23%5D%5D%1C%8F%C7%0DcL%03%00%8C%D6%FA%20%C6h%10%B1%81%88%1A%00%20%C6%E8b%8C%1BD%B4%CE%B9%25%00Xk%ED%86%8C1%8D%18%E3%5D%A5T%22%A5lk%AD%EF%11%D1m!%C4-%00%80%10B%C6%CC%2B%E7%5CJDS%EF%FD%DC%18%03%04%00F)%95%7C%FE%9D%9C%CE.U%1Fn%C8%83%A6%FFv%F2h~%CA%CC%25i%AD%0F%A4%94%ED%D9%A5%EA%7Fy%7Bt%93%83%C1p%D2WJ%B5%85%10K%01%00%7BDt%07v%CCUwO%C4%18%A5%10B%ED%0A%85%10*%C6(%05%22V!%04%BF%2B%0C!xD%AC%04%00%E4%CC%7C%B1%2B%BC%EA%E6%E4%9C%5B%12%D1%B4%BD%CF%3F%06%C3%C9%8Bma%7B%D4%608%B9F%87M%FF%DD%7B%3Fe%E6%25%01%80%F5%DE%CF%DF%3C%3E%FFX%AB%D5%9E%D4%EB%F5%E3%0F_%CD%BB-zv%3F%FC%3Ay%9A%8D%8B%A2%F8%E3%9C%3B%2B%0A%3FGDK%D6%DA%8D1%06%CA%B2%C4%10BYU%D5%EC%B0Y%7B%3E%18N%5E%1E%ED%FB%9F%AF%1E%FE%FB%B4Z%F9%0BfNC%08%7F%11qi%AD%DDP%9E%E7e%B7%DB%E54M%B9%AA%AAl%BD%5E%9F%BF%3E%CE%DE%2B%A5%EA%88Xy%0F93gR%CA%2C%CB2%DB%E9t%8A%C5bQ%E1v%FFh4%92%ADVK%01%00%01%00%E5y%AE%B4%D6!%C6%C8EQ%F8%24I%7C%AF%D7%BB~%FF%3F%87%DA%E3%E2KUj6%00%00%00%00IEND%AEB%60%82",
+    ADD_BUTTON_URL:     B_STATIC_HTTP + 'images/append.gif',
 
     STRING_SHOW_ENTRY_TITLE:   embedStrings.get('showEntryTitle'),
     STRING_SHOW_ENTRY_TEXT:    embedStrings.get('showEntryText'),
+    STRING_SHOW_COMMENT_TITLE: embedStrings.get('showCommentTitle'),
+    STRING_SHOW_COMMENT_TEXT:  embedStrings.get('showCommentText'),
     STRING_ADD_BOOKMARK_TITLE: embedStrings.get('addBookmarkTitle'),
     STRING_ADD_BOOKMARK_TEXT:  embedStrings.get('addBookmarkText'),
 
@@ -250,14 +253,18 @@ extend(WidgetEmbedder.prototype, {
             <a class="hBookmark-widget hBookmark-widget-counter"
                href={ entryURL }
                title={ WE.STRING_SHOW_ENTRY_TITLE }
-               style="display: none;">
+               style="display: none !important;">
                 <img src={ WE.IMAGE_API_PREFIX + url.replace(/#/g, "%23") }
                      alt={ WE.STRING_SHOW_ENTRY_TEXT }/>
             </a>
             <a class="hBookmark-widget hBookmark-widget-comments"
                href={ entryURL }
-               title=""
-               style="display: none;">[c]</a>
+               title={ WE.STRING_SHOW_COMMENT_TITLE }
+               style="display: none !important;">
+                <img src={ WE.COMMENTS_IMAGE_URL }
+                     alt={ WE.STRING_SHOW_COMMENT_TEXT }
+                     width="16" height="13"/>
+            </a>
             <a class="hBookmark-widget hBookmark-widget-add-button"
                href={ addPageURL(url) }
                title={ WE.STRING_ADD_BOOKMARK_TITLE }>
