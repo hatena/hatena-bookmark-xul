@@ -14,6 +14,14 @@
     padding-bottom: 5px;
 }
 
+checkbox[src] > .checkbox-label-box {
+    -moz-box-align: center;
+}
+
+checkbox[src] > .checkbox-label-box > .checkbox-icon {
+    -moz-margin-end: 5px;
+}
+
 /*
 .windowDialog,
 .windowDialog prefpane {

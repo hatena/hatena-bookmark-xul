@@ -186,14 +186,17 @@
             <checkbox id="extensions.hatenabookmark.embed.counter-check"
                       label="&hBookmark.config.browsing.embedCounter;"
                       preference="extensions.hatenabookmark.embed.counter"
+                      src="chrome://hatenabookmark/skin/images/10-users.gif"
                       class="indent"/>
             <checkbox id="extensions.hatenabookmark.embed.comments-check"
                       label="&hBookmark.config.browsing.embedComments;"
                       preference="extensions.hatenabookmark.embed.comments"
+                      src="chrome://hatenabookmark/skin/images/b-comment-balloon.png"
                       class="indent"/>
             <checkbox id="extensions.hatenabookmark.embed.addButton-check"
                       label="&hBookmark.config.browsing.embedAddButton;"
                       preference="extensions.hatenabookmark.embed.addButton"
+                      src="chrome://hatenabookmark/skin/images/b_add.gif"
                       class="indent"/>
         </groupbox>
 
@@ -201,10 +204,12 @@
             <caption label="&hBookmark.config.link;"/>
             <checkbox id="link.captureAddition"
                       label="&hBookmark.config.link.captureAddition;"
-                      preference="extensions.hatenabookmark.link.captureAddition" />
+                      preference="extensions.hatenabookmark.link.captureAddition"
+                      src="chrome://hatenabookmark/skin/images/b_add.gif"/>
             <checkbox id="link.captureComments"
                       label="&hBookmark.config.link.captureComments;"
-                      preference="extensions.hatenabookmark.link.captureComments" />
+                      preference="extensions.hatenabookmark.link.captureComments"
+                      src="chrome://hatenabookmark/skin/images/view-comment.gif"/>
         </groupbox>
 
         <groupbox>
