@@ -51,50 +51,45 @@ function selector2xpath(selector) {
     }
 
     selector = selector.replace(/\s+/g, ' ').replace(/ ?([,>]) ?/g, '$1');
-    return selector.split(',').map(singleSelector2xpath).join(' | ');
+    return selector.replace(/(,)?([^,]+)/g, singleSelector2xpath);
 }
 
-function singleSelector2xpath(selector) {
-    return 'descendant::' +
-        selector.split(/([ >])/).map(selectorPart2xpath).join('');
+function singleSelector2xpath(match, comma, selector) {
+    return (comma ? ' | descendant::' : 'descendant::') +
+        selector.replace(/([ >])?([^ >]+)/g, selectorPart2xpath);
 }
 
-function selectorPart2xpath(part, i) {
-    if (i & 1) return (part === ' ') ? '/descendant::' : '/child::';
-
-    let elementPart = /^(?:[\w-]+|\*)/.exec(part);
-    let element;
-    if (elementPart) {
-        element = elementPart[0];
-        part = part.substring(element.length);
+function selectorPart2xpath(match, combinator, part) {
+    let step = combinator ? ((combinator === ' ') ? '/descendant::' : '/child::') : ''
+    let elementEnd = part.search(/[#.:]/);
+    if (elementEnd === -1) return step + part;
+    if (elementEnd) {
+        step += part.substring(0, elementEnd);
+        part = part.substring(elementEnd);
     } else {
-        element = '*';
+        step += '*';
     }
-    return part
-        ? element + '[' + part.split(/(?=[#.:])/).map(classes2xpath).join(' and ') + ']'
-        : element;
+    return step + '[' + part.replace(/([#.:])([\w-]+(?:\((\d+)\))?)/g, classes2xpath) + ']';
 }
 
-function classes2xpath(kindOfClass) {
-    let first = kindOfClass.charCodeAt(0);
-    if (first === 35 /* '#' */)
-        return '@id = "' + kindOfClass.substring(1) + '"';
-    if (first === 46 /* '.' */)
-        return 'contains(concat(" ", normalize-space(@class), " "), " ' +
-               kindOfClass.substring(1) + ' ")';
+function classes2xpath(match, kind, name, index, offset) {
+    let expr = offset ? ' and ' : '';
+    if (kind === '#')
+        return expr + '@id = "' + name + '"';
+    if (kind === '.')
+        return expr + 'contains(concat(" ", normalize-space(@class), " "), " ' + name + ' ")';
 
-    switch (kindOfClass) {
-    case ':first-child':
-    case ':first':
-    case ':nth-child(1)':
-        return 'not(preceding-sibling::*)';
+    switch (name) {
+    case 'first-child':
+    case 'first': // Someone specifies incorrect pseudo classes
+    case 'nth-child(1)':
+        return expr + 'not(preceding-sibling::*)';
 
-    case':last-child':
-        return 'not(following-sibling::*)';
+    case'last-child':
+        return expr + 'not(following-sibling::*)';
     }
     // Assume it is an nth-child pseudo class.
-    let index = (/\d+/.exec(kindOfClass) || [0])[0];
-    return 'count(preceding-sibling::*) = ' + (index - 1);
+    return expr + 'count(preceding-sibling::*) = ' + (index - 1 || -1);
 }
 
 function getLinkToCurrentURI(context) {
