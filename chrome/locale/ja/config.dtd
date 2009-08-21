@@ -23,7 +23,7 @@
 <!ENTITY hBookmark.config.browsing "Web 閲覧">
 <!ENTITY hBookmark.config.browsing.embedCaption "はてなブックマークの情報表示">
 <!ENTITY hBookmark.config.browsing.embed "Web ページにはてなブックマークの情報を表示する">
-<!ENTITY hBookmark.config.browsing.embedLeanMoreText "もっと詳しく">
+<!ENTITY hBookmark.config.browsing.embedLeanMoreText "もっと詳しく (要更新!)">
 <!ENTITY hBookmark.config.browsing.embedLeanMoreURL "http://b.hatena.ne.jp/guide/firefox_addon"><!-- XXX Specify correct URL -->
 <!ENTITY hBookmark.config.browsing.embedInSupportingPages "対応するページすべてで表示する">
 <!ENTITY hBookmark.config.browsing.embedOnlyInSearchSites "検索サイトでのみ表示する *">
