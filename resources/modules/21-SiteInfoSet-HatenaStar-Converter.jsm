@@ -85,7 +85,7 @@ function classes2xpath(match, kind, name, index, offset) {
     case 'nth-child(1)':
         return expr + 'not(preceding-sibling::*)';
 
-    case'last-child':
+    case 'last-child':
         return expr + 'not(following-sibling::*)';
     }
     // Assume it is an nth-child pseudo class.
