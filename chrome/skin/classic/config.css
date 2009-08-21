@@ -2,7 +2,7 @@
 
 #BrowserPreferences radio[pane] {
   list-style-image: none;
-  -moz-image-region: 0px 0px 0px 0px;
+  -moz-image-region: rect(0px 0px 0px 0px);
 }
 
 .paneButtonIcon {

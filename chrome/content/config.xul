@@ -108,8 +108,6 @@
                       preference="extensions.hatenabookmark.link.openInNewTab" />
             <label value="&hBookmark.config.tabs.openInNewTabNotice;" />
         </groupbox>
-
-        <spacer height="50px" />
     </vbox>
 </prefpane>
 

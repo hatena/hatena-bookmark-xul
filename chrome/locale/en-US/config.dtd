@@ -34,8 +34,8 @@
 <!ENTITY hBookmark.config.browsing.embedAddButton "Show Add-to-Bookmark button">
 
 <!ENTITY hBookmark.config.link "Links">
-<!ENTITY hBookmark.config.link.captureAddition "Open the extended edit screen when you add new links to Hatena Bookmark">
-<!ENTITY hBookmark.config.link.captureComments "Open the extended comment viewer when you click a Show-Bookmark-Comments image">
+<!ENTITY hBookmark.config.link.captureAddition "Open the Edit screen when you add new links to Hatena Bookmark">
+<!ENTITY hBookmark.config.link.captureComments "Open the CommentViewer when you click a bookmark comments button">
 
 <!ENTITY hBookmark.config.browsing.searchCaption "My Bookmark Full-Text Search">
 <!ENTITY hBookmark.config.browsing.search "Show my bookmark full-text search results on search sites *">
