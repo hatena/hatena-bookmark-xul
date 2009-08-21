@@ -29,8 +29,8 @@ function convertHatenaStarSiteConfigToSiteInfoItem(text) {
                 domain:     urlPattern,
                 paragraph:  selector2xpath(paraSelector),
                 link:       selector2xpath(paraInfos.uri || 'parent'),
-                annotation: selector2xpath(paraInfos.container || 'parent'),
-                annotationPosition: 'last',
+                annotation: selector2xpath(paraInfos.container ||
+                                           paraInfos.uri || 'parent'),
             });
         }
     }
