@@ -75,6 +75,13 @@ let builtInSiteInfo = [
             }
         ]]>.toString(),
     },
+    // はてなブックマークのサイトでは、既に十分な情報が
+    // 提供されていること、不用意にブックマーク数などを
+    // 表示するとレイアウトが崩れることにより、表示しない。
+    {
+        domain: /^http:\/\/b\.hatena\.ne\.jp\//,
+        disable: true,
+    },
 ];
 
 var evaluator = new XPathEvaluator();
