@@ -233,6 +233,8 @@
 
         <separator class="thin"/>
         <description>&hBookmark.config.browsing.availableSearchSites;</description>
+        <!-- XXX 下が見切れることがあるので無理やりスペースを空ける -->
+        <separator/>
     </vbox>
 </prefpane>
 
