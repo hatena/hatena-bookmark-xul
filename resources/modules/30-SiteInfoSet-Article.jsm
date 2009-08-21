@@ -124,8 +124,16 @@ function shouldUseExternalSiteInfo() {
 let Article = new SiteInfoSet({
     matcher: articleMatcher,
     sources: [
-        { file: 'Article.user.siteinfo.js' },
+        { file: 'HBUsersCount.user.siteinfo.js' },
         { items: builtInSiteInfo },
+        {
+            file: 'HBUsersCount.siteinfo.js',
+            urls: [
+                'http://wedata.net/databases/HatenaBookmarkUsersCount/items.json',
+            ],
+            format: 'wedata',
+            shouldUse: shouldUseExternalSiteInfo,
+        },
         {
             file: 'LDRize.siteinfo.js',
             urls: [
