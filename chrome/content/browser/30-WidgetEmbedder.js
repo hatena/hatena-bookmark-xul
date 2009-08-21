@@ -173,13 +173,13 @@ extend(WidgetEmbedder.prototype, {
 
     getExistingWidgets: function WE_getExistingWidgets(paragraph, link) {
         const url = iri2uri(link.href);
-        const escapedURL = encodeURIComponent(url);
+        const sharpEscapedURL = url.replace(/#/g, '%23');
         const entryURL    = getEntryURL(link.href);
-        const oldEntryURL = B_HTTP + 'entry/' + url.replace(/#/g, '%23');
+        const oldEntryURL = B_HTTP + 'entry/' + sharpEscapedURL;
         const imageAPIPrefix    = B_STATIC_HTTP + 'entry/image/';
         const oldImageAPIPrefix = B_HTTP + 'entry/image/';
         const addURL    = getAddPageURL(link.href);
-        const oldAddURL = B_HTTP + 'append?' + escapedURL;
+        const oldAddURL = B_HTTP + 'append?' + sharpEscapedURL;
         const entryImagePrefix = 'http://d.hatena.ne.jp/images/b_entry';
         let widgets = {
             entry:     null,
@@ -195,7 +195,10 @@ extend(WidgetEmbedder.prototype, {
                 if (!content) break;
                 if (content.nodeType === Node.TEXT_NODE) {
                     if (content.nodeValue.indexOf(' user') !== -1) {
-                        widgets.counter = a;
+                        let parentName = a.parentNode.nodeName.toLowerCase();
+                        widgets.counter =
+                            (parentName === 'em' || parentName === 'strong')
+                            ? a.parentNode : a;
                         break;
                     }
                     if (!content.nextSibling) break;
