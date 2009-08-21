@@ -137,6 +137,7 @@ let Article = new SiteInfoSet({
             file: 'HBUsersCount.siteinfo.js',
             urls: [
                 'http://wedata.net/databases/HatenaBookmarkUsersCount/items.json',
+                'http://b.st-hatena.com/file/HatenaBookmarkUsersCount.items.json',
             ],
             format: 'wedata',
             shouldUse: shouldUseExternalSiteInfo,
@@ -145,6 +146,7 @@ let Article = new SiteInfoSet({
             file: 'LDRize.siteinfo.js',
             urls: [
                 'http://wedata.net/databases/LDRize/items.json',
+                'http://b.st-hatena.com/file/LDRize.items.json',
                 //'http://ss-o.net/json/wedataLDRize.json.gz',
             ],
             format: 'wedata',
