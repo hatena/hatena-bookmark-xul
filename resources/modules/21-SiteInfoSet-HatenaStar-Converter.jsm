@@ -10,8 +10,8 @@ function convertHatenaStarSiteConfigToSiteInfoItem(text) {
         let entries = config[domain];
         let domainPattern = '^https?://'
         domainPattern += (domain.charCodeAt(0) === 42 /* '*' */)
-                         ? '(?:[\w-]+\.)*' + domain.substring(2)
-                         : domain;
+            ? '(?:[\w-]+\.)*' + domain.substring(2).replace(/\W/g, '\\$&')
+            : domain.replace(/\W/g, '\\$&');
         for (let i = 0; i < entries.length; i++) {
             let entry = entries[i];
             let path = entry.path || '';
