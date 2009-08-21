@@ -270,7 +270,7 @@ extend(WidgetEmbedder.prototype, {
                style="display: none !important;">
                 <img src={ WE.COMMENTS_IMAGE_URL }
                      alt={ WE.STRING_SHOW_COMMENT_TEXT }
-                     width="16" height="13"/>
+                     width="14" height="13"/>
             </a>
             <a class="hBookmark-widget hBookmark-widget-add-button"
                href={ addPageURL(url) }
