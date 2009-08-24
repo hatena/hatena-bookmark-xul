@@ -23,6 +23,7 @@ function testNormalize() {
            'http://www.amazon.co.jp/gp/product/4480064141?ie=UTF8&linkCode=as2&tag=blogsofdankog-22n');
     doTest('http://www.amazon.co.jp/gp/product/4844325396',
            'http://www.amazon.co.jp/gp/product/4844325396?ie=UTF8&s=books&qid=1204387191&sr=1-1');
+
     doTest('http://www.hatena.ne.jp/',
            'http://www.hatena.ne.jp');
     doTest('http://www.hatena.ne.jp/',
@@ -41,4 +42,18 @@ function testNormalize() {
            'http://d.hatena.ne.jp/naoya/20080320/1206009912#seemore');
     doTest('http://d.hatena.ne.jp/naoya/20080320/1206009912#komorebi',
            'http://d.hatena.ne.jp/naoya/20080320/1206009912#komorebi');
+
+    doTest('http://d.hatena.ne.jp/asin/4501622601',
+           'http://d.hatena.ne.jp/asin/4501622601/naoyadyndnsor-22');
+    doTest('http://d.hatena.ne.jp/asin/4501622601',
+           'http://d.hatena.ne.jp/asin/4501622601/');
+    doTest('http://d.hatena.ne.jp/asin/4501622601',
+           'http://d.hatena.ne.jp/asin/4501622601');
+
+    doTest('http://jp.youtube.com/watch?v=1S3_Z3f2b20',
+           'http://jp.youtube.com/watch?v=1S3_Z3f2b20&feature=dir');
+    doTest('http://www.youtube.com/watch?v=1S3_Z3f2b20',
+           'http://www.youtube.com/watch?v=1S3_Z3f2b20&feature=dir');
+    doTest('http://www.youtube.com/watch?v=1S3_Z3f2b20',
+           'http://youtube.com/watch?v=1S3_Z3f2b20&feature=dir');
 }
