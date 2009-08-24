@@ -234,7 +234,7 @@ extend(SiteInfoSet.prototype, {
 
         let self = this;
         function onFetch(event) {
-            p('SiteInfoSet#_doFetchSource onFetch: ' + url);
+            p('SiteInfoSet#_doFetchSource onFetch: [' + event.type + '] ' + url);
             let succeeded = false;
             if (event.type === 'load') {
                 if (xhr.status === 200) {
