@@ -81,13 +81,16 @@ extend(WidgetEmbedder.prototype, {
 
         let link = this.site.query("link", paragraph) || paragraph;
         if (!link.href || !/^https?:\/\//.test(link.href)) return;
-        let points = this.getInsertionPoints(paragraph, link);
+        let existing = this.getExistingWidgets(paragraph, link);
+        let points = this.getInsertionPoints(paragraph, link, existing);
         let xmls = this.createWidgetXMLs(link);
         let space = this.doc.createTextNode(" ");
         let fragment = this.doc.createDocumentFragment();
         fragment.appendChild(space.cloneNode(false));
 
-        let counter = null, comments = null;
+        const DISPLAY_NONE = "display: none !important;";
+        let counterImage = existing.counterImage;
+        let standbys = [];
         if (points.addButton) {
             let f = fragment.cloneNode(true);
             f.appendChild(xml2dom(xmls[2], points.addButton));
@@ -95,10 +98,15 @@ extend(WidgetEmbedder.prototype, {
             points.addButton.insertNode(f);
         }
         if (points.comments) {
-            if (!points.counter)
-                delete xmls[1].@style;
-            comments = xml2dom(xmls[1], points.comments);
+            // カウンタをこれから埋め込むか、読み込み途中の
+            // カウンタ画像があるか、幅 1 ピクセルのカウンタ画像があるなら、
+            // コメント表示ボタン (吹き出しアイコン) を表示しない。
+            if (points.counter || (counterImage &&
+                (!counterImage.complete || counterImage.naturalWidth === 1)))
+                xmls[1].@style = DISPLAY_NONE;
+            let comments = xml2dom(xmls[1], points.comments);
             comments.setAttributeNS(HB_NS, "hb:url", link.href);
+            standbys.push(comments);
             let f = fragment.cloneNode(true);
             f.appendChild(comments);
             if (points.comments !== points.addButton)
@@ -106,11 +114,10 @@ extend(WidgetEmbedder.prototype, {
             points.comments.insertNode(f);
         }
         if (points.counter) {
-            counter = xml2dom(xmls[0], points.counter);
-            let img = counter.firstChild;
-            img.addEventListener("load", onCounterEvent, false);
-            img.addEventListener("error", onCounterEvent, false);
-            img.addEventListener("abort", onCounterEvent, false);
+            xmls[0].@style = DISPLAY_NONE;
+            let counter = xml2dom(xmls[0], points.counter);
+            counterImage = counter.firstChild;
+            standbys.push(counter);
             let f = fragment.cloneNode(true);
             f.appendChild(counter);
             if (points.counter !== points.comments)
@@ -118,47 +125,51 @@ extend(WidgetEmbedder.prototype, {
             points.counter.insertNode(f);
         }
 
+        if (standbys.length && counterImage && !counterImage.complete) {
+            counterImage.addEventListener("load", onCounterEvent, false);
+            counterImage.addEventListener("error", onCounterEvent, false);
+            counterImage.addEventListener("abort", onCounterEvent, false);
+        }
+        existing = points = counterImage = null;
+
         function onCounterEvent(event) {
             let target = event.target;
-            if (event.type === "load" && target.naturalWidth !== 1) {
-                counter.removeAttribute("style");
-                if (comments)
-                    comments.removeAttribute("style");
-            }
+            if (event.type === "load" && target.naturalWidth !== 1)
+                standbys.forEach(function (a) a.removeAttribute("style"));
             target.removeEventListener("load", onCounterEvent, false);
             target.removeEventListener("error", onCounterEvent, false);
             target.removeEventListener("abort", onCounterEvent, false);
         }
     },
 
-    getInsertionPoints: function WE_getInsertionPoints(paragraph, link) {
-        let existings = this.getExistingWidgets(paragraph, link);
+    getInsertionPoints: function WE_getInsertionPoints(paragraph, link,
+                                                       existing) {
         let counterPoint = null, commentsPoint = null, addButtonPoint = null;
-        if (!existings.counter) {
-            let anchor = existings.entry ||
-                         existings.comments ||
-                         existings.addButton;
+        if (!existing.counter) {
+            let anchor = existing.entry ||
+                         existing.comments ||
+                         existing.addButton;
             if (anchor) {
                 counterPoint = this.doc.createRange();
                 counterPoint.selectNode(anchor);
-                counterPoint.collapse(anchor !== existings.entry);
+                counterPoint.collapse(anchor !== existing.entry);
             } else {
                 counterPoint = this.getAnnotationPoint(paragraph, link);
             }
         }
-        if (!existings.comments) {
-            if (existings.counter) {
+        if (!existing.comments) {
+            if (existing.counter) {
                 commentsPoint = this.doc.createRange();
-                commentsPoint.selectNode(existings.counter);
+                commentsPoint.selectNode(existing.counter);
                 commentsPoint.collapse(false);
             } else {
                 commentsPoint = counterPoint;
             }
         }
-        if (!existings.addButton) {
-            if (existings.comments) {
+        if (!existing.addButton) {
+            if (existing.comments) {
                 addButtonPoint = this.doc.createRange();
-                addButtonPoint.selectNode(existings.comments);
+                addButtonPoint.selectNode(existing.comments);
                 addButtonPoint.collapse(false);
             } else {
                 addButtonPoint = commentsPoint;
@@ -182,10 +193,11 @@ extend(WidgetEmbedder.prototype, {
         const oldAddURL = B_HTTP + 'append?' + sharpEscapedURL;
         const entryImagePrefix = 'http://d.hatena.ne.jp/images/b_entry';
         let widgets = {
-            entry:     null,
-            counter:   null,
-            comments:  null,
-            addButton: null,
+            entry:        null,
+            counter:      null,
+            counterImage: null,
+            comments:     null,
+            addButton:    null,
         };
         Array.forEach(paragraph.getElementsByTagName('a'), function (a) {
             switch (a.href) {
@@ -207,10 +219,12 @@ extend(WidgetEmbedder.prototype, {
                 if (content instanceof Ci.nsIDOMHTMLImageElement) {
                     let src = content.src;
                     if (src.indexOf(imageAPIPrefix) === 0 ||
-                        src.indexOf(oldImageAPIPrefix) === 0)
+                        src.indexOf(oldImageAPIPrefix) === 0) {
                         widgets.counter = a;
-                    else if (src.indexOf(entryImagePrefix) === 0)
+                        widgets.counterImage = content;
+                    } else if (src.indexOf(entryImagePrefix) === 0) {
                         widgets.entry = a;
+                    }
                 }
                 break;
 
@@ -259,15 +273,13 @@ extend(WidgetEmbedder.prototype, {
         let xmls = <>
             <a class="hBookmark-widget hBookmark-widget-counter"
                href={ entryURL }
-               title={ WE.STRING_SHOW_ENTRY_TITLE }
-               style="display: none !important;">
+               title={ WE.STRING_SHOW_ENTRY_TITLE }>
                 <img src={ WE.IMAGE_API_PREFIX + url.replace(/#/g, "%23") }
                      alt={ WE.STRING_SHOW_ENTRY_TEXT }/>
             </a>
             <a class="hBookmark-widget hBookmark-widget-comments"
                href={ entryURL }
-               title={ WE.STRING_SHOW_COMMENT_TITLE }
-               style="display: none !important;">
+               title={ WE.STRING_SHOW_COMMENT_TITLE }>
                 <img src={ WE.COMMENTS_IMAGE_URL }
                      alt={ WE.STRING_SHOW_COMMENT_TEXT }
                      width="14" height="13"/>
