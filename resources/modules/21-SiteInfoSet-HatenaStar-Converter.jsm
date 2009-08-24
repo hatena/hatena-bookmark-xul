@@ -94,8 +94,15 @@ function classes2xpath(match, kind, name, index, offset) {
 
 function getLinkToCurrentURI(context) {
     let doc = context.ownerDocument || context;
+    // XXX doesn't work in XHTML.
+    let apLink = doc.evaluate(
+        '(ancestor-or-self::*/preceding-sibling::*' +
+            '[@class = "autopagerize_page_info" or @class = "_autopagerize"]' +
+        ')[last()]/descendant::a[@class = "autopagerize_link" and @href]',
+        context, null, XPathResult.ANY_UNORDERED_NODE_TYPE, null
+    ).singleNodeValue;
     let a = doc.createElementNS(XHTML_NS, 'a');
-    a.href = doc.defaultView.location.href;
+    a.href = apLink ? apLink.href : doc.defaultView.location.href;
     return a;
 }
 
