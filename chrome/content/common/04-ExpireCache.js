@@ -195,7 +195,7 @@ HTTPCache.counter.loadHandler = function(ev) {
 
 HTTPCache.comment = new HTTPCache('commentCache', {
     expire: 60 * 15,
-    baseURL: B_HTTP + 'entry/json/?url=',
+    baseURL: B_HTTP + 'entry/jsonlite/?url=',
     seriarizer: 'uneval',
     json: true,
     encoder: escapeIRI,
