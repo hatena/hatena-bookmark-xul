@@ -95,7 +95,7 @@ extend(Bookmark, {
             query.limit = limit;
         return Bookmark.find(query);
     },
-    search: function(str, limit, ascending) {
+    search: function(str, limit, ascending, offset) {
         str = String(str).replace(/^\s+|\s+$/g, "");
         var res;
         p.b(function() {
@@ -107,6 +107,8 @@ extend(Bookmark, {
                 limit: limit || 10,
                 order: ascending ? 'date asc' : 'date desc'
             });
+            if (offset)
+                args.offset = parseInt(offset);
             res = Bookmark.find(<>
                  select * from bookmarks
                  where {sql}
