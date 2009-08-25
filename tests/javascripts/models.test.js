@@ -1,4 +1,3 @@
-
 var _global = this;
 var hBookmark;
 
@@ -17,6 +16,70 @@ function setUp()
 function testParseTags() {
     var B = model('Bookmark');
     assert.equals(B.parseTags('[hoge][huga]mycomment[foo]').length, 2);
+}
+
+function bookmarkFixture() {
+    var BOOKMARK = model('Bookmark');
+    for (var i = 0;  i < 10; i++) {
+        let b = new BOOKMARK();
+        b.url = 'http://b.hatena.ne.jp/url' + i;
+        b.comment = '[tag1][tag2]b.hatena comment' + i;
+        b.title = 'b.hatena title' + i;
+        b.date = 0;
+        b.save();
+    }
+}
+
+function testBookmarkSearch() {
+    bookmarkFixture();
+    var BOOKMARK = model('Bookmark');
+
+    var res;
+    res = BOOKMARK.search('/url');
+    assert.equals(res.length, 10);
+    assert.equals(res[0].title, 'b.hatena title' + 9); // desc なので
+
+    res = BOOKMARK.search('/url', 100);
+    assert.equals(res.length, 10);
+
+    res = BOOKMARK.search('/url', 5);
+    assert.equals(res.length, 5);
+
+    res = BOOKMARK.search('nohitdayo');
+    assert.equals(res.length, 0);
+
+    res = BOOKMARK.search('tag1 tag2 comment2');
+    assert.equals(res.length, 1);
+
+    res = BOOKMARK.search('/url', 1, true);
+    assert.equals(res[0].title, 'b.hatena title' + 0); // asc
+
+    res = BOOKMARK.search('/url', 1, true, 5);
+    assert.equals(res[0].title, 'b.hatena title' + 5);
+}
+
+function testSearchAny() {
+    bookmarkFixture();
+    var BOOKMARK = model('Bookmark');
+    var res;
+
+    res = BOOKMARK.searchByTitle('url', 10);
+    assert.equals(res.length, 0);
+
+    res = BOOKMARK.searchByTitle('title', 10);
+    assert.equals(res.length, 10);
+
+    res = BOOKMARK.searchByUrl('url', 10);
+    assert.equals(res.length, 10);
+
+    res = BOOKMARK.searchByUrl('title', 10);
+    assert.equals(res.length, 0);
+
+    res = BOOKMARK.searchByComment('tag1', 10);
+    assert.equals(res.length, 10);
+
+    res = BOOKMARK.searchByComment('title', 10);
+    assert.equals(res.length, 0);
 }
 
 function testBookmark() {
