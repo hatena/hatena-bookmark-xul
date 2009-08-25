@@ -19,6 +19,24 @@ function testParseTags() {
     assert.equals(B.parseTags('[hoge][huga]mycomment[foo]').length, 2);
 }
 
+function testBookmarkSearch() {
+    var BOOKMARK = model('Bookmark');
+    for (var i = 0;  i < 10; i++) {
+        let b = new BOOKMARK();
+        b.url = 'http://b.hatena.ne.jp/url' + i;
+        b.comment = '[tag1][tag2]comment' + i;
+        b.title = 'title' + i;
+        b.date = 0;
+        b.save();
+    }
+    var res;
+    res = BOOKMARK.search('/url');
+    assert.equals(res.length, 10);
+
+    res = BOOKMARK.search('/url', 5);
+    assert.equals(res.length, 5);
+}
+
 function testBookmark() {
     var BOOKMARK = model('Bookmark');
     var b = new BOOKMARK();
