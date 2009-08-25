@@ -75,9 +75,26 @@ liberator.plugins.hBookmark = (function() {
         );
     }
 
-    plugin.search = function(word, limit) {
-        limit = limit || liberator.globalVariables.hBookmark_search_limit || 10;
-        return HatenaBookmark.model('Bookmark').search(word, limit);
+    this.__defineGetter__('searchLimit', function() liberator.globalVariables.hBookmark_search_limit || 10);
+
+    plugin.search = function(word, limit, asc, offset) {
+        if (!limit) limit = searchLimit;
+        return HatenaBookmark.model('Bookmark').search(word, limit, asc, offset);
+    }
+
+    plugin.searchByTitle = function(word, limit, asc, offset) {
+        if (!limit) limit = searchLimit;
+        return HatenaBookmark.model('Bookmark').searchByTitle(word, limit, asc, offset);
+    }
+
+    plugin.searchByComment = function(word, limit, asc, offset) {
+        if (!limit) limit = searchLimit;
+        return HatenaBookmark.model('Bookmark').searchByComment(word, limit, asc, offset);
+    }
+
+    plugin.searchByUrl = function(word, limit, asc, offset) {
+        if (!limit) limit = searchLimit;
+        return HatenaBookmark.model('Bookmark').searchByUrl(word, limit, asc, offset);
     }
 
     let BookmarkAdapter = new Struct('b');
@@ -174,7 +191,14 @@ liberator.plugins.hBookmark = (function() {
                     ],
                 }
                 let word = context.filter;
-                let res = plugin.search(word);
+                let res;
+                p('word/ ' + word);
+                if (word.indexOf('-t') == 0) {
+                    word = word.replace('-t', '');
+                    res = plugin.searchByTitle(word);
+                } else {
+                    res = plugin.search(word);
+                }
                 context.filters = [];
                 context.completions = res.map(function(b) new plugin.command.adapter(b));
             }
