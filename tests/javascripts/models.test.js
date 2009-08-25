@@ -59,10 +59,28 @@ function testBookmarkSearch() {
     assert.equals(res[0].title, 'b.hatena title' + 5);
 }
 
-function testSearchTitle() {
+function testSearchAny() {
     bookmarkFixture();
     var BOOKMARK = model('Bookmark');
     var res;
+
+    res = BOOKMARK.searchByTitle('url', 10);
+    assert.equals(res.length, 0);
+
+    res = BOOKMARK.searchByTitle('title', 10);
+    assert.equals(res.length, 10);
+
+    res = BOOKMARK.searchByUrl('url', 10);
+    assert.equals(res.length, 10);
+
+    res = BOOKMARK.searchByUrl('title', 10);
+    assert.equals(res.length, 0);
+
+    res = BOOKMARK.searchByComment('tag1', 10);
+    assert.equals(res.length, 10);
+
+    res = BOOKMARK.searchByComment('title', 10);
+    assert.equals(res.length, 0);
 }
 
 function testBookmark() {

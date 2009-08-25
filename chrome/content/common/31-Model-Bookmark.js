@@ -12,8 +12,9 @@ let Bookmark = Model.Entity({
     }
 });
 
-let createWhereLike = function (word) {
+let createWhereLike = function (word, fieldName) {
     // sqlite での検索は case_sensitive_like = 1 で行った方が速いため
+    if (!fieldName) fieldName = 'search';
     var words = word.toLowerCase().split(/\s+/);
     var sql = [];
     var args = {};
@@ -24,7 +25,7 @@ let createWhereLike = function (word) {
         var arg = {};
         arg[c1] = word;
         return [<>
-          search like :{c1}
+          {fieldName} like :{c1}
         </>.toString(), arg];
     }
     for (var i = 0;  i < words.length; i++) {
@@ -62,7 +63,7 @@ extend(Bookmark, {
 
         return [tags, comment];
     },
-    findByTags: function(tags, limit) {
+    findByTags: function(tags, limit, ascending, offset) {
         tags = [].concat(tags);
         if (!tags.length) return [];
         let bids = [];
@@ -82,10 +83,12 @@ extend(Bookmark, {
         }
         let query = {
             where: 'id IN (' + bids.join(',') + ')',
-            order: 'date DESC'
+            order: ascending ? 'date asc' : 'date desc'
         };
         if (limit)
             query.limit = limit;
+        if (offset)
+            query.offset = parseInt(offset);
         res = Bookmark.find(query);
         return res;
     },
@@ -96,13 +99,25 @@ extend(Bookmark, {
         return Bookmark.find(query);
     },
     search: function(str, limit, ascending, offset) {
+        return Bookmark.searchImpl(str, limit, ascending, offset, 'search');
+    },
+    searchByTitle: function(str, limit, ascending, offset) {
+        return Bookmark.searchImpl(str, limit, ascending, offset, 'title');
+    },
+    searchByUrl: function(str, limit, ascending, offset) {
+        return Bookmark.searchImpl(str, limit, ascending, offset, 'url');
+    },
+    searchByComment: function(str, limit, ascending, offset) {
+        return Bookmark.searchImpl(str, limit, ascending, offset, 'comment');
+    },
+    searchImpl: function(str, limit, ascending, offset, fieldName) {
         str = String(str).replace(/^\s+|\s+$/g, "");
         var res;
         p.b(function() {
         if (!str) {
             res = Bookmark.findRecent(limit);
         } else {
-            var [sql, args] = createWhereLike(str);
+            var [sql, args] = createWhereLike(str, fieldName);
             extend(args, {
                 limit: limit || 10,
                 order: ascending ? 'date asc' : 'date desc'
