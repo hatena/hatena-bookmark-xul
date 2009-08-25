@@ -52,7 +52,7 @@ liberator.plugins.hBookmark = (function() {
     }
 
     if (shortcuts.comment && shortcuts.comment.length) {
-        mappings.addUserMap([modes.NORMAL], 
+        mappings.addUserMap([modes.NORMAL],
             shortcuts.comment,
             'HatenaBookmark - Comment (toggle)',
             function() {
@@ -64,7 +64,7 @@ liberator.plugins.hBookmark = (function() {
     }
 
     if (shortcuts.add && shortcuts.add.length) {
-        mappings.addUserMap([modes.NORMAL], 
+        mappings.addUserMap([modes.NORMAL],
             shortcuts.add,
             'HatenaBookmark - Add',
             function() {
@@ -230,10 +230,10 @@ liberator.plugins.hBookmark = (function() {
 
     completion.addUrlCompleter("H", "Hatena Bookmarks", plugin.command.createCompleter(['Hatena Bookmark']));
     config.guioptions['H'] = ['HatenaBookmark Toolbar',['hBookmarkToolbar']];
-	config.dialogs.push([
-		"hatenabookmark", "Hatenabookmark Config",
-		function(){ window.openDialog("chrome://hatenabookmark/content/config.xul","", "chrome,titlebar,toolbar,centerscreen,dialog=no"); }
-	]);
+    config.dialogs.push([
+        "hatenabookmark", "Hatenabookmark Config",
+        function(){ window.openDialog("chrome://hatenabookmark/content/config.xul","", "chrome,titlebar,toolbar,centerscreen,dialog=no"); }
+    ]);
 
     return plugin;
 })();
