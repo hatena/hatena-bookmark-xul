@@ -179,7 +179,7 @@ liberator.plugins.hBookmark = (function() {
             argCount: '*',
             bang: true,
         },
-        createCompleter: function(titles) {
+        createCompleter: function(titles, searchMethod) {
             return function(context) {
                 context.format = {
                     anchored: true,
@@ -191,14 +191,7 @@ liberator.plugins.hBookmark = (function() {
                     ],
                 }
                 let word = context.filter;
-                let res;
-                p('word/ ' + word);
-                if (word.indexOf('-t') == 0) {
-                    word = word.replace('-t', '');
-                    res = plugin.searchByTitle(word);
-                } else {
-                    res = plugin.search(word);
-                }
+                let res = plugin[searchMethod || 'search'](word);
                 context.filters = [];
                 context.completions = res.map(function(b) new plugin.command.adapter(b));
             }
@@ -252,10 +245,66 @@ liberator.plugins.hBookmark = (function() {
         true
     );
 
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment'], 'searchByComment');
+    commands.addUserCommand(
+        ['hbc[mment]'],
+        'Hatena Bookmark Comment Search',
+        plugin.command.execute,
+        plugin.command.options,
+        true
+    );
+
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment'], 'searchByComment');
+    commands.addUserCommand(
+        ['hbtc[mment]'],
+        'Hatena Bookmark Comment Search (open tab)',
+        plugin.command.executeTab,
+        plugin.command.options,
+        true
+    );
+
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment'], 'searchByUrl');
+    commands.addUserCommand(
+        ['hbu[rl]'],
+        'Hatena Bookmark Url Search',
+        plugin.command.execute,
+        plugin.command.options,
+        true
+    );
+
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment'], 'searchByUrl');
+    commands.addUserCommand(
+        ['hbtu[rl]'],
+        'Hatena Bookmark Url Search (open tab)',
+        plugin.command.executeTab,
+        plugin.command.options,
+        true
+    );
+
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment'], 'searchByTitle');
+    commands.addUserCommand(
+        ['hbti[tle]'],
+        'Hatena Bookmark Title Search',
+        plugin.command.executeTab,
+        plugin.command.options,
+        true
+    );
+
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment'], 'searchByTitle');
+    commands.addUserCommand(
+        ['hbtt[itle]'],
+        'Hatena Bookmark Title Search (open tab)',
+        plugin.command.executeTab,
+        plugin.command.options,
+        true
+    );
+
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment']);
+
     completion.addUrlCompleter("H", "Hatena Bookmarks", plugin.command.createCompleter(['Hatena Bookmark']));
     config.guioptions['H'] = ['HatenaBookmark Toolbar',['hBookmarkToolbar']];
     config.dialogs.push([
-        "hatenabookmark", "Hatenabookmark Config",
+        "hatenabookmark", "HatenaBookmark Config",
         function(){ window.openDialog("chrome://hatenabookmark/content/config.xul","", "chrome,titlebar,toolbar,centerscreen,dialog=no"); }
     ]);
 
