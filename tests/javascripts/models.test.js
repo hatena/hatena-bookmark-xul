@@ -1,4 +1,3 @@
-'b.hatena title' + 5
 var _global = this;
 var hBookmark;
 
