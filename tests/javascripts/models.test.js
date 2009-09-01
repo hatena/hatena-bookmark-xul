@@ -82,6 +82,29 @@ function testSearchAny() {
     assert.equals(res.length, 0);
 }
 
+function testSearchMultibyte() {
+    var BOOKMARK = model('Bookmark');
+    var res;
+
+    var b = new BOOKMARK();
+    b.url = 'http://b.hatena.ne.jp/url';
+    b.comment = '[tag1][tag2][タグ]コメントb.hatena comment';
+    b.title = 'タイトルb.hatena title';
+    b.date = 0;
+    b.save();
+    res = BOOKMARK.searchByComment('コメント', 10);
+    assert.equals(res.length, 1);
+
+    b = new BOOKMARK();
+    b.url = 'http://b.hatena.ne.jp/url2';
+    b.comment = 'コメントb.hatena comment';
+    b.title = 'タイトルb.hatena title';
+    b.date = 0;
+    b.save();
+    res = BOOKMARK.searchByComment('コメント', 10);
+    assert.equals(res.length, 2);
+}
+
 function testBookmark() {
     var BOOKMARK = model('Bookmark');
     var b = new BOOKMARK();
