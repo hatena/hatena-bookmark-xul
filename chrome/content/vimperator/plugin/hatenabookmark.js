@@ -10,6 +10,8 @@ liberator.plugins.hBookmark = (function() {
         Application.console.log('mes: ' + msg);
     }
 
+    let plugin = {};
+
     styles.registerSheet("chrome://hatenabookmark/skin/vimperator.css");
 
     let HatenaBookmark = window.hBookmark;
@@ -54,9 +56,29 @@ liberator.plugins.hBookmark = (function() {
         commandNames = DEFAULT_COMMAND_NAMES;
     }
 
+    let bangFunction;
+    let bangFunctions =  {
+        openNewTab: function(url) {
+            let url = plugin.command.genURL(url);
+            liberator.open(url, liberator.NEW_TAB);
+        },
+        entryPage: function() {
+            let url = plugin.command.genURL(url, true);
+            liberator.open(url, liberator.NEW_TAB);
+        }
+    }
 
+    let globalBangFunction = liberator.globalVariables.hBookmark_bangFunction;
+    if (globalBangFunction) {
+        if (typeof globalBangFunction == 'function') {
+            bangFunction = globalBangFunction;
+        } else {
+            bangFunction = bangFunctions[globalBangFunction];
+        }
+    }
 
-    let plugin = {};
+    if (!bangFunction) 
+        bangFunction = bangFunctions['entryPage'];
 
     if (shortcuts.hintsAdd) {
         hints.addMode(shortcuts.hintsAdd, 'Hatena Bookmark - Add', function(elem) {
@@ -130,7 +152,7 @@ liberator.plugins.hBookmark = (function() {
     ].filter(function (item) item[1]));
 
     plugin.command = {
-        execute: function(args, openTag) {
+        execute: function(args, openTab) {
             if (args['-sync']) {
                 if (!plugin.user) {
                     liberator.echoerr('You need to login to Hatena first.');
@@ -143,27 +165,32 @@ liberator.plugins.hBookmark = (function() {
             if (args['-edit']) {
                 plugin.showPanel(args['-edit']);
             } else {
-                let url = plugin.command.genURL(args);
-                if (openTag) {
-                    liberator.open(url, liberator.NEW_TAB);
+                if (openTab) {
+                    let url = plugin.command.genURL(args.string, args.bang);
+                    bangFunctions.openNewTab(url);
                 } else {
-                    liberator.open(url);
+                    if (args.bang) {
+                        bangFunction(args.string || '');
+                    } else {
+                        let url = plugin.command.genURL(args.string);
+                        liberator.open(url);
+                    }
                 }
             }
         },
         executeTab: function(args) {
             plugin.command.execute(args, true);
         },
-        genURL: function(args) {
-            let url = (args.string || '').replace(/\s/g, '');
+        genURL: function(url, bang) {
+            let url = (url|| '').replace(/\s/g, '');
             if (url.length) {
-                if (args.bang) {
+                if (bang) {
                     return 'http://b.hatena.ne.jp/entry/' + url.replace('#', '%23');
                 } else {
                     return url;
                 }
             } else {
-                if (args.bang) {
+                if (bang) {
                     return 'http://b.hatena.ne.jp/';
                 } else {
                     return 'http://b.hatena.ne.jp/my';
