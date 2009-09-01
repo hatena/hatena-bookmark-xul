@@ -24,8 +24,8 @@ liberator.plugins.hBookmark = (function() {
     const DEFAULT_COMMAND_NAMES = {
         hbsearch             : 'hb[search]',
         hbsearch_tab         : 'hbt[absearch]',
-        hbsearch_comment     : 'hbc[mment]',
-        hbsearch_comment_tab : 'hbtc[mment]',
+        hbsearch_comment     : 'hbc[omment]',
+        hbsearch_comment_tab : 'hbtc[omment]',
         hbsearch_url         : 'hbu[rl]',
         hbsearch_url_tab     : 'hbtu[rl]',
         hbsearch_title       : 'hbti[tle]',
