@@ -1,4 +1,6 @@
 /*
+ * Document: http://wiki.github.com/hatena/hatena-bookmark-xul/vimperator
+ *
  * append to your ~/.vimperatorc
  * =====
  * javascript if (typeof hBookmark != 'undefined') liberator.loadScript('chrome://hatenabookmark/content/vimperator/plugin/hatenabookmark.js', {__proto__: this});
@@ -77,7 +79,7 @@ liberator.plugins.hBookmark = (function() {
         }
     }
 
-    if (!bangFunction) 
+    if (!bangFunction)
         bangFunction = bangFunctions['entryPage'];
 
     if (shortcuts.hintsAdd) {
@@ -120,25 +122,19 @@ liberator.plugins.hBookmark = (function() {
         );
     }
 
-    this.__defineGetter__('searchLimit', function() liberator.globalVariables.hBookmark_search_limit || 10);
-
     plugin.search = function(word, limit, asc, offset) {
-        if (!limit) limit = searchLimit;
         return HatenaBookmark.model('Bookmark').search(word, limit, asc, offset);
     }
 
     plugin.searchByTitle = function(word, limit, asc, offset) {
-        if (!limit) limit = searchLimit;
         return HatenaBookmark.model('Bookmark').searchByTitle(word, limit, asc, offset);
     }
 
     plugin.searchByComment = function(word, limit, asc, offset) {
-        if (!limit) limit = searchLimit;
         return HatenaBookmark.model('Bookmark').searchByComment(word, limit, asc, offset);
     }
 
     plugin.searchByUrl = function(word, limit, asc, offset) {
-        if (!limit) limit = searchLimit;
         return HatenaBookmark.model('Bookmark').searchByUrl(word, limit, asc, offset);
     }
 
@@ -217,8 +213,8 @@ liberator.plugins.hBookmark = (function() {
            if (simpleURL.indexOf('/') == simpleURL.length-1)
                simpleURL = simpleURL.replace('/', '');
            return <><span highlight="CompIcon">{item.icon ? <img src={item.icon}/> : <></>}</span><span class="td-strut"/>{item.item.title}
-
-           <a href={item.item.url} highlight="simpleURL"><span class="extra-info">{
+           <span> </span>
+           <a highlight="simpleURL"><span class="extra-info">{
                  simpleURL
            }</span></a>
            </>
@@ -228,6 +224,49 @@ liberator.plugins.hBookmark = (function() {
             literal: 0,
             argCount: '*',
             bang: true,
+        },
+        _search: function(context, searchMethod) {
+             let interval = liberator.globalVariables.hBookmark_search_interval || 1000;
+             let limit = liberator.globalVariables.hBookmark_search_limit || 10;
+             let maxLimit = liberator.globalVariables.hBookmark_search_max_limit || 100;
+
+             let completions = [];
+             let self = this;
+             let cancel;
+             let canceler;
+             let word = context.filter;
+
+             let searcher = function() {
+                 let res = plugin[searchMethod || 'search'](word, limit, false, context.completions.length);
+                 res = res.map(function(b) new plugin.command.adapter(b));
+                 context.completions = context.completions.concat(res);
+                 return res;
+             }
+
+             let iid = window.setInterval(function() {
+                 if (context.completions.length >= maxLimit) {
+                     canceler();
+                 } else {
+                     try {
+                         let res = searcher();
+                         if (res.length < limit)
+                             canceler();
+                     } catch(e) {
+                         p('error:' + e);
+                         canceler();
+                     }
+                 }
+             }, interval);
+
+             cancel = function() window.clearInterval(iid);
+             canceler = function() {
+                 completions = context.completions;
+                 cancel();
+                 context.incomplete = false;
+                 context.completions = completions; // こうしないと、Generating results が出続ける
+             }
+             setTimeout(searcher, 0); // 初回検索はタイムラグ無しで
+             return cancel;
         },
         createCompleter: function(titles, searchMethod) {
             return function(context) {
@@ -240,10 +279,17 @@ liberator.plugins.hBookmark = (function() {
                         plugin.command.templateDescription,
                     ],
                 }
-                let word = context.filter;
-                let res = plugin[searchMethod || 'search'](word);
+                context.incomplete = true;
                 context.filters = [];
-                context.completions = res.map(function(b) new plugin.command.adapter(b));
+                context.anchored = true;
+
+                context.completions = [];
+                context.cancel = plugin.command._search(context, searchMethod);
+
+                // let word = context.filter;
+                // let res = plugin[searchMethod || 'search'](word);
+                // context.filters = [];
+                // context.completions = res.map(function(b) new plugin.command.adapter(b));
             }
         }
     };
