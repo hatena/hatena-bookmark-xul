@@ -285,11 +285,6 @@ liberator.plugins.hBookmark = (function() {
 
                 context.completions = [];
                 context.cancel = plugin.command._search(context, searchMethod);
-
-                // let word = context.filter;
-                // let res = plugin[searchMethod || 'search'](word);
-                // context.filters = [];
-                // context.completions = res.map(function(b) new plugin.command.adapter(b));
             }
         }
     };
