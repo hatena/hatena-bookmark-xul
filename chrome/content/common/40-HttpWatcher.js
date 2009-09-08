@@ -33,7 +33,7 @@ var HttpWatcher = shared.get("HttpWatcher") || {
             if (!Model.Bookmark.findByUrl(data.url).length) {
                 p(data.url + ' is not registered.  Retry sync.');
                 // 同期が間に合わなかったら少し待ってもう一度だけ同期する。
-                setTimeout(method(Sync, 'sync'), 2000);
+                setTimeout(method(Sync, 'sync'), 7000);
             }
         }, null, 0, false);
         Sync.sync();
