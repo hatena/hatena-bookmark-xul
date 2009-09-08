@@ -472,21 +472,55 @@
                             this.titleField.value = res.title;
                         }
                     }
-                    if (!this.titleLabel.value) {
-                        let xhr = hBookmark.net.sync_get(bookmark.url);
-                        let m = (xhr.responseText || '').match(new RegExp('<title>(.*?)</title>', 'i'));
-                        if (m && m[1].indexOf("\ufffd") === -1) {
-                            let title = hBookmark.decodeReferences(m[1]);
-                            this.titleField.value = title;
-                            this.titleLabel.value = title;
+
+                    let wantTitle = !this.titleLabel.value;
+                    let wantRecommendedTags = !res || !res.recommend_tags ||
+                                              !res.recommend_tags.length;
+                    if (wantTitle || wantRecommendedTags) {
+                        let options = {
+                            wantTitle: wantTitle,
+                            wantRecommendedTags: wantRecommendedTags,
+                        };
+                        let win = getTopWin().gBrowser.contentWindow;
+                        if (hBookmark.iri2uri(win.location.href) === bookmark.url) {
+                            this.updateTitleOrTags(win.document, options);
                         } else {
                             let self = this;
-                            new hBookmark.TitleGuesser(bookmark.url, function (title) {
-                                title = title || bookmark.url;
-                                self.titleField.value = title;
-                                self.titleLabel.value = title;
+                            hBookmark.HTMLDocumentCreator.fromURL(bookmark.url, function (doc) {
+                                if (!doc) return;
+                                self.updateTitleOrTags(doc, options);
                             });
                         }
+                    }
+                ]]></body>
+            </method>
+
+            <method name="updateTitleOrTags">
+                <parameter name="doc"/>
+                <parameter name="options"/>
+                <body><![CDATA[
+                    let bookmark = this.bookmark;
+                    if (options.wantTitle) {
+                        let title = doc.title || bookmark.url;
+                        this.titleField.value = title;
+                        this.titleLabel.value = title;
+                        hBookmark.p('title is set to ' + title);
+                    }
+                    if (options.wantRecommendedTags) {
+                        // XXX プライベートフィールドを引っ張って
+                        // きちゃってるから、tagSelector 側に
+                        // パブリックなマップを持たせておくべき。
+                        let myTags = this.tagSelector._rankedLabels.reduce(function (map, label) {
+                            map[label.tag.name] = label.tag.count;
+                            return map;
+                        }, {});
+                        // XXX 適当な個数で区切るべきか。
+                        let tags; hBookmark.p.b(function () {
+                        /*let*/ tags = hBookmark.ExtractContentJS.suggestTagsForDocument(doc, myTags);
+                        }, 'ExtractContentJS.suggestTagsForDocument');
+                        let tagNames = tags.map(function (t) t.word);
+                        this.updateRecommendedTags(tagNames);
+                        hBookmark.p('recommended tags are ' + tags.toSource());
                     }
                 ]]></body>
             </method>
