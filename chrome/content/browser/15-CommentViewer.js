@@ -159,8 +159,11 @@ var CommentViewer = {
                 li.appendChild(a = E('a', {href: userlinkTag}, tag));
                 a.className = 'tag';
             });
-            li.appendChild(a = E('span')); 
-            a.innerHTML = b.comment.replace(URLRegex, function(m) {
+            li.appendChild(a = E('span'));
+            a.innerHTML = b.comment.replace(/&/g, '&amp;').
+                   replace(/</g, '&lt;').
+                   replace(/>/g, '&gt;').
+                   replace(URLRegex, function(m) {
                 let frag = document.createDocumentFragment();
                 let url = m.toString();
                 let link = E('a', {class: 'commentlink', href: url}, url);

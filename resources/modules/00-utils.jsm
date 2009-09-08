@@ -7,6 +7,15 @@ const B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
 const B_API_STATIC_HOST = 'api.b.st-hatena.com';
 const B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
 
+/*
+const B_HOST = 'local.hatena.ne.jp:3000';
+const B_HTTP = 'http://' + B_HOST + '/';
+const B_STATIC_HOST = 'local.hatena.ne.jp:3000';
+const B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
+const B_API_STATIC_HOST = 'local.hatena.ne.jp:3000';
+const B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
+*/
+
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;

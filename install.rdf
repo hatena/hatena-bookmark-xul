@@ -3,7 +3,7 @@
     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
     <Description about="urn:mozilla:install-manifest">
         <em:id>bookmark@hatena.ne.jp</em:id>
-        <em:version>1.2.2a4</em:version>
+        <em:version>1.2.4</em:version>
         <em:type>2</em:type>
         <em:optionsURL>chrome://hatenabookmark/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://hatenabookmark/skin/images/favicon32.png</em:iconURL>
@@ -30,7 +30,7 @@
             <Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
                 <em:minVersion>3.0</em:minVersion>
-                <em:maxVersion>3.6a1pre</em:maxVersion>
+                <em:maxVersion>3.7a1pre</em:maxVersion>
             </Description>
         </em:targetApplication>
     </Description>

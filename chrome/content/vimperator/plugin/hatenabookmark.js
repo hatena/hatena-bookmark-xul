@@ -1,4 +1,6 @@
 /*
+ * Document: http://wiki.github.com/hatena/hatena-bookmark-xul/vimperator
+ *
  * append to your ~/.vimperatorc
  * =====
  * javascript if (typeof hBookmark != 'undefined') liberator.loadScript('chrome://hatenabookmark/content/vimperator/plugin/hatenabookmark.js', {__proto__: this});
@@ -10,6 +12,8 @@ liberator.plugins.hBookmark = (function() {
         Application.console.log('mes: ' + msg);
     }
 
+    let plugin = {};
+
     styles.registerSheet("chrome://hatenabookmark/skin/vimperator.css");
 
     let HatenaBookmark = window.hBookmark;
@@ -19,6 +23,17 @@ liberator.plugins.hBookmark = (function() {
         hintsComment : 'C',
         add          : ['c'],
         comment      : ['C'],
+    };
+
+    const DEFAULT_COMMAND_NAMES = {
+        hbsearch             : 'hb[search]',
+        hbsearch_tab         : 'hbt[absearch]',
+        hbsearch_comment     : 'hbc[omment]',
+        hbsearch_comment_tab : 'hbtc[omment]',
+        hbsearch_url         : 'hbu[rl]',
+        hbsearch_url_tab     : 'hbtu[rl]',
+        hbsearch_title       : 'hbti[tle]',
+        hbsearch_title_tab   : 'hbtti[tle]',
     };
 
     let globalS = liberator.globalVariables.hBookmark_shortcuts;
@@ -32,8 +47,40 @@ liberator.plugins.hBookmark = (function() {
         shortcuts = DEFAULT_SHORTCUTS;
     }
 
+    let globalC = liberator.globalVariables.hBookmark_commands;
 
-    let plugin = {};
+    let commandNames = {};
+    if (globalC) {
+        for (let key in DEFAULT_COMMAND_NAMES) {
+            commandNames[key] = globalC[key] || DEFAULT_COMMAND_NAMES[key];
+        }
+    } else {
+        commandNames = DEFAULT_COMMAND_NAMES;
+    }
+
+    let bangFunction;
+    let bangFunctions =  {
+        openNewTab: function(url) {
+            let url = plugin.command.genURL(url);
+            liberator.open(url, liberator.NEW_TAB);
+        },
+        entryPage: function() {
+            let url = plugin.command.genURL(url, true);
+            liberator.open(url, liberator.NEW_TAB);
+        }
+    }
+
+    let globalBangFunction = liberator.globalVariables.hBookmark_bangFunction;
+    if (globalBangFunction) {
+        if (typeof globalBangFunction == 'function') {
+            bangFunction = globalBangFunction;
+        } else {
+            bangFunction = bangFunctions[globalBangFunction];
+        }
+    }
+
+    if (!bangFunction)
+        bangFunction = bangFunctions['entryPage'];
 
     if (shortcuts.hintsAdd) {
         hints.addMode(shortcuts.hintsAdd, 'Hatena Bookmark - Add', function(elem) {
@@ -52,7 +99,7 @@ liberator.plugins.hBookmark = (function() {
     }
 
     if (shortcuts.comment && shortcuts.comment.length) {
-        mappings.addUserMap([modes.NORMAL], 
+        mappings.addUserMap([modes.NORMAL],
             shortcuts.comment,
             'HatenaBookmark - Comment (toggle)',
             function() {
@@ -64,7 +111,7 @@ liberator.plugins.hBookmark = (function() {
     }
 
     if (shortcuts.add && shortcuts.add.length) {
-        mappings.addUserMap([modes.NORMAL], 
+        mappings.addUserMap([modes.NORMAL],
             shortcuts.add,
             'HatenaBookmark - Add',
             function() {
@@ -75,9 +122,20 @@ liberator.plugins.hBookmark = (function() {
         );
     }
 
-    plugin.search = function(word, limit) {
-        limit = limit || liberator.globalVariables.hBookmark_search_limit || 10;
-        return HatenaBookmark.model('Bookmark').search(word, limit);
+    plugin.search = function(word, limit, asc, offset) {
+        return HatenaBookmark.model('Bookmark').search(word, limit, asc, offset);
+    }
+
+    plugin.searchByTitle = function(word, limit, asc, offset) {
+        return HatenaBookmark.model('Bookmark').searchByTitle(word, limit, asc, offset);
+    }
+
+    plugin.searchByComment = function(word, limit, asc, offset) {
+        return HatenaBookmark.model('Bookmark').searchByComment(word, limit, asc, offset);
+    }
+
+    plugin.searchByUrl = function(word, limit, asc, offset) {
+        return HatenaBookmark.model('Bookmark').searchByUrl(word, limit, asc, offset);
     }
 
     let BookmarkAdapter = new Struct('b');
@@ -90,7 +148,7 @@ liberator.plugins.hBookmark = (function() {
     ].filter(function (item) item[1]));
 
     plugin.command = {
-        execute: function(args, openTag) {
+        execute: function(args, openTab) {
             if (args['-sync']) {
                 if (!plugin.user) {
                     liberator.echoerr('You need to login to Hatena first.');
@@ -103,27 +161,32 @@ liberator.plugins.hBookmark = (function() {
             if (args['-edit']) {
                 plugin.showPanel(args['-edit']);
             } else {
-                let url = plugin.command.genURL(args);
-                if (openTag) {
-                    liberator.open(url, liberator.NEW_TAB);
+                if (openTab) {
+                    let url = plugin.command.genURL(args.string, args.bang);
+                    bangFunctions.openNewTab(url);
                 } else {
-                    liberator.open(url);
+                    if (args.bang) {
+                        bangFunction(args.string || '');
+                    } else {
+                        let url = plugin.command.genURL(args.string);
+                        liberator.open(url);
+                    }
                 }
             }
         },
         executeTab: function(args) {
             plugin.command.execute(args, true);
         },
-        genURL: function(args) {
-            let url = (args.string || '').replace(/\s/g, '');
+        genURL: function(url, bang) {
+            let url = (url|| '').replace(/\s/g, '');
             if (url.length) {
-                if (args.bang) {
+                if (bang) {
                     return 'http://b.hatena.ne.jp/entry/' + url.replace('#', '%23');
                 } else {
                     return url;
                 }
             } else {
-                if (args.bang) {
+                if (bang) {
                     return 'http://b.hatena.ne.jp/';
                 } else {
                     return 'http://b.hatena.ne.jp/my';
@@ -150,8 +213,8 @@ liberator.plugins.hBookmark = (function() {
            if (simpleURL.indexOf('/') == simpleURL.length-1)
                simpleURL = simpleURL.replace('/', '');
            return <><span highlight="CompIcon">{item.icon ? <img src={item.icon}/> : <></>}</span><span class="td-strut"/>{item.item.title}
-
-           <a href={item.item.url} highlight="simpleURL"><span class="extra-info">{
+           <span> </span>
+           <a highlight="simpleURL"><span class="extra-info">{
                  simpleURL
            }</span></a>
            </>
@@ -162,7 +225,50 @@ liberator.plugins.hBookmark = (function() {
             argCount: '*',
             bang: true,
         },
-        createCompleter: function(titles) {
+        _search: function(context, searchMethod) {
+             let interval = liberator.globalVariables.hBookmark_search_interval || 1000;
+             let limit = liberator.globalVariables.hBookmark_search_limit || 10;
+             let maxLimit = liberator.globalVariables.hBookmark_search_max_limit || 100;
+
+             let completions = [];
+             let self = this;
+             let cancel;
+             let canceler;
+             let word = context.filter;
+
+             let searcher = function() {
+                 let res = plugin[searchMethod || 'search'](word, limit, false, context.completions.length);
+                 res = res.map(function(b) new plugin.command.adapter(b));
+                 context.completions = context.completions.concat(res);
+                 return res;
+             }
+
+             let iid = window.setInterval(function() {
+                 if (context.completions.length >= maxLimit) {
+                     canceler();
+                 } else {
+                     try {
+                         let res = searcher();
+                         if (res.length < limit)
+                             canceler();
+                     } catch(e) {
+                         p('error:' + e);
+                         canceler();
+                     }
+                 }
+             }, interval);
+
+             cancel = function() window.clearInterval(iid);
+             canceler = function() {
+                 completions = context.completions;
+                 cancel();
+                 context.incomplete = false;
+                 context.completions = completions; // こうしないと、Generating results が出続ける
+             }
+             setTimeout(searcher, 0); // 初回検索はタイムラグ無しで
+             return cancel;
+        },
+        createCompleter: function(titles, searchMethod) {
             return function(context) {
                 context.format = {
                     anchored: true,
@@ -173,10 +279,12 @@ liberator.plugins.hBookmark = (function() {
                         plugin.command.templateDescription,
                     ],
                 }
-                let word = context.filter;
-                let res = plugin.search(word);
+                context.incomplete = true;
                 context.filters = [];
-                context.completions = res.map(function(b) new plugin.command.adapter(b));
+                context.anchored = true;
+
+                context.completions = [];
+                context.cancel = plugin.command._search(context, searchMethod);
             }
         }
     };
@@ -212,28 +320,81 @@ liberator.plugins.hBookmark = (function() {
 
     plugin.__defineGetter__('user', function() HatenaBookmark.User.user);
 
-    commands.addUserCommand(
-        ['hb[search]'],
+    if (commandNames.hbsearch) commands.addUserCommand(
+        [commandNames.hbsearch],
         'Hatena Bookmark Search',
         plugin.command.execute,
         plugin.command.options,
         true
     );
 
-    commands.addUserCommand(
-        ['hbt[absearch]'],
+    if (commandNames.hbsearch_tab) commands.addUserCommand(
+        [commandNames.hbsearch_tab],
         'Hatena Bookmark Search (open tab)',
         plugin.command.executeTab,
         plugin.command.options,
         true
     );
 
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment'], 'searchByComment');
+    if (commandNames.hbsearch_comment) commands.addUserCommand(
+        [commandNames.hbsearch_comment],
+        'Hatena Bookmark Comment Search',
+        plugin.command.execute,
+        plugin.command.options,
+        true
+    );
+
+    if (commandNames.hbsearch_comment_tab) commands.addUserCommand(
+        [commandNames.hbsearch_comment_tab],
+        'Hatena Bookmark Comment Search (open tab)',
+        plugin.command.executeTab,
+        plugin.command.options,
+        true
+    );
+
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment'], 'searchByUrl');
+    if (commandNames.hbsearch_url) commands.addUserCommand(
+        [commandNames.hbsearch_url],
+        'Hatena Bookmark Url Search',
+        plugin.command.execute,
+        plugin.command.options,
+        true
+    );
+
+    if (commandNames.hbsearch_url_tab) commands.addUserCommand(
+        [commandNames.hbsearch_url_tab],
+        'Hatena Bookmark Url Search (open tab)',
+        plugin.command.executeTab,
+        plugin.command.options,
+        true
+    );
+
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment'], 'searchByTitle');
+    if (commandNames.hbsearch_title) commands.addUserCommand(
+        [commandNames.hbsearch_title],
+        'Hatena Bookmark Title Search',
+        plugin.command.executeTab,
+        plugin.command.options,
+        true
+    );
+
+    if (commandNames.hbsearch_title_tab) commands.addUserCommand(
+        [commandNames.hbsearch_title_tab],
+        'Hatena Bookmark Title Search (open tab)',
+        plugin.command.executeTab,
+        plugin.command.options,
+        true
+    );
+
+    plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment']);
+
     completion.addUrlCompleter("H", "Hatena Bookmarks", plugin.command.createCompleter(['Hatena Bookmark']));
     config.guioptions['H'] = ['HatenaBookmark Toolbar',['hBookmarkToolbar']];
-	config.dialogs.push([
-		"hatenabookmark", "Hatenabookmark Config",
-		function(){ window.openDialog("chrome://hatenabookmark/content/config.xul","", "chrome,titlebar,toolbar,centerscreen,dialog=no"); }
-	]);
+    config.dialogs.push([
+        "hatenabookmark", "HatenaBookmark Config",
+        function(){ window.openDialog("chrome://hatenabookmark/content/config.xul","", "chrome,titlebar,toolbar,centerscreen,dialog=no"); }
+    ]);
 
     return plugin;
 })();
