@@ -180,5 +180,9 @@ document.addEventListener('TabSelect', function() {
 
 EventService.createListener('UserChange', function() {
     StatusBar.update();
-}, User);
+});
 
+EventService.createListener('BookmarksUpdated', function() {
+    if (StatusBar.prefs.get('addButton'))
+        StatusBar.checkBookmarked();
+});
