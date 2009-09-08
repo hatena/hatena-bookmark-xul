@@ -39,6 +39,11 @@
 <!ENTITY hBookmark.config.browsing.search "検索サイトにマイブックマーク全文検索結果を表示する *">
 <!ENTITY hBookmark.config.browsing.searchCount.before "検索結果を">
 <!ENTITY hBookmark.config.browsing.searchCount.after "件まで表示する">
+<!ENTITY hBookmark.config.browsing.searchSortBy.before "検索結果を">
+<!ENTITY hBookmark.config.browsing.searchSortBy.after "で並べ替える">
+<!ENTITY hBookmark.config.browsing.searchSortBy.dateLabel "日付順">
+<!ENTITY hBookmark.config.browsing.searchSortBy.usersLabel "ユーザー数順">
+<!ENTITY hBookmark.config.browsing.searchSortBy.scoresLabel "スコア順">
 <!ENTITY hBookmark.config.browsing.plus.before "この機能は">
 <!ENTITY hBookmark.config.browsing.plus.label "はてなブックマークプラス">
 <!ENTITY hBookmark.config.browsing.plus.link "http://b.hatena.ne.jp/guide/plus">

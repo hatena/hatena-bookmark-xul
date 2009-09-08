@@ -116,7 +116,9 @@ let Config = {
     browsingStatusDependencies: {
         'enabled-check': ['_targetPages-group', 'counter-check',
                           'comments-check', 'addButton-check'],
-        'search-check': ['searchCount-field'],
+        'search-check': ['searchCount-field', 'searchCount-beforeLabel',
+                         'searchCount-afterLabel', 'searchSortBy-list',
+                         'searchSortBy-beforeLabel', 'searchSortBy-afterLabel'],
     },
     updateBrowsingStatus: function() {
         const ID_PREFIX = 'extensions.hatenabookmark.embed.';

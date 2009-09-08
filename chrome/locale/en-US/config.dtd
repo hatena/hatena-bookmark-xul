@@ -41,6 +41,11 @@
 <!ENTITY hBookmark.config.browsing.search "Show my bookmark full-text search results on search sites *">
 <!ENTITY hBookmark.config.browsing.searchCount.before "Show up to">
 <!ENTITY hBookmark.config.browsing.searchCount.after "search results">
+<!ENTITY hBookmark.config.browsing.searchSortBy.before "Sort results by">
+<!ENTITY hBookmark.config.browsing.searchSortBy.after "">
+<!ENTITY hBookmark.config.browsing.searchSortBy.dateLabel "date">
+<!ENTITY hBookmark.config.browsing.searchSortBy.usersLabel "user count">
+<!ENTITY hBookmark.config.browsing.searchSortBy.scoresLabel "scores">
 <!ENTITY hBookmark.config.browsing.plus.before "Only">
 <!ENTITY hBookmark.config.browsing.plus.label "Hatena Bookmark Plus">
 <!ENTITY hBookmark.config.browsing.plus.link "http://b.hatena.ne.jp/guide/plus">

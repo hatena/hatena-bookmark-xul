@@ -146,6 +146,10 @@
             id="extensions.hatenabookmark.embed.searchCount"
             name="extensions.hatenabookmark.embed.searchCount"
             type="int"/>
+        <preference
+            id="extensions.hatenabookmark.embed.searchSortBy"
+            name="extensions.hatenabookmark.embed.searchSortBy"
+            type="string"/><!-- Should be |type="unichar"|? -->
         <preference 
             id="extensions.hatenabookmark.link.captureAddition"
             name="extensions.hatenabookmark.link.captureAddition"
@@ -216,11 +220,30 @@
                       label="&hBookmark.config.browsing.search;"
                       preference="extensions.hatenabookmark.embed.search"/>
             <hbox class="indent" align="center">
-                <label value="&hBookmark.config.browsing.searchCount.before;"/>
+                <label id="extensions.hatenabookmark.embed.searchCount-beforeLabel"
+                       value="&hBookmark.config.browsing.searchCount.before;"/>
                 <textbox id="extensions.hatenabookmark.embed.searchCount-field"
                          preference="extensions.hatenabookmark.embed.searchCount"
                          type="number" min="1" max="100" size="3"/>
-                <label value="&hBookmark.config.browsing.searchCount.after;"/>
+                <label id="extensions.hatenabookmark.embed.searchCount-afterLabel"
+                       value="&hBookmark.config.browsing.searchCount.after;"/>
+            </hbox>
+            <hbox class="indent" align="center">
+                <label id="extensions.hatenabookmark.embed.searchSortBy-beforeLabel"
+                       value="&hBookmark.config.browsing.searchSortBy.before;"/>
+                <menulist id="extensions.hatenabookmark.embed.searchSortBy-list"
+                         preference="extensions.hatenabookmark.embed.searchSortBy">
+                    <menupopup>
+                        <menuitem label="&hBookmark.config.browsing.searchSortBy.dateLabel;"
+                                  value="date"/>
+                        <menuitem label="&hBookmark.config.browsing.searchSortBy.usersLabel;"
+                                  value="users"/>
+                        <menuitem label="&hBookmark.config.browsing.searchSortBy.scoresLabel;"
+                                  value="scores"/>
+                    </menupopup>
+                </menulist>
+                <label id="extensions.hatenabookmark.embed.searchSortBy-afterLabel"
+                       value="&hBookmark.config.browsing.searchSortBy.after;"/>
             </hbox>
             <hbox align="center">
                 <label value="&hBookmark.config.browsing.plus.before;"/>
