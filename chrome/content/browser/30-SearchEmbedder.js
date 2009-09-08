@@ -48,7 +48,7 @@ extend(SearchEmbedder.prototype, {
         this.doc.addEventListener("DOMContentLoaded", this, false);
         //this.win.addEventListener("pageshow", this, false);
         //this.win.addEventListener("load", this, false);
-        SearchEmbedder.http.async_get(this.httpQuery, method(this, 'onSearch'));
+        FullTextSearch.search(query, method(this, 'onSearch'));
         // XXX Since net.get() can't handle timeout,
         // manually force an error display.
         this.win.setTimeout(function (self) {
@@ -57,13 +57,6 @@ extend(SearchEmbedder.prototype, {
             self.embedFailure();
             //self.state = SearchEmbedder.STATE_COMPLETE;
         }, 15000, this);
-    },
-
-    get httpQuery SE_get_httpQuery() {
-        return '?q=' + encodeURIComponent(this.query) +
-               '&limit=' + Prefs.bookmark.get("embed.searchCount") +
-               '&snip=' + Prefs.bookmark.get("embed.searchSnippetLength") +
-               '&sort=' + Prefs.bookmark.get("embed.searchSortBy");
     },
 
     embed: function SE_embed() {
@@ -321,8 +314,6 @@ extend(SearchEmbedder.prototype, {
     },
 
     onSearch: function SE_onSearch(data) {
-        if (!data)
-            SearchEmbedder.http.clear(this.httpQuery);
         this.data = data;
         this.state |= SearchEmbedder.STATE_SEARCH_DONE;
         this.embed();
@@ -341,17 +332,6 @@ extend(SearchEmbedder, {
             new SearchEmbedder(progress.DOMWindow.document);
         },
     },
-
-    http: new HTTPCache('searchCache', {
-        expire: 60 * 60,
-        baseURL: {
-            toString: function SE_s_cache_baseURL_toString() {
-                return B_HTTP + User.user.name + '/search/json';
-            },
-        },
-        seriarizer: 'uneval', // XXX The correct spell is "serializer"
-        json: true,
-    }),
 });
 
 
@@ -486,7 +466,3 @@ window.addEventListener("load", function SetupSearchEmbedder() {
 window.addEventListener("unload", function ShutdownSearchEmbedder() {
     gBrowser.removeProgressListener(SearchEmbedder.progressListener);
 }, false);
-
-EventService.createListener("UserChange", function () {
-    SearchEmbedder.http.cache.clearAll();
-});
