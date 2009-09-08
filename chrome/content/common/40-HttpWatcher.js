@@ -26,17 +26,24 @@ var HttpWatcher = shared.get("HttpWatcher") || {
         // ブックマーク成功したら、sync する
         // これにより、リモートとのデータの同期がとれる
         // XXX: Sync に依存してしまう
-        let listener = Sync.createListener("complete", function onSync() {
-            p('Sync completed');
-            listener.unlisten();
-            HTTPCache.entry.cache.clear(data.url);
-            if (!Model.Bookmark.findByUrl(data.url).length) {
-                p(data.url + ' is not registered.  Retry sync.');
-                // 同期が間に合わなかったら少し待ってもう一度だけ同期する。
-                setTimeout(method(Sync, 'sync'), 7000);
-            }
-        }, null, 0, false);
-        Sync.sync();
+        let maxTryCount = 3;
+        let triedCount = 0;
+        function trySync() {
+            triedCount++;
+            let listener = Sync.createListener("complete", function onSync() {
+                p('Sync completed');
+                listener.unlisten();
+                HTTPCache.entry.cache.clear(data.url);
+                if (User.user && !User.user.hasBookmark(data.url) &&
+                    triedCount < maxTryCount) {
+                    p(data.url + ' is not registered.  Retry sync.');
+                    // 同期が間に合わなかったら少し待ってもう一度同期する。
+                    setTimeout(trySync, triedCount * 2000);
+                }
+            }, null, 0, false);
+            Sync.sync();
+        }
+        trySync();
 
         let bookmark = Model.Bookmark.findByUrl(data.url)[0];
         if (bookmark) {
