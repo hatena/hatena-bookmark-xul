@@ -62,7 +62,8 @@ extend(SearchEmbedder.prototype, {
     get httpQuery SE_get_httpQuery() {
         return '?q=' + encodeURIComponent(this.query) +
                '&limit=' + Prefs.bookmark.get("embed.searchCount") +
-               '&snip=' + Prefs.bookmark.get("embed.searchSnippetLength");
+               '&snip=' + Prefs.bookmark.get("embed.searchSnippetLength") +
+               '&sort=' + Prefs.bookmark.get("embed.searchSortBy");
     },
 
     embed: function SE_embed() {
