@@ -238,7 +238,7 @@ extend(SearchEmbedder.prototype, {
 
         if (data.meta.total > data.bookmarks.length) {
             result += <div class="hBookmark-search-more">
-                <a href={ B_HTTP + User.user.name + '/search?q=' + encodeURIComponent(query) }>{
+                <a href={ B_HTTP + FullTextSearch.getPath(query) }>{
                     this.strings.get("search.showAllLabel")
                 }</a>
             </div>;
