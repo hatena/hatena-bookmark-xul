@@ -34,7 +34,7 @@ var FullTextSearch = {
         return FullTextSearch.getPath(query, options);
     },
 
-    getPath: function FTS_getJsonPath(query, options) {
+    getPath: function FTS_getPath(query, options) {
         options = options || {};
         let prefs = Prefs.bookmark;
         return User.user.name +
