@@ -53,6 +53,14 @@ extend(WidgetEmbedder, {
             vertical-align: middle;
             -moz-force-broken-image-icon: 1;
         }
+        .hBookmark-widget.hBookmark-widget-add-button > img {
+            width: 16px !important;
+            height: 12px !important;
+        }
+        .hBookmark-widget.hBookmark-widget-comments > img {
+            width: 14px !important;
+            height: 13px !important;
+        }
     ]]>.toString(),
 });
 
@@ -134,8 +142,12 @@ extend(WidgetEmbedder.prototype, {
 
         function onCounterEvent(event) {
             let target = event.target;
-            if (event.type === "load" && target.naturalWidth !== 1)
+            if (event.type === "load" && target.naturalWidth !== 1) {
                 standbys.forEach(function (a) a.removeAttribute("style"));
+                target.style.cssText =
+                    'width: ' + target.naturalWidth + 'px !important;' +
+                    'height: ' + target.naturalHeight + 'px !important;';
+            }
             target.removeEventListener("load", onCounterEvent, false);
             target.removeEventListener("error", onCounterEvent, false);
             target.removeEventListener("abort", onCounterEvent, false);
