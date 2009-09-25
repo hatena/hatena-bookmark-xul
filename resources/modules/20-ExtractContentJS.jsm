@@ -410,6 +410,32 @@ ExtractContentJS.Lib.DOM = (function() {
         }
         return false;
     };
+
+    // For Firefox Extensions
+    DOM.matchTagName = function (node, nameMap) {
+        return node.nodeName in nameMap;
+    };
+    DOM.matchTagWithAttr = function (node, tagAttrMap) {
+        var attrMap = tagAttrMap[node.nodeName] || null
+        for (var attrName in attrMap) {
+            var value = node[attrName];
+            if (value && attrMap[attrName].test(value))
+                return true;
+        }
+        return false;
+    };
+    DOM.matchTagStyle = function (node, tagStyleMap) {
+        var styleMap = tagStyleMap[node.nodeName] || null;
+        if (!styleMap) return false;
+        var view = node.ownerDocument.defaultView;
+        if (!view) return false;
+        var style = view.getComputedStyle(node, null);
+        for (var propName in styleMap)
+            if (style[propName] === styleMap[propName])
+                return true;
+        return false;
+    };
+
     return DOM;
 })();
 
@@ -586,6 +612,7 @@ if (typeof ExtractContentJS == 'undefined') {
                     'div', 'center', 'td',
                     'h1', 'h2'
                 ],
+                sepMap: { div: 1, center: 1, td: 1, h1: 1, h2: 1 },
                 waste: [
                         /Copyright|All\s*Rights?\s*Reserved?/i
                 ],
@@ -593,9 +620,13 @@ if (typeof ExtractContentJS == 'undefined') {
                         /amazon[a-z0-9\.\/\-\?&]+-22/i
                 ],
                 list: [ 'ul', 'dl', 'ol' ],
+                listMap: { ul: 1, dl: 1, ol: 1 },
                 li:   [ 'li', 'dd' ],
+                liMap: { li: 1, dd: 1 },
                 a:    [ 'a' ],
+                aMap: { a: 1 },
                 form: [ 'form' ],
+                formMap: { form: 1 },
                 noContent: [ 'frameset' ],
                 ignore: [
                     'iframe',
@@ -609,14 +640,35 @@ if (typeof ExtractContentJS == 'undefined') {
                         className: [ /more/, /menu/, /side/, /navi/ ]
                     } ]
                 ],
+                ignoreMap: { iframe: 1, img: 1, script: 1, style: 1,
+                             select: 1, noscript: 1 },
+                ignoreAttrMap: {
+                    div: {
+                        id: /more|menu|side|navi/,
+                        className: /more|menu|side|navi/
+                    }
+                },
                 ignoreStyle: {
                     display: 'none',
                     visibility: 'hidden'
+                },
+                ignoreStyleMap: {
+                    div: {
+                        display: 'none',
+                        visibility: 'hidden'
+                    }
                 },
                 // punctuations: /[。、．，！？]|\.[^A-Za-z0-9]|,[^0-9]|!|\?/
                 punctuations: /[\u3002\u3001\uFF0E\uFF0C\uFF01\uFF1F]|\.[^A-Za-z0-9]|,[^0-9]|!|\?/
             })
         };
+        for (var prop in self.pat) {
+            if (/Map$/.test(prop)) {
+                var map = self.pat[prop];
+                for (var n in map)
+                    map[n.toUpperCase()] = map[n];
+            }
+        }
 
         var MyBlock = Util.inherit(function(leaves) {
             var block = new Block(leaves);
@@ -721,21 +773,31 @@ if (typeof ExtractContentJS == 'undefined') {
                     // depth-first recursion
                     if (leaves >= self.opt.limit.leaves) return r;
                     if (depth >= self.opt.limit.recursion) return r;
-                    if (node.nodeName == '#comment') return r;
-                    if (DOM.matchTag(node, self.pat.ignore)) return r;
-                    if (DOM.matchStyle(node, self.pat.ignoreStyle)) return r;
+                    //if (node.nodeName == '#comment') return r;
+                    if (node.nodeType === 8 /* COMMENT_NODE */) return r;
+                    //if (DOM.matchTag(node, self.pat.ignore)) return r;
+                    if (DOM.matchTagName(node, self.pat.ignoreMap)) return r;
+                    if (DOM.matchTagWithAttr(node, self.pat.ignoreAttrMap)) return r;
+                    //if (DOM.matchStyle(node, self.pat.ignoreStyle)) return r;
+                    if (DOM.matchTagStyle(node, self.pat.ignoreStyleMap)) return r;
                     var children = node.childNodes;
                     var sep = self.pat.sep;
+                    var sepMap = self.pat.sepMap;
                     var len = children.length;
                     var flags = {
-                        form: inside.form || DOM.matchTag(node, self.pat.form),
-                        link: inside.link || DOM.matchTag(node, self.pat.a),
-                        list: inside.list || DOM.matchTag(node, self.pat.list),
-                        li: inside.li || DOM.matchTag(node, self.pat.li)
+                        //form: inside.form || DOM.matchTag(node, self.pat.form),
+                        //link: inside.link || DOM.matchTag(node, self.pat.a),
+                        //list: inside.list || DOM.matchTag(node, self.pat.list),
+                        //li: inside.li || DOM.matchTag(node, self.pat.li)
+                        form: inside.form || DOM.matchTagName(node, self.pat.formMap),
+                        link: inside.link || DOM.matchTagName(node, self.pat.aMap),
+                        list: inside.list || DOM.matchTagName(node, self.pat.listMap),
+                        li: inside.li || DOM.matchTagName(node, self.pat.liMap)
                     };
                     for (var i=0; i < len; i++) {
                         var c = children[i];
-                        var f = DOM.matchTag(c, sep);
+                        //var f = DOM.matchTag(c, sep);
+                        var f = DOM.matchTagName(c, sepMap);
                         flush(f);
                         rec(c, depth+1, flags);
                         flush(f);
@@ -755,6 +817,7 @@ if (typeof ExtractContentJS == 'undefined') {
         });
 
         self.extract = function(d/*, url, res*/) {
+            if (!d.body || d.body.nodeName.toLowerCase() !== 'body') return self;
             var isNoContent = function(v){
                 return d.getElementsByTagName(v).length != 0;
             };
@@ -765,10 +828,13 @@ if (typeof ExtractContentJS == 'undefined') {
             var score = 0;
 
             var res = [];
-            var blocks = MyBlock.split(d.body);
+            //var blocks = MyBlock.split(d.body);
+            var blocks; p.b(function () blocks = MyBlock.split(d.body), 'MyBlock.split');
             var last;
 
             var len = blocks.length;
+            //p('len = ' + len);
+            //p.b(function () {
             for (var i=0; i < len; i++) {
                 var block = blocks[i];
                 if (last) {
@@ -795,6 +861,7 @@ if (typeof ExtractContentJS == 'undefined') {
                     }
                 }
             }
+            //}, 'calcScore loop');
 
             self.blocks = res.sort(function(a,b){return b.score-a.score;});
             var best = A.first(self.blocks);
@@ -1045,11 +1112,14 @@ if (typeof ExtractContentJS == 'undefined') {
 //         ex.addHandler( ex.factory.getHandler('Scraper'));
 //         ex.addHandler( ex.factory.getHandler('GoogleAdsence') );
         ex.addHandler( ex.factory.getHandler('Heuristics') );
-        var res = ex.extract(d);
+        //var res = ex.extract(d);
+        var res;p.b(function () res = ex.extract(d), 'extract');
 
         if (!res.isSuccess) return null;
 
         return ns.suggestTags(res.url, res.title, res.content, tags);
+        //var t;p.b(function () t = ns.suggestTags(res.url, res.title, res.content, tags), 'suggest');
+        //return t;
     };
 })(ExtractContentJS);
 
