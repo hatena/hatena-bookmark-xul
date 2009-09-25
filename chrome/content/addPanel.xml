@@ -345,6 +345,8 @@
                       onget="return this.showsRecommendedTagList &amp;&amp; hBookmark.Prefs.bookmark.get('addPanel.suggestRecommendedTags');"/>
             <property name="frequentTagCount" readonly="true"
                       onget="return hBookmark.Prefs.bookmark.get('addPanel.frequentTagCount');"/>
+            <property name="initialTagCount" readonly="true"
+                      onget="return hBookmark.Prefs.bookmark.get('addPanel.initialTagCount');"/>
             <property name="showsAllTags"
                       onget="return hBookmark.Prefs.bookmark.get('addPanel.tagListShowAll');"
                       onset="hBookmark.Prefs.bookmark.set('addPanel.tagListShowAll', val); return val;"/>
@@ -609,7 +611,7 @@
             <method name="switchTagSelectorView">
                 <parameter name="showAll"/>
                 <body><![CDATA[
-                    let count = this.frequentTagCount;
+                    let count = this.initialTagCount;
                     let switcherHidden = (this.tagSelector.tagCount < count);
                     if (showAll) {
                         this.allTagsLabel.hidden = true;

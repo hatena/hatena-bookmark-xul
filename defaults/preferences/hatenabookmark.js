@@ -53,6 +53,7 @@ pref("extensions.hatenabookmark.addPanel.recommendedTagListShow", true);
 pref("extensions.hatenabookmark.addPanel.suggestRecommendedTags", true);
 pref("extensions.hatenabookmark.addPanel.tagListShow", true);
 pref("extensions.hatenabookmark.addPanel.tagListShowAll", false);
+// Deprecated.  Use initialTagCount instead.
 pref("extensions.hatenabookmark.addPanel.frequentTagCount", 30);
 pref("extensions.hatenabookmark.addPanel.xulMigemo", true);
 
