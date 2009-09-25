@@ -935,6 +935,46 @@ if (typeof ExtractContentJS == 'undefined') {
 
         return self;
     };
+
+    ns.LayeredExtractor.Handler.QuickGoogleAdSection = function(/*opt*/) {
+        var self = {
+            name: 'QuickGoogleAdSection',
+            content: [],
+            state: [],
+            opt: Util.inherit(arguments[0], {
+                //limit: {
+                //    leaves: 800,
+                //    recursion: 20
+                //},
+                //debug: false
+            })
+        };
+
+        self.parse = function(d) {
+            var start = d.evaluate(
+                'descendant::comment()[contains(., "google_ad_section_start") and not(contains(., "ignore"))]',
+                d.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
+            ).singleNodeValue;
+            if (!start) return;
+            var end = d.evaluate(
+                'following-sibling::comment()[contains(., "google_ad_section_end")]',
+                start, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null
+            ).singleNodeValue;
+            if (!end) return;
+            for (var n = start.nextSibling; n !== end; n = n.nextSibling)
+                self.content.push(new Leaf(n));
+        };
+
+        self.extract = function(d/*, url, res*/) {
+            p.b(function () {
+            self.parse(d);
+            }, 'QuickGoogleAdSection parse');
+            self.blocks = [ new Block(self.content) ];
+            return self.content;
+        };
+
+        return self;
+    };
 })(ExtractContentJS);
 
 if (typeof ExtractContentJS == 'undefined') {
@@ -1110,6 +1150,7 @@ if (typeof ExtractContentJS == 'undefined') {
 //         ex.addHandler( ex.factory.getHandler('Description') );
 //         ex.addHandler( ex.factory.getHandler('Scraper'));
 //         ex.addHandler( ex.factory.getHandler('GoogleAdsence') );
+        ex.addHandler( ex.factory.getHandler('QuickGoogleAdSection') );
         ex.addHandler( ex.factory.getHandler('Heuristics') );
         //var res = ex.extract(d);
         var res;p.b(function () res = ex.extract(d), 'extract');
