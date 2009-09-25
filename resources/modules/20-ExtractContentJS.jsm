@@ -817,7 +817,6 @@ if (typeof ExtractContentJS == 'undefined') {
         });
 
         self.extract = function(d/*, url, res*/) {
-            if (!d.body || d.body.nodeName.toLowerCase() !== 'body') return self;
             var isNoContent = function(v){
                 return d.getElementsByTagName(v).length != 0;
             };
