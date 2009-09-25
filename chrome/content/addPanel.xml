@@ -521,8 +521,7 @@
                         /*let*/ tags = hBookmark.ExtractContentJS.suggestTagsForDocument(doc, myTags);
                         }, 'ExtractContentJS.suggestTagsForDocument');
                         if (tags && tags.length) {
-                            tags = tags.slice(0, this.frequentTagCount);
-                            let tagNames = tags.map(function (t) t.word);
+                            let tagNames = tags.slice(0, 10).map(function (t) t.word);
                             this.updateRecommendedTags(tagNames);
                             hBookmark.p('recommended tags are ' + tags.toSource());
                         }
