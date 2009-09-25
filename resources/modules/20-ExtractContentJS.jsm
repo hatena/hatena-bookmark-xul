@@ -1,20 +1,7 @@
 // extract-content-allinone.js
-//
-// Changes from original code:
-//   - Add EXPORTED_SYMBOLS
-//   - Add p function
-//   - Escape multi-byte characters "。、．，！？" to
-//     "\u3002\u3001\uFF0E\uFF0C\uFF01\uFF1F"
-//   - Change |var dv = document.defaultView;| to
-//     |var dv = elem.ownerDocument.defaultView;|
 
-
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 const EXPORTED_SYMBOLS = ['ExtractContentJS'];
-function p(value) {
-    Components.classes["@mozilla.org/fuel/application;1"]
-              .getService(Components.interfaces.fuelIApplication)
-              .console.log(String(value));
-}
 
 
 if (typeof ExtractContentJS == 'undefined') {
@@ -24,8 +11,84 @@ if (typeof ExtractContentJS.Lib == 'undefined') {
     ExtractContentJS.Lib = {};
 }
 
-ExtractContentJS.Lib.Util = {
-    inherit: function(child,parent) {
+ExtractContentJS.Lib.Util = (function() {
+    var Util = {};
+    Util.BenchmarkTimer = function() {
+        var now = function() {
+            var d = new Date();
+            var t = 0;
+            t = d.getHours();
+            t = t*60 + d.getMinutes();
+            t = t*60 + d.getSeconds();
+            t = t*1000 + d.getMilliseconds();
+            return t;
+        };
+        var Timer = function() {
+            var self = { elapsed: 0 };
+            self.reset = function(){ self.elapsed = 0; return self };
+            self.start = function(){ self.msec = now(); return self };
+            self.stop = function() {
+                self.elapsed += now() - self.msec;
+                return self;
+            };
+            return self.start();
+        };
+
+        var self = { timers: {} };
+        self.get = function(name) {
+            if (!self.timers[name]) {
+                self.timers[name] = new Timer();
+            }
+            return self.timers[name];
+        };
+        self.reset = function(name){ return self.get(name).reset(); };
+        self.start = function(name){ return self.get(name).start(); };
+        self.stop = function(name){ return self.get(name).stop(); };
+        return self;
+    };
+    Util.Token = function(word) {
+        var regex = {
+            // hiragana: /[あ-んが-ぼぁ-ょゎっー]/,
+            hiragana: /[\u3042-\u3093\u304C-\u307C\u3041-\u3087\u308E\u3063\u30FC]/,
+            // katakana: /[ア-ンガ-ボァ-ョヮッー]/,
+            katakana: /[\u30A2-\u30F3\u30AC-\u30DC\u30A1-\u30E7\u30EE\u30C3\u30FC]/,
+            kanji: { test: function(w) {
+                // return '一' <= w && w <= '龠' || w === '々';
+                return '\u4E00' <= w && w <= '\u9FA0' || w === '\u3005';
+            } },
+            alphabet: /[a-zA-Z]/,
+            digit: /[0-9]/
+        };
+        var tests = function(w){
+            var match = {};
+            for (var r in regex) {
+                if (regex[r].test(w)) {
+                    match[r] = regex[r];
+                }
+            }
+            return match;
+        };
+        var self = {
+            first: tests(word.charAt(0)),
+            last: tests(word.charAt(word.length-1))
+        };
+        self.isTokenized = function(prev, next) {
+            var p = prev.length ? prev.charAt(prev.length-1) : '';
+            var n = next.length ? next.charAt(0) : '';
+            var check = function(w, test) {
+                if (w.length) {
+                    for (var t in test) {
+                        if (test[t].test(w)) return false;
+                    }
+                }
+                return true;
+            };
+            return check(p, self.first) && check(n, self.last);
+        };
+
+        return self;
+    };
+    Util.inherit = function(child,parent) {
         var obj = child || {};
         for (var prop in parent) {
             if (typeof obj[prop] == 'undefined') {
@@ -33,8 +96,8 @@ ExtractContentJS.Lib.Util = {
             }
         }
         return obj;
-    },
-    countMatch: function(text, regex) {
+    };
+    Util.countMatch = function(text, regex) {
         return text.split(regex).length - 1;
         //             var n=0;
         //             for (var i=0;;) {
@@ -44,8 +107,32 @@ ExtractContentJS.Lib.Util = {
         //                 text = text.substr(i+1);
         //             }
         //             return n;
-    },
-    dump: function(obj) {
+    };
+    Util.countMatchTokenized = function(text, word) {
+        var count = 0;
+        var prev = null;
+        var tok = new Util.Token(word);
+        var texts = text.split(word);
+        var len = texts.length;
+        for (var i=0; i < len; i++) {
+            if (prev && tok.isTokenized(prev, texts[i])) count++;
+            prev = texts[i]
+        }
+        return count;
+    };
+    Util.indexOfTokenized = function(text, word) {
+        var index = text.indexOf(word);
+        if (index >= 0) {
+            var tok = new Util.Token(word);
+            var p = index > 1 ? text.substr(index-1, 1) : '';
+            var n = text.substr(index+word.length, 1);
+            if (tok.isTokenized(p, n)) {
+                return index;
+            }
+        }
+        return -1;
+    };
+    Util.dump = function(obj) {
         if (typeof obj == 'undefined')  return 'undefined';
         if (typeof obj == 'string') return '"' + obj + '"';
         if (typeof obj != 'object') return ''+obj;
@@ -61,8 +148,9 @@ ExtractContentJS.Lib.Util = {
             }
             return '{' + arr.join(',') + '}';
         }
-    }
-};
+    };
+    return Util;
+})();
 
 ExtractContentJS.Lib.A = (function() {
     var A = {};
@@ -208,7 +296,6 @@ ExtractContentJS.Lib.DOM = (function() {
     DOM.getElementStyle = function(elem, prop) {
         var style = elem.style ? elem.style[prop] : null;
         if (!style) {
-            //var dv = document.defaultView;
             var dv = elem.ownerDocument.defaultView;
             if (dv && dv.getComputedStyle) {
                 try {
@@ -335,14 +422,17 @@ if (typeof ExtractContentJS == 'undefined') {
     var A = ns.Lib.A;
     var DOM = ns.Lib.DOM;
 
-    var Leaf = Util.inherit(function(node, depth, inside) {
+    var Leaf = Util.inherit(function(node/*, depth, inside, limit*/) {
+        var depth = arguments[1] || 0;
+        var inside = arguments[2] || {};
+        var limit = arguments[3] || 1048576;
         var leaf = { node: node, depth: depth, inside: inside };
 
         leaf.statistics = function() {
             var t = (DOM.text(node) || '').replace(/\s+/g, ' ');
             var l = t.length;
             return {
-                text: t,
+                text: t.substr(0, limit),
                 noLinkText: (inside.link || inside.form) ? '' : t,
                 listTextLength: inside.list ? l : 0,
                 noListTextLength: inside.list ? 0 : l,
@@ -372,6 +462,19 @@ if (typeof ExtractContentJS == 'undefined') {
         }
     });
 
+    var Block = function(leaves) {
+        leaves = A.filter(leaves, function(v) {
+            var s = DOM.text(v.node) || '';
+            s = s.replace(/\s+/g, '');
+            return s.length != 0;
+        });
+        var block = { score: 0, leaves: leaves };
+        block.commonAncestor = function() {
+            return Leaf.commonAncestor.apply(null, block.leaves);
+        };
+        return block;
+    };
+
     var Content = function(c) {
         var self = { _content: c };
 
@@ -392,12 +495,15 @@ if (typeof ExtractContentJS == 'undefined') {
             }, '');
             return self._textFragment;
         };
-        self.toString = function() {
+        self.asText = function() {
             if (self._text) return self._text;
             // covering node
             var node = self.asNode();
             self._text = node ? DOM.text(node) : '';
             return self._text;
+        };
+        self.toString = function() {
+            return self.asTextFragment();
         };
 
         return self;
@@ -411,6 +517,7 @@ if (typeof ExtractContentJS == 'undefined') {
                 if (typeof ns.LayeredExtractor.Handler != 'undefined') {
                     return new ns.LayeredExtractor.Handler[name];
                 }
+                return null;
             }
         };
 
@@ -454,6 +561,7 @@ if (typeof ExtractContentJS == 'undefined') {
 
     ns.LayeredExtractor.Handler.Heuristics = function(/*option, pattern*/) {
         var self = {
+            name: 'Heuristics',
             content: [],
             opt: Util.inherit(arguments[0], {
                 threshold: 60,
@@ -466,6 +574,11 @@ if (typeof ExtractContentJS == 'undefined') {
                 punctuationWeight: 10,
                 minNoLink: 8,
                 noListRatio: 0.2,
+                limit: {
+                    leaves: 800,
+                    recursion: 20,
+                    text: 1048576
+                },
                 debug: false
             }),
             pat: Util.inherit(arguments[1], {
@@ -500,18 +613,13 @@ if (typeof ExtractContentJS == 'undefined') {
                     display: 'none',
                     visibility: 'hidden'
                 },
+                // punctuations: /[。、．，！？]|\.[^A-Za-z0-9]|,[^0-9]|!|\?/
                 punctuations: /[\u3002\u3001\uFF0E\uFF0C\uFF01\uFF1F]|\.[^A-Za-z0-9]|,[^0-9]|!|\?/
             })
         };
 
-        var Block = Util.inherit(function(leaves) {
-            leaves = A.filter(leaves, function(v) {
-                var s = DOM.text(v.node) || '';
-                s = s.replace(/\s+/g, '');
-                return s.length != 0;
-            });
-            var n = leaves.length;
-            var block = { leaves: leaves };
+        var MyBlock = Util.inherit(function(leaves) {
+            var block = new Block(leaves);
 
             block.eliminateLinks = function() {
                 var st = A.map(block.leaves, function(v){
@@ -594,25 +702,25 @@ if (typeof ExtractContentJS == 'undefined') {
                 return block;
             };
 
-            block.commonAncestor = function() {
-                return Leaf.commonAncestor.apply(null, block.leaves);
-            };
-
             return block;
         }, {
             split: function(node) {
                 var r = [];
                 var buf = [];
+                var leaves = 0;
+                var limit = self.opt.limit.text;
 
                 var flush = function(flag) {
                     if (flag && buf.length) {
-                        r.push(new Block(buf));
+                        r.push(new MyBlock(buf));
                         buf = [];
                     }
                 };
 
                 var rec = function(node, depth, inside) {
                     // depth-first recursion
+                    if (leaves >= self.opt.limit.leaves) return r;
+                    if (depth >= self.opt.limit.recursion) return r;
                     if (node.nodeName == '#comment') return r;
                     if (DOM.matchTag(node, self.pat.ignore)) return r;
                     if (DOM.matchStyle(node, self.pat.ignoreStyle)) return r;
@@ -632,7 +740,10 @@ if (typeof ExtractContentJS == 'undefined') {
                         rec(c, depth+1, flags);
                         flush(f);
                     }
-                    if (!len) buf.push(new Leaf(node, depth, flags));
+                    if (!len) {
+                        leaves++;
+                        buf.push(new Leaf(node, depth, flags, limit));
+                    }
                     return r;
                 };
 
@@ -654,7 +765,7 @@ if (typeof ExtractContentJS == 'undefined') {
             var score = 0;
 
             var res = [];
-            var blocks = Block.split(d.body);
+            var blocks = MyBlock.split(d.body);
             var last;
 
             var len = blocks.length;
@@ -696,11 +807,74 @@ if (typeof ExtractContentJS == 'undefined') {
 
         return self;
     };
+
+    ns.LayeredExtractor.Handler.GoogleAdSection = function(/*opt*/) {
+        var self = {
+            name: 'GoogleAdSection',
+            content: [],
+            state: [],
+            opt: Util.inherit(arguments[0], {
+                limit: {
+                    leaves: 800,
+                    recursion: 20
+                },
+                debug: false
+            })
+        };
+
+        var pat = {
+            ignore: /google_ad_section_start\(weight=ignore\)/i,
+            section: /google_ad_section_start/i,
+            end: /google_ad_section_end/i
+        };
+        var stIgnore = 1;
+        var stSection = 2;
+
+        self.inSection = function(){return A.last(self.state)==stSection;};
+        self.ignore = function(){self.state.push(stIgnore);}
+        self.section = function(){self.state.push(stSection);}
+        self.end = function(){ if (self.state.length) self.state.pop(); };
+        self.parse = function(node/*, depth*/) {
+            var depth = arguments[1] || 0;
+            if (node.nodeName == '#comment') {
+                if (pat.ignore.test(node.nodeValue)) {
+                    self.ignore();
+                } else if (pat.section.test(node.nodeValue)) {
+                    self.section();
+                } else if (pat.end.test(node.nodeValue)) {
+                    self.end();
+                }
+                return;
+            }
+
+            if (self.content.length >= self.opt.limit.leaves) return;
+            if (depth >= self.opt.limit.recursion) return;
+            var children = node.childNodes;
+            var len = children.length;
+            for (var i=0; i < len; i++) {
+                var c = children[i];
+                self.parse(c, depth+1);
+            }
+            if (!len && self.inSection()) {
+                self.content.push(new Leaf(node, depth));
+            }
+            return;
+        };
+
+        self.extract = function(d/*, url, res*/) {
+            self.parse(d);
+            self.blocks = [ new Block(self.content) ];
+            return self.content;
+        };
+
+        return self;
+    };
 })(ExtractContentJS);
 
 if (typeof ExtractContentJS == 'undefined') {
     var ExtractContentJS = {};
 }
+
 
 (function(ns) {
     var Util = ns.Lib.Util;
@@ -714,6 +888,7 @@ if (typeof ExtractContentJS == 'undefined') {
                 if (typeof ns.RelativeWords.Engine != 'undefined') {
                     return new ns.RelativeWords.Engine[name];
                 }
+                return null;
             }
         };
 
@@ -746,13 +921,21 @@ if (typeof ExtractContentJS == 'undefined') {
     ns.RelativeWords.Engine = {};
 
     ns.RelativeWords.Engine.TfIdf = function() {
-        var opt = arguments[0] || {};
-        var self = { weight: opt.weight || 0.3 };
+        var opt = arguments[0] || {
+            limit: {
+                text: 32768
+            }
+        };
+        var self = { weight: opt.weight || 0.4 };
 
         self.vote = function(doc, words) {
             var total = 0;
             var max = 0;
             var scores = {};
+            var content = (doc.content+'').substr(0, opt.limit.text);
+            content = content.toLowerCase();
+            var title = (doc.title||'').toLowerCase();
+            var url = (doc.url||'').toLowerCase();
             for (var t in words) total += words[t].df;
             for (var t in words) {
                 var df = words[t].df;
@@ -762,18 +945,84 @@ if (typeof ExtractContentJS == 'undefined') {
 
                 var tf = 0;
                 var w = t.toLowerCase();
-                tf += Util.countMatch((doc.content+'').toLowerCase(), w);
-                if (doc.title) {
-                    tf += Util.countMatch(doc.title.toLowerCase(), w);
-                }
+                tf += Util.countMatchTokenized(content, w);
+                tf += Util.countMatchTokenized(title, w);
+//                 tf += Util.countMatchTokenized(url, w);
 
                 scores[t] = tf/idf;
                 if (scores[t] > max) max = scores[t];
             }
             if (!max) return;
-            for (var t in words) {
+            for (var t in scores) {
                 var score = scores[t] / max; // normalize
                 words[t].score += score * self.weight;
+            }
+        };
+
+        return self;
+    };
+
+    ns.RelativeWords.Engine.ContentPosition = function() {
+        var opt = arguments[0] || {
+            limit: {
+                text: 32768
+            }
+        };
+        var self = { weight: opt.weight || 0.1 };
+
+        self.vote = function(doc, words) {
+            var max = 0;
+            var scores = {};
+            var content = (doc.content+'').substr(0, opt.limit.text);
+            content = content.toLowerCase();
+            for (var t in words) {
+                var w = t.toLowerCase();
+                var index = Util.indexOfTokenized(content, w);
+                if (index >= 0) {
+                    scores[t] = scores[t] || 0;
+                    scores[t] += 1.0 / (index+1);
+                    if (max < scores[t]) max = scores[t];
+                }
+            }
+            if (!max) return;
+            for (var t in scores) {
+                var score = scores[t] / max; // normalize
+                words[t].score += score * self.weight;
+            }
+        };
+
+        return self;
+    };
+
+    ns.RelativeWords.Engine.TitlePosition = function() {
+        var opt = arguments[0] || {
+            limit: {
+                text: 32768
+            }
+        };
+        var self = {
+            weight: {
+                global: (opt.weight && opt.weight.global) || 0.4,
+                title: (opt.weight && opt.weight.title) || 0.35
+            }
+        };
+
+        self.vote = function(doc, words) {
+            var max = 0;
+            var scores = {};
+            var title = (doc.title||'').toLowerCase();
+            for (var t in words) {
+                var w = t.toLowerCase();
+                var index = Util.indexOfTokenized(title, w);
+                if (index >= 0) {
+                    scores[t] = 1 + self.weight.title / (1+Math.log(index+1));
+                    if (max < scores[t]) max = scores[t];
+                }
+            }
+            if (!max) return;
+            for (var t in scores) {
+                var score = scores[t] / max; // normalize
+                words[t].score += score * self.weight.global;
             }
         };
 
@@ -783,8 +1032,8 @@ if (typeof ExtractContentJS == 'undefined') {
     ns.suggestTags = function(url, title, body, tags) {
         var sc = new ns.RelativeWords();
         sc.addEngine( sc.factory.getEngine('TfIdf') );
-//         sc.addEngine( sc.factory.getEngine('Position') );
-//         sc.addEngine( sc.factory.getEngine('URL') );
+        sc.addEngine( sc.factory.getEngine('ContentPosition') );
+        sc.addEngine( sc.factory.getEngine('TitlePosition') );
         return sc.top({ url: url, title: title, content: body }, tags);
     };
 
