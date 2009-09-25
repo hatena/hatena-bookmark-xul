@@ -78,6 +78,7 @@
 <!ENTITY hBookmark.config.addPanelTagCompleteXulMigemoSuffix "is required">
 <!ENTITY hBookmark.config.addPanelTag "Display Tags">
 <!ENTITY hBookmark.config.addPanelTagRecent "Display list of recommended tags">
+<!ENTITY hBookmark.config.addPanelSuggestRecommendedTags "Recommend tags also from the body of a web page">
 <!ENTITY hBookmark.config.addPanelTagMine "Display my tag list">
 <!ENTITY hBookmark.config.addPanelTagItem "Number of initially displayed tags">
 <!ENTITY hBookmark.config.addPanelBackgroundImage "Background Image">

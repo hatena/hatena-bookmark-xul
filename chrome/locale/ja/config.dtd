@@ -75,6 +75,7 @@
 <!ENTITY hBookmark.config.addPanelTagCompleteXulMigemoSuffix "が必要です">
 <!ENTITY hBookmark.config.addPanelTag "タグ表示">
 <!ENTITY hBookmark.config.addPanelTagRecent "おすすめタグ一覧の表示">
+<!ENTITY hBookmark.config.addPanelSuggestRecommendedTags "Web ページの本文からもタグをすすめる">
 <!ENTITY hBookmark.config.addPanelTagMine "自分のタグ一覧の表示">
 <!ENTITY hBookmark.config.addPanelTagItem "初期のタグ表示件数">
 <!ENTITY hBookmark.config.addPanelBackgroundImage "背景画像">

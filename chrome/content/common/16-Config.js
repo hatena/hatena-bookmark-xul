@@ -135,6 +135,19 @@ let Config = {
             });
         }
     },
+    addPanelPaneDependencies: {
+        recommendedTagListShow: ['suggestRecommendedTags'],
+        tagListShow: ['initialTagCount'],
+    },
+    updateAddPanelPane: function() {
+        const PREFIX = 'extensions.hatenabookmark.addPanel.';
+        for (let [master, slaves] in Iterator(this.addPanelPaneDependencies)) {
+            let disabled = !document.getElementById(PREFIX + master).value;
+            slaves.forEach(function (slave) {
+                document.getElementById(PREFIX + slave).disabled = disabled;
+            });
+        }
+    },
     clearImageFile: function() {
         let file = document.getElementById(PrefsBackgroundImage).value;
         if (file) {

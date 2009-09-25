@@ -368,7 +368,8 @@
 
 <prefpane 
     image="chrome://hatenabookmark/skin/images/transparent.png"
-    id="prefpane-addPanel" label="&hBookmark.config.addPanel;" flex="1" onpaneload="hBookmark.Config.updateUI();">
+    id="prefpane-addPanel" label="&hBookmark.config.addPanel;" flex="1"
+    onpaneload="hBookmark.Config.updateUI(); hBookmark.Config.updateAddPanelPane();">
     <preferences>
         <preference 
             id="extensions.hatenabookmark.addPanel.tagCompleteEnabled"
@@ -385,10 +386,16 @@
         <preference 
             id="extensions.hatenabookmark.addPanel.tagListShow"
             name="extensions.hatenabookmark.addPanel.tagListShow"
-            type="bool"/>
+            type="bool"
+            onchange="hBookmark.Config.updateAddPanelPane();"/>
         <preference 
             id="extensions.hatenabookmark.addPanel.recommendedTagListShow"
             name="extensions.hatenabookmark.addPanel.recommendedTagListShow"
+            type="bool"
+            onchange="hBookmark.Config.updateAddPanelPane();"/>
+        <preference 
+            id="extensions.hatenabookmark.addPanel.suggestRecommendedTags"
+            name="extensions.hatenabookmark.addPanel.suggestRecommendedTags"
             type="bool"/>
         <preference 
             id="extensions.hatenabookmark.addPanel.xulMigemo"
@@ -403,13 +410,10 @@
     <vbox>
         <groupbox orient="vertical">
             <caption label="&hBookmark.config.addPanelTagComplete;" />
-            <hbox flex="1" align="center">
-                <checkbox id="addPanel.tagCompleteEnabled" flex="1"
+            <checkbox id="addPanel.tagCompleteEnabled"
                     label="&hBookmark.config.addPanelTagCompleteEnabled;"
                     preference="extensions.hatenabookmark.addPanel.tagCompleteEnabled" />
-            </hbox>
-            <hbox flex="1" align="center">
-                <spacer style="width: 2em;" />
+            <hbox align="center" pack="start" class="indent">
                 <label value="&hBookmark.config.addPanelTagCompleteMaxItem;"
                     control="addPanel.tagMaxResult"/>
                 <textbox id="addPanel.tagMaxResult"
@@ -417,32 +421,30 @@
                     type="number" min="1" increment="1"
                     style="width: 5em;"
                 />
-                <spacer flex="1" />
             </hbox>
-            <hbox flex="1" align="center">
+            <hbox align="center" pack="start">
                 <checkbox id="addPanel.xulMigemo"
                     label="&hBookmark.config.addPanelTagCompleteXulMigemoEnabled;"
                     preference="extensions.hatenabookmark.addPanel.xulMigemo" />
-                <label class="text-link hBookmarkLink" value="XUL/Migemo" href="https://addons.mozilla.org/firefox/addon/5239" />
+                <separator orient="vertical"/>
+                <label class="text-link hBookmarkLink plain" value="XUL/Migemo" href="https://addons.mozilla.org/firefox/addon/5239" />
                 <label value="&hBookmark.config.addPanelTagCompleteXulMigemoSuffix;" />
-                <spacer flex="1" />
             </hbox>
         </groupbox>
 
         <groupbox orient="vertical">
             <caption label="&hBookmark.config.addPanelTag;" />
-            <hbox flex="1" align="center">
-                <checkbox id="addPanel.recommendedTagListShow" flex="1"
+            <checkbox id="addPanel.recommendedTagListShow"
                     label="&hBookmark.config.addPanelTagRecent;"
                     preference="extensions.hatenabookmark.addPanel.recommendedTagListShow" />
-            </hbox>
-            <hbox flex="1" align="center">
-                <checkbox id="addPanel.tagListShow" flex="1"
+            <checkbox id="addPanel.suggestRecommendedTags"
+                      label="&hBookmark.config.addPanelSuggestRecommendedTags;"
+                      preference="extensions.hatenabookmark.addPanel.suggestRecommendedTags"
+                      class="indent"/>
+            <checkbox id="addPanel.tagListShow"
                     label="&hBookmark.config.addPanelTagMine;"
                     preference="extensions.hatenabookmark.addPanel.tagListShow" />
-            </hbox>
-            <hbox flex="1" align="center">
-                <spacer style="width: 2em;" />
+            <hbox align="center" pack="start" class="indent">
                 <label value="&hBookmark.config.addPanelTagItem;"
                     control="addPanel.initialTagCount"/>
                 <textbox id="addPanel.initialTagCount"
@@ -450,7 +452,6 @@
                     type="number" min="1" increment="1"
                     style="width: 5em;"
                 />
-                <spacer flex="1" />
             </hbox>
         </groupbox>
 
