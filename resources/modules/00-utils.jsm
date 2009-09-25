@@ -249,7 +249,7 @@ function unEscapeURIForUI(charset, string)
 
 // これと同じことができる XPCOM コンポーネントはないの?
 function decodeReferences(string)
-    string.replace(/&(?:#([xX]?\d+)|([\w-]+));/g, _referenceReplacement);
+    string.replace(/&(?:#(\d+|[xX][0-9a-fA-F]+)|([\w-]+));/g, _referenceReplacement);
 
 function _referenceReplacement(reference, number, name) {
     return number ? String.fromCharCode("0" + number)

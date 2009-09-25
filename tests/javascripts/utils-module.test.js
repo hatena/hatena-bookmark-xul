@@ -81,8 +81,8 @@ function testExtendBuiltIns() {
 */
 
 function testDecodeReferences() {
-    assert.equals("\u00abHello &unknown; <world>\u00bb",
-                  decodeReferences("&laquo;H&#101;llo &unknown; &lt;&#x77;orld&gt;&raquo;"));
+    assert.equals("\u00abHello &unknown; 日本語 <world>\u00bb",
+                  decodeReferences("&laquo;H&#101;llo &unknown; 日本&#x8a9e; &lt;&#x77;orld&gt;&raquo;"));
 }
 
 function testIRI() {
