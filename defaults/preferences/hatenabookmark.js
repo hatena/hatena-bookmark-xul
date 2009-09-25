@@ -97,5 +97,5 @@ pref("extensions.hatenabookmark.embed.siteInfoUpdateInterval", 86400);
 pref("extensions.hatenabookmark.embed.search", true);
 pref("extensions.hatenabookmark.embed.searchCount", 5);
 pref("extensions.hatenabookmark.embed.searchSnippetLength", 100);
-pref("extensions.hatenabookmark.embed.searchSortBy", "date");
+pref("extensions.hatenabookmark.embed.searchSortBy", "scores");
 pref("extensions.hatenabookmark.embed.showSearchStandby", true);

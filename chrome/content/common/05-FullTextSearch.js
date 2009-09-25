@@ -13,7 +13,8 @@ var FullTextSearch = {
     search: function FTS_search(query, onResult, options) {
         if (!FullTextSearch.canSearch())
             setTimeout(onResult, 0, null);
-        let path = FullTextSearch._getPath(query, options);
+        let path = FullTextSearch.getJsonPath(query, options);
+        p(path);
         FullTextSearch.cache.async_get(path, function FTS_search_callback(data) {
             if (!data)
                 FullTextSearch.cache.clear(path);
@@ -23,15 +24,21 @@ var FullTextSearch = {
 
     searchSync: function FTS_searchSync(query, options) {
         if (!FullTextSearch.canSearch()) return null;
-        let path = FullTextSearch._getPath(query, options);
+        let path = FullTextSearch.getJsonPath(query, options);
         return FullTextSearch.cache.get(path);
     },
 
-    _getPath: function FTS__getPath(query, options) {
+    getJsonPath: function FTS_getJsonPath(query, options) {
+        options = options || {};
+        options.json = true;
+        return FullTextSearch.getPath(query, options);
+    },
+
+    getPath: function FTS_getPath(query, options) {
         options = options || {};
         let prefs = Prefs.bookmark;
         return User.user.name +
-            '/search/json?q=' + encodeURIComponent(query) +
+            '/search' + (options.json ? '/json' : '') + '?q=' + encodeURIComponent(query) +
             '&limit=' + (options.limit || prefs.get('embed.searchCount')) +
             '&snip=' + (options.snippetLength || prefs.get('embed.searchSnippetLength')) +
             '&sort=' + (options.sortBy || prefs.get('embed.searchSortBy'));
