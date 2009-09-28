@@ -512,13 +512,12 @@
                         hBookmark.p('title is set to ' + title);
                     }
                     if (options.wantRecommendedTags) {
-                        // XXX プライベートフィールドを引っ張って
-                        // きちゃってるから、tagSelector 側に
-                        // パブリックなマップを持たせておくべき。
-                        let myTags = this.tagSelector._rankedLabels.reduce(function (map, label) {
-                            map[label.tag.name] = label.tag.count;
+                        let myTags = hBookmark.model('Tag').findDistinctTags();
+                        myTags = myTags.reduce(function (map, tag) {
+                            map[tag.name] = tag.count;
                             return map;
                         }, {});
+hBookmark.p(uneval(myTags));
                         let tags; hBookmark.p.b(function () {
                         /*let*/ tags = hBookmark.ExtractContentJS.suggestTagsForDocument(doc, myTags);
                         }, 'ExtractContentJS.suggestTagsForDocument');

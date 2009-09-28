@@ -150,7 +150,7 @@ extend(Bookmark, {
             Bookmark.db.rollbackTransaction();
             return;
         }
-        Model.Tag.clearRelatedTagCache();
+        Model.Tag.clearTagCache();
         EventService.dispatch("BookmarksUpdated");
     },
     deleteBookmarks: function(bookmarks) {
@@ -162,7 +162,7 @@ extend(Bookmark, {
                              placeholder + ")", bmIds);
         Bookmark.db.execute("delete from bookmarks where id in (" +
                             placeholder + ")", bmIds);
-        Model.Tag.clearRelatedTagCache();
+        Model.Tag.clearTagCache();
         EventService.dispatch("BookmarksUpdated");
     }
 });
@@ -226,7 +226,7 @@ extend(Bookmark.prototype, {
             t.name = tag;
             t.save();
         }
-        Model.Tag.clearRelatedTagCache();
+        Model.Tag.clearTagCache();
     }
 });
 

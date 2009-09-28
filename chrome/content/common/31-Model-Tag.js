@@ -9,11 +9,18 @@ let Tag = Model.Entity({
 
 extend(Tag, {
     findDistinctTags: function (count) {
+        let tags;
+        if (!count && (tags = shared.get('distinctTagCache')))
+            return tags;
         let query = 'select count(name) as `count`, name from tags group by name';
         if (count) query += ' order by count desc limit ' + +count;
-        let tags = this.find(query);
-        // count 順になったのを元に戻す
-        if (count) tags.sort(function (a, b) a.name > b.name ? 1 : -1);
+        tags = this.find(query);
+        if (count) {
+            // count 順になったのを元に戻す
+            tags.sort(function (a, b) a.name > b.name ? 1 : -1);
+        } else {
+            shared.set('distinctTagCache', tags);
+        }
         return tags;
     },
 
@@ -74,7 +81,8 @@ extend(Tag, {
         return leafKey in tagCache[branchKey];
     },
 
-    clearRelatedTagCache: function Tag_clearRelatedTagCache() {
+    clearTagCache: function Tag_clearTagCache() {
+        shared.set("distinctTagCache", null);
         shared.set("relatedTagCache", null);
     },
 
@@ -104,6 +112,8 @@ extend(Tag, {
 //     target.lcname = target.name.toLowerCase();
 //     proceed(args);
 // });
+
+EventService.createListener('UserChange', Tag.clearTagCache);
 
 Model.Tag = Tag;
 Model.MODELS.push("Tag");
