@@ -38,7 +38,7 @@ var UIUtils = {
     },
 
     openHatenaWebSearch: function UIU_openHatenaWebSearch(text, event) {
-        hOpenUILink("http://b.hatena.ne.jp/search?q=" + encodeURIComponent(text), event);
+        hOpenUILink(B_HTTP + "search?q=" + encodeURIComponent(text), event);
     },
 
     openLogin: function UIU_openLogin(event) {
@@ -47,7 +47,39 @@ var UIUtils = {
     },
 
     openAddBookmark: function UIU_openAddBookmark(event) {
-        hOpenUILink("http://b.hatena.ne.jp/" + User.user.name + "/add", event);
+        hOpenUILink(B_HTTP + User.user.name + "/add", event);
+    },
+
+    openHatenaGuide: function UIU_openHatenaGuide(event) {
+        UIUtils.openGuidePage(B_HTTP + 'guide/firefox_start_1', event);
+    },
+
+    openBookmarkGuide: function UIU_openBookmarkGuide(event) {
+        UIUtils.openGuidePage(B_HTTP + 'guide/firefox_start_2', event);
+    },
+
+    openDoneBookmarkGuide: function UIU_openDoneBookmarkGuide(event) {
+        UIUtils.openGuidePage(B_HTTP + 'guide/firefox_start_3', event);
+    },
+
+    openStartupGuide: function UIU_openStartupGuide(event) {
+        UIUtils.openGuidePage(B_HTTP + 'guide/firefox_start_main', event);
+    },
+
+    openGuidePage: function UIU_openGuidePage(url, event) {
+        for (let tab = gBrowser.tabContainer.firstChild;
+             tab;
+             tab = tab.nextSibling) {
+            // XXX 起動時は currentURI が about:blank になっているので、
+            // 既にガイドページを開いていても新たなタブで開いてしまう。
+            if (tab.linkedBrowser.currentURI.spec === url) {
+                gBrowser.selectedTab = tab;
+                return;
+            }
+        }
+
+        event = event || { ctrlKey: true, metaKey: true };
+        hOpenUILink(url, event);
     },
 
     confirmDeleteBookmarks: function UIU_confirmDeleteBookmarks(bookmarks) {

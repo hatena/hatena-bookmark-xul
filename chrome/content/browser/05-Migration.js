@@ -70,16 +70,19 @@ Migration.Migrations = [
         }
     },
     function M_2_openStartPage() {
-        // 初回インストール時に、start ページを表示する
-        let listener;
-        listener = EventService.createListener('load', function() {
-            setTimeout(function() {
-                p('open start page');
-                openUILinkIn('http://b.hatena.ne.jp/guide/firefox_start', 'tab');
-                listener.unlisten();
-            }, 1000);
-        });
+        // // 初回インストール時に、start ページを表示する
+        // let listener;
+        // listener = EventService.createListener('load', function() {
+        //     setTimeout(function() {
+        //         p('open start page');
+        //         openUILinkIn('http://b.hatena.ne.jp/guide/firefox_start', 'tab');
+        //         listener.unlisten();
+        //     }, 1000);
+        // });
 
+        // スタートページの表示は UserGuide でやるんで、
+        // 今は初回インストールだということを記憶するだけ。
+        shared.set('firstRun', true);
     },
     function M_3_renamePrefs() {
         const PREFIX = 'extensions.hatenabookmark.';
