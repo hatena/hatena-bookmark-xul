@@ -4,6 +4,8 @@
 // pref("extensions.hatenabookmark.config.foobar", "foobar");
 
 pref("extensions.hatenabookmark.migration.version", 0);
+pref("extensions.hatenabookmark.everLoggedIn", false);
+pref("extensions.hatenabookmark.everBookmarked", false);
 
 // toolbar
 // Item count in "Hatena Bookmarks" folder in Bookmarks toolbar.

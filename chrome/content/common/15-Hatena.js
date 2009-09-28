@@ -43,6 +43,8 @@ if (shared.has('User')) {
             }
         },
         setUser: function User_setCurrentUser (res) {
+            if (res.bookmark_count)
+                Prefs.bookmark.set('everBookmarked', true);
             let current = this.user;
             if (current) {
                 if (current.name == res.name) {
@@ -63,8 +65,10 @@ if (shared.has('User')) {
                                      Ci.nsICookieManager).enumerator;
             while (cookies.hasMoreElements()) {
                 let cookie = cookies.getNext().QueryInterface(Ci.nsICookie);
-                if (cookie.host === ".hatena.ne.jp" && cookie.name === "rk")
+                if (cookie.host === ".hatena.ne.jp" && cookie.name === "rk") {
+                    Prefs.bookmark.set('everLoggedIn', true);
                     return cookie.value;
+                }
             }
             return "";
         })()
@@ -91,7 +95,10 @@ if (shared.has('User')) {
             }
             return null;
         },
-        get bCount() model('Bookmark').countAll(),
+        get bCount() {
+            let B = model('Bookmark');
+            return B.db.tableExists('bookmarks') ? B.countAll() : 0;
+        },
         hasBookmark: function user_hasBookmark(url) {
             let res = model('Bookmark').findByUrl(url);
             return res && res[0] ? true : false;
@@ -149,6 +156,7 @@ if (shared.has('User')) {
             {
                 case 'added':
                 case 'changed':
+                    Prefs.bookmark.set('everLoggedIn', true);
                     User.rk = cookie.value;
                     User.login();
                     break;

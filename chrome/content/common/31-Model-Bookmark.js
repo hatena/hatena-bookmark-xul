@@ -240,6 +240,7 @@ addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
     target.search = [target.title, target.comment, target.url].join("\n").toLowerCase(); // SQLite での検索用
     proceed(args);
     target.updateTags();
+    Prefs.bookmark.set('everBookmarked', true);
 });
 
 addAround(Bookmark, 'rowToObject', function (proceed, args) {
