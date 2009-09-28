@@ -16,6 +16,18 @@
                                    hidden="true"
                                    oncommand="hBookmark.UIUtils.openLogin(event);"
                                    onclick="checkForMiddleClick(this, event);"/>
+                <xul:toolbarbutton anonid="hatenaGuideButton"
+                                   class="bookmark-item"
+                                   label="&hBookmark.toolbar.hatenaGuideLabel;"
+                                   hidden="true"
+                                   oncommand="hBookmark.UIUtils.openHatenaGuide(event);"
+                                   onclick="checkForMiddleClick(this, event);"/>
+                <xul:toolbarbutton anonid="bookmarkGuideButton"
+                                   class="bookmark-item"
+                                   label="&hBookmark.toolbar.bookmarkGuideLabel;"
+                                   hidden="true"
+                                   oncommand="hBookmark.UIUtils.openBookmarkGuide(event);"
+                                   onclick="checkForMiddleClick(this, event);"/>
                 <xul:toolbarbutton anonid="tagFilterButton"
                                    class="hBookmark-tag-filter-button"
                                    tooltiptext="&hBookmark.toolbar.tagFilterLabel;"
@@ -74,6 +86,12 @@
             <field name="loginButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "loginButton")
             </field>
+            <field name="hatenaGuideButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "hatenaGuideButton")
+            </field>
+            <field name="bookmarkGuideButton">
+                document.getAnonymousElementByAttribute(this, "anonid", "bookmarkGuideButton")
+            </field>
             <field name="tagFilterButton">
                 document.getAnonymousElementByAttribute(this, "anonid", "tagFilterButton")
             </field>
@@ -120,7 +138,11 @@
 
                     let isLoggedIn = !!hBookmark.User.user;
                     let hasBookmarks = !!bookmarks.length;
+                    let everLoggedIn = hBookmark.Prefs.bookmark.get('everLoggedIn');
+                    let everBookmarked = hBookmark.Prefs.bookmark.get('everBookmarked');
                     this.loginButton.hidden = isLoggedIn;
+                    this.hatenaGuideButton.hidden = everLoggedIn;
+                    this.bookmarkGuideButton.hidden = !everLoggedIn || (everBookmarked && hasBookmarks);
                     this.tagFilterButton.hidden = !isLoggedIn || !hasBookmarks;
                     this.redraw();
                 ]]></body>

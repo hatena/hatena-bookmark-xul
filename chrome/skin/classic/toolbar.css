@@ -121,3 +121,20 @@ toolbar[iconsize="small"] #hBookmark-toolbar-recent-button:active {
   display: -moz-box !important;
   margin: 0 2px !important;
 }
+
+#hBookmarkToolbar .hBookmark-toolbar-dynamic-item > .bookmark-item {
+  max-width: none;
+}
+
+/* アイコンがあったほうがいい? */
+/*
+toolbarbutton[anonid="loginButton"] {
+  list-style-image: url("");
+}
+toolbarbutton[anonid="hatenaGuideButton"] {
+  list-style-image: url("");
+}
+toolbarbutton[anonid="bookmarkGuideButton"] {
+  list-style-image: url("");
+}
+*/
