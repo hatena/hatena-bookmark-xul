@@ -517,7 +517,6 @@
                             map[tag.name] = tag.count;
                             return map;
                         }, {});
-hBookmark.p(uneval(myTags));
                         let tags; hBookmark.p.b(function () {
                         /*let*/ tags = hBookmark.ExtractContentJS.suggestTagsForDocument(doc, myTags);
                         }, 'ExtractContentJS.suggestTagsForDocument');
