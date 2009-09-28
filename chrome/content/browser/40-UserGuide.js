@@ -46,7 +46,10 @@ var UserGuide = {
 
     onFirstBookmark: function UG_onFirstBookmark() {
         if (!Prefs.bookmark.get('everBookmarked')) return;
-        UIUtils.openDoneBookmarkGuide();
+        if (shared.has('alreadyBookmarked'))
+            UIUtils.openStartupGuide();
+        else
+            UIUtils.openDoneBookmarkGuide();
     },
 };
 

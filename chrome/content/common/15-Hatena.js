@@ -45,8 +45,10 @@ if (shared.has('User')) {
             }
         },
         setUser: function User_setCurrentUser (res) {
-            if (res.bookmark_count)
+            if (res.bookmark_count) {
+                shared.set('alreadyBookmarked', true);
                 Prefs.bookmark.set('everBookmarked', true);
+            }
             let current = this.user;
             if (current) {
                 if (current.name == res.name) {
