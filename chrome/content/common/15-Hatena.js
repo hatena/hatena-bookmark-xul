@@ -36,10 +36,12 @@ if (shared.has('User')) {
         logout: function User_clearUser () {
             this.clearUser();
         },
-        clearUser: function() {
+        clearUser: function(forUserChange) {
             if (this.user) {
                 this.user.clear();
                 delete this.user;
+                if (!forUserChange)
+                    EventService.dispatch('UserChange', this);
             }
         },
         setUser: function User_setCurrentUser (res) {
@@ -54,7 +56,7 @@ if (shared.has('User')) {
                     delete current._ignores;
                     return current;
                 }
-                this.clearUser();
+                this.clearUser(true);
             }
             let user = new User(res.name, res);
             this.user = user;
