@@ -223,11 +223,12 @@ extend(TagTreeView.prototype, {
             break;
 
         case "UserChange":
-            this.build();
+            if (User.user) this.build();
             break;
 
         case "BookmarksUpdated":
             this.refresh();
+            break;
         }
     },
 

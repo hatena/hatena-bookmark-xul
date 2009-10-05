@@ -84,7 +84,7 @@ extend(BookmarkTreeView.prototype, {
             break;
 
         case "UserChange":
-            this.showBySearchString("");
+            if (User.user) this.showBySearchString("");
             break;
 
         case "input":

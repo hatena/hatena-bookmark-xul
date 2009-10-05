@@ -513,6 +513,7 @@ Entity = function (def){
                     </>, sql);
                 }
             } else {
+                //if (!Model.db) p(new Error().stack);
                 return Model.db.execute(sql, params).map(Model.rowToObject);
             }
         },

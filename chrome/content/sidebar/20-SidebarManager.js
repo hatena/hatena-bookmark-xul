@@ -60,10 +60,12 @@ function showSidebarContent() {
     let isLoggedIn = !!User.user;
     document.getElementById("login-notification").collapsed = isLoggedIn;
     document.getElementById("main-content").collapsed = !isLoggedIn;
-    // ボックスの位置情報が確実に利用できるよう遅延させる。
-    setTimeout(function () {
-        document.getElementById("bookmark-tree").view.wrappedJSObject.update();
-    }, 0);
+    if (isLoggedIn) {
+        // ボックスの位置情報が確実に利用できるよう遅延させる。
+        setTimeout(function () {
+            document.getElementById("bookmark-tree").view.wrappedJSObject.update();
+        }, 0);
+    }
 }
 
 function setBoxDirection() {
