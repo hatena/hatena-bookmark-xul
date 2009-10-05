@@ -1140,7 +1140,7 @@ if (typeof ExtractContentJS == 'undefined') {
         sc.addEngine( sc.factory.getEngine('TfIdf') );
         sc.addEngine( sc.factory.getEngine('ContentPosition') );
         sc.addEngine( sc.factory.getEngine('TitlePosition') );
-        return sc.top({ url: url, title: title, content: body }, tags);
+        return sc.top({ url: url, title: title, content: (body || '').toString().replace(/\bhttps?:\/\//, '', 'g') }, tags);
     };
 
     ns.suggestTagsForDocument = function(d, tags) {
