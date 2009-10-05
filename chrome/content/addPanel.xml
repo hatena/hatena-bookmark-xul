@@ -343,6 +343,8 @@
                       onget="return hBookmark.Prefs.bookmark.get('addPanel.recommendedTagListShow');"/>
             <property name="suggestRecommendedTags" readonly="true"
                       onget="return this.showsRecommendedTagList &amp;&amp; hBookmark.Prefs.bookmark.get('addPanel.suggestRecommendedTags');"/>
+            <property name="alwaysRecommendTagsFromContent" readonly="true"
+                      onget="return this.showsRecommendedTagList &amp;&amp; hBookmark.Prefs.bookmark.get('addPanel.alwaysRecommendTagsFromContent');"/>
             <property name="frequentTagCount" readonly="true"
                       onget="return hBookmark.Prefs.bookmark.get('addPanel.frequentTagCount');"/>
             <property name="initialTagCount" readonly="true"
@@ -429,6 +431,7 @@
                 <parameter name="bookmark"/>
                 <parameter name="res"/>
                 <body><![CDATA[
+                    let tagsFromContent = this.alwaysRecommendTagsFromContent;
                     if (res) {
                         if (+res.count) {
                             this.usersField.value =
@@ -469,7 +472,8 @@
                             this.isPrivateCheck.hidden = false;
                         }
                         this.asin = res.asin;
-                        this.updateRecommendedTags(res.recommend_tags);
+                        if (!tagsFromContent)
+                            this.updateRecommendedTags(res.recommend_tags);
 
                         if (res.title && res.title !== bookmark.title) {
                             this.titleLabel.value = res.title;
@@ -478,9 +482,10 @@
                     }
 
                     let wantTitle = !this.titleLabel.value;
-                    let wantRecommendedTags = (!res || !res.recommend_tags ||
-                                               !res.recommend_tags.length) &&
-                                              this.suggestRecommendedTags;
+                    let wantRecommendedTags = tagsFromContent ||
+                                              ((!res || !res.recommend_tags ||
+                                                !res.recommend_tags.length) &&
+                                               this.suggestRecommendedTags);
                     if (wantTitle || wantRecommendedTags) {
                         let options = {
                             wantTitle: wantTitle,
