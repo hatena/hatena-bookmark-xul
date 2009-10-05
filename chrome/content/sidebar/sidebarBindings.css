@@ -1,0 +1,51 @@
+@namespace "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+bookmarksearchbar {
+    -moz-binding: url("chrome://hatenabookmark/content/sidebar/searchbar.xml#searchbar");
+}
+
+.hBookmark-searchbar-select-button {
+    -moz-user-focus: none;
+}
+
+/* XXX The following style should be at skin. */
+
+.hBookmark-searchbar-textbox {
+    min-height: 22px;
+}
+
+.hBookmark-searchbar-textbox > .autocomplete-textbox-container > .textbox-input-box {
+    margin: 0;
+}
+
+.hBookmark-searchbar-select-button {
+    -moz-appearance: none;
+    background: ThreeDFace url("chrome://browser/skin/navbar-textbox-buttons.png") repeat-x;
+    margin: 0;
+    -moz-margin-end: 3px;
+    padding: 0;
+    border-style: none;
+    -moz-border-end: 1px solid;
+    -moz-border-left-colors: ThreeDShadow;
+    -moz-border-right-colors: ThreeDShadow;
+    min-width: 0;
+    height: 1.23em;
+    min-height: 20px;
+}
+
+.hBookmark-searchbar-select-button > .button-box {
+    -moz-padding-end: 0;
+    border-style: none;
+}
+
+.hBookmark-searchbar-select-button > .button-box > .button-menu-dropmarker {
+    width: 11px;
+}
+
+.hBookmark-searchbar-select-menuitem[selected="true"] > .menu-iconic-text {
+    font-weight: bold;
+}
+
+.hBookmark-searchbar-reset-button {
+    padding: 2px;
+}

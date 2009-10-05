@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/addPanel.dtd">
+<bindings xmlns="http://www.mozilla.org/xbl"
+          xmlns:xbl="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <binding id="searchbar">
+        <content>
+            <xul:textbox class="hBookmark-searchbar-textbox"
+                         type="autocomplete"
+                         flex="1">
+                <xul:button class="hBookmark-searchbar-select-button"
+                            type="menu"
+                            image="moz-icon://.pdf?size=16">
+                    <xul:menupopup position="before_start">
+                        <xul:menuitem class="hBookmark-searchbar-select-menuitem menuitem-iconic"
+                                      label="{{ブックマークを検索}}"
+                                      image="moz-icon://.css?size=16"
+                                      selected="true"/>
+                        <xul:menuitem class="hBookmark-searchbar-select-menuitem menuitem-iconic"
+                                      label="{{タイトルから検索}}"
+                                      image="moz-icon://.html?size=16"/>
+                        <xul:menuitem class="hBookmark-searchbar-select-menuitem menuitem-iconic"
+                                      label="{{コメントから検索}}"
+                                      image="moz-icon://.exe?size=16"/>
+                        <xul:menuitem class="hBookmark-searchbar-select-menuitem menuitem-iconic"
+                                      label="{{URL から検索}}"
+                                      image="moz-icon://.url?size=16"/>
+                    </xul:menupopup>
+                </xul:button>
+                <xul:hbox>
+                    <xul:image class="hBookmark-searchbar-reset-button"
+                               src="moz-icon://.js?size=16"/>
+                </xul:hbox>
+            </xul:textbox>
+        </content>
+    </binding>
+
+</bindings>
