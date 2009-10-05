@@ -53,29 +53,40 @@ var UIUtils = {
         hOpenUILink(B_HTTP + User.user.name + "/add", event);
     },
 
+    _guideURLs: [
+        B_HTTP + 'guide/firefox_start_1',
+        B_HTTP + 'guide/firefox_start_2',
+        B_HTTP + 'guide/firefox_start_3',
+        B_HTTP + 'guide/firefox_start_main',
+    ],
+
     openHatenaGuide: function UIU_openHatenaGuide(event) {
-        UIUtils.openGuidePage(B_HTTP + 'guide/firefox_start_1', event);
+        UIUtils.openGuidePage(UIUtils._guideURLs[0], event);
     },
 
     openBookmarkGuide: function UIU_openBookmarkGuide(event) {
-        UIUtils.openGuidePage(B_HTTP + 'guide/firefox_start_2', event);
+        UIUtils.openGuidePage(UIUtils._guideURLs[1], event);
     },
 
     openDoneBookmarkGuide: function UIU_openDoneBookmarkGuide(event) {
-        UIUtils.openGuidePage(B_HTTP + 'guide/firefox_start_3', event);
+        UIUtils.openGuidePage(UIUtils._guideURLs[2], event);
     },
 
     openStartupGuide: function UIU_openStartupGuide(event) {
-        UIUtils.openGuidePage(B_HTTP + 'guide/firefox_start_main', event);
+        UIUtils.openGuidePage(UIUtils._guideURLs[3], event);
     },
 
     openGuidePage: function UIU_openGuidePage(url, event) {
+        let urls = UIUtils._guideURLs;
         for (let tab = gBrowser.tabContainer.firstChild;
              tab;
              tab = tab.nextSibling) {
-            // XXX 起動時は currentURI が about:blank になっているので、
+            // XXX 起動直後は currentURI が about:blank になっているので、
             // 既にガイドページを開いていても新たなタブで開いてしまう。
-            if (tab.linkedBrowser.currentURI.spec === url) {
+            let currentURL = tab.linkedBrowser.currentURI.spec;
+            if (urls.indexOf(currentURL) !== -1) {
+                if (url !== currentURL)
+                    tab.linkedBrowser.loadURI(url);
                 gBrowser.selectedTab = tab;
                 return;
             }
