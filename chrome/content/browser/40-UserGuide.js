@@ -1,17 +1,13 @@
 const EXPORT = ['UserGuide'];
 
 var UserGuide = {
-    firstTry: true,
-
-    start: function UG_start() {
-        let firstTry = UserGuide.firstTry;
-        UserGuide.firstTry = false;
+    start: function UG_start(allowRestart) {
         let firstRun = shared.has('firstRun');
         let loggedIn = !!User.user;
         let everLoggedIn = Prefs.bookmark.get('everLoggedIn');
         let everBookmarked = Prefs.bookmark.get('everBookmarked');
 
-        if (firstTry && firstRun && everLoggedIn && !loggedIn) {
+        if (allowRestart && everLoggedIn && !loggedIn) {
             UserGuide.tryRestart();
             return;
         }
@@ -34,7 +30,7 @@ var UserGuide = {
             if (!restart) return;
             listener.unlisten();
             restart = listener = null;
-            UserGuide.start();
+            UserGuide.start(false);
         }
         let listener = EventService.createListener('UserChange', restart);
         setTimeout(restart, 3000);
@@ -54,5 +50,5 @@ var UserGuide = {
 };
 
 EventService.createListener('firstPreload', function () {
-    setTimeout(UserGuide.start, 200);
+    setTimeout(function () UserGuide.start(true), 200);
 });
