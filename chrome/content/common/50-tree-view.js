@@ -2,6 +2,12 @@ const EXPORT = ["TreeView"];
 
 function TreeView() {}
 
+extend(TreeView, {
+    SORT_NATURAL: 0,
+    SORT_ASCENDING: 1,
+    SORT_DESCENDING: -1,
+});
+
 extend(TreeView.prototype, {
     get wrappedJSObject () this,
     rowCount:            0,
