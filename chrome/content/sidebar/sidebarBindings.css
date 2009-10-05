@@ -4,7 +4,7 @@ bookmarksearchbar {
     -moz-binding: url("chrome://hatenabookmark/content/sidebar/searchbar.xml#searchbar");
 }
 
-.hBookmark-searchbar-select-button {
+.hBookmark-searchbar-mode-button {
     -moz-user-focus: none;
 }
 
@@ -18,7 +18,7 @@ bookmarksearchbar {
     margin: 0;
 }
 
-.hBookmark-searchbar-select-button {
+.hBookmark-searchbar-mode-button {
     -moz-appearance: none;
     background: ThreeDFace url("chrome://browser/skin/navbar-textbox-buttons.png") repeat-x;
     margin: 0;
@@ -33,19 +33,33 @@ bookmarksearchbar {
     min-height: 20px;
 }
 
-.hBookmark-searchbar-select-button > .button-box {
+.hBookmark-searchbar-mode-button > .button-box {
     -moz-padding-end: 0;
     border-style: none;
 }
 
-.hBookmark-searchbar-select-button > .button-box > .button-menu-dropmarker {
+.hBookmark-searchbar-mode-button > .button-box > .button-menu-dropmarker {
     width: 11px;
 }
 
-.hBookmark-searchbar-select-menuitem[selected="true"] > .menu-iconic-text {
+.hBookmark-searchbar-mode-menuitem[selected="true"] > .menu-iconic-text {
     font-weight: bold;
 }
 
+.hBookmark-searchbar-mode-menuitem[value="all"] {
+    list-style-image: url("moz-icon://.css?size=16");
+}
+.hBookmark-searchbar-mode-menuitem[value="title"] {
+    list-style-image: url("moz-icon://.html?size=16");
+}
+.hBookmark-searchbar-mode-menuitem[value="comment"] {
+    list-style-image: url("moz-icon://.exe?size=16");
+}
+.hBookmark-searchbar-mode-menuitem[value="url"] {
+    list-style-image: url("moz-icon://.url?size=16");
+}
+
 .hBookmark-searchbar-reset-button {
+    list-style-image: url("moz-icon://.js?size=16");
     padding: 2px;
 }

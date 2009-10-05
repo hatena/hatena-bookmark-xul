@@ -6,34 +6,129 @@
 
     <binding id="searchbar">
         <content>
-            <xul:textbox class="hBookmark-searchbar-textbox"
+            <xul:textbox anonid="textbox"
+                         class="hBookmark-searchbar-textbox"
                          type="autocomplete"
                          flex="1">
-                <xul:button class="hBookmark-searchbar-select-button"
-                            type="menu"
-                            image="moz-icon://.pdf?size=16">
-                    <xul:menupopup position="before_start">
-                        <xul:menuitem class="hBookmark-searchbar-select-menuitem menuitem-iconic"
+                <xul:button anonid="modeButton"
+                            class="hBookmark-searchbar-mode-button"
+                            type="menu">
+                    <xul:menupopup anonid="popup"
+                                   oncommand="_doPopupCommand(event);"
+                                   xbl:inherits="position=popupposition">
+                        <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
                                       label="{{ブックマークを検索}}"
-                                      image="moz-icon://.css?size=16"
-                                      selected="true"/>
-                        <xul:menuitem class="hBookmark-searchbar-select-menuitem menuitem-iconic"
+                                      value="all"/>
+                        <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
                                       label="{{タイトルから検索}}"
-                                      image="moz-icon://.html?size=16"/>
-                        <xul:menuitem class="hBookmark-searchbar-select-menuitem menuitem-iconic"
+                                      value="title"/>
+                        <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
                                       label="{{コメントから検索}}"
-                                      image="moz-icon://.exe?size=16"/>
-                        <xul:menuitem class="hBookmark-searchbar-select-menuitem menuitem-iconic"
+                                      value="comment"/>
+                        <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
                                       label="{{URL から検索}}"
-                                      image="moz-icon://.url?size=16"/>
+                                      value="url"/>
                     </xul:menupopup>
                 </xul:button>
                 <xul:hbox>
-                    <xul:image class="hBookmark-searchbar-reset-button"
-                               src="moz-icon://.js?size=16"/>
+                    <xul:image anonid="resetButton"
+                               class="hBookmark-searchbar-reset-button"
+                               onclick="_doResetCommand(event);"
+                               xbl:inherits="resetdirection"
+                               ascendinglabel="{{昔のブックマークを表示}}"
+                               descendinglabel="{{最近のブックマークを表示}}"/>
                 </xul:hbox>
             </xul:textbox>
         </content>
+
+        <implementation>
+            <constructor><![CDATA[
+                let searchMode = this.searchMode;
+                let menuitem = this.popup.firstChild;
+                for (; menuitem; menuitem = menuitem.nextSibling)
+                    if (menuitem.value === searchMode) break;
+                if (menuitem) {
+                    menuitem.setAttribute('selected', 'true');
+                    this._selectedMenuitem = menuitem;
+                    this._setMode(menuitem);
+                }
+                this.resetDirection += '';
+            ]]></constructor>
+
+            <field name="textbox">document.getAnonymousElementByAttribute(
+                this, 'anonid', 'textbox')</field>
+            <field name="modeButton">document.getAnonymousElementByAttribute(
+                this, 'anonid', 'modeButton')</field>
+            <field name="popup">document.getAnonymousElementByAttribute(
+                this, 'anonid', 'popup')</field>
+            <field name="resetButton">document.getAnonymousElementByAttribute(
+                this, 'anonid', 'resetButton')</field>
+
+            <field name="_selectedMenuitem">null</field>
+
+            <property name="searchMode"
+                      onget="return this.getAttribute('searchmode');"
+                      onset="this.setAttribute('searchmode', val); return val;"/>
+
+            <property name="resetDirection"
+                      onget="return this.getAttribute('resetdirection') || 'natural';">
+                <setter><![CDATA[
+                    this.setAttribute('resetdirection', val);
+                    this.resetButton.tooltipText =
+                        this.resetButton.getAttribute(val + 'label') || '';
+                    return val;
+                ]]></setter>
+            </property>
+
+            <method name="_setMode">
+                <parameter name="menuitem"/>
+                <body><![CDATA[
+                    this.searchMode = menuitem.value;
+                    this.textbox.emptyText = menuitem.label;
+                    this.textbox.tooltipText = menuitem.label;
+
+                    let buttonStyle = this.modeButton.style;
+                    buttonStyle.listStyleImage = '';
+                    buttonStyle.MozImageRegion = '';
+                    this.modeButton.image = '';
+                    if (menuitem.image) {
+                        this.modeButton.image = menuitem.image;
+                    } else {
+                        let style = getComputedStyle(menuitem, null);
+                        buttonStyle.listStyleImage = style.listStyleImage;
+                        buttonStyle.MozImageRegion = style.MozImageRegion;
+                    }
+                ]]></body>
+            </method>
+
+            <method name="_doPopupCommand">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    let menuitem = event.target;
+                    if (menuitem === this._selectedMenuitem) return;
+                    if (this._selectedMenuitem)
+                        this._selectedMenuitem.removeAttribute('selected');
+                    menuitem.setAttribute('selected', 'true');
+                    this._selectedMenuitem = menuitem;
+                    this._setMode(event.target);
+                ]]></body>
+            </method>
+
+            <method name="_doResetCommand">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    let ev = document.createEvent('UIEvent');
+                    let direction = this.resetDirection;
+                    let dir = (direction === 'ascending')
+                              ? hBookmark.TreeView.SORT_ASCENDING :
+                              (direction === 'descending')
+                              ? hBookmark.TreeView.SORT_DESCENDING
+                              : hBookmark.TreeView.SORT_NATURAL;
+                    ev.initUIEvent('HB.SearchReset', true, false, window, dir);
+                    this.dispatchEvent(ev);
+                ]]></body>
+            </method>
+        </implementation>
     </binding>
 
 </bindings>

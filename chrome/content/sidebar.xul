@@ -95,7 +95,10 @@
             <textbox id="searchBox" flex="1"/>
         </hbox>
 
-        <bookmarksearchbar/>
+        <bookmarksearchbar id="searchbar"
+                           searchmode="all"
+                           popupposition="before_start"/>
+        <!-- persist="searchmode" -->
     </vbox>
 
 </page>

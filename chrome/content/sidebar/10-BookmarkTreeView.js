@@ -7,7 +7,7 @@ function BookmarkTreeView() {
     this._items = [];
     this._treeBox = null;
     this._update = null;
-    this._isAscending = false;
+    this._isAscending = null;
 }
 
 BookmarkTreeView.prototype.__proto__ = TreeView.prototype;
@@ -18,7 +18,7 @@ extend(BookmarkTreeView.prototype, {
         this._treeBox = treeBox;
         if (!treeBox) return;
         let col = this._treeBox.columns.getFirstColumn().element;
-        this._isAscending = (col.getAttribute("sortDirection") === "ascending");
+        this.isAscending = (col.getAttribute("sortDirection") === "ascending");
         this.showBySearchString("");
     },
 
@@ -30,14 +30,27 @@ extend(BookmarkTreeView.prototype, {
         let sortDir = col.element.getAttribute("sortDirection");
         sortDir = (sortDir === "ascending")  ? "descending" : "ascending";
         col.element.setAttribute("sortDirection", sortDir);
-        this._isAscending = (sortDir === "ascending");
+        this.isAscending = (sortDir === "ascending");
         this._update();
+    },
+
+    get isAscending BTV_get_isAscending() this._isAscending,
+    set isAscending BTV_set_isAscending(value) {
+        let v = !!value;
+        if (this._isAscending !== v) {
+            this._isAscending = v;
+            let event = document.createEvent('UIEvent');
+            event.initUIEvent('HB.TreeDirectionChanged', true, false, window,
+                              v ? TreeView.SORT_ASCENDING : TreeView.SORT_DESCENDING);
+            this._treeBox.treeBody.parentNode.dispatchEvent(event);
+        }
+        return value;
     },
 
     showByTags: function (tags) {
         this._update = function BTV_doUpdateByTags() {
             let bookmarks = Bookmark.findByTags(tags);
-            if (this._isAscending) bookmarks.reverse();
+            if (this.isAscending) bookmarks.reverse();
             this.setBookmarks(bookmarks);
         };
         this._update();
@@ -47,9 +60,9 @@ extend(BookmarkTreeView.prototype, {
         this._update = function BTV_doUpdateBySearchString() {
             let visibleRowCount = this._treeBox.getPageLength();
             let bookmarks = string
-                ? Bookmark.search(string, visibleRowCount, this._isAscending)
+                ? Bookmark.search(string, visibleRowCount, this.isAscending)
                 : Bookmark.find({
-                    order: this._isAscending ? "date ASC" : "date DESC",
+                    order: this.isAscending ? "date ASC" : "date DESC",
                     limit: visibleRowCount
                 });
             this.setBookmarks(bookmarks);
