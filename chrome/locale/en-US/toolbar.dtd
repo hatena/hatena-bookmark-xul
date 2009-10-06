@@ -4,6 +4,7 @@
 <!ENTITY hBookmark.toolbar.loginLabel "Login to Hatena">
 <!ENTITY hBookmark.toolbar.hatenaGuideLabel "Let's try Hatena">
 <!ENTITY hBookmark.toolbar.bookmarkGuideLabel "Let's try Hatena Bookmark">
+<!ENTITY hBookmark.toolbar.whatsBookmarkGuideLabel "What's try Hatena Bookmark">
 <!ENTITY hBookmark.toolbar.addBookmarkLabel "Add Bookmark">
 <!ENTITY hBookmark.toolbar.tagFilterLabel "Filter">
 

@@ -60,6 +60,11 @@ var UIUtils = {
         B_HTTP + 'guide/firefox_start_main',
     ],
 
+    openWhatsHatenaBookmark: function UIU_openWhatsHatenaBookmark(event) {
+        event = event || { ctrlKey: true, metaKey: true };
+        hOpenUILink('http://b.hatena.ne.jp/guide?via=200041', event);
+    },
+
     openHatenaGuide: function UIU_openHatenaGuide(event) {
         UIUtils.openGuidePage(UIUtils._guideURLs[0], event);
     },

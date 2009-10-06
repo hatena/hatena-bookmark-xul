@@ -4,6 +4,7 @@
 <!ENTITY hBookmark.toolbar.loginLabel "はてなにログイン">
 <!ENTITY hBookmark.toolbar.hatenaGuideLabel "はてなのサービスを使ってみよう">
 <!ENTITY hBookmark.toolbar.bookmarkGuideLabel "はてなブックマークを使ってみよう">
+<!ENTITY hBookmark.toolbar.whatsBookmarkGuideLabel "はてなブックマークってなに？">
 <!ENTITY hBookmark.toolbar.addBookmarkLabel "ブックマークを追加">
 <!ENTITY hBookmark.toolbar.tagFilterLabel "絞り込み">
 
