@@ -5,15 +5,23 @@
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <binding id="searchbar">
+        <resources>
+            <stylesheet src="searchbar.css"/>
+            <stylesheet src="chrome://browser/skin/searchbar.css"/>
+        </resources>
+
         <content>
             <xul:textbox anonid="textbox"
-                         class="hBookmark-searchbar-textbox"
-                         type="autocomplete"
+                         class="searchbar-textbox"
                          flex="1">
                 <xul:button anonid="modeButton"
-                            class="hBookmark-searchbar-mode-button"
+                            class="searchbar-engine-button"
                             type="menu">
+                    <xul:image anonid="modeImage"
+                               class="searchbar-engine-image"/>
+                    <xul:image class="searchbar-dropmarker-image"/>
                     <xul:menupopup anonid="popup"
+                                   class="searchbar-popup"
                                    oncommand="_doPopupCommand(event);"
                                    xbl:inherits="position=popupposition">
                         <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
@@ -30,9 +38,9 @@
                                       value="url"/>
                     </xul:menupopup>
                 </xul:button>
-                <xul:hbox>
+                <xul:hbox class="search-go-container">
                     <xul:image anonid="resetButton"
-                               class="hBookmark-searchbar-reset-button"
+                               class="search-go-button"
                                onclick="_doResetCommand(event);"
                                xbl:inherits="resetdirection"
                                ascendinglabel="{{昔のブックマークを表示}}"
@@ -59,6 +67,8 @@
                 this, 'anonid', 'textbox')</field>
             <field name="modeButton">document.getAnonymousElementByAttribute(
                 this, 'anonid', 'modeButton')</field>
+            <field name="modeImage">document.getAnonymousElementByAttribute(
+                this, 'anonid', 'modeImage')</field>
             <field name="popup">document.getAnonymousElementByAttribute(
                 this, 'anonid', 'popup')</field>
             <field name="resetButton">document.getAnonymousElementByAttribute(
@@ -87,16 +97,16 @@
                     this.textbox.emptyText = menuitem.label;
                     this.textbox.tooltipText = menuitem.label;
 
-                    let buttonStyle = this.modeButton.style;
-                    buttonStyle.listStyleImage = '';
-                    buttonStyle.MozImageRegion = '';
-                    this.modeButton.image = '';
+                    let imageStyle = this.modeImage.style;
+                    imageStyle.listStyleImage = '';
+                    imageStyle.MozImageRegion = '';
+                    this.modeImage.src = '';
                     if (menuitem.image) {
-                        this.modeButton.image = menuitem.image;
+                        this.modeImage.src = menuitem.image;
                     } else {
                         let style = getComputedStyle(menuitem, null);
-                        buttonStyle.listStyleImage = style.listStyleImage;
-                        buttonStyle.MozImageRegion = style.MozImageRegion;
+                        imageStyle.listStyleImage = style.listStyleImage;
+                        imageStyle.MozImageRegion = style.MozImageRegion;
                     }
                 ]]></body>
             </method>
@@ -129,6 +139,14 @@
                 ]]></body>
             </method>
         </implementation>
+    </binding>
+
+    <binding id="searchbar-textbox"
+             extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
+        <implementation>
+            <constructor><![CDATA[
+            ]]></constructor>
+        </implemenation>
     </binding>
 
 </bindings>

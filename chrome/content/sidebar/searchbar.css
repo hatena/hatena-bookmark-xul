@@ -1,0 +1,9 @@
+@namespace "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+
+.searchbar-textbox {
+    -moz-binding: url("searchbar.xml#searchbar-textbox");
+}
+
+.searchbar-engine-button {
+    -moz-user-focus: none;
+}
