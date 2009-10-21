@@ -22,7 +22,7 @@
                     <xul:image class="searchbar-dropmarker-image"/>
                     <xul:menupopup anonid="popup"
                                    class="searchbar-popup"
-                                   oncommand="_doPopupCommand(event);"
+                                   oncommand="searchMode = event.target.value;"
                                    xbl:inherits="position=popupposition">
                         <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
                                       label="{{ブックマークを検索}}"
@@ -49,15 +49,8 @@
 
         <implementation>
             <constructor><![CDATA[
-                let searchMode = this.searchMode;
-                let menuitem = this.popup.firstChild;
-                for (; menuitem; menuitem = menuitem.nextSibling)
-                    if (menuitem.value === searchMode) break;
-                if (menuitem) {
-                    menuitem.setAttribute('selected', 'true');
-                    this._selectedMenuitem = menuitem;
-                    this._setMode(menuitem);
-                }
+                // Initialize searchMode
+                this.searchMode = this.searchMode;
             ]]></constructor>
 
             <field name="textbox">document.getAnonymousElementByAttribute(
@@ -71,19 +64,20 @@
             <field name="goButton">document.getAnonymousElementByAttribute(
                 this, 'anonid', 'goButton')</field>
 
+            <field name="_prefs">hBookmark.Prefs.bookmark</field>
             <field name="_selectedMenuitem">null</field>
 
             <property name="searchMode"
-                      onget="return this.getAttribute('searchmode');"
-                      onset="this.setAttribute('searchmode', val); return val;"/>
+                      onget="return this._prefs.get('sidebar.searchMode');">
+                <setter><![CDATA[
+                    let menuitem = this.popup.firstChild;
+                    for (; menuitem; menuitem = menuitem.nextSibling)
+                        if (menuitem.value === val) break;
+                    if (!menuitem || menuitem === this._selectedMenuitem)
+                        return val;
 
-            <method name="_setMode">
-                <parameter name="menuitem"/>
-                <body><![CDATA[
-                    this.searchMode = menuitem.value;
                     this.textbox.emptyText = menuitem.label;
                     this.textbox.tooltipText = menuitem.label;
-
                     let imageStyle = this.modeImage.style;
                     imageStyle.listStyleImage = '';
                     imageStyle.MozImageRegion = '';
@@ -95,21 +89,18 @@
                         imageStyle.listStyleImage = style.listStyleImage;
                         imageStyle.MozImageRegion = style.MozImageRegion;
                     }
-                ]]></body>
-            </method>
-
-            <method name="_doPopupCommand">
-                <parameter name="event"/>
-                <body><![CDATA[
-                    let menuitem = event.target;
-                    if (menuitem === this._selectedMenuitem) return;
                     if (this._selectedMenuitem)
-                        this._selectedMenuitem.removeAttribute('selected');
+                        this._selectedMenuitem.removeAttribute('selected')
                     menuitem.setAttribute('selected', 'true');
                     this._selectedMenuitem = menuitem;
-                    this._setMode(event.target);
-                ]]></body>
-            </method>
+
+                    this._prefs.set('sidebar.searchMode', val);
+                    let event = document.createEvent('CommandEvent');
+                    event.initCommandEvent('HB.SearchModeChanged', true, false, val);
+                    this.dispatchEvent(event);
+                    return val;
+                ]]></setter>
+            </property>
 
             <method name="_dispatchInputEvent">
                 <body><![CDATA[

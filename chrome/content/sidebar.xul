@@ -96,9 +96,7 @@
         </hbox>
 
         <bookmarksearchbar id="searchbar"
-                           searchmode="all"
                            popupposition="before_start"/>
-        <!-- persist="searchmode" -->
     </vbox>
 
 </page>

@@ -6,6 +6,10 @@ bookmarksearchbar {
 
 /* XXX The following style should be at skin. */
 
+.hBookmark-searchbar-mode-menuitem[selected="true"] {
+    font-weight: bold;
+}
+
 .hBookmark-searchbar-mode-menuitem[value="all"] {
     list-style-image: url("moz-icon://.css?size=16");
 }

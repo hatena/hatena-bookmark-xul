@@ -62,6 +62,7 @@ pref("extensions.hatenabookmark.addPanel.xulMigemo", true);
 
 // sidebar
 pref("extensions.hatenabookmark.sidebar.reverseDirection", false);
+pref("extensions.hatenabookmark.sidebar.searchMode", "all");
 
 // comment viewer
 pref("extensions.hatenabookmark.commentviewer.allShow", false);
