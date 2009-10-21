@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/sidebar.dtd">
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<menupopup id="hBookmark-bookmark-context">
+    <menuseparator id="hBookmark-bookmark-context-beforeRefreshSeparator"/>
+    <menuitem id="hBookmark-bookmark-context-showRecent"
+              label="&hBookmark.sidebar.bookmarkTreeContext.showRecentLabel;"
+              accesskey="&hBookmark.sidebar.bookmarkTreeContext.showRecentKey;"/>
+    <menuitem id="hBookmark-bookmark-context-showOld"
+              label="&hBookmark.sidebar.bookmarkTreeContext.showOldLabel;"
+              accesskey="&hBookmark.sidebar.bookmarkTreeContext.showOldKey;"/>
+</menupopup>
+
+</overlay>

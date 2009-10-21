@@ -8,6 +8,11 @@
 <!ENTITY hBookmark.sidebar.tagCountLabel "件数">
 <!ENTITY hBookmark.sidebar.bookmarksLabel "ブックマーク">
 
+<!ENTITY hBookmark.sidebar.bookmarkTreeContext.showRecentLabel "最近のブックマークを表示">
+<!ENTITY hBookmark.sidebar.bookmarkTreeContext.showRecentKey "S">
+<!ENTITY hBookmark.sidebar.bookmarkTreeContext.showOldLabel "昔のブックマークを表示">
+<!ENTITY hBookmark.sidebar.bookmarkTreeContext.showOldKey "S">
+
 <!ENTITY hBookmark.sidebar.search.searchAllLabel "ブックマークを検索">
 <!ENTITY hBookmark.sidebar.search.searchAllKey "S">
 <!ENTITY hBookmark.sidebar.search.searchTitleLabel "タイトルから検索">

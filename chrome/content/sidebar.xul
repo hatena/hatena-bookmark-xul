@@ -6,6 +6,7 @@
 <?xml-stylesheet href="chrome://hatenabookmark/content/sidebar/sidebarBindings.css" type="text/css" ?>
 <?xml-stylesheet href="chrome://hatenabookmark/skin/sidebar.css" type="text/css" ?>
 <?xul-overlay href="chrome://hatenabookmark/content/popupsOverlay.xul"?>
+<?xul-overlay href="chrome://hatenabookmark/content/sidebar/bookmarkTreeContext.xul"?>
 <!DOCTYPE page SYSTEM "chrome://hatenabookmark/locale/sidebar.dtd" [
     <!ENTITY % hBookmark.popups SYSTEM "chrome://hatenabookmark/locale/popups.dtd">
     %hBookmark.popups;

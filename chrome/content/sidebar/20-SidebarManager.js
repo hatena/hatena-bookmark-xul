@@ -35,6 +35,9 @@ function initializeSidebar() {
     EventService.createListener("BookmarksUpdated", bookmarkTreeView);
     EventService.createListener("UserChange", bookmarkTreeView);
 
+    let bookmarkContext = document.getElementById('hBookmark-bookmark-context');
+    let bookmarkTreeContext = new BookmarkTreeContext(bookmarkContext);
+
     setBoxDirection();
     Prefs.bookmark.createListener("sidebar.reverseDirection", setBoxDirection);
 

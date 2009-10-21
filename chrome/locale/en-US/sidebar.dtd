@@ -8,6 +8,11 @@
 <!ENTITY hBookmark.sidebar.tagCountLabel "Count">
 <!ENTITY hBookmark.sidebar.bookmarksLabel "Bookmarks">
 
+<!ENTITY hBookmark.sidebar.bookmarkTreeContext.showRecentLabel "Show Recent Bookmarks">
+<!ENTITY hBookmark.sidebar.bookmarkTreeContext.showRecentKey "S">
+<!ENTITY hBookmark.sidebar.bookmarkTreeContext.showOldLabel "Show Old Bookmarks">
+<!ENTITY hBookmark.sidebar.bookmarkTreeContext.showOldKey "S">
+
 <!ENTITY hBookmark.sidebar.search.searchAllLabel "Search Bookmarks">
 <!ENTITY hBookmark.sidebar.search.searchAllKey "S">
 <!ENTITY hBookmark.sidebar.search.searchTitleLabel "Search from Titles">
