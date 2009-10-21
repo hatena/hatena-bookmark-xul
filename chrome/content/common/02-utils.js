@@ -29,8 +29,6 @@ const _SPRINTF_HASH = {
     '%f': parseFloat,
 };
 
-const IS_OSX = navigator.platform.toLowerCase().indexOf('mac') == 0;
-
 var sprintf = function (str) {
     let args = Array.slice(arguments, 1);
     return str.replace(/%[sdf]/g, function(m) _SPRINTF_HASH[m](args.shift()));

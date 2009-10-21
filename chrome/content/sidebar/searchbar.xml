@@ -102,6 +102,24 @@
                 ]]></setter>
             </property>
 
+            <method name="switchSearchMode">
+                <parameter name="forward"/>
+                <body><![CDATA[
+                    let menuitem = this._selectedMenuitem &&
+                        (forward ? this._selectedMenuitem.nextSibling
+                                 : this._selectedMenuitem.previousSibling);
+                    if (!menuitem) return false;
+                    this.searchMode = menuitem.value;
+                    return true;
+                ]]></body>
+            </method>
+
+            <method name="openSearchModePopup">
+                <body><![CDATA[
+                    this.modeButton.open = true;
+                ]]></body>
+            </method>
+
             <method name="_dispatchInputEvent">
                 <body><![CDATA[
                     let event = document.createEvent('UIEvent');
@@ -115,9 +133,30 @@
     <binding id="searchbar-textbox"
              extends="chrome://global/content/bindings/autocomplete.xml#autocomplete">
         <implementation>
-            <constructor><![CDATA[
-            ]]></constructor>
-        </implemenation>
+            <field name="parent">document.getBindingParent(this)</field>
+        </implementation>
+
+        <handlers>
+            <handler event="keypress" phase="capturing"
+                     keycode="VK_UP" modifiers="accel"
+                     action="this.parent.switchSearchMode(false);"/>
+            <handler event="keypress" phase="capturing"
+                     keycode="VK_DOWN" modifiers="accel"
+                     action="this.parent.switchSearchMode(true);"/>
+            <handler event="keypress" phase="capturing"
+                     keycode="VK_UP" modifiers="alt"
+                     action="this.parent.openSearchModePopup(); return false;"/>
+            <handler event="keypress" phase="capturing"
+                     keycode="VK_DOWN" modifiers="alt"
+                     action="this.parent.openSearchModePopup(); return false;"/>
+            <handler event="keypress" phase="capturing" keycode="VK_F4"><![CDATA[
+                if (hBookmark.IS_MAC) {
+                    this.parent.openSearchModePopup();
+                    return false;
+                }
+                return true;
+            ]]></handler>
+        </handlers>
     </binding>
 
 </bindings>

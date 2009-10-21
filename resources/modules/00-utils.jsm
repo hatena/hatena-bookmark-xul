@@ -29,6 +29,12 @@ let getService = function getService(name, i) {
     return service;
 };
 
+// See https://developer.mozilla.org/en/OS_TARGET for OS_TARGET values.
+const OS_TARGET = getService('@mozilla.org/xre/app-info;1', Ci.nsIXULRuntime).OS;
+const IS_WIN = OS_TARGET.indexOf("WIN") === 0;
+const IS_MAC = OS_TARGET === "Darwin";
+const IS_OSX = IS_MAC;
+
 const Application =
     getService("@mozilla.org/fuel/application;1", Ci.fuelIApplication);
 const PrefetchService =
