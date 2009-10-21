@@ -4,16 +4,19 @@
     font-weight: bold;
 }
 
+.hBookmark-searchbar-mode-menuitem {
+    list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+}
+
 .hBookmark-searchbar-mode-menuitem[value="all"] {
-    list-style-image: url("moz-icon://.css?size=16");
-    /* -moz-image-region: rect(0px, 16px, 16px, 0px); */
+    -moz-image-region: rect(46px, 16px, 62px, 0px);
 }
 .hBookmark-searchbar-mode-menuitem[value="title"] {
-    list-style-image: url("moz-icon://.html?size=16");
+    -moz-image-region: rect(46px, 32px, 62px, 16px);
 }
 .hBookmark-searchbar-mode-menuitem[value="comment"] {
-    list-style-image: url("moz-icon://.exe?size=16");
+    -moz-image-region: rect(46px, 48px, 62px, 32px);
 }
 .hBookmark-searchbar-mode-menuitem[value="url"] {
-    list-style-image: url("moz-icon://.url?size=16");
+    -moz-image-region: rect(46px, 64px, 62px, 48px);
 }
