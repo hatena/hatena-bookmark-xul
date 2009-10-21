@@ -57,7 +57,7 @@ extend(BookmarkTreeView.prototype, {
     },
 
     showBySearchString: function BTV_showBySearchString(string, mode) {
-        p('Search "' + string + '" for ' + mode);
+        //p('Search "' + string + '" for ' + mode);
         let searchMethod = 'search';
         switch (mode) {
         case 'title':   searchMethod = 'searchByTitle';   break;

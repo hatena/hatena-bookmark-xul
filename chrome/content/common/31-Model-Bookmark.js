@@ -118,6 +118,7 @@ extend(Bookmark, {
             res = Bookmark.findRecent(limit);
         } else {
             var [sql, args] = createWhereLike(str, fieldName);
+            //p('sql = ' + sql + '\nargs = ' + uneval(args));
             extend(args, {
                 limit: limit || 10,
                 order: ascending ? 'date asc' : 'date desc'
@@ -129,7 +130,7 @@ extend(Bookmark, {
                  where {sql}
             </>.toString(), args);
         }
-        }, 'Bookmark search [' + [str, limit].join(' ') + ']');
+        }, 'Bookmark search [' + [fieldName, str, limit].join(' ') + ']');
         return res;
     },
     deleteByURLs: function (urls) {
@@ -234,6 +235,13 @@ addAround(Bookmark, 'initialize', function(proceed, args, target) {
     proceed(args);
     target.db.connection.executeSimpleSQL('CREATE INDEX "bookmarks_date" ON "bookmarks" ("date" DESC)');
     target.db.connection.executeSimpleSQL('CREATE INDEX "bookmarks_date_asc" ON "bookmarks" ("date" ASC)');
+});
+
+addAround(Bookmark, 'searchBy*', function(proceed, args, target) {
+    target.db.setPragma('case_sensitive_like', 0);
+    let result = proceed(args);
+    target.db.setPragma('case_sensitive_like', 1);
+    return result;
 });
 
 addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
