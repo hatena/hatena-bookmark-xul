@@ -39,12 +39,10 @@
                     </xul:menupopup>
                 </xul:button>
                 <xul:hbox class="search-go-container">
-                    <xul:image anonid="resetButton"
+                    <xul:image anonid="goButton"
                                class="search-go-button"
-                               onclick="_doResetCommand(event);"
-                               xbl:inherits="resetdirection"
-                               ascendinglabel="{{昔のブックマークを表示}}"
-                               descendinglabel="{{最近のブックマークを表示}}"/>
+                               tooltiptext="{{検索}}"
+                               onclick="_dispatchInputEvent();"/>
                 </xul:hbox>
             </xul:textbox>
         </content>
@@ -60,7 +58,6 @@
                     this._selectedMenuitem = menuitem;
                     this._setMode(menuitem);
                 }
-                this.resetDirection += '';
             ]]></constructor>
 
             <field name="textbox">document.getAnonymousElementByAttribute(
@@ -71,24 +68,14 @@
                 this, 'anonid', 'modeImage')</field>
             <field name="popup">document.getAnonymousElementByAttribute(
                 this, 'anonid', 'popup')</field>
-            <field name="resetButton">document.getAnonymousElementByAttribute(
-                this, 'anonid', 'resetButton')</field>
+            <field name="goButton">document.getAnonymousElementByAttribute(
+                this, 'anonid', 'goButton')</field>
 
             <field name="_selectedMenuitem">null</field>
 
             <property name="searchMode"
                       onget="return this.getAttribute('searchmode');"
                       onset="this.setAttribute('searchmode', val); return val;"/>
-
-            <property name="resetDirection"
-                      onget="return this.getAttribute('resetdirection') || 'natural';">
-                <setter><![CDATA[
-                    this.setAttribute('resetdirection', val);
-                    this.resetButton.tooltipText =
-                        this.resetButton.getAttribute(val + 'label') || '';
-                    return val;
-                ]]></setter>
-            </property>
 
             <method name="_setMode">
                 <parameter name="menuitem"/>
@@ -124,18 +111,11 @@
                 ]]></body>
             </method>
 
-            <method name="_doResetCommand">
-                <parameter name="event"/>
+            <method name="_dispatchInputEvent">
                 <body><![CDATA[
-                    let ev = document.createEvent('UIEvent');
-                    let direction = this.resetDirection;
-                    let dir = (direction === 'ascending')
-                              ? hBookmark.TreeView.SORT_ASCENDING :
-                              (direction === 'descending')
-                              ? hBookmark.TreeView.SORT_DESCENDING
-                              : hBookmark.TreeView.SORT_NATURAL;
-                    ev.initUIEvent('HB.SearchReset', true, false, window, dir);
-                    this.dispatchEvent(ev);
+                    let event = document.createEvent('UIEvent');
+                    event.initUIEvent('input', true, false, window, 0);
+                    this.textbox.inputField.dispatchEvent(event);
                 ]]></body>
             </method>
         </implementation>
