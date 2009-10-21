@@ -8,6 +8,7 @@
         <resources>
             <stylesheet src="searchbar.css"/>
             <stylesheet src="chrome://browser/skin/searchbar.css"/>
+            <stylesheet src="chrome://hatenabookmark/skin/searchbar.css"/>
         </resources>
 
         <content>

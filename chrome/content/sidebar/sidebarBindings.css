@@ -3,22 +3,3 @@
 bookmarksearchbar {
     -moz-binding: url("chrome://hatenabookmark/content/sidebar/searchbar.xml#searchbar");
 }
-
-/* XXX The following style should be at skin. */
-
-.hBookmark-searchbar-mode-menuitem[selected="true"] {
-    font-weight: bold;
-}
-
-.hBookmark-searchbar-mode-menuitem[value="all"] {
-    list-style-image: url("moz-icon://.css?size=16");
-}
-.hBookmark-searchbar-mode-menuitem[value="title"] {
-    list-style-image: url("moz-icon://.html?size=16");
-}
-.hBookmark-searchbar-mode-menuitem[value="comment"] {
-    list-style-image: url("moz-icon://.exe?size=16");
-}
-.hBookmark-searchbar-mode-menuitem[value="url"] {
-    list-style-image: url("moz-icon://.url?size=16");
-}
