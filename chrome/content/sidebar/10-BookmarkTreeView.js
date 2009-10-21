@@ -56,11 +56,18 @@ extend(BookmarkTreeView.prototype, {
         this._update();
     },
 
-    showBySearchString: function BTV_showBySearchString(string) {
+    showBySearchString: function BTV_showBySearchString(string, mode) {
+        p('Search "' + string + '" for ' + mode);
+        let searchMethod = 'search';
+        switch (mode) {
+        case 'title':   searchMethod = 'searchByTitle';   break;
+        case 'comment': searchMethod = 'searchByComment'; break;
+        case 'url':     searchMethod = 'searchByUrl';     break;
+        }
         this._update = function BTV_doUpdateBySearchString() {
             let visibleRowCount = this._treeBox.getPageLength();
             let bookmarks = string
-                ? Bookmark.search(string, visibleRowCount, this.isAscending)
+                ? Bookmark[searchMethod](string, visibleRowCount, this.isAscending)
                 : Bookmark.find({
                     order: this.isAscending ? "date ASC" : "date DESC",
                     limit: visibleRowCount
@@ -100,8 +107,12 @@ extend(BookmarkTreeView.prototype, {
             if (User.user) this.showBySearchString("");
             break;
 
+        case "HB.SearchModeChanged":
+            if (!event.target.value) break;
+            /* FALL THROUGH */
         case "input":
-            this.showBySearchString(event.target.value);
+            let mode = event.target.searchMode || null;
+            this.showBySearchString(event.target.value, mode);
             break;
 
         case "focus":

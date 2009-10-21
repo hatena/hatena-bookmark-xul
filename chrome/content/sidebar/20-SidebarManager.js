@@ -21,11 +21,11 @@ function initializeSidebar() {
     EventService.createListener("BookmarksUpdated", tagTreeView);
     EventService.createListener("UserChange", tagTreeView);
 
-    let searchBox = document.getElementById("searchBox");
-    searchBox.addEventListener("keypress", mayFireInputEvent, false);
+    let searchbar = document.getElementById("searchbar");
 
     tagTree.addEventListener("HB_TagsSelected", bookmarkTreeView, false);
-    searchBox.addEventListener("input", bookmarkTreeView, false);
+    searchbar.addEventListener("input", bookmarkTreeView, false);
+    searchbar.addEventListener("HB.SearchModeChanged", bookmarkTreeView, false);
     bookmarkTree.addEventListener("focus", bookmarkTreeView, false);
     bookmarkTree.addEventListener("select", bookmarkTreeView, false);
     bookmarkTree.addEventListener("click", bookmarkTreeView, false);
@@ -40,20 +40,13 @@ function initializeSidebar() {
 
     EventService.createListener("UserChange", showSidebarContent);
     showSidebarContent();
-    searchBox.focus();
+    searchbar.focus();
 
     // 開いた直後はデータを取得できないことがあるので遅延させる。
     setTimeout(function () {
         if (!tagTreeView.rowCount)
             tagTreeView.build();
     }, 500);
-}
-
-function mayFireInputEvent(event) {
-    if (event.keyCode !== KeyEvent.DOM_VK_RETURN) return;
-    let ev = document.createEvent("UIEvent");
-    ev.initUIEvent("input", true, false, window, 0);
-    event.target.dispatchEvent(ev);
 }
 
 function showSidebarContent() {

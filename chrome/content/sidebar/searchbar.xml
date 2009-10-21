@@ -42,15 +42,15 @@
                     <xul:image anonid="goButton"
                                class="search-go-button"
                                tooltiptext="{{検索}}"
-                               onclick="_dispatchInputEvent();"/>
+                               onclick="dispatchInputEvent();"/>
                 </xul:hbox>
             </xul:textbox>
         </content>
 
         <implementation>
             <constructor><![CDATA[
-                // Initialize searchMode
-                this.searchMode = this.searchMode;
+                this.searchMode = this.searchMode ||
+                                  this._prefs.get('sidebar.searchMode');
             ]]></constructor>
 
             <field name="textbox">document.getAnonymousElementByAttribute(
@@ -64,11 +64,27 @@
             <field name="goButton">document.getAnonymousElementByAttribute(
                 this, 'anonid', 'goButton')</field>
 
+            <property name="value"
+                      onget="return this.textbox.value;"
+                      onset="return this.textbox.value = val;"/>
+
+            <method name="focus">
+                <body><![CDATA[
+                    this.textbox.focus();
+                ]]></body>
+            </method>
+
+            <method name="select">
+                <body><![CDATA[
+                    this.textbox.select();
+                ]]></body>
+            </method>
+
             <field name="_prefs">hBookmark.Prefs.bookmark</field>
             <field name="_selectedMenuitem">null</field>
 
             <property name="searchMode"
-                      onget="return this._prefs.get('sidebar.searchMode');">
+                      onget="return this.getAttribute('searchmode');">
                 <setter><![CDATA[
                     let menuitem = this.popup.firstChild;
                     for (; menuitem; menuitem = menuitem.nextSibling)
@@ -94,9 +110,10 @@
                     menuitem.setAttribute('selected', 'true');
                     this._selectedMenuitem = menuitem;
 
+                    this.setAttribute('searchmode', val);
                     this._prefs.set('sidebar.searchMode', val);
-                    let event = document.createEvent('CommandEvent');
-                    event.initCommandEvent('HB.SearchModeChanged', true, false, val);
+                    let event = document.createEvent('Event');
+                    event.initEvent('HB.SearchModeChanged', true, false);
                     this.dispatchEvent(event);
                     return val;
                 ]]></setter>
@@ -120,7 +137,7 @@
                 ]]></body>
             </method>
 
-            <method name="_dispatchInputEvent">
+            <method name="dispatchInputEvent">
                 <body><![CDATA[
                     let event = document.createEvent('UIEvent');
                     event.initUIEvent('input', true, false, window, 0);
@@ -137,6 +154,8 @@
         </implementation>
 
         <handlers>
+            <handler event="keypress" phase="capturing" keycode="VK_RETURN"
+                     action="this.parent.dispatchInputEvent();"/>
             <handler event="keypress" phase="capturing"
                      keycode="VK_UP" modifiers="accel"
                      action="this.parent.switchSearchMode(false);"/>

@@ -90,11 +90,6 @@
                           tooltip="hBookmark-bookmark-tooltip"/>
         </tree>
 
-        <hbox align="center">
-            <label value="&hBookmark.sidebar.searchLabel;"/>
-            <textbox id="searchBox" flex="1"/>
-        </hbox>
-
         <bookmarksearchbar id="searchbar"
                            popupposition="before_start"/>
     </vbox>
