@@ -145,6 +145,9 @@ var HttpWatcher = shared.get("HttpWatcher") || {
             this.onDeleteBookmarks(subject);
         } else if (this.EDIT_TAG_PATTERN.test(path)) {
             this.onEditTag(subject);
+        } else if ((path || '').indexOf('/guide/firefox_start_3') == 0) {
+            Prefs.bookmark.set('everLoggedIn', true);
+            Prefs.bookmark.set('everBookmarked', true);
         }
     },
 
