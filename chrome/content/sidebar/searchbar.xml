@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/addPanel.dtd">
+<!DOCTYPE bindings SYSTEM "chrome://hatenabookmark/locale/sidebar.dtd">
 <bindings xmlns="http://www.mozilla.org/xbl"
           xmlns:xbl="http://www.mozilla.org/xbl"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
@@ -25,23 +25,27 @@
                                    oncommand="searchMode = event.target.value;"
                                    xbl:inherits="position=popupposition">
                         <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
-                                      label="{{ブックマークを検索}}"
+                                      label="&hBookmark.sidebar.search.searchAllLabel;"
+                                      accesskey="&hBookmark.sidebar.search.searchAllKey;"
                                       value="all"/>
                         <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
-                                      label="{{タイトルから検索}}"
+                                      label="&hBookmark.sidebar.search.searchTitleLabel;"
+                                      accesskey="&hBookmark.sidebar.search.searchTitleKey;"
                                       value="title"/>
                         <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
-                                      label="{{コメントから検索}}"
+                                      label="&hBookmark.sidebar.search.searchCommentLabel;"
+                                      accesskey="&hBookmark.sidebar.search.searchCommentKey;"
                                       value="comment"/>
                         <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
-                                      label="{{URL から検索}}"
+                                      label="&hBookmark.sidebar.search.searchURLLabel;"
+                                      accesskey="&hBookmark.sidebar.search.searchURLKey;"
                                       value="url"/>
                     </xul:menupopup>
                 </xul:button>
                 <xul:hbox class="search-go-container">
                     <xul:image anonid="goButton"
                                class="search-go-button"
-                               tooltiptext="{{検索}}"
+                               tooltiptext="&hBookmark.sidebar.search.goLabel;"
                                onclick="dispatchInputEvent();"/>
                 </xul:hbox>
             </xul:textbox>

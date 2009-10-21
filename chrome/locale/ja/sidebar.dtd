@@ -7,3 +7,13 @@
 <!ENTITY hBookmark.sidebar.tagsLabel "タグ">
 <!ENTITY hBookmark.sidebar.tagCountLabel "件数">
 <!ENTITY hBookmark.sidebar.bookmarksLabel "ブックマーク">
+
+<!ENTITY hBookmark.sidebar.search.searchAllLabel "ブックマークを検索">
+<!ENTITY hBookmark.sidebar.search.searchAllKey "S">
+<!ENTITY hBookmark.sidebar.search.searchTitleLabel "タイトルから検索">
+<!ENTITY hBookmark.sidebar.search.searchTitleKey "T">
+<!ENTITY hBookmark.sidebar.search.searchCommentLabel "コメントから検索">
+<!ENTITY hBookmark.sidebar.search.searchCommentKey "C">
+<!ENTITY hBookmark.sidebar.search.searchURLLabel "URL から検索">
+<!ENTITY hBookmark.sidebar.search.searchURLKey "U">
+<!ENTITY hBookmark.sidebar.search.goLabel "検索">

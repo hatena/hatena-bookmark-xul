@@ -7,3 +7,13 @@
 <!ENTITY hBookmark.sidebar.tagsLabel "Tags">
 <!ENTITY hBookmark.sidebar.tagCountLabel "Count">
 <!ENTITY hBookmark.sidebar.bookmarksLabel "Bookmarks">
+
+<!ENTITY hBookmark.sidebar.search.searchAllLabel "Search Bookmarks">
+<!ENTITY hBookmark.sidebar.search.searchAllKey "S">
+<!ENTITY hBookmark.sidebar.search.searchTitleLabel "Search from Titles">
+<!ENTITY hBookmark.sidebar.search.searchTitleKey "T">
+<!ENTITY hBookmark.sidebar.search.searchCommentLabel "Search from Comments">
+<!ENTITY hBookmark.sidebar.search.searchCommentKey "C">
+<!ENTITY hBookmark.sidebar.search.searchURLLabel "Search from URLs">
+<!ENTITY hBookmark.sidebar.search.searchURLKey "U">
+<!ENTITY hBookmark.sidebar.search.goLabel "Search">
