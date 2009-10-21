@@ -239,9 +239,11 @@ addAround(Bookmark, 'initialize', function(proceed, args, target) {
 
 addAround(Bookmark, 'searchBy*', function(proceed, args, target) {
     target.db.setPragma('case_sensitive_like', 0);
-    let result = proceed(args);
-    target.db.setPragma('case_sensitive_like', 1);
-    return result;
+    try {
+        return proceed(args);
+    } finally {
+        target.db.setPragma('case_sensitive_like', 1);
+    }
 });
 
 addAround(Bookmark.prototype, 'save', function(proceed, args, target) {
