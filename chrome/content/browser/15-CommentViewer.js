@@ -140,7 +140,10 @@ var CommentViewer = {
         let B_URL = 'http://b.hatena.ne.jp/';
         let isFilter = CommentViewer.isFilter;
         let eid = bookmarks.eid;
-        let URLRegex = new RegExp("\\b((?:http|https|ftp)://[A-Za-z0-9~/._\?\&=\\-%#\+:\;,\@\']+)", 'g'); 
+        // XXX コメント文字列をそのままHTMLとして扱うと、
+        // 場当たり的な対応が増えてよろしくないので、後で修正したい。
+        //let URLRegex = new RegExp("\\b((?:http|https|ftp)://[A-Za-z0-9~/._\?\&=\\-%#\+:\;,\@\']+)", 'g');
+        let htmlEscapedURLRegex = /\b(?:https?|ftp):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\']|&(?!lt;|gt;|quot;))+/g;
         while (i++ < Math.min(limit, len)) {
             let b = bookmarks.shift();
             let li = E('li');
@@ -162,9 +165,9 @@ var CommentViewer = {
             a.innerHTML = b.comment.replace(/&/g, '&amp;').
                    replace(/</g, '&lt;').
                    replace(/>/g, '&gt;').
-                   replace(URLRegex, function(m) {
-                let url = m.replace(/\"/g, '&quot;');
-                return '<a class="commentlink" href="' + url + '">' + url + '</a>';
+                   replace(/\"/g, '&quot;').
+                   replace(htmlEscapedURLRegex, function(m) {
+                return '<a class="commentlink" href="' + m + '">' + m + '</a>';
             });
             a.className = 'comment'
             li.appendChild(a = E('span', {}, ymd));
