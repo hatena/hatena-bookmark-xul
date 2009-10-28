@@ -43,7 +43,8 @@
                                       value="url"/>
                     </xul:menupopup>
                 </xul:button>
-                <xul:hbox class="search-go-container">
+                <xul:hbox anonid="goContainer"
+                          class="search-go-container">
                     <!--
                     <xul:image anonid="goButton"
                                class="search-go-button"
@@ -56,6 +57,8 @@
 
         <implementation>
             <constructor><![CDATA[
+                if (hBookmark.IS_MAC)
+                    this.goContainer.className += ' mac';
                 this.searchMode = this.searchMode ||
                                   this._prefs.get('sidebar.searchMode');
             ]]></constructor>
@@ -68,6 +71,8 @@
                 this, 'anonid', 'modeImage')</field>
             <field name="popup">document.getAnonymousElementByAttribute(
                 this, 'anonid', 'popup')</field>
+            <field name="goContainer">document.getAnonymousElementByAttribute(
+                this, 'anonid', 'goContainer')</field>
             <field name="goButton">document.getAnonymousElementByAttribute(
                 this, 'anonid', 'goButton')</field>
 

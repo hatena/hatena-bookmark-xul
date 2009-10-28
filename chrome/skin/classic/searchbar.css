@@ -1,5 +1,10 @@
 @namespace "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
+/* XXX Should be at a separated file? */
+.search-go-container.mac {
+    -moz-padding-end: 14px;
+}
+
 .hBookmark-searchbar-mode-menuitem[selected="true"] {
     font-weight: bold;
 }
