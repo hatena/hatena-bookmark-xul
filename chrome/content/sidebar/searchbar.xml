@@ -23,6 +23,7 @@
                     <xul:image class="searchbar-dropmarker-image"/>
                     <xul:menupopup anonid="popup"
                                    class="searchbar-popup"
+                                   tooltiptext=""
                                    oncommand="_onPopupCommand(event);"
                                    xbl:inherits="position=popupposition">
                         <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
