@@ -140,8 +140,7 @@ var CommentViewer = {
         let B_URL = 'http://b.hatena.ne.jp/';
         let isFilter = CommentViewer.isFilter;
         let eid = bookmarks.eid;
-        let div = E('div');
-        let URLRegex = new RegExp("((?:http|https|ftp)://[A-Za-z0-9~/._\?\&=\\-%#\+:\;,\@\']+)", 'g'); 
+        let URLRegex = new RegExp("\\b((?:http|https|ftp)://[A-Za-z0-9~/._\?\&=\\-%#\+:\;,\@\']+)", 'g'); 
         while (i++ < Math.min(limit, len)) {
             let b = bookmarks.shift();
             let li = E('li');
@@ -163,14 +162,9 @@ var CommentViewer = {
             a.innerHTML = b.comment.replace(/&/g, '&amp;').
                    replace(/</g, '&lt;').
                    replace(/>/g, '&gt;').
+                   replace(/\"/g, '&quot;').
                    replace(URLRegex, function(m) {
-                let frag = document.createDocumentFragment();
-                let url = m.toString();
-                let link = E('a', {class: 'commentlink', href: url}, url);
-                div.appendChild(link);
-                let iHTML = div.innerHTML;
-                while(div.firstChild) div.removeChild(div.firstChild);
-                return iHTML;
+                return '<a class="commentlink" href="' + m + '">' + m + '</a>';
             });
             a.className = 'comment'
             li.appendChild(a = E('span', {}, ymd));
