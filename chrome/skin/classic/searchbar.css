@@ -2,7 +2,8 @@
 
 /* XXX Should be at a separated file? */
 .search-go-container.mac {
-    -moz-padding-end: 14px;
+    /* In XUL box model, min-width includes padding-end length. */
+    min-width: 14px;
 }
 
 .hBookmark-searchbar-mode-menuitem[selected="true"] {
