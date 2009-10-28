@@ -162,9 +162,9 @@ var CommentViewer = {
             a.innerHTML = b.comment.replace(/&/g, '&amp;').
                    replace(/</g, '&lt;').
                    replace(/>/g, '&gt;').
-                   replace(/\"/g, '&quot;').
                    replace(URLRegex, function(m) {
-                return '<a class="commentlink" href="' + m + '">' + m + '</a>';
+                let url = m.replace(/\"/g, '&quot;');
+                return '<a class="commentlink" href="' + url + '">' + url + '</a>';
             });
             a.className = 'comment'
             li.appendChild(a = E('span', {}, ymd));
