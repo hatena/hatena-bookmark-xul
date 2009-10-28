@@ -23,7 +23,7 @@
                     <xul:image class="searchbar-dropmarker-image"/>
                     <xul:menupopup anonid="popup"
                                    class="searchbar-popup"
-                                   oncommand="searchMode = event.target.value;"
+                                   oncommand="_onPopupCommand(event);"
                                    xbl:inherits="position=popupposition">
                         <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
                                       label="&hBookmark.sidebar.search.searchAllLabel;"
@@ -154,6 +154,14 @@
                     let event = document.createEvent('UIEvent');
                     event.initUIEvent('input', true, false, window, 0);
                     this.textbox.inputField.dispatchEvent(event);
+                ]]></body>
+            </method>
+
+            <method name="_onPopupCommand">
+                <parameter name="event"/>
+                <body><![CDATA[
+                    this.searchMode = event.target.value;
+                    this.select();
                 ]]></body>
             </method>
         </implementation>
