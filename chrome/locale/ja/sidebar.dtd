@@ -13,8 +13,8 @@
 <!ENTITY hBookmark.sidebar.bookmarkTreeContext.showOldLabel "昔のブックマークを表示">
 <!ENTITY hBookmark.sidebar.bookmarkTreeContext.showOldKey "S">
 
-<!ENTITY hBookmark.sidebar.search.searchAllLabel "ブックマークを検索">
-<!ENTITY hBookmark.sidebar.search.searchAllKey "S">
+<!ENTITY hBookmark.sidebar.search.searchAllLabel "全体から検索">
+<!ENTITY hBookmark.sidebar.search.searchAllKey "A">
 <!ENTITY hBookmark.sidebar.search.searchTitleLabel "タイトルから検索">
 <!ENTITY hBookmark.sidebar.search.searchTitleKey "T">
 <!ENTITY hBookmark.sidebar.search.searchCommentLabel "コメントから検索">

@@ -13,8 +13,8 @@
 <!ENTITY hBookmark.sidebar.bookmarkTreeContext.showOldLabel "Show Old Bookmarks">
 <!ENTITY hBookmark.sidebar.bookmarkTreeContext.showOldKey "S">
 
-<!ENTITY hBookmark.sidebar.search.searchAllLabel "Search Bookmarks">
-<!ENTITY hBookmark.sidebar.search.searchAllKey "S">
+<!ENTITY hBookmark.sidebar.search.searchAllLabel "Search from All">
+<!ENTITY hBookmark.sidebar.search.searchAllKey "A">
 <!ENTITY hBookmark.sidebar.search.searchTitleLabel "Search from Titles">
 <!ENTITY hBookmark.sidebar.search.searchTitleKey "T">
 <!ENTITY hBookmark.sidebar.search.searchCommentLabel "Search from Comments">
