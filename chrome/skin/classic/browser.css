@@ -141,6 +141,11 @@ width: 800px;
 }
 
 
+#hBookmark-comment-favicon {
+    width: 16px;
+    height: 16px;
+}
+
 #hBookmark-comment-toggle {
     cursor: pointer;
 }
