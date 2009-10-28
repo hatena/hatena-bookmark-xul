@@ -65,7 +65,9 @@ function showSidebarContent() {
 }
 
 function setBoxDirection() {
-    let dir = Prefs.bookmark.get("sidebar.reverseDirection")
-              ? "reverse" : "normal";
+    let reverse = Prefs.bookmark.get("sidebar.reverseDirection");
+    let dir = reverse ? "reverse" : "normal";
     document.getElementById("main-content").setAttribute("dir", dir);
+    let pos = reverse ? "after_start" : "before_start";
+    document.getElementById("searchbar").setAttribute("popupposition", pos);
 }
