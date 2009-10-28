@@ -30,13 +30,13 @@
                                       accesskey="&hBookmark.sidebar.search.searchAllKey;"
                                       value="all"/>
                         <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
-                                      label="&hBookmark.sidebar.search.searchTitleLabel;"
-                                      accesskey="&hBookmark.sidebar.search.searchTitleKey;"
-                                      value="title"/>
-                        <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
                                       label="&hBookmark.sidebar.search.searchCommentLabel;"
                                       accesskey="&hBookmark.sidebar.search.searchCommentKey;"
                                       value="comment"/>
+                        <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
+                                      label="&hBookmark.sidebar.search.searchTitleLabel;"
+                                      accesskey="&hBookmark.sidebar.search.searchTitleKey;"
+                                      value="title"/>
                         <xul:menuitem class="hBookmark-searchbar-mode-menuitem menuitem-iconic"
                                       label="&hBookmark.sidebar.search.searchURLLabel;"
                                       accesskey="&hBookmark.sidebar.search.searchURLKey;"
