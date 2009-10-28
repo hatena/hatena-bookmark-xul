@@ -44,10 +44,12 @@
                     </xul:menupopup>
                 </xul:button>
                 <xul:hbox class="search-go-container">
+                    <!--
                     <xul:image anonid="goButton"
                                class="search-go-button"
                                tooltiptext="&hBookmark.sidebar.search.goLabel;"
                                onclick="dispatchInputEvent();"/>
+                    -->
                 </xul:hbox>
             </xul:textbox>
         </content>
