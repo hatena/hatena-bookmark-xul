@@ -4,13 +4,20 @@ const STAR_API_BASE = 'http://s.hatena.ne.jp/';
 
 function StarLoader(callback) {
     this.callback = callback;
+    this.pendingURLs = [];
+    this._timerId = 0;
     this.alive = true;
 }
+
+StarLoader.ENTRY_PER_REQUEST = 20;
+StarLoader.REQUEST_INTERVAL = 20;
 
 extend(StarLoader.prototype, {
     destroy: function SL_destroy() {
         p('StarLoader destroyed');
+        clearInterval(this._timerId);
         this.callback = null;
+        this.pendingURLs = null;
         this.alive = false;
     },
 
@@ -19,10 +26,25 @@ extend(StarLoader.prototype, {
             rankedURLs = [[rankedURLs]];
         else if (rankedURLs.length && typeof rankedURLs[0] === 'string')
             rankedURLs = [rankedURLs];
+        let n = StarLoader.ENTRY_PER_REQUEST;
         rankedURLs.forEach(function (urls) {
-            // XXX ToDo: 1回につき最大50件とかにする
-            this._loadStarFor(urls);
+            for (let i = 0; i < urls.length; i += n)
+                this.pendingURLs.push(urls.slice(i, i + n));
         }, this);
+        if (this.pendingURLs.length && !this._timerId)
+            this._schedule();
+    },
+
+    _schedule: function SL__schedule() {
+        this._loadStarFor(this.pendingURLs.shift());
+        if (this.pendingURLs.length) {
+            if (!this._timerId)
+                this._timerId = setInterval(method(this, '_schedule'),
+                                            StarLoader.REQUEST_INTERVAL);
+        } else {
+            clearInterval(this._timerId);
+            this._timerId = 0;
+        }
     },
 
     _loadStarFor: function SL__loadStarFor(urls) {

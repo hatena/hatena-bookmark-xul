@@ -211,7 +211,7 @@ var CommentViewer = {
         let bookmarks = Array.slice(data.bookmarks);
         let eid = bookmarks.eid = data.eid;
 
-        let priorURLs = [], urls = [];
+        let priorURLs = [data.url], urls = [];
         let makeBookmarkURL = function (b) {
             return B_HTTP + b.user + '/' + b.timestamp.substring(0, 10).replace('/', '', 'g') + '#bookmark-' + eid;
         };
@@ -221,9 +221,8 @@ var CommentViewer = {
                 return b.comment;
             });
         } else {
-            priorURLs = bookmarks.map(makeBookmarkURL);
+            priorURLs = priorURLs.concat(bookmarks.map(makeBookmarkURL));
         }
-        priorURLs.push(data.url);
         CommentViewer.starLoader.load([priorURLs, urls]);
 
         let fragment = document.createDocumentFragment();
@@ -314,7 +313,7 @@ var CommentViewer = {
         CommentViewer.hideTimer.stop();
         CommentViewer.currentURL = null;
         CommentViewer.lastData = null;
-        //CommentViewer.starLoader = null;
+        CommentViewer.starLoader = null;
         CommentViewer.hideAfterTimer.reset();
         CommentViewer.hideAfterTimer.start();
     },
@@ -431,12 +430,24 @@ var CommentViewer = {
         let user = url.substring(B_HTTP.length, url.indexOf('/', B_HTTP.length));
         let li = CommentViewer.commentElements[user];
         if (!li) return;
-        let stars = document.createDocumentFragment();
-        entry.stars && entry.stars.forEach(function (s) {
-            let img = E('img', { src: 'http://s.hatena.ne.jp/images/star.gif', alt: '☆', title: s.name + ':  ' + s.quote});
-            stars.appendChild(img);
+        let starsList = [];
+        if (entry.colored_stars)
+            starsList = entry.colored_stars.concat();
+        if (entry.stars)
+            starsList.push({ color: 'yellow', stars: entry.stars });
+        let fragment = document.createDocumentFragment();
+        starsList.forEach(function (stars) {
+            // XXX ToDo: 定数化する
+            let image = 'http://s.hatena.ne.jp/images/star' +
+                (stars.color === 'yellow' ? '' : '-' + stars.color) + '.gif';
+            stars.stars.forEach(function (star) {
+                if (typeof star === 'number')
+                    fragment.appendChild(document.createTextNode(star));
+                else
+                    fragment.appendChild(E('img', { src: image, alt: '☆', title: star.name }));
+            }, this);
         }, this);
-        li.appendChild(stars);
+        li.appendChild(fragment);
     },
     _starLoader: null,
     get starLoader() CommentViewer._starLoader,
