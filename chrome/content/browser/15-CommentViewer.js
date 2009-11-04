@@ -173,6 +173,7 @@ var CommentViewer = {
             li.appendChild(a = E('span', {}, ymd));
             a.className = 'timestamp';
             fragment.appendChild(li);
+            CommentViewer.commentElements[b.user] = li;
         }
         return fragment;
     },
@@ -201,14 +202,30 @@ var CommentViewer = {
             panelComment.removeAttribute('hTransparent');
             return;
         }
+        if (!CommentViewer.starLoader || CommentViewer.lastRenderData[0] !== data.url) {
+            CommentViewer.starLoader = new StarLoader(method(CommentViewer, 'loadStarHandler'));
+        }
         while(list.firstChild) list.removeChild(list.firstChild);
+        CommentViewer.commentElements = {};
 
         let bookmarks = Array.slice(data.bookmarks);
-        bookmarks.eid = data.eid;
+        let eid = bookmarks.eid = data.eid;
 
+        let priorURLs = [], urls = [];
+        let makeBookmarkURL = function (b) {
+            return B_HTTP + b.user + '/' + b.timestamp.substring(0, 10).replace('/', '', 'g') + '#bookmark-' + eid;
+        };
         if (isFilter) {
-            bookmarks = bookmarks.filter(function(b) b.comment.length);
+            bookmarks = bookmarks.filter(function(b) {
+                (b.comment ? priorURLs : urls).push(makeBookmarkURL(b));
+                return b.comment;
+            });
+        } else {
+            priorURLs = bookmarks.map(makeBookmarkURL);
         }
+        priorURLs.push(data.url);
+        CommentViewer.starLoader.load([priorURLs, urls]);
+
         let fragment = document.createDocumentFragment();
         if (bookmarks.length) {
             CommentViewer.renderComment(bookmarks, 30, fragment);
@@ -297,6 +314,7 @@ var CommentViewer = {
         CommentViewer.hideTimer.stop();
         CommentViewer.currentURL = null;
         CommentViewer.lastData = null;
+        //CommentViewer.starLoader = null;
         CommentViewer.hideAfterTimer.reset();
         CommentViewer.hideAfterTimer.start();
     },
@@ -406,6 +424,37 @@ var CommentViewer = {
         if (link) {
             hOpenUILink(link, ev);
         }
+    },
+    renderStar: function CommentViewer_renderStar(entry) {
+        let url = entry.uri;
+        if (url.indexOf(B_HTTP) !== 0) return;
+        let user = url.substring(B_HTTP.length, url.indexOf('/', B_HTTP.length));
+        let li = CommentViewer.commentElements[user];
+        if (!li) return;
+        let stars = document.createDocumentFragment();
+        entry.stars && entry.stars.forEach(function (s) {
+            let img = E('img', { src: 'http://s.hatena.ne.jp/images/star.gif', alt: '☆', title: s.name + ':  ' + s.quote});
+            stars.appendChild(img);
+        }, this);
+        li.appendChild(stars);
+    },
+    _starLoader: null,
+    get starLoader() CommentViewer._starLoader,
+    set starLoader(loader) {
+        let currentLoader = CommentViewer._starLoader;
+        if (loader === currentLoader) return loader;
+        if (currentLoader && currentLoader.destroy)
+            currentLoader.destroy();
+        return CommentViewer._starLoader = loader;
+    },
+    loadStarHandler: function CommentViewer_loadStarHandler(entry) {
+        let url = entry.uri;
+        if (url === CommentViewer.lastRenderData[0]) {
+            p('star of target = ' + uneval(entry));
+            return;
+        }
+        // XXX Consider about delayed comments
+        CommentViewer.renderStar(entry);
     },
     goEntry: function(ev) {
         let url = CommentViewer.currentURL || CommentViewer.lastRenderData[0];
