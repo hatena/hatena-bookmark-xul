@@ -336,6 +336,7 @@ var CommentViewer = {
         if (bs && bs.length) {
             let fragment = CommentViewer.renderComment(bs, 50, fragment);
             list.appendChild(fragment);
+            CommentViewer.renderPendingStars();
         }
     },
     windowMouseOutHandler: function(ev) {
@@ -424,12 +425,15 @@ var CommentViewer = {
             hOpenUILink(link, ev);
         }
     },
+    _pendingStarEntries: [],
     renderStar: function CommentViewer_renderStar(entry) {
         let url = entry.uri;
-        if (url.indexOf(B_HTTP) !== 0) return;
         let user = url.substring(B_HTTP.length, url.indexOf('/', B_HTTP.length));
         let li = CommentViewer.commentElements[user];
-        if (!li) return;
+        if (!li) {
+            CommentViewer._pendingStarEntries.push(entry);
+            return;
+        }
         let starsList = [];
         if (entry.colored_stars)
             starsList = entry.colored_stars.concat();
@@ -449,6 +453,11 @@ var CommentViewer = {
         }, this);
         li.appendChild(fragment);
     },
+    renderPendingStars: function CommentViewer_renderPendingStars() {
+        let entries = CommentViewer._pendingStarEntries;
+        CommentViewer._pendingStarEntries = [];
+        entries.forEach(function (entry) this.renderStar(entry), this);
+    },
     _starLoader: null,
     get starLoader() CommentViewer._starLoader,
     set starLoader(loader) {
@@ -464,7 +473,6 @@ var CommentViewer = {
             p('star of target = ' + uneval(entry));
             return;
         }
-        // XXX Consider about delayed comments
         CommentViewer.renderStar(entry);
     },
     goEntry: function(ev) {
