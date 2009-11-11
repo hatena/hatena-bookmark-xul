@@ -88,6 +88,12 @@ a.star > img {
   border: none;
 }
 
+span.inner-count.yellow { color: #f4b128; }
+span.inner-count.green  { color: #8ed701; }
+span.inner-count.red    { color: #ea475c; }
+span.inner-count.blue   { color: #57b1ff; }
+span.inner-count.purple { color: #cd34e3; }
+
 em.highlight {
   font-style: normal;
   font-weight: normal;

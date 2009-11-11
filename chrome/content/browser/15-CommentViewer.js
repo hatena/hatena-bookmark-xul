@@ -423,7 +423,7 @@ var CommentViewer = {
             hOpenUILink(link, ev);
             return;
         }
-        if (/\babbr-star-/.test(ev.target.className) &&
+        if (/\binner-count\b/.test(ev.target.className) &&
             !ev.target.parentNode.isLoading) {
             CommentViewer.starLoader.loadAllStars(ev.target.targetURL);
             ev.target.parentNode.isLoading = true;
@@ -517,7 +517,7 @@ var CommentViewer = {
             stars.stars.forEach(function (star) {
                 // \u2606 is a star (☆)
                 if (typeof star === 'number') {
-                    let span = E('span', { class: 'abbr-star-' + stars.color }, star);
+                    let span = E('span', { class: 'inner-count ' + stars.color }, star);
                     span.targetURL = url;
                     container.appendChild(span);
                 } else {
