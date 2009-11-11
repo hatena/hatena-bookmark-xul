@@ -4,8 +4,6 @@ const STAR_API_BASE = 'http://s.hatena.ne.jp/';
 
 function StarLoader(callback) {
     this.callback = callback;
-    this.pendingURLs = [];
-    this._timerId = 0;
     this.alive = true;
 }
 
@@ -15,51 +13,41 @@ StarLoader.REQUEST_INTERVAL = 20;
 extend(StarLoader.prototype, {
     destroy: function SL_destroy() {
         p('StarLoader destroyed');
-        clearInterval(this._timerId);
         this.callback = null;
-        this.pendingURLs = null;
         this.alive = false;
     },
 
-    load: function SL_load(rankedURLs) {
-        if (typeof rankedURLs === 'string')
-            rankedURLs = [[rankedURLs]];
-        else if (rankedURLs.length && typeof rankedURLs[0] === 'string')
-            rankedURLs = [rankedURLs];
-        let n = StarLoader.ENTRY_PER_REQUEST;
-        rankedURLs.forEach(function (urls) {
-            for (let i = 0; i < urls.length; i += n)
-                this.pendingURLs.push(urls.slice(i, i + n));
-        }, this);
-        if (this.pendingURLs.length && !this._timerId)
-            this._schedule();
-    },
-
-    _schedule: function SL__schedule() {
-        this._loadStarFor(this.pendingURLs.shift());
-        if (this.pendingURLs.length) {
-            if (!this._timerId)
-                this._timerId = setInterval(method(this, '_schedule'),
-                                            StarLoader.REQUEST_INTERVAL);
-        } else {
-            clearInterval(this._timerId);
-            this._timerId = 0;
-        }
-    },
-
-    _loadStarFor: function SL__loadStarFor(urls) {
-        if (!urls || !urls.length) return;
-        let command = 'entries.json?' + urls.map(function (url) {
-            return 'uri=' + encodeURIComponent(url);
-        }).join('&');
+    loadBookmarkStar: function SL_loadBookmarkStar(data) {
+        if (!this.alive) return;
+        let bookmarks = data.bookmarks.concat();
+        // 最初につけられたブックマークほどスターがついている可能性が
+        // 高いので、まずは逆順にする。コメント付きのブックマークのほうが
+        // スターがついている可能性が高いので、先頭に持っていく。
+        if (!data.isSorted)
+            bookmarks.reverse().sort(function (a, b) !!b.comment - !!a.comment);
+        let command = 'entries.simple.json?' +
+            't1=' + encodeURIComponent(B_HTTP) + '&' +
+            't2=' + '%23bookmark-' + data.eid + '&' +
+            bookmarks.slice(0, StarLoader.ENTRY_PER_REQUEST).map(function (b) {
+                return 'u=' + b.user + '%2F' + b.timestamp.substring(0, 4) +
+                    b.timestamp.substring(5, 7) + b.timestamp.substring(8, 10);
+            }).join('&');
+        if (data.url)
+            command += '&uri=' + encodeURIComponent(data.url);
         this._request('GET', command);
+        bookmarks = bookmarks.slice(StarLoader.ENTRY_PER_REQUEST);
+        if (bookmarks.length) {
+            setTimeout(method(this, 'loadBookmarkStar'),
+                       StarLoader.REQUEST_INTERVAL,
+                       { eid: data.eid, bookmarks: bookmarks, isSorted: true });
+        }
     },
 
     _request: function SL__request(method, command) {
         let url = STAR_API_BASE + command;
         let xhr = new XMLHttpRequest();
         xhr.mozBackgroundRequest = true;
-        xhr.open('GET', url);
+        xhr.open(method, url);
         xhr.addEventListener('load', onLoad, false);
         xhr.addEventListener('error', onError, false);
         xhr.addEventListener('progress', onProgress, false);

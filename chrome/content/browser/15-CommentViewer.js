@@ -211,19 +211,10 @@ var CommentViewer = {
         let bookmarks = Array.slice(data.bookmarks);
         let eid = bookmarks.eid = data.eid;
 
-        let priorURLs = [data.url], urls = [];
-        let makeBookmarkURL = function (b) {
-            return B_HTTP + b.user + '/' + b.timestamp.substring(0, 10).replace('/', '', 'g') + '#bookmark-' + eid;
-        };
         if (isFilter) {
-            bookmarks = bookmarks.filter(function(b) {
-                (b.comment ? priorURLs : urls).push(makeBookmarkURL(b));
-                return b.comment;
-            });
-        } else {
-            priorURLs = priorURLs.concat(bookmarks.map(makeBookmarkURL));
+            bookmarks = bookmarks.filter(function(b) b.comment);
         }
-        CommentViewer.starLoader.load([priorURLs, urls]);
+        CommentViewer.starLoader.loadBookmarkStar(data);
 
         let fragment = document.createDocumentFragment();
         if (bookmarks.length) {
@@ -440,18 +431,25 @@ var CommentViewer = {
         if (entry.stars)
             starsList.push({ color: 'yellow', stars: entry.stars });
         let fragment = document.createDocumentFragment();
+        fragment.appendChild(document.createTextNode(' '));
+        fragment.appendChild(CommentViewer.createStarElements(starsList));
+        li.appendChild(fragment);
+    },
+    createStarElements: function CommentViewer_createStarElements(starsList) {
+        let container = E('span', { class: 'star-container' });
         starsList.forEach(function (stars) {
             // XXX ToDo: 定数化する
             let image = 'http://s.hatena.ne.jp/images/star' +
                 (stars.color === 'yellow' ? '' : '-' + stars.color) + '.gif';
             stars.stars.forEach(function (star) {
+                // \u2606 is a star (☆)
                 if (typeof star === 'number')
-                    fragment.appendChild(document.createTextNode(star));
+                    container.appendChild(document.createTextNode(star));
                 else
-                    fragment.appendChild(E('img', { src: image, alt: '☆', title: star.name }));
+                    container.appendChild(E('img', { src: image, alt: '\u2606', title: star.name }));
             }, this);
         }, this);
-        li.appendChild(fragment);
+        return container;
     },
     renderPendingStars: function CommentViewer_renderPendingStars() {
         let entries = CommentViewer._pendingStarEntries;
