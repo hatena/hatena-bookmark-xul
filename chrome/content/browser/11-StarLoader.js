@@ -9,7 +9,7 @@ function StarLoader(callback) {
 }
 
 StarLoader.ENTRIES_PER_REQUEST = 100;
-StarLoader.REQUEST_INTERVAL = 50;
+StarLoader.REQUEST_INTERVAL = 100;
 
 extend(StarLoader.prototype, {
     destroy: function SL_destroy() {
