@@ -422,9 +422,11 @@ var CommentViewer = {
             hOpenUILink(link, ev);
             return;
         }
-        if (ev.target.className === 'abbr-star' && !ev.target.isLoading) {
+        if (/\babbr-star-/.test(ev.target.className) &&
+            !ev.target.parentNode.isLoading) {
             CommentViewer.starLoader.loadAllStars(ev.target.targetURL);
-            ev.target.isLoading = true;
+            ev.target.parentNode.isLoading = true;
+            return;
         }
     },
     mouseOverHandler: function CommentViewer_mouseOverHandler(event) {
@@ -481,7 +483,7 @@ var CommentViewer = {
             stars.stars.forEach(function (star) {
                 // \u2606 is a star (☆)
                 if (typeof star === 'number') {
-                    let span = E('span', { class: 'abbr-star' }, star);
+                    let span = E('span', { class: 'abbr-star-' + stars.color }, star);
                     span.targetURL = url;
                     container.appendChild(span);
                 } else {
