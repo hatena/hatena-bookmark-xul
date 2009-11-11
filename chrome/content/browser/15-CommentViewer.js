@@ -432,6 +432,8 @@ var CommentViewer = {
     },
     mouseOverHandler: function CommentViewer_mouseOverHandler(event) {
         let star = event.target;
+        if (star instanceof Ci.nsIDOMHTMLImageElement)
+            star = star.parentNode;
         if (star.className !== 'star' || !star.user) return;
         starTooltipIcon.src = UserUtils.getProfileIcon(star.user);
         starTooltipUser.value = star.user;
@@ -519,14 +521,11 @@ var CommentViewer = {
                     span.targetURL = url;
                     container.appendChild(span);
                 } else {
-                    let img = E('img', {
-                        src: image, alt: '\u2606',
-                        class: 'star', title: star.name,
-                    });
-                    img.user = star.name;
-                    img.quote = star.quote;
-                    img.href = S_HTTP + star.name + '/';
-                    container.appendChild(img);
+                    let a = E('a', { class: 'star', href: S_HTTP + star.name + '/' },
+                              E('img', { src: image, alt: '\u2606' }));
+                    a.user = star.name;
+                    a.quote = star.quote;
+                    container.appendChild(a);
                 }
             }, this);
         }, this);

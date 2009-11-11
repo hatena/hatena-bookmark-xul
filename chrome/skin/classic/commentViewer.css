@@ -80,6 +80,14 @@ a.commentlink {
   padding-right: 3px;
 }
 
+a.star {
+  text-decoration: none;
+}
+
+a.star > img {
+  border: none;
+}
+
 em.highlight {
   font-style: normal;
   font-weight: normal;
