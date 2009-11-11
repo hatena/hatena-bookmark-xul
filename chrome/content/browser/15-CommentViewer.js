@@ -435,7 +435,8 @@ var CommentViewer = {
         starTooltipIcon.src = UserUtils.getProfileIcon(star.user);
         starTooltipUser.value = star.user;
         if (star.quote) {
-            starTooltipQuote.textContent = star.quote;
+            // XXX Needs localization of quotation marks.
+            starTooltipQuote.textContent = '"' + star.quote + '"';
             starTooltipQuote.collapsed = false;
         } else {
             starTooltipQuote.collapsed = true;
@@ -444,7 +445,9 @@ var CommentViewer = {
         CommentViewer.isStarTooltipOpen = true;
     },
     mouseOutHandler: function CommentViewer_mouseOutHandler(event) {
-        if (CommentViewer.isStarTooltipOpen) {
+        if (CommentViewer.isStarTooltipOpen &&
+            (!event.relatedTarget ||
+             event.relatedTarget.parentNode !== starTooltip)) {
             CommentViewer.isStarTooltipOpen = false;
             starTooltip.hidePopup();
         }
@@ -464,9 +467,7 @@ var CommentViewer = {
         if (entry.stars)
             starsList.push({ color: 'yellow', stars: entry.stars });
         let container = CommentViewer.createStarElements(starsList, url);
-        let oldContainer = li.lastChild;
-        for (; oldContainer; oldContainer = oldContainer.previousSibling)
-            if (oldContainer.className === 'star-container') break;
+        let oldContainer = li.getElementsByClassName('star-container').item(0);
         if (oldContainer) {
             li.replaceChild(container, oldContainer);
         } else {
