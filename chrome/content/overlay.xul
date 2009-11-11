@@ -263,6 +263,7 @@
                 <label flex="1" id="hBookmark-comment-title" crop="end" />
                 <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-users" />
                 <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-pub-pri-users" />
+                <label id="hBookmark-comment-stars"/>
                 <image onclick="hBookmark.CommentViewer.filterToggle(event);" src="chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png" id="hBookmark-comment-toggle" />
             </hbox>
         </vbox>

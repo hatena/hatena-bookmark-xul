@@ -20,12 +20,14 @@ elementGetter(this, 'faviconImage', 'hBookmark-comment-favicon', document);
 elementGetter(this, 'titleLabel', 'hBookmark-comment-title', document);
 elementGetter(this, 'usersLabel', 'hBookmark-comment-users', document);
 elementGetter(this, 'usersPubPriLabel', 'hBookmark-comment-pub-pri-users', document);
+elementGetter(this, 'starsLabel', 'hBookmark-comment-stars', document);
 elementGetter(this, 'toggleImage', 'hBookmark-comment-toggle', document);
 elementGetter(this, 'starTooltip', 'hBookmark-star-tooltip', document);
 elementGetter(this, 'starTooltipIcon', 'hBookmark-star-tooltip-icon', document);
 elementGetter(this, 'starTooltipUser', 'hBookmark-star-tooltip-user', document);
 elementGetter(this, 'starTooltipQuote', 'hBookmark-star-tooltip-quote', document);
 
+const S_HTTP = 'http://s.hatena.ne.jp/';
 
 let userIcon = function(username) {
     return E('img', {
@@ -250,6 +252,7 @@ var CommentViewer = {
             usersLabel.value = '';
             usersPubPriLabel.value = '';
         }
+        starsLabel.collapsed = true;
         setTimeout(function() {
              CommentViewer.updatePosition();
         }, 0);
@@ -509,7 +512,6 @@ var CommentViewer = {
         }
     },
     createStarElements: function CommentViewer_createStarElements(starsList, url) {
-        const S_HTTP = 'http://s.hatena.ne.jp/';
         let container = E('span', { class: 'star-container' });
         starsList.forEach(function (stars) {
             let image = S_HTTP + 'images/star' +
@@ -536,6 +538,21 @@ var CommentViewer = {
         CommentViewer._pendingStarEntries = [];
         entries.forEach(function (entry) this.renderStar(entry), this);
     },
+    renderTargetPageStar: function CommentViewer_renderTargetPageStar(entry) {
+        let count = 0;
+        function countStar(count, star)
+            typeof star === 'number' ? count + star : count + 1;
+        if (entry.stars)
+            count = entry.stars.reduce(countStar, count);
+        if (entry.colored_stars) {
+            entry.colored_stars.forEach(function (stars) {
+                count = stars.reduce(countStar, count);
+            }, this);
+        }
+        if (!count) return;
+        starsLabel.value = count;
+        starsLabel.collapsed = false;
+    },
     _starLoader: null,
     get starLoader() CommentViewer._starLoader,
     set starLoader(loader) {
@@ -548,7 +565,7 @@ var CommentViewer = {
     loadStarHandler: function CommentViewer_loadStarHandler(entry) {
         let url = entry.uri;
         if (url === CommentViewer.lastRenderData[0]) {
-            p('star of target = ' + uneval(entry));
+            CommentViewer.renderTargetPageStar(entry);
             return;
         }
         CommentViewer.renderStar(entry);

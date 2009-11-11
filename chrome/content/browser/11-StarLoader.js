@@ -26,9 +26,9 @@ extend(StarLoader.prototype, {
         let postData = 't1=' + encodeURIComponent(B_HTTP) + '&' +
                        't2=' + '%23bookmark-' + data.eid + '&';
         if (!data.deferred) {
-            if (data.url in this.cache)
-                cachedEntries.push(this.cache[data.url]);
-            else
+            //if (data.url in this.cache)
+            //    cachedEntries.push(this.cache[data.url]);
+            //else
                 postData += 'uri=' + encodeURIComponent(data.url) + '&';
             bookmarks = bookmarks.filter(function (bookmark) {
                 let key = bookmark.user + data.eid;
