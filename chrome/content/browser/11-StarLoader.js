@@ -4,46 +4,67 @@ const STAR_API_BASE = 'http://s.hatena.ne.jp/';
 
 function StarLoader(callback) {
     this.callback = callback;
+    this.cache = {};
     this.alive = true;
 }
 
-StarLoader.ENTRY_PER_REQUEST = 20;
+StarLoader.ENTRIES_PER_REQUEST = 25;
 StarLoader.REQUEST_INTERVAL = 20;
 
 extend(StarLoader.prototype, {
     destroy: function SL_destroy() {
         p('StarLoader destroyed');
         this.callback = null;
+        this.cache = null;
         this.alive = false;
     },
 
     loadBookmarkStar: function SL_loadBookmarkStar(data) {
         if (!this.alive) return;
-        let bookmarks = data.bookmarks.concat();
-        // 最初につけられたブックマークほどスターがついている可能性が
-        // 高いので、まずは逆順にする。コメント付きのブックマークのほうが
-        // スターがついている可能性が高いので、先頭に持っていく。
-        if (!data.isSorted)
-            bookmarks.reverse().sort(function (a, b) !!b.comment - !!a.comment);
+        let bookmarks = data.bookmarks;
+        let cachedEntries = [];
         let command = 'entries.simple.json?' +
             't1=' + encodeURIComponent(B_HTTP) + '&' +
-            't2=' + '%23bookmark-' + data.eid + '&' +
-            bookmarks.slice(0, StarLoader.ENTRY_PER_REQUEST).map(function (b) {
-                return 'u=' + b.user + '%2F' + b.timestamp.substring(0, 4) +
-                    b.timestamp.substring(5, 7) + b.timestamp.substring(8, 10);
-            }).join('&');
-        if (data.url)
-            command += '&uri=' + encodeURIComponent(data.url);
+            't2=' + '%23bookmark-' + data.eid + '&';
+        if (!data.deferred) {
+            if (data.url in this.cache)
+                cachedEntries.push(this.cache[data.url]);
+            else
+                command += 'uri=' + encodeURIComponent(data.url) + '&';
+            bookmarks = bookmarks.filter(function (bookmark) {
+                let key = bookmark.user + data.eid;
+                if (key in this.cache) {
+                    cachedEntries.push(this.cache[key]);
+                    return false;
+                }
+                return true;
+            }, this);
+            // 最初につけられたブックマークほどスターがついている可能性が
+            // 高いので、まずは逆順にする。コメント付きのブックマークのほうが
+            // スターがついている可能性が高いので、先頭に持っていく。
+            bookmarks.reverse().sort(function (a, b) !!b.comment - !!a.comment);
+        }
+        let limit = StarLoader.ENTRIES_PER_REQUEST;
+        command += bookmarks.slice(0, limit).map(function (b) {
+            return 'u=' + b.user + '%2F' + b.timestamp.substring(0, 4) +
+                b.timestamp.substring(5, 7) + b.timestamp.substring(8, 10);
+        }).join('&');
         this._request('GET', command);
-        bookmarks = bookmarks.slice(StarLoader.ENTRY_PER_REQUEST);
-        if (bookmarks.length) {
+        setTimeout(method(this, '_invokeCallbackForCache'), 0, cachedEntries);
+        if (bookmarks.length > limit) {
             setTimeout(method(this, 'loadBookmarkStar'),
                        StarLoader.REQUEST_INTERVAL,
-                       { eid: data.eid, bookmarks: bookmarks, isSorted: true });
+                       { eid: data.eid, bookmarks: bookmarks.slice(limit), deferred: true });
         }
     },
 
     loadAllStars: function SL_loadAllStars(url) {
+        if (!this.alive) return;
+        if (url in this.cache) {
+            setTimeout(method(this, '_invokeCallbackForCache'), 0,
+                       [this.cache[url]]);
+            return;
+        }
         let command = 'entry.json?uri=' + encodeURIComponent(url);
         this._request('GET', command);
     },
@@ -70,7 +91,7 @@ extend(StarLoader.prototype, {
                 onError();
                 return;
             }
-            self._callCallback(data);
+            self._invokeCallback(data, command);
         }
         function onError() {
             removeListeners();
@@ -92,9 +113,34 @@ extend(StarLoader.prototype, {
         }
     },
 
-    _callCallback: function SL__callCallback(data) {
+    _invokeCallbackForCache: function SL__invokeCallbackForCache(entries) {
         if (!this.alive) return;
+        let limit = StarLoader.ENTRIES_PER_REQUEST;
+        entries.slice(0, limit).forEach(function (entry) {
+            try {
+                this.callback(entry);
+            } catch (ex) {
+                Cu.reportError(ex);
+            }
+        }, this);
+        if (entries.length > limit)
+            setTimeout(method(this, '_invokeCallbackForCache'),
+                       StarLoader.REQUEST_INTERVAL / 2,
+                       entries.slice(limit));
+    },
+
+    _invokeCallback: function SL__invokeCallback(data, command) {
+        if (!this.alive) return;
+        let keyRE = command.indexOf('entries.simple.json') === 0
+            ? new RegExp('^' + B_HTTP.replace(/\W/g, '\\$&') +
+                         '([\\w-]+)/\\d{8}#bookmark-(\\d+)$')
+            : null;
         data.entries.forEach(function (entry) {
+            let key = entry.uri;
+            let match = keyRE && keyRE.exec(key);
+            if (match)
+                key = match[1] + match[2];
+            this.cache[key] = entry;
             try {
                 this.callback(entry);
             } catch (ex) {
