@@ -8,8 +8,8 @@ function StarLoader(callback) {
     this.alive = true;
 }
 
-StarLoader.ENTRIES_PER_REQUEST = 25;
-StarLoader.REQUEST_INTERVAL = 20;
+StarLoader.ENTRIES_PER_REQUEST = 100;
+StarLoader.REQUEST_INTERVAL = 50;
 
 extend(StarLoader.prototype, {
     destroy: function SL_destroy() {
@@ -23,14 +23,13 @@ extend(StarLoader.prototype, {
         if (!this.alive) return;
         let bookmarks = data.bookmarks;
         let cachedEntries = [];
-        let command = 'entries.simple.json?' +
-            't1=' + encodeURIComponent(B_HTTP) + '&' +
-            't2=' + '%23bookmark-' + data.eid + '&';
+        let postData = 't1=' + encodeURIComponent(B_HTTP) + '&' +
+                       't2=' + '%23bookmark-' + data.eid + '&';
         if (!data.deferred) {
             if (data.url in this.cache)
                 cachedEntries.push(this.cache[data.url]);
             else
-                command += 'uri=' + encodeURIComponent(data.url) + '&';
+                postData += 'uri=' + encodeURIComponent(data.url) + '&';
             bookmarks = bookmarks.filter(function (bookmark) {
                 let key = bookmark.user + data.eid;
                 if (key in this.cache) {
@@ -45,11 +44,11 @@ extend(StarLoader.prototype, {
             bookmarks.reverse().sort(function (a, b) !!b.comment - !!a.comment);
         }
         let limit = StarLoader.ENTRIES_PER_REQUEST;
-        command += bookmarks.slice(0, limit).map(function (b) {
+        postData += bookmarks.slice(0, limit).map(function (b) {
             return 'u=' + b.user + '%2F' + b.timestamp.substring(0, 4) +
                 b.timestamp.substring(5, 7) + b.timestamp.substring(8, 10);
         }).join('&');
-        this._request('GET', command);
+        this._request('POST', 'entries.simple.json', postData);
         setTimeout(method(this, '_invokeCallbackForCache'), 0, cachedEntries);
         if (bookmarks.length > limit) {
             setTimeout(method(this, 'loadBookmarkStar'),
@@ -69,7 +68,7 @@ extend(StarLoader.prototype, {
         this._request('GET', command);
     },
 
-    _request: function SL__request(method, command) {
+    _request: function SL__request(method, command, postData) {
         let url = STAR_API_BASE + command;
         let xhr = new XMLHttpRequest();
         xhr.mozBackgroundRequest = true;
@@ -77,14 +76,16 @@ extend(StarLoader.prototype, {
         xhr.addEventListener('load', onLoad, false);
         xhr.addEventListener('error', onError, false);
         xhr.addEventListener('progress', onProgress, false);
-        xhr.send(null);
+        if (method.toUpperCase() === 'POST')
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(postData || null);
         let timeout = 60 * 1000;
         let timer = new BuiltInTimer({ observe: onTimeout }, timeout,
                                      Ci.nsITimer.TYPE_ONE_SHOT);
         let self = this;
 
         function onLoad() {
-            p('StarLoader: load ' + url + '\n' + xhr.responseText);
+            p('StarLoader: load ' + url + '\n' + postData + '\n\n' + xhr.responseText);
             removeListeners();
             let data = decodeJSON(xhr.responseText);
             if (!data) {
