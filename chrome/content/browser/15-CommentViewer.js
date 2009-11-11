@@ -21,6 +21,10 @@ elementGetter(this, 'titleLabel', 'hBookmark-comment-title', document);
 elementGetter(this, 'usersLabel', 'hBookmark-comment-users', document);
 elementGetter(this, 'usersPubPriLabel', 'hBookmark-comment-pub-pri-users', document);
 elementGetter(this, 'toggleImage', 'hBookmark-comment-toggle', document);
+elementGetter(this, 'starTooltip', 'hBookmark-star-tooltip', document);
+elementGetter(this, 'starTooltipIcon', 'hBookmark-star-tooltip-icon', document);
+elementGetter(this, 'starTooltipUser', 'hBookmark-star-tooltip-user', document);
+elementGetter(this, 'starTooltipQuote', 'hBookmark-star-tooltip-quote', document);
 
 
 let userIcon = function(username) {
@@ -304,7 +308,7 @@ var CommentViewer = {
         CommentViewer.hideTimer.stop();
         CommentViewer.currentURL = null;
         CommentViewer.lastData = null;
-        CommentViewer.starLoader = null;
+        //CommentViewer.starLoader = null;
         CommentViewer.hideAfterTimer.reset();
         CommentViewer.hideAfterTimer.start();
     },
@@ -403,6 +407,8 @@ var CommentViewer = {
         // panelComment.addEventListener('mouseout', CommentViewer.popupMouseoutHandler, false);
         listDiv.addEventListener('click', CommentViewer.listClickHandler, true);
         CommentViewer.updateToggle();
+        panelComment.addEventListener('mouseover', CommentViewer.mouseOverHandler, false);
+        panelComment.addEventListener('mouseout', CommentViewer.mouseOutHandler, false);
     },
     listClickHandler: function CommentViewer_listClickHandler(ev) {
         ev.stopPropagation();
@@ -419,6 +425,26 @@ var CommentViewer = {
         if (ev.target.className === 'abbr-star' && !ev.target.isLoading) {
             CommentViewer.starLoader.loadAllStars(ev.target.targetURL);
             ev.target.isLoading = true;
+        }
+    },
+    mouseOverHandler: function CommentViewer_mouseOverHandler(event) {
+        let star = event.target;
+        if (star.className !== 'star' || !star.user) return;
+        starTooltipIcon.src = UserUtils.getProfileIcon(star.user);
+        starTooltipUser.value = star.user;
+        if (star.quote) {
+            starTooltipQuote.textContent = star.quote;
+            starTooltipQuote.collapsed = false;
+        } else {
+            starTooltipQuote.collapsed = true;
+        }
+        starTooltip.openPopup(star, 'after_start', 0, 0, false, false);
+        CommentViewer.isStarTooltipOpen = true;
+    },
+    mouseOutHandler: function CommentViewer_mouseOutHandler(event) {
+        if (CommentViewer.isStarTooltipOpen) {
+            CommentViewer.isStarTooltipOpen = false;
+            starTooltip.hidePopup();
         }
     },
     _pendingStarEntries: [],
@@ -459,7 +485,10 @@ var CommentViewer = {
                     span.targetURL = url;
                     container.appendChild(span);
                 } else {
-                    let img = E('img', { src: image, alt: '\u2606', title: star.name });
+                    let img = E('img', {
+                        src: image, alt: '\u2606',
+                        class: 'star', title: star.name,
+                    });
                     img.user = star.name;
                     img.quote = star.quote;
                     container.appendChild(img);
