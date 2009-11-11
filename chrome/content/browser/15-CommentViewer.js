@@ -159,13 +159,13 @@ var CommentViewer = {
             let a;
             li.appendChild(a = E('a', {href: permalink}, b.user));
             a.className = 'username';
+            let container = E('span', {class: 'comment-container'});
             if (!isFilter && b.tags) b.tags.forEach(function(tag, index) {
                 let userlinkTag = userlink + encodeURIComponent(tag);
-                if (index) li.appendChild(document.createTextNode(', '));
-                li.appendChild(a = E('a', {href: userlinkTag}, tag));
-                a.className = 'tag';
+                if (index) container.appendChild(document.createTextNode(', '));
+                container.appendChild(E('a', {href: userlinkTag, class: 'tag'}, tag));
             });
-            li.appendChild(a = E('span'));
+            container.appendChild(a = E('span'));
             a.innerHTML = b.comment.replace(/&/g, '&amp;').
                    replace(/</g, '&lt;').
                    replace(/>/g, '&gt;').
@@ -174,6 +174,7 @@ var CommentViewer = {
                 return '<a class="commentlink" href="' + m + '">' + m + '</a>';
             });
             a.className = 'comment'
+            li.appendChild(container);
             li.appendChild(a = E('span', {}, ymd));
             a.className = 'timestamp';
             fragment.appendChild(li);
@@ -438,19 +439,49 @@ var CommentViewer = {
             // XXX Needs localization of quotation marks.
             starTooltipQuote.textContent = '"' + star.quote + '"';
             starTooltipQuote.collapsed = false;
+            let li = star.parentNode.parentNode;
+            if (!star.originalComment) {
+                star.originalComment = li.getElementsByClassName('comment-container').item(0);
+                star.highlightedComment = CommentViewer.createHighlightedComment(star.originalComment, star.quote);
+            }
+            li.replaceChild(star.highlightedComment, star.originalComment);
         } else {
             starTooltipQuote.collapsed = true;
         }
         starTooltip.openPopup(star, 'after_start', 0, 0, false, false);
-        CommentViewer.isStarTooltipOpen = true;
+        CommentViewer.currentStar = star;
     },
     mouseOutHandler: function CommentViewer_mouseOutHandler(event) {
-        if (CommentViewer.isStarTooltipOpen &&
-            (!event.relatedTarget ||
-             event.relatedTarget.parentNode !== starTooltip)) {
-            CommentViewer.isStarTooltipOpen = false;
+        let star = CommentViewer.currentStar;
+        if (star && (!event.relatedTarget ||
+                     event.relatedTarget.parentNode !== starTooltip)) {
+            CommentViewer.currentStar = null;
+            if (star.highlightedComment &&
+                star.highlightedComment.parentNode) {
+                star.highlightedComment.parentNode.replaceChild(
+                    star.originalComment, star.highlightedComment);
+            }
             starTooltip.hidePopup();
         }
+    },
+    createHighlightedComment: function CommentViewer_createHighlightedComment(base, keyword) {
+        let comment = base.cloneNode(true);
+        let texts = document.evaluate('*/text()', comment, null,
+                                      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+        for (let i = 0; i < texts.snapshotLength; i++) {
+            let text = texts.snapshotItem(i);
+            while (text) {
+                let start = text.data.indexOf(keyword);
+                if (start === -1) break;
+                let keywordText = text.splitText(start);
+                let restText = keywordText.splitText(keyword.length);
+                let em = E('em', { class: 'highlight' });
+                text.parentNode.replaceChild(em, keywordText);
+                em.appendChild(keywordText);
+                text = restText;
+            }
+        }
+        return comment;
     },
     _pendingStarEntries: [],
     renderStar: function CommentViewer_renderStar(entry) {

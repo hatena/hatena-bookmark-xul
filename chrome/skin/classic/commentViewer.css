@@ -80,3 +80,8 @@ a.commentlink {
   padding-right: 3px;
 }
 
+em.highlight {
+  font-style: normal;
+  font-weight: normal;
+  background-color: #ffb;
+}
