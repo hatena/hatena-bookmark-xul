@@ -26,6 +26,8 @@ elementGetter(this, 'starTooltip', 'hBookmark-star-tooltip', document);
 elementGetter(this, 'starTooltipIcon', 'hBookmark-star-tooltip-icon', document);
 elementGetter(this, 'starTooltipUser', 'hBookmark-star-tooltip-user', document);
 elementGetter(this, 'starTooltipQuote', 'hBookmark-star-tooltip-quote', document);
+elementGetter(this, 'targetStarsTooltip', 'hBookmark-comment-target-stars-tooltip', document);
+elementGetter(this, 'targetStarsContainer', 'hBookmark-comment-target-stars-container', document);
 
 const S_HTTP = 'http://s.hatena.ne.jp/';
 
@@ -445,11 +447,13 @@ var CommentViewer = {
             starTooltipQuote.textContent = '"' + star.quote + '"';
             starTooltipQuote.collapsed = false;
             let li = star.parentNode.parentNode;
-            if (!star.originalComment) {
-                star.originalComment = li.getElementsByClassName('comment-container').item(0);
-                star.highlightedComment = CommentViewer.createHighlightedComment(star.originalComment, star.quote);
+            if (li instanceof Ci.nsIDOMHTMLLIElement) {
+                if (!star.originalComment) {
+                    star.originalComment = li.getElementsByClassName('comment-container').item(0);
+                    star.highlightedComment = CommentViewer.createHighlightedComment(star.originalComment, star.quote);
+                }
+                li.replaceChild(star.highlightedComment, star.originalComment);
             }
-            li.replaceChild(star.highlightedComment, star.originalComment);
         } else {
             starTooltipQuote.collapsed = true;
         }
@@ -497,12 +501,7 @@ var CommentViewer = {
             CommentViewer._pendingStarEntries.push(entry);
             return;
         }
-        let starsList = [];
-        if (entry.colored_stars)
-            starsList = entry.colored_stars.concat();
-        if (entry.stars)
-            starsList.push({ color: 'yellow', stars: entry.stars });
-        let container = CommentViewer.createStarElements(starsList, url);
+        let container = CommentViewer.createStarElements(entry);
         let oldContainer = li.getElementsByClassName('star-container').item(0);
         if (oldContainer) {
             li.replaceChild(container, oldContainer);
@@ -511,7 +510,12 @@ var CommentViewer = {
             li.appendChild(container);
         }
     },
-    createStarElements: function CommentViewer_createStarElements(starsList, url) {
+    createStarElements: function CommentViewer_createStarElements(entry) {
+        let starsList = [];
+        if (entry.colored_stars)
+            starsList = entry.colored_stars.concat();
+        if (entry.stars)
+            starsList.push({ color: 'yellow', stars: entry.stars });
         let container = E('span', { class: 'star-container' });
         starsList.forEach(function (stars) {
             let image = S_HTTP + 'images/star' +
@@ -520,7 +524,7 @@ var CommentViewer = {
                 // \u2606 is a star (☆)
                 if (typeof star === 'number') {
                     let span = E('span', { class: 'inner-count ' + stars.color }, star);
-                    span.targetURL = url;
+                    span.targetURL = entry.uri;
                     container.appendChild(span);
                 } else {
                     let a = E('a', { class: 'star', href: S_HTTP + star.name + '/' },
@@ -540,6 +544,12 @@ var CommentViewer = {
     },
     renderTargetPageStar: function CommentViewer_renderTargetPageStar(entry) {
         let count = 0;
+        if (!starsLabel.collapsed) {
+            UIUtils.deleteContents(targetStarsContainer);
+            targetStarsContainer.appendChild(CommentViewer.createStarElements(entry));
+            targetStarsTooltip.openPopup(starsLabel, 'before_end', 0, 0, false, false);
+            return;
+        }
         function countStar(count, star)
             typeof star === 'number' ? count + star : count + 1;
         if (entry.stars)

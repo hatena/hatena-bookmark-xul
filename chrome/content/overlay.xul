@@ -263,7 +263,7 @@
                 <label flex="1" id="hBookmark-comment-title" crop="end" />
                 <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-users" />
                 <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-pub-pri-users" />
-                <label id="hBookmark-comment-stars"/>
+                <label onclick="hBookmark.CommentViewer.starLoader.loadAllStars(hBookmark.CommentViewer.currentURL);" id="hBookmark-comment-stars"/>
                 <image onclick="hBookmark.CommentViewer.filterToggle(event);" src="chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png" id="hBookmark-comment-toggle" />
             </hbox>
         </vbox>
@@ -288,6 +288,10 @@
             <description id="hBookmark-star-tooltip-quote"/>
         </tooltip>
 
+        <tooltip id="hBookmark-comment-target-stars-tooltip">
+            <html:div id="hBookmark-comment-target-stars-container" onmouseover="var star = event.target; if (star instanceof Components.interfaces.nsIDOMHTMLImageElement) star = star.parentNode; if (star.user) document.getElementById('hBookmark-comment-target-stars-user').textContent = star.user;"/>
+            <description id="hBookmark-comment-target-stars-user"/>
+        </tooltip>
     </popupset>
 
     <broadcasterset id="mainBroadcasterSet">
