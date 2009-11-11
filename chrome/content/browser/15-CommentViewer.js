@@ -414,6 +414,11 @@ var CommentViewer = {
         let link = CommentViewer.getHref(ev.target);
         if (link) {
             hOpenUILink(link, ev);
+            return;
+        }
+        if (ev.target.className === 'abbr-star' && !ev.target.isLoading) {
+            CommentViewer.starLoader.loadAllStars(ev.target.targetURL);
+            ev.target.isLoading = true;
         }
     },
     _pendingStarEntries: [],
@@ -430,12 +435,18 @@ var CommentViewer = {
             starsList = entry.colored_stars.concat();
         if (entry.stars)
             starsList.push({ color: 'yellow', stars: entry.stars });
-        let fragment = document.createDocumentFragment();
-        fragment.appendChild(document.createTextNode(' '));
-        fragment.appendChild(CommentViewer.createStarElements(starsList));
-        li.appendChild(fragment);
+        let container = CommentViewer.createStarElements(starsList, url);
+        let oldContainer = li.lastChild;
+        for (; oldContainer; oldContainer = oldContainer.previousSibling)
+            if (oldContainer.className === 'star-container') break;
+        if (oldContainer) {
+            li.replaceChild(container, oldContainer);
+        } else {
+            li.appendChild(document.createTextNode(' '));
+            li.appendChild(container);
+        }
     },
-    createStarElements: function CommentViewer_createStarElements(starsList) {
+    createStarElements: function CommentViewer_createStarElements(starsList, url) {
         let container = E('span', { class: 'star-container' });
         starsList.forEach(function (stars) {
             // XXX ToDo: 定数化する
@@ -443,10 +454,16 @@ var CommentViewer = {
                 (stars.color === 'yellow' ? '' : '-' + stars.color) + '.gif';
             stars.stars.forEach(function (star) {
                 // \u2606 is a star (☆)
-                if (typeof star === 'number')
-                    container.appendChild(document.createTextNode(star));
-                else
-                    container.appendChild(E('img', { src: image, alt: '\u2606', title: star.name }));
+                if (typeof star === 'number') {
+                    let span = E('span', { class: 'abbr-star' }, star);
+                    span.targetURL = url;
+                    container.appendChild(span);
+                } else {
+                    let img = E('img', { src: image, alt: '\u2606', title: star.name });
+                    img.user = star.name;
+                    img.quote = star.quote;
+                    container.appendChild(img);
+                }
             }, this);
         }, this);
         return container;

@@ -43,6 +43,11 @@ extend(StarLoader.prototype, {
         }
     },
 
+    loadAllStars: function SL_loadAllStars(url) {
+        let command = 'entry.json?uri=' + encodeURIComponent(url);
+        this._request('GET', command);
+    },
+
     _request: function SL__request(method, command) {
         let url = STAR_API_BASE + command;
         let xhr = new XMLHttpRequest();
