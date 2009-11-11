@@ -473,10 +473,10 @@ var CommentViewer = {
         }
     },
     createStarElements: function CommentViewer_createStarElements(starsList, url) {
+        const S_HTTP = 'http://s.hatena.ne.jp/';
         let container = E('span', { class: 'star-container' });
         starsList.forEach(function (stars) {
-            // XXX ToDo: 定数化する
-            let image = 'http://s.hatena.ne.jp/images/star' +
+            let image = S_HTTP + 'images/star' +
                 (stars.color === 'yellow' ? '' : '-' + stars.color) + '.gif';
             stars.stars.forEach(function (star) {
                 // \u2606 is a star (☆)
@@ -491,6 +491,7 @@ var CommentViewer = {
                     });
                     img.user = star.name;
                     img.quote = star.quote;
+                    img.href = S_HTTP + star.name + '/';
                     container.appendChild(img);
                 }
             }, this);
