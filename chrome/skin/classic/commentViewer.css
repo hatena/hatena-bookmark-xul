@@ -85,7 +85,12 @@ a.star {
 }
 
 a.star > img {
+  margin-bottom: 3px;
   border: none;
+}
+
+span.inner-count {
+  cursor: pointer;
 }
 
 span.inner-count.yellow { color: #f4b128; }
