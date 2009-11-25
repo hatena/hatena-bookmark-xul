@@ -1,10 +1,14 @@
 const EXPORT = ['StarLoader'];
 
 const STAR_API_BASE = 'http://s.hatena.ne.jp/';
+const COMMAND_ENTRIES = 'entries.simple.json';
+const COMMAND_ENTRY = 'entry.json';
 
 function StarLoader(callback) {
     this.callback = callback;
     this.cache = {};
+    this.cache[COMMAND_ENTRIES] = {};
+    this.cache[COMMAND_ENTRY] = {};
     this.alive = true;
 }
 
@@ -22,18 +26,19 @@ extend(StarLoader.prototype, {
     loadBookmarkStar: function SL_loadBookmarkStar(data) {
         if (!this.alive) return;
         let bookmarks = data.bookmarks;
+        let cache = this.cache[COMMAND_ENTRIES];
         let cachedEntries = [];
         let postData = 't1=' + encodeURIComponent(B_HTTP) + '&' +
                        't2=' + '%23bookmark-' + data.eid + '&';
         if (!data.deferred) {
-            //if (data.url in this.cache)
-            //    cachedEntries.push(this.cache[data.url]);
-            //else
+            if (data.url in cache)
+                cachedEntries.push(cache[data.url]);
+            else
                 postData += 'uri=' + encodeURIComponent(data.url) + '&';
             bookmarks = bookmarks.filter(function (bookmark) {
                 let key = bookmark.user + data.eid;
-                if (key in this.cache) {
-                    cachedEntries.push(this.cache[key]);
+                if (key in cache) {
+                    cachedEntries.push(cache[key]);
                     return false;
                 }
                 return true;
@@ -59,9 +64,9 @@ extend(StarLoader.prototype, {
 
     loadAllStars: function SL_loadAllStars(url) {
         if (!this.alive) return;
-        if (url in this.cache) {
+        if (url in this.cache[COMMAND_ENTRY]) {
             setTimeout(method(this, '_invokeCallbackForCache'), 0,
-                       [this.cache[url]]);
+                       [this.cache[COMMAND_ENTRY][url]]);
             return;
         }
         let command = 'entry.json?uri=' + encodeURIComponent(url);
@@ -132,16 +137,18 @@ extend(StarLoader.prototype, {
 
     _invokeCallback: function SL__invokeCallback(data, command) {
         if (!this.alive) return;
-        let keyRE = command.indexOf('entries.simple.json') === 0
+        command = command.replace(/\?.*/, '');
+        let keyRE = (command === COMMAND_ENTRIES)
             ? new RegExp('^' + B_HTTP.replace(/\W/g, '\\$&') +
                          '([\\w-]+)/\\d{8}#bookmark-(\\d+)$')
             : null;
+        let cache = this.cache[command] || {};
         data.entries.forEach(function (entry) {
             let key = entry.uri;
             let match = keyRE && keyRE.exec(key);
             if (match)
                 key = match[1] + match[2];
-            this.cache[key] = entry;
+            cache[key] = entry;
             try {
                 this.callback(entry);
             } catch (ex) {
