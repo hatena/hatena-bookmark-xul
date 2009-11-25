@@ -419,6 +419,7 @@ var CommentViewer = {
         // panelComment.addEventListener('mouseout', CommentViewer.popupMouseoutHandler, false);
         listDiv.addEventListener('click', CommentViewer.listClickHandler, true);
         targetStarsContainer.addEventListener('click', CommentViewer.listClickHandler, true);
+        targetStarsTooltip.addEventListener('mouseout', CommentViewer.starsTooltipMouseOutHandler, false);
         CommentViewer.updateToggle();
         panelComment.addEventListener('mouseover', CommentViewer.mouseOverHandler, false);
         panelComment.addEventListener('mouseout', CommentViewer.mouseOutHandler, false);
@@ -471,8 +472,7 @@ var CommentViewer = {
         let star = CommentViewer.currentStar;
         if (!star) return;
         let dest = event.relatedTarget;
-        for (let i = 0; dest && i++ < 3; dest = dest.parentNode)
-            if (dest === starTooltip) return;
+        if (CommentViewer.isInStarTooltip(dest)) return;
         CommentViewer.currentStar = null;
         if (star.highlightedComment &&
             star.highlightedComment.parentNode) {
@@ -480,6 +480,12 @@ var CommentViewer = {
                 star.originalComment, star.highlightedComment);
         }
         starTooltip.hidePopup();
+    },
+    isInStarTooltip: function CommentViewer_isInStarTooltip(element) {
+        for (let i = 0; element && i++ < 3; element = element.parentNode)
+            if (element === starTooltip)
+                return true;
+        return false;
     },
     createHighlightedComment: function CommentViewer_createHighlightedComment(base, keyword) {
         let comment = base.cloneNode(true);
@@ -559,8 +565,8 @@ var CommentViewer = {
             targetStarsContainer.firstChild.isLoading = false;
             UIUtils.deleteContents(targetStarsTooltipContainer);
             targetStarsTooltipContainer.appendChild(starElements);
-            targetStarsTooltip.openPopup(targetStarsContainer, 'overlap',
-                                         0, 0, false, false);
+            targetStarsTooltip.openPopup(targetStarsContainer, 'before_end',
+                                         0, 22, false, false);
             return;
         }
         targetStarsContainer.removeAttribute('loading');
@@ -583,6 +589,20 @@ var CommentViewer = {
             return;
         }
         CommentViewer.renderStar(entry);
+    },
+    starsTooltipMouseOutHandler: function CommentViewer_starsTooltipMouseoutHandler(event) {
+        let dest = event.relatedTarget;
+        p('dest is ' + (dest && dest.localName));
+        if (!dest) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+        if (CommentViewer.isInStarTooltip(dest)) return;
+        for (let i = 0; dest && i++ < 5; dest = dest.parentNode)
+            if (dest === targetStarsTooltip)
+                return;
+        targetStarsTooltip.hidePopup();
     },
     goEntry: function(ev) {
         let url = CommentViewer.currentURL || CommentViewer.lastRenderData[0];
