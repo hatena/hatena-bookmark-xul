@@ -235,7 +235,6 @@ var CommentViewer = {
         if (isFilter) {
             bookmarks = bookmarks.filter(function(b) b.comment);
         }
-        //CommentViewer.starLoader.loadBookmarkStar(data);
 
         let fragment = document.createDocumentFragment();
         if (bookmarks.length) {
