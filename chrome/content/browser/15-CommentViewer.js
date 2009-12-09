@@ -204,16 +204,23 @@ var CommentViewer = {
                 CommentViewer.updateImage(true);
             }
         }
-
-        // スターの表示は、ポップアップ表示ごとに新しく行う。
-        UIUtils.deleteContents(pageStarsContainer);
-        UIUtils.deleteContents(extendedPageStarsContainer);
-        pageStarsContainer.setAttribute('loading', true);
-        pageStarsContainer.style.display = '';
-        CommentViewer.starLoader = new StarLoader();
-        CommentViewer.starLoader.loadBookmarkStar(data, method(CommentViewer, 'loadStarHandler'));
-
         let isFilter = CommentViewer.isFilter;
+
+        // スターの表示は、ポップアップ表示ごとに新しく行う。ただし、
+        // ポップアップを開いたわけではなく、単にコメントなしブックマークの
+        // 表示表示を切り替えているだけのときは、対象ページにつけられた
+        // スターの表示を更新しない。
+        let loadPageStars = CommentViewer.lastRenderData[0] !== data.url ||
+                            (!pageStarsContainer.hasChildNodes() &&
+                             !extendedPageStarsContainer.hasChildNodes())
+        if (loadPageStars) {
+            pageStarsContainer.setAttribute('loading', true);
+        }
+        CommentViewer._pendingStarEntries = [];
+        CommentViewer.starLoader = new StarLoader();
+        CommentViewer.starLoader.loadBookmarkStar(data, isFilter, loadPageStars,
+                                                  CommentViewer.loadStarHandler);
+
         if (CommentViewer.lastRenderData[0] == data.url && CommentViewer.lastRenderData[1] == isFilter) {
             // data.url が同じ、かつ filter してない
             panelComment.removeAttribute('hTransparent');
@@ -322,9 +329,12 @@ var CommentViewer = {
         CommentViewer.hideTimer.stop();
         CommentViewer.currentURL = null;
         CommentViewer.lastData = null;
-        CommentViewer.starLoader = null;
         CommentViewer.hideAfterTimer.reset();
         CommentViewer.hideAfterTimer.start();
+        CommentViewer.starLoader = null;
+        UIUtils.deleteContents(pageStarsContainer);
+        UIUtils.deleteContents(extendedPageStarsContainer);
+        pageStarsContainer.style.display = '';
     },
     popupShownHandler: function(ev) {
         if (ev.eventPhase !== Event.AT_TARGET) return;

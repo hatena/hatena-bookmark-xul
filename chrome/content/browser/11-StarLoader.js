@@ -23,15 +23,21 @@ extend(StarLoader.prototype, {
         this.alive = false;
     },
 
-    loadBookmarkStar: function SL_loadBookmarkStar(data, callback) {
+    loadBookmarkStar: function SL_loadBookmarkStar(data,
+                                                   loadCommentedBookmarkStars,
+                                                   loadPageStars,
+                                                   callback) {
         if (!this.alive) return;
         // 最初につけられたブックマークほどスターがついている可能性が
         // 高いので、まずは逆順にする。コメント付きのブックマークのほうが
         // スターがついている可能性が高いので、先頭に持っていく。
-        let bookmarks = data.bookmarks.concat();
-        bookmarks.reverse().sort(function (a, b) !!b.comment - !!a.comment);
+        let bookmarks = data.bookmarks.concat().reverse();
+        if (loadCommentedBookmarkStars)
+            bookmarks = bookmarks.filter(function (b) b.comment);
+        else
+            bookmarks.sort(function (a, b) !!b.comment - !!a.comment);
         this._doLoadStars({
-            page:      data.url,
+            page:      loadPageStars ? data.url : null,
             eid:       data.eid,
             bookmarks: bookmarks,
         }, callback, StarLoader.DEFAULT_RETRY_COUNT);
