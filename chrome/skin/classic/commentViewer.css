@@ -104,3 +104,7 @@ em.highlight {
   font-weight: normal;
   background-color: #ffb;
 }
+
+#hBookmark-comment-page-stars-container[loading]:before {
+  content: "☆…"
+}
