@@ -565,8 +565,8 @@ var CommentViewer = {
             targetStarsContainer.firstChild.isLoading = false;
             UIUtils.deleteContents(targetStarsTooltipContainer);
             targetStarsTooltipContainer.appendChild(starElements);
-            targetStarsTooltip.openPopup(targetStarsContainer, 'before_end',
-                                         0, 22, false, false);
+            //targetStarsTooltip.openPopup(targetStarsContainer, 'before_end',
+            //                             0, 22, false, false);
             return;
         }
         targetStarsContainer.removeAttribute('loading');
@@ -591,6 +591,7 @@ var CommentViewer = {
         CommentViewer.renderStar(entry);
     },
     starsTooltipMouseOutHandler: function CommentViewer_starsTooltipMouseoutHandler(event) {
+        return;
         let dest = event.relatedTarget;
         p('dest is ' + (dest && dest.localName));
         if (!dest) {

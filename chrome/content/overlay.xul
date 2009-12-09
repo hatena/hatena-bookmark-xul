@@ -254,6 +254,9 @@
                     />
                 </html:div>
             </vbox>
+            <vbox>
+                <html:div id="hBookmark-comment-target-stars-tooltip-container"/>
+            </vbox>
             <hbox 
                id="hBookmark-comment-footer"
                flex="1"
@@ -270,9 +273,11 @@
             </hbox>
         </vbox>
         <popupset>
-            <tooltip id="hBookmark-comment-target-stars-tooltip">
+            <panel id="hBookmark-comment-target-stars-tooltip">
+                <!--
                 <html:div id="hBookmark-comment-target-stars-tooltip-container"/>
-            </tooltip>
+                -->
+            </panel>
         </popupset>
         </panel>
         <panel 
