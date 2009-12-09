@@ -133,7 +133,7 @@ extend(StarLoader.prototype, {
             p('StarLoader: load ' + url + '\n' + query + '\n\n' + xhr.responseText);
             removeListeners();
             let res = decodeJSON(xhr.responseText);
-            //if (res) p('res.rks = ' + res.rks);
+            if (res && res.rks) StarAdder.rks = res.rks;
             callback(res);
         }
         function onError() {

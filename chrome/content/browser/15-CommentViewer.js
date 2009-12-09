@@ -271,6 +271,8 @@ var CommentViewer = {
         setTimeout(function() {
              CommentViewer.updatePosition();
         }, 0);
+        CommentViewer.title = title;
+        CommentViewer.entryURL = entryURL(data.url);
         CommentViewer.lastRenderData = [data.url, isFilter];
     },
     lastRenderData: [],
@@ -437,7 +439,7 @@ var CommentViewer = {
         panelComment.addEventListener('mouseout', CommentViewer.mouseOutHandler, false);
     },
     listClickHandler: function CommentViewer_listClickHandler(ev) {
-        ev.stopPropagation();
+        //ev.stopPropagation();
         ev.preventDefault();
         if (ev.target.alt == 'close') {
             CommentViewer.hide();
@@ -572,16 +574,19 @@ var CommentViewer = {
         entries.forEach(function (entry) this.renderStar(entry), this);
     },
     renderPageStar: function CommentViewer_renderPageStar(entry) {
-        var starElements = CommentViewer.createStarElements(entry, false);
+        let addButton = new StarAddButton(entry.uri,
+                                          CommentViewer.title,
+                                          CommentViewer.entryURL);
+        let starElements = CommentViewer.createStarElements(entry, false);
         if (pageStarsContainer.hasChildNodes()) {
             pageStarsContainer.firstChild.isLoading = false;
-            UIUtils.deleteContents(extendedPageStarsContainer);
+            extendedPageStarsContainer.appendChild(addButton.button);
             extendedPageStarsContainer.appendChild(starElements);
             pageStarsContainer.style.display = 'none';
             return;
         }
         pageStarsContainer.removeAttribute('loading');
-        UIUtils.deleteContents(pageStarsContainer);
+        pageStarsContainer.appendChild(addButton.button);
         pageStarsContainer.appendChild(starElements);
     },
     _starLoader: null,
