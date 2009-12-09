@@ -206,16 +206,12 @@ var CommentViewer = {
         }
 
         // スターの表示は、ポップアップ表示ごとに新しく行う。
-        if (!CommentViewer.starLoader ||
-            CommentViewer.lastRenderData[0] !== data.url) {
-            CommentViewer.starLoader =
-                new StarLoader(method(CommentViewer, 'loadStarHandler'));
-        }
         UIUtils.deleteContents(pageStarsContainer);
         UIUtils.deleteContents(extendedPageStarsContainer);
         pageStarsContainer.setAttribute('loading', true);
         pageStarsContainer.style.display = '';
-        CommentViewer.starLoader.loadBookmarkStar(data);
+        CommentViewer.starLoader = new StarLoader();
+        CommentViewer.starLoader.loadBookmarkStar(data, method(CommentViewer, 'loadStarHandler'));
 
         let isFilter = CommentViewer.isFilter;
         if (CommentViewer.lastRenderData[0] == data.url && CommentViewer.lastRenderData[1] == isFilter) {
@@ -326,7 +322,7 @@ var CommentViewer = {
         CommentViewer.hideTimer.stop();
         CommentViewer.currentURL = null;
         CommentViewer.lastData = null;
-        //CommentViewer.starLoader = null;
+        CommentViewer.starLoader = null;
         CommentViewer.hideAfterTimer.reset();
         CommentViewer.hideAfterTimer.start();
     },
@@ -445,7 +441,7 @@ var CommentViewer = {
         }
         if (/\binner-count\b/.test(ev.target.className) &&
             !ev.target.parentNode.isLoading) {
-            CommentViewer.starLoader.loadAllStars(ev.target.targetURL);
+            CommentViewer.starLoader.loadAllStars(ev.target.targetURL, method(CommentViewer, 'loadStarHandler'));
             ev.target.parentNode.isLoading = true;
             return;
         }

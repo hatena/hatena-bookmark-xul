@@ -6,102 +6,133 @@ const COMMAND_ENTRY = 'entry.json';
 
 function StarLoader(callback) {
     this.callback = callback;
-    this.cache = {};
-    this.cache[COMMAND_ENTRIES] = {};
-    this.cache[COMMAND_ENTRY] = {};
     this.alive = true;
 }
 
 StarLoader.ENTRIES_PER_REQUEST = 100;
+// 初回リクエストは応答性を高めるためにエントリ数を少なめに。
+StarLoader.FIRST_ENTRIES_PER_REQUEST = 20;
 StarLoader.REQUEST_INTERVAL = 100;
+StarLoader.REQUEST_TIMEOUT = 15 * 1000;
+StarLoader.DEFAULT_RETRY_COUNT = 3;
 
 extend(StarLoader.prototype, {
     destroy: function SL_destroy() {
         p('StarLoader destroyed');
         this.callback = null;
-        this.cache = null;
         this.alive = false;
     },
 
-    loadBookmarkStar: function SL_loadBookmarkStar(data) {
+    loadBookmarkStar: function SL_loadBookmarkStar(data, callback) {
         if (!this.alive) return;
-        let bookmarks = data.bookmarks;
-        let cache = this.cache[COMMAND_ENTRIES];
-        let cachedEntries = [];
-        let postData = 't1=' + encodeURIComponent(B_HTTP) + '&' +
-                       't2=' + '%23bookmark-' + data.eid + '&';
-        if (!data.deferred) {
-            if (data.url in cache)
-                cachedEntries.push(cache[data.url]);
-            else
-                postData += 'uri=' + encodeURIComponent(data.url) + '&';
-            bookmarks = bookmarks.filter(function (bookmark) {
-                let key = bookmark.user + data.eid;
-                if (key in cache) {
-                    cachedEntries.push(cache[key]);
-                    return false;
-                }
-                return true;
-            }, this);
-            // 最初につけられたブックマークほどスターがついている可能性が
-            // 高いので、まずは逆順にする。コメント付きのブックマークのほうが
-            // スターがついている可能性が高いので、先頭に持っていく。
-            bookmarks.reverse().sort(function (a, b) !!b.comment - !!a.comment);
-        }
+        // 最初につけられたブックマークほどスターがついている可能性が
+        // 高いので、まずは逆順にする。コメント付きのブックマークのほうが
+        // スターがついている可能性が高いので、先頭に持っていく。
+        let bookmarks = data.bookmarks.concat();
+        bookmarks.reverse().sort(function (a, b) !!b.comment - !!a.comment);
+        this._doLoadStars({
+            page:      data.url,
+            eid:       data.eid,
+            bookmarks: bookmarks,
+        }, callback, StarLoader.DEFAULT_RETRY_COUNT);
+    },
+
+    _doLoadStars: function SL__doLoadStars(data, callback, retryCount) {
+        if (!this.alive) return;
         let limit = StarLoader.ENTRIES_PER_REQUEST;
-        postData += bookmarks.slice(0, limit).map(function (b) {
-            return 'u=' + b.user + '%2F' + b.timestamp.substring(0, 4) +
-                b.timestamp.substring(5, 7) + b.timestamp.substring(8, 10);
+        let query = 't1=' + encodeURIComponent(B_HTTP) + '&' +
+                    't2=' + '%23bookmark-' + data.eid + '&';
+        if (data.page) {
+            limit = StarLoader.FIRST_ENTRIES_PER_REQUEST;
+            query += 'uri=' + encodeURIComponent(data.page) + '&';
+        }
+        query += data.bookmarks.slice(0, limit).map(function (b) {
+            return 'u=' + b.user + '%2F' +
+                   b.timestamp.substring(0, 4) +
+                   b.timestamp.substring(5, 7) +
+                   b.timestamp.substring(8, 10);
         }).join('&');
-        this._request('POST', 'entries.simple.json', postData);
-        setTimeout(method(this, '_invokeCallbackForCache'), 0, cachedEntries);
-        if (bookmarks.length > limit) {
-            setTimeout(method(this, 'loadBookmarkStar'),
-                       StarLoader.REQUEST_INTERVAL,
-                       { eid: data.eid, bookmarks: bookmarks.slice(limit), deferred: true });
+        this._request('POST', COMMAND_ENTRIES, query, bind(onLoadStars, this));
+
+        function onLoadStars(res) {
+            if (res) {
+                this._invokeCallback(res.entries, callback, data.page);
+                data.page = null;
+            } else if (retryCount > 1) {
+                this._doLoadStars(data, callback, retryCount - 1);
+                return;
+            }
+            data.bookmarks = data.bookmarks.slice(limit);
+            if (data.bookmarks.length)
+                this._doLoadStars(data, callback, StarLoader.DEFAULT_RETRY_COUNT);
         }
     },
 
-    loadAllStars: function SL_loadAllStars(url) {
+    _invokeCallback: function SL__invokeCallback(entries, callback, pageURL) {
         if (!this.alive) return;
-        if (url in this.cache[COMMAND_ENTRY]) {
-            setTimeout(method(this, '_invokeCallbackForCache'), 0,
-                       [this.cache[COMMAND_ENTRY][url]]);
-            return;
-        }
-        let command = 'entry.json?uri=' + encodeURIComponent(url);
-        this._request('GET', command);
+        let hasPageStars = false;
+        entries.forEach(function (entry) {
+            if (entry.uri === pageURL)
+                hasPageStars = true;
+            try {
+                callback(entry);
+            } catch (ex) {
+                Cu.reportError(ex);
+            }
+        });
+        // スターの読み込みが (少なくとも一度は) 完了したことを
+        // 知らせるため、対象ページには必ずコールバックを呼び出す。
+        if (pageURL && !hasPageStars)
+            callback({ uri: pageURL });
     },
 
-    _request: function SL__request(method, command, postData) {
+    loadAllStars: function SL_loadAllStars(url, callback, retryCount) {
+        if (!this.alive) return;
+        if (arguments.length < 3)
+            retryCount = StarLoader.DEFAULT_RETRY_COUNT;
+        let query = 'uri=' + encodeURIComponent(url);
+        this._request('GET', COMMAND_ENTRY, query, bind(onLoadStars, this));
+
+        function onLoadStars(res) {
+            if (res)
+                this._invokeCallback(res.entries, callback);
+            else if (!res && retryCount > 1)
+                this.loadAllStars(url, callback, retryCount - 1);
+        }
+    },
+
+    _request: function SL__request(method, command, query, callback) {
+        method = method.toUpperCase();
         let url = STAR_API_BASE + command;
+        if (method === 'GET')
+            url += '?' + query;
         let xhr = new XMLHttpRequest();
         xhr.mozBackgroundRequest = true;
         xhr.open(method, url);
         xhr.addEventListener('load', onLoad, false);
         xhr.addEventListener('error', onError, false);
         xhr.addEventListener('progress', onProgress, false);
-        if (method.toUpperCase() === 'POST')
+        let postData = null;
+        if (method === 'POST') {
+            postData = query;
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send(postData || null);
-        let timeout = 60 * 1000;
+        }
+        xhr.send(postData);
+        let timeout = StarLoader.REQUEST_TIMEOUT;
         let timer = new BuiltInTimer({ observe: onTimeout }, timeout,
                                      Ci.nsITimer.TYPE_ONE_SHOT);
         let self = this;
 
         function onLoad() {
-            p('StarLoader: load ' + url + '\n' + postData + '\n\n' + xhr.responseText);
+            p('StarLoader: load ' + url + '\n' + query + '\n\n' + xhr.responseText);
             removeListeners();
-            let data = decodeJSON(xhr.responseText);
-            if (!data) {
-                onError();
-                return;
-            }
-            self._invokeCallback(data, command);
+            let res = decodeJSON(xhr.responseText);
+            callback(res);
         }
         function onError() {
-            removeListeners();
             p('StarLoader: Fail to load ' + url);
+            removeListeners();
+            callback(null);
         }
         function onProgress() {
             timer.cancel();
@@ -116,44 +147,7 @@ extend(StarLoader.prototype, {
             xhr.removeEventListener('error', onError, false);
             xhr.removeEventListener('progress', onProgress, false);
             timer.cancel();
+            timer = null;
         }
-    },
-
-    _invokeCallbackForCache: function SL__invokeCallbackForCache(entries) {
-        if (!this.alive) return;
-        let limit = StarLoader.ENTRIES_PER_REQUEST;
-        entries.slice(0, limit).forEach(function (entry) {
-            try {
-                this.callback(entry);
-            } catch (ex) {
-                Cu.reportError(ex);
-            }
-        }, this);
-        if (entries.length > limit)
-            setTimeout(method(this, '_invokeCallbackForCache'),
-                       StarLoader.REQUEST_INTERVAL / 2,
-                       entries.slice(limit));
-    },
-
-    _invokeCallback: function SL__invokeCallback(data, command) {
-        if (!this.alive) return;
-        command = command.replace(/\?.*/, '');
-        let keyRE = (command === COMMAND_ENTRIES)
-            ? new RegExp('^' + B_HTTP.replace(/\W/g, '\\$&') +
-                         '([\\w-]+)/\\d{8}#bookmark-(\\d+)$')
-            : null;
-        let cache = this.cache[command] || {};
-        data.entries.forEach(function (entry) {
-            let key = entry.uri;
-            let match = keyRE && keyRE.exec(key);
-            if (match)
-                key = match[1] + match[2];
-            cache[key] = entry;
-            try {
-                this.callback(entry);
-            } catch (ex) {
-                Cu.reportError(ex);
-            }
-        }, this);
     },
 });
