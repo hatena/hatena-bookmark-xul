@@ -24,6 +24,7 @@ extend(StarAdder, {
     REQUEST_TIMEOUT: 15 * 1000,
 
     get isAvailable SA_s_get_isAvailable() !!(User.user && this.rks),
+    rks: '',
 });
 
 extend(StarAdder.prototype, {

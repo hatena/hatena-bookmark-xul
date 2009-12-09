@@ -574,6 +574,7 @@ var CommentViewer = {
         entries.forEach(function (entry) this.renderStar(entry), this);
     },
     renderPageStar: function CommentViewer_renderPageStar(entry) {
+        // XXX Check |StarAddButton.isAvailable|
         let addButton = new StarAddButton(entry.uri,
                                           CommentViewer.title,
                                           CommentViewer.entryURL);

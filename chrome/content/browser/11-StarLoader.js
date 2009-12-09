@@ -118,6 +118,8 @@ extend(StarLoader.prototype, {
         xhr.addEventListener('load', onLoad, false);
         xhr.addEventListener('error', onError, false);
         xhr.addEventListener('progress', onProgress, false);
+        if (User.user)
+            xhr.setRequestHeader('Cookie', 'rk=' + encodeURIComponent(User.user.rk));
         let postData = null;
         if (method === 'POST') {
             postData = query;
