@@ -255,30 +255,21 @@
                 </html:div>
             </vbox>
             <vbox>
-                <html:div id="hBookmark-comment-target-stars-tooltip-container"/>
-            </vbox>
-            <hbox 
-               id="hBookmark-comment-footer"
-               flex="1"
-               align="center"
-            >
-                <image id="hBookmark-comment-favicon" />
-                <label flex="1" id="hBookmark-comment-title" crop="end" />
-                <hbox align="center">
-                    <html:div id="hBookmark-comment-target-stars-container"/>
+                <hbox 
+                   id="hBookmark-comment-footer"
+                   flex="1"
+                   align="center"
+                >
+                    <image id="hBookmark-comment-favicon" />
+                    <label flex="1" id="hBookmark-comment-title" crop="end" />
+                    <html:div id="hBookmark-comment-page-stars-container"/>
+                    <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-users" />
+                    <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-pub-pri-users" />
+                    <image onclick="hBookmark.CommentViewer.filterToggle(event);" src="chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png" id="hBookmark-comment-toggle" />
                 </hbox>
-                <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-users" />
-                <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-pub-pri-users" />
-                <image onclick="hBookmark.CommentViewer.filterToggle(event);" src="chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png" id="hBookmark-comment-toggle" />
-            </hbox>
+                <html:div id="hBookmark-comment-extended-page-stars-container"/>
+            </vbox>
         </vbox>
-        <popupset>
-            <panel id="hBookmark-comment-target-stars-tooltip">
-                <!--
-                <html:div id="hBookmark-comment-target-stars-tooltip-container"/>
-                -->
-            </panel>
-        </popupset>
         </panel>
         <panel 
             id="hBookmark-panel-urlbar" 

@@ -26,9 +26,8 @@ elementGetter(this, 'starTooltip', 'hBookmark-star-tooltip', document);
 elementGetter(this, 'starTooltipIcon', 'hBookmark-star-tooltip-icon', document);
 elementGetter(this, 'starTooltipUser', 'hBookmark-star-tooltip-user', document);
 elementGetter(this, 'starTooltipQuote', 'hBookmark-star-tooltip-quote', document);
-elementGetter(this, 'targetStarsTooltip', 'hBookmark-comment-target-stars-tooltip', document);
-elementGetter(this, 'targetStarsTooltipContainer', 'hBookmark-comment-target-stars-tooltip-container', document);
-elementGetter(this, 'targetStarsContainer', 'hBookmark-comment-target-stars-container', document);
+elementGetter(this, 'pageStarsContainer', 'hBookmark-comment-page-stars-container', document);
+elementGetter(this, 'extendedPageStarsContainer', 'hBookmark-comment-extended-page-stars-container', document);
 
 const S_HTTP = 'http://s.hatena.ne.jp/';
 
@@ -206,14 +205,23 @@ var CommentViewer = {
             }
         }
 
+        // スターの表示は、ポップアップ表示ごとに新しく行う。
+        if (!CommentViewer.starLoader ||
+            CommentViewer.lastRenderData[0] !== data.url) {
+            CommentViewer.starLoader =
+                new StarLoader(method(CommentViewer, 'loadStarHandler'));
+        }
+        UIUtils.deleteContents(pageStarsContainer);
+        UIUtils.deleteContents(extendedPageStarsContainer);
+        pageStarsContainer.setAttribute('loading', true);
+        pageStarsContainer.style.display = '';
+        CommentViewer.starLoader.loadBookmarkStar(data);
+
         let isFilter = CommentViewer.isFilter;
         if (CommentViewer.lastRenderData[0] == data.url && CommentViewer.lastRenderData[1] == isFilter) {
             // data.url が同じ、かつ filter してない
             panelComment.removeAttribute('hTransparent');
             return;
-        }
-        if (!CommentViewer.starLoader || CommentViewer.lastRenderData[0] !== data.url) {
-            CommentViewer.starLoader = new StarLoader(method(CommentViewer, 'loadStarHandler'));
         }
         while(list.firstChild) list.removeChild(list.firstChild);
         CommentViewer.commentElements = {};
@@ -224,7 +232,7 @@ var CommentViewer = {
         if (isFilter) {
             bookmarks = bookmarks.filter(function(b) b.comment);
         }
-        CommentViewer.starLoader.loadBookmarkStar(data);
+        //CommentViewer.starLoader.loadBookmarkStar(data);
 
         let fragment = document.createDocumentFragment();
         if (bookmarks.length) {
@@ -236,9 +244,10 @@ var CommentViewer = {
                 CommentViewer.lazyWriter.start();
             }
         } else {
-             let li = E('li', {} , UIEncodeText('表示できるブックマークコメントはありません。'));
-             li.className = 'notice';
-             fragment.appendChild(li);
+            // XXX Needs localization!
+            let li = E('li', {} , UIEncodeText('表示できるブックマークコメントはありません。'));
+            li.className = 'notice';
+            fragment.appendChild(li);
         }
         list.appendChild(fragment);
         faviconImage.src = data.favicon;
@@ -257,8 +266,6 @@ var CommentViewer = {
             usersLabel.value = '';
             usersPubPriLabel.value = '';
         }
-        UIUtils.deleteContents(targetStarsContainer);
-        targetStarsContainer.setAttribute('loading', 'true');
         setTimeout(function() {
              CommentViewer.updatePosition();
         }, 0);
@@ -418,8 +425,8 @@ var CommentViewer = {
         panelComment.addEventListener('popupshown', CommentViewer.popupShownHandler, false);
         // panelComment.addEventListener('mouseout', CommentViewer.popupMouseoutHandler, false);
         listDiv.addEventListener('click', CommentViewer.listClickHandler, true);
-        targetStarsContainer.addEventListener('click', CommentViewer.listClickHandler, true);
-        targetStarsTooltip.addEventListener('mouseout', CommentViewer.starsTooltipMouseOutHandler, false);
+        pageStarsContainer.addEventListener('click', CommentViewer.listClickHandler, true);
+        extendedPageStarsContainer.addEventListener('click', CommentViewer.listClickHandler, true);
         CommentViewer.updateToggle();
         panelComment.addEventListener('mouseover', CommentViewer.mouseOverHandler, false);
         panelComment.addEventListener('mouseout', CommentViewer.mouseOutHandler, false);
@@ -559,19 +566,18 @@ var CommentViewer = {
         CommentViewer._pendingStarEntries = [];
         entries.forEach(function (entry) this.renderStar(entry), this);
     },
-    renderTargetPageStar: function CommentViewer_renderTargetPageStar(entry) {
+    renderPageStar: function CommentViewer_renderPageStar(entry) {
         var starElements = CommentViewer.createStarElements(entry, false);
-        if (targetStarsContainer.hasChildNodes()) {
-            targetStarsContainer.firstChild.isLoading = false;
-            UIUtils.deleteContents(targetStarsTooltipContainer);
-            targetStarsTooltipContainer.appendChild(starElements);
-            //targetStarsTooltip.openPopup(targetStarsContainer, 'before_end',
-            //                             0, 22, false, false);
+        if (pageStarsContainer.hasChildNodes()) {
+            pageStarsContainer.firstChild.isLoading = false;
+            UIUtils.deleteContents(extendedPageStarsContainer);
+            extendedPageStarsContainer.appendChild(starElements);
+            pageStarsContainer.style.display = 'none';
             return;
         }
-        targetStarsContainer.removeAttribute('loading');
-        UIUtils.deleteContents(targetStarsContainer);
-        targetStarsContainer.appendChild(starElements);
+        pageStarsContainer.removeAttribute('loading');
+        UIUtils.deleteContents(pageStarsContainer);
+        pageStarsContainer.appendChild(starElements);
     },
     _starLoader: null,
     get starLoader() CommentViewer._starLoader,
@@ -585,25 +591,10 @@ var CommentViewer = {
     loadStarHandler: function CommentViewer_loadStarHandler(entry) {
         let url = entry.uri;
         if (url === CommentViewer.lastRenderData[0]) {
-            CommentViewer.renderTargetPageStar(entry);
+            CommentViewer.renderPageStar(entry);
             return;
         }
         CommentViewer.renderStar(entry);
-    },
-    starsTooltipMouseOutHandler: function CommentViewer_starsTooltipMouseoutHandler(event) {
-        return;
-        let dest = event.relatedTarget;
-        p('dest is ' + (dest && dest.localName));
-        if (!dest) {
-            event.preventDefault();
-            event.stopPropagation();
-            return;
-        }
-        if (CommentViewer.isInStarTooltip(dest)) return;
-        for (let i = 0; dest && i++ < 5; dest = dest.parentNode)
-            if (dest === targetStarsTooltip)
-                return;
-        targetStarsTooltip.hidePopup();
     },
     goEntry: function(ev) {
         let url = CommentViewer.currentURL || CommentViewer.lastRenderData[0];
