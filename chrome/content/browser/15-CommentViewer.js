@@ -11,6 +11,7 @@ let E = createElementBindDocument(document, XHTML_NS);
 elementGetter(this, 'panelComment', 'hBookmark-panel-comment', document);
 elementGetter(this, 'commentButton', 'hBookmark-status-comment', document);
 elementGetter(this, 'commentContainer', 'hBookmark-comment-container', document);
+elementGetter(this, 'commentFooter', 'hBookmark-comment-footer', document);
 elementGetter(this, 'listContainer', 'hBookmark-comment-list-container', document);
 elementGetter(this, 'list', 'hBookmark-comment-list', document);
 elementGetter(this, 'listDiv', 'hBookmark-comment-div', document);
@@ -22,14 +23,8 @@ elementGetter(this, 'usersLabel', 'hBookmark-comment-users', document);
 elementGetter(this, 'usersPubPriLabel', 'hBookmark-comment-pub-pri-users', document);
 elementGetter(this, 'starsLabel', 'hBookmark-comment-stars', document);
 elementGetter(this, 'toggleImage', 'hBookmark-comment-toggle', document);
-elementGetter(this, 'starTooltip', 'hBookmark-star-tooltip', document);
-elementGetter(this, 'starTooltipIcon', 'hBookmark-star-tooltip-icon', document);
-elementGetter(this, 'starTooltipUser', 'hBookmark-star-tooltip-user', document);
-elementGetter(this, 'starTooltipQuote', 'hBookmark-star-tooltip-quote', document);
 elementGetter(this, 'pageStarsContainer', 'hBookmark-comment-page-stars-container', document);
-elementGetter(this, 'extendedPageStarsContainer', 'hBookmark-comment-extended-page-stars-container', document);
-
-const S_HTTP = 'http://s.hatena.ne.jp/';
+elementGetter(this, 'expandedPageStarsContainer', 'hBookmark-comment-expanded-page-stars-container', document);
 
 let userIcon = function(username) {
     return E('img', {
@@ -160,7 +155,7 @@ var CommentViewer = {
             let permalink = userlink + ymd.replace(/\//g, '') + '#bookmark-' +  eid;
             let icon = userIcon(b.user);
             li.appendChild(icon);
-            let container = E('span', {class: 'comment-container'});
+            let container = E('span', {class: 'hBookmark-star-highlight-container'});
             let a;
             container.appendChild(a = E('a', {href: permalink}, b.user));
             a.className = 'username';
@@ -212,12 +207,12 @@ var CommentViewer = {
         // スターの表示を更新しない。
         let loadPageStars = CommentViewer.lastRenderData[0] !== data.url ||
                             (!pageStarsContainer.hasChildNodes() &&
-                             !extendedPageStarsContainer.hasChildNodes())
+                             !expandedPageStarsContainer.hasChildNodes())
         if (loadPageStars) {
             pageStarsContainer.setAttribute('loading', true);
         }
         CommentViewer._pendingStarEntries = [];
-        CommentViewer.starLoader = new StarLoader();
+        CommentViewer.starLoader = new Star.Loader();
         CommentViewer.starLoader.loadBookmarkStar(data, isFilter, loadPageStars,
                                                   CommentViewer.loadStarHandler);
 
@@ -334,8 +329,9 @@ var CommentViewer = {
         CommentViewer.hideAfterTimer.start();
         CommentViewer.starLoader = null;
         UIUtils.deleteContents(pageStarsContainer);
-        UIUtils.deleteContents(extendedPageStarsContainer);
+        UIUtils.deleteContents(expandedPageStarsContainer);
         pageStarsContainer.style.display = '';
+        expandedPageStarsContainer.style.display = 'none';
     },
     popupShownHandler: function(ev) {
         if (ev.eventPhase !== Event.AT_TARGET) return;
@@ -432,93 +428,32 @@ var CommentViewer = {
         panelComment.addEventListener('popupshown', CommentViewer.popupShownHandler, false);
         // panelComment.addEventListener('mouseout', CommentViewer.popupMouseoutHandler, false);
         listDiv.addEventListener('click', CommentViewer.listClickHandler, true);
-        pageStarsContainer.addEventListener('click', CommentViewer.listClickHandler, true);
-        extendedPageStarsContainer.addEventListener('click', CommentViewer.listClickHandler, true);
         CommentViewer.updateToggle();
-        panelComment.addEventListener('mouseover', CommentViewer.mouseOverHandler, false);
-        panelComment.addEventListener('mouseout', CommentViewer.mouseOutHandler, false);
+        panelComment.addEventListener('click', Star.onClick, false);
+        panelComment.addEventListener('mouseover', Star.onMouseOver, false);
+        panelComment.addEventListener('mouseout', Star.onMouseOut, false);
+        commentFooter.addEventListener(Star.EVENT_STAR_ACTIVATED,
+            CommentViewer.starActivatedHandler, false);
+        commentFooter.addEventListener(Star.EVENT_STAR_INNER_COUNT_ACTIVATED,
+            CommentViewer.pageStarInnerCountHandler, false);
+        listDiv.addEventListener(Star.EVENT_STAR_INNER_COUNT_ACTIVATED,
+            CommentViewer.starInnerCountHandler, false);
+        
     },
     listClickHandler: function CommentViewer_listClickHandler(ev) {
-        //ev.stopPropagation();
-        ev.preventDefault();
         if (ev.target.alt == 'close') {
             CommentViewer.hide();
+            ev.stopPropagation();
+            ev.preventDefault();
             return;
         }
         let link = CommentViewer.getHref(ev.target);
         if (link) {
             hOpenUILink(link, ev);
+            ev.stopPropagation();
+            ev.preventDefault();
             return;
         }
-        if (/\binner-count\b/.test(ev.target.className) &&
-            !ev.target.parentNode.isLoading) {
-            CommentViewer.starLoader.loadAllStars(ev.target.targetURL, method(CommentViewer, 'loadStarHandler'));
-            ev.target.parentNode.isLoading = true;
-            return;
-        }
-    },
-    mouseOverHandler: function CommentViewer_mouseOverHandler(event) {
-        let star = event.target;
-        if (star instanceof Ci.nsIDOMHTMLImageElement)
-            star = star.parentNode;
-        if (star.className !== 'star' || !star.user) return;
-        starTooltipIcon.src = UserUtils.getProfileIcon(star.user);
-        starTooltipUser.value = star.user;
-        if (star.quote) {
-            // XXX Needs localization of quotation marks.
-            starTooltipQuote.textContent = '"' + star.quote + '"';
-            starTooltipQuote.collapsed = false;
-            if (star.forComment) {
-                let li = star.parentNode.parentNode;
-                if (!star.originalComment) {
-                    star.originalComment = li.getElementsByClassName('comment-container').item(0);
-                    star.highlightedComment = CommentViewer.createHighlightedComment(star.originalComment, star.quote);
-                }
-                li.replaceChild(star.highlightedComment, star.originalComment);
-            }
-        } else {
-            starTooltipQuote.collapsed = true;
-        }
-        starTooltip.openPopup(star, 'after_start', 0, 0, false, false);
-        CommentViewer.currentStar = star;
-    },
-    mouseOutHandler: function CommentViewer_mouseOutHandler(event) {
-        let star = CommentViewer.currentStar;
-        if (!star) return;
-        let dest = event.relatedTarget;
-        if (CommentViewer.isInStarTooltip(dest)) return;
-        CommentViewer.currentStar = null;
-        if (star.highlightedComment &&
-            star.highlightedComment.parentNode) {
-            star.highlightedComment.parentNode.replaceChild(
-                star.originalComment, star.highlightedComment);
-        }
-        starTooltip.hidePopup();
-    },
-    isInStarTooltip: function CommentViewer_isInStarTooltip(element) {
-        for (let i = 0; element && i++ < 3; element = element.parentNode)
-            if (element === starTooltip)
-                return true;
-        return false;
-    },
-    createHighlightedComment: function CommentViewer_createHighlightedComment(base, keyword) {
-        let comment = base.cloneNode(true);
-        let texts = document.evaluate('*/text()', comment, null,
-                                      XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-        for (let i = 0; i < texts.snapshotLength; i++) {
-            let text = texts.snapshotItem(i);
-            while (text) {
-                let start = text.data.indexOf(keyword);
-                if (start === -1) break;
-                let keywordText = text.splitText(start);
-                let restText = keywordText.splitText(keyword.length);
-                let em = E('em', { class: 'highlight' });
-                text.parentNode.replaceChild(em, keywordText);
-                em.appendChild(keywordText);
-                text = restText;
-            }
-        }
-        return comment;
     },
     _pendingStarEntries: [],
     renderStar: function CommentViewer_renderStar(entry) {
@@ -529,44 +464,14 @@ var CommentViewer = {
             CommentViewer._pendingStarEntries.push(entry);
             return;
         }
-        let container = CommentViewer.createStarElements(entry, true);
-        let oldContainer = li.getElementsByClassName('star-container').item(0);
-        if (oldContainer) {
-            li.replaceChild(container, oldContainer);
+        let stars = Star.createStarsForEntry(entry, true);
+        let oldStars = li.getElementsByClassName('hBookmark-star-container').item(0);
+        if (oldStars) {
+            li.replaceChild(stars, oldStars);
         } else {
             li.appendChild(document.createTextNode(' '));
-            li.appendChild(container);
+            li.appendChild(stars);
         }
-    },
-    createStarElements: function CommentViewer_createStarElements(entry,
-                                                                  forComment) {
-        let starsList = [];
-        if (entry.colored_stars)
-            starsList = entry.colored_stars.concat();
-        if (entry.stars)
-            starsList.push({ color: 'yellow', stars: entry.stars });
-        let container = E('span', { class: 'star-container' });
-        starsList.forEach(function (stars) {
-            let image = S_HTTP + 'images/star' +
-                (stars.color === 'yellow' ? '' : '-' + stars.color) + '.gif';
-            stars.stars.forEach(function (star) {
-                if (typeof star === 'number') {
-                    let span = E('span', { class: 'inner-count ' + stars.color }, star);
-                    span.targetURL = entry.uri;
-                    container.appendChild(span);
-                } else {
-                    // \u2606 is a star (☆)
-                    let a = E('a', { class: 'star', href: S_HTTP + star.name + '/' },
-                              E('img', { src: image, alt: '\u2606' }));
-                    a.user = star.name;
-                    a.quote = star.quote;
-                    a.forComment = forComment;
-                    container.appendChild(a);
-                    // XXX Do something with |star.count|.
-                }
-            }, this);
-        }, this);
-        return container;
     },
     renderPendingStars: function CommentViewer_renderPendingStars() {
         let entries = CommentViewer._pendingStarEntries;
@@ -574,21 +479,15 @@ var CommentViewer = {
         entries.forEach(function (entry) this.renderStar(entry), this);
     },
     renderPageStar: function CommentViewer_renderPageStar(entry) {
-        // XXX Check |StarAddButton.isAvailable|
-        let addButton = new StarAddButton(entry.uri,
-                                          CommentViewer.title,
-                                          CommentViewer.entryURL);
-        let starElements = CommentViewer.createStarElements(entry, false);
-        if (pageStarsContainer.hasChildNodes()) {
-            pageStarsContainer.firstChild.isLoading = false;
-            extendedPageStarsContainer.appendChild(addButton.button);
-            extendedPageStarsContainer.appendChild(starElements);
-            pageStarsContainer.style.display = 'none';
-            return;
-        }
+        let stars = Star.createStarsForEntry(entry, false);
         pageStarsContainer.removeAttribute('loading');
-        pageStarsContainer.appendChild(addButton.button);
-        pageStarsContainer.appendChild(starElements);
+        pageStarsContainer.appendChild(stars);
+    },
+    renderExpandedPageStar: function CommentViewer_renderExpandedPageStar(entry) {
+        let stars = Star.createStarsForEntry(entry, false);
+        expandedPageStarsContainer.appendChild(stars);
+        pageStarsContainer.style.display = 'none';
+        expandedPageStarsContainer.style.display = '';
     },
     _starLoader: null,
     get starLoader() CommentViewer._starLoader,
@@ -599,13 +498,34 @@ var CommentViewer = {
             currentLoader.destroy();
         return CommentViewer._starLoader = loader;
     },
-    loadStarHandler: function CommentViewer_loadStarHandler(entry) {
-        let url = entry.uri;
-        if (url === CommentViewer.lastRenderData[0]) {
+    loadStarHandler: function CommentViewer_loadStarHandler(entry,
+                                                            isPageStars) {
+        if (isPageStars)
             CommentViewer.renderPageStar(entry);
-            return;
-        }
-        CommentViewer.renderStar(entry);
+        else
+            CommentViewer.renderStar(entry);
+    },
+    loadPageStarHandler: function CommentViewer_loadPageStarHandler(entry) {
+        CommentViewer.renderExpandedPageStar(entry);
+    },
+    starActivatedHandler: function CV_starActivatedHandler(event) {
+        hOpenUILink(event.target.href, event);
+    },
+    starInnerCountHandler: function CV_starInnerCountHandler(event) {
+        CommentViewer.commonInnerCountHandler(event.target,
+                                              CommentViewer.loadStarHandler);
+    },
+    pageStarInnerCountHandler: function CV_pageStarInnerCountHandler(event) {
+        CommentViewer.commonInnerCountHandler(event.target,
+                                              CommentViewer.loadPageStarHandler);
+    },
+    commonInnerCountHandler: function CV_commonInnerCountHandler(innerCount,
+                                                                 callback) {
+        // 省略黄色スターが押されたときも省略カラースターが押されたときも
+        // 読込先は同じなので、共通の親に読み込み中かどうかのフラグを持たせる。
+        if (innerCount.parentNode.isLoading) return;
+        innerCount.parentNode.isLoading = true;
+        CommentViewer.starLoader.loadAllStars(innerCount.targetURI, callback);
     },
     goEntry: function(ev) {
         let url = CommentViewer.currentURL || CommentViewer.lastRenderData[0];

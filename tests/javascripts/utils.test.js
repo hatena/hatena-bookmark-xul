@@ -91,3 +91,13 @@ function testAsyncExecute()
     assert.equals(8, index);
 }
 
+function testMakeQuery() {
+    var data = {
+        foo: '日本語 & English',
+        bar: undefined,
+        baz: ['Hello', 42, '世界'],
+    };
+    assert.equals('foo=%E6%97%A5%E6%9C%AC%E8%AA%9E+%26+English&' +
+                  'baz=Hello&baz=42&baz=%E4%B8%96%E7%95%8C',
+                  net.makeQuery(data))
+}
