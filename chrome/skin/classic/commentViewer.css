@@ -80,31 +80,32 @@ a.commentlink {
   padding-right: 3px;
 }
 
-a.star {
+.hBookmark-star {
   text-decoration: none;
 }
 
-a.star > img {
+.hBookmark-star > img {
   margin-bottom: 3px;
   border: none;
 }
 
-span.inner-count {
+.hBookmark-star-inner-count {
   cursor: pointer;
 }
 
-span.inner-count.yellow { color: #f4b128; }
-span.inner-count.green  { color: #8ed701; }
-span.inner-count.red    { color: #ea475c; }
-span.inner-count.blue   { color: #57b1ff; }
-span.inner-count.purple { color: #cd34e3; }
+.hBookmark-star-inner-count.yellow { color: #f4b128; }
+.hBookmark-star-inner-count.green  { color: #8ed701; }
+.hBookmark-star-inner-count.red    { color: #ea475c; }
+.hBookmark-star-inner-count.blue   { color: #57b1ff; }
+.hBookmark-star-inner-count.purple { color: #cd34e3; }
 
-em.highlight {
+.hBookmark-star-highlight {
   font-style: normal;
   font-weight: normal;
   background-color: #ffb;
 }
 
+/* XXX To be changed. */
 #hBookmark-comment-page-stars-container[loading]:before {
   content: "☆…"
 }
