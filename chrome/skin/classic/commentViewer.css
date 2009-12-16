@@ -85,8 +85,14 @@ a.commentlink {
 }
 
 .hBookmark-star > img {
+  vertical-align: middle;
   margin-bottom: 3px;
   border: none;
+}
+
+.hBookmark-star-add-button {
+  vertical-align: middle;
+  cursor: pointer;
 }
 
 .hBookmark-star-inner-count {

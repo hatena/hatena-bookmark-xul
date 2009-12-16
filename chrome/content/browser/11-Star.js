@@ -254,7 +254,7 @@ Star.DEFAULT_SETTINGS = {
             alt: '\u2605',
         },
         temp: {
-            src: Star.BASE_URI + 'imgages/star-temp.gif',
+            src: Star.BASE_URI + 'images/star-temp.gif',
             alt: '\u2606',
         },
     },
