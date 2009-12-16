@@ -5,9 +5,14 @@ let E = createElementBindDocument(document, XHTML_NS);
 var Star = {
     BASE_URI: 'http://s.hatena.ne.jp/',
 
+    COLOR_YELLOW: 'yellow',
+    COLOR_GREEN:  'green',
+    COLOR_RED:    'red',
+    COLOR_BLUE:   'blue',
+    COLOR_PURPLE: 'purple',
+
     EVENT_STAR_ACTIVATED:             'HB_StarActivated',
     EVENT_STAR_INNER_COUNT_ACTIVATED: 'HB_StarInnerCountActivated',
-    EVENT_STAR_ADD_BUTTON_ACTIVATED:  'HB_StarAddButtonActivated',
 
     // XXX Needs localization of quotation marks.
     OPEN_QUOTE: '"',
@@ -27,12 +32,17 @@ var Star = {
 
     init: function Star_init(settings) {
         let elements = {};
+        let classes = Star.classes;
         for (let [color, setting] in new Iterator(settings.stars)) {
             let star = E('img', { src: setting.src, alt: setting.alt });
             if (color !== 'temp')
-                star = E('a', { class: Star.classes.STAR }, star);
+                star = E('a', { class: classes.STAR }, star);
             elements[color] = star;
         }
+        elements.addButton = E('img', { src: settings.addButton.src,
+                                        alt: settings.addButton.alt,
+                                        class: classes.ADD_BUTTON,
+                                        tabindex: 0 });
         Star.baseElements = elements;
     },
 
@@ -91,10 +101,17 @@ var Star = {
             });
         });
         if (withAddButton) {
-            //container.insertBefore(Star.createAddButton(entry.uri),
-            //                       container.firstChild);
+            container.insertBefore(Star.createAddButton(entry.uri),
+                                   container.firstChild);
         }
         return container;
+    },
+
+    createAddButton: function Star_createAddButton(uri, title, location) {
+        let element = Star.baseElements['addButton'].cloneNode(true);
+        let button = new Star.AddButton(uri, title, location);
+        element.button = button;
+        return element;
     },
 
     childTextExpression: document.createExpression('*/text()', null),
@@ -124,10 +141,13 @@ var Star = {
         let target = event.target;
         let classes = Star.classes;
         if (target instanceof Ci.nsIDOMHTMLImageElement) {
-            if (target.className === classes.ADD_BUTTON)
-                newEventType = Star.EVENT_STAR_ADD_BUTTON_ACTIVATED;
-            else
+            if (target.className === classes.ADD_BUTTON) {
+                target.button.addStar(target);
+                event.stopPropagation();
+                return;
+            } else {
                 target = target.parentNode;
+            }
         }
         if (!newEventType) {
             if (target.className === classes.STAR)
@@ -233,6 +253,8 @@ Star.DEFAULT_SETTINGS = {
         },
     },
     addButton: {
+        src: Star.BASE_URI + 'images/add.gif',
+        alt: '[Add Star]',
     },
 };
 
