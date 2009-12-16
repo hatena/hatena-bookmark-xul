@@ -147,6 +147,7 @@ var CommentViewer = {
         // 場当たり的な対応が増えてよろしくないので、後で修正したい。
         //let URLRegex = new RegExp("\\b((?:http|https|ftp)://[A-Za-z0-9~/._\?\&=\\-%#\+:\;,\@\']+)", 'g');
         let htmlEscapedURLRegex = /\b(?:https?|ftp):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\']|&(?!lt;|gt;|quot;))+/g;
+        let highlightContainerClass = Star.classes.HIGHLIGHT_CONTAINER;
         while (i++ < Math.min(limit, len)) {
             let b = bookmarks.shift();
             let li = E('li');
@@ -155,7 +156,7 @@ var CommentViewer = {
             let permalink = userlink + ymd.replace(/\//g, '') + '#bookmark-' +  eid;
             let icon = userIcon(b.user);
             li.appendChild(icon);
-            let container = E('span', {class: 'hBookmark-star-highlight-container'});
+            let container = E('span', {class: highlightContainerClass});
             let a;
             container.appendChild(a = E('a', {href: permalink}, b.user));
             a.className = 'username';
@@ -465,7 +466,7 @@ var CommentViewer = {
             return;
         }
         let stars = Star.createStarsForEntry(entry, true);
-        let oldStars = li.getElementsByClassName('hBookmark-star-container').item(0);
+        let oldStars = li.getElementsByClassName(Star.classes.CONTAINER).item(0);
         if (oldStars) {
             li.replaceChild(stars, oldStars);
         } else {

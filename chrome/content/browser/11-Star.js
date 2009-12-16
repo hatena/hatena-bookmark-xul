@@ -13,6 +13,15 @@ var Star = {
     OPEN_QUOTE: '"',
     CLOSE_QUOTE: '"',
 
+    classes: {
+        CONTAINER:           'hBookmark-star-container',
+        STAR:                'hBookmark-star',
+        INNER_COUNT_PART:    'hBookmark-star-inner-count ',
+        ADD_BUTTON:          'hBookmark-star-add-button',
+        HIGHLIGHT:           'hBookmark-star-highlight',
+        HIGHLIGHT_CONTAINER: 'hBookmark-star-highlight-container',
+    },
+
     rks: '',
     baseElements: null,
 
@@ -21,7 +30,7 @@ var Star = {
         for (let [color, setting] in new Iterator(settings.stars)) {
             let star = E('img', { src: setting.src, alt: setting.alt });
             if (color !== 'temp')
-                star = E('a', { class: 'hBookmark-star' }, star);
+                star = E('a', { class: Star.classes.STAR }, star);
             elements[color] = star;
         }
         Star.baseElements = elements;
@@ -31,9 +40,9 @@ var Star = {
 
     get tooltip Star_get_tooltip() {
         let tooltip = {
-            body: document.getElementById('hBookmark-star-tooltip'),
-            icon: document.getElementById('hBookmark-star-tooltip-icon'),
-            user: document.getElementById('hBookmark-star-tooltip-user'),
+            body:  document.getElementById('hBookmark-star-tooltip'),
+            icon:  document.getElementById('hBookmark-star-tooltip-icon'),
+            user:  document.getElementById('hBookmark-star-tooltip-user'),
             quote: document.getElementById('hBookmark-star-tooltip-quote'),
         };
         delete Star.tooltip;
@@ -62,13 +71,14 @@ var Star = {
             starsList = entry.colored_stars.concat();
         if (entry.stars)
             starsList.push({ color: 'yellow', stars: entry.stars });
-        let container = E('span', { class: 'hBookmark-star-container' });
+        let classes = Star.classes;
+        let container = E('span', { class: classes.CONTAINER });
         starsList.forEach(function (stars) {
             let color = stars.color;
             stars.stars.forEach(function (star) {
                 if (typeof star === 'number') {
                     let span = E('span',
-                                 { class: 'hBookmark-star-inner-count ' + color,
+                                 { class: classes.INNER_COUNT_PART + color,
                                    tabindex: 0 },
                                  star);
                     span.targetURI = entry.uri;
@@ -100,7 +110,7 @@ var Star = {
                 if (start === -1) break;
                 let keywordText = text.splitText(start);
                 let restText = keywordText.splitText(keyword.length);
-                let em = E('em', { class: 'hBookmark-star-highlight' });
+                let em = E('em', { class: Star.classes.HIGHLIGHT });
                 text.parentNode.replaceChild(em, keywordText);
                 em.appendChild(keywordText);
                 text = restText;
@@ -112,16 +122,17 @@ var Star = {
     onClick: function Star_onClick(event) {
         let newEventType = null;
         let target = event.target;
+        let classes = Star.classes;
         if (target instanceof Ci.nsIDOMHTMLImageElement) {
-            if (target.className === 'hBookmark-star-add-button')
+            if (target.className === classes.ADD_BUTTON)
                 newEventType = Star.EVENT_STAR_ADD_BUTTON_ACTIVATED;
             else
                 target = target.parentNode;
         }
         if (!newEventType) {
-            if (target.className === 'hBookmark-star')
+            if (target.className === classes.STAR)
                 newEventType = Star.EVENT_STAR_ACTIVATED;
-            else if (target.className.indexOf('hBookmark-star-inner-count ') === 0)
+            else if (target.className.indexOf(classes.INNER_COUNT_PART) === 0)
                 newEventType = Star.EVENT_STAR_INNER_COUNT_ACTIVATED;
         }
         if (newEventType) {
@@ -137,14 +148,15 @@ var Star = {
 
     onMouseOver: function Star_onMouseOver(event) {
         let target = event.target;
+        let classes = Star.classes;
         if (target instanceof Ci.nsIDOMHTMLImageElement) {
-            if (target.className === 'hBookmark-star-add-button') {
+            if (target.className === classes.ADD_BUTTON) {
                 // XXX Do something with add-button.
                 return;
             }
             target = target.parentNode;
         }
-        if (target.className !== 'hBookmark-star' || !target.user) return;
+        if (target.className !== classes.STAR || !target.user) return;
         let tooltip = Star.tooltip;
         tooltip.icon.src = UserUtils.getProfileIcon(target.user);
         tooltip.user.value = target.user;
@@ -156,7 +168,7 @@ var Star = {
                 let parent = target.parentNode.parentNode;
                 if (!target.originalContainer) {
                     target.originalContainer =
-                        parent.getElementsByClassName('hBookmark-star-highlight-container').item(0);
+                        parent.getElementsByClassName(classes.HIGHLIGHT_CONTAINER).item(0);
                     target.highlightedContainer =
                         Star.createHighlightedContainer(target.originalContainer, target.quote);
                 }
