@@ -147,6 +147,11 @@ var CommentViewer = {
         // 場当たり的な対応が増えてよろしくないので、後で修正したい。
         //let URLRegex = new RegExp("\\b((?:http|https|ftp)://[A-Za-z0-9~/._\?\&=\\-%#\+:\;,\@\']+)", 'g');
         let htmlEscapedURLRegex = /\b(?:https?|ftp):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\']|&(?!lt;|gt;|quot;))+/g;
+        // ログインしていれば、はてなスターの rks がなくても、とりあえず
+        // スター追加ボタンを表示する。実際に追加するまでに rks を
+        // 取得できればよし、できなければエラーメッセージを出す。
+        // XXX エラーメッセージを出す処理をどこかに書く。
+        let starCreator = User.user ? CommentViewer.starCreator : null;
         let highlightContainerClass = Star.classes.HIGHLIGHT_CONTAINER;
         while (i++ < Math.min(limit, len)) {
             let b = bookmarks.shift();
@@ -177,6 +182,10 @@ var CommentViewer = {
             li.appendChild(container);
             li.appendChild(a = E('span', {}, ymd));
             a.className = 'timestamp';
+            if (starCreator) {
+                li.appendChild(document.createTextNode(' '));
+                li.appendChild(starCreator.createPlaceholder(permalink));
+            }
             fragment.appendChild(li);
             CommentViewer.commentElements[b.user] = li;
         }
@@ -232,6 +241,9 @@ var CommentViewer = {
             bookmarks = bookmarks.filter(function(b) b.comment);
         }
 
+        let title = decodeReferences(data.title) || data.url;
+        CommentViewer.starCreator = new Star.Creator(title, entryURL(data.url));
+
         let fragment = document.createDocumentFragment();
         if (bookmarks.length) {
             CommentViewer.renderComment(bookmarks, 30, fragment);
@@ -249,7 +261,6 @@ var CommentViewer = {
         }
         list.appendChild(fragment);
         faviconImage.src = data.favicon;
-        let title = decodeReferences(data.title) || data.url;
         titleLabel.value = title;
         titleLabel.tooltipText = title;
         let c = data.count;
@@ -267,8 +278,6 @@ var CommentViewer = {
         setTimeout(function() {
              CommentViewer.updatePosition();
         }, 0);
-        CommentViewer.title = title;
-        CommentViewer.entryURL = entryURL(data.url);
         CommentViewer.lastRenderData = [data.url, isFilter];
     },
     lastRenderData: [],
@@ -465,7 +474,7 @@ var CommentViewer = {
             CommentViewer._pendingStarEntries.push(entry);
             return;
         }
-        let stars = Star.createStarsForEntry(entry, true);
+        let stars = CommentViewer.starCreator.createForEntry(entry, true);
         let oldStars = li.getElementsByClassName(Star.classes.CONTAINER).item(0);
         if (oldStars) {
             li.replaceChild(stars, oldStars);
@@ -480,12 +489,12 @@ var CommentViewer = {
         entries.forEach(function (entry) this.renderStar(entry), this);
     },
     renderPageStar: function CommentViewer_renderPageStar(entry) {
-        let stars = Star.createStarsForEntry(entry, false);
+        let stars = CommentViewer.starCreator.createForEntry(entry, false);
         pageStarsContainer.removeAttribute('loading');
         pageStarsContainer.appendChild(stars);
     },
     renderExpandedPageStar: function CommentViewer_renderExpandedPageStar(entry) {
-        let stars = Star.createStarsForEntry(entry, false);
+        let stars = CommentViewer.starCreator.createForEntry(entry, false);
         expandedPageStarsContainer.appendChild(stars);
         pageStarsContainer.style.display = 'none';
         expandedPageStarsContainer.style.display = '';

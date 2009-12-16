@@ -73,8 +73,9 @@ var Star = {
     },
 
     createStarsForEntry: function Star_createStarsForEntry(entry, highlight,
-                                                           withAddButton) {
-        if (typeof withAddButton === 'undefined')
+                                                           withAddButton,
+                                                           title, location) {
+        if (typeof withAddButton === 'undefined' || withAddButton === null)
             withAddButton = Star.canModify;
         let starsList = [];
         if (entry.colored_stars)
@@ -101,10 +102,15 @@ var Star = {
             });
         });
         if (withAddButton) {
-            container.insertBefore(Star.createAddButton(entry.uri),
+            container.insertBefore(Star.createAddButton(entry.uri, title, location),
                                    container.firstChild);
         }
         return container;
+    },
+
+    createPlaceholder: function Star_createPlaceholder(uri, title, location) {
+        return E('span', { class: Star.classes.CONTAINER },
+                 Star.createAddButton(uri, title, location));
     },
 
     createAddButton: function Star_createAddButton(uri, title, location) {

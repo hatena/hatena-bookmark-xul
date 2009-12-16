@@ -93,8 +93,9 @@ extend(Loader.prototype, {
         });
         // スターの読み込みが (少なくとも一度は) 完了したことを
         // 知らせるため、対象ページには必ずコールバックを呼び出す。
-        if (pageURI && !hasPageStars)
-            callback({ uri: pageURI });
+        if (pageURI && !hasPageStars) {
+            callback({ uri: pageURI }, true);
+        }
     },
 });
 
