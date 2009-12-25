@@ -11,8 +11,8 @@ var Star = {
     COLOR_BLUE:   'blue',
     COLOR_PURPLE: 'purple',
 
-    EVENT_STAR_ACTIVATED:             'HB_StarActivated',
-    EVENT_STAR_INNER_COUNT_ACTIVATED: 'HB_StarInnerCountActivated',
+    EVENT_STAR_ACTIVATED:             'HB.StarActivated',
+    EVENT_STAR_INNER_COUNT_ACTIVATED: 'HB.StarInnerCountActivated',
 
     // XXX Needs localization of quotation marks.
     OPEN_QUOTE: '"',
@@ -21,7 +21,7 @@ var Star = {
     classes: {
         CONTAINER:           'hBookmark-star-container',
         STAR:                'hBookmark-star',
-        INNER_COUNT_PART:    'hBookmark-star-inner-count ',
+        INNER_COUNT:         'hBookmark-star-inner-count',
         ADD_BUTTON:          'hBookmark-star-add-button',
         HIGHLIGHT:           'hBookmark-star-highlight',
         HIGHLIGHT_CONTAINER: 'hBookmark-star-highlight-container',
@@ -36,7 +36,7 @@ var Star = {
         for (let [color, setting] in new Iterator(settings.stars)) {
             let star = E('img', { src: setting.src, alt: setting.alt });
             if (color !== 'temp')
-                star = E('a', { class: classes.STAR }, star);
+                star = E('a', { class: classes.STAR + ' ' + color }, star);
             elements[color] = star;
         }
         elements.addButton = E('img', { src: settings.addButton.src,
@@ -55,6 +55,7 @@ var Star = {
             user:  document.getElementById('hBookmark-star-tooltip-user'),
             quote: document.getElementById('hBookmark-star-tooltip-quote'),
         };
+        tooltip.body.addEventListener('popuphidden', Star.hideTooltip, false);
         delete Star.tooltip;
         return Star.tooltip = tooltip;
     },
@@ -89,7 +90,7 @@ var Star = {
             stars.stars.forEach(function (star) {
                 if (typeof star === 'number') {
                     let span = E('span',
-                                 { class: classes.INNER_COUNT_PART + color,
+                                 { class: classes.INNER_COUNT + ' ' + color,
                                    tabindex: 0 },
                                  star);
                     span.targetURI = entry.uri;
@@ -158,7 +159,7 @@ var Star = {
         if (!newEventType) {
             if (target.className === classes.STAR)
                 newEventType = Star.EVENT_STAR_ACTIVATED;
-            else if (target.className.indexOf(classes.INNER_COUNT_PART) === 0)
+            else if (target.className.indexOf(classes.INNER_COUNT + ' ') === 0)
                 newEventType = Star.EVENT_STAR_INNER_COUNT_ACTIVATED;
         }
         if (newEventType) {
@@ -179,45 +180,60 @@ var Star = {
             if (target.className === classes.ADD_BUTTON) {
                 // XXX Do something with add-button.
                 return;
+            } else if (target.parentNode === event.relatedTarget) {
+                return;
             }
             target = target.parentNode;
         }
-        if (target.className !== classes.STAR || !target.user) return;
-        let tooltip = Star.tooltip;
-        tooltip.icon.src = UserUtils.getProfileIcon(target.user);
-        tooltip.user.value = target.user;
-        if (target.quote) {
-            tooltip.quote.textContent =
-                Star.OPEN_QUOTE + target.quote + Star.CLOSE_QUOTE;
-            tooltip.quote.collapsed = false;
-            if (target.highlight) {
-                let parent = target.parentNode.parentNode;
-                if (!target.originalContainer) {
-                    target.originalContainer =
-                        parent.getElementsByClassName(classes.HIGHLIGHT_CONTAINER).item(0);
-                    target.highlightedContainer =
-                        Star.createHighlightedContainer(target.originalContainer, target.quote);
-                }
-                parent.replaceChild(target.highlightedContainer,
-                                    target.originalContainer);
-            }
-        } else {
-            tooltip.quote.collapsed = true;
-        }
-        tooltip.body.openPopup(target, 'after_start', 0, 0, false, false);
-        Star.currentStar = target;
+        if (target.className.indexOf(classes.STAR + ' ') !== 0 ||
+            !target.user || target.firstChild === event.relatedTarget)
+            return;
+        Star.showTooltip(target);
     },
 
     onMouseOut: function Star_onMouseOut(event) {
         let star = Star.currentStar;
-        if (!star || Star.isInTooltip(event.relatedTarget)) return;
+        let dest = event.relatedTarget;
+        if (!star || Star.isInTooltip(dest) ||
+            dest === star || dest.parentNode === star)
+            return;
+        Star.tooltip.body.hidePopup();
+    },
+
+    showTooltip: function Star_showTooltip(star) {
+        let tooltip = Star.tooltip;
+        tooltip.icon.src = UserUtils.getProfileIcon(star.user);
+        tooltip.user.value = star.user;
+        if (star.quote) {
+            tooltip.quote.textContent =
+                Star.OPEN_QUOTE + star.quote + Star.CLOSE_QUOTE;
+            tooltip.quote.collapsed = false;
+            if (star.highlight) {
+                let parent = star.parentNode.parentNode;
+                if (!star.originalContainer) {
+                    star.originalContainer =
+                        parent.getElementsByClassName(Star.classes.HIGHLIGHT_CONTAINER).item(0);
+                    star.highlightedContainer =
+                        Star.createHighlightedContainer(star.originalContainer, star.quote);
+                }
+                parent.replaceChild(star.highlightedContainer,
+                                    star.originalContainer);
+            }
+        } else {
+            tooltip.quote.collapsed = true;
+        }
+        tooltip.body.openPopup(star, 'after_start', 0, 0, false, false);
+        Star.currentStar = star;
+    },
+
+    hideTooltip: function Star_hideTooltip() {
+        let star = Star.currentStar;
         Star.currentStar = null;
         if (star.highlightedContainer &&
             star.highlightedContainer.parentNode) {
             star.highlightedContainer.parentNode.replaceChild(
                 star.originalContainer, star.highlightedContainer);
         }
-        Star.tooltip.body.hidePopup();
     },
 
     isInTooltip: function Star_isInTooltip(element) {
