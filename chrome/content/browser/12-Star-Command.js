@@ -73,13 +73,23 @@ extend(Command.prototype, {
         try {
             this.callback(result);
         } finally {
-            this.request.removeEventListener('load', this, false);
-            this.request.removeEventListener('error', this, false);
-            this.request.removeEventListener('progress', this, false);
-            this.request = null;
-            this.timer.cancel();
-            this.timer = null;
+            this.dispose();
         }
+    },
+
+    cancel: function SC_cancel() {
+        if (!this.request) return;
+        this.request.abort();
+        this.dispose();
+    },
+
+    dispose: function SC_dispose() {
+        this.request.removeEventListener('load', this, false);
+        this.request.removeEventListener('error', this, false);
+        this.request.removeEventListener('progress', this, false);
+        this.request = null;
+        this.timer.cancel();
+        this.timer = null;
     },
 
     handleEvent: function SC_handleEvent(event) {

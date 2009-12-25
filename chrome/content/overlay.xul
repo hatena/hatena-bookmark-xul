@@ -2,6 +2,7 @@
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/toolbar.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/toolbar.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/commentViewer.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/star.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/browser.css"?>
 <?xul-overlay href="chrome://hatenabookmark/content/popupsOverlay.xul"?>
@@ -287,6 +288,21 @@
             </hbox>
             <description id="hBookmark-star-tooltip-quote"/>
         </tooltip>
+
+        <panel id="hBookmark-star-palette">
+            <image id="hBookmark-star-palette-green"
+                   class="hBookmark-star-palette-color"
+                   color="green"/>
+            <image id="hBookmark-star-palette-red"
+                   class="hBookmark-star-palette-color"
+                   color="red"/>
+            <image id="hBookmark-star-palette-blue"
+                   class="hBookmark-star-palette-color"
+                   color="blue"/>
+            <image id="hBookmark-star-palette-purple"
+                   class="hBookmark-star-palette-color"
+                   color="purple"/>
+        </panel>
     </popupset>
 
     <broadcasterset id="mainBroadcasterSet">

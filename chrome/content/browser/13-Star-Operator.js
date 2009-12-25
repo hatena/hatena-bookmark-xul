@@ -10,8 +10,8 @@ function Operator(uri, title, location) {
 
 extend(Operator.prototype, {
     getAvailableColors: function SO_getAvailableColors(callback) {
-        new Command(Command.GET_AVAILABLE_COLORS, { uri: this.uri },
-                    bind(onGotPalette, this));
+        return new Command(Command.GET_AVAILABLE_COLORS, { uri: this.uri },
+                           bind(onGotPalette, this));
         function onGotPalette(res) {
             if (!res) {
                 callback(null);

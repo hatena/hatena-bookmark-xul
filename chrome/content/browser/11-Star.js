@@ -181,7 +181,7 @@ var Star = {
         let classes = Star.classes;
         if (target instanceof Ci.nsIDOMHTMLImageElement) {
             if (target.className === classes.ADD_BUTTON) {
-                // XXX Do something with add-button.
+                target.button.showPaletteLater(target);
                 return;
             } else if (target.parentNode === event.relatedTarget) {
                 return;
@@ -195,10 +195,12 @@ var Star = {
     },
 
     onMouseOut: function Star_onMouseOut(event) {
+        if (event.target.className === Star.classes.ADD_BUTTON)
+            event.target.button.cancelPalette();
         let star = Star.currentStar;
         let dest = event.relatedTarget;
         if (!star || Star.isInTooltip(dest) ||
-            dest === star || dest.parentNode === star)
+            (dest && (dest === star || dest.parentNode === star)))
             return;
         Star.tooltip.body.hidePopup();
     },

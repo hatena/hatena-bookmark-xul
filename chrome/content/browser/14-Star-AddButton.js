@@ -6,6 +6,10 @@ function AddButton(uri, title, location) {
     this.operator = new Star.Operator(this.uri, this.title, this.location);
 }
 
+extend(AddButton, {
+    PALETTE_DELAY: 800,
+});
+
 extend(AddButton.prototype, {
     addStar: function SAB_addStar(element, color) {
         if (!Star.canModify) {
@@ -29,6 +33,33 @@ extend(AddButton.prototype, {
         let star = Star.createTemporaryStar();
         element.parentNode.appendChild(star);
         return star;
+    },
+
+    showPaletteLater: function SAB_showPaletteLater(element) {
+        if (!Star.canModify) return;
+        this.paletteTimer = setTimeout(method(this, 'showPalette'),
+                                       AddButton.PALETTE_DELAY, element);
+    },
+
+    showPalette: function SAB_showPalette(element) {
+        this.paletteCommand =
+            this.operator.getAvailableColors(bind(onGotColors, this));
+        function onGotColors(colors) {
+            this.paletteCommand = null;
+            if (!colors) return;
+            Star.Palette.show(colors, this, element);
+        }
+    },
+
+    cancelPalette: function SAB_cancelPalette() {
+        if (this.paletteTimer) {
+            clearTimeout(this.paletteTimer);
+            this.paletteTimer = 0;
+        }
+        if (this.paletteCommand) {
+            this.paletteCommand.cancel();
+            this.paletteCommand = null;
+        }
     },
 });
 
