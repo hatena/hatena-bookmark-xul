@@ -251,36 +251,36 @@ var Star = {
     },
 };
 
-// XXX Includes images within the skin package.
+let imageBase = 'chrome://hatenabookmark/skin/images/';
 Star.DEFAULT_SETTINGS = {
     stars: {
         yellow: {
-            src: Star.BASE_URI + 'images/star.gif',
+            src: imageBase + 'star.gif',
             alt: strings.get('starChar'),
         },
         green: {
-            src: Star.BASE_URI + 'images/star-green.gif',
+            src: imageBase + 'star-green.gif',
             alt: strings.get('coloredStarChar'),
         },
         red: {
-            src: Star.BASE_URI + 'images/star-red.gif',
+            src: imageBase + 'star-red.gif',
             alt: strings.get('coloredStarChar'),
         },
         blue: {
-            src: Star.BASE_URI + 'images/star-blue.gif',
+            src: imageBase + 'star-blue.gif',
             alt: strings.get('coloredStarChar'),
         },
         purple: {
-            src: Star.BASE_URI + 'images/star-purple.gif',
+            src: imageBase + 'star-purple.gif',
             alt: strings.get('coloredStarChar'),
         },
         temp: {
-            src: Star.BASE_URI + 'images/star-temp.gif',
+            src: imageBase + 'star-temp.gif',
             alt: strings.get('starChar'),
         },
     },
     addButton: {
-        src: Star.BASE_URI + 'images/add.gif',
+        src: imageBase + 'star-add-button.gif',
         alt: strings.get('addButtonLabel'),
     },
 };
