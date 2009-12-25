@@ -4,7 +4,6 @@ function AddButton(uri, title, location) {
     this.title = title || '';
     this.location = location || '';
     this.operator = new Star.Operator(this.uri, this.title, this.location);
-    this.quote = '';
 }
 
 extend(AddButton.prototype, {
@@ -14,7 +13,8 @@ extend(AddButton.prototype, {
             return;
         }
         let tempStar = this.addTemporaryStar(element);
-        this.operator.add(color, this.quote, bind(onStarAdded, this));
+        let quote = String(window.getSelection());
+        this.operator.add(color, quote, bind(onStarAdded, this));
         function onStarAdded(star) {
             if (!star || star.errors) {
                 tempStar.parentNode.removeChild(tempStar);
@@ -29,10 +29,6 @@ extend(AddButton.prototype, {
         let star = Star.createTemporaryStar();
         element.parentNode.appendChild(star);
         return star;
-    },
-
-    rememberQuote: function SAB_rememberQuote() {
-        this.quote = String(window.getSelection());
     },
 });
 
