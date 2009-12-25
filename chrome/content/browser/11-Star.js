@@ -1,6 +1,7 @@
 const EXPORT = ['Star'];
 
 let E = createElementBindDocument(document, XHTML_NS);
+let strings = new Strings('chrome://hatenabookmark/locale/star.properties');
 
 var Star = {
     BASE_URI: 'http://s.hatena.ne.jp/',
@@ -14,9 +15,8 @@ var Star = {
     EVENT_STAR_ACTIVATED:             'HB.StarActivated',
     EVENT_STAR_INNER_COUNT_ACTIVATED: 'HB.StarInnerCountActivated',
 
-    // XXX Needs localization of quotation marks.
-    OPEN_QUOTE: '"',
-    CLOSE_QUOTE: '"',
+    OPEN_QUOTE: strings.get('openQuote'),
+    CLOSE_QUOTE: strings.get('closeQuote'),
 
     classes: {
         CONTAINER:           'hBookmark-star-container',
@@ -29,6 +29,7 @@ var Star = {
 
     rks: '',
     baseElements: null,
+    strings: strings,
 
     init: function Star_init(settings) {
         let elements = {};
@@ -251,37 +252,36 @@ var Star = {
 };
 
 // XXX Includes images within the skin package.
-// \u2606 is a star (☆), \u2605 is a black star (★).
 Star.DEFAULT_SETTINGS = {
     stars: {
         yellow: {
             src: Star.BASE_URI + 'images/star.gif',
-            alt: '\u2606',
+            alt: strings.get('starChar'),
         },
         green: {
             src: Star.BASE_URI + 'images/star-green.gif',
-            alt: '\u2605',
+            alt: strings.get('coloredStarChar'),
         },
         red: {
             src: Star.BASE_URI + 'images/star-red.gif',
-            alt: '\u2605',
+            alt: strings.get('coloredStarChar'),
         },
         blue: {
             src: Star.BASE_URI + 'images/star-blue.gif',
-            alt: '\u2605',
+            alt: strings.get('coloredStarChar'),
         },
         purple: {
             src: Star.BASE_URI + 'images/star-purple.gif',
-            alt: '\u2605',
+            alt: strings.get('coloredStarChar'),
         },
         temp: {
             src: Star.BASE_URI + 'images/star-temp.gif',
-            alt: '\u2606',
+            alt: strings.get('starChar'),
         },
     },
     addButton: {
         src: Star.BASE_URI + 'images/add.gif',
-        alt: '[Add Star]',
+        alt: strings.get('addButtonLabel'),
     },
 };
 

@@ -38,7 +38,7 @@ let Palette = {
         if (target.hasAttribute('canadd'))
             Palette.button.addStar(Palette.anchor, color);
         else
-            hOpenUILink('https://www.hatena.ne.jp/shop/star'); // XXX Needs localization.
+            hOpenUILink(Star.strings.get('starShopURL'));
         Palette.panel.hidePopup();
     },
 

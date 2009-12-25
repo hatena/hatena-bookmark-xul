@@ -13,7 +13,7 @@ extend(AddButton, {
 extend(AddButton.prototype, {
     addStar: function SAB_addStar(element, color) {
         if (!Star.canModify) {
-            hOpenUILink('http://s.hatena.ne.jp/guide'); // XXX localize this URL.
+            hOpenUILink(Star.strings.get('starGuideURL'));
             return;
         }
         let tempStar = this.addTemporaryStar(element);
