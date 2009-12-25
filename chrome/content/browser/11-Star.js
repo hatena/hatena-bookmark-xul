@@ -96,8 +96,9 @@ var Star = {
                     span.targetURI = entry.uri;
                     container.appendChild(span);
                 } else {
-                    // XXX Do something with |star.count|.
                     let elem = Star.createStar(star.name, star.quote, color, highlight);
+                    if (star.count && star.count > 1)
+                        elem.appendChild(document.createTextNode(star.count));
                     container.appendChild(elem);
                 }
             });
