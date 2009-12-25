@@ -147,11 +147,7 @@ var CommentViewer = {
         // 場当たり的な対応が増えてよろしくないので、後で修正したい。
         //let URLRegex = new RegExp("\\b((?:http|https|ftp)://[A-Za-z0-9~/._\?\&=\\-%#\+:\;,\@\']+)", 'g');
         let htmlEscapedURLRegex = /\b(?:https?|ftp):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\']|&(?!lt;|gt;|quot;))+/g;
-        // ログインしていれば、はてなスターの rks がなくても、とりあえず
-        // スター追加ボタンを表示する。実際に追加するまでに rks を
-        // 取得できればよし、できなければエラーメッセージを出す。
-        // XXX エラーメッセージを出す処理をどこかに書く。
-        let starCreator = User.user ? CommentViewer.starCreator : null;
+        let starCreator = CommentViewer.starCreator;
         let highlightContainerClass = Star.classes.HIGHLIGHT_CONTAINER;
         while (i++ < Math.min(limit, len)) {
             let b = bookmarks.shift();
@@ -182,10 +178,8 @@ var CommentViewer = {
             li.appendChild(container);
             li.appendChild(a = E('span', {}, ymd));
             a.className = 'timestamp';
-            if (starCreator) {
-                li.appendChild(document.createTextNode(' '));
-                li.appendChild(starCreator.createPlaceholder(permalink));
-            }
+            li.appendChild(document.createTextNode(' '));
+            li.appendChild(starCreator.createPlaceholder(permalink));
             fragment.appendChild(li);
             CommentViewer.commentElements[b.user] = li;
         }

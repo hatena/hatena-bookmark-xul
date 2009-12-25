@@ -5,9 +5,8 @@ function Creator(title, location) {
 }
 
 extend(Creator.prototype, {
-    createForEntry: function SC_createForEntry(entry, highlight,
-                                               withAddButton) {
-        return Star.createStarsForEntry(entry, highlight, withAddButton,
+    createForEntry: function SC_createForEntry(entry, highlight) {
+        return Star.createStarsForEntry(entry, highlight, true,
                                         this.title, this.location);
     },
 
