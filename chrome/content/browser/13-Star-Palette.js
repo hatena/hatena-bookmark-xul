@@ -23,6 +23,7 @@ let Palette = {
     setStatus: function SP_setStatus(colors) {
         for (let [color, count] in new Iterator(colors)) {
             let image = document.getElementById('hBookmark-star-palette-' + color);
+            if (!image) continue;
             if (count)
                 image.setAttribute('canadd', 'true');
             else
