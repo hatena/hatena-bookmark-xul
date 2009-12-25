@@ -85,13 +85,11 @@ a.commentlink {
 }
 
 .hBookmark-star > img {
-  vertical-align: middle;
   margin-bottom: 3px;
   border: none;
 }
 
 .hBookmark-star-add-button {
-  vertical-align: middle;
   cursor: pointer;
 }
 
@@ -99,11 +97,15 @@ a.commentlink {
   cursor: pointer;
 }
 
-.hBookmark-star-inner-count.yellow { color: #f4b128; }
-.hBookmark-star-inner-count.green  { color: #8ed701; }
-.hBookmark-star-inner-count.red    { color: #ea475c; }
-.hBookmark-star-inner-count.blue   { color: #57b1ff; }
-.hBookmark-star-inner-count.purple { color: #cd34e3; }
+.hBookmark-star, .hBookmark-star-inner-count {
+  font: bold 0.92em Arial, sans-serif;
+}
+
+.hBookmark-star.yellow, .hBookmark-star-inner-count.yellow { color: #f4b128; }
+.hBookmark-star.green,  .hBookmark-star-inner-count.green  { color: #8ed701; }
+.hBookmark-star.red,    .hBookmark-star-inner-count.red    { color: #ea475c; }
+.hBookmark-star.blue,   .hBookmark-star-inner-count.blue   { color: #57b1ff; }
+.hBookmark-star.purple, .hBookmark-star-inner-count.purple { color: #cd34e3; }
 
 .hBookmark-star-highlight {
   font-style: normal;

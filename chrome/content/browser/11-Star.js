@@ -97,8 +97,10 @@ var Star = {
                     container.appendChild(span);
                 } else {
                     let elem = Star.createStar(star.name, star.quote, color, highlight);
-                    if (star.count && star.count > 1)
+                    if (star.count && star.count > 1) {
                         elem.appendChild(document.createTextNode(star.count));
+                        elem.className += ' with-count';
+                    }
                     container.appendChild(elem);
                 }
             });
