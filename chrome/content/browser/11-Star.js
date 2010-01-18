@@ -161,7 +161,7 @@ var Star = {
             }
         }
         if (!newEventType) {
-            if (target.className === classes.STAR)
+            if (target.className.indexOf(classes.STAR + ' ') === 0)
                 newEventType = Star.EVENT_STAR_ACTIVATED;
             else if (target.className.indexOf(classes.INNER_COUNT + ' ') === 0)
                 newEventType = Star.EVENT_STAR_INNER_COUNT_ACTIVATED;
