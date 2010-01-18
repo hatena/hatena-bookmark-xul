@@ -80,6 +80,9 @@ function testSearchAny() {
 
     res = BOOKMARK.searchByComment('title', 10);
     assert.equals(res.length, 0);
+
+    res = BOOKMARK.searchByComment('comment_', 10);
+    assert.equals(res.length, 0);
 }
 
 function testSearchMultibyte() {
