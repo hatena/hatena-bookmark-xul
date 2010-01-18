@@ -63,7 +63,7 @@ var Star = {
 
     createStar: function Star_createStar(user, quote, color, highlight) {
         var star = Star.baseElements[color].cloneNode(true);
-        star.href = Star.BASE_URI + user + '/';
+        star.href = UserUtils.getHomepage(user, 'b');
         star.user = user;
         star.quote = quote;
         star.highlight = highlight;
