@@ -9,8 +9,11 @@
   vertical-align: middle;
 }
 
-.hBookmark-star-add-button {
-  vertical-align: middle;
+.hBookmark-star-add-button,
+/* |#hBookmark-comment-list li img| での指定を上書き */
+#hBookmark-comment-list .hBookmark-star-add-button {
+  /* XXX |middle| など、フォントサイズに依存した指定のほうがよくないか? */
+  vertical-align: -3px;
   cursor: pointer;
 }
 .hBookmark-star-add-button:not(:only-child) {
