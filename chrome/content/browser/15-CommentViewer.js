@@ -23,7 +23,10 @@ elementGetter(this, 'usersLabel', 'hBookmark-comment-users', document);
 elementGetter(this, 'usersPubPriLabel', 'hBookmark-comment-pub-pri-users', document);
 elementGetter(this, 'starsLabel', 'hBookmark-comment-stars', document);
 elementGetter(this, 'toggleImage', 'hBookmark-comment-toggle', document);
+elementGetter(this, 'starsLoadingIndicator', 'hBookmark-comment-stars-loading-indicator', document);
+elementGetter(this, 'pageStarsBox', 'hBookmark-comment-page-stars-box', document);
 elementGetter(this, 'pageStarsContainer', 'hBookmark-comment-page-stars-container', document);
+elementGetter(this, 'expandedPageStarsBox', 'hBookmark-comment-expanded-page-stars-box', document);
 elementGetter(this, 'expandedPageStarsContainer', 'hBookmark-comment-expanded-page-stars-container', document);
 
 let userIcon = function(username) {
@@ -213,7 +216,8 @@ var CommentViewer = {
                             (!pageStarsContainer.hasChildNodes() &&
                              !expandedPageStarsContainer.hasChildNodes())
         if (loadPageStars) {
-            pageStarsContainer.setAttribute('loading', true);
+            starsLoadingIndicator.collapsed = false;
+            pageStarsBox.collapsed = true;
         }
         CommentViewer._pendingStarEntries = [];
         CommentViewer.starLoader = new Star.Loader();
@@ -334,8 +338,9 @@ var CommentViewer = {
         CommentViewer.starLoader = null;
         UIUtils.deleteContents(pageStarsContainer);
         UIUtils.deleteContents(expandedPageStarsContainer);
-        pageStarsContainer.style.display = '';
-        expandedPageStarsContainer.style.display = 'none';
+        starsLoadingIndicator.collapsed = false;
+        pageStarsBox.collapsed = true;
+        expandedPageStarsBox.collapsed = true;
     },
     popupShownHandler: function(ev) {
         if (ev.eventPhase !== Event.AT_TARGET) return;
@@ -484,14 +489,15 @@ var CommentViewer = {
     },
     renderPageStar: function CommentViewer_renderPageStar(entry) {
         let stars = CommentViewer.starCreator.createForEntry(entry, false);
-        pageStarsContainer.removeAttribute('loading');
         pageStarsContainer.appendChild(stars);
+        starsLoadingIndicator.collapsed = true;
+        pageStarsBox.collapsed = false;
     },
     renderExpandedPageStar: function CommentViewer_renderExpandedPageStar(entry) {
         let stars = CommentViewer.starCreator.createForEntry(entry, false);
         expandedPageStarsContainer.appendChild(stars);
-        pageStarsContainer.style.display = 'none';
-        expandedPageStarsContainer.style.display = '';
+        pageStarsBox.collapsed = true;
+        expandedPageStarsBox.collapsed = false;
     },
     _starLoader: null,
     get starLoader() CommentViewer._starLoader,

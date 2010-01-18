@@ -32,11 +32,6 @@
   background-color: #ffb;
 }
 
-/* XXX To be changed. */
-#hBookmark-comment-page-stars-container[loading]:before {
-  content: "☆…";
-}
-
 #hBookmark-star-palette {
   -moz-appearance: none !important;
   background-color: #fff;
