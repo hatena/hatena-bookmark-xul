@@ -148,6 +148,7 @@ var Star = {
     },
 
     onClick: function Star_onClick(event) {
+        if (event.button === 2) return; // Do nothing with right click.
         let newEventType = null;
         let target = event.target;
         let classes = Star.classes;

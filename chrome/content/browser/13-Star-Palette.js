@@ -4,7 +4,7 @@ let Palette = {
         let panel = document.getElementById('hBookmark-star-palette');
         panel.addEventListener('click', this.onPanelClick, false);
         panel.addEventListener('popuphidden', this.onPanelHidden, false);
-        document.addEventListener('click', this.onDocumentClick, true);
+        document.addEventListener('mousedown', this.onDocumentMouseDown, true);
         delete this.panel;
         return this.panel = panel;
     },
@@ -32,6 +32,7 @@ let Palette = {
     },
 
     onPanelClick: function SP_onPanelClick(event) {
+        if (event.button === 2) return;
         let target = event.target;
         let color = target.getAttribute('color');
         if (!color) return;
@@ -46,7 +47,7 @@ let Palette = {
         Palette.button = Palette.anchor = null;
     },
 
-    onDocumentClick: function SP_onDocumentClick(event) {
+    onDocumentMouseDown: function SP_onDocumentMouseDown(event) {
         if (event.target === Palette.panel ||
             event.target.parentNode === Palette.panel)
             return;
