@@ -289,7 +289,9 @@
             <description id="hBookmark-star-tooltip-quote"/>
         </tooltip>
 
-        <panel id="hBookmark-star-palette">
+        <!-- Without the value 'top' of the level attribute, this popup is
+             laid under the comment viewer popup in Mac Firefox 3.5. -->
+        <panel id="hBookmark-star-palette" level="top">
             <image id="hBookmark-star-palette-green"
                    class="hBookmark-star-palette-color"
                    color="green"/>
