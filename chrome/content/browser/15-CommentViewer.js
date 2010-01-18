@@ -257,7 +257,6 @@ var CommentViewer = {
                 CommentViewer.lazyWriter.start();
             }
         } else {
-            // XXX Needs localization!
             let li = E('li', {} , strings.get('noBookmarkLabel'));
             li.className = 'notice';
             fragment.appendChild(li);
