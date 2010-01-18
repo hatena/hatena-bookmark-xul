@@ -39,6 +39,8 @@ let userIcon = function(username) {
     });
 }
 
+let strings = new Strings('chrome://hatenabookmark/locale/commentViewer.properties');
+
 var CommentViewer = {
     filterToggle: function() {
         CommentViewer.prefs.set('showAll', !CommentViewer.prefs.get('showAll'));
@@ -55,13 +57,16 @@ var CommentViewer = {
         CommentViewer.updateImage(CommentViewer.isFilter);
     },
     updateImage: function(filterd) {
-        let src;
+        let src, tooltip;
         if (filterd) {
-             src = "chrome://hatenabookmark/skin/images/comment-viewer-toggle-off.png";
+            src = "chrome://hatenabookmark/skin/images/comment-viewer-toggle-off.png";
+            tooltip = strings.get('showAllBookmarksTooltip');
         } else {
-             src = "chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png";
+            src = "chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png";
+            tooltip = strings.get('showCommentedBookmarksTooltip');
         }
         toggleImage.src = src;
+        toggleImage.tooltipText = tooltip;
     },
     get isFilter() {
         return !CommentViewer.prefs.get('showAll');
@@ -253,7 +258,7 @@ var CommentViewer = {
             }
         } else {
             // XXX Needs localization!
-            let li = E('li', {} , UIEncodeText('表示できるブックマークコメントはありません。'));
+            let li = E('li', {} , strings.get('noBookmarkLabel'));
             li.className = 'notice';
             fragment.appendChild(li);
         }
