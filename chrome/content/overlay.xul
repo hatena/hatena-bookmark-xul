@@ -274,8 +274,7 @@
                 </hbox>
                 <vbox id="hBookmark-comment-expanded-page-stars-box"
                       collapsed="true">
-                    <html:div id="hBookmark-comment-expanded-page-stars-container"
-                              style="display: none;"/>
+                    <html:div id="hBookmark-comment-expanded-page-stars-container"/>
                 </vbox>
             </vbox>
         </vbox>
