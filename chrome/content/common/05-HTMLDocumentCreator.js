@@ -9,26 +9,31 @@ let HDC = {
         let range = doc.createRange();
         range.selectNodeContents(doc.documentElement);
         let fragment = range.createContextualFragment(source);
-        // createContextualFragment で作った文書片には
-        // head 要素と body 要素が欠けているので、自分で作ってやる
-        let head = doc.createElement('head');
-        let headChildNames = {
-            title: true, meta: true, link: true, script: true, style: true,
-            object: true, base: true, isindex: true,
-        };
-        let child;
-        while ((child = fragment.firstChild)) {
-            if ((child.nodeType === Node.ELEMENT_NODE &&
-                 !(child.nodeName.toLowerCase() in headChildNames)) ||
-                (child.nodeType === Node.TEXT_NODE &&
-                 /\S/.test(child.nodeValue)))
-                break;
-            head.appendChild(child);
+        if (Array.some(fragment.childNodes, function (child)
+                       child instanceof Ci.nsIDOMHTMLBodyElement)) {
+            doc.documentElement.appendChild(fragment);
+        } else {
+            // createContextualFragment で作った文書片には
+            // head 要素と body 要素が欠けているので、自分で作ってやる
+            let head = doc.createElement('head');
+            let headChildNames = {
+                title: true, meta: true, link: true, script: true, style: true,
+                object: true, base: true, isindex: true,
+            };
+            let child;
+            while ((child = fragment.firstChild)) {
+                if ((child.nodeType === Node.ELEMENT_NODE &&
+                     !(child.nodeName.toLowerCase() in headChildNames)) ||
+                    (child.nodeType === Node.TEXT_NODE &&
+                     /\S/.test(child.nodeValue)))
+                    break;
+                head.appendChild(child);
+            }
+            let body = doc.createElement('body');
+            body.appendChild(fragment);
+            doc.documentElement.appendChild(head);
+            doc.documentElement.appendChild(body);
         }
-        let body = doc.createElement('body');
-        body.appendChild(fragment);
-        doc.documentElement.appendChild(head);
-        doc.documentElement.appendChild(body);
         if (!doc.title) {
             // Firefox 3 では HTMLDocument.title が自動的に
             // 設定されないようなので、手動で設定する

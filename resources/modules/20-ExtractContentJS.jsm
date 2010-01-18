@@ -559,8 +559,8 @@ if (typeof ExtractContentJS == 'undefined') {
         };
 
         self.extract = function(d) {
-            var url = d.location.href;
-            var res = { title: d.title, url: d.location.href };
+            var url = d.location ? d.location.href : '';
+            var res = { title: d.title, url: url };
             var len = self.handler.length;
             for (var i=0; i < len; i++) {
                 var content = self.handler[i].extract(d, url, res);
