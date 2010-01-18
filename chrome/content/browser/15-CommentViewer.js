@@ -261,17 +261,19 @@ var CommentViewer = {
         faviconImage.src = data.favicon;
         titleLabel.value = title;
         titleLabel.tooltipText = title;
-        let c = data.count;
+        let c = +data.count;
         if (c) {
-            usersLabel.value = parseInt(data.count) == 0 ? (data.count + ' user') :  data.count + ' users';
+            usersLabel.value = UIUtils.getUsersText(c);
+            usersLabel.collapsed = false;
             if (data.privateCount) {
                 usersPubPriLabel.value = '(' + data.publicCount + ' + ' + data.privateCount + ')';
+                usersPubPriLabel.collapsed = false;
             } else {
-                usersPubPriLabel.value = '';
+                usersPubPriLabel.collapsed = true;
             }
         } else {
-            usersLabel.value = '';
-            usersPubPriLabel.value = '';
+            usersLabel.collapsed = true;
+            usersPubPriLabel.collapsed = true;
         }
         setTimeout(function() {
              CommentViewer.updatePosition();
