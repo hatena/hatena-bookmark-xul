@@ -297,6 +297,12 @@ liberator.plugins.hBookmark = (function() {
     plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment']);
 
     plugin.toggleComment = function(url) {
+        if (!url && content.location.href.indexOf('reader.livedoor.com/reader') >= 0) {
+              let item = content.window.wrappedJSObject.get_active_item(true);
+              if (item) {
+                  url = item.link;
+              }
+        }
         HatenaBookmark.CommentViewer.toggle(url);
     }
 
