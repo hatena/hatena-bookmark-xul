@@ -345,6 +345,7 @@ function tryToEmbedWidgets(event) {
     let doc = event.target;
     if (Prefs.bookmark.get("embed.enabled") &&
         doc instanceof HTMLDocument &&
+        /^https?:/.test(doc.defaultView.location.href) &&
         HTTPCache.counter.isValid(doc.defaultView.location.href))
         new WidgetEmbedder(doc);
 }

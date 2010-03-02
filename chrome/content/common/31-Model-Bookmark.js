@@ -20,16 +20,17 @@ let createWhereLike = function (word, fieldName) {
     var args = {};
     var c = 0;
     var likeGenerateor = function(word) {
-        var word = '%' + word + '%';
+        var word = '%' + word.replace(/[_%#]/g, '#$&') + '%';
         var c1 = 'arg' + c++;
         var arg = {};
         arg[c1] = word;
-        return [<>
-          {fieldName} like :{c1}
-        </>.toString(), arg];
+        // escape 演算子を使うと遅くなるらしいので、必要なときのみ使う。
+        return [fieldName + ' like :' + c1 +
+                (word.indexOf('#') === -1 ? '' : " escape '#'"),
+                arg];
     }
     for (var i = 0;  i < words.length; i++) {
-       var w = words[i];
+        var w = words[i];
         if (w.length) {
             var [sq, arg] = likeGenerateor(w);
             sql.push('(' + sq + ')');

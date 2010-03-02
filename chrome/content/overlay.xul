@@ -2,12 +2,15 @@
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/toolbar.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/toolbar.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/commentViewer.css"?>
+<?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/star.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/content/widgets.css"?>
 <?xml-stylesheet type="text/css" href="chrome://hatenabookmark/skin/browser.css"?>
 <?xul-overlay href="chrome://hatenabookmark/content/popupsOverlay.xul"?>
 <!DOCTYPE overlay SYSTEM "chrome://hatenabookmark/locale/browser.dtd" [
     <!ENTITY % toolbar SYSTEM "chrome://hatenabookmark/locale/toolbar.dtd">
     %toolbar;
+    <!ENTITY % star SYSTEM "chrome://hatenabookmark/locale/star.dtd">
+    %star;
 ]>
 <overlay id="HatenabookmarkOverlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     xmlns:html="http://www.w3.org/1999/xhtml"
@@ -254,17 +257,26 @@
                     />
                 </html:div>
             </vbox>
-            <hbox 
-               id="hBookmark-comment-footer"
-               flex="1"
-               align="center"
-            >
-                <image id="hBookmark-comment-favicon" />
-                <label flex="1" id="hBookmark-comment-title" crop="end" />
-                <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-users" />
-                <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-pub-pri-users" />
-                <image onclick="hBookmark.CommentViewer.filterToggle(event);" src="chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png" id="hBookmark-comment-toggle" />
-            </hbox>
+            <vbox id="hBookmark-comment-footer">
+                <hbox align="center">
+                    <image id="hBookmark-comment-favicon" />
+                    <label flex="1" id="hBookmark-comment-title" crop="end" />
+                    <image id="hBookmark-comment-stars-loading-indicator"
+                           src="chrome://hatenabookmark/skin/images/star-loading.gif"
+                           tooltiptext="&hBookmark.star.loadingTooltip;"/>
+                    <vbox id="hBookmark-comment-page-stars-box"
+                          collapsed="true">
+                        <html:div id="hBookmark-comment-page-stars-container"/>
+                    </vbox>
+                    <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-users" />
+                    <label onclick="hBookmark.CommentViewer.goEntry(event);" id="hBookmark-comment-pub-pri-users" />
+                    <image onclick="hBookmark.CommentViewer.filterToggle(event);" src="chrome://hatenabookmark/skin/images/comment-viewer-toggle-on.png" id="hBookmark-comment-toggle" />
+                </hbox>
+                <vbox id="hBookmark-comment-expanded-page-stars-box"
+                      collapsed="true">
+                    <html:div id="hBookmark-comment-expanded-page-stars-container"/>
+                </vbox>
+            </vbox>
         </vbox>
         </panel>
         <panel 
@@ -279,6 +291,30 @@
             id="hBookmark-urlbar-listbox" flex="1" />
         </panel>
 
+        <tooltip id="hBookmark-star-tooltip">
+            <hbox align="center">
+                <image id="hBookmark-star-tooltip-icon"/>
+                <label id="hBookmark-star-tooltip-user"/>
+            </hbox>
+            <description id="hBookmark-star-tooltip-quote"/>
+        </tooltip>
+
+        <!-- Without the value 'top' of the level attribute, this popup is
+             laid under the comment viewer popup in Mac Firefox 3.5. -->
+        <panel id="hBookmark-star-palette" level="top">
+            <image id="hBookmark-star-palette-green"
+                   class="hBookmark-star-palette-color"
+                   color="green"/>
+            <image id="hBookmark-star-palette-red"
+                   class="hBookmark-star-palette-color"
+                   color="red"/>
+            <image id="hBookmark-star-palette-blue"
+                   class="hBookmark-star-palette-color"
+                   color="blue"/>
+            <image id="hBookmark-star-palette-purple"
+                   class="hBookmark-star-palette-color"
+                   color="purple"/>
+        </panel>
     </popupset>
 
     <broadcasterset id="mainBroadcasterSet">

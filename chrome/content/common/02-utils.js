@@ -214,12 +214,18 @@ var net = {};
 net.makeQuery =  function net_makeQuery (data) {
     let pairs = [];
     let regexp = /%20/g;
+    let toString = Object.prototype.toString;
     for (let k in data) {
         if (typeof data[k] == 'undefined') continue;
-        let v = data[k].toString();
-        let pair = encodeURIComponent(k).replace(regexp,'+') + '=' +
-            encodeURIComponent(v).replace(regexp,'+');
-        pairs.push(pair);
+        let n = encodeURIComponent(k);
+        let v = data[k];
+        if (toString.call(v) === '[object Array]') {
+            pairs.push(v.map(function (c) {
+                return n + '=' + encodeURIComponent(c).replace(regexp, '+');
+            }).join('&'));
+        } else {
+            pairs.push(n + '=' + encodeURIComponent(v).replace(regexp, '+'));
+        }
     }
     return pairs.join('&');
 }

@@ -157,10 +157,35 @@ width: 800px;
     padding: 10px;
 }
 
+#hBookmark-comment-footer > hbox {
+    /* スター読み込みアイコンとスターとの高さの違いによるがたつきを防ぐ。 */
+    min-height: 20px;
+}
+
 #hBookmark-comment-list-container {
     display: block;
     overflow-y: auto;
     margin: 2px;
+}
+
+#hBookmark-comment-favicon {
+    -moz-margin-end: 4px;
+}
+#hBookmark-comment-title,
+#hBookmark-comment-stars-loading-indicator,
+#hBookmark-comment-page-stars-box,
+#hBookmark-comment-users,
+#hBookmark-comment-pub-pri-users {
+    -moz-margin-start: 4px;
+    -moz-margin-end: 4px;
+}
+#hBookmark-comment-toggle {
+    -moz-margin-start: 4px;
+}
+
+#hBookmark-comment-favicon {
+    width: 16px;
+    height: 16px;
 }
 
 #hBookmark-comment-users {
@@ -168,7 +193,6 @@ width: 800px;
     text-decoration: underline;
     color: #FF6e6e;
     font-weight: bold;
-    padding-left: 14px;
     font-size: 0.9em;
 }
 
@@ -176,6 +200,11 @@ width: 800px;
     font-size: 0.9em;
     text-decoration: none;
     color: #555;
+}
+
+#hBookmark-comment-expanded-page-stars-container {
+    line-height: 0.82em;
+    margin-top: 0.32em;
 }
 
 /* vbox */

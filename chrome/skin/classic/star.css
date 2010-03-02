@@ -1,0 +1,83 @@
+
+.hBookmark-star {
+  text-decoration: none;
+}
+
+.hBookmark-star > img {
+  margin-bottom: 3px;
+  border: none;
+  vertical-align: middle;
+}
+
+.hBookmark-star-add-button,
+/* |#hBookmark-comment-list li img| での指定を上書き */
+#hBookmark-comment-list .hBookmark-star-add-button {
+  /* XXX |middle| など、フォントサイズに依存した指定のほうがよくないか? */
+  vertical-align: -3px;
+  cursor: pointer;
+}
+.hBookmark-star-add-button:not(:only-child) {
+  -moz-margin-end: 3px;
+}
+
+.hBookmark-star-inner-count {
+  padding: 0 2px;
+  cursor: pointer;
+}
+
+.hBookmark-star, .hBookmark-star-inner-count {
+  font: bold 0.88em Arial, sans-serif;
+}
+
+.hBookmark-star.yellow, .hBookmark-star-inner-count.yellow { color: #f4b128; }
+.hBookmark-star.green,  .hBookmark-star-inner-count.green  { color: #8ed701; }
+.hBookmark-star.red,    .hBookmark-star-inner-count.red    { color: #ea475c; }
+.hBookmark-star.blue,   .hBookmark-star-inner-count.blue   { color: #57b1ff; }
+.hBookmark-star.purple, .hBookmark-star-inner-count.purple { color: #cd34e3; }
+
+.hBookmark-star-highlight {
+  font-style: normal;
+  font-weight: normal;
+  background-color: #f4f798;
+}
+
+#hBookmark-star-palette {
+  -moz-appearance: none !important;
+  background-color: #fff;
+  border: 1px solid #b0b0e0;
+  padding: 1px;
+}
+
+.hBookmark-star-palette-color {
+  margin: 1px 0 0 0;
+  list-style-image: url("chrome://hatenabookmark/skin/images/star-palette.png");
+  cursor: pointer;
+}
+.hBookmark-star-palette-color:first-child {
+  margin: 0;
+}
+
+#hBookmark-star-palette-green {
+  -moz-image-region: rect(11px, 28px, 22px, 14px);
+}
+#hBookmark-star-palette-green[canadd] {
+  -moz-image-region: rect(11px, 14px, 22px, 0px);
+}
+#hBookmark-star-palette-red {
+  -moz-image-region: rect(22px, 28px, 33px, 14px);
+}
+#hBookmark-star-palette-red[canadd] {
+  -moz-image-region: rect(22px, 14px, 33px, 0px);
+}
+#hBookmark-star-palette-blue {
+  -moz-image-region: rect(33px, 28px, 44px, 14px);
+}
+#hBookmark-star-palette-blue[canadd] {
+  -moz-image-region: rect(33px, 14px, 44px, 0px);
+}
+#hBookmark-star-palette-purple {
+  -moz-image-region: rect(44px, 28px, 55px, 14px);
+}
+#hBookmark-star-palette-purple[canadd] {
+  -moz-image-region: rect(44px, 14px, 55px, 0px);
+}
