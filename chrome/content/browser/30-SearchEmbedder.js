@@ -18,9 +18,9 @@ SearchEmbedder.STATE_COMPLETE    = -1;
 extend(SearchEmbedder.prototype, {
     strings: new Strings("chrome://hatenabookmark/locale/embed.properties"),
 
-    get doc SE_get_doc() this.site.doc,
-    get win SE_get_win() this.site.win,
-    get url SE_get_url() this.site.url,
+    get doc() this.site.doc,
+    get win() this.site.win,
+    get url() this.site.url,
 
     isValidDomain: function SE_isValidDomain() {
         const TLDService = getService("@mozilla.org/network/effective-tld-service;1", Ci.nsIEffectiveTLDService);
@@ -117,7 +117,7 @@ extend(SearchEmbedder.prototype, {
         head.appendChild(style);
     },
 
-    get insertionPoint SE_get_insertionPoint() {
+    get insertionPoint() {
         if (this._insertionPoint) return this._insertionPoint.cloneRange();
         let annotation = this.site.query("annotation", this.doc);
         if (!annotation) return null;
@@ -145,7 +145,7 @@ extend(SearchEmbedder.prototype, {
         return range.cloneRange();
     },
 
-    get searchElement SE_get_searchElement() {
+    get searchElement() {
         return this.doc.getElementById("hBookmark-search");
     },
 

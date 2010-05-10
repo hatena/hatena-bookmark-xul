@@ -8,7 +8,7 @@ var HttpWatcher = shared.get("HttpWatcher") || {
         //"localhost",
     ],
 
-    get targetHosts HW_get_targetHosts() {
+    get targetHosts() {
         let hosts = this.targetHostsArray.reduce(function (hosts, host) {
             hosts[host] = true;
             return hosts;

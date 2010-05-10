@@ -354,7 +354,7 @@ var LocationBar = {
             }, 0);
         }
     },
-    get bar function() document.getElementById('urlbar'),
+    get bar() document.getElementById('urlbar'),
 };
 
 /*

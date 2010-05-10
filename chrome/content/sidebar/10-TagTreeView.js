@@ -30,13 +30,13 @@ function TagTreeItem(tag, parentItem) {
 }
 
 extend(TagTreeItem.prototype, {
-    get shouldBeOpen TTI_get_shouldBeOpen() {
+    get shouldBeOpen() {
         let resource = RDFService.GetResource(this.uri);
         return !!resource &&
                LocalStore.HasAssertion(resource, OPEN, TRUE, true);
     },
 
-    set shouldBeOpen TTI_set_shouldBeOpen(open) {
+    set shouldBeOpen(open) {
         let resource = RDFService.GetResource(this.uri);
         if (resource) {
             if (open)

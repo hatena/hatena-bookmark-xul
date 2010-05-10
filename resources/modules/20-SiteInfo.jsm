@@ -20,8 +20,8 @@ function SiteInfo(data, url, doc) {
 }
 
 extend(SiteInfo.prototype, {
-    get doc SI_get_doc() let (w = this.win) w && w.document,
-    get win SI_get_win() {
+    get doc() let (w = this.win) w && w.document,
+    get win() {
         try {
             return this._win.QueryReferent(Ci.nsIDOMWindow);
         } catch (ex) {

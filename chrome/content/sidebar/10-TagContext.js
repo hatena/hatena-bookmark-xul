@@ -57,7 +57,7 @@ extend(TagContext.prototype, {
         this.tags = null;
     },
 
-    get bookmarks TC_get_bookmarks() Model.Bookmark.findByTags(this.tags),
+    get bookmarks() Model.Bookmark.findByTags(this.tags),
 
     openBookmarks: function TC_openBookmarks(event) {
         let urls = this.bookmarks.map(function (b) b.url);
@@ -124,7 +124,7 @@ extend(TagContext.prototype, {
         command.execute();
     },
 
-    get _toolbarRecentLine TC_get__toolbarRecentLine() {
+    get _toolbarRecentLine() {
         return getTopWin().document.getElementById("hBookmark-toolbar-recent-line");
     },
 

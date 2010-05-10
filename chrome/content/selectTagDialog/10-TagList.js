@@ -60,16 +60,16 @@ extend(TagList.prototype, {
         this.tags = tags;
     },
 
-    get selectedTag TL_get_selectedTag() {
+    get selectedTag() {
         let index = this.selection.currentIndex;
         return this.tags[index] || null;
     },
 
-    get treeBody TL_get_treeBody() this._tree && this._tree.treeBody,
+    get treeBody() this._tree && this._tree.treeBody,
 
     // nsITreeView
 
-    get rowCount TL_get_rowCount() this.tags.length,
+    get rowCount() this.tags.length,
 
     getCellText: function TL_getCellText(row, col) {
         switch (col.id) {

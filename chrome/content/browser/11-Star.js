@@ -47,9 +47,9 @@ var Star = {
         Star.baseElements = elements;
     },
 
-    get canModify Star_get_canModify() !!(User.user && Star.rks),
+    get canModify() !!(User.user && Star.rks),
 
-    get tooltip Star_get_tooltip() {
+    get tooltip() {
         let tooltip = {
             body:  document.getElementById('hBookmark-star-tooltip'),
             icon:  document.getElementById('hBookmark-star-tooltip-icon'),

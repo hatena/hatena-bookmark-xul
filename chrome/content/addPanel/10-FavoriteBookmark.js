@@ -5,9 +5,9 @@ function FavoriteBookmark(favorite) {
 }
 
 extend(FavoriteBookmark.prototype, {
-    get name FB_get_name() this._favorite.name,
+    get name() this._favorite.name,
 
-    get comment FB_get_comment() {
+    get comment() {
         let comment = "";
         if (this._favorite.tags.length)
             comment = "[" + this._favorite.tags.join("][") + "]";

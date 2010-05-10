@@ -10,7 +10,7 @@ var Prefs = function (branchName) {
 }
 
 Prefs.prototype = {
-    get prefs function() {
+    get prefs() {
         if (!this._prefs) {
             if (this._branch) {
                 this._prefs = PrefService.getBranch(this._branch);
@@ -23,7 +23,7 @@ Prefs.prototype = {
         return this._prefs;
     },
 
-    get branch function() this._branch,
+    get branch() this._branch,
 
     get: function Prefs_get(name, debug) {
         let prefs = this.prefs;

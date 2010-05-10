@@ -21,11 +21,11 @@ var AddPanelManager = {
         return bookmark;
     },
 
-    get panelDialog APM_get_panelDialog() {
+    get panelDialog() {
         return this.currentPanel && this.currentPanel.document.documentElement;
     },
 
-    get panelContent APM_get_panelContent() {
+    get panelContent() {
         if (!this.currentPanel || this.currentPanel.closed)
             return null;
         let doc = this.currentPanel.document;

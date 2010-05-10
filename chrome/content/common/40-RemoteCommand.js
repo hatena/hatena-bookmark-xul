@@ -43,18 +43,18 @@ extend(RemoteCommand, {
 EventService.implement(RemoteCommand.prototype);
 
 extend(RemoteCommand.prototype, {
-    get url RC_get_url() {
+    get url() {
         return B_HTTP + this.user.name + "/" +
                RemoteCommand.API_ENDPOINT[this.type] + '?editer=fxaddon';
     },
 
-    get query RC_get_query() {
+    get query() {
         let query = this.options.query || {};
         query.rks = this.user.rks;
         return query;
     },
 
-    get user RC_get_user() this.options.user || User.user,
+    get user() this.options.user || User.user,
 
     execute: function RC_execute() {
         this.hook();

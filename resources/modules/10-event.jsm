@@ -64,9 +64,14 @@ extend(EventDispatcher.prototype, {
 function getCallerWindow() {
     let object = arguments.callee.caller.caller;
     if (!object) return null;
-    while (object.__proto__)
-        object = object.__proto__;
-    let window = object.__parent__;
+    let window;
+    if (Cu.getGlobalForObject) {
+        window = Cu.getGlobalForObject(object);
+    } else {
+        while (object.__proto__)
+            object = object.__proto__;
+        window = object.__parent__;
+    }
     return (window && window.addEventListener) ? window : null;
 }
 

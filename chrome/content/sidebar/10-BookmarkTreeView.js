@@ -34,8 +34,8 @@ extend(BookmarkTreeView.prototype, {
         this._update();
     },
 
-    get isAscending BTV_get_isAscending() this._isAscending,
-    set isAscending BTV_set_isAscending(value) {
+    get isAscending() this._isAscending,
+    set isAscending(value) {
         let v = !!value;
         if (this._isAscending !== v) {
             this._isAscending = v;

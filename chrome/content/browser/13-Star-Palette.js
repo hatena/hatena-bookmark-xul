@@ -1,6 +1,6 @@
 
 let Palette = {
-    get panel SP_get_panel() {
+    get panel() {
         let panel = document.getElementById('hBookmark-star-palette');
         panel.addEventListener('click', this.onPanelClick, false);
         panel.addEventListener('popuphidden', this.onPanelHidden, false);
