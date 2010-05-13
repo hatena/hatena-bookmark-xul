@@ -154,15 +154,11 @@
             <toolbarbutton class="bookmark-item bookmarks-toolbar-customize"
                            label="&hBookmark.toolbar.recentLabel;"/>
         </toolbaritem>
-
-        <toolbaritem id="urlbar-container">
-               <textbox id="urlbar">
-                    <hbox id="urlbar-icons">
-                        <image id="hBookmark-search-icon" searchdisabled="true" onclick="hBookmark.LocationBar.iconClickHandler(event);" />
-                    </hbox>
-                </textbox>
-        </toolbaritem>
     </toolbarpalette>
+
+    <hbox id="urlbar-icons">
+        <image id="hBookmark-search-icon" searchdisabled="true" onclick="hBookmark.LocationBar.iconClickHandler(event);" />
+    </hbox>
 
     <toolbox id="navigator-toolbox">
         <toolbar id="hBookmarkToolbar"
