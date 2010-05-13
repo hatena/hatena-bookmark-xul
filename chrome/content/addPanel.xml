@@ -117,7 +117,12 @@
                               <xul:checkbox anonid="sendMailCheck"
                                             label="&hBookmark.addPanel.sendMailLabel;"
                                             preference="extensions.hatenabookmark.addPanel.sendMail"
-                                            tooltiptext="&hBookmark.addPanel.sendMailDescription;"/>
+                                            tooltiptext="&hBookmark.addPanel.sendMailDescription;"
+                                            normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
+                              <xul:checkbox anonid="postTwitterCheck"
+                                            label="&hBookmark.addPanel.postTwitterLabel;"
+                                            preference="extensions.hatenabookmark.addPanel.postTwitter"
+                                            tooltiptext="&hBookmark.addPanel.postTwitterDescription;"/>
                           </xul:hbox>
                       </xul:row>
                   </xul:rows>
@@ -164,9 +169,12 @@
                     w.style.backgroundPosition = 'left bottom';
                 }
                 this.inputHandler = new hBookmark.TagCompleter.InputHandler(this.commentField.inputField);
-                if (!hBookmark.User.user.plususer)
+                if (!hBookmark.User.user.plususer) {
                     this.isPrivateCheck.tooltipText +=
                         " " + this.isPrivateCheck.getAttribute("normalusernotice");
+                    this.sendMailCheck.tooltipText +=
+                        " " + this.sendMailCheck.getAttribute("normalusernotice");
+                }
             ]]></constructor>
 
             <field name="userIcon">
@@ -246,6 +254,9 @@
             </field>
             <field name="sendMailCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "sendMailCheck")
+            </field>
+            <field name="postTwitterCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "postTwitterCheck")
             </field>
             <field name="imageSelector">
                 document.getAnonymousElementByAttribute(this, "anonid", "imageSelector")
@@ -401,10 +412,12 @@
                     this.updateCommentCounter();
 
                     this.addCollectionCheck.hidden = true;
-                    this.isPrivateCheck.hidden = !user.plususer;
+                    //this.isPrivateCheck.hidden = !user.plususer;
                     this.isPrivateCheck.disabled = !user.plususer;
                     this.isPrivateCheck.checked = false;
-                    this.sendMailCheck.hidden = !user.plususer;
+                    //this.sendMailCheck.hidden = !user.plususer;
+                    this.sendMailCheck.disabled = !user.plususer;
+                    this.postTwitterCheck.disabled = !user.canUseTwitter;
                     this.recommendedTagSelectorGroup.hidden = true;
                     this.imageSelector.build();
                     this.imageSelector.hidden = !this.imageSelector.hasImages ||
@@ -668,6 +681,7 @@
                         addCollection: this.addCollectionCheck.checked,
                         isPrivate: this.isPrivateCheck.checked,
                         sendMail: this.sendMailCheck.checked,
+                        postTwitter: this.postTwitterCheck.checked,
                         asin: this.asin,
                         changeImage: this.imageSelector.isImageChanged,
                         image: this.imageSelector.selectedImageURI,

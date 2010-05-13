@@ -22,6 +22,8 @@
 <!ENTITY hBookmark.addPanel.isPrivateDescription "このブックマークを他のユーザーに公開しない (閲覧許可ユーザーにも公開されません)">
 <!ENTITY hBookmark.addPanel.sendMailLabel "メールする">
 <!ENTITY hBookmark.addPanel.sendMailDescription "ブックマークしたページを Web 上の設定ページで指定したメールアドレスに送信する">
+<!ENTITY hBookmark.addPanel.postTwitterLabel "Twitter に投稿">
+<!ENTITY hBookmark.addPanel.postTwitterDescription "このブックマークを Twitter に投稿する">
 <!ENTITY hBookmark.addPanel.normalUserNotice "※ プラスユーザー (有料オプション) のみ利用可能です">
 
 <!ENTITY hBookmark.addPanel.imageDescription "エントリーの画像は全ユーザ共通です">

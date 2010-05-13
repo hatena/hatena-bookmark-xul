@@ -156,6 +156,8 @@ extend(RemoteCommand.prototype, {
             query.private = 1;
         if (this.options.sendMail && user.plususer)
             query.send_mail = 1;
+        if (this.options.postTwitter && user.canUseTwitter)
+            query.post_twitter = 1;
         if (this.options.changeImage && user.public)
             query.image = this.options.image;
         if (user.plususer)

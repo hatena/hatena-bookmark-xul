@@ -22,6 +22,8 @@
 <!ENTITY hBookmark.addPanel.isPrivateDescription "Hide this bookmark from other people.  Access-permitted user also can't view this.">
 <!ENTITY hBookmark.addPanel.sendMailLabel "Send Mail">
 <!ENTITY hBookmark.addPanel.sendMailDescription "Send this bookmark to the mail address you specified in the configuration page on the web.">
+<!ENTITY hBookmark.addPanel.postTwitterLabel "Post to Twitter">
+<!ENTITY hBookmark.addPanel.postTwitterDescription "Post this bookmark to Twitter.">
 <!ENTITY hBookmark.addPanel.normalUserNotice "* Only Plus User (charged option) is able to use this feature.">
 
 <!ENTITY hBookmark.addPanel.imageDescription "The image is shared with all users. ">
