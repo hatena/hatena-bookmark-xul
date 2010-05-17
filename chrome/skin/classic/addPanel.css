@@ -274,3 +274,17 @@ image[anonid="icon"] {
   padding-left: 16px;
   background: url("chrome://hatenabookmark/skin/images/hints.gif") left no-repeat;
 }
+
+[anonid="optionsContainer"] {
+  display: block;
+}
+.hBookmark-option-with-help {
+  -moz-margin-end: 4px;
+}
+.hBookmark-option-with-help > checkbox {
+  -moz-margin-end: 0px;
+}
+.hBookmark-option-with-help > .hBookmark-help-icon {
+  list-style-image: url("http://b.hatena.ne.jp/images/help-tooltip.gif"); /* XXX Move to chrome://.../skin/images/... */
+  cursor: pointer;
+}

@@ -103,26 +103,51 @@
                       </xul:row>
                       <xul:row align="center">
                           <xul:spacer/>
-                          <xul:hbox align="center">
+                          <xul:hbox anonid="optionsContainer" align="center">
                               <xul:checkbox anonid="confirmEntryCheck"
                                             label="&hBookmark.addPanel.confirmEntryLabel;"
                                             preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
+                              <xul:hbox anonid="postTwitterContainer"
+                                        class="hBookmark-option-with-help"
+                                        align="center">
+                                  <xul:checkbox anonid="postTwitterCheck"
+                                                label="&hBookmark.addPanel.postTwitterLabel;"
+                                                preference="extensions.hatenabookmark.addPanel.postTwitter"
+                                                tooltiptext="&hBookmark.addPanel.postTwitterDescription;"/>
+                                  <xul:image class="hBookmark-help-icon"
+                                             tooltiptext="&hBookmark.addPanel.postTwitterHelpTooltip;"
+                                             href="&hBookmark.addPanel.postTwitterHelpURI;"
+                                             onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
+                              </xul:hbox>
+                              <xul:hbox anonid="isPrivateContainer"
+                                        class="hBookmark-option-with-help"
+                                        align="center">
+                                  <xul:checkbox anonid="isPrivateCheck"
+                                                class="hBookmark-has-help-icon"
+                                                label="&hBookmark.addPanel.isPrivateLabel;"
+                                                tooltiptext="&hBookmark.addPanel.isPrivateDescription;"
+                                                normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
+                                  <xul:image class="hBookmark-help-icon"
+                                             tooltiptext="&hBookmark.addPanel.isPrivateHelpTooltip;"
+                                             href="&hBookmark.addPanel.isPrivateHelpURI;"
+                                             onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
+                              </xul:hbox>
+                              <xul:hbox anonid="sendMailContainer"
+                                        class="hBookmark-option-with-help"
+                                        align="center">
+                                  <xul:checkbox anonid="sendMailCheck"
+                                                label="&hBookmark.addPanel.sendMailLabel;"
+                                                preference="extensions.hatenabookmark.addPanel.sendMail"
+                                                tooltiptext="&hBookmark.addPanel.sendMailDescription;"
+                                                normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
+                                  <xul:image class="hBookmark-help-icon"
+                                             tooltiptext="&hBookmark.addPanel.sendMailHelpTooltip;"
+                                             href="&hBookmark.addPanel.sendMailHelpURI;"
+                                             onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
+                              </xul:hbox>
                               <xul:checkbox anonid="addCollectionCheck"
                                             label="&hBookmark.addPanel.addCollectionLabel;"
                                             preference="extensions.hatenabookmark.addPanel.addCollection"/>
-                              <xul:checkbox anonid="isPrivateCheck"
-                                            label="&hBookmark.addPanel.isPrivateLabel;"
-                                            tooltiptext="&hBookmark.addPanel.isPrivateDescription;"
-                                            normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
-                              <xul:checkbox anonid="sendMailCheck"
-                                            label="&hBookmark.addPanel.sendMailLabel;"
-                                            preference="extensions.hatenabookmark.addPanel.sendMail"
-                                            tooltiptext="&hBookmark.addPanel.sendMailDescription;"
-                                            normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
-                              <xul:checkbox anonid="postTwitterCheck"
-                                            label="&hBookmark.addPanel.postTwitterLabel;"
-                                            preference="extensions.hatenabookmark.addPanel.postTwitter"
-                                            tooltiptext="&hBookmark.addPanel.postTwitterDescription;"/>
                           </xul:hbox>
                       </xul:row>
                   </xul:rows>
