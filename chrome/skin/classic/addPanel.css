@@ -275,11 +275,8 @@ image[anonid="icon"] {
   background: url("chrome://hatenabookmark/skin/images/hints.gif") left no-repeat;
 }
 
-[anonid="optionsContainer"][status="open"] {
+[anonid="optionsContainer"] {
   display: block;
-}
-[anonid="toggleOptionsButton"] {
-  vertical-align: middle;
 }
 .hBookmark-option-with-help {
   -moz-margin-end: 4px;
@@ -291,7 +288,3 @@ image[anonid="icon"] {
   list-style-image: url("http://b.hatena.ne.jp/images/help-tooltip.gif"); /* XXX Move to chrome://.../skin/images/... */
   cursor: pointer;
 }
-
-[anonid="optionsContainer"][status="closed"] checkbox,
-[anonid="optionsContainer"][status="closed"] .hBookmark-option-with-help
- { visibility: collapse; }

@@ -103,24 +103,15 @@
                       </xul:row>
                       <xul:row align="center">
                           <xul:spacer/>
-                          <xul:hbox anonid="optionsContainer" align="center"
-                                    status="open">
-<!--
--->
-                              <xul:button anonid="toggleOptionsButton"
-                                          oncommand="toggleOptionsDisplay(this);">
-                                  <xul:label class="button-text" value="{{&lt;&lt; 隠す}}"/>
-                              </xul:button>
+                          <xul:hbox anonid="optionsContainer" align="center">
                               <xul:checkbox anonid="confirmEntryCheck"
                                             label="&hBookmark.addPanel.confirmEntryLabel;"
-                                            src="http://favicon.hatena.ne.jp/?url=http://b.hatena.ne.jp/"
                                             preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
                               <xul:hbox anonid="postTwitterContainer"
                                         class="hBookmark-option-with-help"
                                         align="center">
                                   <xul:checkbox anonid="postTwitterCheck"
                                                 label="&hBookmark.addPanel.postTwitterLabel;"
-                                                src="http://favicon.hatena.ne.jp/?url=http://twitter.com/"
                                                 preference="extensions.hatenabookmark.addPanel.postTwitter"
                                                 tooltiptext="&hBookmark.addPanel.postTwitterDescription;"/>
                                   <xul:image class="hBookmark-help-icon"
@@ -133,7 +124,6 @@
                                         align="center">
                                   <xul:checkbox anonid="isPrivateCheck"
                                                 class="hBookmark-has-help-icon"
-                                                src="http://favicon.hatena.ne.jp/?url=http://k.hatena.ne.jp/"
                                                 label="&hBookmark.addPanel.isPrivateLabel;"
                                                 tooltiptext="&hBookmark.addPanel.isPrivateDescription;"
                                                 normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
@@ -147,7 +137,6 @@
                                         align="center">
                                   <xul:checkbox anonid="sendMailCheck"
                                                 label="&hBookmark.addPanel.sendMailLabel;"
-                                                src="http://favicon.hatena.ne.jp/?url=http://mail.google.com/"
                                                 preference="extensions.hatenabookmark.addPanel.sendMail"
                                                 tooltiptext="&hBookmark.addPanel.sendMailDescription;"
                                                 normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
@@ -158,7 +147,6 @@
                               </xul:hbox>
                               <xul:checkbox anonid="addCollectionCheck"
                                             label="&hBookmark.addPanel.addCollectionLabel;"
-                                            src="http://favicon.hatena.ne.jp/?url=http://www.amazon.co.jp/"
                                             preference="extensions.hatenabookmark.addPanel.addCollection"/>
                           </xul:hbox>
                       </xul:row>
@@ -744,33 +732,6 @@
                     });
                     command.execute();
                     this.hide();
-                ]]></body>
-            </method>
-
-            <method name="toggleOptionsDisplay">
-                <parameter name="button"/>
-                <body><![CDATA[
-                    if (button.parentNode.getAttribute('status') === 'open') {
-                        [
-                            this.confirmEntryCheck,
-                            this.postTwitterCheck,
-                            this.isPrivateCheck,
-                            this.sendMailCheck,
-                            this.addCollectionCheck,
-                        ].forEach(function (checkbox) {
-                            if (checkbox.hidden || checkbox.collapsed || checkbox.disabled || !checkbox.checked) return;
-                            let image = document.createElementNS(hBookmark.XUL_NS, 'image');
-                            image.setAttribute('src', checkbox.getAttribute('src'));
-                            button.appendChild(image);
-                        });
-                        button.firstChild.value = '{{オプションを表示 >>}}';
-                        button.parentNode.setAttribute('status', 'closed');
-                    } else {
-                        while (button.firstChild !== button.lastChild)
-                            button.removeChild(button.lastChild);
-                        button.firstChild.value = '{{<< 隠す}}'
-                        button.parentNode.setAttribute('status', 'open');
-                    }
                 ]]></body>
             </method>
         </implementation>
