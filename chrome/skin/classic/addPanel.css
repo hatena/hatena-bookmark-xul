@@ -1,6 +1,9 @@
 * {
     font-family:"Arial","Helvetica",sans-serif;
 }
+.checkbox-label-box {
+    -moz-box-align: center;
+}
 
 .username-line {
     background: #eee url("chrome://hatenabookmark/skin/images/logo-text.png") no-repeat 10px center;
@@ -278,13 +281,20 @@ image[anonid="icon"] {
 [anonid="optionsContainer"] {
   display: block;
 }
-.hBookmark-option-with-help {
-  -moz-margin-end: 4px;
+[anonid="optionsContainer"] > checkbox,
+[anonid="optionsContainer"] > image {
+  vertical-align: middle;
 }
-.hBookmark-option-with-help > checkbox {
-  -moz-margin-end: 0px;
+[anonid="postTwitterCheck"], [anonid="postTwitterHelp"] {
+  list-style-image: url("http://favicon.hatena.ne.jp/?url=http://twitter.com/"); /* XXX 後で適切な画像を指定する */
 }
-.hBookmark-option-with-help > .hBookmark-help-icon {
-  list-style-image: url("http://b.hatena.ne.jp/images/help-tooltip.gif"); /* XXX Move to chrome://.../skin/images/... */
+[anonid="isPrivateCheck"], [anonid="isPrivateHelp"] {
+  list-style-image: url("http://b.st-hatena.com/images/noshare.gif"); /* XXX 後で適切な画像を指定する */
+}
+.hBookmark-option-help  {
+  -moz-margin-start: 4px;
   cursor: pointer;
+}
+checkbox + .hBookmark-option-help {
+  -moz-margin-start: 0px;
 }

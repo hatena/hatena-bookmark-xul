@@ -107,47 +107,33 @@
                               <xul:checkbox anonid="confirmEntryCheck"
                                             label="&hBookmark.addPanel.confirmEntryLabel;"
                                             preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
-                              <xul:hbox anonid="postTwitterContainer"
-                                        class="hBookmark-option-with-help"
-                                        align="center">
-                                  <xul:checkbox anonid="postTwitterCheck"
-                                                label="&hBookmark.addPanel.postTwitterLabel;"
-                                                preference="extensions.hatenabookmark.addPanel.postTwitter"
-                                                tooltiptext="&hBookmark.addPanel.postTwitterDescription;"/>
-                                  <xul:image class="hBookmark-help-icon"
-                                             tooltiptext="&hBookmark.addPanel.postTwitterHelpTooltip;"
-                                             href="&hBookmark.addPanel.postTwitterHelpURI;"
-                                             onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
-                              </xul:hbox>
-                              <xul:hbox anonid="isPrivateContainer"
-                                        class="hBookmark-option-with-help"
-                                        align="center">
-                                  <xul:checkbox anonid="isPrivateCheck"
-                                                class="hBookmark-has-help-icon"
-                                                label="&hBookmark.addPanel.isPrivateLabel;"
-                                                tooltiptext="&hBookmark.addPanel.isPrivateDescription;"
-                                                normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
-                                  <xul:image class="hBookmark-help-icon"
-                                             tooltiptext="&hBookmark.addPanel.isPrivateHelpTooltip;"
-                                             href="&hBookmark.addPanel.isPrivateHelpURI;"
-                                             onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
-                              </xul:hbox>
-                              <xul:hbox anonid="sendMailContainer"
-                                        class="hBookmark-option-with-help"
-                                        align="center">
-                                  <xul:checkbox anonid="sendMailCheck"
-                                                label="&hBookmark.addPanel.sendMailLabel;"
-                                                preference="extensions.hatenabookmark.addPanel.sendMail"
-                                                tooltiptext="&hBookmark.addPanel.sendMailDescription;"
-                                                normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
-                                  <xul:image class="hBookmark-help-icon"
-                                             tooltiptext="&hBookmark.addPanel.sendMailHelpTooltip;"
-                                             href="&hBookmark.addPanel.sendMailHelpURI;"
-                                             onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
-                              </xul:hbox>
+                              <xul:checkbox anonid="postTwitterCheck"
+                                            label="&hBookmark.addPanel.postTwitterLabel;"
+                                            preference="extensions.hatenabookmark.addPanel.postTwitter"
+                                            tooltiptext="&hBookmark.addPanel.postTwitterDescription;"/>
+                              <xul:checkbox anonid="isPrivateCheck"
+                                            class="hBookmark-has-help-icon"
+                                            label="&hBookmark.addPanel.isPrivateLabel;"
+                                            tooltiptext="&hBookmark.addPanel.isPrivateDescription;"
+                                            normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
+                              <xul:checkbox anonid="sendMailCheck"
+                                            label="&hBookmark.addPanel.sendMailLabel;"
+                                            preference="extensions.hatenabookmark.addPanel.sendMail"
+                                            tooltiptext="&hBookmark.addPanel.sendMailDescription;"
+                                            normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
                               <xul:checkbox anonid="addCollectionCheck"
                                             label="&hBookmark.addPanel.addCollectionLabel;"
                                             preference="extensions.hatenabookmark.addPanel.addCollection"/>
+                              <xul:image anonid="postTwitterHelp"
+                                         class="hBookmark-option-help"
+                                         href="&hBookmark.addPanel.postTwitterHelpURI;"
+                                         tooltiptext="&hBookmark.addPanel.postTwitterHelpTooltip;"
+                                         onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
+                              <xul:image anonid="isPrivateHelp"
+                                         class="hBookmark-option-help"
+                                         href="&hBookmark.addPanel.isPrivateHelpURI;"
+                                         tooltiptext="&hBookmark.addPanel.isPrivateHelpTooltip;"
+                                         onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
                           </xul:hbox>
                       </xul:row>
                   </xul:rows>
@@ -277,11 +263,17 @@
             <field name="isPrivateCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "isPrivateCheck")
             </field>
+            <field name="isPrivateHelp">
+                document.getAnonymousElementByAttribute(this, "anonid", "isPrivateHelp")
+            </field>
             <field name="sendMailCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "sendMailCheck")
             </field>
             <field name="postTwitterCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "postTwitterCheck")
+            </field>
+            <field name="postTwitterHelp">
+                document.getAnonymousElementByAttribute(this, "anonid", "postTwitterHelp")
             </field>
             <field name="imageSelector">
                 document.getAnonymousElementByAttribute(this, "anonid", "imageSelector")
@@ -437,12 +429,12 @@
                     this.updateCommentCounter();
 
                     this.addCollectionCheck.hidden = true;
-                    //this.isPrivateCheck.hidden = !user.plususer;
-                    this.isPrivateCheck.disabled = !user.plususer;
                     this.isPrivateCheck.checked = false;
-                    //this.sendMailCheck.hidden = !user.plususer;
-                    this.sendMailCheck.disabled = !user.plususer;
-                    this.postTwitterCheck.disabled = !user.canUseTwitter;
+                    this.isPrivateCheck.hidden = !user.plususer;
+                    this.isPrivateHelp.hidden = user.plususer
+                    this.sendMailCheck.hidden = !user.plususer;
+                    this.postTwitterCheck.hidden = !user.canUseTwitter;
+                    this.postTwitterHelp.hidden = user.canUseTwitter;
                     this.recommendedTagSelectorGroup.hidden = true;
                     this.imageSelector.build();
                     this.imageSelector.hidden = !this.imageSelector.hasImages ||

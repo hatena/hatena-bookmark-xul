@@ -20,15 +20,13 @@
 <!ENTITY hBookmark.addPanel.addCollectionLabel "コレクションに追加">
 <!ENTITY hBookmark.addPanel.isPrivateLabel "公開しない">
 <!ENTITY hBookmark.addPanel.isPrivateDescription "このブックマークを他のユーザーに公開しない (閲覧許可ユーザーにも公開されません)">
-<!ENTITY hBookmark.addPanel.isPrivateHelpTooltip "&quot;公開しない&quot; についてもっと詳しく">
+<!ENTITY hBookmark.addPanel.isPrivateHelpTooltip "はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開せずにブックマークできるようになります">
 <!ENTITY hBookmark.addPanel.isPrivateHelpURI "http://b.hatena.ne.jp/help/plus_private">
 <!ENTITY hBookmark.addPanel.sendMailLabel "メールする">
 <!ENTITY hBookmark.addPanel.sendMailDescription "ブックマークしたページを Web 上の設定ページで指定したメールアドレスに送信する">
-<!ENTITY hBookmark.addPanel.sendMailHelpTooltip "&quot;メールする&quot; についてもっと詳しく">
-<!ENTITY hBookmark.addPanel.sendMailHelpURI "http://b.hatena.ne.jp/help/plus_mail">
 <!ENTITY hBookmark.addPanel.postTwitterLabel "Twitter に投稿">
 <!ENTITY hBookmark.addPanel.postTwitterDescription "このブックマークを Twitter に投稿する">
-<!ENTITY hBookmark.addPanel.postTwitterHelpTooltip "&quot;Twitter に投稿&quot; についてもっと詳しく">
+<!ENTITY hBookmark.addPanel.postTwitterHelpTooltip "ブックマークするとき、その内容を Twitter に投稿できます。">
 <!ENTITY hBookmark.addPanel.postTwitterHelpURI "http://b.hatena.ne.jp/help/"><!-- XXX Specify correct URL -->
 <!ENTITY hBookmark.addPanel.normalUserNotice "※ プラスユーザー (有料オプション) のみ利用可能です">
 
