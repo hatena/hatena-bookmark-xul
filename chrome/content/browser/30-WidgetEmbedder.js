@@ -201,8 +201,9 @@ extend(WidgetEmbedder.prototype, {
         const oldEntryURL = B_HTTP + 'entry/' + sharpEscapedURL;
         const imageAPIPrefix    = B_STATIC_HTTP + 'entry/image/';
         const oldImageAPIPrefix = B_HTTP + 'entry/image/';
-        const addURL    = getAddPageURL(link.href);
-        const oldAddURL = B_HTTP + 'append?' + sharpEscapedURL;
+        const addURL     = getAddPageURL(link.href);
+        const oldAddURL  = B_HTTP + 'my/add.confirm?url=' + escapeIRI(url);
+        const oldAddURL2 = B_HTTP + 'append?' + sharpEscapedURL;
         const entryImagePrefix = 'http://d.hatena.ne.jp/images/b_entry';
         let widgets = {
             entry:        null,
@@ -242,6 +243,7 @@ extend(WidgetEmbedder.prototype, {
 
             case addURL:
             case oldAddURL:
+            case oldAddURL2:
                 widgets.addButton = a;
                 break;
             }

@@ -4,6 +4,7 @@ const BOOKMARK_TOP = 'http://b.hatena.ne.jp/';
 const BOOKMARK_APPEND = '/append?';
 const BOOKMARK_ADD = '/add?mode=confirm';
 const BOOKMARK_ADD_CONFIRM = '/add.confirm?';
+const BOOKMARK_ENTRY_ADD = '/entry/add/';
 const ESCAPE_REGEX_CHECK = new RegExp('^https?%3A', 'i');
 
 var LinkClickOverlay = {
@@ -38,6 +39,9 @@ var LinkClickOverlay = {
                 let index, url, subindex;
                 if ((index = link.indexOf(BOOKMARK_APPEND)) > 0) {
                     url = link.substring(index + BOOKMARK_APPEND.length);
+                } else if ((index = link.indexOf(BOOKMARK_ENTRY_ADD)) > 0) {
+                    url = link.substring(index + BOOKMARK_ENTRY_ADD.length);
+                    url = url.replace(/%23/g, '#');
                 } else if ((index = link.indexOf(BOOKMARK_ADD_CONFIRM)) > 0)  {
                     subindex = index + BOOKMARK_ADD_CONFIRM.length;
                 } else if ((index = link.indexOf(BOOKMARK_ADD)) > 0)  {

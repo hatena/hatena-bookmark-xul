@@ -208,7 +208,7 @@ var entryURL = function(url) {
 }
 
 var addPageURL = function(url) {
-    return B_HTTP + 'my/add.confirm?url=' + escapeIRI(url);
+    return B_HTTP + 'entry/add/' + iri2uri(url).replace(/#/g, '%23');
 }
 
 var isInclude = function(val, ary) {
