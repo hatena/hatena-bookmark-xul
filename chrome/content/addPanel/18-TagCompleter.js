@@ -281,14 +281,8 @@ TagCompleter.InputLine.prototype = {
     get body() this.cutoffComment(this.value)[0],
     addTag: function(tagName) {
         let val = this.value;
-        let lastIndex = val.lastIndexOf(']');
-        if (lastIndex == -1) {
-            this.value = '[' + tagName + ']' + val;
-        } else {
-            let prefix = val.substring(0, lastIndex + 1);
-            let suffix = val.substr(lastIndex + 1);
-            this.value = prefix + '[' + tagName + ']' + suffix;
-        }
+        let match = val.match(/^((?:\[[^:?%\/\[\]]+\])*)([\s\S]*)/);
+        this.value = match[1] + '[' + tagName + ']' + match[2];
         this.uniqTextTags();
     },
     deleteTag: function(tagName) {
@@ -396,17 +390,14 @@ TagCompleter.InputLine.prototype = {
         this.updateByCommentTags(comment,tags);
     },
     cutoffComment: function(str) {
-        let re = /\[([^\[\]]+)\]/g;
+        let re = /\[([^\[\]]+)\]/gy;
         let match;
         let tags = [];
         let lastIndex = 0;
         while ((match = re.exec(str))) {
-            lastIndex += match[0].length; 
-            if (lastIndex == re.lastIndex) {
-                let tag = match[1];
-                if (!tags.some(function(t) tag == t))
-                    tags.push(match[1]);
-            }
+            lastIndex = re.lastIndex;
+            if (tags.indexOf(match[1]) === -1)
+                tags.push(match[1]);
         }
         let comment = str.substring(lastIndex) || '';
         return [comment, tags];
