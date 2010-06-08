@@ -20,7 +20,7 @@
             <xul:hbox pack="center" anonid="messageRow">
                 <xul:label anonid="messageField"/>
             </xul:hbox>
-            <xul:hbox align="start">
+            <xul:hbox>
               <xul:grid class="mainGrid" flex="1">
                   <xul:columns>
                       <xul:column/>
@@ -124,23 +124,29 @@
                               <xul:checkbox anonid="addCollectionCheck"
                                             label="&hBookmark.addPanel.addCollectionLabel;"
                                             preference="extensions.hatenabookmark.addPanel.addCollection"/>
-                              <xul:image anonid="postTwitterHelp"
-                                         class="hBookmark-option-help"
-                                         href="&hBookmark.addPanel.postTwitterHelpURI;"
-                                         tooltiptext="&hBookmark.addPanel.postTwitterHelpTooltip;"
-                                         onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
-                              <xul:image anonid="isPrivateHelp"
-                                         class="hBookmark-option-help"
-                                         href="&hBookmark.addPanel.isPrivateHelpURI;"
-                                         tooltiptext="&hBookmark.addPanel.isPrivateHelpTooltip;"
-                                         onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
                           </xul:hbox>
                       </xul:row>
                   </xul:rows>
               </xul:grid>
-            <xul:hbox anonid="imageSelector"
-                      class="hBookmarkImageSelector"
-                      hidden="true"/>
+              <xul:vbox anonid="imageSelectorContainer" align="end">
+                  <xul:hbox anonid="imageSelector"
+                            class="hBookmarkImageSelector"
+                            hidden="true"/>
+                  <xul:spacer flex="1"/>
+                  <xul:hbox anonid="optionHelpContainer" align="center">
+                      <xul:label value="?"/>
+                      <xul:image anonid="postTwitterHelp"
+                                 class="hBookmark-option-help"
+                                 href="&hBookmark.addPanel.postTwitterHelpURI;"
+                                 tooltiptext="&hBookmark.addPanel.postTwitterHelpTooltip;"
+                                 onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
+                      <xul:image anonid="isPrivateHelp"
+                                 class="hBookmark-option-help"
+                                 href="&hBookmark.addPanel.isPrivateHelpURI;"
+                                 tooltiptext="&hBookmark.addPanel.isPrivateHelpTooltip;"
+                                 onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
+                  </xul:hbox>
+              </xul:vbox>
             </xul:hbox>
             <xul:groupbox anonid="recommendedTagSelectorGroup">
                 <xul:caption label="&hBookmark.addPanel.recommendedTagsLabel;"/>
@@ -263,14 +269,17 @@
             <field name="isPrivateCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "isPrivateCheck")
             </field>
-            <field name="isPrivateHelp">
-                document.getAnonymousElementByAttribute(this, "anonid", "isPrivateHelp")
-            </field>
             <field name="sendMailCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "sendMailCheck")
             </field>
             <field name="postTwitterCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "postTwitterCheck")
+            </field>
+            <field name="optionHelpContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "optionHelpContainer")
+            </field>
+            <field name="isPrivateHelp">
+                document.getAnonymousElementByAttribute(this, "anonid", "isPrivateHelp")
             </field>
             <field name="postTwitterHelp">
                 document.getAnonymousElementByAttribute(this, "anonid", "postTwitterHelp")
@@ -435,6 +444,7 @@
                     this.sendMailCheck.hidden = !user.plususer;
                     this.postTwitterCheck.hidden = !user.canUseTwitter;
                     this.postTwitterHelp.hidden = user.canUseTwitter;
+                    this.optionHelpContainer.hidden = user.plususer && user.canUseTwitter;
                     this.recommendedTagSelectorGroup.hidden = true;
                     this.imageSelector.build();
                     this.imageSelector.hidden = !this.imageSelector.hasImages ||

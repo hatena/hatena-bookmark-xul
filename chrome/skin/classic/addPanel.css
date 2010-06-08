@@ -125,11 +125,14 @@ button[anonid="cancelEditTitleButton"] {
   padding-left: 25px;
 }
 
+[anonid="imageSelectorContainer"] {
+  margin: 5px;
+}
+
 [anonid="imageSelector"] {
   border: 1px solid #ddd;
   background: #eee;
   padding: 2px;
-  margin: 5px;
 }
 
 panel[anonid="popup"] {
@@ -291,10 +294,12 @@ image[anonid="icon"] {
 [anonid="isPrivateCheck"], [anonid="isPrivateHelp"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/add-private.png");
 }
+
+[anonid="optionHelpContainer"] {
+  background-color: #ccc;
+  margin-top: 5px;
+}
 .hBookmark-option-help  {
   -moz-margin-start: 3px;
   cursor: pointer;
-}
-checkbox + .hBookmark-option-help {
-  -moz-margin-start: 0px;
 }
