@@ -296,10 +296,15 @@ image[anonid="icon"] {
 }
 
 [anonid="optionHelpContainer"] {
-  background-color: #ccc;
+  background: #f3f3f3 url("chrome://hatenabookmark/skin/images/option-help-marker.png") left center no-repeat;
   margin-top: 5px;
+  padding: 2px 4px 2px 22px;
+  -moz-border-radius: 3px;
 }
 .hBookmark-option-help  {
-  -moz-margin-start: 3px;
+  opacity: 0.6;
   cursor: pointer;
+}
+.hBookmark-option-help:hover {
+  opacity: 1;
 }
