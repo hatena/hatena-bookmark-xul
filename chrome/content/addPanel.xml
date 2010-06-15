@@ -444,6 +444,9 @@
                     this.isPrivateCheck.hidden = !user.plususer;
                     this.isPrivateHelp.hidden = user.plususer
                     this.sendMailCheck.hidden = !user.plususer;
+                    if (user.postTwitterChecked !== 'inherit') {
+                        this.postTwitterCheck.checked = (user.postTwitterChecked === 'on');
+                    }
                     this.postTwitterCheck.hidden = !user.canUseTwitter;
                     this.postTwitterHelp.hidden = user.canUseTwitter;
                     this.optionHelpContainer.hidden = user.plususer && user.canUseTwitter;

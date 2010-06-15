@@ -84,6 +84,7 @@ if (shared.has('User')) {
         get private() this.options.private == 1,
         get public() !this.private,
         get canUseTwitter() this.options.is_oauth_twitter == 1,
+        get postTwitterChecked() this.options.twitter_checked || 'inherit',
         get maxCommentLength() this.options.max_comment_length || 100,
         get ignores() {
             if (this.options.ignores_regex) {
