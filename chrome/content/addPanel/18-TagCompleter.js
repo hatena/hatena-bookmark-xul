@@ -57,7 +57,7 @@ TagCompleter.List = {
         ev.initEvent('complete', true, false);
         list.dispatchEvent(ev);
     },
-    showTags: function(tags, el) {
+    showTags: function(tags, el, pos) {
         this.clear();
         let tagsCount = TagCompleter.tagsCount;
         let self = this;
@@ -74,7 +74,7 @@ TagCompleter.List = {
             item.addEventListener('mouseover', method(self, 'listMousemoveHandler'), false);
             list.appendChild(item);
         });
-        this.show(el);
+        this.show(el, pos);
     },
     listMousemoveHandler: function(e) {
 
@@ -84,8 +84,16 @@ TagCompleter.List = {
         return list.getRowCount() == 1;
     },
     get shown() panel.state == 'open',
-    show: function(el) {
-        panel.openPopup(el, 'after_start', 0, 0,false,false);
+    show: function(el, pos) {
+        if (pos) {
+            // |panel.openPopup(el, 'overwrap', pos.x - 5, pos.y + 3, ...)|
+            // だと Firefox 3.6 であらぬ位置に表示されるので、
+            // after_start を基準にする
+            // x は開き角括弧の分マイナス、y は見栄え調整のためにプラス
+            panel.openPopup(el, 'after_start', pos.x - 5, pos.y - el.clientHeight + 3, false, false);
+        } else {
+            panel.openPopup(el, 'after_start', 0, 0,false,false);
+        }
     },
     hide: function() {
         panel.hidePopup();
@@ -129,6 +137,7 @@ TagCompleter.InputHandler = function(input) {
     this.inputLine.__defineGetter__('suggestTags', method(this, 'suggestTags'));
     this.tagCompleteEnabled = Prefs.bookmark.get('addPanel.tagCompleteEnabled');
     this.prevValue = this.input.value;
+    this.listPosition = new TagCompleter.ListPosition(input);
     input.addEventListener('keyup', method(this, 'inputKeyupHandler'), false);
     input.addEventListener('keydown', method(this, 'inputKeydownHandler'), false);
     input.addEventListener('input', method(this, 'inputInputHandler'), false);
@@ -171,7 +180,8 @@ TagCompleter.InputHandler.prototype = {
         if (!this.tagCompleteEnabled) return;
         let words = this.inputLine.suggest(caretPos);
         if (words.length) {
-            TagCompleter.List.showTags(words, this.input);
+            let pos = this.listPosition.guess(caretPos);
+            TagCompleter.List.showTags(words, this.input, pos);
         } else {
             TagCompleter.List.hide();
         }
@@ -257,6 +267,38 @@ TagCompleter.InputHandler.prototype = {
         this.input.dispatchEvent(ev);
     }
 }
+
+TagCompleter.ListPosition = function(input) {
+    this.input = input;
+    this.box = document.createElementNS(XHTML_NS, 'div');
+    this.caret = document.createElementNS(XHTML_NS, 'span');
+    this.preText = document.createTextNode('');
+    this.postText = document.createTextNode('');
+    let inputStyle = getComputedStyle(input, null);
+    let boxStyle = this.box.style;
+    boxStyle.cssText = 'position: fixed; left: 0; right: 0; white-space: pre-wrap; visibility: hidden;';
+    'paddingTop paddingRight paddingBottom paddingLeft fontSize fontFamily lineHeight'.split(' ').forEach(function (p) boxStyle[p] = inputStyle[p]);
+    this.box.appendChild(this.preText);
+    this.box.appendChild(this.caret);
+    this.box.appendChild(this.postText);
+    document.documentElement.appendChild(this.box);
+};
+
+TagCompleter.ListPosition.prototype = {
+    guess: function(caretPos) {
+        let text = this.input.value;
+        let index = text.lastIndexOf('[', caretPos) + 1;
+        this.preText.nodeValue = text.substring(0, index);
+        this.postText.nodeValue = text.substring(index);
+        this.box.style.width = this.input.clientWidth + 'px';
+        let res = {
+            x: this.caret.offsetLeft - this.input.scrollLeft,
+            y: this.caret.offsetTop + this.caret.offsetHeight - this.input.scrollTop,
+        };
+        //p(uneval(res));
+        return res;
+    },
+};
 
 TagCompleter.InputLine = function(value, tags) {
     this.suggestTags = tags;

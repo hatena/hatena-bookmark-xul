@@ -160,6 +160,10 @@ panel[anonid="popup"] {
   overflow-x: hidden;
 }
 
+.hBookmark-tagcomplete-listitem {
+  font-size: 1.1em;
+}
+
 [anonid="commentCounterField"] {
    color: #808080;
 }
