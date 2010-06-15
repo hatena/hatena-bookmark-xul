@@ -745,6 +745,15 @@
                 if (event.originalTarget === this.commentField.inputField)
                     this.updateCommentCounter();
             ]]></handler>
+            <handler event="keypress"><![CDATA[
+                if (event.keyCode === event.DOM_VK_RETURN &&
+                    event.originalTarget === this.commentField.inputField &&
+                    !event.getPreventDefault()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    document.documentElement.acceptDialog();
+                }
+            ]]></handler>
             <handler event="HB_TagChange"
                      action="this._updateTagSelectorsExcept(null);"/>
             <handler event="HB_TagSelected"><![CDATA[
