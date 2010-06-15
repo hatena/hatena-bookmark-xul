@@ -276,7 +276,7 @@ TagCompleter.ListPosition = function(input) {
     this.postText = document.createTextNode('');
     let inputStyle = getComputedStyle(input, null);
     let boxStyle = this.box.style;
-    boxStyle.cssText = 'position: fixed; left: 0; right: 0; white-space: pre-wrap; visibility: hidden;';
+    boxStyle.cssText = 'position: fixed; left: 0; top: 0; white-space: pre-wrap; visibility: hidden;';
     'paddingTop paddingRight paddingBottom paddingLeft fontSize fontFamily lineHeight'.split(' ').forEach(function (p) boxStyle[p] = inputStyle[p]);
     this.box.appendChild(this.preText);
     this.box.appendChild(this.caret);
