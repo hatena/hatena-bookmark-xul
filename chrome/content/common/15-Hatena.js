@@ -52,9 +52,7 @@ if (shared.has('User')) {
             let current = this.user;
             if (current) {
                 if (current.name == res.name) {
-                    current.options.rks = res.rks;
-                    current.options.plususer = res.plususer;
-                    current.options.ignores_regex = res.ignores_regex;
+                    extend(current.options, res);
                     delete current._ignores;
                     return current;
                 }
@@ -206,9 +204,11 @@ if (shared.has('User')) {
 
     User.LoginChecker = new Timer(1000 * 60 * 15); // 15 分
     User.LoginChecker.createListener('timer', function() {
-        if (!User.user) {
+        // ユーザー設定を更新するために、
+        // ログイン済みであってもログインチェックを行う。
+        //if (!User.user) {
             User.login();
-        }
+        //}
     });
     User.LoginChecker.start();
 
