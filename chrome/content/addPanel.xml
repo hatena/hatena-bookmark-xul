@@ -75,30 +75,33 @@
                                      class="text-link hBookmarkLink"
                                      crop="end"/>
                       </xul:row>
-                      <xul:row anonid="usersRow" align="center"
-                               style="visibility: hidden;">
+                      <xul:row align="center">
                           <xul:spacer/>
                           <xul:hbox align="center">
-                              <xul:label anonid="usersField"
-                                         class="text-link hBookmarkLink"/>
-                              <xul:image anonid="showCommentsButton"
-                                         tooltiptext="&hBookmark.addPanel.showCommentsLabel;"
-                                         onclick="getTopWin().hBookmark.CommentViewer.show(document.getBindingParent(this).bookmark.url);"/>
-                              <xul:hbox anonid="favoritesContainer"
-                                        align="center" flex="1"
-                                        tooltip="hBookmarkFavoriteBookmarkTooltip"
-                                        style="overflow-x: hidden;"/>
+                              <xul:hbox anonid="usersRow" align="center"
+                                        flex="1" style="visibility: hidden;">
+                                  <xul:label anonid="usersField"
+                                             class="text-link hBookmarkLink"/>
+                                  <xul:image anonid="showCommentsButton"
+                                             tooltiptext="&hBookmark.addPanel.showCommentsLabel;"
+                                             onclick="getTopWin().hBookmark.CommentViewer.show(document.getBindingParent(this).bookmark.url);"/>
+                                  <xul:hbox anonid="favoritesContainer"
+                                            align="center" flex="1"
+                                            tooltip="hBookmarkFavoriteBookmarkTooltip"
+                                            style="overflow-x: hidden;"/>
+                              </xul:hbox>
+                              <xul:label anonid="commentCounterField"/>
                           </xul:hbox>
                       </xul:row>
-                      <xul:row align="center">
+                      <xul:row align="start">
                           <xul:label value="&hBookmark.addPanel.commentLabel;" class="labelHeader"/>
-                          <xul:hbox align="center">
+                          <xul:hbox align="end">
                               <xul:textbox
                                   anonid="commentField"
                                   class="hBookmarkMyTagComplete"
+                                  multiline="true"
                                   flex="1"
                               />
-                              <xul:label anonid="commentCounterField"/>
                           </xul:hbox>
                       </xul:row>
                       <xul:row align="center">

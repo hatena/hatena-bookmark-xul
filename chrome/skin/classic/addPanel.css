@@ -151,6 +151,15 @@ panel[anonid="popup"] {
   margin: 0;
 }
 
+[anonid="commentField"] > .textbox-input-box > .textbox-textarea {
+  font-size: 1.1em;
+  line-height: 1.4;
+  padding: 3px;
+  -moz-padding-start: 5px;
+  height: 3.4em;
+  overflow-x: hidden;
+}
+
 [anonid="commentCounterField"] {
    color: #808080;
 }
