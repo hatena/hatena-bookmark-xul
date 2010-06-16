@@ -24,9 +24,9 @@
 <!ENTITY hBookmark.addPanel.isPrivateHelpURI "http://b.hatena.ne.jp/help/plus_private">
 <!ENTITY hBookmark.addPanel.sendMailLabel "メールする">
 <!ENTITY hBookmark.addPanel.sendMailDescription "ブックマークしたページを Web 上の設定ページで指定したメールアドレスに送信する">
-<!ENTITY hBookmark.addPanel.postTwitterLabel "Twitter に投稿">
-<!ENTITY hBookmark.addPanel.postTwitterDescription "このブックマークを Twitter に投稿する">
-<!ENTITY hBookmark.addPanel.postTwitterHelpTooltip "ブックマークするとき、その内容を Twitter に投稿できます。">
+<!ENTITY hBookmark.addPanel.postTwitterLabel "Twitter へ投稿">
+<!ENTITY hBookmark.addPanel.postTwitterDescription "このブックマークを Twitter へ投稿する">
+<!ENTITY hBookmark.addPanel.postTwitterHelpTooltip "ブックマークするとき、その内容を Twitter へ投稿できます。">
 <!ENTITY hBookmark.addPanel.postTwitterHelpURI "http://b.hatena.ne.jp/guide/twitter">
 <!ENTITY hBookmark.addPanel.normalUserNotice "※ プラスユーザー (有料オプション) のみ利用可能です">
 
