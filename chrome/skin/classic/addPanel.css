@@ -158,6 +158,7 @@ panel[anonid="popup"] {
   -moz-padding-start: 5px;
   height: 3.4em;
   overflow-x: hidden;
+  -moz-resize: vertical;
 }
 
 .hBookmark-tagcomplete-listitem {
