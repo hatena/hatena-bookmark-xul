@@ -28,6 +28,7 @@
 <!ENTITY hBookmark.addPanel.postTwitterDescription "このブックマークを Twitter へ投稿する">
 <!ENTITY hBookmark.addPanel.postTwitterHelpTooltip "ブックマークするとき、その内容を Twitter へ投稿できます。">
 <!ENTITY hBookmark.addPanel.postTwitterHelpURI "http://b.hatena.ne.jp/guide/twitter">
+<!ENTITY hBookmark.addPanel.twitterDisabledNotice "(非公開ブックマークはTwitterへ投稿されません)">
 <!ENTITY hBookmark.addPanel.normalUserNotice "※ プラスユーザー (有料オプション) のみ利用可能です">
 
 <!ENTITY hBookmark.addPanel.imageDescription "エントリーの画像は全ユーザ共通です">

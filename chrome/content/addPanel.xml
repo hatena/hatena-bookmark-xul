@@ -113,7 +113,8 @@
                               <xul:checkbox anonid="postTwitterCheck"
                                             label="&hBookmark.addPanel.postTwitterLabel;"
                                             preference="extensions.hatenabookmark.addPanel.postTwitter"
-                                            tooltiptext="&hBookmark.addPanel.postTwitterDescription;"/>
+                                            tooltiptext="&hBookmark.addPanel.postTwitterDescription;"
+                                            twitterdisablednotice="&hBookmark.addPanel.twitterDisabledNotice;"/>
                               <xul:checkbox anonid="isPrivateCheck"
                                             class="hBookmark-has-help-icon"
                                             label="&hBookmark.addPanel.isPrivateLabel;"
@@ -449,6 +450,7 @@
                     }
                     this.postTwitterCheck.hidden = !user.canUseTwitter;
                     this.postTwitterHelp.hidden = user.canUseTwitter;
+                    this.setPostTwitterEnable(true);
                     this.optionHelpContainer.hidden = user.plususer && user.canUseTwitter;
                     this.recommendedTagSelectorGroup.hidden = true;
                     this.imageSelector.build();
@@ -515,6 +517,7 @@
                         if (res.is_private) {
                             this.isPrivateCheck.checked = true;
                             this.isPrivateCheck.hidden = false;
+                            this.setPostTwitterEnable(false);
                         }
                         this.asin = res.asin;
                         if (!tagsFromContent)
@@ -656,6 +659,30 @@
                 ]]></body>
             </method>
 
+            <method name="setPostTwitterEnable">
+                <parameter name="enabled"/>
+                <body><![CDATA[
+                    let check = this.postTwitterCheck;
+                    if (!check.enabledTooltipText) {
+                        check.enabledTooltipText = check.tooltipText;
+                        check.disabledTooltipText =
+                            check.tooltipText + ' ' +
+                            check.getAttribute('twitterdisablednotice');
+                        check.defaultChecked = check.checked;
+                    }
+                    if (enabled) {
+                        check.disabled = false;
+                        check.tooltipText = check.enabledTooltipText;
+                        check.checked = check.defaultChecked;
+                    } else {
+                        check.disabled = true;
+                        check.tooltipText = check.disabledTooltipText;
+                        check.defaultChecked = check.checked;
+                        check.checked = false;
+                    }
+                ]]></body>
+            </method>
+
             <method name="switchTagSelectorView">
                 <parameter name="showAll"/>
                 <body><![CDATA[
@@ -755,6 +782,11 @@
                     event.preventDefault();
                     event.stopPropagation();
                     document.documentElement.acceptDialog();
+                }
+            ]]></handler>
+            <handler event="command"><![CDATA[
+                if (event.originalTarget === this.isPrivateCheck) {
+                    this.setPostTwitterEnable(!this.isPrivateCheck.checked);
                 }
             ]]></handler>
             <handler event="HB_TagChange"
