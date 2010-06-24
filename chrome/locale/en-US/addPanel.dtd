@@ -21,15 +21,16 @@
 <!ENTITY hBookmark.addPanel.isPrivateLabel "Hide from People">
 <!ENTITY hBookmark.addPanel.isPrivateDescription "Hide this bookmark from other people.  Access-permitted user also can't view this.">
 <!ENTITY hBookmark.addPanel.isPrivateHelpTooltip "You can hide your bookmark from other people if you join Hatena Bookmark Plus">
-<!ENTITY hBookmark.addPanel.isPrivateHelpURI "http://b.hatena.ne.jp/help/plus_private">
+<!ENTITY hBookmark.addPanel.isPrivateHelpURI "http://b.hatena.ne.jp/guide/plus?target=private&amp;ref=firefox">
 <!ENTITY hBookmark.addPanel.sendMailLabel "Send Mail">
 <!ENTITY hBookmark.addPanel.sendMailDescription "Send this bookmark to the mail address you specified in the configuration page on the web.">
 <!ENTITY hBookmark.addPanel.postTwitterLabel "Post to Twitter">
 <!ENTITY hBookmark.addPanel.postTwitterDescription "Post this bookmark to Twitter.">
 <!ENTITY hBookmark.addPanel.postTwitterHelpTooltip "You can post your bookmark to Twitter">
-<!ENTITY hBookmark.addPanel.postTwitterHelpURI "http://b.hatena.ne.jp/guide/twitter">
+<!ENTITY hBookmark.addPanel.postTwitterHelpURI "http://b.hatena.ne.jp/guide/twitter?target=append&amp;ref=firefox">
 <!ENTITY hBookmark.addPanel.twitterDisabledNotice "(Hidden bookmark will not be posted to Twitter)">
 <!ENTITY hBookmark.addPanel.normalUserNotice "* Only Plus User (charged option) is able to use this feature.">
+<!ENTITY hBookmark.addPanel.optionHelpTooltip "You can use more convenient features.">
 
 <!ENTITY hBookmark.addPanel.imageDescription "The image is shared with all users. ">
 <!ENTITY hBookmark.addPanel.imageGuidelineLabel "Guidelines for image usage (in Japanese)">

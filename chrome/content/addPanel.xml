@@ -137,7 +137,8 @@
                             class="hBookmarkImageSelector"
                             hidden="true"/>
                   <xul:spacer flex="1"/>
-                  <xul:hbox anonid="optionHelpContainer" align="center">
+                  <xul:hbox anonid="optionHelpContainer" align="center"
+                            tooltiptext="&hBookmark.addPanel.optionHelpTooltip;">
                       <xul:image anonid="postTwitterHelp"
                                  class="hBookmark-option-help"
                                  href="&hBookmark.addPanel.postTwitterHelpURI;"
