@@ -6,5 +6,11 @@ style	chrome://browser/content/browser.xul chrome://hatenabookmark/skin/browser.
 style	chrome://browser/content/browser.xul chrome://hatenabookmark/skin/toolbar.osx.css os=Darwin
 style	chrome://global/content/customizeToolbar.xul chrome://hatenabookmark/skin/toolbar.css
 style	chrome://global/content/customizeToolbar.xul chrome://hatenabookmark/skin/toolbar.osx.css os=Darwin
+style	chrome://hatenabookmark/content/addPanel.xul chrome://hatenabookmark/content/addPanel.linux.css os=Linux
+style	chrome://hatenabookmark/content/addPanel.xul chrome://hatenabookmark/content/addPanel.linux.css os=FreeBSD
+style	chrome://hatenabookmark/content/addPanel.xul chrome://hatenabookmark/content/addPanel.linux.css os=NetBSD
+style	chrome://hatenabookmark/content/addPanel.xul chrome://hatenabookmark/content/addPanel.linux.css os=OpenBSD
+style	chrome://hatenabookmark/content/addPanel.xul chrome://hatenabookmark/content/addPanel.linux.css os=DragonFly
+style	chrome://hatenabookmark/content/addPanel.xul chrome://hatenabookmark/content/addPanel.linux.css os=SunOS
 locale	hatenabookmark	en-US	chrome/locale/en-US/
 locale	hatenabookmark	ja	chrome/locale/ja/

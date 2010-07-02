@@ -1,0 +1,3 @@
+checkbox[preference] {
+   -moz-binding: url("chrome://hatenabookmark/content/addPanel.xml#preference-checkbox-with-spacing");
+}

@@ -1430,4 +1430,22 @@
         </handlers>
     </binding>
 
+    <binding id="preference-checkbox-with-spacing"
+             extends="chrome://global/content/bindings/checkbox.xml#checkbox-with-spacing">
+        <implementation>
+            <constructor><![CDATA[
+                this.checked = hBookmark.Prefs.global.get(this.preference);
+            ]]></constructor>
+
+            <property name="preference"
+                      onget="return this.getAttribute('preference');"
+                      onset="this.setAttribute('preference', val); return val;"/>
+        </implementation>
+
+        <handlers>
+            <handler event="command"
+                     action="hBookmark.Prefs.global.set(this.preference, this.checked);"/>
+        </handlers>
+    </binding>
+
 </bindings>

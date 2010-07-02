@@ -302,14 +302,10 @@ image[anonid="icon"] {
 [anonid="optionsContainer"] > image {
   vertical-align: middle;
 }
-[anonid="postTwitterCheck"] > .checkbox-label-box > .checkbox-icon,
-[anonid="postTwitterCheck"] > .checkbox-label-center-box > .checkbox-label-box > .checkbox-icon,
-[anonid="postTwitterHelp"] {
+[anonid="postTwitterCheck"], [anonid="postTwitterHelp"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/add-twitter.png");
 }
-[anonid="isPrivateCheck"] > .checkbox-label-box > .checkbox-icon,
-[anonid="isPrivateCheck"] > .checkbox-label-center-box > .checkbox-label-box > .checkbox-icon,
-[anonid="isPrivateHelp"] {
+[anonid="isPrivateCheck"], [anonid="isPrivateHelp"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/add-private.png");
 }
 
