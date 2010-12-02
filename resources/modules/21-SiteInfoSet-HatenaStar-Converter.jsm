@@ -1,5 +1,5 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
-loadPrecedingModules();
+loadPrecedingModules.call(this);
 const EXPORTED_SYMBOLS = [];
 //const EXPORTED_SYMBOLS = ['selector2xpath'];
 
