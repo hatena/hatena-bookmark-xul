@@ -330,7 +330,7 @@
     (function() {
         with(hBookmark) {
             if (hBookmark.nowDebug) {
-                Application.console.open();
+                toErrorConsole();
             }
 
             EventService.dispatch('preload', window);
