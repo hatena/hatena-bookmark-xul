@@ -294,26 +294,28 @@ extend(SiteInfoSet, {
 
     startObserving: function SIS_s_startObserving() {
         this._timer = Cc['@mozilla.org/timer;1'].createInstance(Ci.nsITimer);
-        this._timer.init(this, 10 * 60 * 1000, Ci.nsITimer.TYPE_REPEATING_SLACK);
-        ObserverService.addObserver(this, 'quit-application', false);
+        this._timer.init(this.observer, 10 * 60 * 1000, Ci.nsITimer.TYPE_REPEATING_SLACK);
+        ObserverService.addObserver(this.observer, 'quit-application', false);
     },
 
     stopObserving: function SIS_s_stopObserving() {
         this._timer.cancel();
         this._timer = null;
-        ObserverService.removeObserver(this, 'quit-application');
+        ObserverService.removeObserver(this.observer, 'quit-application');
         this._instances.length = 0;
     },
 
-    observe: function SIS_s_observe(subject, topic, data) {
-        switch (topic) {
-        case 'timer-callback':
-            this.onTimer();
-            break;
-        case 'quit-application':
-            this.stopObserving();
-            break;
-        }
+    observer: {
+        observe: function (subject, topic, data) {
+            switch (topic) {
+            case 'timer-callback':
+                SiteInfoSet.onTimer();
+                break;
+            case 'quit-application':
+                SiteInfoSet.stopObserving();
+                break;
+            }
+        },
     },
 
     createURLMatcher: function SIS_s_createURLMatcher(key) {
