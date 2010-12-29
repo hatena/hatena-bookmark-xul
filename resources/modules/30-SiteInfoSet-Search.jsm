@@ -43,7 +43,7 @@ let builtInSearchSiteInfo = [
             }
             div > #hBookmark-search {
                 font-size: 0.8em;
-                margin-left: 0.6em;
+                margin-right: -32%;
             }
         ]]>.toString(),
     },
@@ -52,10 +52,10 @@ let builtInSearchSiteInfo = [
         baseDomain: /^yahoo\./,
         query:      /[?&;]p=([^?&;#]+)/,
         encoding:   /[?&;]ei=([\w-]+)/,
-        annotation: 'id("yschres")',
+        annotation: 'id("sIn")',
         style: <![CDATA[
             #hBookmark-search {
-                margin-right: 1em;
+                width: auto;
             }
         ]]>.toString(),
     },
