@@ -68,7 +68,7 @@ task :create_extension_xpi => [
   xpi = Pathname.new 'xpi'
   xpi.mkdir unless xpi.exist? 
   #sh "cd #{BUILD_DIR} && zip -qr -9 ../../xpi/#{EXTENSION_NAME}-#{version_number}-#{Time.now.strftime('%Y%m%d')}-fx.xpi *"
-  find = 'find -type f -regex \'.+\.sw[po]$\' -exec rm {} \\;'
+  find = 'find . -type f -regex \'.+\.sw[po]$\' -exec rm {} \\;'
   sh "cd #{BUILD_DIR} && (#{find}) ; zip -qr -9 ../../xpi/#{EXTENSION_NAME}-#{version_number}.xpi *"
   rm_rf "build"
 end
