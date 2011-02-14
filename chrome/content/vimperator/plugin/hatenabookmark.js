@@ -390,7 +390,12 @@ liberator.plugins.hBookmark = (function() {
     plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment']);
 
     completion.addUrlCompleter("H", "Hatena Bookmarks", plugin.command.createCompleter(['Hatena Bookmark']));
-    config.guioptions['H'] = ['HatenaBookmark Toolbar',['hBookmarkToolbar']];
+
+    if (liberator.version.indexOf("2.") == 0 )
+      config.guioptions['H'] = ['HatenaBookmark Toolbar',['hBookmarkToolbar']];
+    else
+      config.toolbars.hatehaBookmarks = [['hBookmarkToolbar'], "HatenaBookmark Toolbar"];
+
     config.dialogs.push([
         "hatenabookmark", "HatenaBookmark Config",
         function(){ window.openDialog("chrome://hatenabookmark/content/config.xul","", "chrome,titlebar,toolbar,centerscreen,dialog=no"); }
