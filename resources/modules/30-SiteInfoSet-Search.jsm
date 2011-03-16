@@ -23,25 +23,22 @@ let builtInSearchSiteInfo = [
         encoding:   /[?&;]ie=([\w-]+)/,
         //annotation: 'id("res")',
         annotation: function (doc) {
-            let table = doc.getElementById("mbEnd");
-            if (table) {
-                let tr = doc.createElement("tr");
-                let td = doc.createElement("td");
-                tr.appendChild(td);
-                table.tBodies[0].appendChild(tr);
-                return td;
+            let rhs = doc.getElementById("rhs");
+            if (rhs) {
+                let div = doc.createElement('div');
+                rhs.appendChild(div);
+                return div;
             }
             return doc.getElementById("res");
         },
         annotationPosition: 'first',
         style: <![CDATA[
-            td > #hBookmark-search {
-                margin: 1em 0 0 0;
+            #rhs #hBookmark-search {
+                margin: 1.2em 1.5em 0 0.7em;
                 width: auto;
                 float: none;
-                white-space: normal;
             }
-            div > #hBookmark-search {
+            #res #hBookmark-search {
                 font-size: 0.8em;
                 margin-right: -32%;
             }
