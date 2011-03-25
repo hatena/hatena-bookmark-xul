@@ -138,8 +138,7 @@ var StatusBar = {
         p('statusbar load handler');
         StatusBar.registerPrefsListeners();
         StatusBar.update();
-        gBrowser.addProgressListener(StatusBar.progressListener,
-                                     Ci.nsIWebProgress.NOTIFY_LOCATION);
+        gBrowser.addProgressListener(StatusBar.progressListener);
         gBrowser.addEventListener('unload', StatusBar.unloadHandler, false);
         statusComment.addEventListener('mouseover', StatusBar.commentViewerOverHandler, false);
     },

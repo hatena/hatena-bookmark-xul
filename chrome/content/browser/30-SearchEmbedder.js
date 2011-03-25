@@ -459,8 +459,7 @@ SearchEmbedder.STYLE = <![CDATA[
 
 
 window.addEventListener("load", function SetupSearchEmbedder() {
-    gBrowser.addProgressListener(SearchEmbedder.progressListener,
-                                 Ci.nsIWebProgress.NOTIFY_LOCATION);
+    gBrowser.addProgressListener(SearchEmbedder.progressListener);
 }, false);
 
 window.addEventListener("unload", function ShutdownSearchEmbedder() {
