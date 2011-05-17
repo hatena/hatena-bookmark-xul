@@ -150,8 +150,10 @@ if (shared.has('User')) {
         observe: function(aSubject, aTopic, aData) {
             if (aTopic != 'cookie-changed') return;
 
-            let cookie = aSubject.QueryInterface(Ci.nsICookie2);
-            if (cookie.host != '.hatena.ne.jp' || cookie.name != 'rk') return;
+            let cookie = aSubject;
+            if (!(cookie instanceof Ci.nsICookie2) ||
+                cookie.host != '.hatena.ne.jp' ||
+                cookie.name != 'rk') return;
             /*
              * logout: deleted
              * login: added
