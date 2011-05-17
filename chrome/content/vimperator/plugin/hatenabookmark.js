@@ -297,7 +297,7 @@ liberator.plugins.hBookmark = (function() {
     plugin.command.options.completer = plugin.command.createCompleter(['URL','Comment']);
 
     plugin.toggleComment = function(url) {
-        if (!url && content.location.href.indexOf('reader.livedoor.com/reader') >= 0) {
+        if (!url && /\.livedoor\.com$/.test(content.location.hostname) && content.location.href.indexOf('reader.livedoor.com/reader') >= 0) {
               let item = content.window.wrappedJSObject.get_active_item(true);
               if (item) {
                   url = item.link;
@@ -313,7 +313,7 @@ liberator.plugins.hBookmark = (function() {
     plugin.showPanel = function(url, options) {
         if (url) {
             HatenaBookmark.AddPanelManager.showPanel(url, options || {});
-        } else if (content.location.href.indexOf('reader.livedoor.com/reader') >= 0) {
+        } else if (/\.livedoor\.com$/.test(content.location.hostname) && content.location.href.indexOf('reader.livedoor.com/reader') >= 0) {
               // domain match
               let item = content.window.wrappedJSObject.get_active_item(true);
               if (item) {
