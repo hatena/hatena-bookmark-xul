@@ -207,7 +207,7 @@ if (shared.has('User')) {
     };
     User.addObservers();
 
-    User.LoginChecker = new Timer(1000 * 60 * 15); // 15 分
+    User.LoginChecker = new Timer(1000 * 60 * 27); // 27 分
     User.LoginChecker.createListener('timer', function() {
         // ユーザー設定を更新するために、
         // ログイン済みであってもログインチェックを行う。
