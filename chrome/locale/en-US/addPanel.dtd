@@ -29,6 +29,11 @@
 <!ENTITY hBookmark.addPanel.postTwitterHelpTooltip "You can post your bookmark to Twitter">
 <!ENTITY hBookmark.addPanel.postTwitterHelpURI "http://b.hatena.ne.jp/guide/twitter?target=append&amp;ref=firefox">
 <!ENTITY hBookmark.addPanel.twitterDisabledNotice "(Hidden bookmark will not be posted to Twitter)">
+<!ENTITY hBookmark.addPanel.postMixiCheckLabel "Post to mixi check">
+<!ENTITY hBookmark.addPanel.postMixiCheckDescription "Post this bookmark to mixi check.">
+<!ENTITY hBookmark.addPanel.postMixiCheckHelpTooltip "You can post your bookmark to mixi check.">
+<!ENTITY hBookmark.addPanel.postMixiCheckHelpURI "http://b.hatena.ne.jp/help/config_coop#mixi-check">
+<!ENTITY hBookmark.addPanel.mixiCheckDisabledNotice "(Hidden bookmark will not be posted to mixi check)">
 <!ENTITY hBookmark.addPanel.normalUserNotice "* Only Plus User (charged option) is able to use this feature.">
 <!ENTITY hBookmark.addPanel.optionHelpTooltip "You can use more convenient features.">
 

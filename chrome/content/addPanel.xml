@@ -115,6 +115,11 @@
                                             preference="extensions.hatenabookmark.addPanel.postTwitter"
                                             tooltiptext="&hBookmark.addPanel.postTwitterDescription;"
                                             twitterdisablednotice="&hBookmark.addPanel.twitterDisabledNotice;"/>
+                              <xul:checkbox anonid="postMixiCheckCheck"
+                                            label="&hBookmark.addPanel.postMixiCheckLabel;"
+                                            preference="extensions.hatenabookmark.addPanel.postMixiCheck"
+                                            tooltiptext="&hBookmark.addPanel.postMixiCheckDescription;"
+                                            mixicheckdisablednotice="&hBookmark.addPanel.mixiCheckDisabledNotice;"/>
                               <xul:checkbox anonid="isPrivateCheck"
                                             class="hBookmark-has-help-icon"
                                             label="&hBookmark.addPanel.isPrivateLabel;"
@@ -143,6 +148,11 @@
                                  class="hBookmark-option-help"
                                  href="&hBookmark.addPanel.postTwitterHelpURI;"
                                  tooltiptext="&hBookmark.addPanel.postTwitterHelpTooltip;"
+                                 onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
+                      <xul:image anonid="postMixiCheckHelp"
+                                 class="hBookmark-option-help"
+                                 href="&hBookmark.addPanel.postMixiCheckHelpURI;"
+                                 tooltiptext="&hBookmark.addPanel.postMixiCheckHelpTooltip;"
                                  onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
                       <xul:image anonid="isPrivateHelp"
                                  class="hBookmark-option-help"
@@ -279,6 +289,9 @@
             <field name="postTwitterCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "postTwitterCheck")
             </field>
+            <field name="postMixiCheckCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "postMixiCheckCheck")
+            </field>
             <field name="optionHelpContainer">
                 document.getAnonymousElementByAttribute(this, "anonid", "optionHelpContainer")
             </field>
@@ -287,6 +300,9 @@
             </field>
             <field name="postTwitterHelp">
                 document.getAnonymousElementByAttribute(this, "anonid", "postTwitterHelp")
+            </field>
+            <field name="postMixiCheckHelp">
+                document.getAnonymousElementByAttribute(this, "anonid", "postMixiCheckHelp")
             </field>
             <field name="imageSelector">
                 document.getAnonymousElementByAttribute(this, "anonid", "imageSelector")
@@ -452,7 +468,13 @@
                     this.postTwitterCheck.hidden = !user.canUseTwitter;
                     this.postTwitterHelp.hidden = user.canUseTwitter;
                     this.setPostTwitterEnable(true);
-                    this.optionHelpContainer.hidden = user.plususer && user.canUseTwitter;
+                    if (user.postMixiCheckChecked !== 'inherit') {
+                        this.postMixiCheckCheck.checked = (user.postMixiCheckChecked === 'on');
+                    }
+                    this.postMixiCheckCheck.hidden = !user.canUseMixiCheck;
+                    this.postMixiCheckHelp.hidden = user.canUseMixiCheck;
+                    this.setPostMixiCheckEnable(true);
+                    this.optionHelpContainer.hidden = user.plususer && user.canUseTwitter && user.canUseMixiCheck;
                     this.recommendedTagSelectorGroup.hidden = true;
                     this.imageSelector.build();
                     this.imageSelector.hidden = !this.imageSelector.hasImages ||
@@ -519,6 +541,7 @@
                             this.isPrivateCheck.checked = true;
                             this.isPrivateCheck.hidden = false;
                             this.setPostTwitterEnable(false);
+                            this.setPostMixiCheckEnable(false);
                         }
                         this.asin = res.asin;
                         if (!tagsFromContent)
@@ -684,6 +707,30 @@
                 ]]></body>
             </method>
 
+            <method name="setPostMixiCheckEnable">
+                <parameter name="enabled"/>
+                <body><![CDATA[
+                    let check = this.postMixiCheckCheck;
+                    if (!check.enabledTooltipText) {
+                        check.enabledTooltipText = check.tooltipText;
+                        check.disabledTooltipText =
+                            check.tooltipText + ' ' +
+                            check.getAttribute('mixicheckdisablednotice');
+                        check.defaultChecked = check.checked;
+                    }
+                    if (enabled) {
+                        check.disabled = false;
+                        check.tooltipText = check.enabledTooltipText;
+                        check.checked = check.defaultChecked;
+                    } else {
+                        check.disabled = true;
+                        check.tooltipText = check.disabledTooltipText;
+                        check.defaultChecked = check.checked;
+                        check.checked = false;
+                    }
+                ]]></body>
+            </method>
+
             <method name="switchTagSelectorView">
                 <parameter name="showAll"/>
                 <body><![CDATA[
@@ -742,6 +789,7 @@
                         isPrivate: this.isPrivateCheck.checked,
                         sendMail: this.sendMailCheck.checked,
                         postTwitter: this.postTwitterCheck.checked,
+                        postMixiCheck: this.postMixiCheckCheck.checked,
                         asin: this.asin,
                         changeImage: this.imageSelector.isImageChanged,
                         image: this.imageSelector.selectedImageURI,
@@ -788,6 +836,7 @@
             <handler event="command"><![CDATA[
                 if (event.originalTarget === this.isPrivateCheck) {
                     this.setPostTwitterEnable(!this.isPrivateCheck.checked);
+                    this.setPostMixiCheckEnable(!this.isPrivateCheck.checked);
                 }
             ]]></handler>
             <handler event="HB_TagChange"

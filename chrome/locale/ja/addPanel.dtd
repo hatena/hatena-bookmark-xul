@@ -29,6 +29,11 @@
 <!ENTITY hBookmark.addPanel.postTwitterHelpTooltip "Twitter 連携機能を設定すると、ブックマーク時に Twitter へも投稿することができます">
 <!ENTITY hBookmark.addPanel.postTwitterHelpURI "http://b.hatena.ne.jp/guide/twitter?target=append&amp;ref=firefox">
 <!ENTITY hBookmark.addPanel.twitterDisabledNotice "(非公開ブックマークはTwitterへ投稿されません)">
+<!ENTITY hBookmark.addPanel.postMixiCheckLabel "mixiチェックへ投稿">
+<!ENTITY hBookmark.addPanel.postMixiCheckDescription "このブックマークをmixiチェックへ投稿する">
+<!ENTITY hBookmark.addPanel.postMixiCheckHelpTooltip "mixiチェック連携機能を設定すると、ブックマーク時にmixiチェックへも投稿することができます">
+<!ENTITY hBookmark.addPanel.postMixiCheckHelpURI "http://b.hatena.ne.jp/help/config_coop#mixi-check">
+<!ENTITY hBookmark.addPanel.mixiCheckDisabledNotice "(非公開ブックマークはmixiチェックへ投稿されません)">
 <!ENTITY hBookmark.addPanel.normalUserNotice "※ プラスユーザー (有料オプション) のみ利用可能です">
 <!ENTITY hBookmark.addPanel.optionHelpTooltip "有効にすることで使える、より便利な機能の紹介です">
 

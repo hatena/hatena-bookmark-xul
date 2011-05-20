@@ -305,6 +305,9 @@ image[anonid="icon"] {
 [anonid="postTwitterCheck"], [anonid="postTwitterHelp"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/add-twitter.png");
 }
+[anonid="postMixiCheckCheck"], [anonid="postMixiCheckHelp"] {
+  list-style-image: url("chrome://hatenabookmark/skin/images/icon-mixi.png");
+}
 [anonid="isPrivateCheck"], [anonid="isPrivateHelp"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/add-private.png");
 }
