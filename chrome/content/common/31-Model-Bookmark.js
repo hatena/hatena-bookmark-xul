@@ -174,7 +174,7 @@ extend(Bookmark.prototype, {
         return entryURL(this.url);
     },
     get imageURL() {
-        return 'http://b.hatena.ne.jp/entry/image/' + this.url.replace('#', '%23');
+        return 'http://b.st-hatena.com/entry/image/' + this.url.replace('#', '%23');
     },
     get tags() {
         return Bookmark.parseTags(this.comment);
