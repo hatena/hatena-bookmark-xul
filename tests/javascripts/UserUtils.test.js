@@ -9,7 +9,7 @@ function warmUp() {
 function testUserUtils() {
     let UserUtils = hBookmark.UserUtils;
     assert.isDefined(UserUtils);
-    assert.equals('http://www.hatena.ne.jp/users/fo/foo/profile_s.gif',
+    assert.matches(/\/users\/fo\/foo\/profile_s\.gif$/,
                   UserUtils.getProfileIcon('foo', false));
     assert.equals('http://www.hatena.ne.jp/bar/',
                   UserUtils.getHomepage('bar'));

@@ -15,7 +15,7 @@ function testFavoriteBookmark() {
     let fav = new hBookmark.FavoriteBookmark(f);
 
     assert.equals(f.name, fav.name);
-    assert.equals("http://www.hatena.ne.jp/users/an/anonymous/profile_s.gif",
+    assert.matches(/\/users\/an\/anonymous\/profile_s\.gif$/,
                   fav.getProfileIcon(false));
     assert.equals("[foo][bar] my comment", fav.comment);
 

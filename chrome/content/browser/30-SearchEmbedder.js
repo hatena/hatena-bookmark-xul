@@ -200,7 +200,7 @@ extend(SearchEmbedder.prototype, {
 
             let title = <dt>
                 <a href={ entry.url }>
-                    <img src={ 'http://favicon.st-hatena.com/?url=' + encodeURIComponent(entry.url) }
+                    <img src={ 'http://cdn-ak.favicon.st-hatena.com/?url=' + encodeURIComponent(entry.url) }
                          alt="" width="16" height="16"/>
                 </a>
             </dt>;
@@ -378,7 +378,7 @@ SearchEmbedder.STYLE = <![CDATA[
         position: relative;
     }
     #hBookmark-search .hBookmark-search-title {
-        background: url("http://b.st-hatena.com/images/favicon.gif") left center no-repeat;
+        background: url("http://cdn-ak.b.st-hatena.com/images/favicon.gif") left center no-repeat;
         padding-left: 18px;
         font-weight:bold;
     }
@@ -447,7 +447,7 @@ SearchEmbedder.STYLE = <![CDATA[
         margin: 0.5em 0 0 0;
     }
     #hBookmark-search .hBookmark-search-more > a {
-        background: url("http://b.st-hatena.com/images/favicon.gif") left center no-repeat;
+        background: url("http://cdn-ak.b.st-hatena.com/images/favicon.gif") left center no-repeat;
         padding-left: 18px;
         color: #7777cc;
     }
