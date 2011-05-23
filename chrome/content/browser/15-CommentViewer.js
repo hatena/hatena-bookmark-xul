@@ -154,7 +154,7 @@ var CommentViewer = {
         // XXX コメント文字列をそのままHTMLとして扱うと、
         // 場当たり的な対応が増えてよろしくないので、後で修正したい。
         //let URLRegex = new RegExp("\\b((?:http|https|ftp)://[A-Za-z0-9~/._\?\&=\\-%#\+:\;,\@\']+)", 'g');
-        let htmlEscapedURLRegex = /\b(?:https?|ftp):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\']|&(?!lt;|gt;|quot;))+/g;
+        let htmlEscapedURLRegex = /\b(?:https?|ftp):\/\/(?:[A-Za-z0-9~\/._?=\-%#+:;,@\'*$!]|&(?!lt;|gt;|quot;))+/g;
         let starCreator = CommentViewer.starCreator;
         let highlightContainerClass = Star.classes.HIGHLIGHT_CONTAINER;
         while (i++ < Math.min(limit, len)) {
