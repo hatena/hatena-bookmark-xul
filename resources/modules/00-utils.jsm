@@ -1,4 +1,4 @@
-// �������ݡ��Ȥ������ʤ����Ф�̾���ϥ������������(_)����Ϥ���뤳�ȡ�
+// エクスポートしたくないメンバの名前はアンダースコア(_)からはじめること。
 
 const B_HOST = 'b.hatena.ne.jp';
 const B_HTTP = 'http://' + B_HOST + '/';
@@ -96,7 +96,7 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 /* utility functions */
 var nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
 
-// window.XMLHttpRequest ��¸�ߤ��ʤ��Ƥ�����פʤ褦��
+// window.XMLHttpRequest が存在しなくても大丈夫なように
 var XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1");
 var XMLSerializer = Components.Constructor("@mozilla.org/xmlextras/xmlserializer;1");
 var DOMParser = Components.Constructor("@mozilla.org/xmlextras/domparser;1");
@@ -106,7 +106,7 @@ var XPathResult = Ci.nsIDOMXPathResult;
 var BuiltInTimer = Components.Constructor("@mozilla.org/timer;1", "nsITimer", "init");
 
 /*
- * p �ϰ���ǥХå���
+ * p は一時デバッグ用
  */
 var p = function (value) {
     log.info(''+value);
@@ -119,7 +119,7 @@ p.e = function(value) {
 }
 
 /*
- * �ʰץ٥���ޡ���
+ * 簡易ベンチマーク
  */
 p.b = function (func, name) {
     name = 'Benchmark ' + (name || '') + ': ';
@@ -221,18 +221,11 @@ var isInclude = function(val, ary) {
 var bind = function bind(func, self) function () func.apply(self, Array.slice(arguments));
 var method = function method(self, methodName) function () self[methodName].apply(self, Array.slice(arguments));
 
-// XXX model�ؿ���model.jsm���֤��ʤ��ȥ�������Ū�ˤޤ���?
-var model = function(name) {
-    var m = this.Model[name];
-    if (!m) { throw 'model not found' };
-    return m;
-}
-
-// ����Υ�����ɥ���°���ʤ������ѥ��֥������Ȥκ���
+// 特定のウィンドウに属さない辞書用オブジェクトの作成
 function DictionaryObject() ({ __proto__: null });
 
 /*
- * ���ѥ������Х��ѿ�
+ * 共用グローバル変数
  */
 let _shared = new DictionaryObject();
 var shared = {
@@ -248,12 +241,12 @@ var shared = {
 };
 
 /*
- * ʸ�����Ѵ�
+ * 文字列変換
  */
 function unEscapeURIForUI(charset, string) 
     Cc['@mozilla.org/intl/texttosuburi;1'].getService(Ci.nsITextToSubURI).unEscapeURIForUI(charset, string);
 
-// �����Ʊ�����Ȥ��Ǥ��� XPCOM ����ݡ��ͥ�ȤϤʤ���?
+// これと同じことができる XPCOM コンポーネントはないの?
 function decodeReferences(string)
     string.replace(/&(?:#(\d+|[xX][0-9a-fA-F]+)|([\w-]+));/g, _referenceReplacement);
 
@@ -278,7 +271,7 @@ let _referenceMap = {
 };
 
 /*
- * JSON �ǥ�����/���󥳡���
+ * JSON デコード/エンコード
  */
 function decodeJSON(json) {
     try {
@@ -303,7 +296,7 @@ function encodeJSON(object) {
 }
 
 /*
- * favicon ����
+ * favicon 取得
  */
 
 function getFaviconURI (url) {
@@ -321,7 +314,7 @@ function getFaviconURI (url) {
     return faviconURI;
 }
 
-// XPath �������Ƭ���Τʤ�̾���ƥ��Ȥ���Ƭ�� prefix ���ɲä���
+// XPath 式中の接頭辞のない名前テストに接頭辞 prefix を追加する
 // e.g. '//body[@class = "foo"]/p' -> '//prefix:body[@class = "foo"]/prefix:p'
 function addDefaultPrefix(xpath, prefix) {
     const tokenPattern = /([A-Za-z_\u00c0-\ufffd][\w\-.\u00b7-\ufffd]*|\*)\s*(::?|\()?|(".*?"|'.*?'|\d+(?:\.\d*)?|\.(?:\.|\d+)?|[\)\]])|(\/\/?|!=|[<>]=?|[\(\[|,=+-])|([@$])/g;
@@ -374,16 +367,16 @@ function _getModuleURIs() {
 /*
  * original code by tombloo
  * http://github.com/to/tombloo
- * �ʲ��Υ����ɤΥ饤���󥹤� Tombloo �Υ饤���󥹤˽����ޤ�
+ * 以下のコードのライセンスは Tombloo のライセンスに従います
  */
 
 /**
- * ���֥������ȤΥץ��ѥƥ��򥳥ԡ����롣
- * ���å���/���å����δؿ����оݤ˴ޤޤ�롣
+ * オブジェクトのプロパティをコピーする。
+ * ゲッター/セッターの関数も対象に含まれる。
  * 
- * @param {Object} target ���ԡ��衣
- * @param {Object} source ���ԡ�����
- * @return {Object} ���ԡ��衣
+ * @param {Object} target コピー先。
+ * @param {Object} source コピー元。
+ * @return {Object} コピー先。
  */
 var extend = function extend(target, source, overwrite){
     overwrite = overwrite == null ? true : overwrite;
@@ -403,13 +396,13 @@ var extend = function extend(target, source, overwrite){
 }
 
 /**
- * �᥽�åɤ��ƤФ�����˽������ɲä��롣
- * ���ܺ٤ʥ���ȥ����뤬ɬ�פʾ���addAround��Ȥ����ȡ�
+ * メソッドが呼ばれる前に処理を追加する。
+ * より詳細なコントロールが必要な場合はaddAroundを使うこと。
  * 
- * @param {Object} target �оݥ��֥������ȡ�
- * @param {String} name �᥽�å�̾��
- * @param {Function} before ��������
- *        �оݥ��֥������Ȥ�this�Ȥ��ơ����ꥸ�ʥ�ΰ����������Ϥ���ƸƤӽФ���롣
+ * @param {Object} target 対象オブジェクト。
+ * @param {String} name メソッド名。
+ * @param {Function} before 前処理。
+ *        対象オブジェクトをthisとして、オリジナルの引数が全て渡されて呼び出される。
  */
 function addBefore(target, name, before) {
     var original = target[name];
@@ -420,21 +413,21 @@ function addBefore(target, name, before) {
 }
 
 /**
- * �᥽�åɤإ��饦��ɥ��ɥХ������ɲä��롣
- * �������֤��������������ѷ��䡢�֤��ͤβù���Ǥ���褦�ˤ��롣
+ * メソッドへアラウンドアドバイスを追加する。
+ * 処理を置きかえ、引数の変形や、返り値の加工をできるようにする。
  * 
- * @param {Object} target �оݥ��֥������ȡ�
+ * @param {Object} target 対象オブジェクト。
  * @param {String || Array} methodNames 
- *        �᥽�å�̾��ʣ�����ꤹ�뤳�Ȥ�Ǥ��롣
- *        set*�Τ褦�˥磻��ɥ����Ȥ�ȤäƤ�褤��
+ *        メソッド名。複数指定することもできる。
+ *        set*のようにワイルドカートを使ってもよい。
  * @param {Function} advice 
- *        ���ɥХ�����proceed��args��target��methodName��4�Ĥΰ������Ϥ���롣
- *        proceed���оݥ��֥������Ȥ˥Х���ɺѤߤΥ��ꥸ�ʥ�Υ᥽�åɡ�
+ *        アドバイス。proceed、args、target、methodNameの4つの引数が渡される。
+ *        proceedは対象オブジェクトにバインド済みのオリジナルのメソッド。
  */
 function addAround(target, methodNames, advice){
     methodNames = [].concat(methodNames);
     
-    // �磻��ɥ����ɤ�Ÿ��
+    // ワイルドカードの展開
     for(var i=0 ; i<methodNames.length ; i++){
         if(methodNames[i].indexOf('*')==-1) continue;
         

@@ -1,4 +1,7 @@
-const EXPORT = ["UserUtils"];
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+loadPrecedingModules.call(this);
+
+const EXPORTED_SYMBOLS = ["UserUtils"];
 
 var UserUtils = {
     getProfileIcon: function UU_getProfileIcon(name, isLarge) {

@@ -1,4 +1,7 @@
-const EXPORT = ['FullTextSearch'];
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+loadPrecedingModules.call(this);
+
+const EXPORTED_SYMBOLS = ['FullTextSearch'];
 
 var FullTextSearch = {
     cache: new HTTPCache('searchCache', {
@@ -11,8 +14,12 @@ var FullTextSearch = {
     canSearch: function FTS_canSearch() !!User.user && User.user.plususer,
 
     search: function FTS_search(query, onResult, options) {
-        if (!FullTextSearch.canSearch())
-            setTimeout(onResult, 0, null);
+        if (!FullTextSearch.canSearch()) {
+            new BuiltInTimer({
+                observe: function () onResult(null),
+            }, 10, Ci.nsITimer.TYPE_ONE_SHOT);
+            return;
+        }
         let path = FullTextSearch.getJsonPath(query, options);
         p(path);
         FullTextSearch.cache.async_get(path, function FTS_search_callback(data) {

@@ -1,4 +1,7 @@
-const EXPORT = ["Model"];
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+loadPrecedingModules.call(this);
+
+const EXPORTED_SYMBOLS = ["Model", "model"];
 
 var Model = {};
 
@@ -83,10 +86,15 @@ extend(Model, {
 Model.Entity = function (def) {
     let model = extend(Entity(def), {
         get db() {
-            return User.user ? User.user.database : Model.db;
+            var user = shared.get('User').user;
+            return user ? user.database : Model.db;
         }
     });
     return model;
 };
 
-
+var model = function(name) {
+    var m = Model[name];
+    if (!m) { throw 'model not found' };
+    return m;
+};
