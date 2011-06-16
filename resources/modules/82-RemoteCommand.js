@@ -1,4 +1,7 @@
-const EXPORT = ["RemoteCommand"];
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+loadPrecedingModules.call(this);
+
+const EXPORTED_SYMBOLS = ["RemoteCommand"];
 
 const NOP = new Function();
 
@@ -87,9 +90,8 @@ extend(RemoteCommand.prototype, {
 
     setTimer: function RC_setTimer() {
         if (this._timer) return;
-        this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
-        this._timer.init(this, this.options.timeout * 1000,
-                         Ci.nsITimer.TYPE_REPEATING_SLACK);
+        this._timer = new BuiltInTimer(this, this.options.timeout * 1000,
+                                       Ci.nsITimer.TYPE_REPEATING_SLACK);
     },
 
     clearTimer: function RC_clearTimer() {
