@@ -1,3 +1,8 @@
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+loadPrecedingModules.call(this);
+
+const EXPORTED_SYMBOLS = [];
+
 let Bookmark = Model.Entity({
     name : 'bookmarks',
     fields : {
