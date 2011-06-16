@@ -365,7 +365,7 @@ function _getModuleURIs() {
     var files = __LOCATION__.parent.directoryEntries;
     while (files.hasMoreElements()) {
         var file = files.getNext().QueryInterface(Ci.nsIFile);
-        if (/\.jsm$/.test(file.leafName))
+        if (/\.jsm?$/.test(file.leafName))
             uris.push(_MODULE_BASE_URI + file.leafName);
     }
     return uris.sort();

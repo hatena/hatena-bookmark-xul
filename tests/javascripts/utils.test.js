@@ -42,53 +42,11 @@ function testNewURI() {
     assert.equals(uri.spec, "http://example.org/bar");
 }
 
-function testAsyncMethod()
-{
-    var foo = 1;
-    async.method(function() {
-        foo = 30;
-    });
-    yield 100;
-    assert.equals(foo, 30);
-}
-
 function testNetsyncget()
 {
     let res = net.sync_get('http://b.hatena.ne.jp');
 
     assert.isTrue(res.responseText.length > 0);
-}
-
-function testAsyncExecute()
-{
-    let asyncExecute = async.splitExecuter;
-    let index = -1;
-    let loaded = { value: false };
-    asyncExecute(Iterator([1,2,3,4,5], true), 2, function(e, i) {
-        index = i;
-    }, function(i) {
-        loaded.value = true;
-    });
-    assert.equals(-1, index);
-    yield 0;
-    assert.equals(1, index);
-    yield 0;
-    assert.equals(3, index);
-    yield 0;
-    assert.equals(4, index);
-    yield loaded;
-
-    index = -1;
-    asyncExecute(Iterator([1,2,3,4,5,6,7,8,9], true), 3, function(e, i) {
-        index = i;
-    });
-    assert.equals(-1, index);
-    yield 0;
-    assert.equals(2, index);
-    yield 0;
-    assert.equals(5, index);
-    yield 0;
-    assert.equals(8, index);
 }
 
 function testMakeQuery() {

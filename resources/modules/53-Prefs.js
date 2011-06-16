@@ -1,5 +1,7 @@
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+loadPrecedingModules.call(this);
 
-const EXPORT = ['Prefs'];
+const EXPORTED_SYMBOLS = ['Prefs'];
 
 var Prefs = function (branchName) {
     if (branchName && branchName[branchName.length-1] != '.')
@@ -107,10 +109,3 @@ Prefs.prototype = {
 Prefs.global = new Prefs('');
 Prefs.bookmark = new Prefs('extensions.hatenabookmark.');
 Prefs.link = new Prefs('extensions.hatenabookmark.link.');
-
-window.addEventListener("unload", function () {
-    Prefs.global.unregister();
-    Prefs.bookmark.unregister();
-    Prefs.link.unregister();
-    p('unregistered prefs');
-}, false);

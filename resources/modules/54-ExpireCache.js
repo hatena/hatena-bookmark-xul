@@ -1,9 +1,11 @@
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+loadPrecedingModules.call(this);
 
 /*
  * 有効期限付きキャッシュ
  * 現在はブラウザを閉じるとすべて消える
  */
-const EXPORT = ['ExpireCache', 'HTTPCache'];
+const EXPORTED_SYMBOLS = ['ExpireCache', 'HTTPCache'];
 
 var ExpireCache = function(key, defaultExpire, seriarizer, sweeperDelay) {
     this.key = key;
@@ -11,9 +13,7 @@ var ExpireCache = function(key, defaultExpire, seriarizer, sweeperDelay) {
     this.seriarizer = ExpireCache.Seriarizer[seriarizer];
     if (!sweeperDelay)
         sweeperDelay = 60 * 60 * 4; // 四時間
-    this.sweeper = new Timer(1000 * sweeperDelay);
-    this.sweeper.createListener('timer', method(this, 'sweepHandler'));
-    this.sweeper.start();
+    this.sweeper = new BuiltInTimer(this, 1000 * sweeperDelay, Ci.nsITimer.TYPE_REPEATING_SLACK);
 }
 
 this.__defineGetter__('now', function() (new Date-0));
@@ -78,6 +78,10 @@ ExpireCache.prototype = {
         let e = now + (expire * 1000);
         this.cache[key] = [this.seriarize(value), e];
     },
+    observe: function (subject, topic, data) {
+        if (topic !== 'timer-callback') return;
+        this.sweepHandler();
+    },
 }
 
 /*
@@ -103,9 +107,9 @@ HTTPCache.prototype = {
         let cache = this.cache;
         if (cache.has(url)) {
             let val = cache.get(url);
-            setTimeout(function() {
-                callback(val);
-            }, 0);
+            new BuiltInTimer({
+                observe: function (subject, topic, data) callback(val),
+            }, 10, Ci.nsITimer.TYPE_ONE_SHOT);
         } else {
             let self = this;
             net.get(this.createURL(url), function(res) {
