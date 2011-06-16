@@ -4,7 +4,7 @@
     <Description about="urn:mozilla:install-manifest">
         <em:id>bookmark@hatena.ne.jp</em:id>
         <em:name>Hatena Bookmark</em:name>
-        <em:version>2.1.3</em:version>
+        <em:version>2.1.4a1</em:version>
         <em:type>2</em:type>
         <em:optionsURL>chrome://hatenabookmark/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://hatenabookmark/skin/images/favicon32.png</em:iconURL>
