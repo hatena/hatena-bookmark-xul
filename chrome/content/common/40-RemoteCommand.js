@@ -179,15 +179,7 @@ extend(RemoteCommand.prototype, {
         this.options.onComplete = function (result) {
             if (onComplete)
                 onComplete.apply(this, arguments);
-            //if (!result || !result.success) {
-            // サーバの success = 0 のときはすでにエントリーがないので、ローカル DB はけしとく
-            if (!result) {
-                this.onError();
-                return;
-            }
-        };
-        this.options.onError = this.options.onError || function () {
-            UIUtils.alertBookmarkError('delete', bookmarks);
+            if (!result && this.onError) this.onError();
         };
     }
 });

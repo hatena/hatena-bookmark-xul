@@ -60,5 +60,20 @@ var AddPanelManager = {
                 "chrome, dialog, resizable, alwaysRaised, centerscreen",
                 { bookmark: bookmark });
         }
-    }
+    },
+
+    createSaveSuccessCallback: function (bookmark, confirm) {
+        var url = bookmark.url;
+        return function () {
+            HTTPCache.entry.clear(url);
+            if (confirm) gBrowser.addTab(entryURL(url));
+        };
+    },
+
+    createSaveErrorCallback: function (bookmark) {
+        var self = this;
+        return function () {
+            self.showPanel(bookmark);
+        };
+    },
 };

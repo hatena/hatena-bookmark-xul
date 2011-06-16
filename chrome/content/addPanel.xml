@@ -779,9 +779,7 @@
                 <body><![CDATA[
                     let bookmark = this.bookmark;
                     // コールバック関数中では getTopWin 関数が使えない。
-                    let win = getTopWin();
-                    let confirm = this.confirmEntryCheck.checked;
-                    let hb = hBookmark;
+                    let manager = getTopWin().hBookmark.AddPanelManager;
                     let command = new hBookmark.RemoteCommand("edit", {
                         bookmark: bookmark,
                         changeTitle: this.isTitleChanged,
@@ -793,16 +791,8 @@
                         asin: this.asin,
                         changeImage: this.imageSelector.isImageChanged,
                         image: this.imageSelector.selectedImageURI,
-                        onComplete: function () {
-                            hb.HTTPCache.entry.clear(bookmark.url);
-                            if (confirm) win.gBrowser.addTab(bookmark.entryURL);
-                        },
-                        onError: let (self = this) function () {
-                            //self.setError('error');
-                            //self.show(bookmark);
-                            //win.alert('error');
-                            win.hBookmark.AddPanelManager.showPanel(bookmark);
-                        }
+                        onComplete: manager.createSaveSuccessCallback(bookmark, this.confirmEntryCheck.checked),
+                        onError: manager.createSaveErrorCallback(bookmark),
                     });
                     command.execute();
                 ]]></body>
@@ -810,8 +800,10 @@
 
             <method name="deleteBookmark">
                 <body><![CDATA[
+                    var bookmark = this.bookmark;
                     let command = new hBookmark.RemoteCommand("delete", {
-                        bookmark: this.bookmark
+                        bookmark: bookmark,
+                        onError: getTopWin().hBookmark.UIUtils.createDeleteErrorHandler(bookmark),
                     });
                     command.execute();
                     this.hide();

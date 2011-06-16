@@ -126,6 +126,14 @@ var UIUtils = {
         PS.alert(window.top, alertTitle, message);
     },
 
+    createDeleteErrorHandler: function (bookmarks) {
+        bookmarks = [].concat(bookmarks);
+        var self = this;
+        return function () {
+            self.alertBookmarkError('delete', bookmarks);
+        };
+    },
+
     openLinks: function UIU_openLinks(uris, event) {
         if (!this.confirmOpenInTabs(uris.length)) return;
         this.forceOpenLinks(uris, event);
