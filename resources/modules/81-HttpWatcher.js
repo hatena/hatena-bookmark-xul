@@ -1,6 +1,9 @@
-const EXPORT = ["HttpWatcher"];
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+loadPrecedingModules.call(this);
 
-var HttpWatcher = shared.get("HttpWatcher") || {
+const EXPORTED_SYMBOLS = ["HttpWatcher"];
+
+var HttpWatcher = {
     // 監視するホスト
     targetHostsArray: [
         B_HOST,
@@ -38,7 +41,9 @@ var HttpWatcher = shared.get("HttpWatcher") || {
                     triedCount < maxTryCount) {
                     p(data.url + ' is not registered.  Retry sync.');
                     // 同期が間に合わなかったら少し待ってもう一度同期する。
-                    setTimeout(trySync, triedCount * 2000);
+                    new BuiltInTimer({ observe: trySync },
+                                     triedCount * 2000,
+                                     Ci.nsITimer.TYPE_ONE_SHOT);
                 }
             }, null, 0, false);
             Sync.sync();
@@ -169,7 +174,4 @@ var HttpWatcher = shared.get("HttpWatcher") || {
     }
 };
 
-if (!shared.has("HttpWatcher")) {
-    HttpWatcher.startObserving();
-    shared.set("HttpWatcher", HttpWatcher);
-}
+HttpWatcher.startObserving();
