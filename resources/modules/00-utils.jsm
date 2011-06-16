@@ -354,6 +354,7 @@ function loadPrecedingModules() {
 }
 
 function _getModuleURIs() {
+    if (_getModuleURIs.uris) return _getModuleURIs.uris;
     var uris = [];
     var files = __LOCATION__.parent.directoryEntries;
     while (files.hasMoreElements()) {
@@ -361,7 +362,7 @@ function _getModuleURIs() {
         if (/\.jsm?$/.test(file.leafName))
             uris.push(_MODULE_BASE_URI + file.leafName);
     }
-    return uris.sort();
+    return _getModuleURIs.uris = uris.sort();
 }
 
 /*

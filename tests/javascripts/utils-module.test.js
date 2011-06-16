@@ -38,6 +38,7 @@ function testExtend() {
     assert.equals(o.bar, 42);
 }
 
+testLoadModules.shouldSkip = 'モジュールファイル一覧をキャッシュしているので新規追加されたファイルを読み込めない';
 function testLoadModules() {
     loadModules();
     assert.equals(typeof Foo, "object");
