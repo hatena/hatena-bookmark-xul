@@ -1,25 +1,20 @@
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
+loadPrecedingModules.call(this);
 
 // Sync to remote bookmark
 
-const EXPORT = ["Sync"];
+const EXPORTED_SYMBOLS = ["Sync"];
 
-var Sync;
-// Sync オブジェクトは一つだけ
-
-if (shared.has('Sync')) {
-    Sync = shared.get('Sync');
-} else {
-
-Sync = {};
+var Sync = {};
 EventService.implement(Sync);
 extend(Sync, {
     init: function Sync_init () {
         let b = model('Bookmark');
         let db = b.db;
         if (!db.tableExists('bookmarks')) {
-            hBookmark.Model.resetAll();
+            Model.resetAll();
         } else {
-            hBookmark.Model.migrate();
+            Model.migrate();
         }
         this.sync();
     },
@@ -138,21 +133,9 @@ EventService.createListener('UserChange', function() {
         Sync.init();
 }, User);
 
-Sync.SyncTimer = new Timer(1000 * 60 * 30); // 30分に一度 Sync
-Sync.SyncTimer.createListener('timer', function() {
-    if (User.user)
-        Sync.init();
-});
-Sync.SyncTimer.start();
-
-
-shared.set('Sync', Sync);
-}
-
-// EventService.createListener('firstPreload', function() {
-//     if (User.user) {
-//         async.wait(10); // XXX: waiting...
-//         Sync.init();
-//     }
-// }, window);
-
+Sync.SyncTimer = new BuiltInTimer({
+    observe: function (subject, topic, data) {
+        if (User.user)
+            Sync.init();
+    },
+}, 30 * 60 * 1000, Ci.nsITimer.TYPE_REPEATING_SLACK);
