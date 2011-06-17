@@ -1,6 +1,7 @@
-const EXPORT = ["sidebarBundle"];
+const EXPORT = [];
 
 window.addEventListener("load", initializeSidebar, false);
+window.addEventListener("unload", disposeSidebar, false);
 
 function initializeSidebar() {
     User.login();
@@ -50,6 +51,11 @@ function initializeSidebar() {
         if (!tagTreeView.rowCount)
             tagTreeView.build();
     }, 500);
+}
+
+function disposeSidebar() {
+    document.getElementById("tag-tree").view = null;
+    document.getElementById("bookmark-tree").view = null;
 }
 
 function showSidebarContent() {
