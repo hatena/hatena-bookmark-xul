@@ -175,7 +175,7 @@ User.LoginObserver = {
 }
 User.OfflineObserver = {
     observe: function(aSubject, aTopic, aData) {
-        if (aTopic == "network:offline-status-changed" && aState != "offline")
+        if (aTopic == "network:offline-status-changed" && aData != "offline")
             User.login();
     },
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver]),
