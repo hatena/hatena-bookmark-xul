@@ -38,7 +38,7 @@ extend(BookmarkTreeContext.prototype, {
 
         case 'command':
             this.forEachItem(function (item, menuitem) {
-                item.onCommand(treeView);
+                if (menuitem === event.target) item.onCommand(treeView);
             }, this);
             break;
         }
