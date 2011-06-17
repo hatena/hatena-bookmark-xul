@@ -138,7 +138,9 @@ extend(WidgetEmbedder.prototype, {
             counterImage.addEventListener("error", onCounterEvent, false);
             counterImage.addEventListener("abort", onCounterEvent, false);
         }
-        existing = points = counterImage = null;
+        // XXX これは必要か? Firefox 本体からはこのような
+        // 明示的に変数に null を指定するコードは削除されつつある
+        paragraph = link = existing = points = counterImage = space = fragment = null;
 
         function onCounterEvent(event) {
             let target = event.target;
