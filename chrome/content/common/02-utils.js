@@ -4,6 +4,12 @@
  * 頭に _ のついてないローカル変数はすべて EXPORT の対象となる
  */
 
+// 生成される関数の属するグローバルオブジェクトが
+// このウィンドウであるように、ここで宣言しなおす
+function bind(func, self) function () func.apply(self, arguments);
+function method(self, methodName) function () self[methodName].apply(self, arguments);
+
+
 // Timer
 
 var Timer = function(interval, repeatCount) {

@@ -29,10 +29,11 @@ function EventDispatcher() {
 extend(EventDispatcher.prototype, {
     createListener: function ED_createListener(type, handler, lockKey,
                                                priority, disposable) {
+        var originalHandler = handler;
         if (typeof handler.handleEvent === "function")
             handler = method(handler, "handleEvent");
         let window = (arguments.length < 5 || disposable)
-                     ? getCallerWindow() : null;
+                     ? getWindowForObject(originalHandler) : null;
         let listener = new Listener(this, type, handler,
                                     lockKey || "", priority || 0, window);
         listener.listen();
@@ -61,8 +62,7 @@ extend(EventDispatcher.prototype, {
     }
 });
 
-function getCallerWindow() {
-    let object = arguments.callee.caller.caller;
+function getWindowForObject(object) {
     if (!object) return null;
     let window;
     if (Cu.getGlobalForObject) {
