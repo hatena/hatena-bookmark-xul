@@ -12,11 +12,9 @@ function WidgetEmbedder(doc) {
     this._embedCounter = pref.get("embed.counter");
     this._embedComments = pref.get("embed.comments");
     this._embedAddButton = pref.get("embed.addButton");
-    this._timerId = doc.defaultView.setTimeout(this.onTimer, WidgetEmbedder.INITIAL_DELAY, this);
+    this._timerId = doc.defaultView.setTimeout(this.onTimer, WidgetEmbedder.INITIAL_DELAY, this, doc);
     this.embedStyle();
-    doc.addEventListener("GM_AutoPagerizeLoaded", this, false, true);
     doc.addEventListener("HB.PageInserted", this, false, true);
-    doc.addEventListener("DOMNodeInserted", this, false);
 }
 
 const embedStrings =
@@ -320,27 +318,21 @@ extend(WidgetEmbedder.prototype, {
         switch (event.type) {
         case "DOMNodeInserted":
             if (this._timerId) break;
-            this._timerId = doc.defaultView.setTimeout(this.onTimer, WidgetEmbedder.MUTATION_DELAY, this);
+            this._timerId = doc.defaultView.setTimeout(this.onTimer, WidgetEmbedder.MUTATION_DELAY, this, doc);
+            doc.removeEventListener("DOMNodeInserted", this, false);
             break;
 
         case "HB.PageInserted":
             doc.removeEventListener("DOMNodeInserted", this, false);
-            /* FALL THROUGH */
-        case "GM_AutoPagerizeNextPageLoaded":
             this.embed();
-            break;
-
-        case "GM_AutoPagerizeLoaded":
-            doc.removeEventListener("GM_AutoPagerizeLoaded", this, false);
-            doc.removeEventListener("DOMNodeInserted", this, false);
-            doc.addEventListener("GM_AutoPagerizeNextPageLoaded", this, false, true);
             break;
         }
     },
 
-    onTimer: function WE_onTimer(self) {
+    onTimer: function WE_onTimer(self, doc) {
         self.embed();
         self._timerId = 0;
+        doc.addEventListener("DOMNodeInserted", self, false);
     },
 });
 
