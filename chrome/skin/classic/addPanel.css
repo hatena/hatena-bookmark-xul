@@ -52,7 +52,7 @@ label[anonid="userIcon"] {
   margin-left: 5px;
 }
 
-grid.mainGrid {
+.mainEdit {
   margin: 5px;
 }
 
@@ -126,7 +126,7 @@ button[anonid="cancelEditTitleButton"] {
 }
 
 [anonid="imageSelectorContainer"] {
-  margin: 5px;
+  margin: 0 5px 5px 5px;
 }
 
 [anonid="imageSelector"] {

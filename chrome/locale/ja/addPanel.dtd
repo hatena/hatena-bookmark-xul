@@ -4,7 +4,6 @@
 <!ENTITY hBookmark.addPanel.welcomeUserLabel.before "ようこそ">
 <!ENTITY hBookmark.addPanel.welcomeUserLabel.after "さん">
 
-<!ENTITY hBookmark.addPanel.titleLabel "タイトル:">
 <!ENTITY hBookmark.addPanel.loadingTitleLabel "現在、データを取得しています...">
 <!ENTITY hBookmark.addPanel.editTitleLabel "タイトルを変更...">
 <!ENTITY hBookmark.addPanel.cancelEditTitleLabel "キャンセル">
@@ -13,9 +12,7 @@
 <!ENTITY hBookmark.addPanel.titleGuidelineURI "http://b.hatena.ne.jp/help/guideline_title">
 <!ENTITY hBookmark.addPanel.lastTitleEditorLabel "最終変更:">
 
-<!ENTITY hBookmark.addPanel.urlLabel "URL:">
 <!ENTITY hBookmark.addPanel.showCommentsLabel "ブックマークコメントを表示">
-<!ENTITY hBookmark.addPanel.commentLabel "コメント:">
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "ブックマークを確認">
 <!ENTITY hBookmark.addPanel.addCollectionLabel "コレクションに追加">
 <!ENTITY hBookmark.addPanel.isPrivateLabel "公開しない">
