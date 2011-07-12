@@ -83,25 +83,6 @@
                         <xul:hbox anonid="imageSelector"
                                   class="hBookmarkImageSelector"
                                   hidden="true"/>
-                        <xul:spacer flex="1"/>
-                        <xul:hbox anonid="optionHelpContainer" align="center"
-                                  tooltiptext="&hBookmark.addPanel.optionHelpTooltip;">
-                          <xul:image anonid="postTwitterHelp"
-                                     class="hBookmark-option-help"
-                                     href="&hBookmark.addPanel.postTwitterHelpURI;"
-                                     tooltiptext="&hBookmark.addPanel.postTwitterHelpTooltip;"
-                                     onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
-                          <xul:image anonid="postMixiCheckHelp"
-                                     class="hBookmark-option-help"
-                                     href="&hBookmark.addPanel.postMixiCheckHelpURI;"
-                                     tooltiptext="&hBookmark.addPanel.postMixiCheckHelpTooltip;"
-                                     onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
-                          <xul:image anonid="isPrivateHelp"
-                                     class="hBookmark-option-help"
-                                     href="&hBookmark.addPanel.isPrivateHelpURI;"
-                                     tooltiptext="&hBookmark.addPanel.isPrivateHelpTooltip;"
-                                     onclick="hBookmark.hOpenUILink(this.getAttribute('href'), event);"/>
-                        </xul:hbox>
                     </xul:vbox>
                 </xul:hbox>
 
@@ -111,25 +92,33 @@
 
                 <xul:hbox>
                     <xul:vbox flex="1">
-                        <xul:hbox anonid="optionsContainer" align="center">
-                            <xul:checkbox anonid="confirmEntryCheck"
-                                          label="&hBookmark.addPanel.confirmEntryLabel;"
-                                          preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
+                        <xul:hbox class="optionsContainer">
                             <xul:checkbox anonid="postTwitterCheck"
                                           label="&hBookmark.addPanel.postTwitterLabel;"
                                           preference="extensions.hatenabookmark.addPanel.postTwitter"
                                           tooltiptext="&hBookmark.addPanel.postTwitterDescription;"
-                                          twitterdisablednotice="&hBookmark.addPanel.twitterDisabledNotice;"/>
+                                          twitterdisablednotice="&hBookmark.addPanel.twitterDisabledNotice;"
+                                          helptext="&hBookmark.addPanel.postTwitterHelpTooltip;"
+                                          helplink="&hBookmark.addPanel.postTwitterHelpURI;"/>
                             <xul:checkbox anonid="postMixiCheckCheck"
                                           label="&hBookmark.addPanel.postMixiCheckLabel;"
                                           preference="extensions.hatenabookmark.addPanel.postMixiCheck"
                                           tooltiptext="&hBookmark.addPanel.postMixiCheckDescription;"
-                                          mixicheckdisablednotice="&hBookmark.addPanel.mixiCheckDisabledNotice;"/>
+                                          mixicheckdisablednotice="&hBookmark.addPanel.mixiCheckDisabledNotice;"
+                                          helptext="&hBookmark.addPanel.postMixiCheckHelpTooltip;"
+                                          helplink="&hBookmark.addPanel.postMixiCheckHelpURI;"/>
+                        </xul:hbox>
+                        <xul:hbox class="optionsContainer">
+                            <xul:checkbox anonid="confirmEntryCheck"
+                                          label="&hBookmark.addPanel.confirmEntryLabel;"
+                                          preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
                             <xul:checkbox anonid="isPrivateCheck"
                                           class="hBookmark-has-help-icon"
                                           label="&hBookmark.addPanel.isPrivateLabel;"
                                           tooltiptext="&hBookmark.addPanel.isPrivateDescription;"
-                                          normalusernotice="&hBookmark.addPanel.normalUserNotice;"/>
+                                          normalusernotice="&hBookmark.addPanel.normalUserNotice;"
+                                          helptext="&hBookmark.addPanel.isPrivateHelpTooltip;"
+                                          helplink="&hBookmark.addPanel.isPrivateHelpURI;"/>
                             <xul:checkbox anonid="sendMailCheck"
                                           label="&hBookmark.addPanel.sendMailLabel;"
                                           preference="extensions.hatenabookmark.addPanel.sendMail"
@@ -167,6 +156,17 @@
             </xul:groupbox>
             <xul:popupset>
                 <xul:tooltip id="hBookmarkFavoriteBookmarkTooltip"/>
+                <xul:panel anonid="optionHelpPanel">
+                    <xul:hbox align="start">
+                        <xul:image anonid="optionHelpIcon"/>
+                        <xul:vbox align="start" flex="1">
+                            <xul:description anonid="optionHelpText"/>
+                            <xul:label anonid="optionHelpLink"
+                                       class="text-link hBookmarkLink"
+                                       value="&hBookmark.addPanel.optionHelpLearnMoreText;"/>
+                        </xul:vbox>
+                    </xul:hbox>
+                </xul:panel>
             </xul:popupset>
         </content>
 
@@ -274,17 +274,17 @@
             <field name="postMixiCheckCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "postMixiCheckCheck")
             </field>
-            <field name="optionHelpContainer">
-                document.getAnonymousElementByAttribute(this, "anonid", "optionHelpContainer")
+            <field name="optionHelpPanel">
+                document.getAnonymousElementByAttribute(this, "anonid", "optionHelpPanel");
             </field>
-            <field name="isPrivateHelp">
-                document.getAnonymousElementByAttribute(this, "anonid", "isPrivateHelp")
+            <field name="optionHelpIcon">
+                document.getAnonymousElementByAttribute(this, "anonid", "optionHelpIcon");
             </field>
-            <field name="postTwitterHelp">
-                document.getAnonymousElementByAttribute(this, "anonid", "postTwitterHelp")
+            <field name="optionHelpText">
+                document.getAnonymousElementByAttribute(this, "anonid", "optionHelpText");
             </field>
-            <field name="postMixiCheckHelp">
-                document.getAnonymousElementByAttribute(this, "anonid", "postMixiCheckHelp")
+            <field name="optionHelpLink">
+                document.getAnonymousElementByAttribute(this, "anonid", "optionHelpLink");
             </field>
             <field name="imageSelector">
                 document.getAnonymousElementByAttribute(this, "anonid", "imageSelector")
@@ -441,22 +441,24 @@
 
                     this.addCollectionCheck.hidden = true;
                     this.isPrivateCheck.checked = false;
-                    this.isPrivateCheck.hidden = !user.plususer;
-                    this.isPrivateHelp.hidden = user.plususer
+                    if (!user.plususer) {
+                        this.isPrivateCheck.setAttribute('showoptionhelp', 'true');
+                    }
                     this.sendMailCheck.hidden = !user.plususer;
                     if (user.postTwitterChecked !== 'inherit') {
                         this.postTwitterCheck.checked = (user.postTwitterChecked === 'on');
                     }
-                    this.postTwitterCheck.hidden = !user.canUseTwitter;
-                    this.postTwitterHelp.hidden = user.canUseTwitter;
+                    if (!user.canUseTwitter) {
+                        this.postTwitterCheck.setAttribute('showoptionhelp', 'true');
+                    }
                     this.setPostTwitterEnable(true);
                     if (user.postMixiCheckChecked !== 'inherit') {
                         this.postMixiCheckCheck.checked = (user.postMixiCheckChecked === 'on');
                     }
-                    this.postMixiCheckCheck.hidden = !user.canUseMixiCheck;
-                    this.postMixiCheckHelp.hidden = user.canUseMixiCheck;
+                    if (!user.canUseMixiCheck) {
+                        this.postMixiCheckCheck.setAttribute('showoptionhelp', 'true');
+                    }
                     this.setPostMixiCheckEnable(true);
-                    this.optionHelpContainer.hidden = user.plususer && user.canUseTwitter && user.canUseMixiCheck;
                     this.recommendedTagSelectorGroup.hidden = true;
                     this.imageSelector.build();
                     this.imageSelector.hidden = !this.imageSelector.hasImages ||
@@ -521,7 +523,6 @@
                         //res.is_private = 1;
                         if (res.is_private) {
                             this.isPrivateCheck.checked = true;
-                            this.isPrivateCheck.hidden = false;
                             this.setPostTwitterEnable(false);
                             this.setPostMixiCheckEnable(false);
                         }
@@ -713,6 +714,19 @@
                 ]]></body>
             </method>
 
+            <method name="showOptionHelpFor">
+                <parameter name="check"/>
+                <body><![CDATA[
+                    if (this.optionHelpPanel.state === 'open') {
+                        this.optionHelpPanel.hidePopup();
+                    }
+                    this.optionHelpText.textContent = check.getAttribute('helptext');
+                    this.optionHelpLink.href = check.getAttribute('helplink');
+                    this.optionHelpIcon.style.listStyleImage = getComputedStyle(check, null).listStyleImage;
+                    this.optionHelpPanel.openPopup(check, 'after_start', 0, 0, false, false);
+                ]]></body>
+            </method>
+
             <method name="switchTagSelectorView">
                 <parameter name="showAll"/>
                 <body><![CDATA[
@@ -808,9 +822,13 @@
                 }
             ]]></handler>
             <handler event="command"><![CDATA[
-                if (event.originalTarget === this.isPrivateCheck) {
+                let target = event.originalTarget;
+                if (target === this.isPrivateCheck) {
                     this.setPostTwitterEnable(!this.isPrivateCheck.checked);
                     this.setPostMixiCheckEnable(!this.isPrivateCheck.checked);
+                }
+                if (target.getAttribute('showoptionhelp') && target.checked) {
+                    this.showOptionHelpFor(target);
                 }
             ]]></handler>
             <handler event="HB_TagChange"

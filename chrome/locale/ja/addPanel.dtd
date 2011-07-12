@@ -32,7 +32,7 @@
 <!ENTITY hBookmark.addPanel.postMixiCheckHelpURI "http://b.hatena.ne.jp/help/config_coop#mixi-check">
 <!ENTITY hBookmark.addPanel.mixiCheckDisabledNotice "(非公開ブックマークはmixiチェックへ投稿されません)">
 <!ENTITY hBookmark.addPanel.normalUserNotice "※ プラスユーザー (有料オプション) のみ利用可能です">
-<!ENTITY hBookmark.addPanel.optionHelpTooltip "有効にすることで使える、より便利な機能の紹介です">
+<!ENTITY hBookmark.addPanel.optionHelpLearnMoreText "もっと詳しく">
 
 <!ENTITY hBookmark.addPanel.imageDescription "エントリーの画像は全ユーザ共通です">
 <!ENTITY hBookmark.addPanel.imageGuidelineLabel "ガイドライン">

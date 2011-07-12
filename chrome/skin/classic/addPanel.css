@@ -295,33 +295,27 @@ image[anonid="icon"] {
   background: url("chrome://hatenabookmark/skin/images/hints.gif") left no-repeat;
 }
 
-[anonid="optionsContainer"] {
+.optionsContainer {
   display: block;
 }
-[anonid="optionsContainer"] > checkbox,
-[anonid="optionsContainer"] > image {
+.optionsContainer > checkbox,
+.optionsContainer > image {
   vertical-align: middle;
 }
-[anonid="postTwitterCheck"], [anonid="postTwitterHelp"] {
+[anonid="postTwitterCheck"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/add-twitter.png");
 }
-[anonid="postMixiCheckCheck"], [anonid="postMixiCheckHelp"] {
+[anonid="postMixiCheckCheck"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/icon-mixi.png");
 }
-[anonid="isPrivateCheck"], [anonid="isPrivateHelp"] {
+[anonid="isPrivateCheck"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/add-private.png");
 }
 
-[anonid="optionHelpContainer"] {
-  background: #f3f3f3 url("chrome://hatenabookmark/skin/images/option-help-marker.png") left center no-repeat;
-  margin-top: 5px;
-  padding: 2px 4px 2px 22px;
-  -moz-border-radius: 3px;
+[anonid="optionHelpPanel"] {
+  max-width: 36em;
 }
-.hBookmark-option-help  {
-  opacity: 0.6;
-  cursor: pointer;
-}
-.hBookmark-option-help:hover {
-  opacity: 1;
+[anonid="optionHelpIcon"] {
+  margin-top: 2px;
+  -moz-margin-start: 3px;
 }

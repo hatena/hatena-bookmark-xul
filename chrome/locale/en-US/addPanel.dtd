@@ -32,7 +32,7 @@
 <!ENTITY hBookmark.addPanel.postMixiCheckHelpURI "http://b.hatena.ne.jp/help/config_coop#mixi-check">
 <!ENTITY hBookmark.addPanel.mixiCheckDisabledNotice "(Hidden bookmark will not be posted to mixi check)">
 <!ENTITY hBookmark.addPanel.normalUserNotice "* Only Plus User (charged option) is able to use this feature.">
-<!ENTITY hBookmark.addPanel.optionHelpTooltip "You can use more convenient features.">
+<!ENTITY hBookmark.addPanel.optionHelpLearnMoreText "Learn more">
 
 <!ENTITY hBookmark.addPanel.imageDescription "The image is shared with all users. ">
 <!ENTITY hBookmark.addPanel.imageGuidelineLabel "Guidelines for image usage (in Japanese)">
