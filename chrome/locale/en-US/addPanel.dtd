@@ -12,21 +12,23 @@
 <!ENTITY hBookmark.addPanel.titleGuidelineURI "http://b.hatena.ne.jp/help/guideline_title">
 <!ENTITY hBookmark.addPanel.lastTitleEditorLabel "Last modified by">
 
+<!ENTITY hBookmark.addPanel.shareLabel "Share:">
+<!ENTITY hBookmark.addPanel.optionsLabel "Options:">
 <!ENTITY hBookmark.addPanel.showCommentsLabel "Show Bookmark Comments">
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "Confirm Bookmark">
-<!ENTITY hBookmark.addPanel.addCollectionLabel "Add to Collection">
-<!ENTITY hBookmark.addPanel.isPrivateLabel "Hide from People">
+<!ENTITY hBookmark.addPanel.addCollectionLabel "Collection">
+<!ENTITY hBookmark.addPanel.isPrivateLabel "Hide">
 <!ENTITY hBookmark.addPanel.isPrivateDescription "Hide this bookmark from other people.  Access-permitted user also can't view this.">
 <!ENTITY hBookmark.addPanel.isPrivateHelpTooltip "You can hide your bookmark from other people if you join Hatena Bookmark Plus">
 <!ENTITY hBookmark.addPanel.isPrivateHelpURI "http://b.hatena.ne.jp/guide/plus?target=private&amp;ref=firefox">
-<!ENTITY hBookmark.addPanel.sendMailLabel "Send Mail">
+<!ENTITY hBookmark.addPanel.sendMailLabel "Mail">
 <!ENTITY hBookmark.addPanel.sendMailDescription "Send this bookmark to the mail address you specified in the configuration page on the web.">
-<!ENTITY hBookmark.addPanel.postTwitterLabel "Post to Twitter">
+<!ENTITY hBookmark.addPanel.postTwitterLabel "Twitter">
 <!ENTITY hBookmark.addPanel.postTwitterDescription "Post this bookmark to Twitter.">
 <!ENTITY hBookmark.addPanel.postTwitterHelpTooltip "You can post your bookmark to Twitter">
 <!ENTITY hBookmark.addPanel.postTwitterHelpURI "http://b.hatena.ne.jp/guide/twitter?target=append&amp;ref=firefox">
 <!ENTITY hBookmark.addPanel.twitterDisabledNotice "(Hidden bookmark will not be posted to Twitter)">
-<!ENTITY hBookmark.addPanel.postMixiCheckLabel "Post to mixi check">
+<!ENTITY hBookmark.addPanel.postMixiCheckLabel "mixi check">
 <!ENTITY hBookmark.addPanel.postMixiCheckDescription "Post this bookmark to mixi check.">
 <!ENTITY hBookmark.addPanel.postMixiCheckHelpTooltip "You can post your bookmark to mixi check.">
 <!ENTITY hBookmark.addPanel.postMixiCheckHelpURI "http://b.hatena.ne.jp/help/config_coop#mixi-check">

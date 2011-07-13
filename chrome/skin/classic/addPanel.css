@@ -27,7 +27,6 @@ label[anonid="userIcon"] {
 
 .labelHeader {
   font-weight: bold;
-  margin-right: 1em;
   color: #222;
 }
 
@@ -310,6 +309,9 @@ image[anonid="icon"] {
 }
 [anonid="isPrivateCheck"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/add-private.png");
+}
+[anonid="sendMailCheck"] {
+  list-style-image: url("chrome://hatenabookmark/skin/images/icon-mail.png");
 }
 
 [anonid="optionHelpPanel"] {

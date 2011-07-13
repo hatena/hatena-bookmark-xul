@@ -93,6 +93,8 @@
                 <xul:hbox>
                     <xul:vbox flex="1">
                         <xul:hbox class="optionsContainer">
+                            <xul:label class="labelHeader"
+                                       value="&hBookmark.addPanel.shareLabel;"/>
                             <xul:checkbox anonid="postTwitterCheck"
                                           label="&hBookmark.addPanel.postTwitterLabel;"
                                           preference="extensions.hatenabookmark.addPanel.postTwitter"
@@ -109,6 +111,8 @@
                                           helplink="&hBookmark.addPanel.postMixiCheckHelpURI;"/>
                         </xul:hbox>
                         <xul:hbox class="optionsContainer">
+                            <xul:label class="labelHeader"
+                                       value="&hBookmark.addPanel.optionsLabel;"/>
                             <xul:checkbox anonid="confirmEntryCheck"
                                           label="&hBookmark.addPanel.confirmEntryLabel;"
                                           preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
