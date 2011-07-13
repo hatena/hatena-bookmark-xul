@@ -102,6 +102,13 @@
                                           disablednotice="&hBookmark.addPanel.twitterDisabledNotice;"
                                           helptext="&hBookmark.addPanel.postTwitterHelpTooltip;"
                                           helplink="&hBookmark.addPanel.postTwitterHelpURI;"/>
+                            <xul:checkbox anonid="postFacebookCheck"
+                                          label="&hBookmark.addPanel.postFacebookLabel;"
+                                          preference="extensions.hatenabookmark.addPanel.postFacebook"
+                                          tooltiptext="&hBookmark.addPanel.postFacebookDescription;"
+                                          disablednotice="&hBookmark.addPanel.facebookDisabledNotice;"
+                                          helptext="&hBookmark.addPanel.postFacebookHelpTooltip;"
+                                          helplink="&hBookmark.addPanel.postFacebookHelpURI;"/>
                             <xul:checkbox anonid="postMixiCheckCheck"
                                           label="&hBookmark.addPanel.postMixiCheckLabel;"
                                           preference="extensions.hatenabookmark.addPanel.postMixiCheck"
@@ -274,6 +281,9 @@
             </field>
             <field name="postTwitterCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "postTwitterCheck")
+            </field>
+            <field name="postFacebookCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "postFacebookCheck")
             </field>
             <field name="postMixiCheckCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "postMixiCheckCheck")
@@ -457,6 +467,14 @@
                     }
                     if (postTwitterChecked !== 'inherit') {
                         this.postTwitterCheck.checked = (postTwitterChecked === 'on');
+                    }
+                    let postFacebookChecked = user.postFacebookChecked;
+                    if (!user.canUseFacebook) {
+                        postFacebookChecked = 'off';
+                        this.postFacebookCheck.setAttribute('showoptionhelp', 'true');
+                    }
+                    if (postFacebookChecked !== 'inherit') {
+                        this.postFacebookCheck.checked = (postFacebookChecked === 'on');
                     }
                     let postMixiCheckChecked = user.postMixiCheckChecked;
                     if (!user.canUseMixiCheck) {
@@ -676,7 +694,7 @@
             <method name="setShareCheckEnable">
                 <parameter name="enabled"/>
                 <body><![CDATA[
-                    let checks = [this.postTwitterCheck, this.postMixiCheckCheck];
+                    let checks = [this.postTwitterCheck, this.postFacebookCheck, this.postMixiCheckCheck];
                     checks.forEach(function (check) {
                         if (!check.enabledTooltipText) {
                             check.enabledTooltipText = check.tooltipText;
@@ -768,6 +786,7 @@
                         isPrivate: this.isPrivateCheck.checked,
                         sendMail: this.sendMailCheck.checked,
                         postTwitter: this.postTwitterCheck.checked,
+                        postFacebook: this.postFacebookCheck.checked,
                         postMixiCheck: this.postMixiCheckCheck.checked,
                         asin: this.asin,
                         changeImage: this.imageSelector.isImageChanged,

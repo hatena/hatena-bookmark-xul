@@ -160,6 +160,8 @@ extend(RemoteCommand.prototype, {
             query.send_mail = 1;
         if (this.options.postTwitter && user.canUseTwitter)
             query.post_twitter = 1;
+        if (this.options.postFacebook && user.canUseFacebook)
+            query.post_facebook = 1;
         if (this.options.postMixiCheck && user.canUseMixiCheck)
             query.post_mixi_check = 1;
         if (this.options.changeImage && user.public)
