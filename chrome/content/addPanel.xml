@@ -99,14 +99,14 @@
                                           label="&hBookmark.addPanel.postTwitterLabel;"
                                           preference="extensions.hatenabookmark.addPanel.postTwitter"
                                           tooltiptext="&hBookmark.addPanel.postTwitterDescription;"
-                                          twitterdisablednotice="&hBookmark.addPanel.twitterDisabledNotice;"
+                                          disablednotice="&hBookmark.addPanel.twitterDisabledNotice;"
                                           helptext="&hBookmark.addPanel.postTwitterHelpTooltip;"
                                           helplink="&hBookmark.addPanel.postTwitterHelpURI;"/>
                             <xul:checkbox anonid="postMixiCheckCheck"
                                           label="&hBookmark.addPanel.postMixiCheckLabel;"
                                           preference="extensions.hatenabookmark.addPanel.postMixiCheck"
                                           tooltiptext="&hBookmark.addPanel.postMixiCheckDescription;"
-                                          mixicheckdisablednotice="&hBookmark.addPanel.mixiCheckDisabledNotice;"
+                                          disablednotice="&hBookmark.addPanel.mixiCheckDisabledNotice;"
                                           helptext="&hBookmark.addPanel.postMixiCheckHelpTooltip;"
                                           helplink="&hBookmark.addPanel.postMixiCheckHelpURI;"/>
                         </xul:hbox>
@@ -449,20 +449,24 @@
                         this.isPrivateCheck.setAttribute('showoptionhelp', 'true');
                     }
                     this.sendMailCheck.hidden = !user.plususer;
-                    if (user.postTwitterChecked !== 'inherit') {
-                        this.postTwitterCheck.checked = (user.postTwitterChecked === 'on');
-                    }
+
+                    let postTwitterChecked = user.postTwitterChecked;
                     if (!user.canUseTwitter) {
+                        postTwitterChecked = 'off';
                         this.postTwitterCheck.setAttribute('showoptionhelp', 'true');
                     }
-                    this.setPostTwitterEnable(true);
-                    if (user.postMixiCheckChecked !== 'inherit') {
-                        this.postMixiCheckCheck.checked = (user.postMixiCheckChecked === 'on');
+                    if (postTwitterChecked !== 'inherit') {
+                        this.postTwitterCheck.checked = (postTwitterChecked === 'on');
                     }
+                    let postMixiCheckChecked = user.postMixiCheckChecked;
                     if (!user.canUseMixiCheck) {
+                        postMixiCheckChecked = 'off';
                         this.postMixiCheckCheck.setAttribute('showoptionhelp', 'true');
                     }
-                    this.setPostMixiCheckEnable(true);
+                    if (postMixiCheckChecked !== 'inherit') {
+                        this.postMixiCheckCheck.checked = (postMixiCheckChecked === 'on');
+                    }
+                    this.setShareCheckEnable(true);
                     this.recommendedTagSelectorGroup.hidden = true;
                     this.imageSelector.build();
                     this.imageSelector.hidden = !this.imageSelector.hasImages ||
@@ -527,8 +531,7 @@
                         //res.is_private = 1;
                         if (res.is_private) {
                             this.isPrivateCheck.checked = true;
-                            this.setPostTwitterEnable(false);
-                            this.setPostMixiCheckEnable(false);
+                            this.setShareCheckEnable(false);
                         }
                         this.asin = res.asin;
                         if (!tagsFromContent)
@@ -670,51 +673,29 @@
                 ]]></body>
             </method>
 
-            <method name="setPostTwitterEnable">
+            <method name="setShareCheckEnable">
                 <parameter name="enabled"/>
                 <body><![CDATA[
-                    let check = this.postTwitterCheck;
-                    if (!check.enabledTooltipText) {
-                        check.enabledTooltipText = check.tooltipText;
-                        check.disabledTooltipText =
-                            check.tooltipText + ' ' +
-                            check.getAttribute('twitterdisablednotice');
-                        check.defaultChecked = check.checked;
-                    }
-                    if (enabled) {
-                        check.disabled = false;
-                        check.tooltipText = check.enabledTooltipText;
-                        check.checked = check.defaultChecked;
-                    } else {
-                        check.disabled = true;
-                        check.tooltipText = check.disabledTooltipText;
-                        check.defaultChecked = check.checked;
-                        check.checked = false;
-                    }
-                ]]></body>
-            </method>
-
-            <method name="setPostMixiCheckEnable">
-                <parameter name="enabled"/>
-                <body><![CDATA[
-                    let check = this.postMixiCheckCheck;
-                    if (!check.enabledTooltipText) {
-                        check.enabledTooltipText = check.tooltipText;
-                        check.disabledTooltipText =
-                            check.tooltipText + ' ' +
-                            check.getAttribute('mixicheckdisablednotice');
-                        check.defaultChecked = check.checked;
-                    }
-                    if (enabled) {
-                        check.disabled = false;
-                        check.tooltipText = check.enabledTooltipText;
-                        check.checked = check.defaultChecked;
-                    } else {
-                        check.disabled = true;
-                        check.tooltipText = check.disabledTooltipText;
-                        check.defaultChecked = check.checked;
-                        check.checked = false;
-                    }
+                    let checks = [this.postTwitterCheck, this.postMixiCheckCheck];
+                    checks.forEach(function (check) {
+                        if (!check.enabledTooltipText) {
+                            check.enabledTooltipText = check.tooltipText;
+                            check.disabledTooltipText =
+                                check.tooltipText + ' ' +
+                                check.getAttribute('disablednotice');
+                            check.defaultChecked = check.checked;
+                        }
+                        if (enabled) {
+                            check.disabled = false;
+                            check.tooltipText = check.enabledTooltipText;
+                            check.checked = check.defaultChecked;
+                        } else {
+                            check.disabled = true;
+                            check.tooltipText = check.disabledTooltipText;
+                            check.defaultChecked = check.checked;
+                            check.checked = false;
+                        }
+                    }, this);
                 ]]></body>
             </method>
 
@@ -828,8 +809,7 @@
             <handler event="command"><![CDATA[
                 let target = event.originalTarget;
                 if (target === this.isPrivateCheck) {
-                    this.setPostTwitterEnable(!this.isPrivateCheck.checked);
-                    this.setPostMixiCheckEnable(!this.isPrivateCheck.checked);
+                    this.setShareCheckEnable(!this.isPrivateCheck.checked);
                 }
                 if (target.getAttribute('showoptionhelp') && target.checked) {
                     this.showOptionHelpFor(target);
