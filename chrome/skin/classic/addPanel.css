@@ -327,6 +327,9 @@ image[anonid="icon"] {
 [anonid="optionHelpPanel"] {
   max-width: 36em;
 }
+[anonid="optionHelpPanel"] > hbox {
+  padding: 5px 3px;
+}
 [anonid="optionHelpIcon"] {
   margin-top: 2px;
   -moz-margin-start: 3px;
