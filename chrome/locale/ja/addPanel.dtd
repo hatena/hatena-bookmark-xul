@@ -52,5 +52,7 @@
 <!ENTITY hBookmark.addPanel.tagsLabel "タグ">
 <!ENTITY hBookmark.addPanel.showAllTagsLabel "すべてのタグを表示">
 <!ENTITY hBookmark.addPanel.showFrequentTagsLabel "一部タグのみ表示">
+<!ENTITY hBookmark.addPanel.tagHelpLabel "※ タグについての詳しい説明">
+<!ENTITY hBookmark.addPanel.tagHelpURI "http://b.hatena.ne.jp/help/tag">
 
 <!ENTITY hBookmark.addPanel.deleteLabel "削除">

@@ -151,7 +151,12 @@
             </xul:vbox>
 
             <xul:groupbox anonid="recommendedTagSelectorGroup">
-                <xul:caption label="&hBookmark.addPanel.recommendedTagsLabel;"/>
+                <xul:caption>
+                    <xul:label value="&hBookmark.addPanel.recommendedTagsLabel;"/>
+                    <xul:label class="text-link hBookmarkLink tagHelpLink"
+                               value="&hBookmark.addPanel.tagHelpLabel;"
+                               href="&hBookmark.addPanel.tagHelpURI;"/>
+                </xul:caption>
                 <xul:hbox anonid="recommendedTagSelector"
                           class="hBookmarkTagSelector"/>
             </xul:groupbox>
@@ -171,6 +176,12 @@
                           class="hBookmarkTagSelector"
                           flex="1"/>
             </xul:groupbox>
+            <xul:hbox anonid="tagHelpContainer">
+                <xul:label class="text-link hBookmarkLink tagHelpLink"
+                           value="&hBookmark.addPanel.tagHelpLabel;"
+                           href="&hBookmark.addPanel.tagHelpURI;"/>
+            </xul:hbox>
+
             <xul:popupset>
                 <xul:tooltip id="hBookmarkFavoriteBookmarkTooltip"/>
                 <xul:panel anonid="optionHelpPanel">
@@ -326,6 +337,9 @@
             </field>
             <field name="tagSelector">
                 document.getAnonymousElementByAttribute(this, "anonid", "tagSelector")
+            </field>
+            <field name="tagHelpContainer">
+                document.getAnonymousElementByAttribute(this, "anonid", "tagHelpContainer")
             </field>
             <field name="errorField">
                 document.getAnonymousElementByAttribute(this, "anonid", "errorField")
@@ -492,6 +506,7 @@
                     }
                     this.setShareCheckEnable(true);
                     this.recommendedTagSelectorGroup.hidden = true;
+                    this.tagHelpContainer.hidden = true;
                     this.imageSelector.build();
                     this.imageSelector.hidden = !this.imageSelector.hasImages ||
                                                 user.private;
@@ -566,6 +581,8 @@
                             this.titleField.value = res.title;
                         }
                     }
+
+                    this.tagHelpContainer.hidden = !this.recommendedTagSelectorGroup.hidden;
 
                     let wantTitle = !this.titleLabel.value;
                     let wantRecommendedTags = tagsFromContent ||
@@ -648,6 +665,7 @@
                     let selectedTags = this.inputHandler.inputLine.tags;
                     this.recommendedTagSelector.update(selectedTags);
                     this.recommendedTagSelectorGroup.hidden = false;
+                    this.tagHelpContainer.hidden = true;
                 ]]></body>
             </method>
 

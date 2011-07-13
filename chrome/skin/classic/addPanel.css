@@ -219,6 +219,7 @@ groupbox {
   -moz-border-radius: 3px;
 }
 
+.tagHelpLink,
 .hBookmarkCommandLabel {
    color: #808080;
    text-decoration: underline;
@@ -229,6 +230,7 @@ groupbox {
   margin: 0;
 }
 
+.tagHelpLink,
 [anonid="allTagsLabel"],
 [anonid="frequentTagsLabel"] {
   font-weight: normal;
@@ -237,6 +239,11 @@ groupbox {
 
 [anonid="tagSelector"] {
    overflow: auto;
+}
+
+[anonid="tagHelpContainer"] {
+   -moz-margin-start: 10px;
+   -moz-margin-end: 10px;
 }
 
 [anonid="showCommentsButton"] {

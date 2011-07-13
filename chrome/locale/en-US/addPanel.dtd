@@ -52,5 +52,7 @@
 <!ENTITY hBookmark.addPanel.tagsLabel "Tags">
 <!ENTITY hBookmark.addPanel.showAllTagsLabel "Show all tags">
 <!ENTITY hBookmark.addPanel.showFrequentTagsLabel "Show frequently used tags">
+<!ENTITY hBookmark.addPanel.tagHelpLabel "* Learn more about tags (in Japanese)">
+<!ENTITY hBookmark.addPanel.tagHelpURI "http://b.hatena.ne.jp/help/tag">
 
 <!ENTITY hBookmark.addPanel.deleteLabel "Delete">
