@@ -33,6 +33,7 @@
                             <xul:button anonid="editTitleButton"
                                         tooltiptext="&hBookmark.addPanel.editTitleLabel;"
                                         oncommand="document.getBindingParent(this).isTitleEditable = true;"/>
+                            <xul:spacer flex="10000"/>
                         </xul:hbox>
                         <xul:hbox anonid="editableTitleContainer"
                                   align="center">
@@ -61,9 +62,13 @@
                             </xul:hbox>
                         </xul:vbox>
 
-                        <xul:label anonid="urlField"
-                                   class="text-link hBookmarkLink"
-                                   crop="end"/>
+                        <xul:hbox>
+                            <xul:label anonid="urlField"
+                                       class="text-link hBookmarkLink"
+                                       crop="end"
+                                       flex="1"/>
+                            <xul:spacer flex="10000"/>
+                        </xul:hbox>
 
                         <xul:hbox anonid="usersRow" align="center"
                                   style="visibility: hidden;">
@@ -1297,6 +1302,7 @@
                            class="text-link hBookmarkLink"
                            flex="1"
                            crop="end"/>
+                <xul:spacer flex="10000"/>
                 <xul:hbox anonid="usersContainer"
                           align="center"
                           collapsed="true">
