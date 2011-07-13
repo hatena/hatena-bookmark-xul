@@ -93,6 +93,7 @@
 
                 <xul:textbox anonid="commentField"
                              class="hBookmarkMyTagComplete"
+                             emptytext="&hBookmark.addPanel.commentDescription;"
                              multiline="true"/>
 
                 <xul:hbox>

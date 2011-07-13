@@ -12,9 +12,11 @@
 <!ENTITY hBookmark.addPanel.titleGuidelineURI "http://b.hatena.ne.jp/help/guideline_title">
 <!ENTITY hBookmark.addPanel.lastTitleEditorLabel "最終変更:">
 
+<!ENTITY hBookmark.addPanel.showCommentsLabel "ブックマークコメントを表示">
+<!ENTITY hBookmark.addPanel.commentDescription "コメントを入力してください (省略可能)">
+
 <!ENTITY hBookmark.addPanel.shareLabel "共有:">
 <!ENTITY hBookmark.addPanel.optionsLabel "オプション:">
-<!ENTITY hBookmark.addPanel.showCommentsLabel "ブックマークコメントを表示">
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "ブックマークを確認">
 <!ENTITY hBookmark.addPanel.addCollectionLabel "コレクション">
 <!ENTITY hBookmark.addPanel.isPrivateLabel "非公開">
