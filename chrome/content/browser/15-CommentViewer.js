@@ -238,11 +238,10 @@ var CommentViewer = {
         CommentViewer.commentElements = {};
 
         let bookmarks = Array.slice(data.bookmarks);
-        let eid = bookmarks.eid = data.eid;
-
         if (isFilter) {
             bookmarks = bookmarks.filter(function(b) b.comment);
         }
+        let eid = bookmarks.eid = data.eid;
 
         let title = decodeReferences(data.title) || data.url;
         CommentViewer.starCreator = new Star.Creator(title, entryURL(data.url));
