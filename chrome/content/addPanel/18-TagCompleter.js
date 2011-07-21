@@ -138,6 +138,7 @@ TagCompleter.InputHandler = function(input) {
     this.tagCompleteEnabled = Prefs.bookmark.get('addPanel.tagCompleteEnabled');
     this.prevValue = this.input.value;
     this.listPosition = new TagCompleter.ListPosition(input);
+    this.textbox = document.getBindingParent(input);
     input.addEventListener('keyup', method(this, 'inputKeyupHandler'), false);
     input.addEventListener('keydown', method(this, 'inputKeydownHandler'), false);
     input.addEventListener('input', method(this, 'inputInputHandler'), false);
@@ -148,8 +149,6 @@ TagCompleter.InputHandler = function(input) {
 }
 
 TagCompleter.InputHandler.prototype = {
-    get textbox() 
-        document.getBindingParent(this.input),
     get addPanel() 
         document.getBindingParent(this.textbox),
     updateRecommendedTags: function(tags) {
@@ -168,9 +167,9 @@ TagCompleter.InputHandler.prototype = {
         return this._suggestTags;
     },
     updateLineValue: function() 
-        this.inputLine.value = this.input.value,
+        this.inputLine.value = this.textbox.value,
     updateValue: function() 
-        this.prevValue = this.input.value = this.inputLine.value,
+        this.prevValue = this.textbox.value = this.inputLine.value,
     lastCaretPos: null,
     inputKeyupHandler: function(ev) {
         let caretPos = this.caretPos;
