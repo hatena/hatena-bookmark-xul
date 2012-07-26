@@ -36,5 +36,5 @@
 <!ENTITY hBookmark.menu.showlinkKey "E">
 <!ENTITY hBookmark.menu.showcomment "Show This Link on CommentViewer">
 <!ENTITY hBookmark.menu.showcommentKey "C">
-<!ENTITY hBookmark.menu.searchtext "Hatena WebSearch: ">
+<!ENTITY hBookmark.menu.searchtext "Search Hatena Bookmark for: ">
 <!ENTITY hBookmark.menu.searchtextKey "B">
