@@ -19,6 +19,7 @@ Database = function Database(file) {
         s.append(file);
         file = s;
     }
+    /** {mozIStorageConnection} */
     this.connection = StorageService.openDatabase(file);
 }
 
@@ -32,22 +33,22 @@ extend(Database, {
     /**
      * クエリにパラメーターをバインドする。
      * 
-     * @param {mozIStorageStatementWrapper} wrapper クエリ。
+     * @param {mozIStorageStatement} statement クエリ。
      * @param {Object || Array || String || Number} params 
      *        パラメーター。
      *        Objectの場合、名前付きパラメーターとみなされる。
      *        Arrayの場合、出現順に先頭からバインドされる。
      *        単値の場合、先頭のパラメーターにバインドされる。
      *        この値がnullの場合、処理は行われない。
-     * @return {mozIStorageStatementWrapper} バインド済みのクエリ。
+     * @return {mozIStorageStatement} バインド済みのクエリ。
      */
-    bindParams : function(wrapper, params) {
+    bindParams : function( statement, params ) {
         if(params==null)
-            return wrapper;
+            return statement;
         
         // Object
         if(typeof(params)=='object' && params.length==null){
-            var paramNames = this.getParamNames(wrapper);
+            var paramNames = this.getParamNames(statement);
             for(var i=0,len=paramNames.length ; i<len ; i++){
                 var name = paramNames[i];
                 var param = params[name];
@@ -56,41 +57,39 @@ extend(Database, {
                 
                 // 日付型の場合、数値をバインドする
                 if(param instanceof Date){
-                    wrapper.params[name] = param.getTime();
+                    statement.params[name] = param.getTime();
                     continue;
                 }
                 
                 // 配列型の場合、結合し文字列をバインドする
                 if(param instanceof Array){
-                    wrapper.params[name] = this.LIST_DELIMITER + param.join(this.LIST_DELIMITER) + this.LIST_DELIMITER;
+                    statement.params[name] = this.LIST_DELIMITER + param.join(this.LIST_DELIMITER) + this.LIST_DELIMITER;
                     continue;
                 }
                 
-                wrapper.params[name] = param;
+                statement.params[name] = param;
             }
-            return wrapper;
+            return statement;
         }
         
         if(typeof(params)=='string' || params.length==null)
             params = [].concat(params);
         
         // Array
-        var statement = wrapper.statement;
         for(var i=0, len=statement.parameterCount ; i<len ; i++)
             statement.bindUTF8StringParameter(i, params[i]);
         
-        return wrapper;
+        return statement;
     },
     
     /**
      * クエリ内に含まれる名前付きパラメーターのリストを取得する。
      * 
-     * @param {mozIStorageStatementWrapper} wrapper クエリ。
+     * @param {mozIStorageStatement} statement クエリ。
      * @return {Array} パラメーター名のリスト。
      */
-    getParamNames : function(wrapper) {
+    getParamNames : function( statement ) {
         var paramNames = [];
-        var statement = wrapper.statement;
         for (var i=0, len=statement.parameterCount ; i<len ; i++) 
             paramNames.push(statement.getParameterName(i).substr(1));
         
@@ -100,11 +99,11 @@ extend(Database, {
     /**
      * クエリ結果値の列名のリストを取得する。
      * 
-     * @param {mozIStorageStatement || mozIStorageStatementWrapper} statement クエリ。
+     * @param {mozIStorageStatement} statement クエリ。
      * @return {Array} 列名のリスト。
      */
     getColumnNames : function(statement) {
-        statement = statement.statement || statement;
+        //statement = statement.statement || statement;
         
         var columnNames=[];
         for(var i=0, len=statement.columnCount ; i<len ; i++)
@@ -182,14 +181,14 @@ extend(Database.prototype, {
      * @param {String} SQL。
      */
     createStatement : function(sql) {
-        return new StorageStatementWrapper(this.connection.createStatement(sql));
+        return this.connection.createStatement(sql);
     },
     
     /**
      * SQLを実行する。
      * DDL/DML共に利用できる。
      * 
-     * @param {String || mozIStorageStatementWrapper} sql SQL。
+     * @param {String} sql SQL。
      * @param {Object || Array || String} params。
      */
     execute : function(sql, params) {
@@ -220,7 +219,7 @@ extend(Database.prototype, {
         }
         
         try{
-            var statement = sql.initialize? sql : this.createStatement(sql);
+            var statement = this.createStatement(sql);
             Database.bindParams(statement, params);
             
             var columnNames;
@@ -243,7 +242,7 @@ extend(Database.prototype, {
             // これを怠ると、データベースをクローズできなくなる
             if(statement){
                 statement.reset();
-                statement.statement.finalize && statement.statement.finalize();
+                statement.finalize && statement.finalize();
             }
         }
     },
