@@ -115,6 +115,12 @@
                                           disablednotice="&hBookmark.addPanel.facebookDisabledNotice;"
                                           helptext="&hBookmark.addPanel.postFacebookHelpTooltip;"
                                           helplink="&hBookmark.addPanel.postFacebookHelpURI;"/>
+                            <xul:checkbox anonid="postEvernoteCheck"
+                                          label="&hBookmark.addPanel.postEvernoteLabel;"
+                                          preference="extensions.hatenabookmark.addPanel.postEvernote"
+                                          tooltiptext="&hBookmark.addPanel.postEvernoteDescription;"
+                                          helptext="&hBookmark.addPanel.postEvernoteHelpTooltip;"
+                                          helplink="&hBookmark.addPanel.postEvernoteHelpURI;"/>
                             <xul:checkbox anonid="postMixiCheckCheck"
                                           label="&hBookmark.addPanel.postMixiCheckLabel;"
                                           preference="extensions.hatenabookmark.addPanel.postMixiCheck"
@@ -301,6 +307,9 @@
             </field>
             <field name="postFacebookCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "postFacebookCheck")
+            </field>
+            <field name="postEvernoteCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "postEvernoteCheck")
             </field>
             <field name="postMixiCheckCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "postMixiCheckCheck")
@@ -495,6 +504,14 @@
                     }
                     if (postFacebookChecked !== 'inherit') {
                         this.postFacebookCheck.checked = (postFacebookChecked === 'on');
+                    }
+                    let postEvernoteChecked = user.postEvernoteChecked;
+                    if (!user.canUseEvernote) {
+                        postEvernoteChecked = 'off';
+                        this.postEvernoteCheck.setAttribute('showoptionhelp', 'true');
+                    }
+                    if (postEvernoteChecked !== 'inherit') {
+                        this.postEvernoteCheck.checked = (postEvernoteChecked === 'on');
                     }
                     let postMixiCheckChecked = user.postMixiCheckChecked;
                     if (!user.canUseMixiCheck) {
@@ -715,10 +732,21 @@
                 ]]></body>
             </method>
 
+            <!--
+              非公開ブックマークかどうかによる共有オプションの可, 不可を変更する
+              あくまで非公開ブックマークかどうかで変化させるためのものなので,
+              非公開ブックマークでも投稿可能なオプションについては変化させない.
+            -->
             <method name="setShareCheckEnable">
                 <parameter name="enabled"/>
                 <body><![CDATA[
-                    let checks = [this.postTwitterCheck, this.postFacebookCheck, this.postMixiCheckCheck];
+                    /** チェック可能性を変化させる対象となる共有オプション一覧 */
+                    let checks = [
+                        this.postTwitterCheck,
+                        this.postFacebookCheck,
+                        // evernote には private でも投稿可能
+                        this.postMixiCheckCheck
+                    ];
                     checks.forEach(function (check) {
                         if (!check.enabledTooltipText) {
                             check.enabledTooltipText = check.tooltipText;
@@ -811,6 +839,7 @@
                         sendMail: this.sendMailCheck.checked,
                         postTwitter: this.postTwitterCheck.checked,
                         postFacebook: this.postFacebookCheck.checked,
+                        postEvernote: this.postEvernoteCheck.checked,
                         postMixiCheck: this.postMixiCheckCheck.checked,
                         asin: this.asin,
                         changeImage: this.imageSelector.isImageChanged,

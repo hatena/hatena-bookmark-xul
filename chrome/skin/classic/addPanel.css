@@ -314,6 +314,9 @@ image[anonid="icon"] {
 [anonid="postFacebookCheck"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/icon-facebook.png");
 }
+[anonid="postEvernoteCheck"] {
+  list-style-image: url("chrome://hatenabookmark/skin/images/icon-evernote.png");
+}
 [anonid="postMixiCheckCheck"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/icon-mixi.png");
 }

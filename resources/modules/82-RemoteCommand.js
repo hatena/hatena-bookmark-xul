@@ -162,6 +162,8 @@ extend(RemoteCommand.prototype, {
             query.post_twitter = 1;
         if (this.options.postFacebook && user.canUseFacebook)
             query.post_facebook = 1;
+        if (this.options.postEvernote && user.canUseEvernote)
+            query.post_evernote = 1;
         if (this.options.postMixiCheck && user.canUseMixiCheck)
             query.post_mixi_check = 1;
         if (this.options.changeImage && user.public)

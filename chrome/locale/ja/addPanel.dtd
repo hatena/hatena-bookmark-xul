@@ -35,6 +35,12 @@
 <!ENTITY hBookmark.addPanel.postFacebookHelpTooltip "Facebook 連携機能を設定すると、ブックマーク時に Facebook へも投稿することができます">
 <!ENTITY hBookmark.addPanel.postFacebookHelpURI "http://b.hatena.ne.jp/help/config_coop#facebook">
 <!ENTITY hBookmark.addPanel.facebookDisabledNotice "(非公開ブックマークは Facebook へ投稿されません)">
+
+<!ENTITY hBookmark.addPanel.postEvernoteLabel "Evernote">
+<!ENTITY hBookmark.addPanel.postEvernoteDescription "このブックマークを Evernote へ投稿する">
+<!ENTITY hBookmark.addPanel.postEvernoteHelpTooltip "Evernote 連携機能を設定すると、ブックマーク時に Evernote へも投稿することができます">
+<!ENTITY hBookmark.addPanel.postEvernoteHelpURI "http://b.hatena.ne.jp/help/config_coop#evernote">
+
 <!ENTITY hBookmark.addPanel.postMixiCheckLabel "mixiチェック">
 <!ENTITY hBookmark.addPanel.postMixiCheckDescription "このブックマークをmixiチェックへ投稿する">
 <!ENTITY hBookmark.addPanel.postMixiCheckHelpTooltip "mixiチェック連携機能を設定すると、ブックマーク時にmixiチェックへも投稿することができます">
