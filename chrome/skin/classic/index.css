@@ -15,7 +15,7 @@ input {
   vertical-align: middle;
 }
 
-img { 
+img {
   border: none;
   vertical-align: middle;
 }
@@ -214,12 +214,8 @@ pre{
   background:#F4F8FF;
   padding:10px 8px 10px 8px;
   margin:10px;
-  white-space : -moz-pre-wrap ;
-  white-space : -pre-wrap ;
-  white-space : -o-pre-wrap ;
   white-space : pre-wrap ;
   font-size:100%;
-  _font-size:110%;
 }
 
 table{
@@ -304,7 +300,7 @@ li.bookmark img {
   text-decoration: none;
 }
 
-h2.date { 
+h2.date {
     font-size: 120%;
     background-color: rgba(198,223,255, 0.9);
     border: 0px solid #999;
@@ -318,8 +314,3 @@ h2.date {
 
 ul.bookmarked-list {
 }
-
-
-
-
-
