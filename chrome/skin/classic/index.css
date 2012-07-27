@@ -279,7 +279,7 @@ li.bookmark img {
   padding: 4px ;
   padding-left: 28px;
   background-color: rgba(238,238,238, 0.8);
-  -moz-border-radius: 10px;
+  border-radius: 10px;
 }
 
 .bookmark ul li {
@@ -308,7 +308,7 @@ h2.date {
     font-size: 120%;
     background-color: rgba(198,223,255, 0.9);
     border: 0px solid #999;
-    -moz-border-radius: 10px;
+    border-radius: 10px;
     font-family: Verdana, Geneva, sans-serif;
     padding: 5px;
     margin:0px;

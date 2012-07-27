@@ -40,7 +40,7 @@ label[anonid="userIcon"] {
 
 .notice {
   background: #eee;
-  -moz-border-radius: 5px;
+  border-radius: 5px;
   padding: 5px 0;
 }
 
@@ -64,7 +64,7 @@ hbox[anonid="messageRow"] {
     padding: 4px;
     margin: 5px 3px 5px 3px;
     background-color: #FFDDDD;
-    -moz-border-radius: 3px;
+    border-radius: 3px;
     font-weight: bold;
     color: #555;
 }
@@ -216,7 +216,7 @@ groupbox {
 
 .groupbox-body {
   background: rgba(221, 234, 250, 0.7);
-  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
 
 .tagHelpLink,
@@ -291,7 +291,7 @@ image[anonid="icon"] {
 .hBookmarkURLSuggestor {
   padding: 4px;
   margin: 3px;
-  -moz-border-radius: 3px;
+  border-radius: 3px;
   background-color: #fff9c5;
   color: #000000;
 }
