@@ -46,6 +46,7 @@ pref("extensions.hatenabookmark.addPanel.addCollection", true);
 pref("extensions.hatenabookmark.addPanel.sendMail", false);
 pref("extensions.hatenabookmark.addPanel.postTwitter", false);
 pref("extensions.hatenabookmark.addPanel.postFacebook", false);
+pref("extensions.hatenabookmark.addPanel.postEvernote", false);
 pref("extensions.hatenabookmark.addPanel.postMixiCheck", false);
 pref("extensions.hatenabookmark.addPanel.maxImageWidth", 100);
 pref("extensions.hatenabookmark.addPanel.maxImageHeight", 100);
