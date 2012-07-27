@@ -230,43 +230,42 @@ liberator.plugins.hBookmark = (function() {
              let limit = liberator.globalVariables.hBookmark_search_limit || 10;
              let maxLimit = liberator.globalVariables.hBookmark_search_max_limit || 100;
 
-             let completions = [];
-             let self = this;
-             let cancel;
-             let canceler;
+             let completions;
+             let method = searchMethod || 'search';
              let word = context.filter;
+             let offset = 0;
 
-             let searcher = function() {
-                 let res = plugin[searchMethod || 'search'](word, limit, false, context.completions.length);
-                 res = res.map(function(b) new plugin.command.adapter(b));
-                 context.completions = context.completions.concat(res);
+             if (word && interval > 0) {
+                 let iid, result;
+                 let cancel = context.cancel = function cancel() {
+                     context.incomplete = false;
+                     window.clearInterval(iid);
+                 };
+                 iid = window.setInterval(function () {
+                     if (offset >= maxLimit)
+                         cancel();
+                     else {
+                         result = search();
+                         if (result.length < limit)
+                             cancel();
+
+                         completions = completions.concat(result);
+                         // context.itemCache のキャッシュデータも更新必要あり
+                         context.completions = context.itemCache[context.key] = completions;
+                     }
+                 }, interval);
+
+             } else
+                limit = maxLimit;
+
+             return completions = search();
+
+             function search () {
+                 var res = plugin[method](word, limit, false, offset)
+                             .map(function(b) new plugin.command.adapter(b));
+                 offset += limit;
                  return res;
              }
-
-             let iid = window.setInterval(function() {
-                 if (context.completions.length >= maxLimit) {
-                     canceler();
-                 } else {
-                     try {
-                         let res = searcher();
-                         if (res.length < limit)
-                             canceler();
-                     } catch(e) {
-                         p('error:' + e);
-                         canceler();
-                     }
-                 }
-             }, interval);
-
-             cancel = function() window.clearInterval(iid);
-             canceler = function() {
-                 completions = context.completions;
-                 cancel();
-                 context.incomplete = false;
-                 context.completions = completions; // こうしないと、Generating results が出続ける
-             }
-             setTimeout(searcher, 0); // 初回検索はタイムラグ無しで
-             return cancel;
         },
         createCompleter: function(titles, searchMethod) {
             return function(context) {
@@ -279,12 +278,13 @@ liberator.plugins.hBookmark = (function() {
                         plugin.command.templateDescription,
                     ],
                 }
+                context.key = "bookmark";
                 context.incomplete = true;
                 context.filters = [];
                 context.anchored = true;
-
-                context.completions = [];
-                context.cancel = plugin.command._search(context, searchMethod);
+                context.compare = CompletionContext.Sort.unsorted;
+                context.regenerate = true;
+                context.generate = function () plugin.command._search(context, searchMethod);
             }
         }
     };
