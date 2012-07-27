@@ -70,9 +70,6 @@ const AtomService =
 const CryptoHash = 
     Cc["@mozilla.org/security/hash;1"].createInstance(Ci.nsICryptoHash);
 
-const StorageStatementWrapper =
-    Components.Constructor('@mozilla.org/storage/statement-wrapper;1', 'mozIStorageStatementWrapper', 'initialize');
-
 var XMigemoCore, XMigemoTextUtils;
 try{
     // XUL migemo
