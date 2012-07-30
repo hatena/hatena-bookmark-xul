@@ -216,9 +216,11 @@
                     w.style.backgroundPosition = 'left bottom';
                 }
                 this.inputHandler = new hBookmark.TagCompleter.InputHandler(this.commentField.inputField);
-                if (!hBookmark.User.user.plususer) {
+                if (!hBookmark.User.user.canMakeBookmarkPrivate) {
                     this.isPrivateCheck.tooltipText +=
                         " " + this.isPrivateCheck.getAttribute("normalusernotice");
+                }
+                if (!hBookmark.User.user.plususer) {
                     this.sendMailCheck.tooltipText +=
                         " " + this.sendMailCheck.getAttribute("normalusernotice");
                 }
@@ -484,7 +486,7 @@
 
                     this.addCollectionCheck.hidden = true;
                     this.isPrivateCheck.checked = false;
-                    if (!user.plususer) {
+                    if (!user.canMakeBookmarkPrivate) {
                         this.isPrivateCheck.setAttribute('showoptionhelp', 'true');
                     }
                     this.sendMailCheck.hidden = !user.plususer;

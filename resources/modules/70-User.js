@@ -77,6 +77,12 @@ User.prototype = {
     get rks() this.options.rks,
     get private() this.options.private == 1,
     get public() !this.private,
+    // 非公開ブックマークをする権限があるかどうかを示すプロパティ. 2012-08-08 に,
+    // もともと plus 機能であった非公開ブックマーク機能を無料でも使えるように変更
+    // するため, 一時的に this.options.old_plus_mode を見るように変更.
+    // this.options.old_plus_mode は /my.name から返される JSON に一時的に
+    // 追加されたオプションで, 非公開ブクマ機能が無料開放される以前は 1 である.
+    get canMakeBookmarkPrivate() this.options.plususer === 1 || this.options.old_plus_mode !== 1,
     get canUseTwitter() this.options.is_oauth_twitter == 1,
     get postTwitterChecked() this.options.twitter_checked || 'inherit',
     get canUseFacebook() this.options.is_oauth_facebook == 1,
