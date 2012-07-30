@@ -245,12 +245,15 @@
                 <label id="extensions.hatenabookmark.embed.searchSortBy-afterLabel"
                        value="&hBookmark.config.browsing.searchSortBy.after;"/>
             </hbox>
-            <hbox align="center">
+            <hbox align="center" id="extensions.hatenabookmark.embed.search-check-notes-not-plususer">
                 <label value="&hBookmark.config.browsing.plus.before;"/>
                 <label value="&hBookmark.config.browsing.plus.label;"
                        class="text-link plain hBookmark-link"
                        href="&hBookmark.config.browsing.plus.link;"/>
                 <label value="&hBookmark.config.browsing.plus.after;"/>
+            </hbox>
+            <hbox align="center" id="extensions.hatenabookmark.embed.search-check-notes-not-loggedin">
+                <label value="&hBookmark.config.browsing.search.notLoggedin;"/>
             </hbox>
         </groupbox>
 
