@@ -154,8 +154,14 @@ extend(RemoteCommand.prototype, {
             query.add_asin = 1;
             query.asin = this.options.asin;
         }
-        if (this.options.isPrivate && user.plususer)
+        if (this.options.isPrivate && user.canMakeBookmarkPrivate)
             query.private = 1;
+        // ブックマークの状態 (現状では公開, 非公開のみ) を変化させる権限が
+        // あるかどうかを, with_status_op でサーバーに伝える.
+        // (こうしなければ, 非公開ブックマークをする権限がない状態で以前作成した
+        // 非公開ブクマを変更しようとしたとき, 公開ブクマになってしまう.)
+        if (user.canMakeBookmarkPrivate)
+            query.with_status_op = 1;
         if (this.options.sendMail && user.plususer)
             query.send_mail = 1;
         if (this.options.postTwitter && user.canUseTwitter)
@@ -168,8 +174,6 @@ extend(RemoteCommand.prototype, {
             query.post_mixi_check = 1;
         if (this.options.changeImage && user.public)
             query.image = this.options.image;
-        if (user.plususer)
-            query.with_status_op = 1;
         this.options.query = query;
     },
 

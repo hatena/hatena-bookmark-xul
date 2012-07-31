@@ -326,7 +326,7 @@ extend(SearchEmbedder, {
 
         onLocationChange: function SEPL_onLocationChange(progress, request,
                                                          location) {
-            if (!User.user || !User.user.plususer ||
+            if (!User.user || !User.user.canUseFullTextSearch ||
                 !Prefs.bookmark.get("embed.search"))
                 return;
             new SearchEmbedder(progress.DOMWindow.document);
