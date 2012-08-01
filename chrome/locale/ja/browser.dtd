@@ -36,5 +36,5 @@
 <!ENTITY hBookmark.menu.showlinkKey "E">
 <!ENTITY hBookmark.menu.showcomment "このリンクをコメントビューワーで表示">
 <!ENTITY hBookmark.menu.showcommentKey "C">
-<!ENTITY hBookmark.menu.searchtext "はてなウェブ検索から検索: ">
+<!ENTITY hBookmark.menu.searchtext "はてなブックマークで検索: ">
 <!ENTITY hBookmark.menu.searchtextKey "B">

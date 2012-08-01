@@ -35,6 +35,12 @@
 <!ENTITY hBookmark.addPanel.postFacebookHelpTooltip "You can post your bookmark to Facebook.">
 <!ENTITY hBookmark.addPanel.postFacebookHelpURI "http://b.hatena.ne.jp/help/config_coop#facebook">
 <!ENTITY hBookmark.addPanel.facebookDisabledNotice "(Hidden bookmark will not be posted to Facebook)">
+
+<!ENTITY hBookmark.addPanel.postEvernoteLabel "Evernote">
+<!ENTITY hBookmark.addPanel.postEvernoteDescription "Create Note which includes this page content and your bookmark comment on your Evernote account.">
+<!ENTITY hBookmark.addPanel.postEvernoteHelpTooltip "You can post your bookmark to Evernote.">
+<!ENTITY hBookmark.addPanel.postEvernoteHelpURI "http://b.hatena.ne.jp/help/config_coop#evernote">
+
 <!ENTITY hBookmark.addPanel.postMixiCheckLabel "mixi check">
 <!ENTITY hBookmark.addPanel.postMixiCheckDescription "Post this bookmark to mixi check.">
 <!ENTITY hBookmark.addPanel.postMixiCheckHelpTooltip "You can post your bookmark to mixi check.">

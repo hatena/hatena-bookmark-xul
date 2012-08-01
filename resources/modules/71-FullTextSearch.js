@@ -11,7 +11,7 @@ var FullTextSearch = {
         json: true,
     }),
 
-    canSearch: function FTS_canSearch() !!User.user && User.user.plususer,
+    canSearch: function FTS_canSearch() !!User.user && User.user.canUseFullTextSearch,
 
     search: function FTS_search(query, onResult, options) {
         if (!FullTextSearch.canSearch()) {

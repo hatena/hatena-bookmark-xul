@@ -49,6 +49,7 @@
 <!ENTITY hBookmark.config.browsing.plus.link "http://b.hatena.ne.jp/guide/plus">
 <!ENTITY hBookmark.config.browsing.plus.after "ユーザーの方のみご利用になれます">
 <!ENTITY hBookmark.config.browsing.availableSearchSites "* Google と Yahoo! の検索結果ページでご利用になれます">
+<!ENTITY hBookmark.config.browsing.search.notLoggedin "この機能はログインしていなければ使用できません。">
 
 <!ENTITY hBookmark.config.statusbar "ステータスバー">
 <!ENTITY hBookmark.config.statusbarIcon "表示">

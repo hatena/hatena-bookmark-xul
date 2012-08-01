@@ -32,6 +32,7 @@
 <!ENTITY hBookmark.config.browsing.embedCounter "Show the count of bookmarks">
 <!ENTITY hBookmark.config.browsing.embedComments "Show Show-on-CommentViewer button">
 <!ENTITY hBookmark.config.browsing.embedAddButton "Show Add-to-Bookmark button">
+<!ENTITY hBookmark.config.browsing.search.notLoggedin "You must do the login on Hatena to use this feature.">
 
 <!ENTITY hBookmark.config.link "Links">
 <!ENTITY hBookmark.config.link.captureAddition "Open the Edit screen when you add new links to Hatena Bookmark">

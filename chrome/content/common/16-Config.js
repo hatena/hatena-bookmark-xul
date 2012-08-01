@@ -129,10 +129,21 @@ let Config = {
                 document.getElementById(ID_PREFIX + slave).disabled = disabled;
             });
         }
-        if (!User.user || !User.user.plususer) {
+        if (!User.user || !User.user.canUseFullTextSearch) {
             ['search-check'].concat(dependencies['search-check']).forEach(function (key) {
                 document.getElementById(ID_PREFIX + key).disabled = true;
             });
+        }
+        // ログインしている場合は, ログインしなければ使用できない旨の注釈を隠す
+        if ( User.user ) {
+            document.getElementById(ID_PREFIX + "search-check-notes-not-loggedin").style.display = "none";
+        }
+        // ログインしてない場合, またはマイブックマーク全文検索を使用できる
+        // 場合は, plus ユーザじゃないとだめな旨の注釈を隠す
+        // これは, 2012-08-08 のマイブックマーク全文検索機能の無料化に際して
+        // 不要となるので, 無料化後は削除してよい.
+        if ( !User.user || User.user.canUseFullTextSearch ) {
+            document.getElementById(ID_PREFIX + "search-check-notes-not-plususer").style.display = "none";
         }
     },
     addPanelPaneDependencies: {
