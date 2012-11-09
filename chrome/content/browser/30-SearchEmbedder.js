@@ -8,6 +8,11 @@ function SearchEmbedder(doc) {
         this.ready();
 }
 
+(function () {
+
+var modules = {};
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm", modules);
+
 SearchEmbedder.STATE_INITIALIZED = 0x00;
 SearchEmbedder.STATE_LOAD_DONE   = 0x01;
 SearchEmbedder.STATE_SEARCH_DONE = 0x02;
@@ -335,128 +340,14 @@ extend(SearchEmbedder, {
 });
 
 
-SearchEmbedder.STYLE = <![CDATA[
-    #hBookmark-search {
-        font-size: 1em;
-        line-height: 1.4;
-        color: #000;
-        margin: 0;
-        padding: 0;
-        width: 30%;
-        max-width: 25em;
-        float: right;
-    }
-    #hBookmark-search span,
-    #hBookmark-search a,
-    #hBookmark-search b,
-    #hBookmark-search em,
-    #hBookmark-search img,
-    #hBookmark-search div,
-    #hBookmark-search dl,
-    #hBookmark-search dt,
-    #hBookmark-search dd {
-        font: inherit;
-        background: none;
-        color: inherit;
-        margin: 0;
-        padding: 0;
-        border: none;
-    }
-    #hBookmark-search :link {
-        text-decoration: underline;
-        color: #2200cc;
-    }
-    #hBookmark-search :visited {
-        text-decoration: underline;
-        color: #551a8b;
-    }
-    #hBookmark-search .hBookmark-search-heading {
-        margin-bottom: 0.3em;
-        padding-bottom: 0.2em;
-        border-bottom: 1px solid #c9d7f1;
-        overflow: hidden;
-        position: relative;
-    }
-    #hBookmark-search .hBookmark-search-title {
-        background: url("http://cdn-ak.b.st-hatena.com/images/favicon.gif") left center no-repeat;
-        padding-left: 18px;
-        font-weight:bold;
-    }
-    #hBookmark-search .hBookmark-search-user {
-        color: inherit;
-        text-decoration: none;
-        font-size: 12px;
-        display: inline-block;
-        text-align: right;
-        float: right;
-        margin-bottom: 1em;
-        white-space: nowrap;
-    }
-    #hBookmark-search a > img {
-        margin: 0 3px -5px 0;
-    }
-    #hBookmark-search .hBookmark-search-status {
-        font-size: 12px;
-    }
-    #hBookmark-search div.hBookmark-search-container {
-    }
-    #hBookmark-search dl {
-        clear: both;
-        margin: 0;
-        padding: 0 0 10px 20px;
-    }
-    #hBookmark-search dt {
-        margin-top: 1em;
-    }
-    #hBookmark-search dd {
-        font-size: 90%;
-        margin: 0.2em 0;
-    }
-    #hBookmark-search .hBookmark-search-comment {
-        color: #777777;
-    }
-    #hBookmark-search .hBookmark-search-tag {
-        color: #6666cc;
-    }
-    #hBookmark-search dd.hBookmark-search-info {
-    }
-    #hBookmark-search .hBookmark-search-url {
-        color: green;
-        margin-right: 3px;
-    }
-    #hBookmark-search a.hBookmark-search-counter {
-        display: inline-block;
-    }
+// CSS を読み込み
+var xhr = new modules.XMLHttpRequest();
+xhr.open("GET", "resource://hatenabookmark/css/search-embedder.css", false);
+xhr.overrideMimeType("text/css");
+xhr.send();
+SearchEmbedder.STYLE = xhr.responseText;
 
-    #hBookmark-search dt > a > img {
-        position: relative;
-        margin-left: -20px;
-    }
-    #hBookmark-search .hBookmark-search-many {
-        background-color: #fff0f0;
-        color: #ff6666;
-        font-weight: bold;
-    }
-    #hBookmark-search .hBookmark-search-too-many {
-        background-color: #ffcccc;
-        color: #ff0000;
-        font-weight: bold;
-    }
-    #hBookmark-search .hBookmark-search-more {
-        text-align: right;
-        margin: 0.5em 0 0 0;
-    }
-    #hBookmark-search .hBookmark-search-more > a {
-        background: url("http://cdn-ak.b.st-hatena.com/images/favicon.gif") left center no-repeat;
-        padding-left: 18px;
-        color: #7777cc;
-    }
-    #hBookmark-search .hBookmark-search-query,
-    #hBookmark-search em {
-        font-weight: bold;
-    }
-]]>.toString();
-
+}).call(this);
 
 window.addEventListener("load", function SetupSearchEmbedder() {
     gBrowser.addProgressListener(SearchEmbedder.progressListener);
