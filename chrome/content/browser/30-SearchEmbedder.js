@@ -325,21 +325,6 @@ extend(SearchEmbedder.prototype, {
     },
 });
 
-extend(SearchEmbedder, {
-    progressListener: {
-        __proto__: WebProgressListenerPrototype,
-
-        onLocationChange: function SEPL_onLocationChange(progress, request,
-                                                         location) {
-            if (!User.user || !User.user.canUseFullTextSearch ||
-                !Prefs.bookmark.get("embed.search"))
-                return;
-            new SearchEmbedder(progress.DOMWindow.document);
-        },
-    },
-});
-
-
 // CSS を読み込み
 var xhr = new modules.XMLHttpRequest();
 xhr.open("GET", "resource://hatenabookmark/css/search-embedder.css", false);
@@ -349,10 +334,22 @@ SearchEmbedder.STYLE = xhr.responseText;
 
 }).call(this);
 
-window.addEventListener("load", function SetupSearchEmbedder() {
-    gBrowser.addProgressListener(SearchEmbedder.progressListener);
-}, false);
+(function () {
+    var progressListener = Object.create(WebProgressListenerPrototype);
+    progressListener.onLocationChange = function SEPL_onLocationChange(
+                                            progress, request, location) {
+        var isEmbedSearchDisabled = (
+                !User.user || !User.user.canUseFullTextSearch ||
+                !Prefs.bookmark.get("embed.search"));
+        if (isEmbedSearchDisabled) return;
+        new SearchEmbedder(progress.DOMWindow.document);
+    };
 
-window.addEventListener("unload", function ShutdownSearchEmbedder() {
-    gBrowser.removeProgressListener(SearchEmbedder.progressListener);
-}, false);
+    window.addEventListener("load", function SetupSearchEmbedder() {
+        gBrowser.addProgressListener(progressListener);
+    }, false);
+
+    window.addEventListener("unload", function ShutdownSearchEmbedder() {
+        gBrowser.removeProgressListener(progressListener);
+    }, false);
+}).call(this);
