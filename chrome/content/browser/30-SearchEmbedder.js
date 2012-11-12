@@ -10,8 +10,8 @@ function SearchEmbedder(doc) {
 
 (function () {
 
-var modules = {};
-Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm", modules);
+var utils = {};
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm", utils);
 
 SearchEmbedder.STATE_INITIALIZED = 0x00;
 SearchEmbedder.STATE_LOAD_DONE   = 0x01;
@@ -326,11 +326,7 @@ extend(SearchEmbedder.prototype, {
 });
 
 // CSS を読み込み
-var xhr = new modules.XMLHttpRequest();
-xhr.open("GET", "resource://hatenabookmark/css/search-embedder.css", false);
-xhr.overrideMimeType("text/css");
-xhr.send();
-SearchEmbedder.STYLE = xhr.responseText;
+SearchEmbedder.STYLE = utils.loadCssStrFromResource("search-embedder.css");
 
 }).call(this);
 
