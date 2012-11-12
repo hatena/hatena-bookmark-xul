@@ -81,18 +81,20 @@ extend(SearchEmbedder.prototype, {
 
     embedStandby: function SE_embedStandby() {
         if (!Prefs.bookmark.get("embed.showSearchStandby")) return;
-        this.embedContent(<div class="hBookmark-search-standby">{
-            this.strings.get("search.standbyLabel")
-        }</div>);
+        let elem = this.doc.createElementNS(XHTML_NS, "div");
+        elem.classList.add("hBookmark-search-standby");
+        elem.textContent = this.strings.get("search.standbyLabel");
+        this.embedContent(elem);
     },
 
     embedFailure: function SE_embedFailure() {
         if (!Prefs.bookmark.get("embed.showSearchStandby")) return;
-        this.embedContent(<div class="hBookmark-search-failure">{
-            (this.data && this.data.meta && !this.data.meta.total)
-                ? this.strings.get("search.noMatchError")
-                : this.strings.get("search.unexpectedError")
-        }</div>);
+        let elem = this.doc.createElementNS(XHTML_NS, "div");
+        elem.classList.add("hBookmark-search-failure");
+        elem.textContent = (this.data && this.data.meta && !this.data.meta.total)
+                         ? this.strings.get("search.noMatchError")
+                         : this.strings.get("search.unexpectedError");
+        this.embedContent(elem);
     },
 
     embedContent: function SE_embedContent(content) {
@@ -101,15 +103,14 @@ extend(SearchEmbedder.prototype, {
             let point = this.insertionPoint;
             if (!point) return;
             this.embedStyle();
-            search = xml2dom(this.createSearchContainer(), point);
+            search = this.createSearchContainer();
             point.insertNode(search);
         }
         let container = search.getElementsByClassName("hBookmark-search-container")[0];
         if (!container) return;
-        content =
-            (typeof content === "xml")    ? xml2dom(content, container)      :
-            (typeof content === "string") ? this.doc.createTextNode(content) :
-                                            content;
+        content = (typeof content === "string")
+                ? this.doc.createTextNode(content)
+                : content;
         UIUtils.deleteContents(container);
         container.appendChild(content);
     },
@@ -155,15 +156,16 @@ extend(SearchEmbedder.prototype, {
     },
 
     createSearchContainer: function SE_createSearchContainer() {
-        default xml namespace = XHTML_NS;
-        return <div id="hBookmark-search">
-            <div class="hBookmark-search-heading">
-                <span class="hBookmark-search-title">{
-                    this.strings.get("search.title")
-                }</span>
-            </div>
-            <div class="hBookmark-search-container"/>
-        </div>;
+        let elemStr =
+            '<div id="hBookmark-search">' +
+              '<div class="hBookmark-search-heading">' +
+                '<span class="hBookmark-search-title"></span>' +
+              '</div>' +
+              '<div class="hBookmark-search-container"></div>' +
+            '</div>';
+        let elem = this.doc.createRange().createContextualFragment(elemStr).firstChild;
+        elem.getElementsByTagName("span").item(0).textContent = this.strings.get("search.title");
+        return elem;
     },
 
     createSearchResult: function SE_createSearchResult() {
