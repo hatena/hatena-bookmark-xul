@@ -1,0 +1,20 @@
+.hBookmark-widget {
+    background: none !important;
+    text-decoration: none !important;
+    margin: 0 0 0 2px;
+    border: none !important;
+    display: inline !important;
+}
+.hBookmark-widget > img {
+    border: none;
+    vertical-align: middle;
+    -moz-force-broken-image-icon: 1;
+}
+.hBookmark-widget.hBookmark-widget-add-button > img {
+    width: 16px !important;
+    height: 12px !important;
+}
+.hBookmark-widget.hBookmark-widget-comments > img {
+    width: 14px !important;
+    height: 13px !important;
+}

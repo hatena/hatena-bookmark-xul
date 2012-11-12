@@ -37,30 +37,12 @@ extend(WidgetEmbedder, {
     STRING_SHOW_COMMENT_TEXT:  embedStrings.get('showCommentText'),
     STRING_ADD_BOOKMARK_TITLE: embedStrings.get('addBookmarkTitle'),
     STRING_ADD_BOOKMARK_TEXT:  embedStrings.get('addBookmarkText'),
-
-    STYLE: <![CDATA[
-        .hBookmark-widget {
-            background: none !important;
-            text-decoration: none !important;
-            margin: 0 0 0 2px;
-            border: none !important;
-            display: inline !important;
-        }
-        .hBookmark-widget > img {
-            border: none;
-            vertical-align: middle;
-            -moz-force-broken-image-icon: 1;
-        }
-        .hBookmark-widget.hBookmark-widget-add-button > img {
-            width: 16px !important;
-            height: 12px !important;
-        }
-        .hBookmark-widget.hBookmark-widget-comments > img {
-            width: 14px !important;
-            height: 13px !important;
-        }
-    ]]>.toString(),
 });
+(function () {
+    var utils = {};
+    Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm", utils);
+    WidgetEmbedder.STYLE = utils.loadCssStrFromResource("widget-embedder.css");
+}).call(this);
 
 extend(WidgetEmbedder.prototype, {
     embedStyle: function WE_embedStyle() {
@@ -89,7 +71,7 @@ extend(WidgetEmbedder.prototype, {
         if (!link.href || !/^https?:\/\//.test(link.href)) return;
         let existing = this.getExistingWidgets(paragraph, link);
         let points = this.getInsertionPoints(paragraph, link, existing);
-        let xmls = this.createWidgetXMLs(link);
+        let anchorElems = this.createWidgetAnchorElems(link);
         let space = this.doc.createTextNode(" ");
         let fragment = this.doc.createDocumentFragment();
         fragment.appendChild(space.cloneNode(false));
@@ -99,18 +81,20 @@ extend(WidgetEmbedder.prototype, {
         let standbys = [];
         if (points.addButton) {
             let f = fragment.cloneNode(true);
-            f.appendChild(xml2dom(xmls[2], points.addButton));
+            f.appendChild(anchorElems[2]);
             f.appendChild(space.cloneNode(false));
             points.addButton.insertNode(f);
         }
         if (points.comments) {
+            let comments = anchorElems[1];
             // カウンタをこれから埋め込むか、読み込み途中の
             // カウンタ画像があるか、幅 1 ピクセルのカウンタ画像があるなら、
             // コメント表示ボタン (吹き出しアイコン) を表示しない。
             if (points.counter || (counterImage &&
-                (!counterImage.complete || counterImage.naturalWidth === 1)))
-                xmls[1].@style = DISPLAY_NONE;
-            let comments = xml2dom(xmls[1], points.comments);
+                (!counterImage.complete || counterImage.naturalWidth === 1))) {
+                comments.setAttribute("style", DISPLAY_NONE);
+            }
+            // TODO 名前空間を使うよりもカスタムデータ属性を使うようにしたい
             comments.setAttributeNS(HB_NS, "hb:url", link.href);
             standbys.push(comments);
             let f = fragment.cloneNode(true);
@@ -120,8 +104,8 @@ extend(WidgetEmbedder.prototype, {
             points.comments.insertNode(f);
         }
         if (points.counter) {
-            xmls[0].@style = DISPLAY_NONE;
-            let counter = xml2dom(xmls[0], points.counter);
+            let counter = anchorElems[0];
+            counter.setAttribute("style", DISPLAY_NONE);
             counterImage = counter.firstChild;
             standbys.push(counter);
             let f = fragment.cloneNode(true);
@@ -276,41 +260,68 @@ extend(WidgetEmbedder.prototype, {
         return point;
     },
 
-    createWidgetXMLs: function WE_createWidgetXMLs(link) {
-        default xml namespace = XHTML_NS;
-        // Since Vimperator overrides XML settings, we override them again.
-        let xmlSettings = XML.settings();
-        XML.setSettings();
+    createWidgetAnchorElems: function WE_createWidgetAnchorElems(link) {
         const WE = WidgetEmbedder;
         let url = link.href;
         let entryURL = getEntryURL(url);
-        let xmls = <>
-            <a class="hBookmark-widget hBookmark-widget-counter"
-               href={ entryURL }
-               title={ WE.STRING_SHOW_ENTRY_TITLE }>
-                <img src={ WE.IMAGE_API_PREFIX + url.replace(/#/g, "%23") }
-                     alt={ WE.STRING_SHOW_ENTRY_TEXT }/>
-            </a>
-            <a class="hBookmark-widget hBookmark-widget-comments"
-               href={ entryURL }
-               title={ WE.STRING_SHOW_COMMENT_TITLE }>
-                <img src={ WE.COMMENTS_IMAGE_URL }
-                     alt={ WE.STRING_SHOW_COMMENT_TEXT }
-                     width="14" height="13"/>
-            </a>
-            <a class="hBookmark-widget hBookmark-widget-add-button"
-               href={ addPageURL(url) }
-               title={ WE.STRING_ADD_BOOKMARK_TITLE }>
-                <img src={ WE.ADD_BUTTON_URL }
-                     alt={ WE.STRING_ADD_BOOKMARK_TEXT }
-                     width="16" height="12"/>
-            </a>;
-        </>;
-        if (this._inNewTab)
-            for each (let a in xmls)
-                a.@target = '_blank';
-        XML.setSettings(xmlSettings);
-        return xmls;
+        let doc = this.doc;
+
+        function createAnchorElem( info ) {
+            // info がとるプロパティ : classNames, uriStr, title, imgUriStr, imgAltStr, [imgSize]
+
+            var ancElem = doc.createElementNS(XHTML_NS, "a");
+            info.classNames.forEach(function (name) {
+                ancElem.classList.add(name);
+            });
+            ancElem.setAttribute("href", info.uriStr);
+            ancElem.setAttribute("title", info.title);
+            var imgElem = doc.createElementNS(XHTML_NS, "img");
+            imgElem.setAttribute("src", info.imgUriStr);
+            imgElem.setAttribute("alt", info.imgAltStr);
+            if (info.imgSize) {
+                let imgSize = info.imgSize;
+                ["width", "height"].forEach(function (name) {
+                    if (imgSize[name]) imgElem.setAttribute(name, imgSize[name]);
+                });
+            }
+            ancElem.appendChild(imgElem);
+            return ancElem;
+        }
+
+        var ancElemsInfo = [
+            {
+                classNames: [ "hBookmark-widget", "hBookmark-widget-counter" ],
+                uriStr: entryURL,
+                title: WE.STRING_SHOW_ENTRY_TITLE,
+                imgUriStr: WE.IMAGE_API_PREFIX + url.replace(/#/g, "%23"),
+                imgAltStr: WE.STRING_SHOW_ENTRY_TEXT
+            },
+            {
+                classNames: [ "hBookmark-widget", "hBookmark-widget-comments" ],
+                uriStr: entryURL,
+                title: WE.STRING_SHOW_COMMENT_TITLE,
+                imgUriStr: WE.COMMENTS_IMAGE_URL,
+                imgAltStr: WE.STRING_SHOW_COMMENT_TEXT,
+                imgSize: { width: "14", height: "13" }
+            },
+            {
+                classNames: [ "hBookmark-widget", "hBookmark-widget-add-button" ],
+                uriStr: addPageURL(url),
+                title: WE.STRING_ADD_BOOKMARK_TITLE,
+                imgUriStr: WE.ADD_BUTTON_URL,
+                imgAltStr: WE.STRING_ADD_BOOKMARK_TEXT,
+                imgSize: { width: "16", height: "12" }
+            }
+        ];
+        var ancElems = ancElemsInfo.map(function (info) {
+            return createAnchorElem(info);
+        });
+        if (this._inNewTab) {
+            ancElems.forEach(function (elem) {
+                elem.setAttribute("target", "_blank");
+            });
+        }
+        return ancElems;
     },
 
     handleEvent: function WE_handleEvent(event) {
