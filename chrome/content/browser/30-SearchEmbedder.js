@@ -204,7 +204,7 @@ extend(SearchEmbedder.prototype, {
                     let param = (typeof params[key] === "object" ? params[key] : {});
                     node.textContent = (typeof param.text !== "undefined" ? param.text : "-");
                     if (param.classList) {
-                        node.classList.forEach(function (className) {
+                        param.classList.forEach(function (className) {
                             node.classList.add(className);
                         });
                     }
