@@ -174,18 +174,18 @@ extend(SearchEmbedder.prototype, {
         let doc = this.doc;
         let range = this.doc.createRange();
 
-        let resHtmlStr =
+        let resDocFragment = doc.createDocumentFragment();
+
+        let searchInfoElemStr =
             '<div class="hBookmark-search-info">' +
               '<a class="hBookmark-search-user">' +
                 '<img alt="" width="16" height="16"/>' +
                 '<span class="hBookmark-search-user-name"></span>' +
               '</a>' +
               '<span class="hBookmark-search-status"></span>' +
-            '</div>' +
-            '<dl class="hBookmark-search-results"></dl>';
-        let resDocFragment = range.createContextualFragment(resHtmlStr);
-
-        let searchInfoElem = resDocFragment.firstChild;
+            '</div>';
+        let searchInfoElem = range.createContextualFragment(searchInfoElemStr).firstChild;
+        resDocFragment.appendChild(searchInfoElem);
         let userElem = searchInfoElem.getElementsByClassName("hBookmark-search-user").item(0);
         userElem.href = User.user.bookmarkHomepage;
         userElem.getElementsByClassName("hBookmark-search-user-name").item(0).textContent =
@@ -222,7 +222,9 @@ extend(SearchEmbedder.prototype, {
         });
 
         let queryRE = this._createKeywordPattern(data.meta.query.queries);
-        let dl = searchInfoElem;
+        let dlStr = '<dl class="hBookmark-search-results"></dl>';
+        let dl = range.createContextualFragment(dlStr).firstChild;
+        resDocFragment.appendChild(dl);
         data.bookmarks.forEach(function (bookmark) {
             let entry = bookmark.entry;
 
