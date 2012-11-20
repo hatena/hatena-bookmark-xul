@@ -81,12 +81,12 @@ extend(WidgetEmbedder.prototype, {
         let standbys = [];
         if (points.addButton) {
             let f = fragment.cloneNode(true);
-            f.appendChild(anchorElems[2]);
+            f.appendChild(anchorElems.addButton);
             f.appendChild(space.cloneNode(false));
             points.addButton.insertNode(f);
         }
         if (points.comments) {
-            let comments = anchorElems[1];
+            let comments = anchorElems.comments;
             // カウンタをこれから埋め込むか、読み込み途中の
             // カウンタ画像があるか、幅 1 ピクセルのカウンタ画像があるなら、
             // コメント表示ボタン (吹き出しアイコン) を表示しない。
@@ -104,7 +104,7 @@ extend(WidgetEmbedder.prototype, {
             points.comments.insertNode(f);
         }
         if (points.counter) {
-            let counter = anchorElems[0];
+            let counter = anchorElems.counter;
             counter.setAttribute("style", DISPLAY_NONE);
             counterImage = counter.firstChild;
             standbys.push(counter);
@@ -288,38 +288,35 @@ extend(WidgetEmbedder.prototype, {
             return ancElem;
         }
 
-        var ancElemsInfo = [
-            {
+        var ancElems = {
+            counter: createAnchorElem({
                 classNames: [ "hBookmark-widget", "hBookmark-widget-counter" ],
                 uriStr: entryURL,
                 title: WE.STRING_SHOW_ENTRY_TITLE,
                 imgUriStr: WE.IMAGE_API_PREFIX + url.replace(/#/g, "%23"),
                 imgAltStr: WE.STRING_SHOW_ENTRY_TEXT
-            },
-            {
+            }),
+            comments: createAnchorElem({
                 classNames: [ "hBookmark-widget", "hBookmark-widget-comments" ],
                 uriStr: entryURL,
                 title: WE.STRING_SHOW_COMMENT_TITLE,
                 imgUriStr: WE.COMMENTS_IMAGE_URL,
                 imgAltStr: WE.STRING_SHOW_COMMENT_TEXT,
                 imgSize: { width: "14", height: "13" }
-            },
-            {
+            }),
+            addButton: createAnchorElem({
                 classNames: [ "hBookmark-widget", "hBookmark-widget-add-button" ],
                 uriStr: addPageURL(url),
                 title: WE.STRING_ADD_BOOKMARK_TITLE,
                 imgUriStr: WE.ADD_BUTTON_URL,
                 imgAltStr: WE.STRING_ADD_BOOKMARK_TEXT,
                 imgSize: { width: "16", height: "12" }
-            }
-        ];
-        var ancElems = ancElemsInfo.map(function (info) {
-            return createAnchorElem(info);
-        });
+            })
+        };
         if (this._inNewTab) {
-            ancElems.forEach(function (elem) {
-                elem.setAttribute("target", "_blank");
-            });
+            for (var name in ancElems) {
+                ancElems[name].setAttribute("target", "_blank");
+            }
         }
         return ancElems;
     },
