@@ -1,0 +1,3 @@
+[submodule "chrome/content/tests/submodule-qunit"]
+	path = chrome/content/tests/submodule-qunit
+	url = git://github.com/jquery/qunit.git

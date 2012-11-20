@@ -48,6 +48,8 @@ end
 desc "create the chrome jar file"
 task :create_chrome_jar => [:create_buildchrome_dir] do
   cp_r 'chrome', "#{BUILD_DIR}/"
+  # テスト用のディレクトリは削除する
+  rm_rf "#{BUILD_DIR}/chrome/content/tests"
   #sh "cd chrome && zip -qr -0 ../#{BUILD_DIR}/chrome/#{EXTENSION_NAME}.jar * -x \*.svn\*"
 end
 
