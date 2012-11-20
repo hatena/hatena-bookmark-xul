@@ -186,12 +186,12 @@ extend(SearchEmbedder.prototype, {
         let resDocFragment = range.createContextualFragment(resHtmlStr);
 
         let searchInfoElem = resDocFragment.firstChild;
-        let e1 = searchInfoElem.getElementsByClassName("hBookmark-search-user").item(0);
-        let e2 = e1.getElementsByClassName("hBookmark-search-user-name").item(0);
-        let e3 = e1.getElementsByTagName("img").item(0);
-        e1.href = User.user.bookmarkHomepage;
-        e2.textContent = User.user.name;
-        e3.src = User.user.getProfileIcon();
+        let userElem = searchInfoElem.getElementsByClassName("hBookmark-search-user").item(0);
+        userElem.href = User.user.bookmarkHomepage;
+        userElem.getElementsByClassName("hBookmark-search-user-name").item(0).textContent =
+            User.user.name;
+        userElem.getElementsByTagName("img").item(0).src =
+            User.user.getProfileIcon();
 
         let statusElem = searchInfoElem.getElementsByClassName("hBookmark-search-status").item(0);
         let statusPattern = this.strings.get("search.statusPattern");
