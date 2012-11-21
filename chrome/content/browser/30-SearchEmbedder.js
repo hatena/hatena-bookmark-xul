@@ -8,6 +8,11 @@ function SearchEmbedder(doc) {
         this.ready();
 }
 
+(function () {
+
+var utils = {};
+Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm", utils);
+
 SearchEmbedder.STATE_INITIALIZED = 0x00;
 SearchEmbedder.STATE_LOAD_DONE   = 0x01;
 SearchEmbedder.STATE_SEARCH_DONE = 0x02;
@@ -76,18 +81,20 @@ extend(SearchEmbedder.prototype, {
 
     embedStandby: function SE_embedStandby() {
         if (!Prefs.bookmark.get("embed.showSearchStandby")) return;
-        this.embedContent(<div class="hBookmark-search-standby">{
-            this.strings.get("search.standbyLabel")
-        }</div>);
+        let elem = this.doc.createElementNS(XHTML_NS, "div");
+        elem.classList.add("hBookmark-search-standby");
+        elem.textContent = this.strings.get("search.standbyLabel");
+        this.embedContent(elem);
     },
 
     embedFailure: function SE_embedFailure() {
         if (!Prefs.bookmark.get("embed.showSearchStandby")) return;
-        this.embedContent(<div class="hBookmark-search-failure">{
-            (this.data && this.data.meta && !this.data.meta.total)
-                ? this.strings.get("search.noMatchError")
-                : this.strings.get("search.unexpectedError")
-        }</div>);
+        let elem = this.doc.createElementNS(XHTML_NS, "div");
+        elem.classList.add("hBookmark-search-failure");
+        elem.textContent = (this.data && this.data.meta && !this.data.meta.total)
+                         ? this.strings.get("search.noMatchError")
+                         : this.strings.get("search.unexpectedError");
+        this.embedContent(elem);
     },
 
     embedContent: function SE_embedContent(content) {
@@ -96,15 +103,14 @@ extend(SearchEmbedder.prototype, {
             let point = this.insertionPoint;
             if (!point) return;
             this.embedStyle();
-            search = xml2dom(this.createSearchContainer(), point);
+            search = this.createSearchContainer();
             point.insertNode(search);
         }
         let container = search.getElementsByClassName("hBookmark-search-container")[0];
         if (!container) return;
-        content =
-            (typeof content === "xml")    ? xml2dom(content, container)      :
-            (typeof content === "string") ? this.doc.createTextNode(content) :
-                                            content;
+        content = (typeof content === "string")
+                ? this.doc.createTextNode(content)
+                : content;
         UIUtils.deleteContents(container);
         container.appendChild(content);
     },
@@ -150,125 +156,162 @@ extend(SearchEmbedder.prototype, {
     },
 
     createSearchContainer: function SE_createSearchContainer() {
-        default xml namespace = XHTML_NS;
-        return <div id="hBookmark-search">
-            <div class="hBookmark-search-heading">
-                <span class="hBookmark-search-title">{
-                    this.strings.get("search.title")
-                }</span>
-            </div>
-            <div class="hBookmark-search-container"/>
-        </div>;
+        let elemStr =
+            '<div id="hBookmark-search">' +
+              '<div class="hBookmark-search-heading">' +
+                '<span class="hBookmark-search-title"></span>' +
+              '</div>' +
+              '<div class="hBookmark-search-container"></div>' +
+            '</div>';
+        let elem = this.doc.createRange().createContextualFragment(elemStr).firstChild;
+        elem.getElementsByTagName("span").item(0).textContent = this.strings.get("search.title");
+        return elem;
     },
 
     createSearchResult: function SE_createSearchResult() {
-        default xml namespace = XHTML_NS;
-        <></>.(This.is.a.workaround.for.mozilla.bug[330572]);
-        // Since Vimperator overrides XML settings, we override them again.
-        let xmlSettings = XML.settings();
-        XML.setSettings({ ignoreWhitespace: true });
         let data = this.data;
         let query = this.query;
+        let doc = this.doc;
+        let range = this.doc.createRange();
 
-        let result = <>
-            <div class="hBookmark-search-info">
-                <a class="hBookmark-search-user"
-                   href={ User.user.bookmarkHomepage }>
-                    <img src={ User.user.getProfileIcon() }
-                         alt="" width="16" height="16"/>
-                    { User.user.name }
-                </a>
-                <span class="hBookmark-search-status"/>
-            </div>
-            <dl class="hBookmark-search-results"/>
-        </>;
+        let resDocFragment = doc.createDocumentFragment();
 
-        let status = result[0].span[0];
-        status.parent().insertChildBefore(status, " ");
+        let searchInfoElemStr =
+            '<div class="hBookmark-search-info">' +
+              '<a class="hBookmark-search-user">' +
+                '<img alt="" width="16" height="16"/>' +
+                '<span class="hBookmark-search-user-name"></span>' +
+              '</a>' +
+              '<span class="hBookmark-search-status"></span>' +
+            '</div>';
+        let searchInfoElem = range.createContextualFragment(searchInfoElemStr).firstChild;
+        resDocFragment.appendChild(searchInfoElem);
+        let userElem = searchInfoElem.getElementsByClassName("hBookmark-search-user").item(0);
+        userElem.href = User.user.bookmarkHomepage;
+        userElem.getElementsByClassName("hBookmark-search-user-name").item(0).textContent =
+            User.user.name;
+        userElem.getElementsByTagName("img").item(0).src =
+            User.user.getProfileIcon();
+
+        let statusElem = searchInfoElem.getElementsByClassName("hBookmark-search-status").item(0);
         let statusPattern = this.strings.get("search.statusPattern");
-        this._appendFilledInContent(status, statusPattern, {
-            query:   <b class="hBookmark-search-query">{ query }</b>,
-            count:   <b>{ data.bookmarks.length }</b>,
-            total:   <b>{ data.meta.total }</b>,
-            elapsed: <b>{ data.meta.elapsed.toFixed(2) }</b>,
+        (function appendFilledInContent(statusElem, statusPattern, params) {
+            statusPattern.split(/\{(.*?)\}/).forEach(function (key, i) {
+                if (i === 0) return;
+                var node;
+                if (i % 2 === 1) {
+                    node = doc.createElementNS(XHTML_NS, "b");
+                    let param = (typeof params[key] === "object" ? params[key] : {});
+                    node.textContent = (typeof param.text !== "undefined" ? param.text : "-");
+                    if (param.classList) {
+                        param.classList.forEach(function (className) {
+                            node.classList.add(className);
+                        });
+                    }
+                } else {
+                    node = doc.createTextNode(key);
+                }
+                statusElem.appendChild(node);
+            });
+        }).call(this, statusElem, statusPattern, {
+            // query は今のところ表示されなさそう
+            query:   { text: query, classList: ["hBookmark-search-query"] },
+            count:   { text: data.bookmarks.length },
+            total:   { text: data.meta.total },
+            elapsed: { text: data.meta.elapsed.toFixed(2) }
         });
 
         let queryRE = this._createKeywordPattern(data.meta.query.queries);
-        let dl = result[1];
+        let dlStr = '<dl class="hBookmark-search-results"></dl>';
+        let dl = range.createContextualFragment(dlStr).firstChild;
+        resDocFragment.appendChild(dl);
         data.bookmarks.forEach(function (bookmark) {
             let entry = bookmark.entry;
 
-            let title = <dt>
-                <a href={ entry.url }>
-                    <img src={ 'http://cdn-ak.favicon.st-hatena.com/?url=' + encodeURIComponent(entry.url) }
-                         alt="" width="16" height="16"/>
-                </a>
-            </dt>;
-            this._appendEmphasizedContent(title.a[0], entry.title, queryRE);
+            let titleStr =
+                '<dt><a href="#"><img src="#" width="16" height="16"/></a></dt>';
+            let titleElem = range.createContextualFragment(titleStr).firstChild;
+            titleAnchorElem = titleElem.getElementsByTagName("a").item(0);
+            titleAnchorElem.href = entry.url;
+            let faviconUriStr = 'http://cdn-ak.favicon.st-hatena.com/?url=' + encodeURIComponent(entry.url);
+            titleAnchorElem.firstElementChild.src = faviconUriStr;
+            this._appendEmphasizedContent(titleAnchorElem, entry.title, queryRE);
+            dl.appendChild(titleElem);
 
-            let snippet = <></>;
             if (entry.snippet) {
-                snippet = <dd class="hBookmark-search-snippet"/>;
-                this._appendEmphasizedContent(snippet, entry.snippet, queryRE);
+                let snippetElem = doc.createElement("dd");
+                snippetElem.classList.add("hBookmark-search-snippet");
+                this._appendEmphasizedContent(snippetElem, entry.snippet, queryRE);
+                dl.appendChild(snippetElem);
             }
 
-            let comment = <></>;
             if (bookmark.comment) {
-                comment = <dd class="hBookmark-search-comment"/>;
-                this._appendCommentContents(comment, bookmark.comment, queryRE);
+                let commentElem = doc.createElement("dd");
+                commentElem.classList.add("hBookmark-search-comment");
+                this._appendCommentContents(commentElem, bookmark.comment, queryRE);
+                dl.appendChild(commentElem);
             }
 
-            let info = <dd class="hBookmark-search-info">
-                <span class="hBookmark-search-url"/>
-                <a class="hBookmark-search-counter"
-                   href={ entryURL(entry.url) }>{
-                    UIUtils.getUsersText(entry.count)
-                }</a>
-            </dd>;
+            let infoStr =
+                '<dd class="hBookmark-search-info">' +
+                  '<span class="hBookmark-search-url"></span>' +
+                  '<a class="hBookmark-search-counter" href="#"></a>' +
+                '</dd>';
+            let infoElem = range.createContextualFragment(infoStr).firstChild;
             let displayURL = UIUtils.cropURL(entry.url);
-            this._appendEmphasizedContent(info.span[0], displayURL, queryRE);
+            this._appendEmphasizedContent(infoElem.firstElementChild, displayURL, queryRE);
+            let infoAnchorElem = infoElem.getElementsByTagName("a").item(0);
+            infoAnchorElem.href = entryURL(entry.url);
+            infoAnchorElem.textContent = UIUtils.getUsersText(entry.count);
             if (entry.count >= 3) {
-                info.a[0].@class += (entry.count >= 10)
-                    ? " hBookmark-search-too-many" : " hBookmark-search-many";
+                infoAnchorElem.classList.add(
+                    (entry.count >= 10) ? "hBookmark-search-too-many"
+                                        : "hBookmark-search-many"
+                );
             }
-            info.insertChildAfter(info.span[0], " ");
-
-            dl.appendChild(title + snippet + comment + info);
+            infoElem.insertBefore(doc.createTextNode(" "), infoAnchorElem);
+            dl.appendChild(infoElem);
         }, this);
 
         if (data.meta.total > data.bookmarks.length) {
-            result += <div class="hBookmark-search-more">
-                <a href={ B_HTTP + FullTextSearch.getPath(query) }>{
-                    this.strings.get("search.showAllLabel")
-                }</a>
-            </div>;
+            let smStr =
+                '<div class="hBookmark-search-more"><a href="#"></a></div>';
+            let smElem = range.createContextualFragment(smStr).firstChild;
+            let ancElem = smElem.firstElementChild;
+            ancElem.href = B_HTTP + FullTextSearch.getPath(query);
+            ancElem.textContent = this.strings.get("search.showAllLabel");
+            resDocFragment.appendChild(smElem);
         }
 
         if (Prefs.bookmark.get("link.openInNewTab")) {
-            for each (let a in result..a)
-                a.@target = "_blank";
+            let cns = resDocFragment.childNodes;
+            for (let i = 0, lenI = cns.length; i < lenI; ++i) {
+                let e = cns.item(i);
+                let anchorElems = e.getElementsByTagName("a");
+                for (let j = 0, lenJ = anchorElems.length; j < lenJ; ++j) {
+                    anchorElems.item(j).setAttribute("target", "_blank");
+                }
+            }
         }
-        XML.setSettings(xmlSettings);
-        return result;
-    },
 
-    _appendFilledInContent: function SE__appendFilledInContent(element,
-                                                               pattern,
-                                                               map) {
-        pattern.split(/\{(.*?)\}/).forEach(function (key, i) {
-            element.appendChild((i & 1) ? map[key] : key);
-        });
-        return element;
+        return resDocFragment;
     },
 
     _appendEmphasizedContent: function SE__appendEmphasizedContent(element,
                                                                    text,
                                                                    keyword) {
-        default xml namespace = XHTML_NS;
+        var doc = this.doc;
         if (keyword.constructor.name !== "RegExp")
             keyword = this._createKeywordPattern(keyword);
         text.split(keyword).forEach(function (fragment, i) {
-            element.appendChild((i & 1) ? <em>{ fragment }</em> : fragment);
+            var node;
+            if (i & 1) {
+                node = doc.createElementNS(XHTML_NS, "em");
+                node.textContent = fragment;
+            } else {
+                node = doc.createTextNode(fragment);
+            }
+            element.appendChild(node);
         });
         return element;
     },
@@ -282,16 +325,18 @@ extend(SearchEmbedder.prototype, {
     _appendCommentContents: function SE__appendCommentContents(element,
                                                                comment,
                                                                keyword) {
-        default xml namespace = XHTML_NS;
+        var doc = this.doc;
         let tags = comment.match(/\[[^\[\]]+\]/gy);
         if (tags) {
             let n = 0;
             tags.forEach(function (tag, i, tags) {
                 n += tag.length;
-                let tagElement = <span class="hBookmark-search-tag"/>;
+                let tagElement = doc.createElementNS(XHTML_NS, "span");
+                tagElement.classList.add("hBookmark-search-tag");
                 this._appendEmphasizedContent(tagElement, tag.slice(1, -1), keyword);
                 element.appendChild(tagElement);
-                element.appendChild((i === tags.length - 1) ? " " : ", ");
+                let tn = doc.createTextNode((i === tags.length - 1) ? " " : ", ");
+                element.appendChild(tn);
             }, this);
             comment = comment.substring(n);
         }
@@ -320,148 +365,27 @@ extend(SearchEmbedder.prototype, {
     },
 });
 
-extend(SearchEmbedder, {
-    progressListener: {
-        __proto__: WebProgressListenerPrototype,
+// CSS を読み込み
+SearchEmbedder.STYLE = utils.loadCssStrFromResource("search-embedder.css");
 
-        onLocationChange: function SEPL_onLocationChange(progress, request,
-                                                         location) {
-            if (!User.user || !User.user.canUseFullTextSearch ||
-                !Prefs.bookmark.get("embed.search"))
-                return;
-            new SearchEmbedder(progress.DOMWindow.document);
-        },
-    },
-});
+}).call(this);
 
+(function () {
+    var progressListener = Object.create(WebProgressListenerPrototype);
+    progressListener.onLocationChange = function SEPL_onLocationChange(
+                                            progress, request, location) {
+        var isEmbedSearchDisabled = (
+                !User.user || !User.user.canUseFullTextSearch ||
+                !Prefs.bookmark.get("embed.search"));
+        if (isEmbedSearchDisabled) return;
+        new SearchEmbedder(progress.DOMWindow.document);
+    };
 
-SearchEmbedder.STYLE = <![CDATA[
-    #hBookmark-search {
-        font-size: 1em;
-        line-height: 1.4;
-        color: #000;
-        margin: 0;
-        padding: 0;
-        width: 30%;
-        max-width: 25em;
-        float: right;
-    }
-    #hBookmark-search span,
-    #hBookmark-search a,
-    #hBookmark-search b,
-    #hBookmark-search em,
-    #hBookmark-search img,
-    #hBookmark-search div,
-    #hBookmark-search dl,
-    #hBookmark-search dt,
-    #hBookmark-search dd {
-        font: inherit;
-        background: none;
-        color: inherit;
-        margin: 0;
-        padding: 0;
-        border: none;
-    }
-    #hBookmark-search :link {
-        text-decoration: underline;
-        color: #2200cc;
-    }
-    #hBookmark-search :visited {
-        text-decoration: underline;
-        color: #551a8b;
-    }
-    #hBookmark-search .hBookmark-search-heading {
-        margin-bottom: 0.3em;
-        padding-bottom: 0.2em;
-        border-bottom: 1px solid #c9d7f1;
-        overflow: hidden;
-        position: relative;
-    }
-    #hBookmark-search .hBookmark-search-title {
-        background: url("http://cdn-ak.b.st-hatena.com/images/favicon.gif") left center no-repeat;
-        padding-left: 18px;
-        font-weight:bold;
-    }
-    #hBookmark-search .hBookmark-search-user {
-        color: inherit;
-        text-decoration: none;
-        font-size: 12px;
-        display: inline-block;
-        text-align: right;
-        float: right;
-        margin-bottom: 1em;
-        white-space: nowrap;
-    }
-    #hBookmark-search a > img {
-        margin: 0 3px -5px 0;
-    }
-    #hBookmark-search .hBookmark-search-status {
-        font-size: 12px;
-    }
-    #hBookmark-search div.hBookmark-search-container {
-    }
-    #hBookmark-search dl {
-        clear: both;
-        margin: 0;
-        padding: 0 0 10px 20px;
-    }
-    #hBookmark-search dt {
-        margin-top: 1em;
-    }
-    #hBookmark-search dd {
-        font-size: 90%;
-        margin: 0.2em 0;
-    }
-    #hBookmark-search .hBookmark-search-comment {
-        color: #777777;
-    }
-    #hBookmark-search .hBookmark-search-tag {
-        color: #6666cc;
-    }
-    #hBookmark-search dd.hBookmark-search-info {
-    }
-    #hBookmark-search .hBookmark-search-url {
-        color: green;
-        margin-right: 3px;
-    }
-    #hBookmark-search a.hBookmark-search-counter {
-        display: inline-block;
-    }
+    window.addEventListener("load", function SetupSearchEmbedder() {
+        gBrowser.addProgressListener(progressListener);
+    }, false);
 
-    #hBookmark-search dt > a > img {
-        position: relative;
-        margin-left: -20px;
-    }
-    #hBookmark-search .hBookmark-search-many {
-        background-color: #fff0f0;
-        color: #ff6666;
-        font-weight: bold;
-    }
-    #hBookmark-search .hBookmark-search-too-many {
-        background-color: #ffcccc;
-        color: #ff0000;
-        font-weight: bold;
-    }
-    #hBookmark-search .hBookmark-search-more {
-        text-align: right;
-        margin: 0.5em 0 0 0;
-    }
-    #hBookmark-search .hBookmark-search-more > a {
-        background: url("http://cdn-ak.b.st-hatena.com/images/favicon.gif") left center no-repeat;
-        padding-left: 18px;
-        color: #7777cc;
-    }
-    #hBookmark-search .hBookmark-search-query,
-    #hBookmark-search em {
-        font-weight: bold;
-    }
-]]>.toString();
-
-
-window.addEventListener("load", function SetupSearchEmbedder() {
-    gBrowser.addProgressListener(SearchEmbedder.progressListener);
-}, false);
-
-window.addEventListener("unload", function ShutdownSearchEmbedder() {
-    gBrowser.removeProgressListener(SearchEmbedder.progressListener);
-}, false);
+    window.addEventListener("unload", function ShutdownSearchEmbedder() {
+        gBrowser.removeProgressListener(progressListener);
+    }, false);
+}).call(this);

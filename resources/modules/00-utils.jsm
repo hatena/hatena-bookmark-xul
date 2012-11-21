@@ -362,6 +362,20 @@ function _getModuleURIs() {
     return _getModuleURIs.uris = uris.sort();
 }
 
+/**
+ * resource/css ディレクトリの中からファイルを読み込んで, その中身のテキストを返す
+ * 読み込むファイルは CSS として扱う.
+ * パラメータ path は, resource/css/ からの相対パス.
+ * ファイルが存在しない場合は, send の時点で NS_ERROR_FILE_NOT_FOUND エラーが発生する.
+ */
+function loadCssStrFromResource(path) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "resource://hatenabookmark/css/" + path, false);
+    xhr.overrideMimeType("text/css");
+    xhr.send();
+    return xhr.responseText;
+}
+
 /*
  * original code by tombloo
  * http://github.com/to/tombloo

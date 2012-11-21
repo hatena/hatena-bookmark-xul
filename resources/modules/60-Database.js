@@ -436,9 +436,9 @@ Entity = function (def){
         },
         
         deinitialize : function(){
-            return Model.db.execute(<>
-                DROP TABLE {def.name} 
-            </>);
+            return Model.db.execute(
+                "DROP TABLE " + def.name
+            );
         },
         
         insert : function(model){
@@ -452,31 +452,31 @@ Entity = function (def){
         },
         
         deleteById : function(id){
-            return Model.db.execute(<>
-                DELETE FROM {def.name} 
-                WHERE
-                    id = :id
-            </>, id);
+            return Model.db.execute(
+                "DELETE FROM " + def.name + " " +
+                "WHERE id = :id",
+                id
+            );
         },
         
         deleteAll : function(){
-            return Model.db.execute(<>
-                DELETE FROM {def.name} 
-            </>);
+            return Model.db.execute(
+                "DELETE FROM " + def.name
+            );
         },
         
         countAll : function(){
-            return Model.db.execute(<>
-                SELECT count(*) AS count
-                FROM {def.name} 
-            </>)[0].count;
+            return Model.db.execute(
+                "SELECT count(*) AS count " +
+                "FROM " + def.name
+            )[0].count;
         },
         
         findAll : function(){
-            return this.find(<>
-                SELECT * 
-                FROM {def.name} 
-            </>);
+            return this.find(
+                "SELECT * " +
+                "FROM " + def.name
+            );
         },
         
         rowToObject : function(obj){
@@ -484,12 +484,12 @@ Entity = function (def){
             model.temporary = false;
             return model;
         },
-        
+
         delete : function(sql){
-            return Model.db.execute(<>
-                DELETE
-                FROM {def.name}
-            </>, sql);
+            return Model.db.execute(
+                "DELETE FROM " + def.name,
+                sql
+            );
         },
 
         findFirst : function(params) {
@@ -501,18 +501,18 @@ Entity = function (def){
         find : function(sql, params){
             if (!params && typeof sql == 'object') {
                 if (typeof sql.where == 'string') {
-                    var str = <>
-                        SELECT * 
-                        FROM {def.name}
-                        WHERE {sql.where}
-                    </>;
+                    var str =
+                        "SELECT * " +
+                        "FROM " + def.name + " " +
+                        "WHERE " + sql.where;
                     delete sql.where;
                     return this.find(str, sql);
                 } else {
-                    return this.find(<>
-                        SELECT * 
-                        FROM {def.name}
-                    </>, sql);
+                    return this.find(
+                        "SELECT * " +
+                        "FROM " + def.name,
+                        sql
+                    );
                 }
             } else {
                 //if (!Model.db) p(new Error().stack);
@@ -538,18 +538,18 @@ Entity = function (def){
                 
                 switch(type){
                 case 'find':
-                    sql = Entity.compactSQL(<>
-                        SELECT * 
-                        FROM {def.name} 
-                        {Entity.createWhereClause(fields)} 
-                    </>)
+                    sql = Entity.compactSQL(
+                        "SELECT * " +
+                        "FROM " + def.name + " " +
+                        Entity.createWhereClause(fields)
+                    );
                     break;
                 case 'count':
-                    sql = Entity.compactSQL(<>
-                        SELECT count(id) AS count
-                        FROM {def.name} 
-                        {Entity.createWhereClause(fields)} 
-                    </>)
+                    sql = Entity.compactSQL(
+                        "SELECT count(id) AS count " +
+                        "FROM " + def.name + " " +
+                        Entity.createWhereClause(fields)
+                    );
                     break;
                 }
                 
@@ -571,10 +571,9 @@ Entity = function (def){
 
 extend(Entity, {
     createWhereClause : function(fields){
-        return Entity.compactSQL(<>
-            WHERE
-                {fields.map(function(p){return p + '=:' + p}).join(' AND ')} 
-        </>);
+        return Entity.compactSQL(
+            "WHERE " + fields.map(function(p){return p + '=:' + p}).join(' AND ')
+        );
     },
     
     createInitializeSQL : function(def){
@@ -582,11 +581,11 @@ extend(Entity, {
         for(var p in def.fields)
             fields.push(p + ' ' + def.fields[p].replace('TIMESTAMP', 'INTEGER').replace('LIST', 'TEXT'));
         
-        return Entity.compactSQL(<>
-            CREATE TABLE IF NOT EXISTS {def.name} (
-                {fields.join(', ')} 
-            )
-        </>);
+        return Entity.compactSQL(
+            "CREATE TABLE IF NOT EXISTS " + def.name + " (" +
+                fields.join(', ') +
+            ")"
+        );
     },
     
     createInsertSQL : function(def){
@@ -594,29 +593,25 @@ extend(Entity, {
         var params = fields.map(function(p){
             return ':' + p
         });
-        return Entity.compactSQL(<>
-            INSERT INTO {def.name} (
-                {fields.join(', ')}
-            ) VALUES (
-                {params.join(', ')}
-            )
-        </>);
+        var fieldsStr = fields.join(', ');
+        var paramsStr = params.join(', ');
+        return Entity.compactSQL(
+            "INSERT INTO " + def.name + " (" + fieldsStr + ") VALUES (" + paramsStr + ")"
+        );
     },
     
     createUpdateSQL : function(def){
-        var fields = [key for (key in def.fields)].
+        var fieldsStr = [key for (key in def.fields)].
             filter(function(p){return p!='id'}).
             map(function(p){
                 return p + '=:' + p;
             }).join(', ');
         
-        return Entity.compactSQL(<>
-            UPDATE {def.name} 
-            SET 
-                {fields} 
-            WHERE 
-                id = :id
-        </>);
+        return Entity.compactSQL(
+            "UPDATE " + def.name + " " +
+            "SET " + fieldsStr + " " +
+            "WHERE id = :id"
+        );
     },
     
     /**

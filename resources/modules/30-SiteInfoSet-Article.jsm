@@ -69,11 +69,7 @@ let builtInSiteInfo = [
         },
         annotation: 'descendant::div[@class = "sinf"]',
         annotationPosition: 'last',
-        style: <![CDATA[
-            .hBookmark-widget {
-                margin-left: 6px;
-            }
-        ]]>.toString(),
+        style: ".hBookmark-widget { margin-left: 6px; }",
     },
     // はてなブックマークのサイトでは、既に十分な情報が
     // 提供されていること、不用意にブックマーク数などを

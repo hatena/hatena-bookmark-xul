@@ -32,17 +32,16 @@ let builtInSearchSiteInfo = [
             return doc.getElementById("res");
         },
         annotationPosition: 'first',
-        style: <![CDATA[
-            #rhs #hBookmark-search {
-                margin: 1.2em 1.5em 0 0.7em;
-                width: auto;
-                float: none;
-            }
-            #res #hBookmark-search {
-                font-size: 0.8em;
-                margin-right: -32%;
-            }
-        ]]>.toString(),
+        style:
+            '#rhs #hBookmark-search {' +
+                'margin: 1.2em 1.5em 0 0.7em;' +
+                'width: auto;' +
+                'float: none;' +
+            '}' +
+            '#res #hBookmark-search {' +
+                'font-size: 0.8em;' +
+                'margin-right: -32%;' +
+            '}',
     },
     { // Yahoo Web Search
         url:        /^http:\/\/search\.yahoo(?:\.\w+){1,2}\/search\?/,
@@ -50,11 +49,7 @@ let builtInSearchSiteInfo = [
         query:      /[?&;]p=([^?&;#]+)/,
         encoding:   /[?&;]ei=([\w-]+)/,
         annotation: 'id("sIn")',
-        style: <![CDATA[
-            #hBookmark-search {
-                width: auto;
-            }
-        ]]>.toString(),
+        style: '#hBookmark-search { width: auto; }',
     },
 ];
 
