@@ -24,7 +24,7 @@ let createWhereLike = function (word, fieldName) {
     var sql = [];
     var args = {};
     var c = 0;
-    var likeGenerateor = function(word) {
+    function generateSqlLikeStatement(word) {
         var word = '%' + word.replace(/[_%#]/g, '#$&') + '%';
         var c1 = 'arg' + c++;
         var arg = {};
@@ -37,7 +37,7 @@ let createWhereLike = function (word, fieldName) {
     for (var i = 0;  i < words.length; i++) {
         var w = words[i];
         if (w.length) {
-            var [sq, arg] = likeGenerateor(w);
+            var [sq, arg] = generateSqlLikeStatement(w);
             sql.push('(' + sq + ')');
             extend(args, arg);
         }
@@ -131,10 +131,7 @@ extend(Bookmark, {
             });
             if (offset)
                 args.offset = parseInt(offset);
-            res = Bookmark.find(<>
-                 select * from bookmarks
-                 where {sql}
-            </>.toString(), args);
+            res = Bookmark.find("SELECT * FROM bookmarks WHERE " + sql, args);
         }
         }, 'Bookmark search [' + [fieldName, str, limit].join(' ') + ']');
         return res;
@@ -204,14 +201,13 @@ extend(Bookmark.prototype, {
                         d.substring(6, 8), d.substring(8, 10),
                         d.substring(10, 12), d.substring(12, 14));
     },
+    // 全データ検索用に, search.dataと似た形式の文字列を返すっぽいが, 今は使われてなさそう
     get searchData() {
-        let res = this.db.execute(<>
-            SELECT
-               id, title, comment, url
-            FROM 
-               bookmarks
-            ORDER_BY date DESC;
-        </>.toString());
+        let res = this.db.execute(
+            "SELECT   id, title, comment, url " +
+            "FROM     bookmarks " +
+            "ORDER_BY date DESC;"
+        );
         let data = [];
         for (let i = 0, len = res.length; i < len; i++) {
             data.push('\\0' + id + '\\0' + title + "\n" + comment + "\n" + url);
