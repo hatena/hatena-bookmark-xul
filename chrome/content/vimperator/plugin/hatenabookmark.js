@@ -195,29 +195,24 @@ liberator.plugins.hBookmark = (function() {
         },
         adapter: BookmarkAdapter,
         templateDescription: function (item, text) {
-           return <>
-               {
-                   !(item.extra && item.extra.length) ? "" :
-                   <span class="extra-info">
-                       {
+           return !(item.extra && item.extra.length) ? "" :
+                   xml`<span class="extra-info">
+                       ${
                            template.map(item.extra, function (e)
-                           <><span highlight={e[2]}>{e[1]}</span></>,
-                           <>&#xa0;</>/* Non-breaking space */)
+                           xml`<span highlight=${e[2]}>${e[1]}</span>`,
+                           xml`&#xa0;`/* Non-breaking space */)
                        }
-                   </span>
-               }
-           </>
+                   </span>`;
         },
         templateTitleIcon: function (item, text) {
            var simpleURL = text.replace(/^https?:\/\//, '');
            if (simpleURL.indexOf('/') == simpleURL.length-1)
                simpleURL = simpleURL.replace('/', '');
-           return <><span highlight="CompIcon">{item.icon ? <img src={item.icon}/> : <></>}</span><span class="td-strut"/>{item.item.title}
+           return xml`<span highlight="CompIcon">${item.icon ? xml`<img src=${item.icon}/>` : ""}</span><span class="td-strut"/>${item.item.title}
            <span> </span>
-           <a highlight="simpleURL"><span class="extra-info">{
+           <a highlight="simpleURL"><span class="extra-info">${
                  simpleURL
-           }</span></a>
-           </>
+           }</span></a>`;
         },
         options: {
             completer: null,
