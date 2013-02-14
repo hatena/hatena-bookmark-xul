@@ -1,10 +1,11 @@
 /*
- * Document: http://wiki.github.com/hatena/hatena-bookmark-xul/vimperator
- *
- * append to your ~/.vimperatorc
- * =====
- * javascript if (typeof hBookmark != 'undefined') liberator.loadScript('chrome://hatenabookmark/content/vimperator/plugin/hatenabookmark.js', {__proto__: this});
- * =====
+ * はてなブックマーク Firefox 拡張の Vimperator プラグインの本体 (E4X 使用版)
+ * Vimperator 3.5 以前のバージョンと Vimperator 3.6 以降のバージョンで Firefox
+ * の E4X が使用できる場合はこのプラグインファイルを使用すること.
+ * 実際の利用の際は, これまでどおり下記ファイルを読み込むようにしておくよい. 自
+ * 動的に E4X が有効かどうかを確認して適切なプラグインファイルを読み込むようにな
+ * っている.
+ *   chrome://hatenabookmark/content/vimperator/plugin/hatenabookmark.js
  */
 
 liberator.plugins.hBookmark = (function() {
