@@ -3,8 +3,6 @@ loadPrecedingModules.call(this);
 
 const EXPORTED_SYMBOLS = ["RemoteCommand"];
 
-const NOP = new Function();
-
 function RemoteCommand(type, options) {
     this.type = type;
     this.options = {
@@ -46,6 +44,8 @@ extend(RemoteCommand, {
 EventService.implement(RemoteCommand.prototype);
 
 extend(RemoteCommand.prototype, {
+    // can be overridden for tests
+    _MyXMLHttpRequest: XMLHttpRequest,
     get url() {
         return B_HTTP + this.user.name + "/" +
                RemoteCommand.API_ENDPOINT[this.type] + '?editer=fxaddon';
@@ -62,7 +62,7 @@ extend(RemoteCommand.prototype, {
     execute: function RC_execute() {
         this.hook();
         this.setTimer();
-        this._request = new XMLHttpRequest();
+        this._request = new this._MyXMLHttpRequest();
         this._request.mozBackgroundRequest = true;
         this._request.open("POST", this.url);
         this._request.addEventListener("load", this, false);
@@ -76,14 +76,16 @@ extend(RemoteCommand.prototype, {
         this._request.send(net.makeQuery(this.query));
     },
 
+    // クラス内部のみから使用される private なメソッドぽい
     complete: function RC_complete(success, result) {
         result = result || null;
         this.clearTimer();
+        var callback;
         if (success) {
-            (this.options.onComplete || NOP).call(this, result);
+            if (callback = this.options.onComplete) callback.call(this, result);
             this.dispatch("complete");
         } else {
-            (this.options.onError || NOP).call(this, result);
+            if (callback = this.options.onError) callback.call(this, result);
             this.dispatch("error");
         }
     },
