@@ -405,22 +405,32 @@ Entity = function (def){
     });
 
     var fields = [];
+    var proto = Model.prototype;
     for(var field in def.fields){
         var type = def.fields[field];
-        var proto = Model.prototype;
         switch(type){
         case 'TIMESTAMP':
-            proto.__defineGetter__(field, new Function('return this._'+field));
-            proto.__defineSetter__(field, new Function('val', 
-                'this._'+field+' = typeof(val)=="object"? val : new Date(val)'
-            ));
+            (function (field) { // `field` の値を保持するためのクロージャ
+                Object.defineProperty(proto, field, {
+                    get: function () { return this["_"+field] },
+                    set: function (val) {
+                        this["_"+field] = (typeof val === "object" ? val : new Date(val));
+                    },
+                });
+            })(field);
             break;
 
         case 'LIST':
-            proto.__defineGetter__(field, new Function('return this._'+field));
-            proto.__defineSetter__(field, new Function('val', 
-                'this._'+field+' = typeof(val)=="object"? val : val.split(Database.LIST_DELIMITER).filter(function(i){return i!=""})'
-            ));
+            (function (field) { // `field` の値を保持するためのクロージャ
+                Object.defineProperty(proto, field, {
+                    get: function () { return this["_"+field] },
+                    set: function (val) {
+                        this["_"+field] = (typeof val === "object" ?
+                            val : val.split(Database.LIST_DELIMITER).
+                                      filter(function(i){return i!=""}));
+                    },
+                });
+            })(field);
             break;
         }
     }
