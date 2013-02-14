@@ -195,18 +195,16 @@ liberator.plugins.hBookmark = (function() {
         },
         adapter: BookmarkAdapter,
         templateDescription: function (item, text) {
-           return <>
-               {
-                   !(item.extra && item.extra.length) ? "" :
-                   <span class="extra-info">
-                       {
-                           template.map(item.extra, function (e)
-                           <><span highlight={e[2]}>{e[1]}</span></>,
-                           <>&#xa0;</>/* Non-breaking space */)
-                       }
-                   </span>
-               }
-           </>
+            return !(item.extra && item.extra.length) ?
+                "" :
+                (function () {
+                    var descElem = <span class="extra-info"></span>;
+                    template.map(item.extra, function (e) {
+                        descElem += <span highlight={e[2]}>{e[1]}</span>;
+                        descElem += <>&#xa0;</>; // Non-breaking space
+                    });
+                    return descElem;
+                }).call(this);
         },
         templateTitleIcon: function (item, text) {
            var simpleURL = text.replace(/^https?:\/\//, '');
