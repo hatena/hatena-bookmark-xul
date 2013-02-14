@@ -46,6 +46,8 @@ extend(RemoteCommand, {
 EventService.implement(RemoteCommand.prototype);
 
 extend(RemoteCommand.prototype, {
+    // can be overridden for tests
+    _MyXMLHttpRequest: XMLHttpRequest,
     get url() {
         return B_HTTP + this.user.name + "/" +
                RemoteCommand.API_ENDPOINT[this.type] + '?editer=fxaddon';
@@ -62,7 +64,7 @@ extend(RemoteCommand.prototype, {
     execute: function RC_execute() {
         this.hook();
         this.setTimer();
-        this._request = new XMLHttpRequest();
+        this._request = new this._MyXMLHttpRequest();
         this._request.mozBackgroundRequest = true;
         this._request.open("POST", this.url);
         this._request.addEventListener("load", this, false);
