@@ -1,7 +1,7 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 loadPrecedingModules.call(this);
 
-const EXPORTED_SYMBOLS = ["Database", "Entity", "Model"];
+const EXPORTED_SYMBOLS = ["Database", "Entity"];
 
 /*
  * original code by tombloo
@@ -11,7 +11,6 @@ const EXPORTED_SYMBOLS = ["Database", "Entity", "Model"];
 
 var Database = null;
 var Entity = null;
-var Model = null;
 
 Database = function Database(file) {
     if (typeof file == 'string') {
@@ -378,34 +377,35 @@ extend(Database.prototype, {
 Entity = function (def){
     def.fields = def.fields || [];
 
-    // RDB のテーブルの行に相当するオブジェクトを生成するコンストラクタ
-    var Model = function(obj){
+    /* テーブルの各行を表すオブジェクトを生成するためのコンストラクタであり,
+     * かつ, テーブルに対する操作を行う各種関数を保持するオブジェクトでもある */
+    var _Model = function(obj){
         update(this, obj);
         this.temporary=true;
     }
 
-    extend(Model.prototype, {
+    extend(_Model.prototype, {
         save : function(){
             if(this.temporary){
-                Model.insert(this);
+                _Model.insert(this);
                 this.temporary=false;
-                if (Model.db.connection.lastInsertRowID) {
+                if (_Model.db.connection.lastInsertRowID) {
                     // id と固定されてしまう…
-                    this.id = Model.db.connection.lastInsertRowID;
+                    this.id = _Model.db.connection.lastInsertRowID;
                 }
             } else {
-                Model.update(this);
+                _Model.update(this);
             }
         },
 
         remove : function(){
-            Model.deleteById(this.id);
+            _Model.deleteById(this.id);
             this.temporary = true;
         },
     });
 
     var fields = [];
-    var proto = Model.prototype;
+    var proto = _Model.prototype;
     for(var field in def.fields){
         var type = def.fields[field];
         switch(type){
@@ -440,32 +440,32 @@ Entity = function (def){
 
     var sqlCache = {};
 
-    extend(Model, {
+    extend(_Model, {
         definitions : def,
 
         initialize : function(){
             var sql = Entity.createInitializeSQL(def);
-            Model.db.execute(sql);
+            _Model.db.execute(sql);
         },
 
         deinitialize : function(){
-            return Model.db.execute(
+            return _Model.db.execute(
                 "DROP TABLE " + def.name
             );
         },
 
         insert : function(model){
-            if(!(model instanceof Model))
-                model = new Model(model);
-            Model.db.execute(INSERT_SQL, model);
+            if(!(model instanceof _Model))
+                model = new _Model(model);
+            _Model.db.execute(INSERT_SQL, model);
         },
 
         update : function(model){
-            Model.db.execute(UPDATE_SQL, model);
+            _Model.db.execute(UPDATE_SQL, model);
         },
 
         deleteById : function(id){
-            return Model.db.execute(
+            return _Model.db.execute(
                 "DELETE FROM " + def.name + " " +
                 "WHERE id = :id",
                 id
@@ -473,13 +473,13 @@ Entity = function (def){
         },
 
         deleteAll : function(){
-            return Model.db.execute(
+            return _Model.db.execute(
                 "DELETE FROM " + def.name
             );
         },
 
         countAll : function(){
-            return Model.db.execute(
+            return _Model.db.execute(
                 "SELECT count(*) AS count " +
                 "FROM " + def.name
             )[0].count;
@@ -493,13 +493,13 @@ Entity = function (def){
         },
 
         rowToObject : function(obj){
-            var model = new Model(obj);
+            var model = new _Model(obj);
             model.temporary = false;
             return model;
         },
 
         delete : function(sql){
-            return Model.db.execute(
+            return _Model.db.execute(
                 "DELETE FROM " + def.name,
                 sql
             );
@@ -528,8 +528,8 @@ Entity = function (def){
                     );
                 }
             } else {
-                //if (!Model.db) p(new Error().stack);
-                return Model.db.execute(sql, params).map(Model.rowToObject);
+                //if (!_Model.db) p(new Error().stack);
+                return _Model.db.execute(sql, params).map(_Model.rowToObject);
             }
         },
 
@@ -574,12 +574,12 @@ Entity = function (def){
             case 'find':
                 return this.find.apply(this, args);
             case 'count':
-                return Model.db.execute.apply(Model.db, args)[0].count;
+                return _Model.db.execute.apply(_Model.db, args)[0].count;
             }
         },
     });
 
-    return Model;
+    return _Model;
 }
 
 extend(Entity, {
