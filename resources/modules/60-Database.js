@@ -1,7 +1,7 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 loadPrecedingModules.call(this);
 
-const EXPORTED_SYMBOLS = ["Database", "Entity", "Model"];
+const EXPORTED_SYMBOLS = ["Database", "Entity"];
 
 /*
  * original code by tombloo
@@ -11,7 +11,6 @@ const EXPORTED_SYMBOLS = ["Database", "Entity", "Model"];
 
 var Database = null;
 var Entity = null;
-var Model = null;
 
 Database = function Database(file) {
     if (typeof file == 'string') {
@@ -372,121 +371,135 @@ extend(Database.prototype, {
     }
 });
 
-
+/**
+ * @param def { name: "table name", fields: { "field name": "SQL def", ... } } 形式のオブジェクト
+ */
 Entity = function (def){
     def.fields = def.fields || [];
-    
-    var Model = function(obj){
+
+    /* テーブルの各行を表すオブジェクトを生成するためのコンストラクタであり,
+     * かつ, テーブルに対する操作を行う各種関数を保持するオブジェクトでもある */
+    var _Model = function(obj){
         update(this, obj);
         this.temporary=true;
     }
-    
-    extend(Model.prototype, {
+
+    extend(_Model.prototype, {
         save : function(){
             if(this.temporary){
-                Model.insert(this);
+                _Model.insert(this);
                 this.temporary=false;
-                if (Model.db.connection.lastInsertRowID) {
+                if (_Model.db.connection.lastInsertRowID) {
                     // id と固定されてしまう…
-                    this.id = Model.db.connection.lastInsertRowID;
+                    this.id = _Model.db.connection.lastInsertRowID;
                 }
             } else {
-                Model.update(this);
+                _Model.update(this);
             }
         },
-        
+
         remove : function(){
-            Model.deleteById(this.id);
+            _Model.deleteById(this.id);
             this.temporary = true;
         },
     });
-    
+
     var fields = [];
+    var proto = _Model.prototype;
     for(var field in def.fields){
         var type = def.fields[field];
-        var proto = Model.prototype;
         switch(type){
         case 'TIMESTAMP':
-            proto.__defineGetter__(field, new Function('return this._'+field));
-            proto.__defineSetter__(field, new Function('val', 
-                'this._'+field+' = typeof(val)=="object"? val : new Date(val)'
-            ));
+            (function (field) { // `field` の値を保持するためのクロージャ
+                Object.defineProperty(proto, field, {
+                    get: function () { return this["_"+field] },
+                    set: function (val) {
+                        this["_"+field] = (typeof val === "object" ? val : new Date(val));
+                    },
+                });
+            })(field);
             break;
-            
+
         case 'LIST':
-            proto.__defineGetter__(field, new Function('return this._'+field));
-            proto.__defineSetter__(field, new Function('val', 
-                'this._'+field+' = typeof(val)=="object"? val : val.split(Database.LIST_DELIMITER).filter(function(i){return i!=""})'
-            ));
+            (function (field) { // `field` の値を保持するためのクロージャ
+                Object.defineProperty(proto, field, {
+                    get: function () { return this["_"+field] },
+                    set: function (val) {
+                        this["_"+field] = (typeof val === "object" ?
+                            val : val.split(Database.LIST_DELIMITER).
+                                      filter(function(i){return i!=""}));
+                    },
+                });
+            })(field);
             break;
         }
     }
-    
+
     var INSERT_SQL = Entity.createInsertSQL(def);
     var UPDATE_SQL = Entity.createUpdateSQL(def);
-    
+
     var sqlCache = {};
-    
-    extend(Model, {
+
+    extend(_Model, {
         definitions : def,
-        
+
         initialize : function(){
             var sql = Entity.createInitializeSQL(def);
-            Model.db.execute(sql);
+            _Model.db.execute(sql);
         },
-        
+
         deinitialize : function(){
-            return Model.db.execute(
-                "DROP TABLE " + def.name
+            return _Model.db.execute(
+                "DROP TABLE IF EXISTS " + def.name
             );
         },
-        
+
         insert : function(model){
-            if(!(model instanceof Model))
-                model = new Model(model);
-            Model.db.execute(INSERT_SQL, model);
+            if(!(model instanceof _Model))
+                model = new _Model(model);
+            _Model.db.execute(INSERT_SQL, model);
         },
-        
+
         update : function(model){
-            Model.db.execute(UPDATE_SQL, model);
+            _Model.db.execute(UPDATE_SQL, model);
         },
-        
+
         deleteById : function(id){
-            return Model.db.execute(
+            return _Model.db.execute(
                 "DELETE FROM " + def.name + " " +
                 "WHERE id = :id",
                 id
             );
         },
-        
+
         deleteAll : function(){
-            return Model.db.execute(
+            return _Model.db.execute(
                 "DELETE FROM " + def.name
             );
         },
-        
+
         countAll : function(){
-            return Model.db.execute(
+            return _Model.db.execute(
                 "SELECT count(*) AS count " +
                 "FROM " + def.name
             )[0].count;
         },
-        
+
         findAll : function(){
             return this.find(
                 "SELECT * " +
                 "FROM " + def.name
             );
         },
-        
+
         rowToObject : function(obj){
-            var model = new Model(obj);
+            var model = new _Model(obj);
             model.temporary = false;
             return model;
         },
 
         delete : function(sql){
-            return Model.db.execute(
+            return _Model.db.execute(
                 "DELETE FROM " + def.name,
                 sql
             );
@@ -497,7 +510,7 @@ Entity = function (def){
             params.limit = 1;
             return this.find(params)[0];
         },
-        
+
         find : function(sql, params){
             if (!params && typeof sql == 'object') {
                 if (typeof sql.where == 'string') {
@@ -515,18 +528,18 @@ Entity = function (def){
                     );
                 }
             } else {
-                //if (!Model.db) p(new Error().stack);
-                return Model.db.execute(sql, params).map(Model.rowToObject);
+                //if (!_Model.db) p(new Error().stack);
+                return _Model.db.execute(sql, params).map(_Model.rowToObject);
             }
         },
-        
+
         __noSuchMethod__ : function (method, args) {
             if( ! method.match(/^(find|count)By/))
                 throw new TypeError("No such method: " + method);
-            
+
             var me = arguments.callee;
             var cache = me.cache || (me.cache = {});
-            
+
             var sql;
             var type = RegExp.$1;
             if(method in cache){
@@ -535,7 +548,7 @@ Entity = function (def){
                 var fields = method.substr(type.length+2).
                     split('And').
                     map(function (e) decapitalize(e));
-                
+
                 switch(type){
                 case 'find':
                     sql = Entity.compactSQL(
@@ -552,21 +565,21 @@ Entity = function (def){
                     );
                     break;
                 }
-                
+
                 cache[method] = sql;
             }
             args.unshift(sql);
-            
+
             switch(type){
             case 'find':
                 return this.find.apply(this, args);
             case 'count':
-                return Model.db.execute.apply(Model.db, args)[0].count;
+                return _Model.db.execute.apply(_Model.db, args)[0].count;
             }
         },
     });
-    
-    return Model;
+
+    return _Model;
 }
 
 extend(Entity, {

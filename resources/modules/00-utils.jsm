@@ -128,14 +128,6 @@ p.b = function (func, name) {
 }
 
 var log = {
-    error: function (msg) {
-        if (msg instanceof Error) {
-            // Cu.reportError(msg);
-            Application.console.log('Error: ' + msg.toString() + msg.stack.join("\n"));
-        } else {
-            Application.console.log('Error: ' + msg.toString());
-        }
-    },
     info: function (msg) {
         if (nowDebug) {
             Application.console.log((msg || '').toString());

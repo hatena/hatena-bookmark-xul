@@ -10,16 +10,31 @@ extend(Model, {
     init: function() {
         if (this._init) return;
         this._init = true;
+        this._db = null;
     },
+    // 常にログアウト時用の Database オブジェクトを返す
+    // ログイン時は Model.Bookmark.db や Model.Tag.db が各ユーザー用の
+    // Database オブジェクトを返すようになっているので問題ない.
+    // (Model.Entity メソッド参照)
+    // 本来はログインしていない状態だと Database を触りにいかないように
+    // するのが最もよいが, 触りにいっている箇所があるのでとりあえずの処置.
+    // (将来的にはこのメソッドが必要ないようにしたい)
     get db() {
         if (!this._init) this.init();
-        if (this._db) return this._db;
-
-        // var db = new Database('hatena.bookmark.sqlite');
-        // return this.db = db;
-    },
-    set db(db) {
-        this._db = db;
+        if (!this._db) this._db = new Database('hatena.bookmark.sqlite');
+        var db = this._db;
+        // アプリケーション終了時に DB を閉じるように
+        var QUIT_APP_GRANTED_TOPIC = "quit-application-granted";
+        var observer = {
+            observe: function (aSubject, aTopic, aData) {
+                if (aTopic === QUIT_APP_GRANTED_TOPIC) {
+                    db.close();
+                    ObserverService.removeObserver(observer, QUIT_APP_GRANTED_TOPIC);
+                }
+            },
+            QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver])
+        };
+        ObserverService.addObserver(observer, QUIT_APP_GRANTED_TOPIC, false);
         return db;
     },
     resetAll: function() {
@@ -31,10 +46,10 @@ extend(Model, {
     },
     deleteAll: function() {
         this.MODELS.forEach(function(m) {
-            try { 
-                Model[m].deinitialize() 
-            } catch(e) {
-                log.error(e);
+            try {
+                Model[m].deinitialize();
+            } catch (err) {
+                Components.utils.reportError(err);
             }
         });
     },
@@ -55,7 +70,6 @@ extend(Model, {
             p('migrate fail.DB not found');
             return;
         }
-        this.db = db;
         let version = db.version || 0;
         if (version == 0) {
             // tag の nocase のための migration
