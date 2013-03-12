@@ -46,10 +46,10 @@ extend(Model, {
     },
     deleteAll: function() {
         this.MODELS.forEach(function(m) {
-            try { 
-                Model[m].deinitialize() 
-            } catch(e) {
-                log.error(e);
+            try {
+                Model[m].deinitialize();
+            } catch (err) {
+                Components.utils.reportError(err);
             }
         });
     },

@@ -450,7 +450,7 @@ Entity = function (def){
 
         deinitialize : function(){
             return _Model.db.execute(
-                "DROP TABLE " + def.name
+                "DROP TABLE IF EXISTS " + def.name
             );
         },
 
