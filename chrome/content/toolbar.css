@@ -7,6 +7,10 @@
 .hBookmark-toolbar-recent-popup {
    -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#recent-popup");
 }
+.hBookmark-toolbar-recent-popup .menuitem-iconic .menu-iconic-left {
+    display: -moz-box;
+    visibility: visible;
+}
 .hBookmark-tag-filter-popup {
    -moz-binding: url("chrome://hatenabookmark/content/toolbar.xml#tag-filter-popup");
 }

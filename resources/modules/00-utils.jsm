@@ -287,7 +287,16 @@ function encodeJSON(object) {
 /*
  * favicon 取得
  */
-
+function getFaviconImageUriAsync(uri, callback) {
+    if (typeof uri === "string") uri = IOService.newURI(uri, null, null);
+    var AsyncFavicons = FaviconService.QueryInterface(Ci.mozIAsyncFavicons);
+    AsyncFavicons.getFaviconURLForPage(uri, {
+        onComplete: function (faviconUri, dataLen, data, mimeType) {
+            // faviconUri may be null
+            callback(faviconUri ? faviconUri.spec : "");
+        }
+    });
+}
 function getFaviconURI (url) {
     let faviconURI;
     let iurl = IOService.newURI(url, null, null);
