@@ -185,6 +185,15 @@ extend(Bookmark.prototype, {
         let [, body] = Bookmark.parse(this.comment);
         return body;
     },
+    getFaviconAsync: function (callback) {
+        if (this._favicon) {
+            callback(this._favicon);
+        } else {
+            getFaviconImageUriAsync(this.url, function (faviconImageUri) {
+                callback(faviconImageUri);
+            });
+        }
+    },
     get favicon() {
         if (!this._favicon) {
             this._favicon = getFaviconURI(this.url);
