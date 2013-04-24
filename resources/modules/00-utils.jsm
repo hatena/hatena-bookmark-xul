@@ -305,7 +305,7 @@ function getFaviconImageUriStrForPageOrDefaultAsync(uri, callback) {
     });
 }
 // Deprecated at Firefox 22
-function getFaviconURI (url) {
+function getFaviconURI_deprecatedAtFx22 (url) {
     let faviconURI;
     let iurl = IOService.newURI(url, null, null);
     try {

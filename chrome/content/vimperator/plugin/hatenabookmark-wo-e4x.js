@@ -230,8 +230,6 @@ liberator.plugins.hBookmark = (function() {
              let completions;
              let method = searchMethod || 'search';
              let word = context.filter;
-             //if (counter < 0xFF) counter++; else counter = 1;
-             //let myCounter = counter;
              let offset = 0;
 
              // 検索語がない場合 (全件取得) などは 1 回の検索で全部返す

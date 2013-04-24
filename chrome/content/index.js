@@ -33,7 +33,7 @@ with(hBookmark) { // XXX
         let favImgClassName = "favicon-image";
         let favImgSubClassName = "favicon-image-sub";
         let html = E('li', {className: 'bookmark'});
-        var h3Elem = html.appendChild(
+        let h3Elem = html.appendChild(
            html.head = E('h3', {className: 'entry-search'},
                E("span", { className: favImgSubClassName }), // favicon 画像の代わり
                html.link = E('a', { target: '_blank' }, bookmark.title))

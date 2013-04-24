@@ -196,9 +196,9 @@ extend(Bookmark.prototype, {
             });
         }
     },
-    get favicon() {
+    get favicon_deprecatedAtFx22() {
         if (!this._favicon) {
-            this._favicon = getFaviconURI(this.url);
+            this._favicon = getFaviconURI_deprecatedAtFx22(this.url);
         }
         return this._favicon.spec.toString();
     },
