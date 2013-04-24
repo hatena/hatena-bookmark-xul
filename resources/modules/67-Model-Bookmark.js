@@ -189,7 +189,9 @@ extend(Bookmark.prototype, {
         if (this._favicon) {
             callback(this._favicon);
         } else {
-            getFaviconImageUriAsync(this.url, function (faviconImageUri) {
+            var that = this;
+            getFaviconImageUriStrForPageOrDefaultAsync(this.url, function (faviconImageUri) {
+                that._favicon = faviconImageUri;
                 callback(faviconImageUri);
             });
         }

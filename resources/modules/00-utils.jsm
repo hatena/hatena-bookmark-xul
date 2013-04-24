@@ -297,13 +297,23 @@ function getFaviconImageUriAsync(uri, callback) {
         }
     });
 }
+// ローカルにある favicon データの URI (?) か, それがなければデフォルト favicon の URI を返す
+function getFaviconImageUriStrForPageOrDefaultAsync(uri, callback) {
+    getFaviconImageUriAsync(uri, function (favUriStr) {
+        if (favUriStr === "") favUriStr = FaviconService.defaultFavicon.spec;
+        callback(favUriStr);
+    });
+}
+// Deprecated at Firefox 22
 function getFaviconURI (url) {
     let faviconURI;
     let iurl = IOService.newURI(url, null, null);
     try {
         try {
+            // ローカルにある favicon データの URI? なければデフォルト favicon の URI
             faviconURI = FaviconService.getFaviconImageForPage(iurl);
         } catch(e) {
+            // favicon の URI を返す
             faviconURI = FaviconService.getFaviconForPage(iurl);
         }
     } catch(e) {
