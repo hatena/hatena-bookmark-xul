@@ -99,33 +99,29 @@ extend(TagTreeView.prototype, {
     },
 
     getCellProperties: function (row, col, properties) {
-        function forCurrentTag(props) {
-            if (!props) { // since Gecko 22
-                return "Name title tag";
+        var propNames;
+        switch (col.id) {
+        case "hBookmarkTagTree_currentTag":
+            if (!properties) { // since Gecko 22
+                propNames = "Name title tag";
             } else {
                 // デフォルトのフォルダアイコンではなく独自のアイコンを使うのなら
                 // 次の二つのアトムを追加する必要はない。
-                props.AppendElement(NAME_ATOM);
-                props.AppendElement(TITLE_ATOM);
-                props.AppendElement(TAG_ATOM);
+                properties.AppendElement(NAME_ATOM);
+                properties.AppendElement(TITLE_ATOM);
+                properties.AppendElement(TAG_ATOM);
             }
-        }
-        function forCount(props) {
-            if (!props) { // since Gecko 22
-                return "count";
-            } else {
-                properties.AppendElement(COUNT_ATOM);
-            }
-        }
-        switch (col.id) {
-        case "hBookmarkTagTree_currentTag":
-            return forCurrentTag(properties);
             break;
 
         case "hBookmarkTagTree_count":
-            return forCount(properties);
+            if (!properties) { // since Gecko 22
+                propNames = "count";
+            } else {
+                properties.AppendElement(COUNT_ATOM);
+            }
             break;
         }
+        return propNames;
     },
 
     cycleHeader: function TTV_cycleHeader(col) {
