@@ -467,7 +467,10 @@
                     this.userNameField.value = user.name;
                     this.userNameField.href  = user.bookmarkHomepage;
 
-                    this.titleIcon.src = hBookmark.favicon(bookmark.url);
+                    var titleIcon = this.titleIcon;
+                    hBookmark.getFaviconImageUriAsync(bookmark.url, function (faviconUriStr) {
+                        if (faviconUriStr !== "") titleIcon.src = faviconUriStr;
+                    });
                     this.titleLabel.value       = bookmark.title;
                     this.titleField.value       = bookmark.title;
                     this.editTitleButton.hidden = user.private;

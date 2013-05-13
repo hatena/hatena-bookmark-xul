@@ -30,12 +30,22 @@ with(hBookmark) { // XXX
     let H = function(xml) xmlToDom(xml, 'http://www.w3.org/1999/xhtml');
 
     let createBookmarkList = function(bookmark) {
+        let favImgClassName = "favicon-image";
+        let favImgSubClassName = "favicon-image-sub";
         let html = E('li', {className: 'bookmark'});
-        html.appendChild(
-           html.head = E('h3', {className: 'entry-search'}, 
-               E('img', {src: bookmark.favicon}),
+        let h3Elem = html.appendChild(
+           html.head = E('h3', {className: 'entry-search'},
+               E("span", { className: favImgSubClassName }), // favicon 画像の代わり
                html.link = E('a', { target: '_blank' }, bookmark.title))
         );
+        hBookmark.getFaviconImageUriAsync(bookmark.url, function (faviconUriStr) {
+            if (faviconUriStr !== "") {
+                var favSubElem = h3Elem.querySelector("span." + favImgSubClassName);
+                var favImgElem = E("img", { className: favImgClassName, src: faviconUriStr });
+                h3Elem.insertBefore(favImgElem, favSubElem);
+                h3Elem.removeChild(favSubElem);
+            }
+        });
         html.appendChild(
            html.commentDiv = E('div', {className: 'comment'}, 
              html.tags      = E('span', {className: 'tags'}, bookmark.tags.join(', ')), ' ',

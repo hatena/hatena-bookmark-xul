@@ -143,7 +143,7 @@ liberator.plugins.hBookmark = (function() {
     BookmarkAdapter.prototype.__defineGetter__('title', function() this.b.title);
     BookmarkAdapter.prototype.__defineGetter__('comment', function() this.b.comment);
     BookmarkAdapter.prototype.__defineGetter__('url', function() this.b.url);
-    BookmarkAdapter.prototype.__defineGetter__('icon', function() this.b.favicon);
+    BookmarkAdapter.prototype.__defineGetter__('icon', function() this.b.favicon_deprecatedAtFx22);
     BookmarkAdapter.prototype.__defineGetter__("extra", function () [
         ["comment", this.comment, "Comment"],
     ].filter(function (item) item[1]));

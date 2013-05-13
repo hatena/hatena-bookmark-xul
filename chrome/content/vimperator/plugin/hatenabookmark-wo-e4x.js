@@ -139,14 +139,14 @@ liberator.plugins.hBookmark = (function() {
         return HatenaBookmark.model('Bookmark').searchByUrl(word, limit, asc, offset);
     }
 
-    let BookmarkAdapter = new Struct('b');
-    BookmarkAdapter.prototype.__defineGetter__('title', function() this.b.title);
-    BookmarkAdapter.prototype.__defineGetter__('comment', function() this.b.comment);
-    BookmarkAdapter.prototype.__defineGetter__('url', function() this.b.url);
-    BookmarkAdapter.prototype.__defineGetter__('icon', function() this.b.favicon);
-    BookmarkAdapter.prototype.__defineGetter__("extra", function () [
-        ["comment", this.comment, "Comment"],
-    ].filter(function (item) item[1]));
+    let BookmarkAdapter = new Struct('b', "faviconUriStr");
+    Object.defineProperties(BookmarkAdapter.prototype, {
+        title:   { get: function () this.b.title   },
+        comment: { get: function () this.b.comment },
+        url:     { get: function () this.b.url     },
+        icon:    { get: function () this.faviconUriStr },
+        extra:   { get: function () this.comment ? [["comment", this.comment, "Comment"]] : [] }
+    });
 
     plugin.command = {
         execute: function(args, openTab) {
@@ -221,8 +221,9 @@ liberator.plugins.hBookmark = (function() {
             argCount: '*',
             bang: true,
         },
-        _search: function(context, searchMethod) {
-             let interval = liberator.globalVariables.hBookmark_search_interval || 1000;
+        _search: function (context, searchMethod) {
+             // TODO interval が 0 になることはないが, 0 の設定も通るようにすべきでは?
+             let interval = liberator.globalVariables.hBookmark_search_interval || 80;
              let limit = liberator.globalVariables.hBookmark_search_limit || 10;
              let maxLimit = liberator.globalVariables.hBookmark_search_max_limit || 100;
 
@@ -231,39 +232,63 @@ liberator.plugins.hBookmark = (function() {
              let word = context.filter;
              let offset = 0;
 
-             if (word && interval > 0) {
-                 let iid, result;
-                 let cancel = context.cancel = function cancel() {
-                     context.incomplete = false;
-                     window.clearInterval(iid);
-                 };
-                 iid = window.setInterval(function () {
-                     if (offset >= maxLimit)
-                         cancel();
-                     else {
-                         result = search();
-                         if (result.length < limit)
-                             cancel();
+             // 検索語がない場合 (全件取得) などは 1 回の検索で全部返す
+             if (!word || interval <= 0) limit = maxLimit;
 
+             let iid, result;
+             let canceled = false;
+             let cancel = context.cancel = function cancel() {
+                 canceled = true;
+                 context.incomplete = false;
+                 window.clearTimeout(iid);
+                 context.completions = context.itemCache[context.key] = completions;
+                 iid = null;
+             };
+             iid = window.setTimeout(function f() {
+                 // デバッグ用
+                 //liberator.log(Date.now() + " vimperator hb search " + "(word: " + word + ", offset: " + offset + ", limit: " + limit + ")");
+                 if (offset >= maxLimit) {
+                     cancel();
+                 } else {
+                     searchAsync(function (result) {
+                         if (canceled) return;
                          completions = completions.concat(result);
-                         // context.itemCache のキャッシュデータも更新必要あり
-                         context.completions = context.itemCache[context.key] = completions;
-                     }
-                 }, interval);
 
-             } else
-                limit = maxLimit;
+                         if (!word || result.length === 0 || result.length < limit) {
+                             cancel();
+                         } else {
+                             // context.itemCache のキャッシュデータも更新必要あり
+                             context.completions = context.itemCache[context.key] = completions;
+                             iid = window.setTimeout(f, interval);
+                         }
+                     });
+                 }
+             }, 4);
 
-             return completions = search();
+             return completions = [];
 
-             function search () {
-                 var res = plugin[method](word, limit, false, offset)
-                             .map(function(b) new plugin.command.adapter(b));
+             // Firefox 22 で favicon 取得が非同期にしかできなくなったので非同期に結果を返す
+             function searchAsync(callback) {
+                 let res = plugin[method](word, limit, false, offset);
+                 let bb = [];
+                 let count = 0;
+                 function notify() {
+                     if (res.length === count) callback(bb);
+                     count++;
+                 }
+                 notify(); // 結果が 0 件の場合もちゃんと callback が呼ばれるように
+                 res.forEach(function (b, idx) {
+                     bb.push(null);
+                     b.getFaviconAsync(function (faviconUriStr) {
+                         bb[idx] = new plugin.command.adapter(b, faviconUriStr);
+                         notify();
+                     });
+                 });
                  offset += limit;
-                 return res;
              }
         },
         createCompleter: function(titles, searchMethod) {
+            // completer については http://d.hatena.ne.jp/nokturnalmortum/20081122/1227356221 などが参考になる
             return function(context) {
                 context.format = {
                     anchored: true,

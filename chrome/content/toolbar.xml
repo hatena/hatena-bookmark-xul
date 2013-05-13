@@ -161,7 +161,9 @@
                                                           "toolbarbutton");
                     button.setAttribute("class", "bookmark-item");
                     button.setAttribute("label", bookmark.title);
-                    button.setAttribute("image", hBookmark.favicon(bookmark.url));
+                    hBookmark.getFaviconImageUriAsync(bookmark.url, function (faviconUriStr) {
+                        if (faviconUriStr !== "") button.setAttribute("image", faviconUriStr);
+                    });
                     button.bookmark = bookmark;
                     return button;
                 ]]></body>
@@ -277,7 +279,9 @@
                                                         "menuitem");
                     item.setAttribute("class", "bookmark-item menuitem-iconic");
                     item.setAttribute("label", bookmark.title);
-                    item.setAttribute("image", hBookmark.favicon(bookmark.url));
+                    hBookmark.getFaviconImageUriAsync(bookmark.url, function (faviconUriStr) {
+                        if (faviconUriStr !== "") item.setAttribute("image", faviconUriStr);
+                    });
                     item.bookmark = bookmark;
                     return item;
                 ]]></body>

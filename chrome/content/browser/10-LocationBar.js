@@ -218,12 +218,17 @@ var LocationBar = {
             let comment;
             // XXX: context 指定してもうまくいかない
             let label;
+
+            let faviconUriStr = FaviconService.defaultFavicon.spec;
+            let faviconElem = E('image', {src: faviconUriStr, width:'16px', height:'16px'});
+            b.getFaviconAsync(function (faviconUriStr) {
+                if (faviconElem.src !== faviconUriStr) faviconElem.src = faviconUriStr;
+            });
+
             let item = E('richlistitem', {
                 'class': 'hBookmark-urlbar-listitem', value:b.url},
                 E('hbox', {flex: '1'}, 
-                    E('vbox', null,
-                        E('image', {src: b.favicon, width:'16px', height:'16px'})
-                    ),
+                    E('vbox', null, faviconElem),
                     E('vbox', {flex: '1'}, 
                         E('label', {
                             class: 'hBookmark-urlbar-title', crop: 'end', flex: '1', value: b.title, tooltiptext: b.title}),
