@@ -90,7 +90,11 @@ extend(TagList.prototype, {
     },
 
     getCellProperties: function TL_getCellProperties(row, col, properties) {
-        properties.AppendElement((col.id === COL_TAG) ? TAG_ATOM : COUNT_ATOM);
+        if (!properties) { // since Gecko 22
+            return (col.id === COL_TAG ? "tag" : "count");
+        } else {
+            properties.AppendElement((col.id === COL_TAG) ? TAG_ATOM : COUNT_ATOM);
+        }
     },
 
     cycleHeader: function TL_cycleHeader(col) {
