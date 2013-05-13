@@ -258,8 +258,18 @@ input.button {
   margin: 3px;
 }
 
-li.bookmark img {
+li.bookmark .favicon-image-sub,
+li.bookmark .favicon-image {
     margin-right: 5px;
+    width: 16px;
+    height: 16px;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+li.bookmark .favicon-image-sub {
+    display: inline-block;
+    border: dashed 1px #CCCCCC;
 }
 
 .bookmark h3.entry-search {

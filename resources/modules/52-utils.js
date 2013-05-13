@@ -12,12 +12,6 @@ function newURI(uriSpec, originCharset, baseURI) {
     return IOService.newURI(uriSpec, originCharset, baseURI);
 }
 
-function favicon(uri) {
-    if (typeof uri === "string")
-        uri = IOService.newURI(uri, null, null);
-    return FaviconService.getFaviconImageForPage(uri).spec;
-}
-
 /*
  * %s, %d, %f のみサポート
  */

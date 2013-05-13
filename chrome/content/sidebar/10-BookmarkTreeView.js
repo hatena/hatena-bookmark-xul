@@ -23,7 +23,7 @@ extend(BookmarkTreeView.prototype, {
     },
 
     getImageSrc: function BTV_getImageSrc(row, col) {
-        return favicon(this._items[row].url);
+        return this._items[row].faviconUriStr;
     },
 
     cycleHeader: function BTV_cycleHeader(col) {
@@ -48,10 +48,10 @@ extend(BookmarkTreeView.prototype, {
     },
 
     showByTags: function (tags) {
-        this._update = function BTV_doUpdateByTags() {
+        this._update = function BTV_doUpdateByTags(callback) {
             let bookmarks = Bookmark.findByTags(tags);
             if (this.isAscending) bookmarks.reverse();
-            this.setBookmarks(bookmarks);
+            this.setBookmarksAsync(bookmarks, callback);
         };
         this._update();
     },
@@ -64,7 +64,7 @@ extend(BookmarkTreeView.prototype, {
         case 'comment': searchMethod = 'searchByComment'; break;
         case 'url':     searchMethod = 'searchByUrl';     break;
         }
-        this._update = function BTV_doUpdateBySearchString() {
+        this._update = function BTV_doUpdateBySearchString(callback) {
             let visibleRowCount = this._treeBox.getPageLength();
             let bookmarks = string
                 ? Bookmark[searchMethod](string, visibleRowCount, this.isAscending)
@@ -72,17 +72,34 @@ extend(BookmarkTreeView.prototype, {
                     order: this.isAscending ? "date ASC" : "date DESC",
                     limit: visibleRowCount
                 });
-            this.setBookmarks(bookmarks);
+            this.setBookmarksAsync(bookmarks, callback);
         };
         this._update();
     },
 
-    setBookmarks: function BTV_setBookmarks(bookmarks) {
-        let prevRowCount = this.rowCount;
-        this._items = bookmarks;
-        this._treeBox.treeBody.bookmarks = bookmarks;
-        this._treeBox.rowCountChanged(0, -prevRowCount);
-        this._treeBox.rowCountChanged(0, this.rowCount);
+    setBookmarksAsync: function BTV_setBookmarks(bookmarks, callback) {
+        var that = this;
+        function setBookmarks() {
+            let prevRowCount = that.rowCount;
+            that._items = bookmarks;
+            that._treeBox.treeBody.bookmarks = bookmarks;
+            that._treeBox.rowCountChanged(0, -prevRowCount);
+            that._treeBox.rowCountChanged(0, that.rowCount);
+            if (callback) callback();
+        }
+
+        let count = 0;
+        function notify() {
+            if (bookmarks.length === count) setBookmarks();
+            count++;
+        }
+        notify(); // 結果が 0 件の場合もちゃんと callback が呼ばれるように
+        bookmarks.forEach(function (b, idx) {
+            b.getFaviconAsync(function (faviconUriStr) {
+                bookmarks[idx].faviconUriStr = faviconUriStr || FaviconService.defaultFavicon.spec;
+                notify();
+            });
+        });
     },
 
     setSelectedBookmark: function BTV_setSelectedBookmark() {
@@ -130,8 +147,10 @@ extend(BookmarkTreeView.prototype, {
     update: function BTV_update() {
         if (!this._update) return;
         let row = this._treeBox.getFirstVisibleRow();
-        this._update();
-        this._treeBox.scrollToRow(row);
+        var that = this;
+        this._update(function onComplete() {
+            that._treeBox.scrollToRow(row);
+        });
     },
 
     handleMouseOver: function BTV_handleMouseOver(event) {

@@ -287,14 +287,33 @@ function encodeJSON(object) {
 /*
  * favicon 取得
  */
-
-function getFaviconURI (url) {
+function getFaviconImageUriAsync(uri, callback) {
+    if (typeof uri === "string") uri = IOService.newURI(uri, null, null);
+    var AsyncFavicons = FaviconService.QueryInterface(Ci.mozIAsyncFavicons);
+    AsyncFavicons.getFaviconURLForPage(uri, {
+        onComplete: function (faviconUri, dataLen, data, mimeType) {
+            // faviconUri may be null
+            callback(faviconUri ? faviconUri.spec : "");
+        }
+    });
+}
+// ローカルにある favicon データの URI (?) か, それがなければデフォルト favicon の URI を返す
+function getFaviconImageUriStrForPageOrDefaultAsync(uri, callback) {
+    getFaviconImageUriAsync(uri, function (favUriStr) {
+        if (favUriStr === "") favUriStr = FaviconService.defaultFavicon.spec;
+        callback(favUriStr);
+    });
+}
+// Deprecated at Firefox 22
+function getFaviconURI_deprecatedAtFx22 (url) {
     let faviconURI;
     let iurl = IOService.newURI(url, null, null);
     try {
         try {
+            // ローカルにある favicon データの URI? なければデフォルト favicon の URI
             faviconURI = FaviconService.getFaviconImageForPage(iurl);
         } catch(e) {
+            // favicon の URI を返す
             faviconURI = FaviconService.getFaviconForPage(iurl);
         }
     } catch(e) {

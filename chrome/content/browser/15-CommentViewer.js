@@ -88,8 +88,10 @@ var CommentViewer = {
                 data.url = data.title = url;
                 data.bookmarks = [];
             }
-            data.favicon = favicon(data.url);
-            self.updateComment(data);
+            hBookmark.getFaviconImageUriStrForPageOrDefaultAsync(url, function (faviconUriStr) {
+                data.favicon = faviconUriStr;
+                self.updateComment(data);
+            });
         });
     },
     toggle: function CommentViewer_toggle(url) {
