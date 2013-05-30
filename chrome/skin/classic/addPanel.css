@@ -60,6 +60,11 @@ label[anonid="titleLabel"] {
   font-weight: bold;
 }
 
+image[anonid="titleIcon"] {
+    width: 16px;
+    height: 16px;
+}
+
 hbox[anonid="messageRow"] {
     padding: 4px;
     margin: 5px 3px 5px 3px;
