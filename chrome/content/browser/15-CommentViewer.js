@@ -15,7 +15,7 @@ elementGetter(this, 'commentFooter', 'hBookmark-comment-footer', document);
 elementGetter(this, 'listContainer', 'hBookmark-comment-list-container', document);
 elementGetter(this, 'list', 'hBookmark-comment-list', document);
 elementGetter(this, 'listDiv', 'hBookmark-comment-div', document);
-elementGetter(this, 'statusbar', 'status-bar', document);
+elementGetter(this, 'addonbar', 'addon-bar', document);
 
 elementGetter(this, 'faviconImage', 'hBookmark-comment-favicon', document);
 elementGetter(this, 'titleLabel', 'hBookmark-comment-title', document);
@@ -141,7 +141,7 @@ var CommentViewer = {
         data.publicCount = data.bookmarks.length;
         data.privateCount = data.count - data.publicCount;
         panelComment.setAttribute('hTransparent', true);
-        panelComment.openPopup(statusbar, 'before_end', -20, 0,false,false);
+        panelComment.openPopup(addonbar, 'before_end', -20, 0, false, false);
         CommentViewer.updateViewer(data);
         commentButton.setAttribute('loading', 'false'); 
     },
