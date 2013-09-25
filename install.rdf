@@ -4,7 +4,7 @@
     <Description about="urn:mozilla:install-manifest">
         <em:id>bookmark@hatena.ne.jp</em:id>
         <em:name>Hatena Bookmark</em:name>
-        <em:version>2.3.4.1</em:version>
+        <em:version>2.3.5</em:version>
         <em:type>2</em:type>
         <em:optionsURL>chrome://hatenabookmark/content/config.xul</em:optionsURL>
         <em:iconURL>chrome://hatenabookmark/skin/images/favicon32.png</em:iconURL>
@@ -32,7 +32,7 @@
             <Description>
                 <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
                 <em:minVersion>6.0</em:minVersion>
-                <em:maxVersion>22.*</em:maxVersion>
+                <em:maxVersion>26.*</em:maxVersion>
             </Description>
         </em:targetApplication>
     </Description>
