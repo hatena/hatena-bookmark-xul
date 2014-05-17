@@ -9,8 +9,9 @@
 
 /* StatusBar */
 #hBookmark-statusBarPanel {
-    margin: 0px;
+    margin: 4px 2px;
     padding: 0px;
+    -moz-box-align: center;
 }
 
 #hBookmark-status-home {

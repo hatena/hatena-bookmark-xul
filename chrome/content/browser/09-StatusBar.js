@@ -32,6 +32,7 @@ var StatusBar = {
         AddPanelManager.toggle();
     },
     checkBookmarked: function StatusBar_checkBookmarked() {
+        if (!addButton) return;
         if (isHttp && User.user && User.user.hasBookmark(locationURL)) {
             addButton.setAttribute('added', true);
         } else {
@@ -81,6 +82,7 @@ var StatusBar = {
         }
     },
     setCount: function(val) {
+        if (!statusCount) return;
         if (val !== null) val = +val || 0;
         if (StatusBar.lastCountValue == val) return;
         StatusBar.lastCountValue = val;
@@ -119,6 +121,7 @@ var StatusBar = {
     },
     prefsAddButtonHandler: function(e) {
         p('prefs add button check');
+        if (!addButton) return;
         if (StatusBar.prefs.get('addButton')) {
             addButton.removeAttribute('hidden');
         } else {
@@ -126,6 +129,7 @@ var StatusBar = {
         }
     },
     prefsCounterHandler: function(e) {
+        if (!statusCount) return;
         if (StatusBar.prefs.get('counter')) {
             statusCount.removeAttribute('hidden');
             statusComment.removeAttribute('hidden');
@@ -140,13 +144,9 @@ var StatusBar = {
         StatusBar.update();
         gBrowser.addProgressListener(StatusBar.progressListener);
         gBrowser.addEventListener('unload', StatusBar.unloadHandler, false);
-        statusComment.addEventListener('mouseover', StatusBar.commentViewerOverHandler, false);
     },
     unloadHandler: function(ev) {
         gBrowser.removeProgressListener(StatusBar.progressListener);
-    },
-    commentViewerOverHandler: function(ev) {
-        CommentViewer.autoHoverShow();
     },
     updateHandler: function(ev) {
         StatusBar.update;

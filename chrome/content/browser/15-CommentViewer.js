@@ -15,7 +15,7 @@ elementGetter(this, 'commentFooter', 'hBookmark-comment-footer', document);
 elementGetter(this, 'listContainer', 'hBookmark-comment-list-container', document);
 elementGetter(this, 'list', 'hBookmark-comment-list', document);
 elementGetter(this, 'listDiv', 'hBookmark-comment-div', document);
-elementGetter(this, 'addonbar', 'addon-bar', document);
+elementGetter(this, 'bottombox', 'browser-bottombox', document);
 
 elementGetter(this, 'faviconImage', 'hBookmark-comment-favicon', document);
 elementGetter(this, 'titleLabel', 'hBookmark-comment-title', document);
@@ -141,7 +141,7 @@ var CommentViewer = {
         data.publicCount = data.bookmarks.length;
         data.privateCount = data.count - data.publicCount;
         panelComment.setAttribute('hTransparent', true);
-        panelComment.openPopup(addonbar, 'before_end', -20, 0, false, false);
+        panelComment.openPopup(bottombox, 'before_end', -20, 0, false, false);
         CommentViewer.updateViewer(data);
         commentButton.setAttribute('loading', 'false'); 
     },
@@ -439,7 +439,6 @@ var CommentViewer = {
         }
     },
     loadHandler: function CommentViewer_loadHandler() {
-        commentButton.addEventListener('mousedown', CommentViewer.buttonClickHandler, true);
         panelComment.addEventListener('popuphidden', CommentViewer.popupHiddenHandler, false);
         panelComment.addEventListener('popupshown', CommentViewer.popupShownHandler, false);
         // panelComment.addEventListener('mouseout', CommentViewer.popupMouseoutHandler, false);

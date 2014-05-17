@@ -154,31 +154,10 @@
             <toolbarbutton class="bookmark-item bookmarks-toolbar-customize"
                            label="&hBookmark.toolbar.recentLabel;"/>
         </toolbaritem>
-    </toolbarpalette>
-
-    <hbox id="urlbar-icons">
-        <image id="hBookmark-search-icon" searchdisabled="true" onclick="hBookmark.LocationBar.iconClickHandler(event);" />
-    </hbox>
-
-    <toolbox id="navigator-toolbox">
-        <toolbar id="hBookmarkToolbar"
-                 class="chromeclass-toolbar-additional"
-                 mode="icons"
-                 defaultmode="icons"
-                 iconsize="small"
-                 defaulticonsize="small"
-                 customizable="true"
-                 defaultset="hBookmark-toolbar-sidebar-button,hBookmark-toolbar-add-button,hBookmark-toolbar-home-button,separator,hBookmark-toolbar-recent-line"
-                 context="toolbar-context-menu"
-                 toolbarname="&hBookmark.toolbar.title;"
-                 accesskey="&hBookmark.toolbar.titleKey;"/>
-    </toolbox>
-
-
-    <statusbar id="status-bar">
-        <statusbarpanel id="hBookmark-statusBarPanel"
+        <toolbaritem id="hBookmark-statusBarPanel"
              collapsed="false"
              context="hBookmarkStatusMenu"
+             class="chromeclass-toolbar-additional"
         >
             <hbox align="center" id="hBookmark-syncProgressBox" hidden="true">
                 <label value="&hBookmark.statusbar.now_syncing;" />
@@ -211,25 +190,49 @@
                id="hBookmark-status-comment"
                tooltiptext="&hBookmark.statusbar.tooltip.comment;"
                loading="false"
+               onmousedown="hBookmark.CommentViewer.buttonClickHandler(event)"
+               onmouseover="hBookmark.CommentViewer.autoHoverShow()"
           />
+          <menupopup id="hBookmarkStatusMenu">
+              <menuitem
+                  label="&hBookmark.menu.sync;"
+                  accesskey="&hBookmark.menu.syncKey;"
+                  oncommand="hBookmark.Sync.sync();"/>
+              <menuitem
+                  label="&hBookmark.menu.config;"
+                  accesskey="&hBookmark.menu.configKey;"
+                  oncommand="hBookmark.Config.openDialog();"/>
+              <menuseparator/>
+              <menuitem 
+                  label="&hBookmark.menu.help;"
+                  accesskey="&hBookmark.menu.helpKey;"
+                  oncommand="hBookmark.Config.goHelp(event);"/>
+          </menupopup>
 
-        </statusbarpanel>
+        </toolbaritem>
 
-        <menupopup id="hBookmarkStatusMenu">
-            <menuitem
-                label="&hBookmark.menu.sync;"
-                accesskey="&hBookmark.menu.syncKey;"
-                oncommand="hBookmark.Sync.sync();"/>
-            <menuitem
-                label="&hBookmark.menu.config;"
-                accesskey="&hBookmark.menu.configKey;"
-                oncommand="hBookmark.Config.openDialog();"/>
-            <menuseparator/>
-            <menuitem 
-                label="&hBookmark.menu.help;"
-                accesskey="&hBookmark.menu.helpKey;"
-                oncommand="hBookmark.Config.goHelp(event);"/>
-        </menupopup>
+    </toolbarpalette>
+
+    <hbox id="urlbar-icons">
+        <image id="hBookmark-search-icon" searchdisabled="true" onclick="hBookmark.LocationBar.iconClickHandler(event);" />
+    </hbox>
+
+    <toolbox id="navigator-toolbox">
+        <toolbar id="hBookmarkToolbar"
+                 class="chromeclass-toolbar-additional"
+                 mode="icons"
+                 defaultmode="icons"
+                 iconsize="small"
+                 defaulticonsize="small"
+                 customizable="true"
+                 defaultset="hBookmark-toolbar-sidebar-button,hBookmark-toolbar-add-button,hBookmark-toolbar-home-button,separator,hBookmark-toolbar-recent-line"
+                 context="toolbar-context-menu"
+                 toolbarname="&hBookmark.toolbar.title;"
+                 accesskey="&hBookmark.toolbar.titleKey;"/>
+    </toolbox>
+
+
+    <statusbar id="status-bar">
     </statusbar>
 
     <popupset id="mainPopupSet">
@@ -312,6 +315,16 @@
                    color="purple"/>
         </panel>
     </popupset>
+
+    <panelmultiview id="PanelUI-multiView">
+      <panelview id="PanelUI-hBookmark-recent-view" flex="1">
+        <label value="&hBookmark.toolbar.recentLabel;" class="panel-subview-header"/>
+        <vbox id="PanelUI-hBookmark-recent-items"
+              class="panel-subview-body"
+              oncommand="hBookmark.UIUtils.onBookmarkCommand(event)"
+              />
+      </panelview>
+    </panelmultiview>
 
     <broadcasterset id="mainBroadcasterSet">
         <broadcaster id="viewHBookmarkSidebar"
