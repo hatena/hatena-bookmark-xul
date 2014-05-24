@@ -12,6 +12,7 @@
 <!ENTITY hBookmark.sidebar.label "はてなブックマークサイドバー">
 <!ENTITY hBookmark.sidebar.key "A">
 
+<!ENTITY hBookmark.statusbar.label "はてなパネル">
 <!ENTITY hBookmark.statusbar.now_syncing "データを同期しています...">
 <!ENTITY hBookmark.statusbar.tooltip.addButton "はてなブックマークに追加・編集">
 <!ENTITY hBookmark.statusbar.tooltip.counter "はてなブックマークで表示">

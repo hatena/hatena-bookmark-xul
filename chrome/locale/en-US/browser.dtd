@@ -12,6 +12,7 @@
 <!ENTITY hBookmark.sidebar.label "Hatena Bookmark">
 <!ENTITY hBookmark.sidebar.key "A">
 
+<!ENTITY hBookmark.statusbar.label "Hatena Panel">
 <!ENTITY hBookmark.statusbar.now_syncing "Sync with Bookmarks…">
 <!ENTITY hBookmark.statusbar.tooltip.addButton "Add to Hatena Bookmark">
 <!ENTITY hBookmark.statusbar.tooltip.counter "Show on Hatena Bookmark">

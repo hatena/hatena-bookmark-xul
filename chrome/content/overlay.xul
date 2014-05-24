@@ -157,6 +157,7 @@
         <toolbaritem id="hBookmark-statusBarPanel"
              collapsed="false"
              context="hBookmarkStatusMenu"
+             label="&hBookmark.statusbar.label;"
              class="chromeclass-toolbar-additional"
         >
             <hbox align="center" id="hBookmark-syncProgressBox" hidden="true">
@@ -237,6 +238,7 @@
 
     <popupset id="mainPopupSet">
         <panel id="hBookmark-panel-comment" 
+             type="arrow"
              orient="vertical"
              noautofocus="true"
              noautohide="false"
