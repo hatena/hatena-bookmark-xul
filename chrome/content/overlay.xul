@@ -198,7 +198,7 @@
             <image
                  id="hBookmark-status-comment"
                  tooltiptext="&hBookmark.statusbar.tooltip.comment;"
-                 loading="false"
+                 observes="hBookmark-comment-loading"
                  onmousedown="hBookmark.CommentViewer.buttonClickHandler(event)"
                  onmouseover="hBookmark.CommentViewer.autoHoverShow()"
             />
@@ -380,6 +380,7 @@
                      oncommand="toggleSidebar('viewHBookmarkSidebar');"/>
         <broadcaster id="hBookmark-added"
                      added="false"/>
+        <broadcaster id="hBookmark-comment-loading" loading="false"/>
     </broadcasterset>
 
     <script type="text/javascript; version=1.8" charset="utf-8">

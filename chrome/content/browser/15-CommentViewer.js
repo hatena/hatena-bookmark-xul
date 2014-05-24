@@ -16,6 +16,7 @@ elementGetter(this, 'listContainer', 'hBookmark-comment-list-container', documen
 elementGetter(this, 'list', 'hBookmark-comment-list', document);
 elementGetter(this, 'listDiv', 'hBookmark-comment-div', document);
 elementGetter(this, 'bottombox', 'browser-bottombox', document);
+elementGetter(this, 'commentLoading', 'hBookmark-comment-loading', document);
 
 elementGetter(this, 'faviconImage', 'hBookmark-comment-favicon', document);
 elementGetter(this, 'titleLabel', 'hBookmark-comment-title', document);
@@ -80,7 +81,7 @@ var CommentViewer = {
             if (!isHttp) return;
             url = aDoc.location.href;
         }
-        commentButton.setAttribute('loading', 'true'); 
+        commentLoading.setAttribute('loading', 'true');
         var self = this;
         HTTPCache.comment.async_get(url, function(data) {
             if (!data || !data.title) {
@@ -140,7 +141,6 @@ var CommentViewer = {
         }
         data.publicCount = data.bookmarks.length;
         data.privateCount = data.count - data.publicCount;
-        panelComment.setAttribute('hTransparent', true);
         let props = {
           anchor: bottombox,
           positions: ["before", "end"],
@@ -164,7 +164,7 @@ var CommentViewer = {
         }
         panelComment.openPopup(props.anchor, props.positions.join("_"), props.x, props.y, false, false);
         CommentViewer.updateViewer(data);
-        commentButton.setAttribute('loading', 'false'); 
+        commentLoading.setAttribute('loading', 'false');
     },
     renderComment: function(bookmarks, limit, fragment) {
         if (!fragment) 
@@ -254,7 +254,6 @@ var CommentViewer = {
 
         if (CommentViewer.lastRenderData[0] == data.url && CommentViewer.lastRenderData[1] == isFilter) {
             // data.url が同じ、かつ filter してない
-            panelComment.removeAttribute('hTransparent');
             return;
         }
         while(list.firstChild) list.removeChild(list.firstChild);
@@ -321,7 +320,6 @@ var CommentViewer = {
         p('comment viewer pos:' + h + ', ' + w);
         listContainer.style.height = '' + h + 'px';
         commentContainer.style.width = '' + w + 'px';
-        panelComment.removeAttribute('hTransparent');
         setTimeout(function() {
             listDiv.focus()
         }, 10);
@@ -474,7 +472,6 @@ var CommentViewer = {
             CommentViewer.pageStarInnerCountHandler, false);
         listDiv.addEventListener(Star.EVENT_STAR_INNER_COUNT_ACTIVATED,
             CommentViewer.starInnerCountHandler, false);
-        
     },
     listClickHandler: function CommentViewer_listClickHandler(ev) {
         if (ev.target.alt == 'close') {

@@ -117,12 +117,6 @@ width: 800px;
     border-style: solid;
 }
 
-#hBookmark-panel-comment[hTransparent="true"] {
-    opacity: 0.0 !important;
-    background-color: transparent !important;
-}
-
-
 #hBookmark-comment-favicon {
     width: 16px;
     height: 16px;
