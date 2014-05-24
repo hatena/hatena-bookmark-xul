@@ -18,6 +18,11 @@
 <!ENTITY hBookmark.statusbar.tooltip.counter "はてなブックマークで表示">
 <!ENTITY hBookmark.statusbar.tooltip.comment "ブックマークコメントを表示">
 
+<!ENTITY hBookmark.subview.add "追加・編集">
+<!ENTITY hBookmark.subview.comment "ブックマークコメントを表示">
+<!ENTITY hBookmark.subview.showentry "はてなブックマークで表示">
+<!ENTITY hBookmark.subview.sync "データの同期">
+
 <!ENTITY hBookmark.menu.main "はてなブックマーク">
 <!ENTITY hBookmark.menu.mainKey "B">
 <!ENTITY hBookmark.menu.sync "データの同期">

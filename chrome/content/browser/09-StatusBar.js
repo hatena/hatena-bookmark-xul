@@ -11,6 +11,7 @@ this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexO
 
 
 elementGetter(this, 'addButton', 'hBookmarkAddButton', document);
+elementGetter(this, 'addedObserver', 'hBookmark-added', document);
 elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
 elementGetter(this, 'statusCountLabel', 'hBookmark-status-count-label', document);
 elementGetter(this, 'statusComment', 'hBookmark-status-comment', document);
@@ -32,11 +33,10 @@ var StatusBar = {
         AddPanelManager.toggle();
     },
     checkBookmarked: function StatusBar_checkBookmarked() {
-        if (!addButton) return;
         if (isHttp && User.user && User.user.hasBookmark(locationURL)) {
-            addButton.setAttribute('added', true);
+            addedObserver.setAttribute('added', true);
         } else {
-            addButton.setAttribute('added', false);
+            addedObserver.setAttribute('added', false);
         }
     },
     lastURL: null,
@@ -168,7 +168,13 @@ var StatusBar = {
             Ci.nsIWebProgressListener2,
             Ci.nsISupportsWeakReference,
         ])
-    }
+    },
+    showSubView: function(ev) {
+        if (ev.button === 2) return;
+        PanelUI.multiView.showSubView("PanelUI-hBookmark-panel", ev.originalTarget);
+        ev.stopPropagation();
+        ev.preventDefault();
+    },
 }
 
 window.addEventListener('load', StatusBar.loadHandler, false);

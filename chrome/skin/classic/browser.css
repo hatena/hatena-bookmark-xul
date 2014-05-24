@@ -7,39 +7,13 @@
   -moz-image-region: rect(46px 16px 62px 0px);
 }
 
-/* StatusBar */
-#hBookmark-statusBarPanel {
-    margin: 4px 2px;
-    padding: 0px;
-    -moz-box-align: center;
-}
-
 #hBookmark-status-home {
   list-style-image: url("chrome://hatenabookmark/skin/images/home.gif");
 }
 
 #hBookmarkAddButton {
   margin: 0 1px;
-}
-
-#hBookmarkAddButton[added="false"] {
-  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(46px 16px 62px 0px);
   cursor: pointer;
-}
-
-#hBookmarkAddButton[added="false"]:active {
-  -moz-image-region: rect(62px 16px 78px 0px);
-}
-
-#hBookmarkAddButton[added="true"] {
-  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
-  -moz-image-region: rect(46px 64px 62px 48px);
-  cursor: pointer;
-}
-
-#hBookmarkAddButton[added="true"]:active {
-  -moz-image-region: rect(62px 64px 78px 48px);
 }
 
 #hBookmark-status-count {

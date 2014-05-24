@@ -160,6 +160,12 @@
              label="&hBookmark.statusbar.label;"
              class="chromeclass-toolbar-additional"
         >
+            <toolbarbutton id="hBookmark-panelbutton"
+                           label="&hBookmark.statusbar.label;"
+                           class="toolbarbutton-1"
+                           observes="hBookmark-added"
+                           onclick="hBookmark.StatusBar.showSubView(event);"/>
+
             <hbox align="center" id="hBookmark-syncProgressBox" hidden="true">
                 <label value="&hBookmark.statusbar.now_syncing;" />
                 <progressmeter 
@@ -170,7 +176,9 @@
                 />
             </hbox>
 
-            <image id="hBookmarkAddButton" added="false"
+            <image id="hBookmarkAddButton"
+                   observes="hBookmark-added"
+                   class="hBookmarkAddIconic"
                    tooltiptext="&hBookmark.statusbar.tooltip.addButton;"
                    onclick="hBookmark.StatusBar.showPanelToggle(event);"
             />
@@ -185,30 +193,30 @@
             ><label id="hBookmark-status-count-label" /></hbox>
 
 
-          <toolbarseparator class="hBookmark-status-separator" />
+            <toolbarseparator class="hBookmark-status-separator" />
 
-          <image
-               id="hBookmark-status-comment"
-               tooltiptext="&hBookmark.statusbar.tooltip.comment;"
-               loading="false"
-               onmousedown="hBookmark.CommentViewer.buttonClickHandler(event)"
-               onmouseover="hBookmark.CommentViewer.autoHoverShow()"
-          />
-          <menupopup id="hBookmarkStatusMenu">
-              <menuitem
-                  label="&hBookmark.menu.sync;"
-                  accesskey="&hBookmark.menu.syncKey;"
-                  oncommand="hBookmark.Sync.sync();"/>
-              <menuitem
-                  label="&hBookmark.menu.config;"
-                  accesskey="&hBookmark.menu.configKey;"
-                  oncommand="hBookmark.Config.openDialog();"/>
-              <menuseparator/>
-              <menuitem 
-                  label="&hBookmark.menu.help;"
-                  accesskey="&hBookmark.menu.helpKey;"
-                  oncommand="hBookmark.Config.goHelp(event);"/>
-          </menupopup>
+            <image
+                 id="hBookmark-status-comment"
+                 tooltiptext="&hBookmark.statusbar.tooltip.comment;"
+                 loading="false"
+                 onmousedown="hBookmark.CommentViewer.buttonClickHandler(event)"
+                 onmouseover="hBookmark.CommentViewer.autoHoverShow()"
+            />
+            <menupopup id="hBookmarkStatusMenu">
+                <menuitem
+                    label="&hBookmark.menu.sync;"
+                    accesskey="&hBookmark.menu.syncKey;"
+                    oncommand="hBookmark.Sync.sync();"/>
+                <menuitem
+                    label="&hBookmark.menu.config;"
+                    accesskey="&hBookmark.menu.configKey;"
+                    oncommand="hBookmark.Config.openDialog();"/>
+                <menuseparator/>
+                <menuitem
+                    label="&hBookmark.menu.help;"
+                    accesskey="&hBookmark.menu.helpKey;"
+                    oncommand="hBookmark.Config.goHelp(event);"/>
+            </menupopup>
 
         </toolbaritem>
 
@@ -319,7 +327,39 @@
     </popupset>
 
     <panelmultiview id="PanelUI-multiView">
-      <panelview id="PanelUI-hBookmark-recent-view" flex="1">
+      <panelview id="PanelUI-hBookmark-panel" class="PanelUI-subView" flex="1">
+        <label value="&hBookmark.statusbar.label;" class="panel-subview-header"/>
+        <vbox class="panel-subview-body">
+          <toolbarbutton label="&hBookmark.subview.add;"
+                         class="subviewbutton hBookmarkAddIconic"
+                         observes="hBookmark-added"
+                         oncommand="hBookmark.AddPanelManager.showPanel(document.commandDispatcher.focusedWindow);"/>
+          <toolbarbutton label="&hBookmark.subview.comment;"
+                         class="subviewbutton"
+                         oncommand="hBookmark.CommentViewer.show();"/>
+          <toolbarbutton label="&hBookmark.subview.showentry;"
+                         class="subviewbutton"
+                         oncommand="hBookmark.hOpenUILink(hBookmark.entryURL(window.content.location.href), event);"/>
+          <toolbarseparator/>
+          <toolbarbutton observes="viewHBookmarkSidebar"
+                         class="subviewbutton"/>
+          <toolbarseparator/>
+          <toolbarbutton label="&hBookmark.subview.sync;"
+                         class="subviewbutton"
+                         oncommand="hBookmark.Sync.sync();"/>
+        </vbox>
+        <hbox>
+          <toolbarbutton label="&hBookmark.menu.config;"
+                         flex="2"
+                         class="subviewbutton panel-subview-footer"
+                         oncommand="hBookmark.Config.openDialog();"/>
+          <toolbarbutton label="&hBookmark.menu.help;"
+                         flex="1"
+                         class="subviewbutton panel-subview-footer"
+                         oncommand="hBookmark.Config.goHelp(event);"/>
+        </hbox>
+      </panelview>
+      <panelview id="PanelUI-hBookmark-recent-view" class="PanelUI-subView" flex="1">
         <label value="&hBookmark.toolbar.recentLabel;" class="panel-subview-header"/>
         <vbox id="PanelUI-hBookmark-recent-items"
               class="panel-subview-body"
@@ -338,6 +378,8 @@
                      sidebartitle="&hBookmark.sidebar.label;"
                      key="hBookmark-key-sidebar"
                      oncommand="toggleSidebar('viewHBookmarkSidebar');"/>
+        <broadcaster id="hBookmark-added"
+                     added="false"/>
     </broadcasterset>
 
     <script type="text/javascript; version=1.8" charset="utf-8">
