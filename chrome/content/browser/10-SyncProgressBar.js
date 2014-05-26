@@ -5,9 +5,6 @@ var SyncProggressBar = {
 
         this._inited = true;
 
-        this.box = document.getElementById('hBookmark-syncProgressBox');
-        this.meter = document.getElementById('hBookmark-syncProgressMeter');
-
         let events = ['start', 'complete', 'fail', 'progress'];
         for (var i = 0;  i < events.length; i++) {
             let eName = events[i];
@@ -28,9 +25,11 @@ var SyncProggressBar = {
         this.box.setAttribute('hidden', true);
     },
     progressHandler: function(e) {
-        this.meter.value = e.data.value;
+        this.meter.setAttribute('value', e.data.value);
     },
 };
+elementGetter(SyncProggressBar, 'box',   'hBookmarkBroadcaster-syncbar', document);
+elementGetter(SyncProggressBar, 'meter', 'hBookmarkBroadcaster-sync',    document);
 
 EventService.createListener('load', function() {
     SyncProggressBar.init();

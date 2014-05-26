@@ -166,14 +166,9 @@
                            observes="hBookmarkBroadcaster-addedStatus"
                            onclick="hBookmark.StatusBar.showSubView(event);"/>
 
-            <hbox align="center" id="hBookmark-syncProgressBox" hidden="true">
+            <hbox align="center" observes="hBookmarkBroadcaster-syncbar">
                 <label value="&hBookmark.statusbar.now_syncing;" />
-                <progressmeter 
-                id="hBookmark-syncProgressMeter"
-                class="progressmeter-statusbar"
-                tooltiptext="&hBookmark.statusbar.now_syncing;"
-                width="50" mode="determined" value="82" 
-                />
+                <progressmeter observes="hBookmarkBroadcaster-sync" width="50" />
             </hbox>
 
             <image id="hBookmarkAddButton"
@@ -353,9 +348,17 @@
           <toolbarbutton observes="viewHBookmarkSidebar"
                          class="subviewbutton"/>
           <toolbarseparator/>
-          <toolbarbutton label="&hBookmark.subview.sync;"
-                         class="subviewbutton"
-                         oncommand="hBookmark.Sync.sync();"/>
+          <deck>
+              <hbox align="center" observes="hBookmarkBroadcaster-syncbar">
+                  <label value="&hBookmark.statusbar.now_syncing;"/>
+                  <progressmeter observes="hBookmarkBroadcaster-sync"
+                                 flex="1"
+                                 mode="determined"/>
+              </hbox>
+              <toolbarbutton label="&hBookmark.subview.sync;"
+                             class="subviewbutton"
+                             oncommand="hBookmark.Sync.sync();"/>
+          </deck>
         </vbox>
         <hbox>
           <toolbarbutton label="&hBookmark.menu.config;"
@@ -390,6 +393,13 @@
         <broadcaster id="hBookmarkBroadcaster-addedStatus" added="false"/>
         <broadcaster id="hBookmarkBroadcaster-commentStatus" loading="false"/>
         <broadcaster id="hBookmarkBroadcaster-countValue" value=""/>
+        <broadcaster id="hBookmarkBroadcaster-syncbar" hidden="true"/>
+        <broadcaster id="hBookmarkBroadcaster-sync"
+                     value="82"
+                     mode="determined"
+                     class="progressmeter-statusbar"
+                     tooltiptext="&hBookmark.statusbar.now_syncing;"
+        />
     </broadcasterset>
 
     <script type="text/javascript; version=1.8" charset="utf-8">
