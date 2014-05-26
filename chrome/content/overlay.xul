@@ -163,7 +163,7 @@
             <toolbarbutton id="hBookmark-panelbutton"
                            label="&hBookmark.statusbar.label;"
                            class="toolbarbutton-1"
-                           observes="hBookmark-added"
+                           observes="hBookmarkBroadcaster-addedStatus"
                            onclick="hBookmark.StatusBar.showSubView(event);"/>
 
             <hbox align="center" id="hBookmark-syncProgressBox" hidden="true">
@@ -177,7 +177,7 @@
             </hbox>
 
             <image id="hBookmarkAddButton"
-                   observes="hBookmark-added"
+                   observes="hBookmarkBroadcaster-addedStatus"
                    class="hBookmarkAddIconic"
                    tooltiptext="&hBookmark.statusbar.tooltip.addButton;"
                    onclick="hBookmark.StatusBar.showPanelToggle(event);"
@@ -191,7 +191,7 @@
                  tooltiptext="&hBookmark.statusbar.tooltip.counter;"
                  value=""
             >
-                <label observes="hBookmark-counter" />
+                <label observes="hBookmarkBroadcaster-countValue" />
                 <hbox class="hBookmark-counter-images"/>
             </hbox>
 
@@ -201,7 +201,7 @@
             <image
                  id="hBookmark-status-comment"
                  tooltiptext="&hBookmark.statusbar.tooltip.comment;"
-                 observes="hBookmark-comment-status"
+                 observes="hBookmarkBroadcaster-commentStatus"
                  onmousedown="hBookmark.CommentViewer.buttonClickHandler(event)"
                  onmouseover="hBookmark.CommentViewer.autoHoverShow()"
             />
@@ -334,14 +334,14 @@
         <hbox class="panel-subview-header">
           <label value="&hBookmark.statusbar.label;" flex="1"/>
           <hbox class="hBookmark-status-count-container">
-            <label observes="hBookmark-counter"/>
+            <label observes="hBookmarkBroadcaster-countValue"/>
             <hbox id="hBookmark-status-count" class="hBookmark-counter-images" />
           </hbox>
         </hbox>
         <vbox class="panel-subview-body">
           <toolbarbutton label="&hBookmark.subview.add;"
                          class="subviewbutton hBookmarkAddIconic"
-                         observes="hBookmark-added"
+                         observes="hBookmarkBroadcaster-addedStatus"
                          oncommand="hBookmark.AddPanelManager.showPanel(document.commandDispatcher.focusedWindow);"/>
           <toolbarbutton label="&hBookmark.subview.comment;"
                          class="subviewbutton"
@@ -387,10 +387,9 @@
                      sidebartitle="&hBookmark.sidebar.label;"
                      key="hBookmark-key-sidebar"
                      oncommand="toggleSidebar('viewHBookmarkSidebar');"/>
-        <broadcaster id="hBookmark-added"
-                     added="false"/>
-        <broadcaster id="hBookmark-comment-status" loading="false"/>
-        <broadcaster id="hBookmark-counter" value=""/>
+        <broadcaster id="hBookmarkBroadcaster-addedStatus" added="false"/>
+        <broadcaster id="hBookmarkBroadcaster-commentStatus" loading="false"/>
+        <broadcaster id="hBookmarkBroadcaster-countValue" value=""/>
     </broadcasterset>
 
     <script type="text/javascript; version=1.8" charset="utf-8">

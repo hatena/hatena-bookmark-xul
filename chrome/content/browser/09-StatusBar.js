@@ -11,10 +11,10 @@ this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexO
 
 
 elementGetter(this, 'addButton', 'hBookmarkAddButton', document);
-elementGetter(this, 'addedObserver', 'hBookmark-added', document);
+elementGetter(this, 'addedStatus', 'hBookmarkBroadcaster-addedStatus', document);
 elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
-elementGetter(this, 'statusCountObserver', 'hBookmark-counter', document);
-elementGetter(this, 'commentStatus', 'hBookmark-comment-status', document);
+elementGetter(this, 'statusCountLabel', 'hBookmarkBroadcaster-countValue', document);
+elementGetter(this, 'commentStatus', 'hBookmarkBroadcaster-commentStatus', document);
 
 let strings = new Strings('chrome://hatenabookmark/locale/browser.properties');
 
@@ -34,9 +34,9 @@ var StatusBar = {
     },
     checkBookmarked: function StatusBar_checkBookmarked() {
         if (isHttp && User.user && User.user.hasBookmark(locationURL)) {
-            addedObserver.setAttribute('added', true);
+            addedStatus.setAttribute('added', true);
         } else {
-            addedObserver.setAttribute('added', false);
+            addedStatus.setAttribute('added', false);
         }
     },
     lastURL: null,
@@ -86,7 +86,7 @@ var StatusBar = {
         if (StatusBar.lastCountValue == val) return;
         StatusBar.lastCountValue = val;
         let label = (val == null) ? strings.get('counter.ignoredLabel') : val;
-        statusCountObserver.setAttribute('value', label);
+        statusCountLabel.setAttribute('value', label);
         UIUtils.deleteContents(statusCount);
         if (val > 0) {
             let counts = val.toString().split('');

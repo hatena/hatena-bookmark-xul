@@ -16,7 +16,7 @@ elementGetter(this, 'listContainer', 'hBookmark-comment-list-container', documen
 elementGetter(this, 'list', 'hBookmark-comment-list', document);
 elementGetter(this, 'listDiv', 'hBookmark-comment-div', document);
 elementGetter(this, 'bottombox', 'browser-bottombox', document);
-elementGetter(this, 'commentStatus', 'hBookmark-comment-status', document);
+elementGetter(this, 'commentStatus', 'hBookmarkBroadcaster-commentStatus', document);
 
 elementGetter(this, 'faviconImage', 'hBookmark-comment-favicon', document);
 elementGetter(this, 'titleLabel', 'hBookmark-comment-title', document);
