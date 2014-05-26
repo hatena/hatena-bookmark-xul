@@ -13,8 +13,8 @@ this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexO
 elementGetter(this, 'addButton', 'hBookmarkAddButton', document);
 elementGetter(this, 'addedObserver', 'hBookmark-added', document);
 elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
-elementGetter(this, 'statusCountLabel', 'hBookmark-status-count-label', document);
-elementGetter(this, 'statusComment', 'hBookmark-status-comment', document);
+elementGetter(this, 'statusCountObserver', 'hBookmark-counter', document);
+elementGetter(this, 'commentStatus', 'hBookmark-comment-status', document);
 
 let strings = new Strings('chrome://hatenabookmark/locale/browser.properties');
 
@@ -82,14 +82,12 @@ var StatusBar = {
         }
     },
     setCount: function(val) {
-        if (!statusCount) return;
         if (val !== null) val = +val || 0;
         if (StatusBar.lastCountValue == val) return;
         StatusBar.lastCountValue = val;
         let label = (val == null) ? strings.get('counter.ignoredLabel') : val;
-        statusCountLabel.setAttribute('value', label);
+        statusCountObserver.setAttribute('value', label);
         UIUtils.deleteContents(statusCount);
-        statusCount.appendChild(statusCountLabel);
         if (val > 0) {
             let counts = val.toString().split('');
             counts.forEach(function(i) {
@@ -103,13 +101,20 @@ var StatusBar = {
 
         if (val >= 5) {
             statusCount.setAttribute('users', 'many');
-            statusComment.setAttribute('comment', 'true');
+            commentStatus.setAttribute('comment', 'true');
         } else if (val >= 1) {
-            statusComment.setAttribute('comment', 'true');
+            commentStatus.setAttribute('comment', 'true');
             statusCount.setAttribute('users', 'few');
         } else {
-            statusComment.setAttribute('comment', 'false');
+            commentStatus.setAttribute('comment', 'false');
             statusCount.setAttribute('users', 'none');
+        }
+
+        var statusbarCounter = document.querySelector("#hBookmark-statusBarPanel .hBookmark-counter-images");
+        if (statusbarCounter) {
+            let clone = statusCount.cloneNode(true);
+            clone.removeAttribute("id");
+            statusbarCounter.parentNode.replaceChild(clone, statusbarCounter);
         }
     },
     registerPrefsListeners: function () {
@@ -132,10 +137,10 @@ var StatusBar = {
         if (!statusCount) return;
         if (StatusBar.prefs.get('counter')) {
             statusCount.removeAttribute('hidden');
-            statusComment.removeAttribute('hidden');
+            commentStatus.removeAttribute('hidden');
         } else {
             statusCount.setAttribute('hidden', true);
-            statusComment.setAttribute('hidden', true);
+            commentStatus.setAttribute('hidden', true);
         }
     },
     loadHandler: function(ev) {

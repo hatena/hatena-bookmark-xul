@@ -16,7 +16,7 @@ elementGetter(this, 'listContainer', 'hBookmark-comment-list-container', documen
 elementGetter(this, 'list', 'hBookmark-comment-list', document);
 elementGetter(this, 'listDiv', 'hBookmark-comment-div', document);
 elementGetter(this, 'bottombox', 'browser-bottombox', document);
-elementGetter(this, 'commentLoading', 'hBookmark-comment-loading', document);
+elementGetter(this, 'commentStatus', 'hBookmark-comment-status', document);
 
 elementGetter(this, 'faviconImage', 'hBookmark-comment-favicon', document);
 elementGetter(this, 'titleLabel', 'hBookmark-comment-title', document);
@@ -81,7 +81,7 @@ var CommentViewer = {
             if (!isHttp) return;
             url = aDoc.location.href;
         }
-        commentLoading.setAttribute('loading', 'true');
+        commentStatus.setAttribute('loading', 'true');
         var self = this;
         HTTPCache.comment.async_get(url, function(data) {
             if (!data || !data.title) {
@@ -164,7 +164,7 @@ var CommentViewer = {
         }
         panelComment.openPopup(props.anchor, props.positions.join("_"), props.x, props.y, false, false);
         CommentViewer.updateViewer(data);
-        commentLoading.setAttribute('loading', 'false');
+        commentStatus.setAttribute('loading', 'false');
     },
     renderComment: function(bookmarks, limit, fragment) {
         if (!fragment) 

@@ -186,11 +186,14 @@
             <hbox
                  align="center"
                  pack="end"
-                 id="hBookmark-status-count"
+                 class="hBookmark-status-count-container"
                  onclick="hBookmark.StatusBar.goEntry(event);"
                  tooltiptext="&hBookmark.statusbar.tooltip.counter;"
                  value=""
-            ><label id="hBookmark-status-count-label" /></hbox>
+            >
+                <label observes="hBookmark-counter" />
+                <hbox class="hBookmark-counter-images"/>
+            </hbox>
 
 
             <toolbarseparator class="hBookmark-status-separator" />
@@ -198,7 +201,7 @@
             <image
                  id="hBookmark-status-comment"
                  tooltiptext="&hBookmark.statusbar.tooltip.comment;"
-                 observes="hBookmark-comment-loading"
+                 observes="hBookmark-comment-status"
                  onmousedown="hBookmark.CommentViewer.buttonClickHandler(event)"
                  onmouseover="hBookmark.CommentViewer.autoHoverShow()"
             />
@@ -328,7 +331,13 @@
 
     <panelmultiview id="PanelUI-multiView">
       <panelview id="PanelUI-hBookmark-panel" class="PanelUI-subView" flex="1">
-        <label value="&hBookmark.statusbar.label;" class="panel-subview-header"/>
+        <hbox class="panel-subview-header">
+          <label value="&hBookmark.statusbar.label;" flex="1"/>
+          <hbox class="hBookmark-status-count-container">
+            <label observes="hBookmark-counter"/>
+            <hbox id="hBookmark-status-count" class="hBookmark-counter-images" />
+          </hbox>
+        </hbox>
         <vbox class="panel-subview-body">
           <toolbarbutton label="&hBookmark.subview.add;"
                          class="subviewbutton hBookmarkAddIconic"
@@ -380,7 +389,8 @@
                      oncommand="toggleSidebar('viewHBookmarkSidebar');"/>
         <broadcaster id="hBookmark-added"
                      added="false"/>
-        <broadcaster id="hBookmark-comment-loading" loading="false"/>
+        <broadcaster id="hBookmark-comment-status" loading="false"/>
+        <broadcaster id="hBookmark-counter" value=""/>
     </broadcasterset>
 
     <script type="text/javascript; version=1.8" charset="utf-8">
