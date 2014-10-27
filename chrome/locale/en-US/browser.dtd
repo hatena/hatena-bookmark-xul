@@ -20,7 +20,7 @@
 
 <!ENTITY hBookmark.subview.add "Add / Edit">
 <!ENTITY hBookmark.subview.comment "Show Comments">
-<!ENTITY hBookmark.subview.showentry "Go to Hatena Bookmark Page">
+<!ENTITY hBookmark.subview.showentry "Show on Hatena Bookmark">
 <!ENTITY hBookmark.subview.sync "Sync">
 
 <!ENTITY hBookmark.menu.main "Hatena Bookmark">
