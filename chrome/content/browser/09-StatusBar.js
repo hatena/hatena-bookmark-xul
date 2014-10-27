@@ -175,7 +175,7 @@ var StatusBar = {
         ])
     },
     showSubView: function(ev) {
-        if (ev.button === 2) return;
+        if (ev.button === 2) return;    // 右クリック
         PanelUI.multiView.showSubView("PanelUI-hBookmark-panel", ev.originalTarget);
         ev.stopPropagation();
         ev.preventDefault();
