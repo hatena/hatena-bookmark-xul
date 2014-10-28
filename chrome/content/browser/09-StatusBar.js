@@ -14,7 +14,9 @@ elementGetter(this, 'addButton', 'hBookmarkAddButton', document);
 elementGetter(this, 'addedStatus', 'hBookmarkBroadcaster-addedStatus', document);
 elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
 elementGetter(this, 'statusCountLabel', 'hBookmarkBroadcaster-countValue', document);
+elementGetter(this, 'statusCountContainer', 'hBookmark-status-count-container', document);
 elementGetter(this, 'commentStatus', 'hBookmarkBroadcaster-commentStatus', document);
+elementGetter(this, 'statusSeparator', 'hBookmark-status-separator', document);
 
 let strings = new Strings('chrome://hatenabookmark/locale/browser.properties');
 
@@ -47,7 +49,7 @@ var StatusBar = {
         StatusBar.lastURL = lURL;
         if (StatusBar.prefs.get('addButton'))
             StatusBar.checkBookmarked();
-        if (StatusBar.prefs.get('counter'))
+        if (StatusBar.prefs.get('counter') || StatusBar.prefs.get('commentViewerButton'))
             StatusBar.checkCount();
     },
     get prefs() {
@@ -116,6 +118,7 @@ var StatusBar = {
         StatusBar.prefsCounterHandler();
         StatusBar.prefs.createListener('addButton', StatusBar.prefsAddButtonHandler);
         StatusBar.prefs.createListener('counter', StatusBar.prefsCounterHandler);
+        StatusBar.prefs.createListener('commentViewerButton', StatusBar.prefsCommentViewerButtonHandler);
     },
     prefsAddButtonHandler: function(e) {
         p('prefs add button check');
@@ -129,11 +132,27 @@ var StatusBar = {
     prefsCounterHandler: function(e) {
         if (!statusCount) return;
         if (StatusBar.prefs.get('counter')) {
-            statusCount.removeAttribute('hidden');
+            statusCountContainer.removeAttribute('hidden');
+        } else {
+            statusCountContainer.setAttribute('hidden', true);
+        }
+        StatusBar.prefsStatusSeparatorHandler(e);
+    },
+    prefsCommentViewerButtonHandler: function(e) {
+        if (!commentStatus) return;
+        if (StatusBar.prefs.get('commentViewerButton')) {
             commentStatus.removeAttribute('hidden');
         } else {
-            statusCount.setAttribute('hidden', true);
             commentStatus.setAttribute('hidden', true);
+        }
+        StatusBar.prefsStatusSeparatorHandler(e);
+    },
+    prefsStatusSeparatorHandler: function(e) {
+        if (!statusSeparator) return;
+        if (StatusBar.prefs.get('counter') && StatusBar.prefs.get('commentViewerButton')) {
+            statusSeparator.removeAttribute('hidden');
+        } else {
+            statusSeparator.setAttribute('hidden', true);
         }
     },
     loadHandler: function(ev) {

@@ -38,6 +38,7 @@ pref("extensions.hatenabookmark.statusbar.counter", true);
 // local addresses
 pref("extensions.hatenabookmark.statusbar.counterIgnoreList", "['\\^https:\\/\\/.*\\$', '\\^https?:\\/\\/192\\\\.168\\\\.\\\\d+\\\\.\\\\d+.*\\$', '\\^https?:\\/\\/172\\\\.((1[6-9])|(2[0-9])|(3[0-1]))\\\\.\\\\d+\\\\.\\\\d+.*\\$', '\\^https?:\\/\\/10\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+.*\\$']");
 pref("extensions.hatenabookmark.statusbar.addButton", true);
+pref("extensions.hatenabookmark.statusbar.commentViewerButton", true);
 
 // addPanel 
 pref("extensions.hatenabookmark.addPanel.backgroundImage", '');

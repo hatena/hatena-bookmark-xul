@@ -54,7 +54,8 @@
 <!ENTITY hBookmark.config.statusbar "はてブパネル">
 <!ENTITY hBookmark.config.statusbarIcon "ツールバーボタンの表示">
 <!ENTITY hBookmark.config.statusbarAddButton "追加ボタンの表示">
-<!ENTITY hBookmark.config.statusbarCounter "コメントビュワーボタンの表示">
+<!ENTITY hBookmark.config.statusbarCounter "ユーザー数カウンターの表示">
+<!ENTITY hBookmark.config.statusbarCommentViewerButton "コメントビュワーボタンの表示">
 <!ENTITY hBookmark.config.statusbarHttpsIngore "URL が https の場合はカウントしない">
 <!ENTITY hBookmark.config.statusbarURLEdit "ユーザー数カウンター無視URLリスト">
 <!ENTITY hBookmark.config.statusbarOpenURLEditor "設定">
