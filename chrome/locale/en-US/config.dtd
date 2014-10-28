@@ -53,10 +53,10 @@
 <!ENTITY hBookmark.config.browsing.plus.after "users can use this feature">
 <!ENTITY hBookmark.config.browsing.availableSearchSites "* These features are available on the search results pages of Google and Yahoo!">
 
-<!ENTITY hBookmark.config.statusbar "Statusbar">
-<!ENTITY hBookmark.config.statusbarIcon "Display">
+<!ENTITY hBookmark.config.statusbar "Hatebu Panel">
+<!ENTITY hBookmark.config.statusbarIcon "Display the toolbar buttons">
 <!ENTITY hBookmark.config.statusbarAddButton "Display the Add button">
-<!ENTITY hBookmark.config.statusbarCounter "Display the user counter">
+<!ENTITY hBookmark.config.statusbarCounter "Display the comment viewer button">
 <!ENTITY hBookmark.config.statusbarURLEdit "Ignore url list.">
 <!ENTITY hBookmark.config.statusbarOpenURLEditor "Settings">
 <!ENTITY hBookmark.config.statusbarHttpsIngore "Will not be displayed when using https">

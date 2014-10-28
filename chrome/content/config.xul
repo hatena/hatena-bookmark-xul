@@ -314,7 +314,6 @@
                 preference="extensions.hatenabookmark.statusbar.counter"/>
                 <!-- src="chrome://hatenabookmark/skin/images/nbookmarks.png" -->
             <hbox align="center">
-            <spacer style="width: 3em;" />
             <label value="&hBookmark.config.statusbarURLEdit;" />
             <button label="&hBookmark.config.statusbarOpenURLEditor;" oncommand="hBookmark.Config.openURLEditor();" />
             </hbox>
