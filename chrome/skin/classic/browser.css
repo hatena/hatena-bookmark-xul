@@ -16,6 +16,10 @@
   cursor: pointer;
 }
 
+#hBookmark-toolbar-recent-line > toolbarbutton {
+  display: none;
+}
+
 #hBookmark-status-count-container {
   cursor: pointer;
   width: 32px;
