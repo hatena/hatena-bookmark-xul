@@ -89,6 +89,8 @@ var StatusBar = {
         StatusBar.lastCountValue = val;
         let label = (val == null) ? strings.get('counter.ignoredLabel') : val;
         statusCountLabel.setAttribute('value', label);
+        // PanelUIの場合はstatusCountが存在しないはずなので残りの処理は無視
+        if (!statusCount) return;
         UIUtils.deleteContents(statusCount);
         if (val > 0) {
             let counts = val.toString().split('');
