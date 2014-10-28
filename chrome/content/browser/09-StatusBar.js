@@ -109,13 +109,6 @@ var StatusBar = {
             commentStatus.setAttribute('comment', 'false');
             statusCount.setAttribute('users', 'none');
         }
-
-        var statusbarCounter = document.querySelector("#hBookmark-statusBarPanel .hBookmark-counter-images");
-        if (statusbarCounter) {
-            let clone = statusCount.cloneNode(true);
-            clone.removeAttribute("id");
-            statusbarCounter.parentNode.replaceChild(clone, statusbarCounter);
-        }
     },
     registerPrefsListeners: function () {
         p('register prefs listeners');

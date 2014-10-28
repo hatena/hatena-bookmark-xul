@@ -165,10 +165,11 @@ toolbarpaletteitem[place="palette"] > #hBookmark-statusBarPanel > #hBookmark-pan
 #hBookmark-statusBarPanel[cui-areatype="menu-panel"] > #hBookmark-panelbutton {
   visibility: visible;
 }
+
 #hBookmark-statusBarPanel[cui-areatype="menu-panel"] >
-:-moz-any(#hBookmarkAddButton, .hBookmark-status-count-container,toolbarseparator,#hBookmark-status-comment),
+:-moz-any(#hBookmarkAddButton, #hBookmark-status-container),
 toolbarpaletteitem[place="palette"] > #hBookmark-statusBarPanel >
-:-moz-any(#hBookmarkAddButton, .hBookmark-status-count-container,toolbarseparator,#hBookmark-status-comment)
+:-moz-any(#hBookmarkAddButton, #hBookmark-status-container)
 {
  visibility: collapse !important;
 }

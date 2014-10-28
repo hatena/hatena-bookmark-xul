@@ -16,18 +16,11 @@
   cursor: pointer;
 }
 
-#hBookmark-statusBarPanel > .hBookmark-status-count-container {
+#hBookmark-status-count-container {
   cursor: pointer;
-}
-.hBookmark-status-count-container {
-  /*background-image: url("chrome://hatenabookmark/skin/images/nbookmarks.png");*/
   width: 32px;
   height: 16px;
   padding-right: 2px;
-  /*
-  padding:2px 3px 0 0;
-  margin:0px;
-  */
   opacity: 0.6;
   text-align: right;
   font-size: 10px;
@@ -38,30 +31,11 @@
   -moz-box-pack: end;
 }
 
-.hBookmark-status-count-container label {
+#hBookmark-status-count-container label {
     display: none;
 }
 
-.hBookmark-status-count-container[users="none"] {
-    /*
-    display:none;
-    padding-left:0px;
-    padding-right:0px;
-    */
-}
-
-.hBookmark-status-count-container[users="few"] ,
-.hBookmark-status-count-container[users="many"] {
-    /*
-    display:inline;
-    padding-left:0px;
-    padding-right:0px;
-    font-weight: bold;
-    color: #333;
-    */
-}
-
-.hBookmark-status-separator {
+#hBookmark-status-separator {
   height: 16px;
   margin: 0;
   padding: 0;

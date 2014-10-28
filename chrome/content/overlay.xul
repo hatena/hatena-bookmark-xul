@@ -178,28 +178,25 @@
                    onclick="hBookmark.StatusBar.showPanelToggle(event);"
             />
 
-            <hbox
-                 align="center"
-                 pack="end"
-                 class="hBookmark-status-count-container"
-                 onclick="hBookmark.StatusBar.goEntry(event);"
-                 tooltiptext="&hBookmark.statusbar.tooltip.counter;"
-                 value=""
-            >
+            <hbox id="hBookmark-status-container" align="center">
+              <hbox id="hBookmark-status-count-container"
+                  align="center"
+                  pack="end"
+                  onclick="hBookmark.StatusBar.goEntry(event);"
+                  tooltiptext="&hBookmark.statusbar.tooltip.counter;"
+              >
                 <label observes="hBookmarkBroadcaster-countValue" />
-                <hbox class="hBookmark-counter-images"/>
+                <hbox id="hBookmark-status-count" />
+              </hbox>
+              <toolbarseparator id="hBookmark-status-separator" />
+              <image id="hBookmark-status-comment"
+                  tooltiptext="&hBookmark.statusbar.tooltip.comment;"
+                  observes="hBookmarkBroadcaster-commentStatus"
+                  onmousedown="hBookmark.CommentViewer.buttonClickHandler(event)"
+                  onmouseover="hBookmark.CommentViewer.autoHoverShow()"
+              />
             </hbox>
 
-
-            <toolbarseparator class="hBookmark-status-separator" />
-
-            <image
-                 id="hBookmark-status-comment"
-                 tooltiptext="&hBookmark.statusbar.tooltip.comment;"
-                 observes="hBookmarkBroadcaster-commentStatus"
-                 onmousedown="hBookmark.CommentViewer.buttonClickHandler(event)"
-                 onmouseover="hBookmark.CommentViewer.autoHoverShow()"
-            />
             <menupopup id="hBookmarkStatusMenu">
                 <menuitem
                     label="&hBookmark.menu.sync;"
@@ -327,11 +324,8 @@
     <panelmultiview id="PanelUI-multiView">
       <panelview id="PanelUI-hBookmark-panel" class="PanelUI-subView" flex="1">
         <hbox class="panel-subview-header">
-          <label value="&hBookmark.statusbar.label;" flex="1"/>
-          <hbox class="hBookmark-status-count-container">
-            <label observes="hBookmarkBroadcaster-countValue"/>
-            <hbox id="hBookmark-status-count" class="hBookmark-counter-images" />
-          </hbox>
+          <label value="&hBookmark.statusbar.label;" flex="1" />
+          <label observes="hBookmarkBroadcaster-countValue" />
         </hbox>
         <vbox class="panel-subview-body">
           <toolbarbutton label="&hBookmark.subview.add;"
