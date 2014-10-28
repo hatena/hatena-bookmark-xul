@@ -165,9 +165,6 @@ var StatusBar = {
     unloadHandler: function(ev) {
         gBrowser.removeProgressListener(StatusBar.progressListener);
     },
-    updateHandler: function(ev) {
-        StatusBar.update;
-    },
     progressListener: {
         onLocationChange: function (progress, request, location) {
             StatusBar.update();
