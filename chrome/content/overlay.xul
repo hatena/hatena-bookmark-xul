@@ -232,7 +232,7 @@
                  iconsize="small"
                  defaulticonsize="small"
                  customizable="true"
-                 defaultset="hBookmark-toolbar-sidebar-button,hBookmark-toolbar-add-button,hBookmark-toolbar-home-button,separator,hBookmark-toolbar-recent-line"
+                 defaultset="hBookmark-toolbar-sidebar-button,hBookmark-toolbar-home-button,hBookmark-statusBarPanel,separator,hBookmark-toolbar-recent-line"
                  context="toolbar-context-menu"
                  toolbarname="&hBookmark.toolbar.title;"
                  accesskey="&hBookmark.toolbar.titleKey;"/>
