@@ -156,6 +156,9 @@ extend(RemoteCommand.prototype, {
             query.add_asin = 1;
             query.asin = this.options.asin;
         }
+        if (this.options.isReadLater) {
+            query.read_later = 1;
+        }
         if (this.options.isPrivate && user.canMakeBookmarkPrivate)
             query.private = 1;
         // ブックマークの状態 (現状では公開, 非公開のみ) を変化させる権限が

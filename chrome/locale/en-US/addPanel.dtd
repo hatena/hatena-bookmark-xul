@@ -19,6 +19,10 @@
 <!ENTITY hBookmark.addPanel.optionsLabel "Options:">
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "Confirm Bookmark">
 <!ENTITY hBookmark.addPanel.addCollectionLabel "Collection">
+<!ENTITY hBookmark.addPanel.isReadLaterLabel "Read later">
+<!ENTITY hBookmark.addPanel.isReadLaterDescription "To receive a 'Read later' notification, click the check-box and add this bookmark to 'Unread' bookmark list">
+<!ENTITY hBookmark.addPanel.isReadLaterHelpTooltip "With 'Read later' feature, 'Unread' bookmark list and 'Unread' notification will be enabled.">
+<!ENTITY hBookmark.addPanel.isReadLaterHelpURI "http://b.hatena.ne.jp/help/entry/read_later">
 <!ENTITY hBookmark.addPanel.isPrivateLabel "Hide">
 <!ENTITY hBookmark.addPanel.isPrivateDescription "Hide this bookmark from other people.  Access-permitted user also can't view this.">
 <!ENTITY hBookmark.addPanel.isPrivateHelpTooltip "You can hide your bookmark from other people if you join Hatena Bookmark Plus">
