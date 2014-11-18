@@ -147,7 +147,7 @@ var CommentViewer = {
             x: -50,
             y: 0
         };
-        if (commentButton && (!IS_AUSTRALIS || commentButton.parentNode.getAttribute("cui-areatype") === "toolbar")) {
+        if (commentButton && (!IS_AUSTRALIS || commentButton.parentNode.parentNode.getAttribute("cui-areatype") === "toolbar")) {
             props.anchor = commentButton;
             props.x = -commentButton.boxObject.width / 2;
             let centerPos = { x: window.innerWidth / 2,     y: window.innerHeight /2 },
