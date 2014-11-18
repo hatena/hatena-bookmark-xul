@@ -11,9 +11,12 @@ this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexO
 
 
 elementGetter(this, 'addButton', 'hBookmarkAddButton', document);
+elementGetter(this, 'addedStatus', 'hBookmarkBroadcaster-addedStatus', document);
 elementGetter(this, 'statusCount', 'hBookmark-status-count', document);
-elementGetter(this, 'statusCountLabel', 'hBookmark-status-count-label', document);
-elementGetter(this, 'statusComment', 'hBookmark-status-comment', document);
+elementGetter(this, 'statusCountLabel', 'hBookmarkBroadcaster-countValue', document);
+elementGetter(this, 'statusCountContainer', 'hBookmark-status-count-container', document);
+elementGetter(this, 'commentStatus', 'hBookmarkBroadcaster-commentStatus', document);
+elementGetter(this, 'statusSeparator', 'hBookmark-status-separator', document);
 
 let strings = new Strings('chrome://hatenabookmark/locale/browser.properties');
 
@@ -33,9 +36,9 @@ var StatusBar = {
     },
     checkBookmarked: function StatusBar_checkBookmarked() {
         if (isHttp && User.user && User.user.hasBookmark(locationURL)) {
-            addButton.setAttribute('added', true);
+            addedStatus.setAttribute('added', true);
         } else {
-            addButton.setAttribute('added', false);
+            addedStatus.setAttribute('added', false);
         }
     },
     lastURL: null,
@@ -46,7 +49,7 @@ var StatusBar = {
         StatusBar.lastURL = lURL;
         if (StatusBar.prefs.get('addButton'))
             StatusBar.checkBookmarked();
-        if (StatusBar.prefs.get('counter'))
+        if (StatusBar.prefs.get('counter') || StatusBar.prefs.get('commentViewerButton'))
             StatusBar.checkCount();
     },
     get prefs() {
@@ -86,8 +89,9 @@ var StatusBar = {
         StatusBar.lastCountValue = val;
         let label = (val == null) ? strings.get('counter.ignoredLabel') : val;
         statusCountLabel.setAttribute('value', label);
+        // PanelUIの場合はstatusCountが存在しないはずなので残りの処理は無視
+        if (!statusCount) return;
         UIUtils.deleteContents(statusCount);
-        statusCount.appendChild(statusCountLabel);
         if (val > 0) {
             let counts = val.toString().split('');
             counts.forEach(function(i) {
@@ -101,12 +105,12 @@ var StatusBar = {
 
         if (val >= 5) {
             statusCount.setAttribute('users', 'many');
-            statusComment.setAttribute('comment', 'true');
+            commentStatus.setAttribute('comment', 'true');
         } else if (val >= 1) {
-            statusComment.setAttribute('comment', 'true');
+            commentStatus.setAttribute('comment', 'true');
             statusCount.setAttribute('users', 'few');
         } else {
-            statusComment.setAttribute('comment', 'false');
+            commentStatus.setAttribute('comment', 'false');
             statusCount.setAttribute('users', 'none');
         }
     },
@@ -116,9 +120,11 @@ var StatusBar = {
         StatusBar.prefsCounterHandler();
         StatusBar.prefs.createListener('addButton', StatusBar.prefsAddButtonHandler);
         StatusBar.prefs.createListener('counter', StatusBar.prefsCounterHandler);
+        StatusBar.prefs.createListener('commentViewerButton', StatusBar.prefsCommentViewerButtonHandler);
     },
     prefsAddButtonHandler: function(e) {
         p('prefs add button check');
+        if (!addButton) return;
         if (StatusBar.prefs.get('addButton')) {
             addButton.removeAttribute('hidden');
         } else {
@@ -126,12 +132,29 @@ var StatusBar = {
         }
     },
     prefsCounterHandler: function(e) {
+        if (!statusCount) return;
         if (StatusBar.prefs.get('counter')) {
-            statusCount.removeAttribute('hidden');
-            statusComment.removeAttribute('hidden');
+            statusCountContainer.removeAttribute('hidden');
         } else {
-            statusCount.setAttribute('hidden', true);
-            statusComment.setAttribute('hidden', true);
+            statusCountContainer.setAttribute('hidden', true);
+        }
+        StatusBar.prefsStatusSeparatorHandler(e);
+    },
+    prefsCommentViewerButtonHandler: function(e) {
+        if (!commentStatus) return;
+        if (StatusBar.prefs.get('commentViewerButton')) {
+            commentStatus.removeAttribute('hidden');
+        } else {
+            commentStatus.setAttribute('hidden', true);
+        }
+        StatusBar.prefsStatusSeparatorHandler(e);
+    },
+    prefsStatusSeparatorHandler: function(e) {
+        if (!statusSeparator) return;
+        if (StatusBar.prefs.get('counter') && StatusBar.prefs.get('commentViewerButton')) {
+            statusSeparator.removeAttribute('hidden');
+        } else {
+            statusSeparator.setAttribute('hidden', true);
         }
     },
     loadHandler: function(ev) {
@@ -140,16 +163,9 @@ var StatusBar = {
         StatusBar.update();
         gBrowser.addProgressListener(StatusBar.progressListener);
         gBrowser.addEventListener('unload', StatusBar.unloadHandler, false);
-        statusComment.addEventListener('mouseover', StatusBar.commentViewerOverHandler, false);
     },
     unloadHandler: function(ev) {
         gBrowser.removeProgressListener(StatusBar.progressListener);
-    },
-    commentViewerOverHandler: function(ev) {
-        CommentViewer.autoHoverShow();
-    },
-    updateHandler: function(ev) {
-        StatusBar.update;
     },
     progressListener: {
         onLocationChange: function (progress, request, location) {
@@ -168,7 +184,13 @@ var StatusBar = {
             Ci.nsIWebProgressListener2,
             Ci.nsISupportsWeakReference,
         ])
-    }
+    },
+    showSubView: function(ev) {
+        if (ev.button === 2) return;    // 右クリック
+        PanelUI.multiView.showSubView("PanelUI-hBookmark-panel", ev.originalTarget);
+        ev.stopPropagation();
+        ev.preventDefault();
+    },
 }
 
 window.addEventListener('load', StatusBar.loadHandler, false);

@@ -89,6 +89,9 @@ const XMLNS_NS = "http://www.w3.org/2000/xmlns/";
 const HB_NS = "http://b.hatena.ne.jp/";
 
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
+Cu.import('resource://gre/modules/Services.jsm');
+
+const IS_AUSTRALIS = Services.vc.compare(Services.appinfo.version, "29") >= 0;
 
 /* utility functions */
 var nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;

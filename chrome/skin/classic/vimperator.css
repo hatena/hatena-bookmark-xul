@@ -2,12 +2,12 @@
 /* 
  * XXX
  */
-#hBookmark-status-count label {
+#hBookmark-status-count-container label {
     display: inline !important;
     opacity: 1 !important;
     cursor: pointer !important;
 }
 
-#hBookmark-status-count image {
+#hBookmark-status-count-container image {
     display: none !important;
 }
