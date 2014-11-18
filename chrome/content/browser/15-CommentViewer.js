@@ -142,25 +142,25 @@ var CommentViewer = {
         data.publicCount = data.bookmarks.length;
         data.privateCount = data.count - data.publicCount;
         let props = {
-          anchor: bottombox,
-          positions: ["before", "end"],
-          x: -50,
-          y: 0
+            anchor: bottombox,
+            positions: ["before", "end"],
+            x: -50,
+            y: 0
         };
         if (commentButton && (!IS_AUSTRALIS || commentButton.parentNode.getAttribute("cui-areatype") === "toolbar")) {
-          props.anchor = commentButton;
-          props.x = -commentButton.boxObject.width / 2;
-          let centerPos = { x: window.innerWidth / 2,     y: window.innerHeight /2 },
-              anchorPos = { x: commentButton.boxObject.x, y: commentButton.boxObject.y };
-          // コメントボタンが中央より左にある場合
-          if (centerPos.x > anchorPos.x) {
-            props.positions[1] = "start";
-            props.x = -props.x;
-          }
-          // コメントボタンが中央より上にある場合
-          if (centerPos.y > anchorPos.y) {
-            props.positions[0] = "after";
-          }
+            props.anchor = commentButton;
+            props.x = -commentButton.boxObject.width / 2;
+            let centerPos = { x: window.innerWidth / 2,     y: window.innerHeight /2 },
+                anchorPos = { x: commentButton.boxObject.x, y: commentButton.boxObject.y };
+            // コメントボタンが中央より左にある場合
+            if (centerPos.x > anchorPos.x) {
+                props.positions[1] = "start";
+                props.x = -props.x;
+            }
+            // コメントボタンが中央より上にある場合
+            if (centerPos.y > anchorPos.y) {
+                props.positions[0] = "after";
+            }
         }
         panelComment.openPopup(props.anchor, props.positions.join("_"), props.x, props.y, false, false);
         CommentViewer.updateViewer(data);
