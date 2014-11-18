@@ -328,6 +328,9 @@ image[anonid="icon"] {
 [anonid="isPrivateCheck"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/add-private.png");
 }
+[anonid="isReadLaterCheck"] {
+  list-style-image: url("chrome://hatenabookmark/skin/images/add-read-later.png");
+}
 [anonid="sendMailCheck"] {
   list-style-image: url("chrome://hatenabookmark/skin/images/icon-mail.png");
 }
