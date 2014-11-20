@@ -179,7 +179,7 @@ liberator.plugins.hBookmark = (function() {
             plugin.command.execute(args, true);
         },
         genURL: function(url, bang) {
-            let url = (url|| '').replace(/\s/g, '');
+            url = (url|| '').replace(/\s/g, '');
             if (url.length) {
                 if (bang) {
                     return 'http://b.hatena.ne.jp/entry/' + url.replace('#', '%23');

@@ -19,6 +19,10 @@
 <!ENTITY hBookmark.addPanel.optionsLabel "オプション:">
 <!ENTITY hBookmark.addPanel.confirmEntryLabel "ブックマークを確認">
 <!ENTITY hBookmark.addPanel.addCollectionLabel "コレクション">
+<!ENTITY hBookmark.addPanel.isReadLaterLabel "あとで読む">
+<!ENTITY hBookmark.addPanel.isReadLaterDescription "未読ブックマークに追加し、「あとで読む」通知を受ける場合はチェックを入れてください">
+<!ENTITY hBookmark.addPanel.isReadLaterHelpTooltip "「あとで読む」機能により未読ブックマークリストやお知らせ欄・携帯端末への通知等がご利用いただけます">
+<!ENTITY hBookmark.addPanel.isReadLaterHelpURI "http://b.hatena.ne.jp/help/entry/read_later">
 <!ENTITY hBookmark.addPanel.isPrivateLabel "非公開">
 <!ENTITY hBookmark.addPanel.isPrivateDescription "このブックマークを他のユーザーに公開しない (閲覧許可ユーザーにも公開されません)">
 <!ENTITY hBookmark.addPanel.isPrivateHelpTooltip "はてなブックマークプラスにお申し込みいただくと、他のユーザーに公開しない非公開ブックマークがご利用いただけます">

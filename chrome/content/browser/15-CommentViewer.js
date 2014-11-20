@@ -15,7 +15,8 @@ elementGetter(this, 'commentFooter', 'hBookmark-comment-footer', document);
 elementGetter(this, 'listContainer', 'hBookmark-comment-list-container', document);
 elementGetter(this, 'list', 'hBookmark-comment-list', document);
 elementGetter(this, 'listDiv', 'hBookmark-comment-div', document);
-elementGetter(this, 'addonbar', 'addon-bar', document);
+elementGetter(this, 'bottombox', 'browser-bottombox', document);
+elementGetter(this, 'commentStatus', 'hBookmarkBroadcaster-commentStatus', document);
 
 elementGetter(this, 'faviconImage', 'hBookmark-comment-favicon', document);
 elementGetter(this, 'titleLabel', 'hBookmark-comment-title', document);
@@ -80,7 +81,7 @@ var CommentViewer = {
             if (!isHttp) return;
             url = aDoc.location.href;
         }
-        commentButton.setAttribute('loading', 'true'); 
+        commentStatus.setAttribute('loading', 'true');
         var self = this;
         HTTPCache.comment.async_get(url, function(data) {
             if (!data || !data.title) {
@@ -140,10 +141,30 @@ var CommentViewer = {
         }
         data.publicCount = data.bookmarks.length;
         data.privateCount = data.count - data.publicCount;
-        panelComment.setAttribute('hTransparent', true);
-        panelComment.openPopup(addonbar, 'before_end', -20, 0, false, false);
+        let props = {
+            anchor: bottombox,
+            positions: ["before", "end"],
+            x: -50,
+            y: 0
+        };
+        if (commentButton && (!IS_AUSTRALIS || commentButton.parentNode.parentNode.getAttribute("cui-areatype") === "toolbar")) {
+            props.anchor = commentButton;
+            props.x = -commentButton.boxObject.width / 2;
+            let centerPos = { x: window.innerWidth / 2,     y: window.innerHeight /2 },
+                anchorPos = { x: commentButton.boxObject.x, y: commentButton.boxObject.y };
+            // コメントボタンが中央より左にある場合
+            if (centerPos.x > anchorPos.x) {
+                props.positions[1] = "start";
+                props.x = -props.x;
+            }
+            // コメントボタンが中央より上にある場合
+            if (centerPos.y > anchorPos.y) {
+                props.positions[0] = "after";
+            }
+        }
+        panelComment.openPopup(props.anchor, props.positions.join("_"), props.x, props.y, false, false);
         CommentViewer.updateViewer(data);
-        commentButton.setAttribute('loading', 'false'); 
+        commentStatus.setAttribute('loading', 'false');
     },
     renderComment: function(bookmarks, limit, fragment) {
         if (!fragment) 
@@ -233,7 +254,6 @@ var CommentViewer = {
 
         if (CommentViewer.lastRenderData[0] == data.url && CommentViewer.lastRenderData[1] == isFilter) {
             // data.url が同じ、かつ filter してない
-            panelComment.removeAttribute('hTransparent');
             return;
         }
         while(list.firstChild) list.removeChild(list.firstChild);
@@ -300,7 +320,6 @@ var CommentViewer = {
         p('comment viewer pos:' + h + ', ' + w);
         listContainer.style.height = '' + h + 'px';
         commentContainer.style.width = '' + w + 'px';
-        panelComment.removeAttribute('hTransparent');
         setTimeout(function() {
             listDiv.focus()
         }, 10);
@@ -439,10 +458,9 @@ var CommentViewer = {
         }
     },
     loadHandler: function CommentViewer_loadHandler() {
-        commentButton.addEventListener('mousedown', CommentViewer.buttonClickHandler, true);
         panelComment.addEventListener('popuphidden', CommentViewer.popupHiddenHandler, false);
         panelComment.addEventListener('popupshown', CommentViewer.popupShownHandler, false);
-        // panelComment.addEventListener('mouseout', CommentViewer.popupMouseoutHandler, false);
+        panelComment.addEventListener('mouseout', CommentViewer.popupMouseoutHandler, false);
         listDiv.addEventListener('click', CommentViewer.listClickHandler, true);
         CommentViewer.updateToggle();
         panelComment.addEventListener('click', Star.onClick, false);
@@ -454,7 +472,6 @@ var CommentViewer = {
             CommentViewer.pageStarInnerCountHandler, false);
         listDiv.addEventListener(Star.EVENT_STAR_INNER_COUNT_ACTIVATED,
             CommentViewer.starInnerCountHandler, false);
-        
     },
     listClickHandler: function CommentViewer_listClickHandler(ev) {
         if (ev.target.alt == 'close') {

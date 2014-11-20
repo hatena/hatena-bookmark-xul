@@ -138,3 +138,53 @@ toolbarbutton[anonid="bookmarkGuideButton"] {
   list-style-image: url("");
 }
 */
+
+/* StatusBar */
+#hBookmark-statusBarPanel {
+    margin: 0px 2px;
+    padding: 0px;
+    -moz-box-align: center;
+}
+#hBookmark-statusBarPanel[cui-areatype="menu-panel"] {
+  -moz-box-orient: vertical !important;
+  margin: 6px 0 0 0 !important;
+  -moz-box-pack: center;
+}
+#hBookmark-panelbutton {
+  /* TODO: 要専用アイコン */
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(46px 16px 62px 0px);
+  width: 32px;
+  height: 32px;
+  visibility: collapse;
+}
+#hBookmark-panelbutton[added="true"] {
+  -moz-image-region: rect(46px 64px 62px 48px);
+}
+toolbarpaletteitem[place="palette"] > #hBookmark-statusBarPanel > #hBookmark-panelbutton,
+#hBookmark-statusBarPanel[cui-areatype="menu-panel"] > #hBookmark-panelbutton {
+  visibility: visible;
+}
+
+#hBookmark-statusBarPanel[cui-areatype="menu-panel"] >
+:-moz-any(#hBookmarkAddButton, #hBookmark-status-container),
+toolbarpaletteitem[place="palette"] > #hBookmark-statusBarPanel >
+:-moz-any(#hBookmarkAddButton, #hBookmark-status-container)
+{
+ visibility: collapse !important;
+}
+
+.hBookmarkAddIconic {
+  list-style-image: url("chrome://hatenabookmark/skin/images/buttons.png");
+  -moz-image-region: rect(46px 16px 62px 0px);
+}
+.hBookmarkAddIconic:active {
+  -moz-image-region: rect(62px 16px 78px 0px);
+}
+.hBookmarkAddIconic[added="true"] {
+  -moz-image-region: rect(46px 64px 62px 48px);
+}
+.hBookmarkAddIconic[added="true"]:active {
+  -moz-image-region: rect(62px 64px 78px 48px);
+}
+

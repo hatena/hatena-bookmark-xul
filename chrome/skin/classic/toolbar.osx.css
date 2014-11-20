@@ -7,7 +7,7 @@
 }
 
 #nav-bar #hBookmark-toolbar-sidebar-button[checked="true"] {
-  -moz-image-region: rect(23px 244 46 208px);
+  -moz-image-region: rect(23px 244px 46px 208px);
 }
 
 #nav-bar #hBookmark-toolbar-add-button {

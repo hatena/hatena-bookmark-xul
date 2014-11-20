@@ -278,6 +278,10 @@
             name="extensions.hatenabookmark.statusbar.counter"
             type="bool"/>
         <preference 
+            id="extensions.hatenabookmark.statusbar.commentViewerButton"
+            name="extensions.hatenabookmark.statusbar.commentViewerButton"
+            type="bool"/>
+        <preference 
             id="extensions.hatenabookmark.commentviewer.autoHoverShow"
             name="extensions.hatenabookmark.commentviewer.autoHoverShow"
             type="bool"/>
@@ -312,12 +316,14 @@
             <checkbox id="extensions.hatenabookmark.statusbar.counter-check" flex="1"
                 label="&hBookmark.config.statusbarCounter;"
                 preference="extensions.hatenabookmark.statusbar.counter"/>
-                <!-- src="chrome://hatenabookmark/skin/images/nbookmarks.png" -->
             <hbox align="center">
-            <spacer style="width: 3em;" />
-            <label value="&hBookmark.config.statusbarURLEdit;" />
-            <button label="&hBookmark.config.statusbarOpenURLEditor;" oncommand="hBookmark.Config.openURLEditor();" />
+              <spacer style="width: 3em;" />
+              <label value="&hBookmark.config.statusbarURLEdit;" />
+              <button label="&hBookmark.config.statusbarOpenURLEditor;" oncommand="hBookmark.Config.openURLEditor();" />
             </hbox>
+            <checkbox id="extensions.hatenabookmark.statusbar.commentViewerButton-check" flex="1"
+                label="&hBookmark.config.statusbarCommentViewerButton;"
+                preference="extensions.hatenabookmark.statusbar.commentViewerButton" />
         </groupbox>
 
         <groupbox orient="vertical">

@@ -135,6 +135,13 @@
                             <xul:checkbox anonid="confirmEntryCheck"
                                           label="&hBookmark.addPanel.confirmEntryLabel;"
                                           preference="extensions.hatenabookmark.addPanel.confirmEntry"/>
+                            <xul:checkbox anonid="isReadLaterCheck"
+                                          class="hBookmark-has-help-icon"
+                                          showoptionhelp="true"
+                                          label="&hBookmark.addPanel.isReadLaterLabel;"
+                                          tooltiptext="&hBookmark.addPanel.isReadLaterDescription;"
+                                          helptext="&hBookmark.addPanel.isReadLaterHelpTooltip;"
+                                          helplink="&hBookmark.addPanel.isReadLaterHelpURI;"/>
                             <xul:checkbox anonid="isPrivateCheck"
                                           class="hBookmark-has-help-icon"
                                           label="&hBookmark.addPanel.isPrivateLabel;"
@@ -300,6 +307,9 @@
             </field>
             <field name="isPrivateCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "isPrivateCheck")
+            </field>
+            <field name="isReadLaterCheck">
+                document.getAnonymousElementByAttribute(this, "anonid", "isReadLaterCheck")
             </field>
             <field name="sendMailCheck">
                 document.getAnonymousElementByAttribute(this, "anonid", "sendMailCheck")
@@ -488,6 +498,7 @@
                     this.updateCommentCounter();
 
                     this.addCollectionCheck.hidden = true;
+                    this.isReadLaterCheck.checked = false;
                     this.isPrivateCheck.checked = false;
                     if (!user.canMakeBookmarkPrivate) {
                         this.isPrivateCheck.setAttribute('showoptionhelp', 'true');
@@ -840,6 +851,7 @@
                         bookmark: bookmark,
                         changeTitle: this.isTitleChanged,
                         addCollection: this.addCollectionCheck.checked,
+                        isReadLater: this.isReadLaterCheck.checked,
                         isPrivate: this.isPrivateCheck.checked,
                         sendMail: this.sendMailCheck.checked,
                         postTwitter: this.postTwitterCheck.checked,
