@@ -61,11 +61,11 @@ liberator.plugins.hBookmark = (function() {
     let bangFunction;
     let bangFunctions =  {
         openNewTab: function(url) {
-            let url = plugin.command.genURL(url);
+            var url = plugin.command.genURL(url);
             liberator.open(url, liberator.NEW_TAB);
         },
         entryPage: function() {
-            let url = plugin.command.genURL(url, true);
+            var url = plugin.command.genURL(url, true);
             liberator.open(url, liberator.NEW_TAB);
         }
     }
