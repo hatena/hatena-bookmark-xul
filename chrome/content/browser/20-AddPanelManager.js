@@ -7,7 +7,6 @@ var AddPanelManager = {
 
     // XXX AddPanelManagerではなく全体に属すべき。
     getBookmarkFor: function APM_getBookmarkFor(item) {
-        if (item.url) return item;
         let win = item instanceof Ci.nsIDOMWindow ? item : null;
         let uri = win ? newURI(win.location.href) :
             (item instanceof Ci.nsIURI) ? item : newURI(item);
@@ -45,7 +44,7 @@ var AddPanelManager = {
             UIUtils.encourageLogin();
             return;
         }
-        let bookmark = this.getBookmarkFor(item);
+        let bookmark = (item instanceof Bookmark) ? item : this.getBookmarkFor(item);
         if (!/^https?:\/\//.test(bookmark.url)) return;
         if (!bookmark.title && options && options.title)
             bookmark.title = options.title;
