@@ -122,7 +122,7 @@ def firefox_profile_dir(name = nil)
   base = 
     case RUBY_PLATFORM
     when /darwin/
-      '~/Library/Application Support/Firefox/profiles'
+      '~/Library/Application Support/Firefox/Profiles'
     when /win/
       '~/Application Data/Mozilla/Firefox/Profiles'
     else
