@@ -242,7 +242,7 @@ extend(WidgetEmbedder.prototype, {
         let point = this.doc.createRange();
         let position = this.site.data.annotationPosition ||
             ((annotation instanceof Ci.nsIDOMHTMLAnchorElement ||
-              annotation instanceof Ci.nsIDOMHTMLBRElement ||
+              (annotation instanceof Ci.nsIDOMHTMLElement && annotation.tagName === 'br') ||
               annotation instanceof Ci.nsIDOMHTMLHRElement ||
               annotation instanceof Ci.nsIDOMHTMLImageElement ||
               annotation instanceof Ci.nsIDOMHTMLCanvasElement ||
