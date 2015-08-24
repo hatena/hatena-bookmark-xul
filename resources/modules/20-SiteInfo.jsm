@@ -20,7 +20,10 @@ function SiteInfo(data, url, doc) {
 }
 
 extend(SiteInfo.prototype, {
-    get doc() let (w = this.win) w && w.document,
+    get doc() {
+        let w = this.win;
+        return w && w.document;
+    },
     get win() {
         try {
             return this._win.QueryReferent(Ci.nsIDOMWindow);
