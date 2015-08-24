@@ -466,7 +466,7 @@ function addAround(target, methodNames, advice){
     }
     
     methodNames.forEach(function(methodName){
-        var method = target[methodName];
+        var method = target[methodName] || { 'overwrite': 0 };
         target[methodName] = function() {
             var self = this;
             return advice(
