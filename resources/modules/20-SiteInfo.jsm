@@ -145,7 +145,7 @@ extend(SiteInfoSet.prototype, {
             let file = DirectoryService.get('ProfD', Ci.nsIFile);
             file.append('hatenabookmark');
             if (!file.exists())
-                file.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
+                file.create(Ci.nsIFile.DIRECTORY_TYPE, parseInt('0755', 8));
             file.append(source.file);
             source.fileObject = file;
         }
@@ -204,7 +204,7 @@ extend(SiteInfoSet.prototype, {
         // We assume that the result of toSource() is an ASCII string.
         let data = { updated: source.updated, items: source.items }.toSource();
         try {
-            stream.init(source.fileObject, 0x02 | 0x08 | 0x20, 0644, 0);
+            stream.init(source.fileObject, 0x02 | 0x08 | 0x20, parseInt('0644', 8), 0);
             stream.write(data, data.length);
             p('SiteInfoSet#_writeSource: written to ' + source.fileObject.path)
         } catch (ex) {

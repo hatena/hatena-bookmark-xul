@@ -90,7 +90,7 @@ ExpireCache.prototype = {
 var HTTPCache = function(key, options) {
     if (!options) options = {};
     this.options = options;
-    this.cache = new ExpireCache(key, options.expire, options.seriarizer);
+    this.cache = new ExpireCache(key, options.expire, options.seriarizer || 'uneval');
 }
 
 HTTPCache.prototype = {

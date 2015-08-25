@@ -145,11 +145,11 @@ User.prototype = {
         let pd = DirectoryService.get("ProfD", Ci.nsIFile);
         pd.append('hatenabookmark');
         if (!pd.exists() || !pd.isDirectory()) {
-            pd.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
+            pd.create(Ci.nsIFile.DIRECTORY_TYPE, parseInt('0755', 8));
         }
         pd.append(this.name);
         if (!pd.exists() || !pd.isDirectory()) {
-            pd.create(Ci.nsIFile.DIRECTORY_TYPE, 0755);
+            pd.create(Ci.nsIFile.DIRECTORY_TYPE, parseInt('0755', 8));
         }
         return pd;
     }
