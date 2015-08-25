@@ -3,34 +3,18 @@ Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 const EXPORTED_SYMBOLS = ["SiteInfo", "SiteInfoSet"];
 
 const DEFAULT_PREFIX = "__default__";
-let evaluator = new XPathEvaluator();
-
 
 function SiteInfo(data, url, doc) {
     this.data = data;
     this.url = url;
-    // 念のため循環参照にならないよう弱参照で持つ
-    // 本当に弱参照にしないといけないか (そうしないと
-    // メモリリークが発生するか) は不明、未確認。
-    this._win = doc.defaultView
-                   .QueryInterface(Ci.nsISupportsWeakReference)
-                   .GetWeakReference();
+    this._doc = doc;
     this._isHTML = (doc.contentType === "text/html");
     this._exprs = {};
 }
 
 extend(SiteInfo.prototype, {
-    get doc() {
-        let w = this.win;
-        return w && w.document;
-    },
-    get win() {
-        try {
-            return this._win.QueryReferent(Ci.nsIDOMWindow);
-        } catch (ex) {
-            return null;
-        }
-    },
+    get doc() this._doc,
+    get win() this._doc.defaultView,
 
     query: function SI_query(key, context, resultType) {
         context = context || this.doc;
@@ -42,7 +26,7 @@ extend(SiteInfo.prototype, {
                 if (!this._isHTML)
                     expr = addDefaultPrefix(expr, DEFAULT_PREFIX);
                 try {
-                    expr = evaluator.createExpression(expr, this);
+                    expr = this.doc.createExpression(expr, this);
                 } catch (ex) {
                     return null;
                 }
