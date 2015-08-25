@@ -116,7 +116,7 @@ User.prototype = {
         return B.db.tableExists('bookmarks') ? B.countAll() : 0;
     },
     hasBookmark: function user_hasBookmark(url) {
-        let res = model('Bookmark').findByUrl(url);
+        let res = model('Bookmark').searchByUrl(url);
         return res && res[0] ? true : false;
     },
     get database() {

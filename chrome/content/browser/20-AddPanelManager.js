@@ -12,7 +12,7 @@ var AddPanelManager = {
         let uri = win ? newURI(win.location.href) :
             (item instanceof Ci.nsIURI) ? item : newURI(item);
         let url = URLNormalizer.normalize(uri).asciiSpec;
-        let bookmark = Bookmark.findByUrl(url)[0];
+        let bookmark = Bookmark.searchByUrl(url)[0];
         if (bookmark) return bookmark;
         bookmark = new Bookmark();
         bookmark.title = win ? (win.document.title || url) : "";
