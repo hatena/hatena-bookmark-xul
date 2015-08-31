@@ -239,7 +239,7 @@ extend(WidgetEmbedder.prototype, {
     getAnnotationPoint: function WE_getAnnotationPoint(paragraph, link) {
         let annotation = this.site.query("annotation", paragraph) || link;
         if (annotation instanceof Ci.nsIDOMRange) return annotation;
-        let tagName = annotation.tagName.toUpperCase();
+        let tagName = annotation instanceof Ci.nsIDOMHTMLElement ? annotation.tagName.toUpperCase() : '';
         let tagNames = [
             'BR', 'HR', 'A', 'IMG',
             'CANVAS', 'OBJECT',
@@ -247,7 +247,7 @@ extend(WidgetEmbedder.prototype, {
             'SELECT', 'TEXTAREA',
         ];
         let point = this.doc.createRange();
-        let position = this.site.data.annotationPosition || (annotation instanceof Ci.nsIDOMHTMLElement && tagNames.indexOf(tagName) > -1) ? 'after' : 'last';
+        let position = this.site.data.annotationPosition || (tagNames.indexOf(tagName) > -1 ? 'after' : 'last');
         if (position === 'before' || position === 'after')
             point.selectNode(annotation);
         else
