@@ -1,4 +1,3 @@
-
 const EXPORT = ['CommentViewer'];
 
 // local utility 
@@ -386,7 +385,7 @@ var CommentViewer = {
     lazyTimerHandler: function(ev) {
         let bs = CommentViewer.lazyWriterBookmarks;
         if (bs && bs.length) {
-            let fragment = CommentViewer.renderComment(bs, 50, fragment);
+            let fragment = CommentViewer.renderComment(bs, 50, null);
             list.appendChild(fragment);
             CommentViewer.renderPendingStars();
         }
@@ -577,5 +576,4 @@ var CommentViewer = {
 }
 
 EventService.createListener('load', CommentViewer.loadHandler);
-
 

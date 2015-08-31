@@ -80,12 +80,11 @@ extend(RemoteCommand.prototype, {
     complete: function RC_complete(success, result) {
         result = result || null;
         this.clearTimer();
-        var callback;
         if (success) {
-            if (callback = this.options.onComplete) callback.call(this, result);
+            if (this.options.onComplete) this.options.onComplete.call(this, result);
             this.dispatch("complete");
         } else {
-            if (callback = this.options.onError) callback.call(this, result);
+            if (this.options.onError) this.options.onError.call(this, result);
             this.dispatch("error");
         }
     },

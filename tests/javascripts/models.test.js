@@ -142,7 +142,7 @@ function testBookmark() {
     b.date = 20090401123456;
     b.save();
 
-    var b3 = BOOKMARK.findByUrl(b.url);
+    var b3 = BOOKMARK.searchByUrl(b.url);
     assert.equals(b.comment, b3[0].comment);
     assert.equals('2009/04/01', b3[0].dateYMD);
     assert.equals('2009-04-01 12:34:56',

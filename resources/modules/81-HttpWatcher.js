@@ -50,7 +50,7 @@ var HttpWatcher = {
         }
         trySync();
 
-        let bookmark = Model.Bookmark.findByUrl(data.url)[0];
+        let bookmark = Model.Bookmark.searchByUrl(data.url)[0];
         if (bookmark) {
             // すでに存在するブックマークは Sync で
             // 同期できないので、ここで DB を更新しておく。

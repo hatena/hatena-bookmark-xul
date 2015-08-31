@@ -25,7 +25,7 @@ let createWhereLike = function (word, fieldName) {
     var args = {};
     var c = 0;
     function generateSqlLikeStatement(word) {
-        var word = '%' + word.replace(/[_%#]/g, '#$&') + '%';
+        word = '%' + word.replace(/[_%#]/g, '#$&') + '%';
         var c1 = 'arg' + c++;
         var arg = {};
         arg[c1] = word;

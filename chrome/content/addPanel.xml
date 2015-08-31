@@ -1439,7 +1439,7 @@
             <property name="bookmark" readonly="true">
                 <getter><![CDATA[
                     const Bookmark = hBookmark.Model.Bookmark;
-                    let bookmark = Bookmark.findByUrl(this.url)[0];
+                    let bookmark = Bookmark.searchByUrl(this.url)[0];
                     if (!bookmark) {
                         bookmark = new Bookmark();
                         bookmark.title = bookmark.url = this.url;

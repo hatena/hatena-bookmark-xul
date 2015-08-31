@@ -5,6 +5,17 @@
 
 ## 開発者向け情報
 
+### アドオンのインストール方法
+
+`Rakefile` に `install` および `uninstall` コマンドが書かれているのでこれを利用するのが良い。
+なお Firefox Developer Edition にインストールしたい場合や普段利用しているプロファイルとは別のものにインストールしたい場合は `NAME` を与えると良い。
+
+```sh
+$ rake install
+$ NAME=dev-edition-default rake install # Firefox Developer Edition
+$ NAME=develop rake install # develop プロファイルにインストール
+```
+
 ### ブランチの使い方
 
 永続的なブランチとして次の 2 つがあります。
