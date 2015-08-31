@@ -79,6 +79,7 @@ try{
     XMigemoTextUtils = Cc['@piro.sakura.ne.jp/xmigemo/text-utility;1']
                             .getService(Ci.pIXMigemoTextUtils);
 }
+catch(ex if ex instanceof ReferenceError){}
 catch(ex if ex instanceof TypeError){}
 
 const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
@@ -466,7 +467,7 @@ function addAround(target, methodNames, advice){
     }
     
     methodNames.forEach(function(methodName){
-        var method = target[methodName];
+        var method = target[methodName] || { 'overwrite': 0 };
         target[methodName] = function() {
             var self = this;
             return advice(
