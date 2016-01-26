@@ -1,5 +1,5 @@
 
-const EXPORT = ['urlEditor'];
+var EXPORT = ['urlEditor'];
 
 elementGetter(this, 'addInput', 'hBookmark-urlEditor-add-input', document);
 elementGetter(this, 'listbox', 'hBookmark-urlEditor-listbox', document);

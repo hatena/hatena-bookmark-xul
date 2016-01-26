@@ -1,4 +1,4 @@
-const EXPORT = ["UIUtils"];
+var EXPORT = ["UIUtils"];
 
 Cu.import("resource://gre/modules/PluralForm.jsm", this);
 

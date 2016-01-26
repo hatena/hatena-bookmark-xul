@@ -1,4 +1,4 @@
-const EXPORT = ['Star'];
+var EXPORT = ['Star'];
 
 let E = createElementBindDocument(document, XHTML_NS);
 let strings = new Strings('chrome://hatenabookmark/locale/star.properties');

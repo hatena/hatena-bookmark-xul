@@ -1,4 +1,4 @@
-const EXPORT = ["WidgetEmbedder", "IconEmbedder"];
+var EXPORT = ["WidgetEmbedder", "IconEmbedder"];
 
 var getEntryURL = entryURL;
 var getAddPageURL = addPageURL;

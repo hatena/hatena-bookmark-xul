@@ -1,4 +1,4 @@
-const EXPORT = ["FavoriteBookmark"];
+var EXPORT = ["FavoriteBookmark"];
 
 function FavoriteBookmark(favorite) {
     this._favorite = favorite;

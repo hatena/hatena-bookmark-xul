@@ -1,4 +1,4 @@
-const EXPORT = ['HTMLDocumentCreator'];
+var EXPORT = ['HTMLDocumentCreator'];
 
 const NS_HTMLDOCUMENT_CID = '{5d0fcdd0-4daa-11d2-b328-00805f8a3859}';
 

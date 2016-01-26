@@ -1,4 +1,4 @@
-const EXPORT = ['BookmarkTreeContext'];
+var EXPORT = ['BookmarkTreeContext'];
 
 function BookmarkTreeContext(popup) {
     popup.addEventListener('popupshowing', this, false);

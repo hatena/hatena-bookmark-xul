@@ -1,7 +1,7 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 loadPrecedingModules.call(this);
 
-const EXPORTED_SYMBOLS = ["User"];
+var EXPORTED_SYMBOLS = ["User"];
 const MY_NAME_URL = B_HTTP + 'my.name';
 
 var User = function User_constructor (name, options) {

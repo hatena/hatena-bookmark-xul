@@ -1,5 +1,5 @@
 
-const EXPORT = ['ContextMenu'];
+var EXPORT = ['ContextMenu'];
 
 elementGetter(this, 'addentry', 'hBookmark-menu-addentry', document);
 elementGetter(this, 'addlink', 'hBookmark-menu-addlink', document);

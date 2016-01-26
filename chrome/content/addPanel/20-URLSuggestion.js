@@ -1,4 +1,4 @@
-const EXPORT = ["URLSuggestion"];
+var EXPORT = ["URLSuggestion"];
 
 function URLSuggestion(originalURL, doc) {
     this.originalURL = originalURL;

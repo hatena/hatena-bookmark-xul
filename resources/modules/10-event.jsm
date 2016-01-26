@@ -1,6 +1,6 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 
-const EXPORTED_SYMBOLS = ["EventService"];
+var EXPORTED_SYMBOLS = ["EventService"];
 
 /* var l = EventService.createListener("DataUpdated", function () { ... });
  *

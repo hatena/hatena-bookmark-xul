@@ -1,4 +1,4 @@
-const EXPORT = ["TagList"];
+var EXPORT = ["TagList"];
 
 const COL_TAG   = "tag-list-col-tag";
 const COL_COUNT = "tag-list-col-count";

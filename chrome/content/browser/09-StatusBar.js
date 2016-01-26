@@ -1,5 +1,5 @@
 
-const EXPORT = ['StatusBar'];
+var EXPORT = ['StatusBar'];
 
 // local utility 
 this.__defineGetter__('aWin', function() getTopWin());

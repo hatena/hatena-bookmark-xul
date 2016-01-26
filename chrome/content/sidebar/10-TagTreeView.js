@@ -1,4 +1,4 @@
-const EXPORT = ["TagTreeView"];
+var EXPORT = ["TagTreeView"];
 
 const NAME_ATOM  = AtomService.getAtom("Name");
 const TITLE_ATOM = AtomService.getAtom("title");

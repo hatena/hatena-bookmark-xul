@@ -1,5 +1,5 @@
 
-const EXPORT = ["RecentButton"];
+var EXPORT = ["RecentButton"];
 
 elementGetter(this, 'subviewBody', 'PanelUI-hBookmark-recent-items', document);
 

@@ -5,7 +5,7 @@ loadPrecedingModules.call(this);
  * 有効期限付きキャッシュ
  * 現在はブラウザを閉じるとすべて消える
  */
-const EXPORTED_SYMBOLS = ['ExpireCache', 'HTTPCache'];
+var EXPORTED_SYMBOLS = ['ExpireCache', 'HTTPCache'];
 
 var ExpireCache = function(key, defaultExpire, seriarizer, sweeperDelay) {
     this.key = key;

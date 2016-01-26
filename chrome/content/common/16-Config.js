@@ -1,5 +1,5 @@
 
-const EXPORT = ['Config'];
+var EXPORT = ['Config'];
 
 const PrefsBackgroundImage = 'extensions.hatenabookmark.addPanel.backgroundImage';
 

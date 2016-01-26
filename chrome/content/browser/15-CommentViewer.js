@@ -1,4 +1,4 @@
-const EXPORT = ['CommentViewer'];
+var EXPORT = ['CommentViewer'];
 
 // local utility 
 this.__defineGetter__('aWin', function() getTopWin());

@@ -1,5 +1,5 @@
 
-const EXPORT = ['LinkClickOverlay'];
+var EXPORT = ['LinkClickOverlay'];
 const BOOKMARK_TOP = 'http://b.hatena.ne.jp/';
 const BOOKMARK_APPEND = '/append?';
 const BOOKMARK_ADD = '/add?mode=confirm';

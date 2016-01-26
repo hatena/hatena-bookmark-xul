@@ -1,4 +1,4 @@
-const EXPORT = ["AddPanelManager"];
+var EXPORT = ["AddPanelManager"];
 
 let Bookmark = Model.Bookmark;
 

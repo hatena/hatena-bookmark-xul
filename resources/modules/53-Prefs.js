@@ -1,7 +1,7 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 loadPrecedingModules.call(this);
 
-const EXPORTED_SYMBOLS = ['Prefs'];
+var EXPORTED_SYMBOLS = ['Prefs'];
 
 var Prefs = function (branchName) {
     if (branchName && branchName[branchName.length-1] != '.')

@@ -1,4 +1,4 @@
 
-const EXPORT = ['TabObserver'];
+var EXPORT = ['TabObserver'];
 
 

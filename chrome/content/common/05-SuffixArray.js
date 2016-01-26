@@ -4,7 +4,7 @@
  * MIT/X11 license.
  */
 
-const EXPORT = ['SuffixArray'];
+var EXPORT = ['SuffixArray'];
 
 var SuffixArray = function (string) {
     this.string = string;

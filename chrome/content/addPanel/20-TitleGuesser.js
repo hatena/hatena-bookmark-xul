@@ -1,4 +1,4 @@
-const EXPORT = ["TitleGuesser"];
+var EXPORT = ["TitleGuesser"];
 
 function TitleGuesser(url, callback) {
     this.callback = callback;
