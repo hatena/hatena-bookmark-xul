@@ -6,8 +6,8 @@ elementGetter(this, 'panel', 'hBookmark-panel-urlbar', document);
 elementGetter(this, 'list', 'hBookmark-urlbar-listbox', document);
 elementGetter(this, 'icon', 'hBookmark-search-icon', document, true);
 
-let E = createElementBindDocument(document);
-let Bookmark = model('Bookmark');
+var E = createElementBindDocument(document);
+var Bookmark = model('Bookmark');
 
 var LocationBar = {
     registerEventListeners: function() {

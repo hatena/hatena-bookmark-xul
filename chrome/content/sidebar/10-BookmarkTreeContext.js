@@ -5,7 +5,7 @@ function BookmarkTreeContext(popup) {
     popup.addEventListener('command', this, false);
 }
 
-const ID_PREFIX = 'hBookmark-bookmark-context-';
+var ID_PREFIX = 'hBookmark-bookmark-context-';
 
 BookmarkTreeContext.items = {
     showRecent: {

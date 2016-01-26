@@ -1,4 +1,4 @@
-const UTILS_MODULE = "resource://hatenabookmark/modules/00-utils.jsm";
+var UTILS_MODULE = "resource://hatenabookmark/modules/00-utils.jsm";
 var moduleFile = null;
 
 function warmUp() {

@@ -1,11 +1,11 @@
 
 var EXPORT = ['LinkClickOverlay'];
-const BOOKMARK_TOP = 'http://b.hatena.ne.jp/';
-const BOOKMARK_APPEND = '/append?';
-const BOOKMARK_ADD = '/add?mode=confirm';
-const BOOKMARK_ADD_CONFIRM = '/add.confirm?';
-const BOOKMARK_ENTRY_ADD = '/entry/add/';
-const ESCAPE_REGEX_CHECK = new RegExp('^https?%3A', 'i');
+var BOOKMARK_TOP = 'http://b.hatena.ne.jp/';
+var BOOKMARK_APPEND = '/append?';
+var BOOKMARK_ADD = '/add?mode=confirm';
+var BOOKMARK_ADD_CONFIRM = '/add.confirm?';
+var BOOKMARK_ENTRY_ADD = '/entry/add/';
+var ESCAPE_REGEX_CHECK = new RegExp('^https?%3A', 'i');
 
 var LinkClickOverlay = {
     linkClickHandler: function(ev) {

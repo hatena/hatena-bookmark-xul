@@ -3,7 +3,7 @@ loadPrecedingModules.call(this);
 
 var EXPORTED_SYMBOLS = [];
 
-let builtInSearchSiteInfo = [
+var builtInSearchSiteInfo = [
     /*
     {
         url:
@@ -53,7 +53,7 @@ let builtInSearchSiteInfo = [
     },
 ];
 
-let Search = new SiteInfoSet({
+var Search = new SiteInfoSet({
     matcher: SiteInfoSet.createURLMatcher('url'),
     sources: [
         { file: 'Search.user.siteinfo.js' },

@@ -15,7 +15,7 @@ function setUp() {
 function tearDown() {
 }
 
-const TestTags = [
+var TestTags = [
    '*これはほげ',
    'aaa',
    'abc',

@@ -1,4 +1,4 @@
-let hBookmark = null;
+var hBookmark = null;
 
 function warmUp() {
     utils.include("btil.js");
@@ -6,7 +6,7 @@ function warmUp() {
     hBookmark = global.hBookmark;
 }
 
-let lastOpenedURI = "";
+var lastOpenedURI = "";
 function openUILinkIn(uri, where) {
     lastOpenedURI = uri;
 }

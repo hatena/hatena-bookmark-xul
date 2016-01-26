@@ -1,14 +1,14 @@
 var EXPORT = ["TagTreeView"];
 
-const NAME_ATOM  = AtomService.getAtom("Name");
-const TITLE_ATOM = AtomService.getAtom("title");
-const TAG_ATOM   = AtomService.getAtom("tag");
-const COUNT_ATOM = AtomService.getAtom("count");
+var NAME_ATOM  = AtomService.getAtom("Name");
+var TITLE_ATOM = AtomService.getAtom("title");
+var TAG_ATOM   = AtomService.getAtom("tag");
+var COUNT_ATOM = AtomService.getAtom("count");
 
-const RDFService = getService("@mozilla.org/rdf/rdf-service;1", Ci.nsIRDFService);
-const LocalStore = RDFService.GetDataSource("rdf:local-store");
-const OPEN = RDFService.GetResource("http://home.netscape.com/NC-rdf#open");
-const TRUE = RDFService.GetLiteral("true");
+var RDFService = getService("@mozilla.org/rdf/rdf-service;1", Ci.nsIRDFService);
+var LocalStore = RDFService.GetDataSource("rdf:local-store");
+var OPEN = RDFService.GetResource("http://home.netscape.com/NC-rdf#open");
+var TRUE = RDFService.GetLiteral("true");
 
 var Tag = model("Tag");
 
@@ -58,7 +58,7 @@ function TagTreeView() {
     this.selection = null;
 }
 
-let $maxCount = 28, $count, $start;
+var $maxCount = 28, $count, $start;
 
 TagTreeView.prototype.__proto__ = TreeView.prototype;
 extend(TagTreeView.prototype, {

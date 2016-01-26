@@ -3,7 +3,7 @@ loadPrecedingModules.call(this);
 
 var EXPORTED_SYMBOLS = [];
 
-let builtInSiteInfo = [
+var builtInSiteInfo = [
     /*
     {
         domain:
@@ -124,7 +124,7 @@ function shouldUseExternalSiteInfo() {
     return PrefService.getBoolPref('extensions.hatenabookmark.embed.useExternalSiteInfo');
 }
 
-let Article = new SiteInfoSet({
+var Article = new SiteInfoSet({
     matcher: articleMatcher,
     sources: [
         { file: 'HBUsersCount.user.siteinfo.js' },

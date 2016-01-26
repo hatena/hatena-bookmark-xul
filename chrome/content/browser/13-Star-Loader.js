@@ -1,5 +1,5 @@
 
-let Command = Star.Command;
+var Command = Star.Command;
 
 function Loader() {
     this.alive = true;

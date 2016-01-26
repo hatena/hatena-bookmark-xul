@@ -1,6 +1,6 @@
 var EXPORT = ["AddPanelManager"];
 
-let Bookmark = Model.Bookmark;
+var Bookmark = Model.Bookmark;
 
 var AddPanelManager = {
     currentPanel: null,

@@ -1,28 +1,28 @@
 // エクスポートしたくないメンバの名前はアンダースコア(_)からはじめること。
 
-const B_HOST = 'b.hatena.ne.jp';
-const B_HTTP = 'http://' + B_HOST + '/';
-const B_STATIC_HOST = 'cdn-ak.b.st-hatena.com';
-const B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
-const B_API_STATIC_HOST = 'api.b.st-hatena.com';
-const B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
+var B_HOST = 'b.hatena.ne.jp';
+var B_HTTP = 'http://' + B_HOST + '/';
+var B_STATIC_HOST = 'cdn-ak.b.st-hatena.com';
+var B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
+var B_API_STATIC_HOST = 'api.b.st-hatena.com';
+var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
 
 /*
-const B_HOST = 'local.hatena.ne.jp:3000';
-const B_HTTP = 'http://' + B_HOST + '/';
-const B_STATIC_HOST = 'local.hatena.ne.jp:3000';
-const B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
-const B_API_STATIC_HOST = 'local.hatena.ne.jp:3000';
-const B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
+var B_HOST = 'local.hatena.ne.jp:3000';
+var B_HTTP = 'http://' + B_HOST + '/';
+var B_STATIC_HOST = 'local.hatena.ne.jp:3000';
+var B_STATIC_HTTP = 'http://' + B_STATIC_HOST + '/';
+var B_API_STATIC_HOST = 'local.hatena.ne.jp:3000';
+var B_API_STATIC_HTTP = 'http://' + B_API_STATIC_HOST + '/';
 */
 
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-const Cr = Components.results;
-const Cu = Components.utils;
-const EXT_ID = 'bookmark@hatena.ne.jp';
+var Cc = Components.classes;
+var Ci = Components.interfaces;
+var Cr = Components.results;
+var Cu = Components.utils;
+var EXT_ID = 'bookmark@hatena.ne.jp';
 
-let getService = function getService(name, i) {
+var getService = function getService(name, i) {
     let interfaces = Array.concat(i);
     let service = Cc[name].getService(interfaces.shift());
     interfaces.forEach(function(i) service.QueryInterface(i));
@@ -30,44 +30,44 @@ let getService = function getService(name, i) {
 };
 
 // See https://developer.mozilla.org/en/OS_TARGET for OS_TARGET values.
-const OS_TARGET = getService('@mozilla.org/xre/app-info;1', Ci.nsIXULRuntime).OS;
-const IS_WIN = OS_TARGET.indexOf("WIN") === 0;
-const IS_MAC = OS_TARGET === "Darwin";
-const IS_OSX = IS_MAC;
+var OS_TARGET = getService('@mozilla.org/xre/app-info;1', Ci.nsIXULRuntime).OS;
+var IS_WIN = OS_TARGET.indexOf("WIN") === 0;
+var IS_MAC = OS_TARGET === "Darwin";
+var IS_OSX = IS_MAC;
 
-const Application =
+var Application =
     getService("@mozilla.org/fuel/application;1", Ci.fuelIApplication);
-const PrefetchService =
+var PrefetchService =
     getService("@mozilla.org/prefetch-service;1", Ci.nsIPrefetchService);
-const DirectoryService =
+var DirectoryService =
     getService('@mozilla.org/file/directory_service;1', Ci.nsIProperties);
 
-const ObserverService =
+var ObserverService =
     getService("@mozilla.org/observer-service;1", Ci.nsIObserverService);
-const StorageService =
+var StorageService =
     getService("@mozilla.org/storage/service;1", Ci.mozIStorageService);
-const IOService =
+var IOService =
     getService("@mozilla.org/network/io-service;1", Ci.nsIIOService);
-const ThreadManager =
+var ThreadManager =
     getService("@mozilla.org/thread-manager;1", Ci.nsIThreadManager);
-const HistoryService =
+var HistoryService =
     getService("@mozilla.org/browser/nav-history-service;1", Ci.nsINavHistoryService);
-const BookmarksService =
+var BookmarksService =
     getService("@mozilla.org/browser/nav-bookmarks-service;1", Ci.nsINavBookmarksService); 
-const FaviconService = 
+var FaviconService = 
     getService("@mozilla.org/browser/favicon-service;1", Ci.nsIFaviconService);
-const PrefService = 
+var PrefService = 
     getService("@mozilla.org/preferences-service;1", [Ci.nsIPrefService, Ci.nsIPrefBranch, Ci.nsIPrefBranch2]);
-const CookieManager =
+var CookieManager =
      getService("@mozilla.org/cookiemanager;1", Ci.nsICookieManager);
-const CookieService=
+var CookieService=
      getService("@mozilla.org/cookieService;1", Ci.nsICookieService);
-const PromptService =
+var PromptService =
     getService("@mozilla.org/embedcomp/prompt-service;1", Ci.nsIPromptService);
-const AtomService =
+var AtomService =
     getService("@mozilla.org/atom-service;1", Ci.nsIAtomService);
 
-const CryptoHash = 
+var CryptoHash = 
     Cc["@mozilla.org/security/hash;1"].createInstance(Ci.nsICryptoHash);
 
 var XMigemoCore, XMigemoTextUtils;
@@ -82,17 +82,17 @@ try{
 catch(ex if ex instanceof ReferenceError){}
 catch(ex if ex instanceof TypeError){}
 
-const XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
-const XBL_NS = "http://www.mozilla.org/xbl";
-const XHTML_NS = "http://www.w3.org/1999/xhtml";
-const XML_NS = "http://www.w3.org/XML/1998/namespace";
-const XMLNS_NS = "http://www.w3.org/2000/xmlns/";
-const HB_NS = "http://b.hatena.ne.jp/";
+var XUL_NS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+var XBL_NS = "http://www.mozilla.org/xbl";
+var XHTML_NS = "http://www.w3.org/1999/xhtml";
+var XML_NS = "http://www.w3.org/XML/1998/namespace";
+var XMLNS_NS = "http://www.w3.org/2000/xmlns/";
+var HB_NS = "http://b.hatena.ne.jp/";
 
 Cu.import('resource://gre/modules/XPCOMUtils.jsm');
 Cu.import('resource://gre/modules/Services.jsm');
 
-const IS_AUSTRALIS = Services.vc.compare(Services.appinfo.version, "29") >= 0;
+var IS_AUSTRALIS = Services.vc.compare(Services.appinfo.version, "29") >= 0;
 
 /* utility functions */
 var nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
@@ -220,7 +220,7 @@ function DictionaryObject() ({ __proto__: null });
 /*
  * 共用グローバル変数
  */
-let _shared = new DictionaryObject();
+var _shared = new DictionaryObject();
 var shared = {
     get: function shared_get (name) {
         return (name in _shared) ? _shared[name] : void 0;
@@ -248,7 +248,7 @@ function _referenceReplacement(reference, number, name) {
                   : (_referenceMap[name] || reference);
 }
 
-let _referenceMap = {
+var _referenceMap = {
     amp:   "&",
     lt:    "<",
     gt:    ">",
@@ -350,7 +350,7 @@ function addDefaultPrefix(xpath, prefix) {
     return xpath.replace(tokenPattern, replacer);
 }
 
-const _MODULE_BASE_URI = "resource://hatenabookmark/modules/"
+var _MODULE_BASE_URI = "resource://hatenabookmark/modules/"
 
 function loadModules() {
     var uris = _getModuleURIs();

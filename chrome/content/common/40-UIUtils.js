@@ -2,7 +2,7 @@ var EXPORT = ["UIUtils"];
 
 Cu.import("resource://gre/modules/PluralForm.jsm", this);
 
-let PS = Cc["@mozilla.org/embedcomp/prompt-service;1"].
+var PS = Cc["@mozilla.org/embedcomp/prompt-service;1"].
          getService(Ci.nsIPromptService);
 
 var UIUtils = {

@@ -1,8 +1,8 @@
 var EXPORT = ['HTMLDocumentCreator'];
 
-const NS_HTMLDOCUMENT_CID = '{5d0fcdd0-4daa-11d2-b328-00805f8a3859}';
+var NS_HTMLDOCUMENT_CID = '{5d0fcdd0-4daa-11d2-b328-00805f8a3859}';
 
-let HDC = {
+var HDC = {
     fromString: function HDC_fromString(source) {
         let doc = Components.classesByID[NS_HTMLDOCUMENT_CID].createInstance();
         doc.appendChild(doc.createElement('html'));
