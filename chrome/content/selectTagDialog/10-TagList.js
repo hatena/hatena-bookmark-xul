@@ -1,10 +1,10 @@
-const EXPORT = ["TagList"];
+var EXPORT = ["TagList"];
 
-const COL_TAG   = "tag-list-col-tag";
-const COL_COUNT = "tag-list-col-count";
+var COL_TAG   = "tag-list-col-tag";
+var COL_COUNT = "tag-list-col-count";
 
-const TAG_ATOM   = AtomService.getAtom("tag");
-const COUNT_ATOM = AtomService.getAtom("count");
+var TAG_ATOM   = AtomService.getAtom("tag");
+var COUNT_ATOM = AtomService.getAtom("count");
 
 function TagList(treeElement) {
     this.tags = [];

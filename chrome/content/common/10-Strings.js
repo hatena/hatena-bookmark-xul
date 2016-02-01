@@ -1,4 +1,4 @@
-const EXPORT = ["Strings", "stringsGetter"];
+var EXPORT = ["Strings", "stringsGetter"];
 
 function Strings(propertiesFile) {
     this._bundle = Cc["@mozilla.org/intl/stringbundle;1"]

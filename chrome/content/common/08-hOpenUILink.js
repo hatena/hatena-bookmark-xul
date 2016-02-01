@@ -1,5 +1,5 @@
 
-const EXPORT = ['hOpenUILink'];
+var EXPORT = ['hOpenUILink'];
 
 var hOpenUILink = function(link, ev) {
     let where = whereToOpenLink(ev);

@@ -1,5 +1,5 @@
 
-const EXPORT = ['Migration'];
+var EXPORT = ['Migration'];
 /*
  * バージョンによってのコンフィグの差異を変更する
  */

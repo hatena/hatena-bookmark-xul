@@ -1,4 +1,4 @@
-const EXPORT = [];
+var EXPORT = [];
 
 window.addEventListener("load", initializeSidebar, false);
 window.addEventListener("unload", disposeSidebar, false);

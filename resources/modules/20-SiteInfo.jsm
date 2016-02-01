@@ -1,8 +1,8 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 
-const EXPORTED_SYMBOLS = ["SiteInfo", "SiteInfoSet"];
+var EXPORTED_SYMBOLS = ["SiteInfo", "SiteInfoSet"];
 
-const DEFAULT_PREFIX = "__default__";
+var DEFAULT_PREFIX = "__default__";
 
 function SiteInfo(data, url, doc) {
     this.data = data;

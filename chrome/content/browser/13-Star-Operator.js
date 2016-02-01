@@ -1,5 +1,5 @@
 
-let Command = Star.Command;
+var Command = Star.Command;
 
 function Operator(uri, title, location) {
     this.uri = uri;

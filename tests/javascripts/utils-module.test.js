@@ -1,4 +1,4 @@
-const UTILS_MODULE = "resource://hatenabookmark/modules/00-utils.jsm";
+var UTILS_MODULE = "resource://hatenabookmark/modules/00-utils.jsm";
 var moduleFile = null;
 
 function warmUp() {
@@ -11,7 +11,7 @@ function warmUp() {
     moduleFile.append("modules");
     moduleFile.append("01_foo.jsm");
     utils.writeTo(<![CDATA[
-        const EXPORTED_SYMBOLS = ["Foo"];
+        var EXPORTED_SYMBOLS = ["Foo"];
         var Foo = { baz: 42 };
         var Bar = { baz: 12 };
     ]]>.toString(), moduleFile, "utf-8");

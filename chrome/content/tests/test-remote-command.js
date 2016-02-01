@@ -15,7 +15,7 @@ hBookmark.loadModules();
 hBookmark.load("chrome://hatenabookmark/content/common/");
 //hBookmark.load("chrome://hatenabookmark/content/browser/");
 
-let lastOpendURI = null;
+var lastOpendURI = null;
 var createXHRMock = (function (options) {
     if (!options) options = {};
     /*

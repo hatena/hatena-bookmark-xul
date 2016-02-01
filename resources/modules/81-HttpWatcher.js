@@ -1,7 +1,7 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 loadPrecedingModules.call(this);
 
-const EXPORTED_SYMBOLS = ["HttpWatcher"];
+var EXPORTED_SYMBOLS = ["HttpWatcher"];
 
 var HttpWatcher = {
     // 監視するホスト

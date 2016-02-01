@@ -1,11 +1,11 @@
-const EXPORT = ['CommentViewer'];
+var EXPORT = ['CommentViewer'];
 
 // local utility 
 this.__defineGetter__('aWin', function() getTopWin());
 this.__defineGetter__('aDoc', function() getTopWin().gBrowser.contentDocument);
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
 
-let E = createElementBindDocument(document, XHTML_NS);
+var E = createElementBindDocument(document, XHTML_NS);
 
 elementGetter(this, 'panelComment', 'hBookmark-panel-comment', document);
 elementGetter(this, 'commentButton', 'hBookmark-status-comment', document);
@@ -29,7 +29,7 @@ elementGetter(this, 'pageStarsContainer', 'hBookmark-comment-page-stars-containe
 elementGetter(this, 'expandedPageStarsBox', 'hBookmark-comment-expanded-page-stars-box', document);
 elementGetter(this, 'expandedPageStarsContainer', 'hBookmark-comment-expanded-page-stars-container', document);
 
-let userIcon = function(username) {
+var userIcon = function(username) {
     return E('img', {
         src: UserUtils.getProfileIcon(username),
         className: 'usericon',
@@ -39,7 +39,7 @@ let userIcon = function(username) {
     });
 }
 
-let strings = new Strings('chrome://hatenabookmark/locale/commentViewer.properties');
+var strings = new Strings('chrome://hatenabookmark/locale/commentViewer.properties');
 
 var CommentViewer = {
     filterToggle: function() {

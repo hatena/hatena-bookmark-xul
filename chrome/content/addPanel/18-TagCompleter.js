@@ -4,7 +4,7 @@ var EXPORT = ['TagCompleter'];
 elementGetter(this, 'panel', 'hBookmark-panel-tagcomplete', document);
 elementGetter(this, 'list', 'hBookmark-tagcomplete-listbox', document);
 
-let E = createElementBindDocument(document);
+var E = createElementBindDocument(document);
 
 /*
  * ToDo: 毎回 addPanel 呼び出されると作られるため重い

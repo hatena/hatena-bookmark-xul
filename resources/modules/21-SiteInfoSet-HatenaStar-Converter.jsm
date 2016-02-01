@@ -1,7 +1,7 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 loadPrecedingModules.call(this);
-const EXPORTED_SYMBOLS = [];
-//const EXPORTED_SYMBOLS = ['selector2xpath'];
+var EXPORTED_SYMBOLS = [];
+//var EXPORTED_SYMBOLS = ['selector2xpath'];
 
 function convertHatenaStarSiteConfigToSiteInfoItem(text) {
     let config = decodeJSON(text);

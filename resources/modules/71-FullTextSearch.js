@@ -1,7 +1,7 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 loadPrecedingModules.call(this);
 
-const EXPORTED_SYMBOLS = ['FullTextSearch'];
+var EXPORTED_SYMBOLS = ['FullTextSearch'];
 
 var FullTextSearch = {
     cache: new HTTPCache('searchCache', {

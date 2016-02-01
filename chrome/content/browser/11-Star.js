@@ -1,7 +1,7 @@
-const EXPORT = ['Star'];
+var EXPORT = ['Star'];
 
-let E = createElementBindDocument(document, XHTML_NS);
-let strings = new Strings('chrome://hatenabookmark/locale/star.properties');
+var E = createElementBindDocument(document, XHTML_NS);
+var strings = new Strings('chrome://hatenabookmark/locale/star.properties');
 
 var Star = {
     BASE_URI: 'http://s.hatena.ne.jp/',
@@ -252,7 +252,7 @@ var Star = {
     },
 };
 
-let imageBase = 'chrome://hatenabookmark/skin/images/';
+var imageBase = 'chrome://hatenabookmark/skin/images/';
 Star.DEFAULT_SETTINGS = {
     stars: {
         yellow: {

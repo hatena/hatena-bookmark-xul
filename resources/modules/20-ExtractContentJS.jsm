@@ -1,7 +1,7 @@
 // extract-content-allinone.js
 
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
-const EXPORTED_SYMBOLS = ['ExtractContentJS'];
+var EXPORTED_SYMBOLS = ['ExtractContentJS'];
 
 
 if (typeof ExtractContentJS == 'undefined') {

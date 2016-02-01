@@ -15,7 +15,7 @@ function newURI(uriSpec, originCharset, baseURI) {
 /*
  * %s, %d, %f のみサポート
  */
-const _SPRINTF_HASH = {
+var _SPRINTF_HASH = {
     '%s': String,
     '%d': parseInt,
     '%f': parseFloat,

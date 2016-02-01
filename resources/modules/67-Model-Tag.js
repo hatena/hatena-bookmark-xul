@@ -1,9 +1,9 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 loadPrecedingModules.call(this);
 
-const EXPORTED_SYMBOLS = [];
+var EXPORTED_SYMBOLS = [];
 
-let Tag = Model.Entity({
+var Tag = Model.Entity({
     name : 'tags',
     fields : {
         id           : 'INTEGER PRIMARY KEY',

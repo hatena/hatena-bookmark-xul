@@ -3,7 +3,7 @@ loadPrecedingModules.call(this);
 
 // Sync to remote bookmark
 
-const EXPORTED_SYMBOLS = ["Sync"];
+var EXPORTED_SYMBOLS = ["Sync"];
 
 var Sync = {};
 EventService.implement(Sync);

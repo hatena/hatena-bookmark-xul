@@ -1,5 +1,5 @@
 
-const EXPORT = ['ShortCut'];
+var EXPORT = ['ShortCut'];
 
 var ShortCut = {
     get keyset() {
