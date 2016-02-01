@@ -37,18 +37,10 @@ function tearDown() {
 }
 
 function testNagayama() {
-<<<<<<< HEAD:tests/javascripts/suffixarray.test.js
-//     var test = utils.readFrom('data/test.null.data', 'UTF-8');
-//     sary = new SuffixArray(test);
-//     sary.make();
-//     return;
-
-    //var data = utils.readFrom('data/secondlife.search.data', 'UTF-8');
+    // var data = utils.readFrom('data/secondlife.search.data', 'UTF-8');
     var data = utils.readFrom('data/nagayama.search.data', 'UTF-8');
-//    var data = utils.readFrom('data/secondlife.search.data', 'UTF-8');
-    //var data = utils.readFrom('data/nagayama.search.data', 'UTF-8');
     // var data = utils.readFrom('data/naoya.search.data', 'UTF-8');
-//     var data = utils.readFrom('data/otsune.search.data', 'UTF-8');
+    // var data = utils.readFrom('data/otsune.search.data', 'UTF-8');
     data = data.substr(0, data.length * 3/4);
     assert.isTrue(data.length);
     var sary, finder, indexes;
@@ -100,4 +92,3 @@ function testSuffixArray()
     let indexes = [i for (i in finder)];
     assert.equals([3,6,13], indexes);
 }
-
