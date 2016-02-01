@@ -3,7 +3,7 @@ loadPrecedingModules.call(this);
 
 var EXPORTED_SYMBOLS = [];
 
-let Tag = Model.Entity({
+var Tag = Model.Entity({
     name : 'tags',
     fields : {
         id           : 'INTEGER PRIMARY KEY',
