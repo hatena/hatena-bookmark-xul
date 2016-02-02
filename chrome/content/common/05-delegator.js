@@ -5,7 +5,7 @@ var EXPORT = ['Delegator'];
  * メソッドの委譲を行う
  */
 
-let Delegator = function(obj, propertyDelegate) {
+var Delegator = function(obj, propertyDelegate) {
     this.__target__obj = obj;
     if (typeof propertyDelegate == 'undefined') 
         propertyDelegate = true;

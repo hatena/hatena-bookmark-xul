@@ -1,4 +1,4 @@
-const EXPORT = ["SearchEmbedder"];
+var EXPORT = ["SearchEmbedder"];
 
 function SearchEmbedder(doc) {
     this.site = SiteInfoSet.Search.get(doc);

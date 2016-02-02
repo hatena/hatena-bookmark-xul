@@ -1,9 +1,9 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 loadPrecedingModules.call(this);
 
-const EXPORTED_SYMBOLS = [];
+var EXPORTED_SYMBOLS = [];
 
-let builtInSearchSiteInfo = [
+var builtInSearchSiteInfo = [
     /*
     {
         url:
@@ -53,7 +53,7 @@ let builtInSearchSiteInfo = [
     },
 ];
 
-let Search = new SiteInfoSet({
+var Search = new SiteInfoSet({
     matcher: SiteInfoSet.createURLMatcher('url'),
     sources: [
         { file: 'Search.user.siteinfo.js' },

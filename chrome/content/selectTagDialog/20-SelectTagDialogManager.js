@@ -1,4 +1,4 @@
-const EXPORT = ["SelectTagDialogManager"];
+var EXPORT = ["SelectTagDialogManager"];
 
 function SelectTagDialogManager(dialog) {
     this.dialog = dialog;

@@ -1,4 +1,4 @@
-const EXPORT = ['UserGuide'];
+var EXPORT = ['UserGuide'];
 
 var UserGuide = {
     start: function UG_start(allowRestart) {

@@ -1,4 +1,4 @@
-const EXPORT = ["TreeView"];
+var EXPORT = ["TreeView"];
 
 // nsITreeView インターフェイスを実装
 // https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsITreeView

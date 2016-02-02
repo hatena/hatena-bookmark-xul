@@ -1,4 +1,4 @@
-const EXPORT = ["WidgetEmbedder", "IconEmbedder"];
+var EXPORT = ["WidgetEmbedder", "IconEmbedder"];
 
 var getEntryURL = entryURL;
 var getAddPageURL = addPageURL;
@@ -17,7 +17,7 @@ function WidgetEmbedder(doc) {
     doc.addEventListener("HB.PageInserted", this, false, true);
 }
 
-const embedStrings =
+var embedStrings =
     new Strings("chrome://hatenabookmark/locale/embed.properties");
 
 

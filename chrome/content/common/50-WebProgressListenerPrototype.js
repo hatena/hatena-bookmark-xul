@@ -1,4 +1,4 @@
-const EXPORT = ["WebProgressListenerPrototype"];
+var EXPORT = ["WebProgressListenerPrototype"];
 
 var WebProgressListenerPrototype = {
     onLocationChange: function (progress, request, location) {},

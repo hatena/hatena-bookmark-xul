@@ -1,9 +1,9 @@
 
-const EXPORT = ['Config'];
+var EXPORT = ['Config'];
 
-const PrefsBackgroundImage = 'extensions.hatenabookmark.addPanel.backgroundImage';
+var PrefsBackgroundImage = 'extensions.hatenabookmark.addPanel.backgroundImage';
 
-let Config = {
+var Config = {
     get strings() {
         if (!Config._strings) {
             Config._strings = new Strings("chrome://hatenabookmark/locale/config.properties"); 

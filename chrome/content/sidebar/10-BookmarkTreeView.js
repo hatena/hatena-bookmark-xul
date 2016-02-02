@@ -1,4 +1,4 @@
-const EXPORT = ["BookmarkTreeView"];
+var EXPORT = ["BookmarkTreeView"];
 
 var Bookmark = model("Bookmark");
 

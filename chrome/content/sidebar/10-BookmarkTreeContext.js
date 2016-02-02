@@ -1,11 +1,11 @@
-const EXPORT = ['BookmarkTreeContext'];
+var EXPORT = ['BookmarkTreeContext'];
 
 function BookmarkTreeContext(popup) {
     popup.addEventListener('popupshowing', this, false);
     popup.addEventListener('command', this, false);
 }
 
-const ID_PREFIX = 'hBookmark-bookmark-context-';
+var ID_PREFIX = 'hBookmark-bookmark-context-';
 
 BookmarkTreeContext.items = {
     showRecent: {

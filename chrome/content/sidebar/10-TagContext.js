@@ -1,4 +1,4 @@
-const EXPORT = ["TagContext"];
+var EXPORT = ["TagContext"];
 
 function getURIFor(pageType) {
     let base = B_HTTP + User.user.name + "/";

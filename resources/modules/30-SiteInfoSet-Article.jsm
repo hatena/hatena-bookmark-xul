@@ -1,9 +1,9 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 loadPrecedingModules.call(this);
 
-const EXPORTED_SYMBOLS = [];
+var EXPORTED_SYMBOLS = [];
 
-let builtInSiteInfo = [
+var builtInSiteInfo = [
     /*
     {
         domain:
@@ -124,7 +124,7 @@ function shouldUseExternalSiteInfo() {
     return PrefService.getBoolPref('extensions.hatenabookmark.embed.useExternalSiteInfo');
 }
 
-let Article = new SiteInfoSet({
+var Article = new SiteInfoSet({
     matcher: articleMatcher,
     sources: [
         { file: 'HBUsersCount.user.siteinfo.js' },

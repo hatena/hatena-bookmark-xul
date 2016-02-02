@@ -1,6 +1,6 @@
 Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm");
 
-const EXPORTED_SYMBOLS = ["EventService"];
+var EXPORTED_SYMBOLS = ["EventService"];
 
 /* var l = EventService.createListener("DataUpdated", function () { ... });
  *
@@ -75,7 +75,7 @@ function getWindowForObject(object) {
     return (window && window.addEventListener) ? window : null;
 }
 
-let disposableEntries = [];
+var disposableEntries = [];
 
 function addDisposableListener(listener, window) {
     let entry = getDisposableEntry(window);
@@ -109,7 +109,7 @@ function getDisposableEntry(window) {
     return null;
 }
 
-let locked = {};
+var locked = {};
 
 function Listener(dispatcher, type, handler, lockKey, priority, window) {
     this.dispatcher = dispatcher;

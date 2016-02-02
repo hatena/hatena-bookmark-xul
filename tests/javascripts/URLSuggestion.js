@@ -1,4 +1,4 @@
-let hBookmark;
+var hBookmark;
 
 function warmUp() {
     utils.include("btil.js");

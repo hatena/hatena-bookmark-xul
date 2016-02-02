@@ -1,5 +1,5 @@
 
-let Palette = {
+var Palette = {
     get panel() {
         let panel = document.getElementById('hBookmark-star-palette');
         panel.addEventListener('click', this.onPanelClick, false);

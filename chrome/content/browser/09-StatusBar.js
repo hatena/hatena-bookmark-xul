@@ -1,5 +1,5 @@
 
-const EXPORT = ['StatusBar'];
+var EXPORT = ['StatusBar'];
 
 // local utility 
 this.__defineGetter__('aWin', function() getTopWin());
@@ -18,7 +18,7 @@ elementGetter(this, 'statusCountContainer', 'hBookmark-status-count-container', 
 elementGetter(this, 'commentStatus', 'hBookmarkBroadcaster-commentStatus', document);
 elementGetter(this, 'statusSeparator', 'hBookmark-status-separator', document);
 
-let strings = new Strings('chrome://hatenabookmark/locale/browser.properties');
+var strings = new Strings('chrome://hatenabookmark/locale/browser.properties');
 
 var StatusBar = {
     goEntry: function StatusBar_goEntry(ev) {

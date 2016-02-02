@@ -1,4 +1,4 @@
-const EXPORT = ["BookmarkContext"];
+var EXPORT = ["BookmarkContext"];
 
 function BookmarkContext(popup) {
     this.bookmark = null;
