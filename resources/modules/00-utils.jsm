@@ -494,11 +494,9 @@ var update = function (self, obj/*, ... */) {
     }
     return self;
 };
-var EXPORTED_SYMBOLS = [m for (m in new Iterator(this, true))
-                          if (m[0] !== "_" && m !== "EXPORTED_SYMBOLS")];
+var EXPORTED_SYMBOLS = Object.keys(this).filter(name => name[0] !== "_" && name !== "EXPORTED_SYMBOLS");
 
 /* Debug
 EXPORTED_SYMBOLS.push.apply(EXPORTED_SYMBOLS,
-                            [m for (m in new Iterator(this, true))
-                               if (m[0] === "_")]);
+                            Object.keys(this).filter(name => name[0] === "_"));
 //*/

@@ -103,7 +103,7 @@ extend(RemoteCommand.prototype, {
 
     // nsIDOMEventListener (for nsIXMLHttpRequest)
     handleEvent: function RC_handleEvent(event) {
-        p([key + ': ' + value for ([key, value] in Iterator(event))].join("\n"));
+        p(Object.keys(event).map(key => key + ': ' + event[key]).join("\n"));
         p(this._request.status + "\n" + this._request.responseText);
         let status = (event.type === "load") ? this._request.status : 0;
         // HTTP ステータスコードが 200 なら成功として終了、

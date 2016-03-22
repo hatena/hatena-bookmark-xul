@@ -602,7 +602,7 @@ extend(Entity, {
     },
     
     createInsertSQL : function(def){
-        var fields =  [key for (key in def.fields)]
+        var fields = Object.keys(def.fields);
         var params = fields.map(function(p){
             return ':' + p
         });
@@ -614,7 +614,7 @@ extend(Entity, {
     },
     
     createUpdateSQL : function(def){
-        var fieldsStr = [key for (key in def.fields)].
+        var fieldsStr = Object.keys(def.fields).
             filter(function(p){return p!='id'}).
             map(function(p){
                 return p + '=:' + p;

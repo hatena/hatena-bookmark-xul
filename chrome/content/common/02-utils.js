@@ -58,7 +58,6 @@ Timer.prototype = {
 }
 
 
-var EXPORT = [m for (m in new Iterator(this, true))
-                          if (m[0] !== "_" && m !== "EXPORT")];
+var EXPORT = Object.keys(this).filter(name => name[0] !== "_" && name !== "EXPORT");
 
 

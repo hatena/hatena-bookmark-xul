@@ -29,8 +29,8 @@ var sprintf = function (str) {
 /*
  * グローバル関数としてエクスポートはしないけど、あったら便利な関数など
  */
-var keys = function(obj) [key for (key in obj)];
-var values = function(obj) [key for each (key in obj)];
+var keys = (obj => Object.keys(obj));
+var values = (obj => Object.keys(obj).map(key => obj[key]));
 
 var getHistoryNodeByURL = function getHistoryNodeByURL(url) {
     let query = HistoryService.getNewQuery();
@@ -210,5 +210,4 @@ var parseShortcut = function parseShortcut(aShortcut) {
 }
 
 
-var EXPORTED_SYMBOLS = [m for (m in new Iterator(this, true))
-                          if (m[0] !== "_" && m !== "EXPORTED_SYMBOLS")];
+var EXPORTED_SYMBOLS = Object.keys(this).filter(name => name[0] !== "_" && name !== "EXPORTED_SYMBOLS");
