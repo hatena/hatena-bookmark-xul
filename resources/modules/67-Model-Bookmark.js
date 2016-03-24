@@ -77,11 +77,14 @@ extend(Bookmark, {
         for (var i = 0;  i < tags.length; i++) {
             var tag = tags[i];
             if (i == 0) {
-                res = Model.Tag.findByName(tag);
+                res = Model.Tag.find({
+                    where: 'name = :name',
+                    name: tag
+                });
             } else {
                 res = Model.Tag.find({
                     where: 'name = :name AND bookmark_id IN (' + bids.join(',') + ')',
-                    name: tag,
+                    name: tag
                 });
             }
             if (!res.length) return [];
