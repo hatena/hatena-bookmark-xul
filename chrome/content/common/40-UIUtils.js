@@ -217,7 +217,6 @@ var UIUtils = {
         let get = PluralForm.makeGetter(ruleNum)[0];
         let text = get(count, this.addPanelStrings.get("usersLabel"));
         return text.replace(/#1/g, count);
-        // return count + " users";
     },
 
     deleteContents: function UIU_deleteContents(element) {
