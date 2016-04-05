@@ -104,6 +104,7 @@ end
 
 desc "install to local profile directory"
 task :install do
+  FileUtils.mkdir_p "#{firefox_profile_dir(ENV['NAME'])}/extensions"
   File.open("#{firefox_profile_dir(ENV['NAME'])}/extensions/#{extension_id}", 'w') do |f|
     f.puts(Dir.pwd)
   end
