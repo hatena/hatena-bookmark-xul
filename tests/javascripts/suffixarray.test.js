@@ -51,7 +51,7 @@ function testNagayama() {
     return;
     var word = 'ブックマーク';
     //p.b(function() {
-        // indexes = [i for (i in finder)];
+        // indexes = Object.keys(finder);
         indexes = sary.search(word);
     //}, 'search');
 
@@ -89,6 +89,6 @@ function testSuffixArray()
     assert.equals(index, sary.length - 1);
 
     finder = sary.finder('ba');
-    let indexes = [i for (i in finder)];
+    let indexes = Object.keys(finder);
     assert.equals([3,6,13], indexes);
 }
