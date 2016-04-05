@@ -302,7 +302,7 @@ liberator.plugins.hBookmark = (function() {
                 context.incomplete = true;
                 context.filters = [];
                 context.anchored = true;
-                context.compare = CompletionContext.Sort.unsorted;
+                context.compare = null;
                 context.regenerate = true;
                 context.generate = function () plugin.command._search(context, searchMethod);
             }
