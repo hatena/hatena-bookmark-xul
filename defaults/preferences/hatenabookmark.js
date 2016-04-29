@@ -40,7 +40,7 @@ pref("extensions.hatenabookmark.statusbar.counterIgnoreList", "['\\^https:\\/\\/
 pref("extensions.hatenabookmark.statusbar.addButton", true);
 pref("extensions.hatenabookmark.statusbar.commentViewerButton", true);
 
-// addPanel 
+// addPanel
 pref("extensions.hatenabookmark.addPanel.backgroundImage", '');
 pref("extensions.hatenabookmark.addPanel.confirmEntry", false);
 pref("extensions.hatenabookmark.addPanel.addCollection", true);

@@ -27,11 +27,11 @@ var ContextMenu = {
             return;
         }
 
-        if (gContextMenu.onTextInput || 
-            gContextMenu.onMailtoLink || 
-            gContextMenu.onMathML || 
-            gContextMenu.isTextSelected || 
-            (gContextMenu.onImage && !gContextMenu.onLink) 
+        if (gContextMenu.onTextInput ||
+            gContextMenu.onMailtoLink ||
+            gContextMenu.onMathML ||
+            gContextMenu.isTextSelected ||
+            (gContextMenu.onImage && !gContextMenu.onLink)
         ) {
             addentry.setAttribute('hidden', true);
             addlink.setAttribute('hidden', true);

@@ -6,8 +6,8 @@ var PrefsBackgroundImage = 'extensions.hatenabookmark.addPanel.backgroundImage';
 var Config = {
     get strings() {
         if (!Config._strings) {
-            Config._strings = new Strings("chrome://hatenabookmark/locale/config.properties"); 
-        } 
+            Config._strings = new Strings("chrome://hatenabookmark/locale/config.properties");
+        }
         return Config._strings;
     },
     openURLEditor: function() {

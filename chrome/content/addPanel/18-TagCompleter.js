@@ -63,7 +63,7 @@ TagCompleter.List = {
         let self = this;
         tags.forEach(function(tag) {
             let item = E('richlistitem', {flex:1, 'class': 'hBookmark-tagcomplete-listitem', value:tag},
-                E('hbox', {flex:1}, 
+                E('hbox', {flex:1},
 
                     E('label', {'class': 'hBookmark-tagcomplete-tagname', value: tag}),
                     E('spacer', {flex: 1}),
@@ -149,7 +149,7 @@ TagCompleter.InputHandler = function(input) {
 }
 
 TagCompleter.InputHandler.prototype = {
-    get addPanel() 
+    get addPanel()
         document.getBindingParent(this.textbox),
     updateRecommendedTags: function(tags) {
         delete this._suggestTags;
@@ -166,9 +166,9 @@ TagCompleter.InputHandler.prototype = {
         }
         return this._suggestTags;
     },
-    updateLineValue: function() 
+    updateLineValue: function()
         this.inputLine.value = this.textbox.value,
-    updateValue: function() 
+    updateValue: function()
         this.prevValue = this.textbox.value = this.inputLine.value,
     lastCaretPos: null,
     inputKeyupHandler: function(ev) {
@@ -368,10 +368,10 @@ TagCompleter.InputLine.prototype = {
     suggest: function(pos) {
         let word = this.posWord(pos);
         if (!word) return [];
-        
+
         if (this.useMigemo && XMigemoCore) {
             return this.migemoSuggest(word);
-        } 
+        }
 
         let limit = this.maxSuggest;
         let words = [];

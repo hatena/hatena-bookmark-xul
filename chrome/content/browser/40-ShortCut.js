@@ -40,7 +40,7 @@ var ShortCut = {
     updateShortcut: function(key) {
         /*
          * XXX: keyset が、一回でも押されると変更できない
-         * http://d.hatena.ne.jp/onozaty/20080204/p1 
+         * http://d.hatena.ne.jp/onozaty/20080204/p1
          */
         let aID = this.getKeyName(key);
         let node = document.getElementById(aID);
@@ -55,7 +55,7 @@ var ShortCut = {
         let aInfo;
         if (pref) {
             aInfo = parseShortcut(pref);
-        } 
+        }
         if (!aInfo) {
             p('key pref not found. :' + key);
             return;

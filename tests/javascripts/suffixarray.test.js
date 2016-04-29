@@ -65,7 +65,7 @@ function testSuffixArray()
 {
     return;
     let str = <>map foo bar map baz substr mappp ppmap maa
-   Construction began in 1974 on the 19 story structure, with plans to name it after a construction materials company that was to call it home.[1] Construction ended in 1974 on the $16 million dollar project,[2] but the namesake suffered economic setbacks and did not move into the building, leaving it nameless.[1] The building opened in 1975, and Benjamin Franklin Federal Savings and Loan Association moved their headquarters to the building and were able to get the building named as the Benjamin Franklin Plaza.[1] 
+   Construction began in 1974 on the 19 story structure, with plans to name it after a construction materials company that was to call it home.[1] Construction ended in 1974 on the $16 million dollar project,[2] but the namesake suffered economic setbacks and did not move into the building, leaving it nameless.[1] The building opened in 1975, and Benjamin Franklin Federal Savings and Loan Association moved their headquarters to the building and were able to get the building named as the Benjamin Franklin Plaza.[1]
     </>.toString();
     let sary = new SuffixArray(str);
     p(''+sary.search('llion'));

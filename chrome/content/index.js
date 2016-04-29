@@ -24,7 +24,7 @@ with(hBookmark) { // XXX
         range.selectNodeContents(imported);
         var fragment = range.extractContents();
         range.detach();
-        return fragment.childNodes.length > 1 ? fragment : fragment.firstChild; 
+        return fragment.childNodes.length > 1 ? fragment : fragment.firstChild;
     }
 
     let H = function(xml) xmlToDom(xml, 'http://www.w3.org/1999/xhtml');
@@ -47,13 +47,13 @@ with(hBookmark) { // XXX
             }
         });
         html.appendChild(
-           html.commentDiv = E('div', {className: 'comment'}, 
+           html.commentDiv = E('div', {className: 'comment'},
              html.tags      = E('span', {className: 'tags'}, bookmark.tags.join(', ')), ' ',
              html.comment   = E('span', {className: 'comment'}, bookmark.body)
            )
         );
         html.appendChild(
-           html.urlDiv = E('div', {className: 'infos'}, 
+           html.urlDiv = E('div', {className: 'infos'},
              html.url = E('a', {className: 'url'}, bookmark.url), ' ',
              // html.timestamp = E('span', {className: 'timestamp'}, bookmark.date.toString().substring(0,8)),
              ' ', E('a', {href: bookmark.entryURL}, E('img', {src: bookmark.imageURL, height:'13'}))
