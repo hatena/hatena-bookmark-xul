@@ -35,8 +35,8 @@ var IS_WIN = OS_TARGET.indexOf("WIN") === 0;
 var IS_MAC = OS_TARGET === "Darwin";
 var IS_OSX = IS_MAC;
 
-var Application =
-    getService("@mozilla.org/fuel/application;1", Ci.fuelIApplication);
+var ConsoleService =
+    getService("@mozilla.org/consoleservice;1", Ci.nsIConsoleService);
 var PrefetchService =
     getService("@mozilla.org/prefetch-service;1", Ci.nsIPrefetchService);
 var DirectoryService =
@@ -95,7 +95,7 @@ Cu.import('resource://gre/modules/Services.jsm');
 var IS_AUSTRALIS = Services.vc.compare(Services.appinfo.version, "29") >= 0;
 
 /* utility functions */
-var nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
+var nowDebug = PrefService.getBoolPref('extensions.hatenabookmark.debug.log');
 
 // window.XMLHttpRequest が存在しなくても大丈夫なように
 var XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1");
@@ -134,7 +134,7 @@ p.b = function (func, name) {
 var log = {
     info: function (msg) {
         if (nowDebug) {
-            Application.console.log((msg || '').toString());
+            ConsoleService.logStringMessage((msg || '').toString());
         }
     }
 }
@@ -143,7 +143,7 @@ p.observe = function Prefs_observe (aSubject, aTopic, aData) {
      if (aTopic != "nsPref:changed") return;
 
      if (aData == 'extensions.hatenabookmark.debug.log') {
-         nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
+         nowDebug = PrefService.getBoolPref('extensions.hatenabookmark.debug.log');
      }
 }
 
