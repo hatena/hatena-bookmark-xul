@@ -6,7 +6,7 @@ var hBookmark;
  * p は一時デバッグ用
  */
 var p = function (value) {
-    Application.console.log(Array.map(arguments, String).join("\n"));
+    ConsoleService.logStringMessage(Array.map(arguments, String).join("\n"));
     return value;
 }
 
