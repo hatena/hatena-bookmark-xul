@@ -157,7 +157,4 @@ var Article = new SiteInfoSet({
     ],
 });
 
-// For check
-// try { alert(target.hBookmark.SiteInfoSet.Article.get(target.gBrowser.contentDocument).data.toSource()); } catch (ex) { Application.console.log(ex); }
-
 SiteInfoSet.Article = Article;
