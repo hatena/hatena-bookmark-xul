@@ -7,8 +7,8 @@ elementGetter(this, 'listbox', 'hBookmark-urlEditor-listbox', document);
 var urlEditor = {
     get strings() {
         if (!Config._strings) {
-            Config._strings = new Strings("chrome://hatenabookmark/locale/urlEditor.properties"); 
-        } 
+            Config._strings = new Strings("chrome://hatenabookmark/locale/urlEditor.properties");
+        }
         return Config._strings;
     },
     init: function() {
@@ -28,7 +28,7 @@ var urlEditor = {
     },
     remove: function() {
         let i = listbox.selectedIndex;
-        if (i >= 0) 
+        if (i >= 0)
             listbox.removeItemAt(i);
     },
     accept: function() {

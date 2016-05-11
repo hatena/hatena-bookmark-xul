@@ -28,12 +28,12 @@ function decapitalize(str) {
 
 extend(Database, {
     LIST_DELIMITER : ',',
-    
+
     /**
      * クエリにパラメーターをバインドする。
-     * 
+     *
      * @param {mozIStorageStatement} statement クエリ。
-     * @param {Object || Array || String || Number} params 
+     * @param {Object || Array || String || Number} params
      *        パラメーター。
      *        Objectの場合、名前付きパラメーターとみなされる。
      *        Arrayの場合、出現順に先頭からバインドされる。
@@ -44,7 +44,7 @@ extend(Database, {
     bindParams : function( statement, params ) {
         if(params==null)
             return statement;
-        
+
         // Object
         if(typeof(params)=='object' && params.length==null){
             var paramNames = this.getParamNames(statement);
@@ -53,67 +53,67 @@ extend(Database, {
                 var param = params[name];
                 if(typeof(param)=='undefined')
                     continue;
-                
+
                 // 日付型の場合、数値をバインドする
                 if(param instanceof Date){
                     statement.params[name] = param.getTime();
                     continue;
                 }
-                
+
                 // 配列型の場合、結合し文字列をバインドする
                 if(param instanceof Array){
                     statement.params[name] = this.LIST_DELIMITER + param.join(this.LIST_DELIMITER) + this.LIST_DELIMITER;
                     continue;
                 }
-                
+
                 statement.params[name] = param;
             }
             return statement;
         }
-        
+
         if(typeof(params)=='string' || params.length==null)
             params = [].concat(params);
-        
+
         // Array
         for(var i=0, len=statement.parameterCount ; i<len ; i++)
             statement.bindUTF8StringParameter(i, params[i]);
-        
+
         return statement;
     },
-    
+
     /**
      * クエリ内に含まれる名前付きパラメーターのリストを取得する。
-     * 
+     *
      * @param {mozIStorageStatement} statement クエリ。
      * @return {Array} パラメーター名のリスト。
      */
     getParamNames : function( statement ) {
         var paramNames = [];
-        for (var i=0, len=statement.parameterCount ; i<len ; i++) 
+        for (var i=0, len=statement.parameterCount ; i<len ; i++)
             paramNames.push(statement.getParameterName(i).substr(1));
-        
+
         return paramNames;
     },
-    
+
     /**
      * クエリ結果値の列名のリストを取得する。
-     * 
+     *
      * @param {mozIStorageStatement} statement クエリ。
      * @return {Array} 列名のリスト。
      */
     getColumnNames : function(statement) {
         //statement = statement.statement || statement;
-        
+
         var columnNames=[];
         for(var i=0, len=statement.columnCount ; i<len ; i++)
             columnNames.push(statement.getColumnName(i));
-        
+
         return columnNames;
     },
-    
+
     /**
      * テーブル行をオブジェクトに変換する。
-     * 
+     *
      * @param {mozIStorageStatementRow} row テーブル行。
      * @param {Array} columnNames 列名のリスト。
      * @return {Object} 列名をプロパティとして値を格納したオブジェクト。
@@ -124,30 +124,30 @@ extend(Database, {
             var name = columnNames[i];
             result[name] = row[name];
         }
-        
+
         return result;
     },
 })
 
 extend(Database.prototype, {
-    
+
     /**
      * データベースのバージョンを取得する。
      * PRAGMAのuser_versionに相当する(schema_versionではない)。
-     * 
+     *
      * @return {Number} データベースバージョン。
      */
     get version(){
         return this.getPragma('user_version');
     },
-    
+
     /**
      * データベースのバージョンを設定する。
      */
     set version(ver){
         return this.setPragma('user_version', ver);
     },
-    
+
     /**
      * PRAGMAの値を取得する。
      * Firefox 2でPRAGMA user_versionを使うステートメントを
@@ -156,7 +156,7 @@ extend(Database.prototype, {
     setPragma : function(name, val){
         this.connection.executeSimpleSQL('PRAGMA ' + name + '=' + val);
     },
-    
+
     /**
      * PRAGMAの値を取得する。
      */
@@ -173,20 +173,20 @@ extend(Database.prototype, {
             }
         }
     },
-    
+
     /**
      * ステートメントを生成する。
-     * 
+     *
      * @param {String} SQL。
      */
     createStatement : function(sql) {
         return this.connection.createStatement(sql);
     },
-    
+
     /**
      * SQLを実行する。
      * DDL/DML共に利用できる。
-     * 
+     *
      * @param {String} sql SQL。
      * @param {Object || Array || String} params。
      */
@@ -202,34 +202,34 @@ extend(Database.prototype, {
             });
         }
         sql = sqls[0];
-        
+
         if(params && params.group){
             sql += ' GROUP BY ' + params.group;
         }
-        
+
         if(params && params.order){
             sql += ' ORDER BY ' + params.order;
         }
-        
+
         if(params && params.limit){
             sql += ' LIMIT :limit OFFSET :offset';
             if(params.offset==null)
                 params.offset = 0;
         }
-        
+
         try{
             var statement = this.createStatement(sql);
             Database.bindParams(statement, params);
-            
+
             var columnNames;
             var result = [];
-            
+
             // 全ての行を繰り返す
             while (statement.step()){
                 // 列名はパフォーマンスを考慮しキャッシュする
                 if (!columnNames)
                     columnNames = Database.getColumnNames(statement);
-                
+
                 result.push(Database.getRow(statement.row, columnNames));
             }
             return result;
@@ -245,7 +245,7 @@ extend(Database.prototype, {
             }
         }
     },
-    
+
     /**
      * トランザクション内で処理を実行する。
      * パフォーマンスを考慮する必要のある一括追加部分などで用いる。
@@ -257,29 +257,29 @@ extend(Database.prototype, {
      */
     transaction : function(handler) {
         var d = succeed();
-        
+
         if(this.connection.transactionInProgress){
             d.addCallback(handler);
             return d;
         }
-        
+
         var self = this;
         d.addCallback(bind('beginTransaction', this));
         d.addCallback(handler);
         d.addCallback(function(res){
             self.commitTransaction();
-            
+
             return res;
         });
         d.addErrback(function(err){
             self.rollbackTransaction();
-            
+
             throw err;
         });
-        
+
         return d;
     },
-    
+
     /**
      * トランザクションを開始する。
      * トランザクションが既に開始されていた場合でも、エラーを発生させない。
@@ -288,7 +288,7 @@ extend(Database.prototype, {
         with(this.connection)
             transactionInProgress || beginTransaction();
     },
-    
+
     /**
      * トランザクションをコミットする。
      * トランザクションが開始されていない場合でも、エラーを発生させない。
@@ -297,7 +297,7 @@ extend(Database.prototype, {
         with(this.connection)
             transactionInProgress && commitTransaction();
     },
-    
+
     /**
      * トランザクションをロールバックする。
      * トランザクションが開始されていない場合でも、エラーを発生させない。
@@ -306,7 +306,7 @@ extend(Database.prototype, {
         with(this.connection)
             transactionInProgress && rollbackTransaction();
     },
-    
+
     /**
      * データベース例外を解釈し再発生させる。
      *
@@ -328,7 +328,7 @@ extend(Database.prototype, {
             throw new Database.DatabaseException(this, e);
         }
     },
-    
+
     /**
      * データベースをクローズする。
      * クローズしない場合、ファイルがロックされ削除できない。
@@ -337,7 +337,7 @@ extend(Database.prototype, {
         // Firefox 2ではcloseは存在しない
         this.connection.close && this.connection.close();
     },
-    
+
     /**
      * テーブルが存在するかを確認する。
      *
@@ -349,7 +349,7 @@ extend(Database.prototype, {
             this.connection.tableExists(name) :
             !!this.execute('PRAGMA table_info('+name+')').length;
     },
-    
+
     /**
      * データベースの無駄な領域を除去する。
      */
@@ -588,19 +588,19 @@ extend(Entity, {
             "WHERE " + fields.map(function(p){return p + '=:' + p}).join(' AND ')
         );
     },
-    
+
     createInitializeSQL : function(def){
         var fields = [];
         for(var p in def.fields)
             fields.push(p + ' ' + def.fields[p].replace('TIMESTAMP', 'INTEGER').replace('LIST', 'TEXT'));
-        
+
         return Entity.compactSQL(
             "CREATE TABLE IF NOT EXISTS " + def.name + " (" +
                 fields.join(', ') +
             ")"
         );
     },
-    
+
     createInsertSQL : function(def){
         var fields = Object.keys(def.fields);
         var params = fields.map(function(p){
@@ -612,21 +612,21 @@ extend(Entity, {
             "INSERT INTO " + def.name + " (" + fieldsStr + ") VALUES (" + paramsStr + ")"
         );
     },
-    
+
     createUpdateSQL : function(def){
         var fieldsStr = Object.keys(def.fields).
             filter(function(p){return p!='id'}).
             map(function(p){
                 return p + '=:' + p;
             }).join(', ');
-        
+
         return Entity.compactSQL(
             "UPDATE " + def.name + " " +
             "SET " + fieldsStr + " " +
             "WHERE id = :id"
         );
     },
-    
+
     /**
      * SQL文から不要な空白などを取り除き短く整形する。
      * 表記のぶれを無くし、解析後の文のキャッシュヒットを増やす目的がある。

@@ -13,8 +13,8 @@
 //          j += t;
 //      }
 //  })();
-// 
-// 
+//
+//
 //   let t = ThreadManager.newThread(0);
 //   let m = ThreadManager.mainThread;
 //   do
@@ -23,7 +23,7 @@
 //       fib();
 //   }
 //   while (m.hasPendingEvents());
-// 
+//
 // })();
 
 

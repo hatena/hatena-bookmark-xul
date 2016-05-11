@@ -55,7 +55,7 @@ ExpireCache.prototype = {
     _update: function ExpireCache__update(key) {
         if (!this.cache[key]) return;
         let [_, expire] = this.cache[key];
-        if (now >= expire) 
+        if (now >= expire)
             delete this.cache[key]
     },
     has: function ExpireCache_has(key) {

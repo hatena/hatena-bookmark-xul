@@ -58,7 +58,7 @@ extend(Bookmark, {
         let tags = [];
         let lastIndex = 0;
         while ((match = re.exec(str))) {
-            lastIndex += match[0].length; 
+            lastIndex += match[0].length;
             if (lastIndex == re.lastIndex) {
                 let tag = match[1];
                 if (!tags.some(function(t) tag == t))

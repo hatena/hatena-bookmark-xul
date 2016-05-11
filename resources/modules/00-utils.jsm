@@ -35,8 +35,8 @@ var IS_WIN = OS_TARGET.indexOf("WIN") === 0;
 var IS_MAC = OS_TARGET === "Darwin";
 var IS_OSX = IS_MAC;
 
-var Application =
-    getService("@mozilla.org/fuel/application;1", Ci.fuelIApplication);
+var ConsoleService =
+    getService("@mozilla.org/consoleservice;1", Ci.nsIConsoleService);
 var PrefetchService =
     getService("@mozilla.org/prefetch-service;1", Ci.nsIPrefetchService);
 var DirectoryService =
@@ -53,10 +53,10 @@ var ThreadManager =
 var HistoryService =
     getService("@mozilla.org/browser/nav-history-service;1", Ci.nsINavHistoryService);
 var BookmarksService =
-    getService("@mozilla.org/browser/nav-bookmarks-service;1", Ci.nsINavBookmarksService); 
-var FaviconService = 
+    getService("@mozilla.org/browser/nav-bookmarks-service;1", Ci.nsINavBookmarksService);
+var FaviconService =
     getService("@mozilla.org/browser/favicon-service;1", Ci.nsIFaviconService);
-var PrefService = 
+var PrefService =
     getService("@mozilla.org/preferences-service;1", [Ci.nsIPrefService, Ci.nsIPrefBranch, Ci.nsIPrefBranch2]);
 var CookieManager =
      getService("@mozilla.org/cookiemanager;1", Ci.nsICookieManager);
@@ -67,7 +67,7 @@ var PromptService =
 var AtomService =
     getService("@mozilla.org/atom-service;1", Ci.nsIAtomService);
 
-var CryptoHash = 
+var CryptoHash =
     Cc["@mozilla.org/security/hash;1"].createInstance(Ci.nsICryptoHash);
 
 var XMigemoCore, XMigemoTextUtils;
@@ -95,7 +95,7 @@ Cu.import('resource://gre/modules/Services.jsm');
 var IS_AUSTRALIS = Services.vc.compare(Services.appinfo.version, "29") >= 0;
 
 /* utility functions */
-var nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
+var nowDebug = PrefService.getBoolPref('extensions.hatenabookmark.debug.log');
 
 // window.XMLHttpRequest が存在しなくても大丈夫なように
 var XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1");
@@ -134,7 +134,7 @@ p.b = function (func, name) {
 var log = {
     info: function (msg) {
         if (nowDebug) {
-            Application.console.log((msg || '').toString());
+            ConsoleService.logStringMessage((msg || '').toString());
         }
     }
 }
@@ -143,7 +143,7 @@ p.observe = function Prefs_observe (aSubject, aTopic, aData) {
      if (aTopic != "nsPref:changed") return;
 
      if (aData == 'extensions.hatenabookmark.debug.log') {
-         nowDebug = !!Application.prefs.get('extensions.hatenabookmark.debug.log').value;
+         nowDebug = PrefService.getBoolPref('extensions.hatenabookmark.debug.log');
      }
 }
 
@@ -236,7 +236,7 @@ var shared = {
 /*
  * 文字列変換
  */
-function unEscapeURIForUI(charset, string) 
+function unEscapeURIForUI(charset, string)
     Cc['@mozilla.org/intl/texttosuburi;1'].getService(Ci.nsITextToSubURI).unEscapeURIForUI(charset, string);
 
 // これと同じことができる XPCOM コンポーネントはないの?
@@ -400,7 +400,7 @@ function loadCssStrFromResource(path) {
 /**
  * オブジェクトのプロパティをコピーする。
  * ゲッター/セッターの関数も対象に含まれる。
- * 
+ *
  * @param {Object} target コピー先。
  * @param {Object} source コピー元。
  * @return {Object} コピー先。
@@ -411,11 +411,11 @@ var extend = function extend(target, source, overwrite){
         var getter = source.__lookupGetter__(p);
         if(getter)
             target.__defineGetter__(p, getter);
-        
+
         var setter = source.__lookupSetter__(p);
         if(setter)
             target.__defineSetter__(p, setter);
-        
+
         if(!getter && !setter && (overwrite || !(p in target)))
             target[p] = source[p];
     }
@@ -425,7 +425,7 @@ var extend = function extend(target, source, overwrite){
 /**
  * メソッドが呼ばれる前に処理を追加する。
  * より詳細なコントロールが必要な場合はaddAroundを使うこと。
- * 
+ *
  * @param {Object} target 対象オブジェクト。
  * @param {String} name メソッド名。
  * @param {Function} before 前処理。
@@ -442,22 +442,22 @@ function addBefore(target, name, before) {
 /**
  * メソッドへアラウンドアドバイスを追加する。
  * 処理を置きかえ、引数の変形や、返り値の加工をできるようにする。
- * 
+ *
  * @param {Object} target 対象オブジェクト。
- * @param {String || Array} methodNames 
+ * @param {String || Array} methodNames
  *        メソッド名。複数指定することもできる。
  *        set*のようにワイルドカートを使ってもよい。
- * @param {Function} advice 
+ * @param {Function} advice
  *        アドバイス。proceed、args、target、methodNameの4つの引数が渡される。
  *        proceedは対象オブジェクトにバインド済みのオリジナルのメソッド。
  */
 function addAround(target, methodNames, advice){
     methodNames = [].concat(methodNames);
-    
+
     // ワイルドカードの展開
     for(var i=0 ; i<methodNames.length ; i++){
         if(methodNames[i].indexOf('*')==-1) continue;
-        
+
         var hint = methodNames.splice(i, 1)[0];
         hint = new RegExp('^' + hint.replace(/\*/g, '.*'));
         for(var prop in target) {
@@ -465,7 +465,7 @@ function addAround(target, methodNames, advice){
                 methodNames.push(prop);
         }
     }
-    
+
     methodNames.forEach(function(methodName){
         var method = target[methodName] || { 'overwrite': 0 };
         target[methodName] = function() {
@@ -473,7 +473,7 @@ function addAround(target, methodNames, advice){
             return advice(
                 function(args){
                     return method.apply(self, args);
-                }, 
+                },
                 arguments, self, methodName);
         };
         target[methodName].overwrite = (method.overwrite || 0) + 1;

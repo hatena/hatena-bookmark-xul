@@ -66,7 +66,7 @@ var LocationBar = {
     },
     _fakeController: null,
     get fakeController() {
-        if (!this._fakeController) 
+        if (!this._fakeController)
             this._fakeController = new FakeAutoCompletePopupController(LocationBar.bar.mController);
         return this._fakeController;
     },
@@ -79,7 +79,7 @@ var LocationBar = {
             }
 
             LocationBar._isSearch = true;
-            /* XXX: 本当は AutoComplete をきちんと切りたい… 
+            /* XXX: 本当は AutoComplete をきちんと切りたい…
              * ここで要素が見えてないと AutoComplete がエラーになるので直す
              */
             LocationBar.bar.mController = LocationBar.fakeController;
@@ -227,9 +227,9 @@ var LocationBar = {
 
             let item = E('richlistitem', {
                 'class': 'hBookmark-urlbar-listitem', value:b.url},
-                E('hbox', {flex: '1'}, 
+                E('hbox', {flex: '1'},
                     E('vbox', null, faviconElem),
-                    E('vbox', {flex: '1'}, 
+                    E('vbox', {flex: '1'},
                         E('label', {
                             class: 'hBookmark-urlbar-title', crop: 'end', flex: '1', value: b.title, tooltiptext: b.title}),
                         E('hbox', {tooltiptext: b.comment},
@@ -336,7 +336,7 @@ var LocationBar = {
         } else if (ev.target.getAttribute('class') == 'hBookmark-urlbar-entryedit') {
             hBookmark.AddPanelManager.showPanel(url);
             return;
-        } 
+        }
         hOpenUILink(url, ev);
         LocationBar.searchEnabled = false;
     },
@@ -366,7 +366,7 @@ var LocationBar = {
  * Fx 3.0 では urlbar の autocomplete を無効化する方法が不明なため、
  * 何もしない nsIAutoCompleteController の偽コントローラを作る
  */
-function FakeAutoCompletePopupController(aBaseController) 
+function FakeAutoCompletePopupController(aBaseController)
 {
     this.init(aBaseController);
 }
@@ -377,38 +377,38 @@ FakeAutoCompletePopupController.prototype = {
     get controller() this.__originalController__,
     init : function(controller) this.__originalController__ = controller,
 
-    STATUS_NONE              : Ci.nsIAutoCompleteController.STATUS_NONE, 
+    STATUS_NONE              : Ci.nsIAutoCompleteController.STATUS_NONE,
     STATUS_SEARCHING         : Ci.nsIAutoCompleteController.STATUS_SEARCHING,
     STATUS_COMPLETE_NO_MATCH : Ci.nsIAutoCompleteController.STATUS_COMPLETE_NO_MATCH,
     STATUS_COMPLETE_MATCH    : Ci.nsIAutoCompleteController.STATUS_COMPLETE_MATCH,
-    get input() 
+    get input()
         this.controller.input,
-    set input(aValue) 
+    set input(aValue)
         this.controller.input = aValue,
-    get searchStatus() 
+    get searchStatus()
         this.controller.searchStatus,
-    set searchStatus(aValue) 
+    set searchStatus(aValue)
         this.controller.searchStatus = aValue,
-    get matchCount() 
+    get matchCount()
         0,
-    startSearch : function(aString) 
+    startSearch : function(aString)
         null,
         //this.controller.startSearch(aString),
-    stopSearch : function() 
+    stopSearch : function()
         null,
         //this.controller.stopSearch(),
-    handleText : function(aIgnoreSelection) 
+    handleText : function(aIgnoreSelection)
         null,
         //this.controller.handleText(aIgnoreSelection),
-    handleEnter : function(aIsPopupSelection) 
+    handleEnter : function(aIsPopupSelection)
         this.controller.handleEnter(aIsPopupSelection),
-    handleEscape : function() 
+    handleEscape : function()
         //false,
         this.controller.handleEscape(),
-    handleStartComposition : function() 
+    handleStartComposition : function()
         null,
         //this.controller.handleStartComposition(),
-    handleEndComposition : function() 
+    handleEndComposition : function()
         null,
         //this.controller.handleEndComposition(),
     handleTab : function() {
@@ -419,23 +419,23 @@ FakeAutoCompletePopupController.prototype = {
         //return true;
         return this.controller.handleKeyNavigation(aKey);
     },
-    handleDelete : function() 
+    handleDelete : function()
         //false,
         this.controller.handleDelete(),
-    getValueAt : function(aIndex) 
+    getValueAt : function(aIndex)
         null,
-    getCommentAt : function(aIndex) 
+    getCommentAt : function(aIndex)
         null,
-    getStyleAt : function(aIndex) 
+    getStyleAt : function(aIndex)
         null,
-    getImageAt : function(aIndex) 
+    getImageAt : function(aIndex)
         null,
-    get searchString() 
+    get searchString()
         this.controller.searchString,
     set searchString(aValue)
         this.controller.searchString = aValue,
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIAutoCompleteController, Ci.nsISupports]),
-}; 
+};
 
 window.addEventListener('load', function() {
     LocationBar.init();

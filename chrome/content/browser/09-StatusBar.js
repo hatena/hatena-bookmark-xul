@@ -1,7 +1,7 @@
 
 var EXPORT = ['StatusBar'];
 
-// local utility 
+// local utility
 this.__defineGetter__('aWin', function() getTopWin());
 this.__defineGetter__('aDoc', function() getTopWin().gBrowser.contentDocument);
 this.__defineGetter__('locationURL', function() {

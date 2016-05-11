@@ -1,6 +1,6 @@
 var EXPORT = ['CommentViewer'];
 
-// local utility 
+// local utility
 this.__defineGetter__('aWin', function() getTopWin());
 this.__defineGetter__('aDoc', function() getTopWin().gBrowser.contentDocument);
 this.__defineGetter__('isHttp', function() aDoc && aDoc.location.protocol.indexOf('http') == 0);
@@ -109,7 +109,7 @@ var CommentViewer = {
         if (!CommentViewer.prefs.get('autoHoverShow')) return;
 
         let url;
-        if (!url && isHttp) 
+        if (!url && isHttp)
             url = aDoc.location.href;
 
         if (!HTTPCache.counter.isValid(url)) {
@@ -166,7 +166,7 @@ var CommentViewer = {
         commentStatus.setAttribute('loading', 'false');
     },
     renderComment: function(bookmarks, limit, fragment) {
-        if (!fragment) 
+        if (!fragment)
             fragment = document.createDocumentFragment();
         let i = 0;
         let len = bookmarks.length;

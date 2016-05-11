@@ -6,7 +6,7 @@ Components.utils.import("resource://hatenabookmark/modules/00-utils.jsm",
 
 /**
  * 指定されたURIのスクリプトを読み込む。
- * 
+ *
  * @param {String} uri スクリプトのURI。"/"で終わっていた場合は
  *                     そのディレクトリ直下のすべてのスクリプトを読み込む。
  */

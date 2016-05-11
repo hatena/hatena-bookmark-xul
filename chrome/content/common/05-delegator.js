@@ -7,7 +7,7 @@ var EXPORT = ['Delegator'];
 
 var Delegator = function(obj, propertyDelegate) {
     this.__target__obj = obj;
-    if (typeof propertyDelegate == 'undefined') 
+    if (typeof propertyDelegate == 'undefined')
         propertyDelegate = true;
 
     if (propertyDelegate) {
