@@ -1,4 +1,3 @@
-
 var EXPORT = ['urlEditor'];
 
 elementGetter(this, 'addInput', 'hBookmark-urlEditor-add-input', document);
@@ -37,27 +36,25 @@ var urlEditor = {
             let item = listbox.getItemAtIndex(i);
             res.push(item.value);
         }
-        Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').value = uneval(res);
+        PrefService.setCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList', uneval(res));
     },
     reset: function() {
         if (window.confirm(urlEditor.strings.get('defaultConfirm'))) {
-            let current = Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').value;
-            Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').reset();
+            let defaults = PrefService.getDefaultBranch(null).getCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList');
+            PrefService.setCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList', defaults);
             urlEditor.init();
-            Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').value = current;
         }
     },
     init: function() {
         let list;
         try {
-            list = eval(Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').value);
-        } catch(e) {
-            Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').reset();
-            list = eval(Application.prefs.get('extensions.hatenabookmark.statusbar.counterIgnoreList').value);
+            list = eval(PrefService.getCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList'));
+        } catch (e) {
+            let defaults = PrefService.getDefaultBranch(null).getCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList');
+            PrefService.setCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList', defaults);
+            list = eval(PrefService.getCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList'));
         }
         while(listbox.getRowCount()) listbox.removeItemAt(0);
         list.forEach(function(v) listbox.appendItem(v, v));
     },
 };
-
-
