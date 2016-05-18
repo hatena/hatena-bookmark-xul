@@ -10,8 +10,6 @@ var urlEditor = {
         }
         return Config._strings;
     },
-    init: function() {
-    },
     add: function() {
         let url = addInput.value;
         url = url.replace(/\s+/g, '');
