@@ -40,8 +40,7 @@ var urlEditor = {
     },
     reset: function() {
         if (window.confirm(urlEditor.strings.get('defaultConfirm'))) {
-            let defaults = PrefService.getDefaultBranch(null).getCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList');
-            PrefService.setCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList', defaults);
+            PrefService.clearUserPref('extensions.hatenabookmark.statusbar.counterIgnoreList');
             urlEditor.init();
         }
     },
@@ -50,8 +49,7 @@ var urlEditor = {
         try {
             list = eval(PrefService.getCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList'));
         } catch (e) {
-            let defaults = PrefService.getDefaultBranch(null).getCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList');
-            PrefService.setCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList', defaults);
+            PrefService.clearUserPref('extensions.hatenabookmark.statusbar.counterIgnoreList');
             list = eval(PrefService.getCharPref('extensions.hatenabookmark.statusbar.counterIgnoreList'));
         }
         while(listbox.getRowCount()) listbox.removeItemAt(0);
