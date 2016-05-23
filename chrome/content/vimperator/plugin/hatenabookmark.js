@@ -8,10 +8,6 @@
  */
 
 liberator.plugins.hBookmark = (function() {
-    let p = function(msg) {
-        Application.console.log('mes: ' + msg);
-    }
-
     let plugin = {};
 
     styles.registerSheet("chrome://hatenabookmark/skin/vimperator.css");
@@ -429,4 +425,3 @@ liberator.plugins.hBookmark = (function() {
 
     return plugin;
 })();
-
